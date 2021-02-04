@@ -26,7 +26,9 @@ using SoapCore;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Services.EmailInternal;
 using Prime.HttpClients;
+using Prime.HttpClients.Mail;
 using Prime.Models.Api;
 using Prime.Infrastructure;
 
@@ -54,6 +56,8 @@ namespace Prime
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmailDocumentsService, EmailDocumentsService>();
+            services.AddScoped<IEmailRenderingService, EmailRenderingService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IAgreementService, AgreementService>();
             services.AddScoped<IEnrolleeSubmissionService, EnrolleeSubmissionService>();

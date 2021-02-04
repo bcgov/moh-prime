@@ -1,15 +1,10 @@
-@using Prime.Services
-@model EmailParams
-
-@{
-  var documentUrl = Model.DocumentUrl;
-}
+@using Prime.ViewModels.Emails
+@model LinkedEmailViewModel
 
 <p>
   A user has uploaded business licence to their PharmaNet site registration.
-  @if (documentUrl != "")
-
+  @if (!string.IsNullOrWhiteSpace(Model.Url))
   {
-    @("To access the Business Licence, click this") <a href="@documentUrl" target="_blank">link</a>@(".")
+    @("To access the Business Licence, click this") <a href="@Model.Url" target="_blank">link</a>@(".")
   }
 </p>

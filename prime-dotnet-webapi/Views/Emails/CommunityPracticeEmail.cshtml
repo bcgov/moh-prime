@@ -1,12 +1,5 @@
-@using Prime.Services
-@model EmailParams
-
-@{
-  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
-  var tokenUrl = Model.TokenUrl;
-  var maxViews = Model.MaxViews;
-  var expiryDays = Model.ExpiryDays;
-}
+@using Prime.ViewModels.Emails
+@model ProvisionerAccessEmailViewModel
 
 <style>
   .underline {
@@ -21,7 +14,7 @@
 To: Clinic Manager (person responsible for coordinating PharmaNet access):
 <br><br>
 
-@enrolleeName has been approved for Private Community Health Practice Access to PharmaNet.<br><br>
+@Model.EnrolleeFullName has been approved for Private Community Health Practice Access to PharmaNet.<br><br>
 
 <strong>
   To set up their access, you must forward this PRIME Enrolment Confirmation and the information
@@ -58,10 +51,9 @@ To: Clinic Manager (person responsible for coordinating PharmaNet access):
   </li>
 </ol>
 
-<a href="@tokenUrl">@tokenUrl</a>
+<a href="@Model.TokenUrl">@Model.TokenUrl</a>
 <br>
-<strong>This link will expire after @expiryDays days.</strong>
-@* <strong>This link will expire after @maxViews views or @expiryDays days.</strong> *@
+<strong>This link will expire after @Model.ExpiresInDays days.</strong>
 <br><br>
 
 Thank you,<br><br>

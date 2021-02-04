@@ -13752,6 +13752,46 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeNote");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeNoteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("EnrolleeNoteId")
+                        .IsUnique();
+
+                    b.ToTable("EnrolleeNotification");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
                 {
                     b.Property<int>("Id")
@@ -17199,6 +17239,46 @@ namespace Prime.Migrations
                     b.ToTable("SiteAdjudicationDocument");
                 });
 
+            modelBuilder.Entity("Prime.Models.SiteNotification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("AdminId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("AssigneeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SiteRegistrationNoteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdminId");
+
+                    b.HasIndex("AssigneeId");
+
+                    b.HasIndex("SiteRegistrationNoteId")
+                        .IsUnique();
+
+                    b.ToTable("SiteNotification");
+                });
+
             modelBuilder.Entity("Prime.Models.SiteRegistrationNote", b =>
                 {
                     b.Property<int>("Id")
@@ -18099,6 +18179,27 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeNotification", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Admin", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.EnrolleeNote", "EnrolleeNote")
+                        .WithOne("EnrolleeNotification")
+                        .HasForeignKey("Prime.Models.EnrolleeNotification", "EnrolleeNoteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeRemoteUser", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -18412,6 +18513,27 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteAdjudicationDocuments")
                         .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteNotification", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Admin", "Assignee")
+                        .WithMany()
+                        .HasForeignKey("AssigneeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.SiteRegistrationNote", "SiteRegistrationNote")
+                        .WithOne("SiteNotification")
+                        .HasForeignKey("Prime.Models.SiteNotification", "SiteRegistrationNoteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

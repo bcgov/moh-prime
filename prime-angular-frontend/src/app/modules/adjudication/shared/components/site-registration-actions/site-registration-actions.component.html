@@ -26,6 +26,12 @@
       <mat-icon>mail</mat-icon>
       <span>Contact Signing Authority</span>
     </button>
+    <button mat-menu-item
+            [disabled]="!canEdit || siteRegistration.adjudicatorIdir"
+            (click)="onEscalate()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Enrolment Escalation</span>
+    </button>
 
     <mat-divider></mat-divider>
 
