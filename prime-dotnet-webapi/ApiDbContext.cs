@@ -104,6 +104,8 @@ namespace Prime
         public DbSet<DocumentAccessToken> DocumentAccessTokens { get; set; }
 
         public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
+        public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
+        public DbSet<SiteNotification> SiteNotifications { get; set; }
 
         public override int SaveChanges()
         {
