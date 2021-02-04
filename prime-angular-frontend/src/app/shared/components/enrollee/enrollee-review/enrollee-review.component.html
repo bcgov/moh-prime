@@ -36,46 +36,15 @@
 
 </section>
 
-<section *ngIf="hasMailingAddress"
-         class="mb-4">
+<app-address-view title="Physical Address"
+                  [address]="enrollee.physicalAddress"
+                  [showRedirect]="showEditRedirect"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
 
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Preferred Address</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Preferred Address"
-            (click)="onRoute(demographicRoutePath)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Country">
-    {{ enrollee.mailingAddress?.countryCode | configCode: 'countries' | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Province">
-    {{ enrollee.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Street Address">
-    {{ enrollee.mailingAddress?.street | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="enrollee.mailingAddress?.street2"
-                         title="Street Address 2">
-    {{ enrollee.mailingAddress?.street2 | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="City">
-    {{ enrollee.mailingAddress?.city | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Postal Code">
-    {{ enrollee.mailingAddress?.postal | postal | default }}
-  </app-enrollee-property>
-
-</section>
+<app-address-view title="Mailing Address"
+                  [address]="enrollee.mailingAddress"
+                  [showRedirect]="showEditRedirect"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
 
 <section class="mb-4">
 
