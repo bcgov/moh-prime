@@ -77,10 +77,10 @@ import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/e
 import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
-import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.component';
-import { PreferredNameFormComponent } from './components/forms/preferred-name-form/preferred-name-form.component';
-import { EscalationNoteComponent } from './components/dialogs/content/escalation-note/escalation-note.component';
-import { ClaimNoteComponent } from './components/dialogs/content/claim-note/claim-note.component';
+import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
+import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
+import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 
 @NgModule({
   declarations: [
@@ -145,11 +145,11 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     SendEmailComponent,
     CareSettingPipe,
     JoinPipe,
-    PreferredNameFormComponent
-    TriageComponent,
+    PreferredNameFormComponent,
     ToggleContentComponent,
     BcscProfileComponent,
-    PreferredNameFormComponent
+    PreferredNameFormComponent,
+    TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent
   ],
@@ -223,10 +223,10 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     ContactInformationFormComponent,
     CareSettingPipe,
     JoinPipe,
-    TriageComponent,
     ToggleContentComponent,
     BcscProfileComponent,
-    PreferredNameFormComponent
+    PreferredNameFormComponent,
+    TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent
   ],
