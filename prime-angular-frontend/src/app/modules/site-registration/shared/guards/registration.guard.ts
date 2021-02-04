@@ -54,7 +54,6 @@ export class RegistrationGuard extends BaseGuard {
             : createOrganization$
         ),
         map((organization: Organization) => {
-          // TODO PRIME-1131
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           // TODO drop this and see if the organization guard is enough

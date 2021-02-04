@@ -19,8 +19,6 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
-import { OrganizationSigningAuthorityFormState } from './organization-signing-authority-form-state.class';
-
 @Component({
   selector: 'app-organization-signing-authority',
   templateUrl: './organization-signing-authority.component.html',
@@ -92,8 +90,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.organizationFormStateService.json;
-      this.organizationResource
-        .updateOrganization(payload)
+      this.organizationResource.updateOrganization(payload)
         .subscribe(() => {
           this.form.markAsPristine();
           this.nextRoute();
@@ -143,6 +140,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public ngOnInit() {
     this.createFormInstance();
+    this.patchForm();
     // Ensure enrollee validated address information has been
     // checked before initializing the form to control UI and
     // validation management
@@ -159,12 +157,17 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.form = formState.form;
   }
 
-  private initForm() {
+  private patchForm() {
+    // Store a local copy of the organization for views
     this.organization = this.organizationService.organization;
     this.isCompleted = this.organization?.completed;
-    this.organizationFormStateService.setForm(this.organization, true);
-    this.form.markAsPristine();
 
+    // Attempt to patch the form if not already patched
+    this.organizationFormStateService.setForm(this.organization, true);
+    // this.form.markAsPristine();
+  }
+
+  private initForm() {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
     this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
