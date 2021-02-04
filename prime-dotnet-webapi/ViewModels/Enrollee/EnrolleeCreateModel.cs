@@ -76,7 +76,7 @@ namespace Prime.ViewModels
                 FirstName = user.FindFirstValue(Claims.GivenName);
                 LastName = user.FindFirstValue(Claims.FamilyName);
                 GivenNames = user.FindFirstValue(Claims.GivenNames);
-                VerifiedAddress = user.GetVerifiedAddress();
+                VerifiedAddress = VerifiedAddress;
             }
             else
             {
