@@ -62,5 +62,14 @@ namespace Prime.ViewModels
         public bool RemoteAccess { get; set; }
 
         public ICollection<int> CareSettingCodes { get; set; }
+
+        public bool HasNotification { get; set; }
+
+        public EnrolleeListViewModel SetNotification(bool value)
+        {
+            HasNotification = value;
+            return this;
+        }
+
     }
 }
