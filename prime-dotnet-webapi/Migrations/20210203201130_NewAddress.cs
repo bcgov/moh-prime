@@ -8,6 +8,155 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "EnrolleeAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    AddressId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EnrolleeAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EnrolleeAddress_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EnrolleeAddress_Enrollee_EnrolleeId",
+                        column: x => x.EnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeAddress_EnrolleeId_AddressId",
+                table: "EnrolleeAddress",
+                columns: new[] { "EnrolleeId", "AddressId" },
+                unique: true);
+
+            migrationBuilder.CreateTable(
+                name: "PartyAddress",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PartyId = table.Column<int>(nullable: false),
+                    AddressId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PartyAddress", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PartyAddress_Address_AddressId",
+                        column: x => x.AddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PartyAddress_Party_PartyId",
+                        column: x => x.PartyId,
+                        principalTable: "Party",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartyAddress_PartyId_AddressId",
+                table: "PartyAddress",
+                columns: new[] { "PartyId", "AddressId" },
+                unique: true);
+
+            migrationBuilder.InsertData(
+                table: "StatusReasonLookup",
+                columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
+                values: new object[] { 17, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "No address from BCSC. Enrollee entered address.", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeAddress_AddressId",
+                table: "EnrolleeAddress",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeAddress_EnrolleeId",
+                table: "EnrolleeAddress",
+                column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartyAddress_AddressId",
+                table: "PartyAddress",
+                column: "AddressId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PartyAddress_PartyId",
+                table: "PartyAddress",
+                column: "PartyId");
+
+            // Migrate data
+            //
+            migrationBuilder.Sql(@"
+                INSERT INTO ""EnrolleeAddress""
+                (
+                    ""AddressId"",
+                    ""EnrolleeId""
+                )
+                SELECT
+                    e.""MailingAddressId"", e.""Id""
+                FROM
+                    ""Enrollee"" e
+                WHERE
+                    e.""MailingAddressId"" is not null
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""EnrolleeAddress""
+                (
+                    ""AddressId"",
+                    ""EnrolleeId""
+                )
+                SELECT
+                    e.""PhysicalAddressId"", e.""Id""
+                FROM
+                    ""Enrollee"" e
+                WHERE
+                    e.""PhysicalAddressId"" is not null
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""PartyAddress""
+                (
+                    ""AddressId"",
+                    ""PartyId""
+                )
+                SELECT
+                    p.""MailingAddressId"", p.""Id""
+                FROM
+                    ""Party"" p
+                WHERE
+                    p.""MailingAddressId"" is not null
+            ");
+
+            migrationBuilder.Sql(@"
+                INSERT INTO ""PartyAddress""
+                (
+                    ""AddressId"",
+                    ""PartyId""
+                )
+                SELECT
+                    p.""PhysicalAddressId"", p.""Id""
+                FROM
+                    ""Party"" p
+                WHERE
+                    p.""PhysicalAddressId"" is not null
+            ");
+
+            // Drop unnecessary columns
+            //
             migrationBuilder.DropForeignKey(
                 name: "FK_Enrollee_Address_MailingAddressId",
                 table: "Enrollee");
@@ -55,83 +204,6 @@ namespace Prime.Migrations
             migrationBuilder.DropColumn(
                 name: "PhysicalAddressId",
                 table: "Enrollee");
-
-            migrationBuilder.CreateTable(
-                name: "EnrolleeAddress",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    EnrolleeId = table.Column<int>(nullable: false),
-                    AddressId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EnrolleeAddress", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EnrolleeAddress_Address_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EnrolleeAddress_Enrollee_EnrolleeId",
-                        column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PartyAddress",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PartyId = table.Column<int>(nullable: false),
-                    AddressId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PartyAddress", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PartyAddress_Address_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PartyAddress_Party_PartyId",
-                        column: x => x.PartyId,
-                        principalTable: "Party",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "StatusReasonLookup",
-                columns: new[] { "Code", "CreatedTimeStamp", "CreatedUserId", "Name", "UpdatedTimeStamp", "UpdatedUserId" },
-                values: new object[] { 17, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "No address from BCSC. Enrollee entered address.", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnrolleeAddress_AddressId",
-                table: "EnrolleeAddress",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnrolleeAddress_EnrolleeId",
-                table: "EnrolleeAddress",
-                column: "EnrolleeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartyAddress_AddressId",
-                table: "PartyAddress",
-                column: "AddressId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PartyAddress_PartyId",
-                table: "PartyAddress",
-                column: "PartyId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
