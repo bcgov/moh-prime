@@ -40,6 +40,7 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
+      // Expected in most cases provided by BCSC identity provider
       verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),

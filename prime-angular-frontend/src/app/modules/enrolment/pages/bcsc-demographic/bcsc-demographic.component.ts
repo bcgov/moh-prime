@@ -38,10 +38,10 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
    * Enrollee information from the provider not contained
    * within the form for use in creation.
    */
-  public enrollee: Enrollee;
+  public bcscUser: BcscUser;
 
   public hasPreferredName: boolean;
-  public hasValidatedAddress: boolean;
+  public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
@@ -105,25 +105,36 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   public ngOnInit() {
     this.createFormInstance();
     // Ensure that the enrollee user information is loaded prior
-    // to initialization of the form to check for validated address
+    // to initialization of the form to check for verified address
     // information to control UI and validation management
-    this.getUser$()
+    this.authService.getUser$()
       .pipe(
-        map((enrollee: Enrollee) => {
-          this.enrollee = enrollee;
-          this.hasValidatedAddress = Address.isNotEmpty(enrollee.verifiedAddress);
-          if (!this.hasValidatedAddress) {
+        map((bcscUser: BcscUser) => {
+          this.bcscUser = bcscUser;
+          this.hasVerifiedAddress = Address.isNotEmpty(bcscUser.verifiedAddress);
+          if (!this.hasVerifiedAddress) {
             this.clearAddressValidator(this.verifiedAddress);
             this.setAddressValidator(this.physicalAddress);
           }
+
+          return bcscUser;
         }),
-        exhaustMap(() => this.patchForm())
+        // Patch the form using the stored enrolment information
+        exhaustMap((bcscUser: BcscUser) => this.patchForm().pipe(map(() => bcscUser))),
+        // BCSC information should always use identity provider
+        // profile information as the source of truth, and
+        // patch the form to have it save changes
+        map((bcscUser: BcscUser) => {
+          if (bcscUser.verifiedAddress) {
+            this.verifiedAddress.patchValue(bcscUser.verifiedAddress);
+          }
+        })
       )
       .subscribe(() => this.initForm());
   }
@@ -139,7 +150,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
     this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
     this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
@@ -147,8 +158,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       return this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
+            const { verifiedAddress, ...remainder } = enrollee;
             const { userId, ...demographic } = enrolment.enrollee;
-            return { ...enrollee, ...demographic };
+            return { ...remainder, ...demographic, verifiedAddress };
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate generated keys within the form state
