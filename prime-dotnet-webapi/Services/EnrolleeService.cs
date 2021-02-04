@@ -152,6 +152,12 @@ namespace Prime.Services
             createModel.ThrowIfNull(nameof(createModel));
 
             var enrollee = _mapper.Map<Enrollee>(createModel);
+            enrollee.Addresses = new List<EnrolleeAddress>();
+
+            UpdateAddress(enrollee, createModel.MailingAddress);
+            UpdateAddress(enrollee, createModel.PhysicalAddress);
+            UpdateAddress(enrollee, createModel.VerifiedAddress);
+
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
