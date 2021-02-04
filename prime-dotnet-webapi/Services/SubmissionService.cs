@@ -187,6 +187,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
@@ -214,6 +215,7 @@ namespace Prime.Services
             await _agreementService.AcceptCurrentEnrolleeAgreementAsync(enrollee.Id);
             await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             if (enrollee.AdjudicatorId != null)
             {
@@ -230,6 +232,7 @@ namespace Prime.Services
         {
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined TOA");
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
             await _context.SaveChangesAsync();
         }
 
@@ -240,6 +243,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task LockProfileAsync(Enrollee enrollee)
@@ -249,6 +253,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task DeclineProfileAsync(Enrollee enrollee)
@@ -257,6 +262,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
             await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             if (_httpContext.HttpContext.User.HasVCIssuance())
             {
@@ -277,6 +283,7 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
             await ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
         private async Task SetGpid(Enrollee enrollee)

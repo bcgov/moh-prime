@@ -23,6 +23,9 @@ import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
+import { EnrolleeNotification } from '../models/enrollee-notification.model';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { SiteNotification } from '../models/site-notification.model';
 
 @Injectable({
   providedIn: 'root'
@@ -365,6 +368,115 @@ export class AdjudicationResource {
         })
       );
   }
+
+  // ---
+  // Notifications
+  // ---
+
+  public getNotificationsByEnrollee(enrolleeId: number): Observable<EnrolleeNote[]> {
+    return this.apiResource.get(`enrollees/${enrolleeId}/notifications`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNote[]>) => response.result),
+        tap((adjudicatorNotes: EnrolleeNote[]) => this.logger.info('ENROLLEE_NOTIFICATIONS', adjudicatorNotes)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Notification could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getNotificationsByEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createEnrolleeNotification(enrolleeId: number, enrolleeNoteId: number, assigneeId: number): Observable<EnrolleeNotification> {
+    const payload = { data: assigneeId };
+    return this.apiResource.post(`enrollees/${enrolleeId}/adjudicator-notes/${enrolleeNoteId}/notification`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNotification>) => response.result),
+        tap((notification: EnrolleeNotification) => {
+          this.toastService.openErrorToast('Enrolment Notification has been saved');
+          this.logger.info('NEW_ENROLMENT_ESCALTION', notification);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Notification has been saved');
+          this.logger.error('[Adjudication] AdjudicationResource::createEnrolleeNotification error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteEnrolleeNotification(enrolleeId: number, enrolleeNoteId: number) {
+    return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator-notes/${enrolleeNoteId}/notification`)
+      .pipe(
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Notification could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteEnrolleeNotification error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteEnrolleeNotifications(enrolleeId: number) {
+    return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/notifications`)
+      .pipe(
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee Notifications could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteEnrolleeNotifications error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getNotificationsBySite(siteId: number): Observable<SiteRegistrationNote[]> {
+    return this.apiResource.get(`sites/${siteId}/notifications`)
+      .pipe(
+        map((response: ApiHttpResponse<SiteRegistrationNote[]>) => response.result),
+        tap((siteRegistrationNotes: SiteRegistrationNote[]) => this.logger.info('SITE_NOTIFICATIONS', siteRegistrationNotes)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Notifications could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getNotificationsBySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createSiteNotification(siteId: number, siteRegistrationNoteId: number, assigneeId: number): Observable<SiteNotification> {
+    const payload = { data: assigneeId };
+    return this.apiResource.post(`sites/${siteId}/site-registration-notes/${siteRegistrationNoteId}/notification`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<SiteNotification>) => response.result),
+        tap((notification: SiteNotification) => {
+          this.toastService.openErrorToast('Site Notification has been saved');
+          this.logger.info('NEW_ENROLMENT_ESCALTION', notification);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Notification has been saved');
+          this.logger.error('[Adjudication] AdjudicationResource::createSiteNotification error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteSiteNotification(siteId: number, siteRegistrationNoteId: number) {
+    return this.apiResource.delete(`sites/${siteId}/site-registration-notes/${siteRegistrationNoteId}/notification`)
+      .pipe(
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Notification could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteSiteNotification error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteSiteNotifications(siteId: number) {
+    return this.apiResource.delete(`sites/${siteId}/notifications`)
+      .pipe(
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site Notifications could not be deleted');
+          this.logger.error('[Adjudication] AdjudicationResource::deleteSiteNotifications error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
 
   // ---
   // Enrollee and Enrolment Adapters

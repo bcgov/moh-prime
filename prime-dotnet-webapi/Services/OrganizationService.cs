@@ -9,6 +9,8 @@ using Prime.ViewModels;
 using Prime.HttpClients;
 using Prime.ViewModels.Parties;
 using System.Security.Claims;
+using AutoMapper.QueryableExtensions;
+using AutoMapper;
 
 namespace Prime.Services
 {
@@ -17,35 +19,35 @@ namespace Prime.Services
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
 
         public OrganizationService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
             IPartyService partyService,
+            IMapper mapper,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
             _documentClient = documentClient;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null)
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync()
         {
-            return await GetBaseOrganizationQuery()
-                .Include(o => o.Sites)
-                    .ThenInclude(s => s.SiteVendors)
-                .Include(o => o.Sites)
-                    .ThenInclude(s => s.PhysicalAddress)
-                .Include(o => o.Sites)
-                    .ThenInclude(s => s.Adjudicator)
-                .Include(o => o.Sites)
-                    .ThenInclude(s => s.RemoteUsers)
-                .Include(o => o.Sites)
-                    .ThenInclude(s => s.BusinessLicence)
-                        .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .If(partyId != null, q => q.Where(o => o.SigningAuthorityId == partyId))
+            return await _context.Organizations
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
+        {
+            return await _context.Organizations
+                .Where(o => o.SigningAuthorityId == partyId)
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
@@ -66,7 +68,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create Organization. Error when updating Signing Authority");
             }
 
-            var organizations = await GetOrganizationsAsync(partyId);
+            var organizations = await GetOrganizationsByPartyIdAsync(partyId);
             if (organizations.Count() != 0)
             {
                 throw new InvalidOperationException("Could not create Organization. Only one organization can exist for a party.");

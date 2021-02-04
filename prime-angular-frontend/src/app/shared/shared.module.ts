@@ -59,7 +59,6 @@ import { ApproveEnrolmentComponent } from '@shared/components/dialogs/content/ap
 import { PrimeSupportEmailComponent } from '@shared/components/prime-support-email/prime-support-email.component';
 import { AccessTermsTableComponent } from '@shared/components/access-terms-table/access-terms-table.component';
 import { AccessTermComponent } from '@shared/components/access-term/access-term.component';
-import { ClaimEnrolleeComponent } from '@shared/components/dialogs/content/claim-enrollee/claim-enrollee.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CollectionNoticeContainerComponent } from '@shared/components/collection-notice-container/collection-notice-container.component';
@@ -71,7 +70,6 @@ import { OverviewSectionComponent } from '@shared/components/overview-section/ov
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
 import { CollegeCertificationFormComponent } from '@shared/components/forms/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
-import { ClaimSiteComponent } from '@shared/components/dialogs/content/claim-site/claim-site.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
@@ -81,6 +79,8 @@ import { SendEmailComponent } from '@shared/components/dialogs/content/send-emai
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
 import { BcscProfileComponent } from './components/bcsc-profile/bcsc-profile.component';
 import { PreferredNameFormComponent } from './components/forms/preferred-name-form/preferred-name-form.component';
+import { EscalationNoteComponent } from './components/dialogs/content/escalation-note/escalation-note.component';
+import { ClaimNoteComponent } from './components/dialogs/content/claim-note/claim-note.component';
 
 @NgModule({
   declarations: [
@@ -128,7 +128,6 @@ import { PreferredNameFormComponent } from './components/forms/preferred-name-fo
     AccessTermsTableComponent,
     AccessTermComponent,
     NoteComponent,
-    ClaimEnrolleeComponent,
     ManualFlagNoteComponent,
     ImageComponent,
     CollectionNoticeContainerComponent,
@@ -140,17 +139,19 @@ import { PreferredNameFormComponent } from './components/forms/preferred-name-fo
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
     AddressAutocompleteComponent,
-    ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
     SendEmailComponent,
     CareSettingPipe,
     JoinPipe,
+    PreferredNameFormComponent
     TriageComponent,
     ToggleContentComponent,
     BcscProfileComponent,
     PreferredNameFormComponent
+    EscalationNoteComponent,
+    ClaimNoteComponent
   ],
   imports: [
     CommonModule,
@@ -217,7 +218,6 @@ import { PreferredNameFormComponent } from './components/forms/preferred-name-fo
     OverviewSectionComponent,
     OverviewContainerComponent,
     CollegeCertificationFormComponent,
-    ClaimSiteComponent,
     RemoteUserReviewComponent,
     AccessCodeFormComponent,
     ContactInformationFormComponent,
@@ -227,6 +227,8 @@ import { PreferredNameFormComponent } from './components/forms/preferred-name-fo
     ToggleContentComponent,
     BcscProfileComponent,
     PreferredNameFormComponent
+    EscalationNoteComponent,
+    ClaimNoteComponent
   ],
   providers: [
     FullnamePipe,
