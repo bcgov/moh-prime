@@ -13568,7 +13568,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("EnrolleeId");
+                    b.HasIndex("EnrolleeId", "AddressId")
+                        .IsUnique();
 
                     b.ToTable("EnrolleeAddress");
                 });
@@ -15533,7 +15534,8 @@ namespace Prime.Migrations
 
                     b.HasIndex("AddressId");
 
-                    b.HasIndex("PartyId");
+                    b.HasIndex("PartyId", "AddressId")
+                        .IsUnique();
 
                     b.ToTable("PartyAddress");
                 });
