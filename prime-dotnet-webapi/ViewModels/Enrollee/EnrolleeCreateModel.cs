@@ -9,6 +9,16 @@ namespace Prime.ViewModels
 {
     public class EnrolleeCreateModel
     {
+        public Guid UserId { get; set; }
+
+        public string HPDID { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string GivenNames { get; set; }
+
         public DateTime DateOfBirth { get; set; }
 
         public string PreferredFirstName { get; set; }
@@ -31,23 +41,7 @@ namespace Prime.ViewModels
 
         public string SmsPhone { get; set; }
 
-        // Properties conditionally set by the backend based on Identity Provider
-        [JsonIgnore]
-        public string HPDID { get; set; }
-
-        [JsonIgnore]
-        public string FirstName { get; set; }
-
-        [JsonIgnore]
-        public string LastName { get; set; }
-
-        [JsonIgnore]
-        public string GivenNames { get; set; }
-
         // Properties always set by the backend from the JWT token (we cannot trust these properties from the frontend)
-        [JsonIgnore]
-        public Guid UserId { get; set; }
-
         [JsonIgnore]
         public int IdentityAssuranceLevel { get; set; }
 
@@ -64,34 +58,39 @@ namespace Prime.ViewModels
             return DateOfBirth > DateTime.Today.AddYears(-18);
         }
 
-        public void MapConditionalProperties(ClaimsPrincipal user)
+        public void MapUserClaims(ClaimsPrincipal user)
         {
-            UserId = user.GetPrimeUserId();
             IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
 
+            if (IdentityProvider != AuthConstants.BCServicesCard)
+            {
+                // TODO: Send this up from FE rather than mapping it
+                GivenNames = FirstName;
+            }
+        }
+
+        public bool Validate(ClaimsPrincipal user)
+        {
+            if (UserId != user.GetPrimeUserId()
+                || FirstName != user.FindFirstValue(Claims.GivenName)
+                || LastName != user.FindFirstValue(Claims.FamilyName)
+                || IsUnder18())
+            {
+                return false;
+            }
+
             if (IdentityProvider == AuthConstants.BCServicesCard)
             {
-                HPDID = user.FindFirstValue(Claims.PreferredUsername);
-                FirstName = user.FindFirstValue(Claims.GivenName);
-                LastName = user.FindFirstValue(Claims.FamilyName);
-                GivenNames = user.FindFirstValue(Claims.GivenNames);
-                VerifiedAddress = user.GetVerifiedAddress();
+                return HPDID == user.FindFirstValue(Claims.PreferredUsername)
+                    && GivenNames == user.FindFirstValue(Claims.GivenNames)
+                    && DateOfBirth == user.GetDateOfBirth()
+                    && VerifiedAddress == user.GetVerifiedAddress();
             }
             else
             {
-                FirstName = PreferredFirstName;
-                LastName = PreferredLastName;
-                GivenNames = $"{PreferredFirstName} {PreferredMiddleName}";
-                PhysicalAddress = new PhysicalAddress
-                {
-                    CountryCode = MailingAddress.CountryCode,
-                    ProvinceCode = MailingAddress.ProvinceCode,
-                    Street = MailingAddress.Street,
-                    Street2 = MailingAddress.Street2,
-                    City = MailingAddress.City,
-                    Postal = MailingAddress.Postal
-                };
+                return VerifiedAddress == null
+                    && Email == user.FindFirstValue(Claims.Email);
             }
         }
     }

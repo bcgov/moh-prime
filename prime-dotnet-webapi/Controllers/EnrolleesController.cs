@@ -130,11 +130,12 @@ namespace Prime.Controllers
             }
 
             var createModel = payload.Enrollee;
-            createModel.MapConditionalProperties(User);
+            createModel.MapUserClaims(User);
 
-            if (createModel.IsUnder18())
+            if (!createModel.Validate(User))
             {
-                return Forbid();
+                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             string filename = null;
