@@ -1,8 +1,11 @@
+
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SiteService } from '@registration/shared/services/site.service';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Person } from '@registration/shared/models/person.model';
+import { Address } from '@shared/models/address.model';
+import { Party } from '@registration/shared/models/party.model';
 
 @Component({
   selector: 'app-same-as',
@@ -57,6 +60,14 @@ export class SameAsComponent implements OnInit {
   private removeContactIds(person: Person): Person {
     if (!person) {
       return null;
+    }
+
+    // Use verifiedAddress by defalt and fall back to physicalAddress
+    // if verifiedAddress is empty
+    const party = person as Party;
+    if (Address.isNotEmpty(party.verifiedAddress)) {
+      // make a copy of verifiedAddress
+      party.physicalAddress = Object.assign({}, party.verifiedAddress);
     }
 
     person.id = 0;
