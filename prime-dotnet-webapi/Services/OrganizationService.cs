@@ -46,6 +46,9 @@ namespace Prime.Services
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
         {
             return await _context.Organizations
+                .Include(o => o.SigningAuthority)
+                        .ThenInclude(sa => sa.Addresses)
+                            .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -225,12 +228,6 @@ namespace Prime.Services
                 agreement.AcceptedDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
-        }
-
-        public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
-        {
-            return await _context.Organizations
-                .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
         }
 
         public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
