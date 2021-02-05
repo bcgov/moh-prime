@@ -1,4 +1,3 @@
-
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SiteService } from '@registration/shared/services/site.service';
