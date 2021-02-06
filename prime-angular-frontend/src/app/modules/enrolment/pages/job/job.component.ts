@@ -333,10 +333,10 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   private removeCareSettingSites() {
     // Clear out sites so validation doesn't interrupt submissions
     this.communityHealthSites.clearValidators();
-    this.communityHealthSites.clear();
+    this.communityHealthSites.updateValueAndValidity();
     this.communityPharmacySites.clearValidators();
-    this.communityPharmacySites.clear();
+    this.communityPharmacySites.updateValueAndValidity();
     this.healthAuthoritySites.clearValidators();
-    this.healthAuthoritySites.clear();
+    this.healthAuthoritySites.updateValueAndValidity();
   }
 }
