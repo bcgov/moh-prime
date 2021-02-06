@@ -24,8 +24,12 @@ namespace Prime.Models
 
         public bool LicensedToProvideCare { get; set; }
 
+        public int PrescriberIdMandatory { get; set; }
+
         [Required]
         public string Name { get; set; }
+
+        public string LicenceNumberLabel { get; set; }
 
         [JsonIgnore]
         public ICollection<Certification> Certifications { get; set; }
