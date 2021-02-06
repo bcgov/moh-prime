@@ -141,9 +141,9 @@ namespace Prime.Controllers
             string filename = null;
             if (!createModel.IsBcServicesCard())
             {
-                if (payload.IdentificationDocumentGuid != null)
+                if (payload.IdentificationDocumentGuid.HasValue)
                 {
-                    filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
+                    filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, "identification_document");
                     if (string.IsNullOrWhiteSpace(filename))
                     {
                         ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
@@ -162,7 +162,7 @@ namespace Prime.Controllers
 
             if (filename != null)
             {
-                await _enrolleeService.CreateIdentificationDocument(enrollee.Id, (Guid)payload.IdentificationDocumentGuid, filename);
+                await _enrolleeService.CreateIdentificationDocument(enrollee.Id, payload.IdentificationDocumentGuid.Value, filename);
             }
 
             return CreatedAtAction(
