@@ -67,6 +67,18 @@ namespace Prime.Services.Rules
             foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
             {
                 PharmanetCollegeRecord record = null;
+
+                if (cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.NA) && cert.License == null
+                || cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.Mandatory) && cert.PractitionerId == null)
+                {
+                    return false;
+                }
+
+                if (cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
+                {
+                    return passed;
+                }
+
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
