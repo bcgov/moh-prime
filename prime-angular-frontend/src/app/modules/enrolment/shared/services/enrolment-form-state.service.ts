@@ -235,17 +235,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
-    // Ensure consistent order of health authorities by always
-    // using the config service sort order
-    // TODO:
-    // const enrolleeHealthAuthorities = this.configService.healthAuthorities
-    //   .map(c => c.code)
-    //   .map(code => ({
-    //     healthAuthorityCode: code,
-    //     facilityCodes: this.getHealthAuthorityFacilities(healthAuthorities, code)
-    //   }));
-    // this.careSettingsForm.patchValue({ enrolleeHealthAuthorities });
-
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
       jobs.clear();
@@ -266,23 +255,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       communityHealthSites.clear();
       communityPharmacySites.clear();
       healthAuthoritySites.clear();
-
-      enrolment.careSettings.forEach((careSetting: CareSetting) => {
-        switch (careSetting.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-        }
-      });
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();

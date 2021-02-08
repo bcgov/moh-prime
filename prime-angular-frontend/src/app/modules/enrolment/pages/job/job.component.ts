@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
@@ -200,18 +201,21 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.careSettings?.forEach((careSetting) => {
       switch (careSetting.careSettingCode) {
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
           if (!this.communityHealthSites.length) {
             this.addOboSite(careSetting.careSettingCode);
           }
           break;
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
           if (!this.communityPharmacySites.length) {
             this.addOboSite(careSetting.careSettingCode);
           }
           break;
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
+          this.healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
           if (!this.healthAuthoritySites.length) {
             this.addOboSite(careSetting.careSettingCode);
           }
@@ -327,9 +331,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   private removeCareSettingSites() {
-    // Clear out sites so validation don't interrupt submissions
-    this.communityHealthSites.clear();
-    this.communityPharmacySites.clear();
-    this.healthAuthoritySites.clear();
+    // Clear out sites so validation doesn't interrupt submissions
+    this.communityHealthSites.clearValidators();
+    this.communityHealthSites.updateValueAndValidity();
+    this.communityPharmacySites.clearValidators();
+    this.communityPharmacySites.updateValueAndValidity();
+    this.healthAuthoritySites.clearValidators();
+    this.healthAuthoritySites.updateValueAndValidity();
   }
 }

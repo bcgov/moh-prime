@@ -22,6 +22,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-site-management',
@@ -37,6 +38,7 @@ export class SiteManagementComponent implements OnInit {
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
   public AgreementType = AgreementType;
+  public CareSettingEnum = CareSettingEnum;
   public SiteRoutes = SiteRoutes;
 
   constructor(
