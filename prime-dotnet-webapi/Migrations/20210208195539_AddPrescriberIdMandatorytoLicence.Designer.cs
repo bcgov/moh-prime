@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210208192701_AddPrescriberIdMandatorytoLicence")]
+    [Migration("20210208195539_AddPrescriberIdMandatorytoLicence")]
     partial class AddPrescriberIdMandatorytoLicence
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -15015,7 +15015,7 @@ namespace Prime.Migrations
                             PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true,
+                            Validate = false,
                             Weight = 7
                         },
                         new
@@ -15047,7 +15047,7 @@ namespace Prime.Migrations
                             PrescriberIdMandatory = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false,
+                            Validate = true,
                             Weight = 9
                         },
                         new
@@ -15075,7 +15075,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Employed Student Nurse",
                             NamedInImReg = false,
-                            Prefix = "96",
+                            Prefix = "R9",
                             PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -15091,7 +15091,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "96",
+                            Prefix = "R9",
                             PrescriberIdMandatory = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -15107,7 +15107,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Provisional Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "96",
+                            Prefix = "R9",
                             PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
@@ -15123,7 +15123,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Non-Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "96",
+                            Prefix = "R9",
                             PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
