@@ -38,6 +38,7 @@ export interface LicenseConfig extends Config<number> {
   namedInImReg: boolean;
   weight: number;
   validate: boolean;
+  prescriberIdMandatory: PrescriberIdType;
 }
 
 export interface CollegeLicenseConfig {
@@ -56,4 +57,10 @@ export interface VendorConfig extends Config<number> {
 
 export interface ProvinceConfig extends Config<string> {
   countryCode: string;
+}
+
+export enum PrescriberIdType {
+  NA = 1,
+  Optional = 2,
+  Mandatory = 3
 }

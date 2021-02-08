@@ -41,7 +41,9 @@
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
-            <mat-label>Licence class issued by the college</mat-label>
+            <mat-label>{{ (collegeCode.value === CollegeLicenceClass.CPSBC) ? "CPSID Number" : "Licence class issued by
+              the
+              college" }}</mat-label>
             <mat-select formControlName="licenseCode">
               <mat-option *ngFor="let license of allowedLicenses()"
                           [value]="license.code">
@@ -55,32 +57,45 @@
 
         <div class="col-sm-12 pl-5">
 
-          <div class="row">
-            <div class="col">
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Licence Number from College"
+                   formControlName="licenseNumber">
+            <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
+              Must contain only alphanumeric characters
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Licence Number from College"
-                       formControlName="licenseNumber"
-                       (blur)="onLicenceNumberBlur()">
-                <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-                <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
-                  Must contain only alphanumeric characters
-                </mat-error>
-              </mat-form-field>
+        <div class="col-sm-12 pl-5"
+             *ngIf="!condensed && prescriberIdMandatory > 1">
+          <div class="row">
+            <div class="col text-center my-auto">
+              <mat-checkbox #prescribing
+                            (change)="onPrescribing($event)"
+                            [checked]="prescriberIdMandatory === PrescriberIdType.Mandatory"
+                            [disabled]="prescriberIdMandatory === PrescriberIdType.Mandatory">
+                <div class="pl-3">
+                  Are you a prescribing nurse?
+                </div>
+              </mat-checkbox>
 
             </div>
-            <div *ngIf="!condensed && licenceValidatedByPharmaNet"
-                 class="col">
+
+            <div class="col">
 
               <app-form-icon-group>
                 <mat-form-field class="w-100">
                   <input matInput
-                         placeholder="Practitioner ID"
+                         placeholder="Prescriber ID"
                          formControlName="practitionerId">
                   <mat-error *ngIf="form.get('practitionerId').hasError('required')">Required</mat-error>
                   <mat-error *ngIf="form.get('practitionerId').hasError('numeric')">
-                    Must contain only numeric characters
+                    Must contain only 5 numeric characters
+                  </mat-error>
+                  <mat-error *ngIf="form.get('practitionerId').hasError('length')">
+                    Must contain only 5 numeric characters
                   </mat-error>
                 </mat-form-field>
 
@@ -122,7 +137,6 @@
 
             </div>
           </div>
-
         </div>
 
         <ng-container *ngIf="!condensed">
