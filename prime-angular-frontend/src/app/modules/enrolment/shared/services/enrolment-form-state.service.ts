@@ -10,6 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -105,9 +106,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.careSettingsForm.getRawValue();
-
-    const enrolleeHealthAuthorities = this.healthAuthoritiesFormState.json;
-
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -123,7 +121,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       jobs,
       oboSites,
       ...careSettings,
-      enrolleeHealthAuthorities,
       enrolleeRemoteUsers,
       remoteAccessSites,
       ...remoteAccessLocations,
@@ -227,6 +224,27 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
+    if (enrolment.enrolleeHealthAuthorities.length) {
+      const ehaFormArray = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+      ehaFormArray.clear();
+      // Re-populate selections associated with form after logoff/login situation
+      enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
+        const ehaFormGroup = this.buildEnrolleeHealthAuthorityFormGroup();
+        ehaFormGroup.patchValue(eha);
+        ehaFormArray.push(ehaFormGroup);
+      });
+    }
+
+    // Ensure consistent order of health authorities by always
+    // using the config service sort order
+    // TODO:
+    // const enrolleeHealthAuthorities = this.configService.healthAuthorities
+    //   .map(c => c.code)
+    //   .map(code => ({
+    //     healthAuthorityCode: code,
+    //     facilityCodes: this.getHealthAuthorityFacilities(healthAuthorities, code)
+    //   }));
+    // this.careSettingsForm.patchValue({ enrolleeHealthAuthorities });
 
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
@@ -523,13 +541,22 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
-      careSettings: this.fb.array([])
+      careSettings: this.fb.array([]),
+      enrolleeHealthAuthorities: this.fb.array([])
     });
   }
 
   public buildCareSettingForm(code: number = null): FormGroup {
     return this.fb.group({
       careSettingCode: [code, [Validators.required]]
+    });
+  }
+
+  public buildEnrolleeHealthAuthorityFormGroup(): FormGroup {
+    // Needs to have the fields to carry data to back-end
+    return this.fb.group({
+      enrolleeId: [null, []],
+      healthAuthorityCode: [null, []]
     });
   }
 

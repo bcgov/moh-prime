@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -13,6 +13,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
@@ -46,8 +47,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private configService: ConfigService,
-    private authService: AuthService
+    public configService: ConfigService,
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {
     super(
       route,
@@ -69,6 +71,20 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.form.get('careSettings') as FormArray;
   }
 
+  /**
+   * Representing available health authorities to select from and whether a given one was selected
+   */
+  public get availableHAs(): FormArray {
+    return this.form.get('availableHAs') as FormArray;
+  }
+
+  /**
+   * Health authorities selected by enrollee, stored as FormGroup objects
+   */
+  public get enrolleeHealthAuthorities(): FormArray {
+    return this.form.get('enrolleeHealthAuthorities') as FormArray;
+  }
+
   public onSubmit() {
     const controls = this.careSettings.controls;
 
@@ -76,6 +92,23 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.careSettingTypes.forEach(type => {
       if (!controls.some(c => c.value.careSettingCode === type.code)) {
         this.removeOboSites(type.code);
+      }
+    });
+
+    const enrolleeId = this.enrolment.id;
+
+    this.enrolleeHealthAuthorities.clear();
+    // Any checked HA is converted into an enrollee health authority FormGroup,
+    // which is used to create the payload to back-end
+    this.availableHAs?.controls.forEach((checkbox, i) => {
+      if (checkbox.value) {
+        var ha = this.configService.healthAuthorities[i];
+        const enrolleeHA = this.enrolmentFormStateService.buildEnrolleeHealthAuthorityFormGroup();
+        enrolleeHA.patchValue({
+          enrolleeId,
+          healthAuthorityCode: ha.code
+        });
+        this.enrolleeHealthAuthorities.push(enrolleeHA);
       }
     });
 
@@ -130,6 +163,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.careSettingTypes;
   }
 
+
+  public hasSelectedHACareSetting(): boolean {
+    // When code is in template, get: `Parser Error: Bindings cannot contain assignments`
+    return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  }
+
+
   public routeBackTo() {
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
@@ -168,6 +208,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // the enrollee to fill out
     if (!this.careSettings?.length) {
       this.addCareSetting();
+    }
+
+    // Initialize Health Authority form even if it might not be used:
+    // Create unchecked checkboxes for each known Health Authority.
+    this.form.controls.availableHAs = this.fb.array(this.configService.healthAuthorities.map(() => this.fb.control(false)));
+    if (this.enrolment.enrolleeHealthAuthorities.length) {
+      // Update value of checkboxes according to previous selections
+      this.enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
+        const haIndex = this.configService.healthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
+        this.availableHAs.controls[haIndex].setValue(true);
+      });
     }
   }
 
