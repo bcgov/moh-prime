@@ -48,7 +48,7 @@
 
       <app-toggle-content label="Provide your preferred physical address, if you have one"
                           [checked]="hasPhysicalAddress"
-                          (change)="onPhysicalAddressChange($event)">
+                          (toggle)="onPhysicalAddressChange($event)">
 
         <section>
           <app-page-subheader>

@@ -10,16 +10,16 @@ export class ToggleContentComponent implements OnInit {
   @Input() public color: 'primary' | 'accent' | 'warn';
   @Input() public label: string;
   @Input() public checked: boolean;
-  @Output() public change: EventEmitter<Pick<MatSlideToggleChange, 'checked'>>;
+  @Output() public toggle: EventEmitter<Pick<MatSlideToggleChange, 'checked'>>;
 
   constructor() {
     this.color = 'primary';
-    this.change = new EventEmitter<Pick<MatSlideToggleChange, 'checked'>>();
+    this.toggle = new EventEmitter<Pick<MatSlideToggleChange, 'checked'>>();
   }
 
   public onChange({ checked }: MatSlideToggleChange): void {
     this.checked = !this.checked;
-    this.change.emit({ checked });
+    this.toggle.emit({ checked });
   }
 
   public ngOnInit(): void { }

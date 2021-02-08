@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
+import { Address, AddressType } from '@shared/models/address.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Person } from '@registration/shared/models/person.model';
-import { Address } from '@shared/models/address.model';
 import { Party } from '@registration/shared/models/party.model';
 
 @Component({
@@ -33,22 +33,22 @@ export class SameAsComponent implements OnInit {
       {
         key: 'signingAuthority',
         display: 'Signing Authority',
-        data: this.removeContactIds(site?.provisioner)
+        data: this.fromParty({ ...site?.provisioner })
       },
       {
         key: 'administratorPharmaNet',
         display: 'Administrator of PharmaNet Onboarding',
-        data: this.removeContactIds(site?.administratorPharmaNet)
+        data: this.removeUniqueIds({ ...site?.administratorPharmaNet })
       },
       {
         key: 'privacyOfficer',
         display: 'Privacy Officer',
-        data: this.removeContactIds(site?.privacyOfficer)
+        data: this.removeUniqueIds({ ...site?.privacyOfficer })
       },
       {
         key: 'technicalSupport',
         display: 'Technical Support',
-        data: this.removeContactIds(site?.technicalSupport)
+        data: this.removeUniqueIds({ ...site?.technicalSupport })
       }
     ];
 
@@ -56,28 +56,32 @@ export class SameAsComponent implements OnInit {
     this.contacts = this.contacts.slice(0, index);
   }
 
-  private removeContactIds(person: Person): Person {
+  private fromParty(party: Party): Contact {
+    if (!party) {
+      return null;
+    }
+
+    // Use verifiedAddress by default and fallback to physicalAddress
+    if (Address.isNotEmpty(party.verifiedAddress)) {
+      party.physicalAddress = { ...party.verifiedAddress };
+    }
+
+    return this.removeUniqueIds(party);
+  }
+
+  private removeUniqueIds(person: Person): Contact {
     if (!person) {
       return null;
     }
 
-    // Use verifiedAddress by defalt and fall back to physicalAddress
-    // if verifiedAddress is empty
-    const party = person as Party;
-    if (Address.isNotEmpty(party.verifiedAddress)) {
-      // make a copy of verifiedAddress
-      party.physicalAddress = Object.assign({}, party.verifiedAddress);
-    }
-
     person.id = 0;
-    if (person.physicalAddress) {
-      person.physicalAddressId = 0;
-      person.physicalAddress.id = 0;
-    }
-    if (person.mailingAddress) {
-      person.mailingAddressId = 0;
-      person.mailingAddress.id = 0;
-    }
+    ['physicalAddress', 'mailingAddress']
+      .forEach((addressType: AddressType) => {
+        if (person[addressType]) {
+          person[`${addressType}Id`] = 0;
+          person[addressType].id = 0;
+        }
+      });
 
     return person;
   }

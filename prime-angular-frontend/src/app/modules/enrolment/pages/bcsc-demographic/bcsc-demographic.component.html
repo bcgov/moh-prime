@@ -25,7 +25,7 @@
 
       <app-toggle-content label="I have a preferred name"
                           [checked]="hasPreferredName"
-                          (change)="onPreferredNameChange($event)">
+                          (toggle)="onPreferredNameChange($event)">
 
         <section>
           <app-page-subheader2>
@@ -60,7 +60,7 @@
 
         <app-toggle-content label="I have a preferred physical address"
                             [checked]="hasPhysicalAddress"
-                            (change)="onPhysicalAddressChange($event)">
+                            (toggle)="onPhysicalAddressChange($event)">
 
           <section>
             <app-page-subheader2>
@@ -91,7 +91,7 @@
 
       <app-toggle-content label="I have a preferred mailing address"
                           [checked]="hasMailingAddress"
-                          (change)="onMailingAddressChange($event)">
+                          (toggle)="onMailingAddressChange($event)">
 
         <section>
           <app-page-subheader2>

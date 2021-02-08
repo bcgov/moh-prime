@@ -28,7 +28,7 @@
 
       <app-toggle-content label="Provide your name as it appears on your College licence, if applicable"
                           [checked]="hasPreferredName"
-                          (change)="onPreferredNameChange($event)">
+                          (toggle)="onPreferredNameChange($event)">
 
         <section>
           <app-page-subheader2>
@@ -64,7 +64,7 @@
 
         <app-toggle-content label="Provide your preferred physical address, if you have one"
                             [checked]="hasPhysicalAddress"
-                            (change)="onPhysicalAddressChange($event)">
+                            (toggle)="onPhysicalAddressChange($event)">
 
           <section>
             <app-page-subheader2>
@@ -72,11 +72,13 @@
             </app-page-subheader2>
 
             <app-address-form [form]="physicalAddress"
+                              [onlyBc]="true"
                               [showManualButton]="true"
                               [showAddressFields]="hasPhysicalAddress"></app-address-form>
           </section>
 
         </app-toggle-content>
+
       </ng-container>
 
       <ng-template #noAddress>
@@ -95,7 +97,7 @@
 
       <app-toggle-content label="Provide your preferred mailing address, if you have one"
                           [checked]="hasMailingAddress"
-                          (change)="onMailingAddressChange($event)">
+                          (toggle)="onMailingAddressChange($event)">
 
         <section>
           <app-page-subheader2>
