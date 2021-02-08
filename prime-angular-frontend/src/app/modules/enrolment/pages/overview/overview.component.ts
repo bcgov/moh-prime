@@ -73,11 +73,13 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? this.enrolmentResource.submitApplication(enrolment)
-              : EMPTY
-          )
+          // Perform an update that includes changes from BCSC
+          // profile updates prior to submission
+          exhaustMap((result: boolean) => (result)
+            ? this.enrolmentResource.updateEnrollee(enrolment)
+            : EMPTY
+          ),
+          exhaustMap(() => this.enrolmentResource.submitApplication(enrolment))
         )
         .subscribe(() => {
           this.toastService.openSuccessToast('Enrolment has been submitted');
