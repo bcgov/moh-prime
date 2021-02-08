@@ -24,7 +24,7 @@ namespace Prime.Models
 
         public bool LicensedToProvideCare { get; set; }
 
-        public int PrescriberIdMandatory { get; set; }
+        public PrescriberIdType PrescriberIdMandatory { get; set; }
 
         [Required]
         public string Name { get; set; }

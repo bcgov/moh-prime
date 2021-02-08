@@ -1,6 +1,6 @@
 namespace Prime.Models
 {
-    public enum PrescriberId
+    public enum PrescriberIdType
     {
         NA = 1,
         Optional = 2,
