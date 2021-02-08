@@ -2,12 +2,12 @@
 
 namespace Prime.Migrations
 {
-    public partial class AddPrescriberIdMandatorytoLicence : Migration
+    public partial class AddPrescriberIdTypetoLicence : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "PrescriberIdMandatory",
+                name: "PrescriberIdType",
                 table: "LicenseLookup",
                 nullable: false,
                 defaultValue: 0);
@@ -16,483 +16,483 @@ namespace Prime.Migrations
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 1,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 2,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 3,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 4,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 5,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 6,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 7,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 8,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 9,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 10,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 11,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 12,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 13,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 14,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 15,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 16,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 17,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 18,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 19,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 20,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 21,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 22,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 23,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 24,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 25,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 26,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 27,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 28,
-                columns: new[] { "NamedInImReg", "PrescriberIdMandatory", "Validate" },
+                columns: new[] { "NamedInImReg", "PrescriberIdType", "Validate" },
                 values: new object[] { false, 1, false });
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 29,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 30,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 31,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 32,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 33,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 34,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 35,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 36,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 37,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 38,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 39,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 40,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 41,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 42,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 43,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 44,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 45,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 2);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 46,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 47,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 3);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 48,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 49,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 50,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 3);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 51,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 3);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 52,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 53,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 54,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 55,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 56,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 57,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 58,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 59,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 60,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 61,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 62,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 63,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 64,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 65,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 66,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 67,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
 
             migrationBuilder.UpdateData(
                 table: "LicenseLookup",
                 keyColumn: "Code",
                 keyValue: 68,
-                column: "PrescriberIdMandatory",
+                column: "PrescriberIdType",
                 value: 1);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PrescriberIdMandatory",
+                name: "PrescriberIdType",
                 table: "LicenseLookup");
 
             migrationBuilder.UpdateData(

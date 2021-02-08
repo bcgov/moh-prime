@@ -68,20 +68,18 @@ namespace Prime.Services.Rules
             {
                 PharmanetCollegeRecord record = null;
 
-                if (cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.NA) && cert.License == null
-                || cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.Mandatory) && cert.PractitionerId == null)
-                {
-                    return false;
-                }
+                var licenceNumber = cert.License.PrescriberIdType.Equals(PrescriberIdType.NA)
+                                ? cert.LicenseNumber
+                                : cert.PractitionerId;
 
-                if (cert.License.PrescriberIdMandatory.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
+                if (cert.License.PrescriberIdType.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
                 {
                     return passed;
                 }
 
                 try
                 {
-                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
+                    record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
                 }
                 catch (PharmanetCollegeApiException)
                 {
