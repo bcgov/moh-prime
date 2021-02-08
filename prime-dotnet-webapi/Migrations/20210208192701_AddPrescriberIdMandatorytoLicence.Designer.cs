@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210208192701_AddPrescriberIdMandatorytoLicence")]
+    partial class AddPrescriberIdMandatorytoLicence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -15013,7 +15015,7 @@ namespace Prime.Migrations
                             PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false,
+                            Validate = true,
                             Weight = 7
                         },
                         new
@@ -15045,7 +15047,7 @@ namespace Prime.Migrations
                             PrescriberIdMandatory = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true,
+                            Validate = false,
                             Weight = 9
                         },
                         new
@@ -15073,7 +15075,8 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Employed Student Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
+                            PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15088,7 +15091,8 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
+                            PrescriberIdMandatory = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15103,7 +15107,8 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Provisional Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
+                            PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15118,7 +15123,8 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Non-Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
+                            PrescriberIdMandatory = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
