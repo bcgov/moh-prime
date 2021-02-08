@@ -87,7 +87,7 @@ namespace Prime.HttpClients
             {
                 ApplicationUUID = Guid.NewGuid().ToString();
                 ProgramArea = "PRIME";
-                LicenceNumber = cert.PractitionerId ?? throw new ArgumentNullException(nameof(LicenceNumber));
+                LicenceNumber = cert.PractitionerId; // ?? throw new ArgumentNullException(nameof(LicenceNumber));
                 CollegeReferenceId = cert.License?.Prefix ?? throw new ArgumentNullException(nameof(CollegeReferenceId));
             }
         }
