@@ -14,7 +14,7 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
@@ -33,7 +33,6 @@ export class OverviewComponent implements OnInit {
 
   public showSubmission: boolean;
 
-
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -41,7 +40,7 @@ export class OverviewComponent implements OnInit {
     private dialog: MatDialog,
     private siteService: SiteService,
     private organizationService: OrganizationService,
-    private logger: LoggerService,
+    private logger: LoggerService
   ) {
     this.routeUtils = (this.isOrganizationReview)
       ? new RouteUtils(route, router, SiteRoutes.routePath(SiteRoutes.ORGANIZATION_REVIEW))

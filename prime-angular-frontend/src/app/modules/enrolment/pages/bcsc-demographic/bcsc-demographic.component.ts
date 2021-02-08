@@ -127,9 +127,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
         }),
         // Patch the form using the stored enrolment information
         exhaustMap((bcscUser: BcscUser) => this.patchForm().pipe(map(() => bcscUser))),
-        // BCSC information should always use identity provider
-        // profile information as the source of truth, and
-        // patch the form to have it save changes
+        // BCSC information should always use identity provider profile
+        // information as the source of truth, and patch the form to
+        // have it save any changes
         map((bcscUser: BcscUser) => {
           if (bcscUser.verifiedAddress) {
             this.verifiedAddress.patchValue(bcscUser.verifiedAddress);
