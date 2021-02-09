@@ -114,7 +114,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public onVendorChange(change: MatRadioChange) {
     this.hasNoVendorError = false;
 
-    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers?.length) {
+    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
       const data: DialogOptions = {
         icon: 'announcement',
         ...this.vendorChangeDialogOptions,

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
 import { ClaimNoteComponent } from './claim-note.component';
 
@@ -8,9 +9,12 @@ describe('ClaimNoteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClaimNoteComponent ]
+      imports: [
+        NgxMaterialModule
+      ],
+      declarations: [ClaimNoteComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

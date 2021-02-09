@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { ContextualSiteNotificationComponent } from './contextual-site-notification.component';
 
@@ -8,9 +9,15 @@ describe('ContextualSiteNotificationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContextualSiteNotificationComponent ]
+      declarations: [ContextualSiteNotificationComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
