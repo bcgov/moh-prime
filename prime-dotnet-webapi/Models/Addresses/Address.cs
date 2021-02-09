@@ -60,7 +60,38 @@ namespace Prime.Models
             City = other.City;
             Postal = other.Postal;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Address other)
+            {
+                return Equals(other);
+            }
+
+            return false;
+        }
+
+        public bool Equals(Address other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return CountryCode == other.CountryCode
+                && ProvinceCode == other.ProvinceCode
+                && Street == other.Street
+                && Street2 == other.Street2
+                && City == other.City
+                && Postal == other.Postal;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(CountryCode, ProvinceCode, Street, Street2, City, Postal);
+        }
     }
+
     public class PhysicalAddress : Address
     { }
 
