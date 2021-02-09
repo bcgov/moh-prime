@@ -66,7 +66,7 @@ namespace Prime.Services.Rules
 
             foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
             {
-                if (cert.License.PrescriberIdType.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
+                if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)
                 {
                     continue;
                 }
