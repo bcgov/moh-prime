@@ -103,23 +103,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       }
     });
 
-    const enrolleeId = this.enrolment.id;
-
-    this.enrolleeHealthAuthorities.clear();
-    // Any checked HA is converted into an enrollee health authority FormGroup,
-    // which is used to create the payload to back-end
-    this.selectableHealthAuthorities.controls.forEach((checkbox, i) => {
-      if (checkbox.value) {
-        var ha = this.configService.healthAuthorities[i];
-        const enrolleeHA = this.enrolmentFormStateService.buildEnrolleeHealthAuthorityFormGroup();
-        enrolleeHA.patchValue({
-          enrolleeId,
-          healthAuthorityCode: ha.code
-        });
-        this.enrolleeHealthAuthorities.push(enrolleeHA);
-      }
-    });
-
     // Remove health authorities if health authority care setting not chosen
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
       this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();

@@ -105,7 +105,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const { jobs, oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
-    const careSettings = this.careSettingsForm.getRawValue();
+    const careSettings = this.convertCareSettingFormToJson(id);
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -404,6 +404,27 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         } as Site,
       } as RemoteAccessSite;
     });
+  }
+
+  private convertCareSettingFormToJson(enrolleeId: number): any {
+    const { careSettings, enrolleeHealthAuthorities, selectableHealthAuthorities } = this.careSettingsForm.getRawValue();
+
+    if (selectableHealthAuthorities?.length) {
+      enrolleeHealthAuthorities.length = 0;
+      // Any checked HA is converted into an enrollee health authority,
+      // which is used to create the payload to back-end
+      selectableHealthAuthorities.forEach((checkState, i) => {
+        if (checkState) {
+          var ha = this.configService.healthAuthorities[i];
+          const enrolleeHA = {
+            enrolleeId,
+            healthAuthorityCode: ha.code
+          };
+          enrolleeHealthAuthorities.push(enrolleeHA);
+        }
+      });
+    }
+    return { careSettings, enrolleeHealthAuthorities };
   }
 
   /**
