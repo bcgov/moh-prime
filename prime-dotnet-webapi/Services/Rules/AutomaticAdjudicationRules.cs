@@ -74,8 +74,8 @@ namespace Prime.Services.Rules
                 PharmanetCollegeRecord record = null;
 
                 var licenceNumber = cert.License.PrescriberIdType == null
-                                ? cert.LicenseNumber
-                                : cert.PractitionerId;
+                    ? cert.LicenseNumber
+                    : cert.PractitionerId;
 
                 try
                 {
