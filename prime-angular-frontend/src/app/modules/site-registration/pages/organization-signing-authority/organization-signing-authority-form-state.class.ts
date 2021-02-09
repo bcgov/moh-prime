@@ -38,13 +38,15 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
   public buildForm(): void {
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
-      id: [0, []],
+      id: [0, []], // TODO do we need this?
+      hpdid: [{ value: null, disabled: true }, [Validators.required]],
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
+      givenNames: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
-      dateOfBirth: [null, [Validators.required]],
       verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),
