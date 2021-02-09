@@ -121,11 +121,9 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   public onPrescribing(event: MatCheckboxChange): void {
-    if (event.checked) {
-      this.enablePractitionerId()
-    } else {
-      this.disablePractitionerId();
-    }
+    (event.checked)
+      ? this.enablePractitionerId()
+      : this.disablePractitionerId();
   }
 
   public ngOnInit() {
