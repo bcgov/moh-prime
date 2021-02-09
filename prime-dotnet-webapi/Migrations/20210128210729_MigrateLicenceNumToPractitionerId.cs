@@ -6,6 +6,7 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            /*
             migrationBuilder.Sql(@"
                 UPDATE ""Certification"" c
                 SET ""PractitionerId"" = c.""LicenseNumber""
@@ -16,6 +17,7 @@ namespace Prime.Migrations
                 AND LENGTH(c.""LicenseNumber"") = 5
                 AND c.""LicenseNumber"" ~ '^[0-9]*$';
             ");
+            */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
