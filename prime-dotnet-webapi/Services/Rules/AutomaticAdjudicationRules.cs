@@ -66,16 +66,17 @@ namespace Prime.Services.Rules
 
             foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
             {
+                if (cert.License.PrescriberIdType.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
+                {
+                    passed = true;
+                    continue;
+                }
+
                 PharmanetCollegeRecord record = null;
 
                 var licenceNumber = cert.License.PrescriberIdType.Equals(PrescriberIdType.NA)
                                 ? cert.LicenseNumber
                                 : cert.PractitionerId;
-
-                if (cert.License.PrescriberIdType.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
-                {
-                    return passed;
-                }
 
                 try
                 {
