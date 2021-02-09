@@ -1,5 +1,5 @@
 export enum PrescriberIdTypeEnum {
-  NA = 1,
-  Optional = 2,
-  Mandatory = 3
+  NA = 0,
+  Optional = 1,
+  Mandatory = 2
 }

@@ -167,6 +167,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
+      // Trigger licenceCode value changes to manage setting up
+      // remaining parts of the form
       this.licenseCode.patchValue(this.filteredLicenses[0].code);
     }
 
