@@ -68,14 +68,14 @@
           </mat-form-field>
         </div>
 
-        <div class="col-sm-12 pl-5"
-             *ngIf="!condensed && prescriberIdMandatory > 1">
+        <div *ngIf="!condensed && prescriberIdMandatory > 1" 
+             class="col-sm-12 pl-5">
           <div class="row">
             <div class="col text-center my-auto">
               <mat-checkbox #prescribing
-                            (change)="onPrescribing($event)"
                             [checked]="prescriberIdMandatory === PrescriberIdType.Mandatory"
-                            [disabled]="prescriberIdMandatory === PrescriberIdType.Mandatory">
+                            [disabled]="prescriberIdMandatory === PrescriberIdType.Mandatory"
+                            (change)="onPrescribing($event)">
                 <div class="pl-3">
                   Are you a prescribing nurse?
                 </div>
