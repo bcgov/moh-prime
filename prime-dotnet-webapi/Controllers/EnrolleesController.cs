@@ -117,7 +117,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolleeViewModel>> CreateEnrollee(EnrolleeCreatePayload payload)
         {
-            if (payload == null || payload.Enrollee == null)
+            if (payload?.Enrollee == null)
             {
                 ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
