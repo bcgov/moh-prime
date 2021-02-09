@@ -40,7 +40,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   public hasPractices: boolean;
   public prescriberIdMandatory: PrescriberIdType;
   public minRenewalDate: moment.Moment;
-
   public CollegeLicenceClass = CollegeLicenceClass;
   public PrescriberIdType = PrescriberIdType;
 
