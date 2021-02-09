@@ -241,6 +241,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   private getPrescriberIdType(licenceCode: number): PrescriberIdType | undefined {
     return this.licenses
       .filter(licenseConfig => licenseConfig.code === licenceCode)
-      .map(licenseConfig => licenseConfig.prescriberIdMandatory).pop();
+      .map(licenseConfig => licenseConfig.prescriberIdType).pop();
   }
 }

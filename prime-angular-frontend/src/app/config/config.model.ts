@@ -38,7 +38,7 @@ export interface LicenseConfig extends Config<number> {
   namedInImReg: boolean;
   weight: number;
   validate: boolean;
-  prescriberIdMandatory: PrescriberIdType;
+  prescriberIdType: PrescriberIdType;
 }
 
 export interface CollegeLicenseConfig {
