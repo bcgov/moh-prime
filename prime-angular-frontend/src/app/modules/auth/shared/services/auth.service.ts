@@ -105,10 +105,10 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey(['hpdid', 'preferred_username']);
+    const claims = await this.getTokenAttribsByKey('preferred_username');
 
     const mapping = {
-      preferred_username: 'username'
+      preferred_username: 'hpdid'
     };
     ObjectUtils.keyMapping(claims, mapping);
 
@@ -153,7 +153,6 @@ export class AuthService implements IAuthService {
     const claims = await this.getTokenAttribsByKey('preferred_username');
 
     const mapping = {
-      // TODO consolidate `idir` into `username` on User
       preferred_username: 'idir'
     };
     ObjectUtils.keyMapping(claims, mapping);
@@ -163,7 +162,7 @@ export class AuthService implements IAuthService {
       firstName,
       lastName,
       email,
-      ...claims
+      ...claims as { idir: string }
     } as Admin;
   }
 

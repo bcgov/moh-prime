@@ -74,13 +74,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          // Perform an update that includes changes from BCSC
-          // profile updates prior to submission
-          exhaustMap((result: boolean) => (result)
-            ? this.enrolmentResource.updateEnrollee(enrolment)
-            : EMPTY
-          ),
-          exhaustMap(() => this.enrolmentResource.submitApplication(enrolment))
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.enrolmentResource.submitApplication(enrolment)
+              : EMPTY
+          )
         )
         .subscribe(() => {
           this.toastService.openSuccessToast('Enrolment has been submitted');
@@ -151,7 +149,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // enrolment regardless of whether they visited the demographic view
           // to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
-          ['firstName', 'lastName', 'verifiedAddress']
+          ['hpdid', 'firstName', 'lastName', 'givenNames', 'dateOfBirth', 'verifiedAddress']
             .forEach((field: string) => {
               if (bcscUser[field]) {
                 form.get(field).patchValue(bcscUser[field]);

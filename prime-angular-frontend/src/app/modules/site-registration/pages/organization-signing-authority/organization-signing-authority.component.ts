@@ -173,9 +173,12 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
         // profile information as the source of truth, and
         // patch the form to have it save changes
         map((bcscUser: BcscUser) => {
-          if (bcscUser.verifiedAddress) {
-            this.verifiedAddress.patchValue(bcscUser.verifiedAddress);
-          }
+          ['hpdid', 'firstName', 'lastName', 'givenNames', 'dateOfBirth', 'verifiedAddress']
+            .forEach((field: string) => {
+              if (bcscUser[field]) {
+                this.form.get(field).patchValue(bcscUser[field]);
+              }
+            });
         })
       )
       .subscribe(() => this.initForm());
