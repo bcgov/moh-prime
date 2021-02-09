@@ -1,3 +1,5 @@
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+
 export interface Configuration {
   practices: PracticeConfig[];
   colleges: CollegeConfig[];
@@ -38,7 +40,7 @@ export interface LicenseConfig extends Config<number> {
   namedInImReg: boolean;
   weight: number;
   validate: boolean;
-  prescriberIdType: PrescriberIdType;
+  prescriberIdType: PrescriberIdTypeEnum;
 }
 
 export interface CollegeLicenseConfig {
@@ -57,10 +59,4 @@ export interface VendorConfig extends Config<number> {
 
 export interface ProvinceConfig extends Config<string> {
   countryCode: string;
-}
-
-export enum PrescriberIdType {
-  NA = 1,
-  Optional = 2,
-  Mandatory = 3
 }

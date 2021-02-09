@@ -1,16 +1,17 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Config, CollegeConfig, LicenseConfig, PracticeConfig, PrescriberIdType } from '@config/config.model';
+import { Config, CollegeConfig, LicenseConfig, PracticeConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
@@ -27,7 +28,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   @Input() public licenceFilterPredicate: (licenceConfig: LicenseConfig) => boolean;
   @Input() public condensed: boolean;
   @Output() public remove: EventEmitter<number>;
-
+  public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
   /**
@@ -38,10 +39,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
-  public prescriberIdMandatory: PrescriberIdType;
+  public prescriberIdType: PrescriberIdTypeEnum;
   public minRenewalDate: moment.Moment;
-  public CollegeLicenceClass = CollegeLicenceClass;
-  public PrescriberIdType = PrescriberIdType;
+  public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
+  public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
 
   constructor(
     private configService: ConfigService,
@@ -110,7 +111,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return ((+this.collegeCode.value === CollegeLicenceClass.BCCNM) && ([
+    return ((+this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) && ([
       NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
       NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
       NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
@@ -119,10 +120,12 @@ export class CollegeCertificationFormComponent implements OnInit {
     ].includes(this.licenseCode.value)));
   }
 
-  public onPrescribing(event: MatCheckboxChange): void {
-    (event.checked)
-      ? this.enablePractitionerId()
-      : this.disablePractitionerId();
+  public onPrescribing({ checked }: MatSlideToggleChange): void {
+    this.isPrescribing = checked;
+
+    (checked)
+      ? this.setPractitionerIdValidators()
+      : this.resetAndClearPractitionerIdValidators();
   }
 
   public ngOnInit() {
@@ -141,17 +144,15 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.licenseCode.valueChanges
         .subscribe((licenseCode: number) => {
-          // Reset to default
-          this.disablePractitionerId();
-
-          this.prescriberIdMandatory = this.getPrescriberIdType(licenseCode);
-          if (this.prescriberIdMandatory === PrescriberIdType.Mandatory) {
-            this.enablePractitionerId();
+          this.resetAndClearPractitionerIdValidators();
+          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
+          if (this.prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
+            this.setPractitionerIdValidators();
           }
         });
     }
 
-    this.prescriberIdMandatory = this.getPrescriberIdType(this.licenseCode.value);
+    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -162,7 +163,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
-    this.setValidations();
+    this.setCollegeCertificationValidators();
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
@@ -174,23 +175,12 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
-  private disablePractitionerId() {
-    this.practitionerId.disable();
-    this.formUtilsService.resetAndClearValidators(this.practitionerId);
-  }
-
-  private enablePractitionerId() {
-    this.formUtilsService.setValidators(this.practitionerId, [
-      Validators.required,
-      FormControlValidators.numeric,
-      FormControlValidators.requiredLength(5)
-    ]);
-    this.practitionerId.enable();
-  }
-
-  private setValidations() {
+  private setCollegeCertificationValidators() {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.licenseNumber, [Validators.required, FormControlValidators.alphanumeric]);
+    this.formUtilsService.setValidators(this.licenseNumber, [
+      Validators.required,
+      FormControlValidators.alphanumeric
+    ]);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
@@ -204,7 +194,30 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.renewalDate.reset(null);
       this.practiceCode.reset(null);
+      this.practitionerId.reset(null);
     }
+  }
+
+  private setPractitionerIdValidators() {
+    this.formUtilsService.setValidators(this.practitionerId, [
+      Validators.required,
+      FormControlValidators.numeric,
+      FormControlValidators.requiredLength(5)
+    ]);
+  }
+
+  private resetAndClearPractitionerIdValidators() {
+    this.formUtilsService.resetAndClearValidators(this.practitionerId);
+  }
+
+  private prescriberIdTypeByLicenceCode(licenceCode: number): PrescriberIdTypeEnum {
+    const prescriberIdTypes = this.licenses
+      .filter(licenseConfig => licenseConfig.code === licenceCode)
+      .map(licenseConfig => licenseConfig.prescriberIdType);
+
+    return (prescriberIdTypes.length)
+      ? prescriberIdTypes[0]
+      : PrescriberIdTypeEnum.NA;
   }
 
   private removeValidations() {
@@ -233,11 +246,5 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private filterPractices(collegeCode: number): PracticeConfig[] {
     return this.practices.filter(p => p.collegePractices.map(cl => cl.collegeCode).includes(collegeCode));
-  }
-
-  private getPrescriberIdType(licenceCode: number): PrescriberIdType | undefined {
-    return this.licenses
-      .filter(licenseConfig => licenseConfig.code === licenceCode)
-      .map(licenseConfig => licenseConfig.prescriberIdType).pop();
   }
 }
