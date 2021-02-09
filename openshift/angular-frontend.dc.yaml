@@ -3,7 +3,6 @@ apiVersion: v1
 kind: Template
 metadata:
   name: angular-frontend-dc
-  creationTimestamp:
   description: >-
     Deployment configuration template for PRIME's Angular frontend component.
 parameters:
@@ -154,9 +153,9 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-hrp"
+    name: "${NAME}${SUFFIX}-hpr"
   spec:
-    host: "healthpractionerregistration${SUFFIX}.pathfinder.gov.bc.ca"
+    host: "healthpractitionerregistration${SUFFIX}.apps.silver.devops.gov.bc.ca"
     port:
       targetPort: "8888"
     tls:
