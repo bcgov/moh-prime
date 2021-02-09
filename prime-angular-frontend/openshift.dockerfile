@@ -3,11 +3,11 @@ FROM node:10.16
 WORKDIR /app
 
 # Copy package definition, install them, then copy everything into working directory and build it
-COPY package.json package-lock.json ./
+# COPY package.json package-lock.json ./
+COPY . ./
 RUN echo "Populating environment..."
 RUN (eval "echo \"$(cat /app/src/environments/environment.prod.template.ts )\"" ) > /app/src/environments/environment.prod.ts
 RUN npm install
-COPY . .
 RUN npm run build
 
 
