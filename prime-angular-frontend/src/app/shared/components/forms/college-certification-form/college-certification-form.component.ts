@@ -163,7 +163,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     // Initialize the validations when the college code is not
     // "None" to allow for submission when no college is selected
-    this.setValidations();
+    this.setCollegeCertificationValidators();
 
     this.loadLicenses(collegeCode);
     if (this.filteredLicenses?.length === 1) {
@@ -175,7 +175,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
-  private setValidations() {
+  private setCollegeCertificationValidators() {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
     this.formUtilsService.setValidators(this.licenseNumber, [
       Validators.required,
@@ -194,6 +194,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.renewalDate.reset(null);
       this.practiceCode.reset(null);
+      this.practitionerId.reset(null);
     }
   }
 
