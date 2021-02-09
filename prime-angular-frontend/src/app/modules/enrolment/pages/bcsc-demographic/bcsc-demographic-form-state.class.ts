@@ -41,6 +41,8 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
   // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      firstName: [null, []],
+      lastName: [null, []],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
@@ -48,8 +50,8 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),
-      mailingAddress: this.formUtilsService.buildAddressForm(),
       physicalAddress: this.formUtilsService.buildAddressForm(),
+      mailingAddress: this.formUtilsService.buildAddressForm(),
       email: [null, [
         Validators.required,
         FormControlValidators.email

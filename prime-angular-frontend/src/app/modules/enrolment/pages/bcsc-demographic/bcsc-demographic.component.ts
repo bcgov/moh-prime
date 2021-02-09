@@ -131,6 +131,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
         // information as the source of truth, and patch the form to
         // have it save any changes
         map((bcscUser: BcscUser) => {
+          if (bcscUser.firstName) {
+            this.form.get('firsName').patchValue(bcscUser.firstName);
+          }
+          if (bcscUser.lastName) {
+            this.form.get('lastName').patchValue(bcscUser.lastName);
+          }
           if (bcscUser.verifiedAddress) {
             this.verifiedAddress.patchValue(bcscUser.verifiedAddress);
           }

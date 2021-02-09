@@ -25,16 +25,23 @@ export class BcscDemographicFormState extends AbstractFormState<PhsaBcscDemograp
       return;
     }
 
+    // TODO adapt the data after getting values, ie. address(es)
+
     return this.formInstance.getRawValue();
   }
 
   public patchValue(): void {
+
+    // TODO adapt the data before patching values, ie. address(es)
+
     throw new Error('Not Implemented');
   }
 
   // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      firstName: [null, []],
+      lastName: [null, []],
       // verifiedAddress: this.formUtilsService.buildAddressForm(),
       // physicalAddress: this.formUtilsService.buildAddressForm(),
       // mailingAddress: this.formUtilsService.buildAddressForm(),
