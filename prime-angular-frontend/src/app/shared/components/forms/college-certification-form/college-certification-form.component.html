@@ -109,18 +109,17 @@
 
         </ng-container>
 
-        <div *ngIf="!condensed && prescriberIdMandatory !== PrescriberIdTypeEnum.NA"
+        <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
              class="col-sm-12 pl-5">
-          <div *ngIf="prescriberIdMandatory !== PrescriberIdTypeEnum.Mandatory"
+          <div *ngIf="prescriberIdType !== PrescriberIdTypeEnum.Mandatory"
                class="mb-3">
             <mat-slide-toggle class="mr-4"
-                              [checked]="prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory"
                               (change)="onPrescribing($event)">
               Are you a prescribing nurse?
             </mat-slide-toggle>
           </div>
 
-          <ng-container *ngIf="prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory || isPrescribing">
+          <ng-container *ngIf="prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing">
 
             <app-form-icon-group>
               <mat-form-field class="w-100">

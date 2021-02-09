@@ -39,7 +39,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public filteredLicenses: Config<number>[];
   public filteredPractices: Config<number>[];
   public hasPractices: boolean;
-  public prescriberIdMandatory: PrescriberIdTypeEnum;
+  public prescriberIdType: PrescriberIdTypeEnum;
   public minRenewalDate: moment.Moment;
   public CollegeLicenceClassEnum = CollegeLicenceClassEnum;
   public PrescriberIdTypeEnum = PrescriberIdTypeEnum;
@@ -145,14 +145,14 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.licenseCode.valueChanges
         .subscribe((licenseCode: number) => {
           this.resetAndDisablePractitionerId(); // Reset to default
-          this.prescriberIdMandatory = this.prescriberIdTypeByLicenceCode(licenseCode);
-          if (this.prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory) {
+          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
+          if (this.prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
             this.enablePractitionerId();
           }
         });
     }
 
-    this.prescriberIdMandatory = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
   }
 
   private setCollegeCertification(collegeCode: number): void {
