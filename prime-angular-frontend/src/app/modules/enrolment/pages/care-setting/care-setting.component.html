@@ -69,12 +69,12 @@
             </ng-container>
           </app-page-subheader>
 
-          <!-- Create visual checkboxes and bind to `availableHAs` array -->
-          <div formArrayName="availableHAs"
+          <!-- Create visual checkboxes and bind to `selectableHealthAuthorities` array -->
+          <div formArrayName="selectableHealthAuthorities"
                class="mb-3"
-               *ngFor="let ha of this.configService.healthAuthorities; let i = index">
+               *ngFor="let ha of knownHealthAuthorities; let i = index">
             <mat-checkbox [formControlName]="i">
-              {{ ha.name }} ({{ ha.code }})
+              {{ ha.name }}
             </mat-checkbox>
           </div>
         </div>

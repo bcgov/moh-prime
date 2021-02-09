@@ -47,7 +47,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    public configService: ConfigService,
+    private configService: ConfigService,
     private authService: AuthService,
     private fb: FormBuilder
   ) {
@@ -72,10 +72,10 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   /**
-   * Representing available health authorities to select from and whether a given one was selected
+   * Representing possible health authorities to select from and whether a given one was selected
    */
-  public get availableHAs(): FormArray {
-    return this.form.get('availableHAs') as FormArray;
+  public get selectableHealthAuthorities(): FormArray {
+    return this.form.get('selectableHealthAuthorities') as FormArray;
   }
 
   /**
@@ -83,6 +83,14 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    */
   public get enrolleeHealthAuthorities(): FormArray {
     return this.form.get('enrolleeHealthAuthorities') as FormArray;
+  }
+
+  /**
+   * All possible Health Authorities
+   */
+  public get knownHealthAuthorities(): Config<number>[] {
+    // Don't expose configService to template due to performance considerations
+    return this.configService.healthAuthorities;
   }
 
   public onSubmit() {
@@ -100,7 +108,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     this.enrolleeHealthAuthorities.clear();
     // Any checked HA is converted into an enrollee health authority FormGroup,
     // which is used to create the payload to back-end
-    this.availableHAs?.controls.forEach((checkbox, i) => {
+    this.selectableHealthAuthorities.controls.forEach((checkbox, i) => {
       if (checkbox.value) {
         var ha = this.configService.healthAuthorities[i];
         const enrolleeHA = this.enrolmentFormStateService.buildEnrolleeHealthAuthorityFormGroup();
@@ -212,12 +220,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Initialize Health Authority form even if it might not be used:
     // Create unchecked checkboxes for each known Health Authority.
-    this.form.controls.availableHAs = this.fb.array(this.configService.healthAuthorities.map(() => this.fb.control(false)));
+    this.form.controls.selectableHealthAuthorities = this.fb.array(this.configService.healthAuthorities.map(() => this.fb.control(false)));
     if (this.enrolment.enrolleeHealthAuthorities.length) {
       // Update value of checkboxes according to previous selections
       this.enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
         const haIndex = this.configService.healthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
-        this.availableHAs.controls[haIndex].setValue(true);
+        this.selectableHealthAuthorities.controls[haIndex].setValue(true);
       });
     }
   }
