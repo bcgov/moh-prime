@@ -113,11 +113,11 @@
              class="col-sm-12 pl-5">
           <div *ngIf="prescriberIdMandatory !== PrescriberIdTypeEnum.Mandatory"
                class="mb-3">
-            <mat-checkbox class="mr-4"
-                          [checked]="prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory"
-                          (change)="onPrescribing($event)">
+            <mat-slide-toggle class="mr-4"
+                              [checked]="prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory"
+                              (change)="onPrescribing($event)">
               Are you a prescribing nurse?
-            </mat-checkbox>
+            </mat-slide-toggle>
           </div>
 
           <ng-container *ngIf="prescriberIdMandatory === PrescriberIdTypeEnum.Mandatory || isPrescribing">

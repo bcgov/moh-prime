@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { MatCheckbox, MatCheckboxChange } from '@angular/material/checkbox';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import moment from 'moment';
 
@@ -120,7 +120,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     ].includes(this.licenseCode.value)));
   }
 
-  public onPrescribing({ checked }: MatCheckboxChange): void {
+  public onPrescribing({ checked }: MatSlideToggleChange): void {
     this.isPrescribing = checked;
 
     (checked)
