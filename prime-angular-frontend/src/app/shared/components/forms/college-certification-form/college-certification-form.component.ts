@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 
 import moment from 'moment';
 
@@ -11,7 +12,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { MatCheckboxChange } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-college-certification-form',
