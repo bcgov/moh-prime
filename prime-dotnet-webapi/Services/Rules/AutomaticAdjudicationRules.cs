@@ -68,7 +68,6 @@ namespace Prime.Services.Rules
             {
                 if (cert.License.PrescriberIdType.Equals(PrescriberIdType.Optional) && cert.PractitionerId == null)
                 {
-                    passed = true;
                     continue;
                 }
 
