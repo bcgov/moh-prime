@@ -50,8 +50,7 @@ describe('OverviewComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
-          },
-          EnrolmentService
+          }
         ]
       }
     ).compileComponents();

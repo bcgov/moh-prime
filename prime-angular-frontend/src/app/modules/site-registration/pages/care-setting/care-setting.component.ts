@@ -86,7 +86,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
         actionText: 'Continue'
       };
       const update$ = this.siteResource.updateSite(payload);
-      const request$ = (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers?.length)
+      const request$ = (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers.length)
         ? this.dialog.open(ConfirmDialogComponent, { data })
           .afterClosed()
           .pipe(

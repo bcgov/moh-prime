@@ -118,7 +118,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     let enrolment = this.enrolmentService.enrolment;
 
     // Store current status as it will be truncated for initial enrolment
-    this.currentStatus = enrolment?.currentStatus.statusCode;
+    this.currentStatus = enrolment.currentStatus.statusCode;
 
     if (this.enrolmentFormStateService.isPatched) {
       enrolment = this.enrolmentFormStateService.json;

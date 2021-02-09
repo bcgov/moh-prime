@@ -47,7 +47,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
   }
 
   private createSelfDeclarationComposites() {
-    const answered = this.enrolment?.selfDeclarations
+    const answered = this.enrolment.selfDeclarations
       .map(s => s.selfDeclarationTypeCode);
     const unanswered = (this.isEnrollee)
       ? EnumUtils.values(SelfDeclarationTypeEnum)

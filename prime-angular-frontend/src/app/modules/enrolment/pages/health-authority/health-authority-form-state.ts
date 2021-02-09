@@ -59,7 +59,7 @@ export class HealthAuthorityFormState extends AbstractFormState<HealthAuthority[
   }
 
   public buildForm(): void {
-    const healthAuthorities = this.configService?.healthAuthorities
+    const healthAuthorities = this.configService.healthAuthorities
       .map(h => this.fb.group({
         healthAuthorityCode: [h.code],
         facilityCodes: [[]]
