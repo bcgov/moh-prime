@@ -111,9 +111,10 @@
 
         <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
              class="col-sm-12 pl-5">
-          <div *ngIf="prescriberIdType !== PrescriberIdTypeEnum.Mandatory"
+          <div *ngIf="prescriberIdType === PrescriberIdTypeEnum.Optional"
                class="mb-3">
             <mat-slide-toggle class="mr-4"
+                              [checked]="practitionerId.value"
                               (change)="onPrescribing($event)">
               Are you a prescribing nurse?
             </mat-slide-toggle>
