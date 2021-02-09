@@ -85,7 +85,7 @@ namespace Prime.ViewModels
                 return HPDID == user.FindFirstValue(Claims.PreferredUsername)
                     && GivenNames == user.FindFirstValue(Claims.GivenNames)
                     && DateOfBirth == user.GetDateOfBirth()
-                    && VerifiedAddress == user.GetVerifiedAddress();
+                    && Equals(VerifiedAddress, user.GetVerifiedAddress());
             }
             else
             {
