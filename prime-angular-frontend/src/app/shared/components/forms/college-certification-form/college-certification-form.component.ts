@@ -124,15 +124,14 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.isPrescribing = checked;
 
     (checked)
-      ? this.setPractitionerIdValidators()
-      : this.resetAndClearPractitionerIdValidators();
+      ? this.setPractitionerId(this.licenseCode.value)
+      : this.resetPractitionerId();
   }
 
   public ngOnInit() {
     if (this.condensed) {
       this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
     }
-
     this.setCollegeCertification(this.collegeCode.value);
 
     this.collegeCode.valueChanges
@@ -143,16 +142,12 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if (!this.condensed) {
       this.licenseCode.valueChanges
-        .subscribe((licenseCode: number) => {
-          this.resetAndClearPractitionerIdValidators();
-          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
-          if (this.prescriberIdType === PrescriberIdTypeEnum.Mandatory) {
-            this.setPractitionerIdValidators();
-          }
-        });
+        .subscribe((licenseCode: number) => this.setPractitionerId(licenseCode));
     }
 
-    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.practitionerId.value);
+    this.isPrescribing = this.prescriberIdType === PrescriberIdTypeEnum.Optional || !!this.practitionerId.value;
+    this.setPractitionerId(this.licenseCode.value);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -196,19 +191,23 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.renewalDate.reset(null);
       this.practiceCode.reset(null);
-      this.practitionerId.reset(null);
+      this.resetPractitionerId();
     }
   }
 
-  private setPractitionerIdValidators() {
-    this.formUtilsService.setValidators(this.practitionerId, [
-      Validators.required,
-      FormControlValidators.numeric,
-      FormControlValidators.requiredLength(5)
-    ]);
+  private setPractitionerId(licenseCode: number) {
+    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
+    if (this.prescriberIdType === PrescriberIdTypeEnum.Mandatory || this.isPrescribing) {
+      this.formUtilsService.setValidators(this.practitionerId, [
+        Validators.required,
+        FormControlValidators.numeric,
+        FormControlValidators.requiredLength(5)
+      ]);
+    }
   }
 
-  private resetAndClearPractitionerIdValidators() {
+  private resetPractitionerId() {
+    this.isPrescribing = false;
     this.formUtilsService.resetAndClearValidators(this.practitionerId);
   }
 
