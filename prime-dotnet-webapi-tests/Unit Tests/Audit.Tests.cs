@@ -29,13 +29,11 @@ namespace PrimeTests.UnitTests
             var enrollee = new Enrollee();
             TestDb.Enrollees.Add(enrollee);
             await TestDb.SaveChangesAsync();
-            var initialCreated = enrollee.CreatedTimeStamp;
             var initialUpdated = enrollee.UpdatedTimeStamp;
 
             enrollee.FirstName = "Name";
             await TestDb.SaveChangesAsync();
 
-            Assert.Equal(initialCreated, enrollee.CreatedTimeStamp);
             Assert.True(enrollee.UpdatedTimeStamp > initialUpdated);
         }
 
@@ -45,12 +43,10 @@ namespace PrimeTests.UnitTests
             var enrollee = TestDb.HasAnEnrollee();
             var initialCreated = enrollee.CreatedTimeStamp;
 
-            var retrieved = TestDb.Enrollees.Single();
-            retrieved.CreatedTimeStamp = DateTimeOffset.Now.AddDays(10);
+            enrollee.CreatedTimeStamp = DateTimeOffset.Now.AddDays(10);
             await TestDb.SaveChangesAsync();
 
-            retrieved = TestDb.Enrollees.Single();
-            Assert.Equal(initialCreated, retrieved.CreatedTimeStamp);
+            Assert.Equal(initialCreated, enrollee.CreatedTimeStamp);
         }
     }
 }
