@@ -96,7 +96,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     return this.form.get('email') as FormControl;
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const payload = this.organizationFormStateService.json;
       this.organizationResource.updateOrganization(payload)
@@ -107,7 +107,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     }
   }
 
-  public onPreferredNameChange({ checked }: MatSlideToggleChange) {
+  public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
     if (!this.hasPreferredName) {
       this.form.get('preferredMiddleName').reset();
     }
@@ -115,19 +115,19 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
-  public onBack() {
+  public onBack(): void {
     this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
   }
 
-  public nextRoute() {
+  public nextRoute(): void {
     const redirectPath = this.route.snapshot.queryParams.redirect;
     if (redirectPath) {
       this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
@@ -147,7 +147,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       : true;
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     // Ensure that the identity provider user information is loaded
     // prior to initialization of the form override form values, and
@@ -175,12 +175,12 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       .subscribe(() => this.initForm());
   }
 
-  private createFormInstance() {
+  private createFormInstance(): void {
     const formState = this.organizationFormStateService.organizationSigningAuthorityFormState;
     this.form = formState.form;
   }
 
-  private patchForm() {
+  private patchForm(): void {
     // Store a local copy of the organization for views
     this.organization = this.organizationService.organization;
     this.isCompleted = this.organization?.completed;
@@ -189,7 +189,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.organizationFormStateService.setForm(this.organization, true);
   }
 
-  private initForm() {
+  private initForm(): void {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
@@ -206,7 +206,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
     if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);

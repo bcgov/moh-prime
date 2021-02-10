@@ -100,15 +100,15 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     // Ensure that the identity provider user information is loaded
     // prior to initialization of the form override form values, and
@@ -133,12 +133,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       .subscribe(() => this.initForm());
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = this.enrolmentFormStateService.bcscDemographicFormState;
     this.form = this.formState.form;
   }
 
-  protected initForm() {
+  protected initForm(): void {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
@@ -174,7 +174,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  protected nextRouteAfterSubmit() {
+  protected nextRouteAfterSubmit(): void {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.CARE_SETTING;
@@ -183,7 +183,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
     if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);

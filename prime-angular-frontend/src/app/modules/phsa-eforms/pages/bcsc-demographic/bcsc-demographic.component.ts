@@ -65,11 +65,11 @@ export class BcscDemographicComponent implements OnInit {
     }
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange) {
+  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
     this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
   }
 
@@ -80,14 +80,8 @@ export class BcscDemographicComponent implements OnInit {
     // control the validation management
     this.getUser$()
       .pipe(
-        map((enrollee: PhsaEnrollee) => {
-          this.enrollee = enrollee;
-          this.hasValidatedAddress = Address.isNotEmpty(enrollee.verifiedAddress);
-          if (!this.hasValidatedAddress) {
-            this.clearAddressValidator(this.verifiedAddress);
-            this.setAddressValidator(this.physicalAddress);
-          }
-        })
+        map((enrollee: PhsaEnrollee) => this.enrollee = enrollee),
+        map((enrollee: PhsaEnrollee) => this.patchForm())
       )
       .subscribe(() => this.initForm());
   }
@@ -96,9 +90,17 @@ export class BcscDemographicComponent implements OnInit {
     this.form = this.enrolmentFormStateService.demographicFormState.form;
   }
 
-  private initForm() {
-    // TODO move into patchForm when base registration class is added
+  private patchForm(): void {
+    // Attempt to patch the form if not already patched
     this.enrolmentFormStateService.setForm(this.enrollee);
+  }
+
+  private initForm(): void {
+    this.hasValidatedAddress = Address.isNotEmpty(this.enrollee.verifiedAddress);
+    if (!this.hasValidatedAddress) {
+      this.clearAddressValidator(this.verifiedAddress);
+      this.setAddressValidator(this.physicalAddress);
+    }
   }
 
   private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
