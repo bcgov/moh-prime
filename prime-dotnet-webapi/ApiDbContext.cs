@@ -139,6 +139,11 @@ namespace Prime
                     entry.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
                     entry.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentTime;
                 }
+                else
+                {
+                    entry.Property(nameof(IAuditable.CreatedUserId)).IsModified = false;
+                    entry.Property(nameof(IAuditable.CreatedTimeStamp)).IsModified = false;
+                }
             }
         }
 
