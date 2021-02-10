@@ -12,7 +12,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -47,8 +46,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   constructor(
     private configService: ConfigService,
     private viewportService: ViewportService,
-    private formUtilsService: FormUtilsService,
-    private enrolmentService: EnrolmentService
+    private formUtilsService: FormUtilsService
   ) {
     this.remove = new EventEmitter<number>();
     this.colleges = this.configService.colleges;
@@ -227,6 +225,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, []);
+      this.formUtilsService.setValidators(this.practitionerId, []);
     }
   }
 
