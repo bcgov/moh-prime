@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210209223537_AddPrescriberIdTypetoLicence")]
+    partial class AddPrescriberIdTypetoLicence
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -13505,11 +13507,17 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
+
+                    b.Property<int>("PhysicalAddressId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("PreferredFirstName")
                         .HasColumnType("text");
@@ -13545,33 +13553,14 @@ namespace Prime.Migrations
                     b.HasIndex("HPDID")
                         .IsUnique();
 
+                    b.HasIndex("MailingAddressId");
+
+                    b.HasIndex("PhysicalAddressId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Enrollee");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("EnrolleeId", "AddressId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolleeAddress");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeAdjudicationDocument", b =>
@@ -15535,11 +15524,17 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("PreferredFirstName")
                         .HasColumnType("text");
@@ -15564,33 +15559,14 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MailingAddressId");
+
+                    b.HasIndex("PhysicalAddressId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Party");
-                });
-
-            modelBuilder.Entity("Prime.Models.PartyAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("PartyId", "AddressId")
-                        .IsUnique();
-
-                    b.ToTable("PartyAddress");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
@@ -17675,15 +17651,6 @@ namespace Prime.Migrations
                             Name = "Terms of Access to be determined by an Adjudicator",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = 17,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "No address from BCSC. Enrollee entered address.",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
                 });
 
@@ -17927,15 +17894,6 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Prime.Models.VerifiedAddress", b =>
-                {
-                    b.HasBaseType("Prime.Models.Address");
-
-                    b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(3);
-                });
-
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -18143,19 +18101,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
-                });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
-                {
-                    b.HasOne("Prime.Models.Address", "Address")
+                    b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MailingAddressId");
 
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("Addresses")
-                        .HasForeignKey("EnrolleeId")
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -18381,19 +18334,15 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.PartyAddress", b =>
+            modelBuilder.Entity("Prime.Models.Party", b =>
                 {
-                    b.HasOne("Prime.Models.Address", "Address")
+                    b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MailingAddressId");
 
-                    b.HasOne("Prime.Models.Party", "Party")
-                        .WithMany("Addresses")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>

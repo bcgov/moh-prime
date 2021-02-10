@@ -9,14 +9,14 @@ namespace Prime.HttpClients
     /// </summary>
     public class DummyCollegeLicenceClient : ICollegeLicenceClient
     {
-        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
+        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)
         {
-            if (certification.LicenseNumber == "error")
+            if (licenceNumber == "error")
             {
                 throw new PharmanetCollegeApiException();
             }
 
-            var info = certification.LicenseNumber switch
+            var info = licenceNumber switch
             {
                 "1" => new { Date = "2000-05-17", Name = "ONE" },
                 "2" => new { Date = "1998-08-07", Name = "TWO" },

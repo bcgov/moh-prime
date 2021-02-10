@@ -474,7 +474,7 @@ export class EnrolmentResource {
   }
 
   private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const whitelist = ['practiceCode'];
+    const whitelist = ['practiceCode', 'practitionerId'];
 
     return Object.keys(certification)
       .every((key: string) =>
