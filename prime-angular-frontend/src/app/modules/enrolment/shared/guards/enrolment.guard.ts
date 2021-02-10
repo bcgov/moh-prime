@@ -177,10 +177,7 @@ export class EnrolmentGuard extends BaseGuard {
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
 
-    if (
-      !this.enrolmentService
-        .canRequestRemoteAccess(certifications, careSettings)
-    ) {
+    if (!this.enrolmentService.canRequestRemoteAccess(certifications, careSettings)) {
       // No access to remote access if OBO or pharmacist
       blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
