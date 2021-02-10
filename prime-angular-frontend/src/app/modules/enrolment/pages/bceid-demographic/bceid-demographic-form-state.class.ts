@@ -35,9 +35,9 @@ export class BceidDemographicFormState extends AbstractFormState<Enrollee> {
 
   public buildForm(): void {
     this.fb.group({
-      preferredFirstName: [null, [Validators.required]],
-      preferredMiddleName: [null, []],
-      preferredLastName: [null, [Validators.required]],
+      firstName: [null, [Validators.required]],
+      middleName: [null, []],
+      lastName: [null, [Validators.required]],
       mailingAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         useDefaults: ['countryCode']

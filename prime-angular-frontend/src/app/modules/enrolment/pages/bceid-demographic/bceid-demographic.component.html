@@ -22,7 +22,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="First Name"
-                   formControlName="preferredFirstName">
+                   formControlName="firstName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -32,7 +32,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Middle Name (optional)"
-                   formControlName="preferredMiddleName">
+                   formControlName="middleName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -44,7 +44,7 @@
           <mat-form-field class="w-100">
             <input matInput
                    placeholder="Last Name"
-                   formControlName="preferredLastName">
+                   formControlName="lastName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
@@ -57,13 +57,13 @@
             <input matInput
                    placeholder="Date of Birth"
                    [max]="maxDateOfBirth"
-                   [matDatepicker]="myDatepicker"
+                   [matDatepicker]="dobDatePicker"
                    formControlName="dateOfBirth"
-                   (click)="myDatepicker.open()"
+                   (click)="dobDatePicker.open()"
                    readonly>
             <mat-datepicker-toggle matSuffix
-                                   [for]="myDatepicker"></mat-datepicker-toggle>
-            <mat-datepicker #myDatepicker
+                                   [for]="dobDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #dobDatePicker
                             startView="multi-year"
                             disabled="false"></mat-datepicker>
             <mat-error>Required</mat-error>
