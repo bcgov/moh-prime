@@ -1,5 +1,6 @@
 ### Stage 1: Create build environment ###
 FROM node:10.16
+RUN mkdir /app
 WORKDIR /app
 
 # Set environment variables
