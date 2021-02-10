@@ -242,7 +242,6 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private loadLicenses(collegeCode: number) {
     this.filteredLicenses = this.filterLicenses(collegeCode);
-    console.log('LOADING...');
     this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
   }
 
