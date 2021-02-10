@@ -225,8 +225,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       .map(licenseConfig => licenseConfig.prescriberIdType);
 
     return (prescriberIdTypes.length)
-      // TODO put in an adapter, but for now prescriberIdTypes can be `null`
-      ? (prescriberIdTypes[0] ?? PrescriberIdTypeEnum.NA)
+      ? prescriberIdTypes[0]
       : PrescriberIdTypeEnum.NA;
   }
 
