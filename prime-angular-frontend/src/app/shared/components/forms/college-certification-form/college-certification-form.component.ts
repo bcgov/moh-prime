@@ -215,7 +215,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       .map(licenseConfig => licenseConfig.prescriberIdType);
 
     return (prescriberIdTypes.length)
-      ? prescriberIdTypes[0]
+      ? (prescriberIdTypes[0] ?? PrescriberIdTypeEnum.NA)
       : PrescriberIdTypeEnum.NA;
   }
 
