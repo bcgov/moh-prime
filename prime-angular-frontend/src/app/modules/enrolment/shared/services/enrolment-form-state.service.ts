@@ -546,9 +546,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   public buildEnrolleeHealthAuthorityFormGroup(): FormGroup {
-    // Needs to have the fields to carry data to back-end
+    // Will need to have the fields to carry data to back-end
     return this.fb.group({
-      enrolleeId: [null, []],
       healthAuthorityCode: [null, []]
     });
   }

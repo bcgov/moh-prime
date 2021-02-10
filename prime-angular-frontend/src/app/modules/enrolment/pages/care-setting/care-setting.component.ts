@@ -35,6 +35,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
+  public knownHealthAuthorities: Config<number>[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -83,14 +84,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    */
   public get enrolleeHealthAuthorities(): FormArray {
     return this.form.get('enrolleeHealthAuthorities') as FormArray;
-  }
-
-  /**
-   * All possible Health Authorities
-   */
-  public get knownHealthAuthorities(): Config<number>[] {
-    // Don't expose configService to template due to performance considerations
-    return this.configService.healthAuthorities;
   }
 
   public onSubmit() {
@@ -156,7 +149,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
 
   public hasSelectedHACareSetting(): boolean {
-    // When code is in template, get: `Parser Error: Bindings cannot contain assignments`
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
   }
 
@@ -201,13 +193,15 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.addCareSetting();
     }
 
+    this.knownHealthAuthorities = this.configService.healthAuthorities;
+
     // Initialize Health Authority form even if it might not be used:
     // Create unchecked checkboxes for each known Health Authority.
-    this.form.controls.selectableHealthAuthorities = this.fb.array(this.configService.healthAuthorities.map(() => this.fb.control(false)));
+    this.form.controls.selectableHealthAuthorities = this.fb.array(this.knownHealthAuthorities.map(() => this.fb.control(false)));
     if (this.enrolment.enrolleeHealthAuthorities.length) {
       // Update value of checkboxes according to previous selections
       this.enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
-        const haIndex = this.configService.healthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
+        const haIndex = this.knownHealthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
         this.selectableHealthAuthorities.controls[haIndex].setValue(true);
       });
     }
