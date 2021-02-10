@@ -50,7 +50,10 @@
       </app-page-subheader>
 
       <app-address-form [form]="mailingAddress"
+                        [showManualButton]="true"
+                        [showAddressFields]="hasMailingAddress"
                         [formControlNames]="addressFormControlNames"></app-address-form>
+
     </section>
 
     <app-contact-information-form [form]="form"></app-contact-information-form>
