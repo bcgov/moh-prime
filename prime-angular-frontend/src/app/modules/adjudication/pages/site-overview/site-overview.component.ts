@@ -60,6 +60,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       router,
       organizationResource,
       siteResource,
+      adjudicationResource,
       authService,
       utilsService,
       dialog);

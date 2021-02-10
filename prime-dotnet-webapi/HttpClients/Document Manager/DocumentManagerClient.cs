@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Prime.Extensions;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.HttpClients
 {
@@ -67,50 +68,20 @@ namespace Prime.HttpClients
             return documentResponse?.Document_guid ?? Guid.Empty;
         }
 
-        public async Task<HttpResponseMessage> GetFileAsync(Guid documentGuid)
+        public async Task<HttpResponseMessage> GetFileResponseAsync(Guid documentGuid)
         {
             return await _client.GetAsync($"documents/{documentGuid}");
         }
 
-        public async Task<Stream> GetFileStreamAsync(Guid documentGuid)
+        public async Task<byte[]> GetFileAsync(Guid documentGuid)
         {
-            var response = await GetFileAsync(documentGuid);
-            return await response.Content.ReadAsStreamAsync();
-        }
-
-        private class FileMetadata
-        {
-            private readonly Dictionary<string, string> _metadata;
-
-            public FileMetadata(string filename = null, string destinationFolder = null)
+            var response = await GetFileResponseAsync(documentGuid);
+            if (!response.IsSuccessStatusCode)
             {
-                _metadata = new Dictionary<string, string>
-                {
-                    { "filename", filename },
-                    { "folder", destinationFolder }
-                }
-                .RemoveNullValues();
+                return null;
             }
 
-            public HttpContent AsHttpContent()
-            {
-                return new FormUrlEncodedContent(_metadata);
-            }
-
-            public string AsQueryStringUrl(string baseUrl)
-            {
-                return _metadata.ToQueryStringUrl(baseUrl, false);
-            }
-        }
-
-        private class DownloadToken
-        {
-            public string Token { get; set; }
-        }
-
-        private class DocumentResponse
-        {
-            public Guid Document_guid { get; set; }
+            return await response.Content.ReadAsByteArrayAsync();
         }
     }
 }

@@ -10,6 +10,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Controllers
 {
@@ -85,18 +86,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
         {
-            if (string.IsNullOrWhiteSpace(providedEmails))
+            var emails = Email.ParseCommaSeparatedEmails(providedEmails);
+            if (!emails.Any())
             {
-                ModelState.AddModelError("Email(s)", "No emails were provided.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
-            }
-
-            string[] emails = ((string)providedEmails).Split(",");
-
-            // Emails are either "Other" provisioners, or office manager(s)
-            if (emails.Any() && !EmailService.AreValidEmails(emails))
-            {
-                ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
+                ModelState.AddModelError("Emails", "The email(s) provided are not valid.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -119,7 +112,7 @@ namespace Prime.Controllers
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {providedEmails}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),

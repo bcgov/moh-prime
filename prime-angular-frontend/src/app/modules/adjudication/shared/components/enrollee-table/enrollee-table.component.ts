@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription } from 'rxjs';
 
@@ -14,6 +13,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Admin } from '@auth/shared/models/admin.model';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -23,9 +23,10 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class EnrolleeTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<EnrolleeListViewModel>;
   @Output() public notify: EventEmitter<number>;
-  @Output() public claim: EventEmitter<number>;
-  @Output() public disclaim: EventEmitter<number>;
+  @Output() public assign: EventEmitter<number>;
+  @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public reload: EventEmitter<number>;
 
   public busy: Subscription;
   public form: FormGroup;
@@ -41,8 +42,9 @@ export class EnrolleeTableComponent implements OnInit {
     private fb: FormBuilder,
   ) {
     this.notify = new EventEmitter<number>();
-    this.claim = new EventEmitter<number>();
-    this.disclaim = new EventEmitter<number>();
+    this.assign = new EventEmitter<number>();
+    this.reassign = new EventEmitter<number>();
+    this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
       'prefixes',
@@ -54,7 +56,7 @@ export class EnrolleeTableComponent implements OnInit {
       'remoteAccess',
       'renewalDate',
       'currentTOA',
-      'claimedBy',
+      'assignedTo',
       'careSetting',
       'actions'
     ];
@@ -75,16 +77,20 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify.emit(enrolleeId);
   }
 
-  public onClaim(enrolleeId: number): void {
-    this.claim.emit(enrolleeId);
+  public onAssign(enrolleeId: number): void {
+    this.assign.emit(enrolleeId);
   }
 
-  public onDisclaim(enrolleeId: number): void {
-    this.disclaim.emit(enrolleeId);
+  public onReassign(enrolleeId: number): void {
+    this.reassign.emit(enrolleeId);
   }
 
   public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
+  }
+
+  public onReload(enrolleeId: number): void {
+    this.reload.emit(enrolleeId);
   }
 
   public sortData(sort: Sort) {

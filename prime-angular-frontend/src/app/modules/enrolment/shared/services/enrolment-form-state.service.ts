@@ -227,7 +227,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
-
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
       jobs.clear();
@@ -248,23 +247,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       communityHealthSites.clear();
       communityPharmacySites.clear();
       healthAuthoritySites.clear();
-
-      enrolment.careSettings.forEach((careSetting: CareSetting) => {
-        switch (careSetting.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
-            break;
-          }
-        }
-      });
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
@@ -355,7 +337,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
-    this.regulatoryFormState.patchValue(enrolment.certifications);
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
     // After patching the form is dirty, and needs to be pristine

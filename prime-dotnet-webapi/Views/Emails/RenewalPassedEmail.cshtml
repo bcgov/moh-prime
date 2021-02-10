@@ -1,12 +1,7 @@
-@using Prime
-@using Prime.Services
-@model EmailParams
+@using Prime.ViewModels.Emails
+@model EnrolleeRenewalEmailViewModel
 
-@{
-  var enrolleeName = $"{Model.FirstName} {Model.LastName}";
-}
-
-Dear @enrolleeName,
+Dear @Model.EnrolleeName,
 <br>
 <br>
 Your enrolment has not been renewed. PRIME will be notifying your PharmaNet software vendor to deactivate your
