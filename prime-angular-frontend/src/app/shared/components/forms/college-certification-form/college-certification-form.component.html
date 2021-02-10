@@ -41,10 +41,7 @@
              class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
-            <mat-label>
-              {{ (collegeCode.value === CollegeLicenceClassEnum.CPSBC)
-              ? "CPSID Number" : "Licence class issued by the college" }}
-            </mat-label>
+            <mat-label>Licence class issued by the college</mat-label>
             <mat-select formControlName="licenseCode">
               <mat-option *ngFor="let license of allowedLicenses()"
                           [value]="license.code">
@@ -59,7 +56,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Licence Number from College"
+                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPSBC) ? 'CPSID Number' : 'Licence class issued by the college'"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
