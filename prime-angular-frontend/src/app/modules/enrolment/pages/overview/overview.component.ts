@@ -156,6 +156,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
               }
             });
         })
-      );
+      ).subscribe();
   }
 }
