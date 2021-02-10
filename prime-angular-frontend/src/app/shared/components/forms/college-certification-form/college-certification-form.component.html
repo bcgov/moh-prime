@@ -48,80 +48,21 @@
                 {{ license.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="form.get('licenseCode').hasError('required')">Required</mat-error>
+            <mat-error *ngIf="licenseCode.hasError('required')">Required</mat-error>
           </mat-form-field>
 
         </div>
-
         <div class="col-sm-12 pl-5">
 
-          <div class="row">
-            <div class="col">
-
-              <mat-form-field class="w-100">
-                <input matInput
-                       placeholder="Licence Number from College"
-                       formControlName="licenseNumber"
-                       (blur)="onLicenceNumberBlur()">
-                <mat-error *ngIf="form.get('licenseNumber').hasError('required')">Required</mat-error>
-                <mat-error *ngIf="form.get('licenseNumber').hasError('alphanumeric')">
-                  Must contain only alphanumeric characters
-                </mat-error>
-              </mat-form-field>
-
-            </div>
-            <div *ngIf="!condensed && licenceValidatedByPharmaNet"
-                 class="col">
-
-              <app-form-icon-group>
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Practitioner ID"
-                         formControlName="practitionerId">
-                  <mat-error *ngIf="form.get('practitionerId').hasError('required')">Required</mat-error>
-                  <mat-error *ngIf="form.get('practitionerId').hasError('numeric')">
-                    Must contain only numeric characters
-                  </mat-error>
-                </mat-form-field>
-
-                <ng-container appContextualContent>
-
-                  <ng-container [ngSwitch]="collegeCode.value">
-                    <p *ngSwitchCase="CollegeLicenceClass.BCCNM">
-                      If you are a nurse practitioner, your Prescriber ID number was issued and communicated to you when
-                      you were initially granted practising NP registration. Your Prescriber ID number is created with
-                      the digits 96 and the last five digits of your College ID/Registration number. Please provide only
-                      the last 5 digits, without the leading "96".
-                    </p>
-                    <p *ngSwitchCase="CollegeLicenceClass.CPSBC">
-                      Your Practitioner ID number is called the "CPSID number" in your license letter. Provide only the
-                      last 5 digits, without the leading zero.
-                    </p>
-                    <div *ngSwitchCase="CollegeLicenceClass.CPBC">
-                      <p>
-                        You may view your registration number on eServices by clicking "My Profile" and navigating to
-                        either:
-                      </p>
-                      <ol>
-                        <li>
-                          <strong>Update profile (view only)</strong> OR
-                        </li>
-                        <li>
-                          <strong>My Registration Card</strong> (downloads registration card containing your
-                          registration number)
-                        </li>
-                      </ol>
-                    </div>
-                    <p *ngSwitchDefault>
-                      Enter your College licence number
-                    </p>
-                  </ng-container>
-
-                </ng-container>
-              </app-form-icon-group>
-
-            </div>
-          </div>
+          <mat-form-field class="w-100">
+            <input matInput
+                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPSBC) ? 'CPSID Number' : 'Licence class issued by the college'"
+                   formControlName="licenseNumber">
+            <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
+              Must contain only alphanumeric characters
+            </mat-error>
+          </mat-form-field>
 
         </div>
 
@@ -142,7 +83,7 @@
               <mat-datepicker #picker
                               startView="multi-year"
                               [touchUi]="isMobile"></mat-datepicker>
-              <mat-error *ngIf="form.get('renewalDate').hasError('required')">Required</mat-error>
+              <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
             </mat-form-field>
 
           </div>
@@ -158,12 +99,75 @@
                   {{ practice.name }}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="form.get('practiceCode').hasError('required')">Required</mat-error>
+              <mat-error *ngIf="practiceCode.hasError('required')">Required</mat-error>
             </mat-form-field>
 
           </div>
 
         </ng-container>
+
+        <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
+             class="col-sm-12 pl-5">
+          <div *ngIf="prescriberIdType === PrescriberIdTypeEnum.Optional"
+               class="mb-3">
+            <mat-slide-toggle class="mr-4"
+                              [checked]="practitionerId.value"
+                              (change)="onPrescribing($event)">
+              Are you a prescribing nurse?
+            </mat-slide-toggle>
+          </div>
+
+          <ng-container *ngIf="prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing">
+
+            <app-form-icon-group>
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Prescriber ID"
+                       formControlName="practitionerId">
+                <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
+                  Must contain only 5 numeric characters
+                </mat-error>
+              </mat-form-field>
+
+              <ng-container appContextualContent>
+
+                <ng-container [ngSwitch]="collegeCode.value">
+                  <p *ngSwitchCase="CollegeLicenceClassEnum.BCCNM">
+                    If you are a nurse practitioner, your Prescriber ID number was issued and communicated to you when
+                    you were initially granted practising NP registration. Your Prescriber ID number is created with
+                    the digits 96 and the last five digits of your College ID/Registration number. Please provide only
+                    the last 5 digits, without the leading "96".
+                  </p>
+                  <p *ngSwitchCase="CollegeLicenceClassEnum.CPSBC">
+                    Your Practitioner ID number is called the "CPSID number" in your license letter. Provide only the
+                    last 5 digits, without the leading zero.
+                  </p>
+                  <div *ngSwitchCase="CollegeLicenceClassEnum.CPBC">
+                    <p>
+                      You may view your registration number on eServices by clicking "My Profile" and navigating to
+                      either:
+                    </p>
+                    <ol>
+                      <li>
+                        <strong>Update profile (view only)</strong> OR
+                      </li>
+                      <li>
+                        <strong>My Registration Card</strong> (downloads registration card containing your
+                        registration number)
+                      </li>
+                    </ol>
+                  </div>
+                  <p *ngSwitchDefault>
+                    Enter your College licence number
+                  </p>
+                </ng-container>
+
+              </ng-container>
+            </app-form-icon-group>
+
+          </ng-container>
+        </div>
 
       </ng-container>
 
