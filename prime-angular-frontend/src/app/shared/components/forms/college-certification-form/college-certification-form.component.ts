@@ -140,7 +140,10 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if (!this.condensed) {
       this.licenseCode.valueChanges
-        .subscribe((licenseCode: number) => this.setPractitionerId(licenseCode));
+        .subscribe((licenseCode: number) => {
+          this.resetPractitionerId();
+          this.setPractitionerId(licenseCode);
+        });
     }
 
     this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.practitionerId.value);
@@ -215,6 +218,7 @@ export class CollegeCertificationFormComponent implements OnInit {
       .map(licenseConfig => licenseConfig.prescriberIdType);
 
     return (prescriberIdTypes.length)
+      // TODO put in an adapter, but for now prescriberIdTypes can be `null`
       ? (prescriberIdTypes[0] ?? PrescriberIdTypeEnum.NA)
       : PrescriberIdTypeEnum.NA;
   }
