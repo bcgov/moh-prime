@@ -125,7 +125,7 @@ namespace Prime
         {
             ChangeTracker.DetectChanges();
             var updated = ChangeTracker.Entries()
-                 .Where(x => x.Entity is BaseAuditable
+                .Where(x => x.Entity is BaseAuditable
                     && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
             var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
