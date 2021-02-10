@@ -42,7 +42,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
    */
   public bcscUser: BcscUser;
   public hasPreferredName: boolean;
-  public hasValidatedAddress: boolean;
+  public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
@@ -120,7 +120,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange) {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   public onBack() {
@@ -149,29 +149,20 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
 
   public ngOnInit() {
     this.createFormInstance();
-    // Ensure that the user information is loaded prior to
-    // initialization of the form to check for verified address
-    // information to control UI and validation management
+    // Ensure that the identity provider user information is loaded
+    // prior to initialization of the form override form values, and
+    // control the validation management
     this.authService.getUser$()
       .pipe(
-        map((bcscUser: BcscUser) => {
-          this.bcscUser = bcscUser;
-          this.hasValidatedAddress = Address.isNotEmpty(bcscUser.verifiedAddress)
-          if (!this.hasValidatedAddress) {
-            this.clearAddressValidator(this.verifiedAddress);
-            this.setAddressValidator(this.physicalAddress);
-          }
-
-          return bcscUser;
-        }),
-        // Patch the form using the stored organization information
+        map((bcscUser: BcscUser) => this.bcscUser = bcscUser),
+        // Patch the form using the stored enrolment information
         map((bcscUser: BcscUser) => {
           this.patchForm();
           return bcscUser;
         }),
-        // BCSC information should always use identity provider
-        // profile information as the source of truth, and
-        // patch the form to have it save changes
+        // BCSC information should always use identity provider profile
+        // information as the source of truth, and patch the form to
+        // have it save any changes
         map((bcscUser: BcscUser) => {
           ['hpdid', 'firstName', 'lastName', 'givenNames', 'dateOfBirth', 'verifiedAddress']
             .forEach((field: string) => {
@@ -201,10 +192,18 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   private initForm() {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
-    this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
-    this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+
+    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress)
+    if (!this.hasVerifiedAddress) {
+      this.clearAddressValidator(this.verifiedAddress);
+      this.setAddressValidator(this.physicalAddress);
+    } else {
+      this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
+      this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+    }
+
     this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasValidatedAddress);
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl) {

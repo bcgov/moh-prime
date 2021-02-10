@@ -75,9 +75,9 @@ export class BcscDemographicComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    // Ensure that the enrollee user information is loaded prior
-    // to initialization of the form to check for validated address
-    // information to control UI and validation management
+    // Ensure that the identity provider user information is loaded
+    // prior to initialization of the form override form values, and
+    // control the validation management
     this.getUser$()
       .pipe(
         map((enrollee: PhsaEnrollee) => {
