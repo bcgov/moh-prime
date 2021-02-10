@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { Role } from '@auth/shared/enum/role.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { UtilsService } from '@core/services/utils.service';
 @Component({
   selector: 'app-site-registration-actions',
@@ -15,8 +16,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
 
+  public Role = Role;
+
   constructor(
-    private authService: AuthService,
+    private permissionService: PermissionService,
     private utilsService: UtilsService
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
@@ -26,11 +29,11 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.permissionService.hasRoles(Role.ADMIN);
   }
 
   public get canDelete(): boolean {
-    return this.authService.isSuperAdmin();
+    return this.permissionService.hasRoles(Role.SUPER_ADMIN);
   }
 
   public onApprove(): void {

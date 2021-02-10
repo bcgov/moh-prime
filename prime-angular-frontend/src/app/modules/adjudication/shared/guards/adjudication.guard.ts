@@ -8,7 +8,9 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { Admin } from '@auth/shared/models/admin.model';
+import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Injectable({
@@ -18,6 +20,7 @@ export class AdjudicationGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
+    private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private adjudicationResource: AdjudicationResource
@@ -45,7 +48,7 @@ export class AdjudicationGuard extends BaseGuard {
           } as Admin;
 
           // Attempt to create an admin if they don't exist
-          return (this.authService.isAdmin())
+          return (this.permissionService.hasRoles(Role.ADMIN))
             ? this.adjudicationResource.createAdmin(admin)
             : Promise.resolve(admin);
         })
@@ -56,7 +59,7 @@ export class AdjudicationGuard extends BaseGuard {
       let destinationRoute = this.config.routes.denied;
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.authService.hasAdminView()) {
+      } else if (this.permissionService.hasRoles(Role.READONLY_ADMIN)) {
         // Allow route to resolve
         return resolve(true);
       }

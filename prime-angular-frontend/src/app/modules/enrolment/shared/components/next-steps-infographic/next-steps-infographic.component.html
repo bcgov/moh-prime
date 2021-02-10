@@ -36,7 +36,7 @@
       <button mat-flat-button
               type="button"
               color="primary"
-              *ngIf="hasVCIssuance"
+              *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
               (click)="openQR($event)">
         Verified Credential
       </button>

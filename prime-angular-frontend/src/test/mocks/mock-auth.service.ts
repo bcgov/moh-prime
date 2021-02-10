@@ -91,28 +91,4 @@ export class MockAuthService implements IAuthService {
   public getAdmin$(forceReload?: boolean): Observable<Admin> {
     return from(this.getAdmin());
   }
-
-  public isEnrollee(): boolean {
-    return this._role === Role.ENROLLEE;
-  }
-
-  public isAdmin(): boolean {
-    return this._role === Role.ADMIN;
-  }
-
-  public isSuperAdmin(): boolean {
-    return this._role === Role.SUPER_ADMIN;
-  }
-
-  public hasAdminView(): boolean {
-    return this._role === Role.READONLY_ADMIN;
-  }
-
-  public hasVCIssuance(): boolean {
-    return this._role === Role.FEATURE_VC_ISSUANCE;
-  }
-
-  public hasSitePharmacist(): boolean {
-    return this._role === Role.FEATURE_SITE_PHARMACIST;
-  }
 }

@@ -15,9 +15,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { VendorEnum } from '@shared/enums/vendor.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -53,7 +54,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private authService: AuthService
+    private permissionService: PermissionService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -129,7 +130,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
         return true;
       case CareSettingEnum.COMMUNITY_PHARMACIST:
-        return this.authService.hasSitePharmacist();
+        return this.permissionService.hasRoles(Role.FEATURE_SITE_PHARMACIST);
       default:
         return false;
     }

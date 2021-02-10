@@ -33,6 +33,7 @@ import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
+import { PermissionPipe } from '@shared/pipes/permission-pipe';
 import { AddressComponent } from '@shared/components/forms/address/address.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
@@ -99,6 +100,7 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     SafePipe,
     CasePipe,
     AddressPipe,
+    PermissionPipe,
     AddressComponent,
     ConfirmDialogComponent,
     PageComponent,
@@ -185,6 +187,7 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     FullnamePipe,
     SafePipe,
     AddressPipe,
+    PermissionPipe,
     AddressComponent,
     PageComponent,
     PageHeaderComponent,

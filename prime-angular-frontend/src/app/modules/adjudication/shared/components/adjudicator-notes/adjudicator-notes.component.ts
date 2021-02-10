@@ -8,9 +8,10 @@ import { map } from 'rxjs/operators';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { BaseAdjudicatorNote } from '@shared/models/adjudicator-note.model';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { NoteType } from '@adjudication/shared/enums/note-type.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { DateContent } from '@adjudication/shared/components/dated-content-table/dated-content-table.component';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -31,6 +32,7 @@ export class AdjudicatorNotesComponent implements OnInit {
   public hasActions: boolean;
 
   public AdjudicationRoutes = AdjudicationRoutes;
+  public Role = Role;
 
   private routeUtils: RouteUtils;
 
@@ -40,16 +42,12 @@ export class AdjudicatorNotesComponent implements OnInit {
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
     private siteResource: SiteResource,
-    private authService: AuthService
+    private permissionService: PermissionService
   ) {
     // Arbitrary base route path, since all routing is relative in this page.
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
     this.hasActions = false;
     this.adjudicatorNotes$ = new BehaviorSubject<DateContent[]>(null);
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
   }
 
   public get note(): FormControl {
@@ -94,7 +92,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       note: [
         {
           value: '',
-          disabled: !this.authService.isAdmin()
+          disabled: !this.permissionService.hasRoles(Role.ADMIN)
         },
         []
       ]

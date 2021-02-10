@@ -15,7 +15,7 @@
 
         <editor class="mb-4"
                 [init]="editorConfig"
-                [disabled]="!canEdit"
+                [disabled]="!(Role.ADMIN | inRole)"
                 (onKeyUp)="onUpdate($event)"
                 (onChange)="onUpdate($event)"
                 formControlName="note">
@@ -23,7 +23,7 @@
 
         <div class="text-right">
           <button mat-flat-button
-                  [disabled]="!canEdit"
+                  [disabled]="!(Role.ADMIN | inRole)"
                   color="primary">Save Clause</button>
         </div>
 

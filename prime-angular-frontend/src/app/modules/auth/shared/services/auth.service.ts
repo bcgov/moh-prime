@@ -27,13 +27,6 @@ export interface IAuthService {
   getUser$(forceReload?: boolean): Observable<BcscUser>;
   getAdmin(forceReload?: boolean): Promise<Admin>;
   getAdmin$(forceReload?: boolean): Observable<Admin>;
-
-  isEnrollee(): boolean;
-  isAdmin(): boolean;
-  isSuperAdmin(): boolean;
-  hasAdminView(): boolean;
-  hasVCIssuance(): boolean;
-  hasSitePharmacist(): boolean;
 }
 
 @Injectable({
@@ -169,34 +162,6 @@ export class AuthService implements IAuthService {
 
   public getAdmin$(forceReload?: boolean): Observable<Admin> {
     return from(this.getAdmin(forceReload)).pipe(take(1));
-  }
-
-  public isEnrollee(): boolean {
-    return this.accessTokenService.hasRole(Role.ENROLLEE);
-  }
-
-  public isPhsa(): boolean {
-    return this.accessTokenService.hasRole(Role.PHSA_LABTECH) || this.accessTokenService.hasRole(Role.PHSA_IMMUNIZER);
-  }
-
-  public isAdmin(): boolean {
-    return this.accessTokenService.hasRole(Role.ADMIN);
-  }
-
-  public isSuperAdmin(): boolean {
-    return this.accessTokenService.hasRole(Role.SUPER_ADMIN);
-  }
-
-  public hasAdminView(): boolean {
-    return this.accessTokenService.hasRole(Role.READONLY_ADMIN);
-  }
-
-  public hasVCIssuance(): boolean {
-    return this.accessTokenService.hasRole(Role.FEATURE_VC_ISSUANCE);
-  }
-
-  public hasSitePharmacist(): boolean {
-    return this.accessTokenService.hasRole(Role.FEATURE_SITE_PHARMACIST);
   }
 
   private async getUserId(): Promise<string> {

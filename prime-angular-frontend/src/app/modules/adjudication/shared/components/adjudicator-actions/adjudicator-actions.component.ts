@@ -7,8 +7,9 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -43,7 +44,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
-    private authService: AuthService,
+    private permissionService: PermissionService,
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
@@ -75,11 +76,11 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    return this.permissionService.hasRoles(Role.ADMIN);
   }
 
   public get canDelete(): boolean {
-    return this.authService.isSuperAdmin();
+    return this.permissionService.hasRoles(Role.SUPER_ADMIN);
   }
 
   public get isUnderReview(): boolean {

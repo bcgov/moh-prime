@@ -5,10 +5,9 @@ import { Subscription } from 'rxjs';
 
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { Role } from '@auth/shared/enum/role.enum';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
-
-import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-next-steps-infographic',
@@ -19,15 +18,11 @@ export class NextStepsInfographicComponent implements OnInit {
   @Input() public enrolment: Enrolment;
 
   public busy: Subscription;
+  public Role = Role;
 
   constructor(
-    private dialog: MatDialog,
-    private authService: AuthService
+    private dialog: MatDialog
   ) { }
-
-  public get hasVCIssuance(): boolean {
-    return this.authService.hasVCIssuance();
-  }
 
   public openQR(event: Event) {
     event.preventDefault();

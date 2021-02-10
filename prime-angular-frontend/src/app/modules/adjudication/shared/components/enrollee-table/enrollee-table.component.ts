@@ -10,10 +10,11 @@ import moment from 'moment';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
+
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Admin } from '@auth/shared/models/admin.model';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -35,6 +36,7 @@ export class EnrolleeTableComponent implements OnInit {
   public hasRenewalDateRange = false;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
+  public Role = Role;
 
   constructor(
     private authService: AuthService,
@@ -60,10 +62,6 @@ export class EnrolleeTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
