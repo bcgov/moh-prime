@@ -30,7 +30,7 @@ namespace PrimeTests.HttpClientMocks
             _expectedEnrollee = expectedEnrollee;
         }
 
-        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
+        public Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)
         {
             OperationMode mode = GetNextMode();
 
