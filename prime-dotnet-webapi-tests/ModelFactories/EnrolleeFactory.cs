@@ -56,9 +56,8 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
             Ignore(x => x.AlwaysManual);
+            Ignore(x => x.EnrolleeCredentials);
             Ignore(x => x.IdentityProvider);
-            Ignore(x => x.Credential);
-            Ignore(x => x.CredentialId);
             Ignore(x => x.EnrolleeRemoteUsers);
             Ignore(x => x.RemoteAccessSites);
             Ignore(x => x.RemoteAccessLocations);

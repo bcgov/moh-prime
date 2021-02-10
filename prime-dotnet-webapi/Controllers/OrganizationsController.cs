@@ -33,6 +33,7 @@ namespace Prime.Controllers
         private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
         private readonly IPdfService _pdfService;
+        private readonly ISiteService _siteService;
 
         public OrganizationsController(
             IMapper mapper,
@@ -41,7 +42,8 @@ namespace Prime.Controllers
             IPartyService partyService,
             IDocumentService documentService,
             IRazorConverterService razorConverterService,
-            IPdfService pdfService)
+            IPdfService pdfService,
+            ISiteService siteService)
         {
             _mapper = mapper;
             _organizationService = organizationService;
@@ -50,42 +52,40 @@ namespace Prime.Controllers
             _razorConverterService = razorConverterService;
             _documentService = documentService;
             _pdfService = pdfService;
+            _siteService = siteService;
         }
 
         // GET: api/Organizations
         /// <summary>
         /// Gets all of the Organizations for a user, or all organizations if user has ADMIN role
         /// </summary>
-        /// <param name="verbose"></param>
         [HttpGet(Name = nameof(GetOrganizations))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Organization>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Organization>>> GetOrganizations([FromQuery] bool verbose)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetOrganizations()
         {
-            IEnumerable<Organization> organizations;
+            IEnumerable<OrganizationListViewModel> organizations;
 
             if (User.HasAdminView())
             {
+                var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
                 organizations = await _organizationService.GetOrganizationsAsync();
+                foreach (var organization in organizations)
+                {
+                    organization.Sites = organization.Sites.Select(s => s.SetNotification(notifiedIds.Contains(s.Id)));
+                }
             }
             else
             {
                 var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
 
                 organizations = (party != null)
-                    ? await _organizationService.GetOrganizationsAsync(party.Id)
-                    : Enumerable.Empty<Organization>();
+                    ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
+                    : Enumerable.Empty<OrganizationListViewModel>();
             }
 
-            if (verbose)
-            {
-                return Ok(ApiResponse.Result(organizations));
-            }
-            else
-            {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<OrganizationListViewModel>>(organizations)));
-            }
+            return Ok(ApiResponse.Result(organizations));
         }
 
         // GET: api/Organizations/5
@@ -200,6 +200,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpDelete("{organizationId}", Name = nameof(DeleteOrganization))]
+        [Authorize(Policy = Policies.SuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

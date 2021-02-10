@@ -63,7 +63,10 @@ namespace Prime.Controllers
         {
             if (User.HasAdminView())
             {
-                return Ok(ApiResponse.Result(await _enrolleeService.GetEnrolleesAsync(searchOptions)));
+                var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
+                var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+                var result = enrollees.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
+                return Ok(ApiResponse.Result(result));
             }
             else
             {
@@ -748,9 +751,117 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
-            var status = await _enrolleeService.GetEnrolleeCurrentStatus(enrolleeId);
+            var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
 
             return Ok(ApiResponse.Result(status));
+        }
+
+        // POST: api/Enrollees/5/adjudicator-notes/6/notification
+        /// <summary>
+        /// Creates a new enrollee notification on an enrollee note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorNoteId"></param>
+        /// <param name="assigneeId"></param>
+        [HttpPost("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(CreateEnrolleeNotification))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNotification>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNotification>> CreateEnrolleeNotification(int enrolleeId, int adjudicatorNoteId, FromBodyData<int> assigneeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            if (note == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var notification = await _enrolleeService.CreateEnrolleeNotificationAsync(note.Id, admin.Id, assigneeId);
+
+            return Ok(ApiResponse.Result(notification));
+        }
+
+        // DELETE: api/Enrollees/5/adjudicator-notes/6/notification
+        /// <summary>
+        /// deletes the notification on an enrollees note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="adjudicatorNoteId"></param>
+        [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(DeleteEnrolleeNotification))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeleteEnrolleeNotification(int enrolleeId, int adjudicatorNoteId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
+            if (note == null || note.EnrolleeNotification == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee note with notification not found with id {adjudicatorNoteId}"));
+            }
+
+            await _enrolleeService.RemoveEnrolleeNotificationAsync(note.EnrolleeNotification.Id);
+
+            return Ok();
+        }
+
+        // Get: api/Enrollees/5/notifications
+        /// <summary>
+        /// Get the enrollee note on an enrollee that has a notification  for current admin user.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/notifications", Name = nameof(GetNotifications))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNoteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> GetNotifications(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            var notes = await _enrolleeService.GetNotificationsAsync(enrolleeId, admin.Id);
+
+            return Ok(ApiResponse.Result(notes));
+        }
+
+        // Delete: api/Enrollees/5/notifications
+        /// <summary>
+        /// Delete all notifications on an enrollee
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpDelete("{enrolleeId}/notifications", Name = nameof(DeleteEnrolleeNotifications))]
+        [Authorize(Policy = Policies.Admin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult<EnrolleeNoteViewModel>> DeleteEnrolleeNotifications(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+
+            await _enrolleeService.RemoveNotificationsAsync(enrolleeId);
+
+            return Ok();
         }
     }
 }

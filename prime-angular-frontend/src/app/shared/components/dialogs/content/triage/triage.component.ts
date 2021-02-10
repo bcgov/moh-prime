@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Observable, of, Subscription } from 'rxjs';
+import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
@@ -14,6 +15,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EscalationNoteComponent, EscalationType } from '../escalation-note/escalation-note.component';
+import { DialogOptions } from '../../dialog-options.model';
 
 @Component({
   selector: 'app-triage',
@@ -22,6 +25,9 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 })
 export class TriageComponent implements OnInit {
   @Input() public enrolleeId: number;
+  @Input() public assigned: boolean;
+  @Output() public reload: EventEmitter<boolean>;
+
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
 
@@ -31,7 +37,10 @@ export class TriageComponent implements OnInit {
     private adjudicationResource: AdjudicationResource,
     private toastService: ToastService,
     private utilsService: UtilsService,
+    private dialog: MatDialog,
   ) {
+    this.reload = new EventEmitter<boolean>();
+    this.assigned = false;
   }
 
   public get canEdit(): boolean {
@@ -39,17 +48,25 @@ export class TriageComponent implements OnInit {
   }
 
   public onEscalate() {
-    // TODO: Part of escalate ticket.
+    const data: DialogOptions = {
+      data: {
+        id: this.enrolleeId,
+        escalationType: EscalationType.ENROLLEE
+      }
+    };
+
+    this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.reload.emit(true) : noop);
   }
 
   public onEnableEditing() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.ENABLE_EDITING)
-      .subscribe();
+      .subscribe(() => this.reload.emit(true));
   }
 
   public onRerunRules() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.RERUN_RULES)
-      .subscribe();
+      .subscribe(() => this.reload.emit(true));
   }
 
   public onNotify() {

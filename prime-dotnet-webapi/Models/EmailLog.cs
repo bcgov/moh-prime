@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Models
 {
@@ -27,5 +28,19 @@ namespace Prime.Models
         public string LatestStatus { get; set; }
 
         public string StatusMessage { get; set; }
+
+        public static EmailLog FromEmail(Email email, string sendType, Guid? msgId)
+        {
+            return new EmailLog
+            {
+                Body = email.Body,
+                Cc = string.Join(",", email.Cc),
+                DateSent = DateTimeOffset.Now,
+                MsgId = msgId,
+                SendType = sendType,
+                SentTo = string.Join(",", email.To),
+                Subject = email.Subject,
+            };
+        }
     }
 }
