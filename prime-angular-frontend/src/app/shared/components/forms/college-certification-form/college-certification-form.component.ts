@@ -12,6 +12,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { Observable } from 'tinymce';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -30,6 +31,9 @@ export class CollegeCertificationFormComponent implements OnInit {
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
+
+
+  public subscription$: Observable<any>;
   /**
    * @description
    * Indicates the licenceCode is validated by PharmaNet.
@@ -141,12 +145,15 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.licenseCode.valueChanges
         .subscribe((licenseCode: number) => {
-          this.resetPractitionerId();
+          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+          if (this.prescriberIdType === PrescriberIdTypeEnum.NA) {
+            this.resetPractitionerId();
+          }
           this.setPractitionerId(licenseCode);
         });
     }
 
-    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.practitionerId.value);
+    this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
     this.isPrescribing = this.prescriberIdType === PrescriberIdTypeEnum.Optional || !!this.practitionerId.value;
     this.setPractitionerId(this.licenseCode.value);
   }
@@ -235,7 +242,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private loadLicenses(collegeCode: number) {
     this.filteredLicenses = this.filterLicenses(collegeCode);
-    this.licenseCode.patchValue(this.licenseCode.value || null);
+    console.log('LOADING...');
+    this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
   }
 
   private loadPractices(collegeCode: number) {
