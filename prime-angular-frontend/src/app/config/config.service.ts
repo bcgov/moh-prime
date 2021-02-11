@@ -8,6 +8,7 @@ import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, L
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 
 export interface IConfigService extends Configuration {
   load(): Observable<Configuration>;
@@ -117,7 +118,16 @@ export class ConfigService implements IConfigService {
   private getConfiguration(): Observable<Configuration> {
     return this.apiResource.get<Configuration>('lookups')
       .pipe(
-        map((response: ApiHttpResponse<Configuration>) => response.result)
+        map((response: ApiHttpResponse<Configuration>) => response.result),
+        map((configuration: Configuration) => {
+          configuration.licenses
+            .map((licenceConfig: LicenseConfig) => {
+              // Nullable on backend, but converted to NA
+              licenceConfig.prescriberIdType = licenceConfig.prescriberIdType ?? PrescriberIdTypeEnum.NA;
+              return licenceConfig;
+            });
+          return configuration;
+        })
       );
   }
 
