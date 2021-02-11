@@ -33,8 +33,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 
-RUN rm -fr /usr/share/nginx/html
 RUN chmod -R 777 /app/src
+RUN ln /app/dist/angular-frontend /usr/share/nginx/html
 
 RUN chmod +x /entrypoint.sh
 RUN chmod 777 /entrypoint.sh
