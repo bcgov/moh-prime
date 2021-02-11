@@ -130,7 +130,7 @@ namespace Prime.Controllers
             }
 
             var createModel = payload.Enrollee;
-            createModel.MapUserClaims(User);
+            createModel.SetPropertiesFromToken(User);
 
             if (!createModel.Validate(User))
             {
@@ -187,6 +187,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeUpdateModel enrollee, [FromQuery] bool beenThroughTheWizard)
         {
+            if (enrollee == null)
+            {
+                ModelState.AddModelError("Enrollee", "Profile update model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
@@ -197,14 +203,20 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            enrollee.SetPropertiesFromToken(User);
+
+            if (!enrollee.Validate(User))
+            {
+                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             // If the enrollee is not in the status of 'Editable', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
-
-            enrollee.SetTokenProperties(User);
 
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
 

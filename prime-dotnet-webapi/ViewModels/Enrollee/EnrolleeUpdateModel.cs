@@ -10,6 +10,12 @@ namespace Prime.ViewModels
 {
     public class EnrolleeUpdateModel
     {
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string GivenNames { get; set; }
+
         public string PreferredFirstName { get; set; }
 
         public string PreferredMiddleName { get; set; }
@@ -61,10 +67,18 @@ namespace Prime.ViewModels
         [JsonIgnore]
         public string IdentityProvider { get; set; }
 
-        public void SetTokenProperties(ClaimsPrincipal user)
+        public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
             IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
+        }
+
+        public bool Validate(ClaimsPrincipal user)
+        {
+            return FirstName == user.FindFirstValue(Claims.GivenName)
+                && LastName == user.FindFirstValue(Claims.FamilyName)
+                && GivenNames == user.FindFirstValue(Claims.GivenNames)
+                && Equals(VerifiedAddress, user.GetVerifiedAddress());
         }
     }
 }

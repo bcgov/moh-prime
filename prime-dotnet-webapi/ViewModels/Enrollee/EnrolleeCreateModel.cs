@@ -58,40 +58,22 @@ namespace Prime.ViewModels
             return DateOfBirth > DateTime.Today.AddYears(-18);
         }
 
-        public void MapUserClaims(ClaimsPrincipal user)
+        public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
             IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);
             IdentityAssuranceLevel = user.GetIdentityAssuranceLevel();
-
-            if (IdentityProvider != AuthConstants.BCServicesCard)
-            {
-                // TODO: Send this up from FE rather than mapping it
-                GivenNames = FirstName;
-            }
         }
 
         public bool Validate(ClaimsPrincipal user)
         {
-            if (UserId != user.GetPrimeUserId()
-                || FirstName != user.FindFirstValue(Claims.GivenName)
-                || LastName != user.FindFirstValue(Claims.FamilyName)
-                || IsUnder18())
-            {
-                return false;
-            }
-
-            if (IdentityProvider == AuthConstants.BCServicesCard)
-            {
-                return HPDID == user.FindFirstValue(Claims.PreferredUsername)
-                    && GivenNames == user.FindFirstValue(Claims.GivenNames)
-                    && DateOfBirth == user.GetDateOfBirth()
-                    && Equals(VerifiedAddress, user.GetVerifiedAddress());
-            }
-            else
-            {
-                return VerifiedAddress == null
-                    && Email == user.FindFirstValue(Claims.Email);
-            }
+            return UserId == user.GetPrimeUserId()
+                && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+                && FirstName == user.FindFirstValue(Claims.GivenName)
+                && LastName == user.FindFirstValue(Claims.FamilyName)
+                && GivenNames == user.FindFirstValue(Claims.GivenNames)
+                && DateOfBirth == user.GetDateOfBirth()
+                && !IsUnder18()
+                && Equals(VerifiedAddress, user.GetVerifiedAddress());
         }
     }
 }
