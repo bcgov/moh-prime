@@ -92,7 +92,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       note: [
         {
           value: '',
-          disabled: !this.permissionService.hasRoles(Role.ADMIN)
+          disabled: !this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)
         },
         []
       ]

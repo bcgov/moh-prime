@@ -12,8 +12,7 @@ export class PermissionPipe implements PipeTransform {
     private permissionService: PermissionService
   ) { }
 
-  transform(...roles: Role[]): boolean {
-    return this.permissionService.hasRoles(...roles);
+  transform(...roles: any): boolean {
+    return this.permissionService.hasRoles(roles);
   }
-
 }

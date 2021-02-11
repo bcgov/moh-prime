@@ -42,6 +42,7 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   public EnrolmentStatus = EnrolmentStatus;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public Role = Role;
 
   constructor(
     private permissionService: PermissionService,
@@ -75,20 +76,13 @@ export class AdjudicatorActionsComponent implements OnInit {
     return this.form.get('assignedTOAType') as FormControl;
   }
 
-  public get canEdit(): boolean {
-    return this.permissionService.hasRoles(Role.ADMIN);
-  }
-
-  public get canDelete(): boolean {
-    return this.permissionService.hasRoles(Role.SUPER_ADMIN);
-  }
-
   public get isUnderReview(): boolean {
     return (this.enrollee && this.enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public onApprove() {
-    if (this.formUtilsService.checkValidity(this.form) && this.canEdit && this.isUnderReview) {
+    if (this.formUtilsService.checkValidity(this.form) &&
+      this.permissionService.hasRoles(Role.APPROVE_ENROLLEE) && this.isUnderReview) {
       const agreementName = this.termsOfAccessAgreements
         .filter(t => t.type === this.assignedTOAType.value)[0]
         .name;
@@ -97,49 +91,49 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public onDecline() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.decline.emit(this.enrollee.id);
     }
   }
 
   public onLock() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.lock.emit(this.enrollee.id);
     }
   }
 
   public onUnlock() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.unlock.emit(this.enrollee.id);
     }
   }
 
   public onDelete() {
-    if (this.canDelete) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.delete.emit(this.enrollee.id);
     }
   }
 
   public onEnableEnrollee() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.enableEnrollee.emit(this.enrollee.id);
     }
   }
 
   public onEnableEditing() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.APPROVE_ENROLLEE)) {
       this.enableEditing.emit(this.enrollee.id);
     }
   }
 
   public onRerunRules() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.TRIAGE_ENROLLEE)) {
       this.rerunRules.emit(this.enrollee.id);
     }
   }
 
   public onToggleManualAdj() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.toggleManualAdj.emit({
         enrolleeId: this.enrollee.id,
         alwaysManual: !this.enrollee.alwaysManual

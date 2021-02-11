@@ -91,7 +91,7 @@ export class DashboardV1Component implements OnInit {
     // the existence of PHSA
     let routePath = AuthRoutes.routePath(AuthRoutes.INFO);
 
-    if (this.permissionService.hasRoles(Role.READONLY_ADMIN)) {
+    if (this.permissionService.hasRoles(Role.ADMIN)) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
 

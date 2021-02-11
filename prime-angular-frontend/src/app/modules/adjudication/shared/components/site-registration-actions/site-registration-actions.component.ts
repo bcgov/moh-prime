@@ -28,28 +28,20 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.escalate = new EventEmitter<number>();
   }
 
-  public get canEdit(): boolean {
-    return this.permissionService.hasRoles(Role.ADMIN);
-  }
-
-  public get canDelete(): boolean {
-    return this.permissionService.hasRoles(Role.SUPER_ADMIN);
-  }
-
   public onApprove(): void {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.approve.emit(this.siteRegistration.siteId);
     }
   }
 
   public onDecline(): void {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.decline.emit(this.siteRegistration.siteId);
     }
   }
 
   public onEscalate(): void {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.escalate.emit(this.siteRegistration.siteId);
     }
   }

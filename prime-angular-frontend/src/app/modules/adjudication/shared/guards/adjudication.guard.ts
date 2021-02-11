@@ -59,7 +59,7 @@ export class AdjudicationGuard extends BaseGuard {
       let destinationRoute = this.config.routes.denied;
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.permissionService.hasRoles(Role.READONLY_ADMIN)) {
+      } else if (this.permissionService.hasRoles(Role.ADMIN)) {
         // Allow route to resolve
         return resolve(true);
       }
