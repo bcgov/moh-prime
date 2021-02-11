@@ -145,22 +145,25 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (!this.condensed) {
       this.licenseCode.valueChanges
         .subscribe((licenseCode: number) => {
-          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+          this.prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
 
           switch (this.prescriberIdType) {
             case PrescriberIdTypeEnum.NA:
+              // Ensures validators are cleared and value reset
               this.resetPractitionerId();
               break;
             case PrescriberIdTypeEnum.Optional:
+              // Maintain validators only if the value exists
               if (!this.practitionerId.value) {
                 this.resetPractitionerId();
               }
+              // Ensures that changes in licence code from mandatory
+              // to optional will show the input
               this.isPrescribing = this.practitionerId.value;
               break;
-            case PrescriberIdTypeEnum.Mandatory:
-              // Noop
-              break;
+            case PrescriberIdTypeEnum.Mandatory: break; // NOOP
           }
+
           this.setPractitionerId(licenseCode);
         });
     }
