@@ -146,9 +146,21 @@ export class CollegeCertificationFormComponent implements OnInit {
       this.licenseCode.valueChanges
         .subscribe((licenseCode: number) => {
           this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-          if (this.prescriberIdType !== PrescriberIdTypeEnum.Mandatory) {
-            this.resetPractitionerId();
+
+          switch (this.prescriberIdType) {
+            case PrescriberIdTypeEnum.NA:
+              this.resetPractitionerId();
+              break;
+            case PrescriberIdTypeEnum.Optional:
+              if (!this.practitionerId.value) {
+                this.resetPractitionerId();
+              }
+              break;
+            case PrescriberIdTypeEnum.Mandatory:
+              // Noop
+              break;
           }
+
           this.setPractitionerId(licenseCode);
         });
     }
