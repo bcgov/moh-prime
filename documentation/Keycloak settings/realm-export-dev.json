@@ -122,6 +122,15 @@
         "attributes": {}
       },
       {
+        "id": "943fb54a-7873-4b73-bad7-7692c38642d6",
+        "name": "prime_administrant",
+        "description": "A role representing the basic ability of the user is to access the \"admin\" portion of PRIME.",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "dc232d2e-ff00-4fb9-88e8-0f014dfbe5e8",
         "name": "enrollee_triage",
         "composite": false,
@@ -132,15 +141,6 @@
       {
         "id": "90ad35b2-e794-4e2f-a8a5-67d5917a0d57",
         "name": "prime_api_service_account",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "148016c3-ec3b-4e36-bf93-3a659bfc419d",
-        "name": "prime_admin2",
-        "description": "Placeholder for the new role designating users as able to access the admin portion of PRIME (equivalent to prime_readonly_admin currently)",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -539,11 +539,11 @@
       "path": "/Analyst",
       "attributes": {},
       "realmRoles": [
-        "prime_admin2",
         "prime_admin",
         "enrollee_view",
         "site_view",
         "site_edit",
+        "prime_administrant",
         "enrollee_approve",
         "enrollee_triage"
       ],
@@ -556,11 +556,11 @@
       "path": "/Clerk",
       "attributes": {},
       "realmRoles": [
-        "prime_admin2",
         "prime_admin",
         "enrollee_view",
         "site_edit",
         "site_view",
+        "prime_administrant",
         "enrollee_triage"
       ],
       "clientRoles": {},
@@ -572,10 +572,10 @@
       "path": "/HIBCHelpdesk",
       "attributes": {},
       "realmRoles": [
-        "prime_admin2",
         "enrollee_view",
         "site_view",
-        "prime_readonly_admin"
+        "prime_readonly_admin",
+        "prime_administrant"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -586,12 +586,12 @@
       "path": "/Manager",
       "attributes": {},
       "realmRoles": [
-        "prime_admin2",
         "prime_admin",
         "enrollee_view",
         "site_edit",
         "site_view",
         "enrollee_elevated_management",
+        "prime_administrant",
         "enrollee_approve",
         "enrollee_triage"
       ],
