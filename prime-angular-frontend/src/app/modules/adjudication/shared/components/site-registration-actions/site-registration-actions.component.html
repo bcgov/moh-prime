@@ -27,7 +27,7 @@
       <span>Contact Signing Authority</span>
     </button>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole) || siteRegistration.adjudicatorIdir"
+            [disabled]="!((Role.EDIT_SITE | inRole) || siteRegistration.adjudicatorIdir)"
             (click)="onEscalate()">
       <mat-icon>error_outline</mat-icon>
       <span>Enrolment Escalation</span>

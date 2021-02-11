@@ -31,7 +31,7 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole) || assigned"
+            [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
             (click)="onEscalate()">
       <mat-icon>error_outline</mat-icon>
       <span>Enrolment Escalation</span>

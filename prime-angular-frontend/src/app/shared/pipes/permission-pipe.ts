@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Role } from '@auth/shared/enum/role.enum';
-
 import { PermissionService } from '@auth/shared/services/permission.service';
 
 @Pipe({
@@ -13,6 +11,6 @@ export class PermissionPipe implements PipeTransform {
   ) { }
 
   transform(...roles: any): boolean {
-    return this.permissionService.hasRoles(roles);
+    return this.permissionService.hasRoles(...roles);
   }
 }
