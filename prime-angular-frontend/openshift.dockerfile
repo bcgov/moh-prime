@@ -25,6 +25,8 @@ RUN npm run build
 ### Stage 2: Run Angular & Nginx ###
 FROM nginx:stable
 
+WORKDIR /app
+
 RUN apt-get update
 RUN touch /etc/nginx/conf.d/default.conf
 RUN chmod -R 777 /etc/nginx
