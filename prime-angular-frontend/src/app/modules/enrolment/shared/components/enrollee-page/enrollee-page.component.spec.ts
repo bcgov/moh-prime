@@ -9,6 +9,7 @@ import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_DI_CONFIG, APP_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('EnrolleePageComponent', () => {
   let component: EnrolleePageComponent;
@@ -33,6 +34,7 @@ describe('EnrolleePageComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
+        KeycloakService
       ]
     })
       .compileComponents();
