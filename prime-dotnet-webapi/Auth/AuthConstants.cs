@@ -43,7 +43,7 @@ namespace Prime.Auth
 
 
         // New Auth roles
-        public const string NewPrimeAdmin = "prime_admin2";
+        public const string PrimeAdministrant = "prime_administrant";
         public const string ViewEnrollee = "enrollee_view";
         public const string TriageEnrollee = "enrollee_triage";
         public const string ApproveEnrollee = "enrollee_approve";
