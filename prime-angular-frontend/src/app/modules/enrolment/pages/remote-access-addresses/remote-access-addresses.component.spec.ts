@@ -14,6 +14,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { RemoteAccessAddressesComponent } from './remote-access-addresses.component';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('RemoteAccessAddressesComponent', () => {
   let component: RemoteAccessAddressesComponent;
@@ -47,6 +49,10 @@ describe('RemoteAccessAddressesComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         KeycloakService
       ]

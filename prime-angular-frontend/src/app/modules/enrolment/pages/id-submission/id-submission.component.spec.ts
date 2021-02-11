@@ -11,6 +11,8 @@ import { IdSubmissionComponent } from './id-submission.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('IdSubmissionComponent', () => {
   let component: IdSubmissionComponent;
@@ -35,6 +37,10 @@ describe('IdSubmissionComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         KeycloakService
       ]
