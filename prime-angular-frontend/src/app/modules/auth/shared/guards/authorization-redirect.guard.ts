@@ -35,8 +35,6 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      console.log(routePath.slice(1));
-
       if (this.authService.isPhsa()) {
         destinationRoute = this.config.routes.phsa;
       } else if (this.authService.isEnrollee()) {
