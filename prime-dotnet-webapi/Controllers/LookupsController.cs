@@ -14,7 +14,8 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee + "," + Roles.ViewSite)]
+    // Lookups are available to every user of PRIME and service accounts
+    [Authorize]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;

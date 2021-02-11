@@ -9,7 +9,7 @@ namespace Prime.Auth.Internal
         {
             context.ThrowIfNull(nameof(context));
 
-            if (context.User.HasAdminView()
+            if (context.User.IsInRole(Roles.PrimeAdministrant)
                 || context.User.IsInRole(Roles.PrimeEnrollee))
             {
                 context.Succeed(requirement);

@@ -21,12 +21,17 @@ namespace Prime
 
         public static bool IsAdmin(this ClaimsPrincipal User)
         {
-            return User.IsInRole(Roles.PrimeAdmin);
+            return User.IsInRole(Roles.PrimeAdministrant);
         }
 
-        public static bool HasAdminView(this ClaimsPrincipal User)
+        public static bool HasViewEnrollee(this ClaimsPrincipal User)
         {
-            return User.IsInRole(Roles.PrimeReadonlyAdmin);
+            return User.IsInRole(Roles.ViewEnrollee);
+        }
+
+        public static bool HasViewSite(this ClaimsPrincipal User)
+        {
+            return User.IsInRole(Roles.ViewSite);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)

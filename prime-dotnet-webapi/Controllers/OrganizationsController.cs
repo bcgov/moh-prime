@@ -22,7 +22,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class OrganizationsController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -67,7 +67,7 @@ namespace Prime.Controllers
         {
             IEnumerable<OrganizationListViewModel> organizations;
 
-            if (User.HasAdminView())
+            if (User.HasViewSite())
             {
                 var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
                 organizations = await _organizationService.GetOrganizationsAsync();
