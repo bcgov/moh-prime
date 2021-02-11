@@ -149,7 +149,8 @@ export class CollegeCertificationFormComponent implements OnInit {
 
           switch (this.prescriberIdType) {
             case PrescriberIdTypeEnum.NA:
-              // Ensures validators are cleared and value reset
+              // Ensures validators are cleared and value reset to prevent
+              // values persisting through to submission
               this.resetPractitionerId();
               break;
             case PrescriberIdTypeEnum.Optional:
