@@ -31,9 +31,6 @@ export class CollegeCertificationFormComponent implements OnInit {
   public isPrescribing: boolean;
   public colleges: CollegeConfig[];
   public licenses: LicenseConfig[];
-
-
-  public subscription$: Observable<any>;
   /**
    * @description
    * Indicates the licenceCode is validated by PharmaNet.
