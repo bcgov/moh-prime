@@ -2,6 +2,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PrimeEmailComponent } from './prime-email.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('PrimeEmailComponent', () => {
   let component: PrimeEmailComponent;
@@ -18,6 +19,7 @@ describe('PrimeEmailComponent', () => {
             provide: APP_CONFIG,
             useValue: APP_DI_CONFIG
           },
+          KeycloakService
         ]
       }
     ).compileComponents();

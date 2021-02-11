@@ -11,6 +11,7 @@ import { AdministratorComponent } from './administrator.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteService } from '@registration/shared/services/site.service';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('AdministratorComponent', () => {
   let component: AdministratorComponent;
@@ -36,7 +37,8 @@ describe('AdministratorComponent', () => {
         {
           provide: SiteService,
           useClass: MockSiteService
-        }
+        },
+        KeycloakService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

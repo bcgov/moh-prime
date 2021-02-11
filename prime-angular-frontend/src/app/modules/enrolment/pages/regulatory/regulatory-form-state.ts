@@ -69,12 +69,9 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
       licenseNumber: [null, []],
-      practitionerId: [null, [
-        FormControlValidators.requiredLength(5),
-        FormControlValidators.numeric
-      ]],
       renewalDate: [null, []],
-      practiceCode: [null, []]
+      practiceCode: [null, []],
+      practitionerId: [null, []]
     });
   }
 

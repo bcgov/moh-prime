@@ -6,6 +6,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthModule } from '@auth/auth.module';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('SiteComponent', () => {
   let component: SiteComponent;
@@ -24,7 +25,8 @@ describe('SiteComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
-        }
+        },
+        KeycloakService
       ]
     })
       .compileComponents();
