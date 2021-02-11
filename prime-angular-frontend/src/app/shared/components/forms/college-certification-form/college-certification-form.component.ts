@@ -155,12 +155,12 @@ export class CollegeCertificationFormComponent implements OnInit {
               if (!this.practitionerId.value) {
                 this.resetPractitionerId();
               }
+              this.isPrescribing = this.practitionerId.value;
               break;
             case PrescriberIdTypeEnum.Mandatory:
               // Noop
               break;
           }
-
           this.setPractitionerId(licenseCode);
         });
     }
