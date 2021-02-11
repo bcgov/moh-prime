@@ -38,8 +38,6 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      console.log(routePath.slice(1));
-
       if (this.permissionService.hasAnyRole(Role.PHSA_LABTECH, Role.PHSA_IMMUNIZER)) {
         destinationRoute = this.config.routes.phsa;
       } else if (this.permissionService.hasRoles(Role.ENROLLEE)) {
