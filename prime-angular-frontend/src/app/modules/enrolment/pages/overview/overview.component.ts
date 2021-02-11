@@ -149,7 +149,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // enrolment regardless of whether they visited the demographic view
           // to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
-          ['hpdid', 'firstName', 'lastName', 'givenNames', 'dateOfBirth', 'verifiedAddress']
+          ['firstName', 'lastName', 'givenNames', 'verifiedAddress']
             .forEach((field: string) => {
               if (bcscUser[field]) {
                 form.get(field).patchValue(bcscUser[field]);

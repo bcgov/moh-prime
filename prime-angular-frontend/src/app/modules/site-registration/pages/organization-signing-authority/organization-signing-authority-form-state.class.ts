@@ -39,8 +39,6 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
       id: [0, []], // TODO do we need this?
-      hpdid: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       givenNames: [{ value: null, disabled: true }, [Validators.required]],

@@ -40,8 +40,6 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
   // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      hpdid: [{ value: null, disabled: true }, [Validators.required]],
-      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       givenNames: [{ value: null, disabled: true }, [Validators.required]],
@@ -63,7 +61,7 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
         FormControlValidators.phone
       ]],
       phoneExtension: [null, [FormControlValidators.numeric]],
-      smsPhone: [null, [FormControlValidators.phone]],
+      smsPhone: [null, [FormControlValidators.phone]]
     });
   }
 }
