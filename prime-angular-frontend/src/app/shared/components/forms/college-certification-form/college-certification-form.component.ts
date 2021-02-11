@@ -154,7 +154,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
 
     this.prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-    this.isPrescribing = this.prescriberIdType === PrescriberIdTypeEnum.Optional || !!this.practitionerId.value;
+    this.isPrescribing = this.prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
     this.setPractitionerId(this.licenseCode.value);
   }
 
