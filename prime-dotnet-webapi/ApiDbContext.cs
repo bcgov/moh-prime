@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
@@ -125,7 +124,7 @@ namespace Prime
         {
             ChangeTracker.DetectChanges();
             var updated = ChangeTracker.Entries()
-                 .Where(x => x.Entity is IAuditable
+                .Where(x => x.Entity is BaseAuditable
                     && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
             var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
@@ -133,13 +132,18 @@ namespace Prime
 
             foreach (var entry in updated)
             {
-                entry.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                entry.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentTime;
+                entry.CurrentValues[nameof(BaseAuditable.UpdatedUserId)] = currentUser;
+                entry.CurrentValues[nameof(BaseAuditable.UpdatedTimeStamp)] = currentTime;
 
                 if (entry.State == EntityState.Added)
                 {
-                    entry.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
-                    entry.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentTime;
+                    entry.CurrentValues[nameof(BaseAuditable.CreatedUserId)] = currentUser;
+                    entry.CurrentValues[nameof(BaseAuditable.CreatedTimeStamp)] = currentTime;
+                }
+                else
+                {
+                    entry.Property(nameof(BaseAuditable.CreatedUserId)).IsModified = false;
+                    entry.Property(nameof(BaseAuditable.CreatedTimeStamp)).IsModified = false;
                 }
             }
         }
@@ -154,20 +158,6 @@ namespace Prime
                 .HasValue<PhysicalAddress>(AddressType.Physical)
                 .HasValue<MailingAddress>(AddressType.Mailing)
                 .HasValue<VerifiedAddress>(AddressType.Verified);
-            #endregion
-
-            #region IAuditable
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                if (typeof(IAuditable).IsAssignableFrom(entityType.ClrType))
-                {
-                    entityType.FindProperty(nameof(IAuditable.CreatedUserId))
-                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-
-                    entityType.FindProperty(nameof(IAuditable.CreatedTimeStamp))
-                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-                }
-            }
             #endregion
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
