@@ -15,11 +15,12 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
 # Copy package definition, install them, then copy everything into working directory and build it
 # COPY package.json package-lock.json ./
-COPY . ./
+COPY . .
 RUN echo "Populating environment..."
 RUN (eval "echo \"$(cat /app/src/environments/environment.prod.template.ts )\"" ) > /app/src/environments/environment.prod.ts
 RUN npm install
-RUN npm run build
+RUN npm install -g @angular/cli
+RUN ng build --prod
 
 
 ### Stage 2: Run Angular & Nginx ###
@@ -36,13 +37,13 @@ COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 
 RUN chmod -R 777 /app/src
-RUN ln /app/dist/angular-frontend /usr/share/nginx/html
+COPY /app/dist/angular-frontend /usr/share/nginx/html
 
 RUN chmod +x /entrypoint.sh
 RUN chmod 777 /entrypoint.sh
 RUN echo "Build completed."
 
-COPY ./entrypoint.sh /
+COPY ./entrypoint.sh /app
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
