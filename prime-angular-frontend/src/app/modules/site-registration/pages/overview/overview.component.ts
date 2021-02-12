@@ -94,10 +94,10 @@ export class OverviewComponent implements OnInit {
     this.organization = this.organizationService.organization;
 
     if (this.isOrganizationReview) {
-      this.showSubmission = false;
+      this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
-      this.showSubmission = !this.site.submittedDate;
+      this.showSubmissionAction = !this.site.submittedDate;
     }
   }
 
