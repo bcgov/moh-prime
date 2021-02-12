@@ -13,6 +13,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
 
 describe('RemoteAccessComponent', () => {
   let component: RemoteAccessComponent;
@@ -38,6 +40,10 @@ describe('RemoteAccessComponent', () => {
         {
           provide: EnrolmentService,
           useClass: MockEnrolmentService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         KeycloakService
       ],

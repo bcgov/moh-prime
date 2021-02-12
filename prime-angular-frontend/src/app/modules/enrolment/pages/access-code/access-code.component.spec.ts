@@ -12,6 +12,9 @@ import { AccessCodeComponent } from './access-code.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConfigService } from '@config/config.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { SharedModule } from '@shared/shared.module';
 
 describe('AccessCodeComponent', () => {
   let component: AccessCodeComponent;
@@ -24,11 +27,10 @@ describe('AccessCodeComponent', () => {
         RouterTestingModule,
         HttpClientTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        SharedModule
       ],
-      declarations: [
-        AccessCodeComponent
-      ],
+      declarations: [],
       providers: [
         {
           provide: APP_CONFIG,
@@ -37,6 +39,10 @@ describe('AccessCodeComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         KeycloakService
       ]
