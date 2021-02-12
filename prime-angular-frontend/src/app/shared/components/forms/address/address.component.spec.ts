@@ -63,6 +63,7 @@ describe('AddressComponent', () => {
     fixture.detectChanges();
   }));
 
+  //TODO fix null address
   it('should create', () => {
     expect(component).toBeTruthy();
   });

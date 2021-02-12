@@ -66,6 +66,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
                   practitioners you have submitted in the application will be deleted and
                   do not have permission to access PharmaNet remotely.`
     };
+    this.filteredVendorConfig = [];
   }
 
   public get careSettingCode(): FormControl {

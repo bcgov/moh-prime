@@ -39,6 +39,16 @@ namespace Prime.Auth
 
         public const string PhsaLabtech = "phsa_eforms_labtech";
         public const string PhsaImmunizer = "phsa_eforms_immunizer_covid19";
+
+
+        // New Auth roles
+        public const string PrimeAdministrant = "prime_administrant";
+        public const string ViewEnrollee = "enrollee_view";
+        public const string TriageEnrollee = "enrollee_triage";
+        public const string ApproveEnrollee = "enrollee_approve";
+        public const string ManageEnrollee = "enrollee_elevated_management";
+        public const string ViewSite = "site_view";
+        public const string EditSite = "site_edit";
     }
 
     public static class Policies

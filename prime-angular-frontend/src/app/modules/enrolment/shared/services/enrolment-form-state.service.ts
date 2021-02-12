@@ -348,7 +348,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm.patchValue(selfDeclarations);
     this.careSettingsForm.patchValue(enrolment);
 
-    this.regulatoryFormState.patchValue(enrolment.certifications);
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
     // After patching the form is dirty, and needs to be pristine

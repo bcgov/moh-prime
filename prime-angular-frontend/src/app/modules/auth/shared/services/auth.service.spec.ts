@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { KeycloakService } from 'keycloak-angular';
 
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
@@ -10,7 +11,8 @@ describe('AuthService', () => {
       {
         provide: AuthService,
         useClass: MockAuthService
-      }
+      },
+      KeycloakService
     ]
   }));
 

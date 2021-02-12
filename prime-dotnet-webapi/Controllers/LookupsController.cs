@@ -46,18 +46,9 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
         [Authorize(Policy = Policies.SuperAdmin)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string practitionerId)
+        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
-            var cert = new Certification
-            {
-                PractitionerId = practitionerId,
-                License = new License
-                {
-                    Prefix = collegePrefix
-                }
-            };
-
-            var record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
+            var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
             return Ok(ApiResponse.Result(record));
         }

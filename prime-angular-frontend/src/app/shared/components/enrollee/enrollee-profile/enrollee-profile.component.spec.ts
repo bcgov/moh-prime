@@ -9,6 +9,7 @@ import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 describe('EnrolleeProfileComponent', () => {
   let component: EnrolleeProfileComponent;
@@ -19,7 +20,8 @@ describe('EnrolleeProfileComponent', () => {
       {
         imports: [
           HttpClientTestingModule,
-          NgxMaterialModule
+          NgxMaterialModule,
+          ReactiveFormsModule
         ],
         declarations: [
           EnrolleeProfileComponent,
