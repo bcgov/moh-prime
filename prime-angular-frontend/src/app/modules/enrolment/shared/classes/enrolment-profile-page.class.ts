@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, pipe, from } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ToastService } from '@core/services/toast.service';
@@ -12,6 +12,8 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -76,7 +78,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(route, router);
 
@@ -148,7 +151,17 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
   protected handleSubmission(beenThroughTheWizard: boolean = false) {
     if (this.isInitialEnrolment) {
       // Update using the form which could contain changes
-      this.busy = this.performHttpRequest(this.enrolmentFormStateService.json, beenThroughTheWizard)
+      this.busy = this.authService.getUser$()
+        .pipe(
+          map(({ firstName, lastName, verifiedAddress }: BcscUser) => {
+            // Ensure that on every update that the BCSC information is included
+            const enrolment = this.enrolmentFormStateService.json;
+            const { enrollee } = enrolment;
+            enrolment.enrollee = { ...enrollee, firstName, lastName, verifiedAddress };
+            return enrolment;
+          }),
+          exhaustMap((enrolment: Enrolment) => this.performHttpRequest(enrolment, beenThroughTheWizard))
+        )
         .subscribe();
     } else {
       // Allow routing to occur without invoking the deactivation,
