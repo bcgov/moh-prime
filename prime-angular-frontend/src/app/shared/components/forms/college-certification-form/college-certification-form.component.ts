@@ -235,7 +235,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.prescriberIdType = prescriberIdType;
     this.isPrescribing = isPrescribing;
 
-    if (this.prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing) {
+    if (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA)) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
         FormControlValidators.numeric,
