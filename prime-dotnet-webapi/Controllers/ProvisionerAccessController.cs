@@ -112,7 +112,7 @@ namespace Prime.Controllers
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {providedEmails}");
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
