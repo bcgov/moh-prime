@@ -133,7 +133,10 @@ namespace Prime.Services
             {
                 if (credential.AcceptedCredentialDate == null)
                 {
-                    await _verifiableCredentialClient.DeleteCredentialAsync(credential);
+                    if (await _verifiableCredentialClient.DeleteCredentialAsync(credential))
+                    {
+                        credential.RevokedCredentialDate = DateTimeOffset.Now;
+                    }
                 }
                 else
                 {
