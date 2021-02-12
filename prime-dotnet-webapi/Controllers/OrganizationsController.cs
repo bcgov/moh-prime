@@ -200,7 +200,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpDelete("{organizationId}", Name = nameof(DeleteOrganization))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

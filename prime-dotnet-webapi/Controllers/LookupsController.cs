@@ -45,7 +45,7 @@ namespace Prime.Controllers
         /// For testing college licence validation
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);

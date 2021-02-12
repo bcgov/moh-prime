@@ -58,7 +58,7 @@ namespace Prime.Controllers
         /// Delete a Document Access Token.
         /// </summary>
         [HttpDelete("{accessTokenId}", Name = nameof(DeleteDocumentAccessToken))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
