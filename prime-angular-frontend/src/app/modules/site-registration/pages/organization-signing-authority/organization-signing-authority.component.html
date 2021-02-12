@@ -26,7 +26,7 @@
       <app-bcsc-profile [user]="organization?.signingAuthority"
                         [showAddress]="false"></app-bcsc-profile>
 
-      <app-toggle-content label="Provide your name as it appears on your College licence, if applicable"
+      <app-toggle-content label="Provide your preferred name, if you have one."
                           [checked]="hasPreferredName"
                           (toggle)="onPreferredNameChange($event)">
 
