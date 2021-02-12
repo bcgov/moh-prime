@@ -3,6 +3,7 @@ import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RootRoutesModule } from '../../root-routes.module';
 import { AccessDeniedComponent } from './access-denied.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AccessDeniedComponent', () => {
   let component: AccessDeniedComponent;
@@ -12,7 +13,8 @@ describe('AccessDeniedComponent', () => {
     TestBed.configureTestingModule(
       {
         imports: [
-          RootRoutesModule
+          RootRoutesModule,
+          RouterTestingModule
         ],
         declarations: [],
         providers: [
