@@ -2,7 +2,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe, from } from 'rxjs';
+import { Observable, pipe, from, EMPTY, of } from 'rxjs';
 import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
@@ -134,14 +134,40 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Patch the form with enrollee information.
    */
-  protected patchForm(): Observable<void> {
-    // Store a local copy of the enrolment for views
-    this.enrolment = this.enrolmentService.enrolment;
+  protected patchForm(): Observable<any> {
+    // Will be null if enrolment has not been created
+    const enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
-    // Attempt to patch the form if not already patched
-    return from(this.enrolmentFormStateService.setForm(this.enrolment));
+    // Attempt to patch the form if not already patched, and ensure the
+    // identity provider information is always populated from the claim
+    return this.authService.getUser$()
+      .pipe(
+        // TODO add idenity provider check to fork for BCeID
+        exhaustMap((bcscUser: BcscUser) => {
+          // An enrolment won't exist until after the first submission, and
+          // patching the form state should occur in that initial view
+          if (enrolment) {
+            // Existing enrolments should have the identity provider
+            // information populated directly from the claim, which
+            // will be patched directly into the form state
+            const { firstName, lastName, givenNames, verifiedAddress } = bcscUser;
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
+          }
+
+          // Store a local copy of the enrolment for views
+          this.enrolment = enrolment;
+
+          // Store a local copy of the enrolment for views, but the
+          // enrolment is also piped through to view for chaining
+          return of([bcscUser, enrolment]);
+        }),
+        exhaustMap(([bcscUser, updatedEnrolment]: [BcscUser, Enrolment]) => {
+          return from(this.enrolmentFormStateService.setForm(updatedEnrolment))
+            .pipe(map(() => [bcscUser, updatedEnrolment]));
+        })
+      );
   }
 
   /**
@@ -150,14 +176,14 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected handleSubmission(beenThroughTheWizard: boolean = false) {
     if (this.isInitialEnrolment) {
-      // Update using the form which could contain changes
+      // Update using the form which could contain changes, and ensure identity
+      // provider information was not altered by repopulating in the payload
       this.busy = this.authService.getUser$()
         .pipe(
-          map(({ firstName, lastName, verifiedAddress }: BcscUser) => {
-            // Ensure that on every update that the BCSC information is included
+          // TODO add idenity provider check to fork for BCeID
+          map(({ firstName, lastName, givenNames, verifiedAddress }: BcscUser) => {
             const enrolment = this.enrolmentFormStateService.json;
-            const { enrollee } = enrolment;
-            enrolment.enrollee = { ...enrollee, firstName, lastName, verifiedAddress };
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
             return enrolment;
           }),
           exhaustMap((enrolment: Enrolment) => this.performHttpRequest(enrolment, beenThroughTheWizard))

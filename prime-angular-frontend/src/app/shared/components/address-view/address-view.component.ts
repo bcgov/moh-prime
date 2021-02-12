@@ -22,6 +22,11 @@ export class AddressViewComponent implements OnInit {
   @Input() public address: Address;
   /**
    * @description
+   * Show a message indicating an address does not exist.
+   */
+  @Input() public showIfEmpty: boolean;
+  /**
+   * @description
    * Show the redirect icon.
    */
   @Input() public showRedirect: boolean;

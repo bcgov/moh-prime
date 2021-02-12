@@ -7,6 +7,20 @@
     <app-bcsc-profile [user]="organization?.signingAuthority"></app-bcsc-profile>
   </app-overview-section>
 
+  <app-address-view title="Physical Address"
+                    [address]="organization?.signingAuthority.physicalAddress"
+                    [showRedirect]="showEditRedirect"
+                    [showIfEmpty]="true"
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+  </app-address-view>
+
+  <app-address-view title="Mailing Address"
+                    [address]="organization?.signingAuthority.mailingAddress"
+                    [showRedirect]="showEditRedirect"
+                    [showIfEmpty]="true"
+                    (route)="onRoute([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY])">
+  </app-address-view>
+
   <app-overview-section title="Contact Information"
                         [showEditRedirect]="showEditRedirect"
                         [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]"

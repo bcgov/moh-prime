@@ -67,8 +67,7 @@ export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements O
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {

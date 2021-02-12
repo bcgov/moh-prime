@@ -139,11 +139,12 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
-
-    if (this.enrolment.enrolleeRemoteUsers.length) {
-      this.getRemoteAccess();
-    }
+    this.patchForm().subscribe(() => {
+      // TODO refactor and make this invoke initForm
+      if (this.enrolment.enrolleeRemoteUsers.length) {
+        this.getRemoteAccess();
+      }
+    });
   }
 
   protected createFormInstance() {

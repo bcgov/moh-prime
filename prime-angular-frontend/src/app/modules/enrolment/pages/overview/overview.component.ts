@@ -118,7 +118,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public ngOnInit() {
     this.authService.getUser$()
       .pipe(
-        map((bcscUser: BcscUser) => {
+        map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Initial assumption is a user has authenticated, been redirected to
           // this view, and not made any changes to the state of their enrolment
           // so use the source of truth that is populated from the server
@@ -127,15 +127,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Store current status as it will be truncated for initial enrolment
           this.currentStatus = enrolment.currentStatus.statusCode;
 
-          // Form being patched indicates that there is possibly changes
-          // that reside in the form for submission, and they should be
-          // reflected in the view
+          // Form being patched indicates that there is possibly changes that reside
+          // in the form for submission, and they should be reflected in the view
           if (this.enrolmentFormStateService.isPatched) {
             // Replace enrolment with the version from the form
             enrolment = this.enrolmentFormStateService.json;
             // Merge current BCSC information that may not be stored in the form
-            const { firstName, lastName, dateOfBirth, verifiedAddress } = bcscUser;
-            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, verifiedAddress };
+            // for use within the view
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, dateOfBirth, verifiedAddress };
           }
 
           // Store a local copy of the enrolment for views
@@ -145,16 +144,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Attempt to patch the form if not already patched
           this.enrolmentFormStateService.setForm(enrolment);
 
-          // Allow for BCSC information to be updated on each submission of the
-          // enrolment regardless of whether they visited the demographic view
-          // to make adjustments
+          // Allow for BCSC information to be updated on each submission of the enrolment
+          // regardless of whether they visited the demographic view to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
-          ['firstName', 'lastName', 'givenNames', 'verifiedAddress']
-            .forEach((field: string) => {
-              if (bcscUser[field]) {
-                form.get(field).patchValue(bcscUser[field]);
-              }
-            });
+          form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
         })
       ).subscribe();
   }

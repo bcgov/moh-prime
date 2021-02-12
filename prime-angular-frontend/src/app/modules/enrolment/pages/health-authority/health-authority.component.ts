@@ -72,8 +72,7 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {

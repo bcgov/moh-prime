@@ -66,8 +66,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
   public ngOnInit() {
     this.createFormInstance();
-    this.initForm();
-    this.patchForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {

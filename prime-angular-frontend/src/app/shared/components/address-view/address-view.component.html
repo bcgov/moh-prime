@@ -1,4 +1,4 @@
-<section *ngIf="hasAddress"
+<section *ngIf="hasAddress || showIfEmpty"
          class="mb-4">
 
   <app-page-subheader *ngIf="title">
@@ -12,6 +12,11 @@
     </button>
   </app-page-subheader>
 
+  <ng-container *ngTemplateOutlet="(hasAddress) ? addressIf : addressElse"></ng-container>
+
+</section>
+
+<ng-template #addressIf>
   <app-enrollee-property title="Country">
     {{ address?.countryCode | configCode: 'countries' | default }}
   </app-enrollee-property>
@@ -36,5 +41,8 @@
   <app-enrollee-property title="Postal Code">
     {{ address?.postal | postal | default }}
   </app-enrollee-property>
+</ng-template>
 
-</section>
+<ng-template #addressElse>
+  No address entered.
+</ng-template>

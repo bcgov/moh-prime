@@ -152,8 +152,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy() {

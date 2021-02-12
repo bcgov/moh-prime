@@ -71,7 +71,7 @@ export class AuthService implements IAuthService {
   }
 
   public identityProvider$(): Observable<IdentityProviderEnum> {
-    return from(this.identityProvider()).pipe(take(1));
+    return from(this.identityProvider());
   }
 
   public logout(redirectUri: string = '/'): Promise<void> {

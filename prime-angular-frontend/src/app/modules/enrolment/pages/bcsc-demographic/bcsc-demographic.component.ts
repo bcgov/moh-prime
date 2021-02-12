@@ -111,24 +111,16 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
-    // Ensure that the identity provider user information is loaded
-    // prior to initialization of the form override form values, and
-    // control the validation management
-    this.authService.getUser$()
+    this.patchForm()
       .pipe(
-        map((bcscUser: BcscUser) => this.bcscUser = bcscUser),
-        // Patch the form using the stored enrolment information
-        exhaustMap((bcscUser: BcscUser) => this.patchForm().pipe(map(() => bcscUser))),
-        // BCSC information should always use identity provider profile
-        // information as the source of truth, and patch the form to
-        // have it save any changes
-        map((bcscUser: BcscUser) => {
-          ['firstName', 'lastName', 'givenNames', 'verifiedAddress']
-            .forEach((field: string) => {
-              if (bcscUser[field]) {
-                this.form.get(field).patchValue(bcscUser[field]);
-              }
-            });
+        map(([bcscUser, enrolment]: [BcscUser, Enrolment]) => {
+          this.bcscUser = bcscUser;
+          if (!enrolment) {
+            // Manage patching the form state for a new enrolment
+            // that has not been created
+            const { firstName, lastName, givenNames, verifiedAddress } = bcscUser;
+            this.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
+          }
         })
       )
       .subscribe(() => this.initForm());
@@ -161,9 +153,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       return this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
-            const { firstName, lastName, verifiedAddress, ...remainder } = enrollee;
+            const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
             const { userId, ...demographic } = enrolment.enrollee;
-            return { ...remainder, ...demographic, firstName, lastName, verifiedAddress };
+            return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching

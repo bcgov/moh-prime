@@ -135,8 +135,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {

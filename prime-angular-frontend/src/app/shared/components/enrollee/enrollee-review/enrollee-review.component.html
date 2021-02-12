@@ -39,11 +39,13 @@
 <app-address-view title="Physical Address"
                   [address]="enrollee.physicalAddress"
                   [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
 <app-address-view title="Mailing Address"
                   [address]="enrollee.mailingAddress"
                   [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
 <section class="mb-4">
@@ -301,8 +303,12 @@
             {{ site.pec | default }}
           </app-enrollee-property>
 
-          <app-enrollee-property title="Site Address">
-            <div class="mb-3">{{ site.physicalAddress?.street | default }}</div>
+          <app-enrollee-property title="Site Address"
+                                 [makeBold]="true">
+            <!-- <div class="mb-3">{{ site.physicalAddress?.street | default }}</div> -->
+            <app-enrollee-property title="Street">
+              {{ site.physicalAddress?.street | default }}
+            </app-enrollee-property>
 
             <app-enrollee-property title="City">
               {{ site.physicalAddress?.city | default }}
