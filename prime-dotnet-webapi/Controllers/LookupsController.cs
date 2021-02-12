@@ -48,16 +48,7 @@ namespace Prime.Controllers
         [Authorize(Policy = Policies.SuperAdmin)]
         public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
-            Certification cert = new Certification
-            {
-                LicenseNumber = licenceNumber,
-                License = new License
-                {
-                    Prefix = collegePrefix
-                }
-            };
-
-            var record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
+            var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
             return Ok(ApiResponse.Result(record));
         }

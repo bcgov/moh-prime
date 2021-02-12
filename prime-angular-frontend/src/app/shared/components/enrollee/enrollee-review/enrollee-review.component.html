@@ -1,7 +1,9 @@
 <app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
 
-<section *ngIf="hasPreferredName && identityProvider === IdentityProviderEnum.BCSC"
+<section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR"
          class="mb-4">
+  <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
+       so it is pointless to show the preferred names -->
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Preferred Name</ng-container>
@@ -14,17 +16,23 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Preferred First Name">
-    {{ enrollee?.preferredFirstName | default }}
-  </app-enrollee-property>
+  <ng-container *ngIf="hasPreferredName; else noPreferredName">
+    <app-enrollee-property title="Preferred First Name">
+      {{ enrollee?.preferredFirstName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Middle Name">
-    {{ enrollee?.preferredMiddleName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Middle Name">
+      {{ enrollee?.preferredMiddleName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Last Name">
-    {{ enrollee?.preferredLastName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Last Name">
+      {{ enrollee?.preferredLastName | default }}
+    </app-enrollee-property>
+  </ng-container>
+
+  <ng-template #noPreferredName>
+    No preferred name entered.
+  </ng-template>
 
 </section>
 
@@ -32,11 +40,11 @@
          class="mb-4">
 
   <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+    <ng-container appPageSubheaderTitle>Preferred Address</ng-container>
 
     <button *ngIf="showEditRedirect"
             mat-icon-button
-            matTooltip="Edit Mailing Address"
+            matTooltip="Edit Preferred Address"
             (click)="onRoute(demographicRoutePath)">
       <mat-icon>edit</mat-icon>
     </button>
@@ -199,12 +207,16 @@
       {{ certification.collegeCode | configCode: 'colleges' | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Licence Class">
+      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
     <app-enrollee-property title="Licence Number">
       {{ certification.licenseNumber | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Licence Class">
-      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    <app-enrollee-property title="Prescriber ID">
+      {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Renewal Date">

@@ -20,6 +20,9 @@ using Newtonsoft.Json.Linq;
 
 namespace PrimeTests.Utils
 {
+    /// <summary>
+    /// This class is Deprecated, please avoid using for new tests.
+    /// </summary>
     public class TestUtils
     {
 

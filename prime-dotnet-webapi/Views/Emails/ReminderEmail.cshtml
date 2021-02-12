@@ -1,9 +1,7 @@
-@using Prime
-
-@{
-  var url = PrimeEnvironment.FrontendUrl;
-}
+@using Prime.ViewModels.Emails
+@model LinkedEmailViewModel
 
 <p>
-  Your PRIME application status has changed since you last viewed it. Please click <a href="@url">here</a> to log into PRIME and view your status.
+  Your PRIME application status has changed since you last viewed it. Please click
+  <a href="@Model.Url">here</a> to log into PRIME and view your status.
 </p>

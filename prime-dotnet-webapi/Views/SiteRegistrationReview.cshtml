@@ -1,5 +1,5 @@
-@using Prime.Models
-@model Site
+@using Prime.ViewModels.SiteRegistration
+@model SiteRegistrationReviewViewModel
 
 @{
   Layout = "~/Views/Partials/_BaseLayout.cshtml";
@@ -18,56 +18,56 @@
 
 <div class="ml-2 mb-2">
   <h5>Organization Name (Legal Entity Operating Site)</h5>
-  <span class="ml-2">@(Model.Organization.Name ?? "-")</span>
+  <span class="ml-2">@(Model.OrganizationName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Organization Registration ID</h5>
-  <span class="ml-2">@(Model.Organization.RegistrationId ?? "-")</span>
+  <span class="ml-2">@(Model.OrganizationRegistrationId ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Doing Business As</h5>
-  <span class="ml-2">@(Model.Organization.DoingBusinessAs ?? "-")</span>
+  <span class="ml-2">@(Model.OrganizationDoingBusinessAs ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Site Information</h2>
 
 <div class="ml-2 mb-2">
   <h5>Site Name (doing business as)</h5>
-  <span class="ml-2">@(Model.DoingBusinessAs ?? "-")</span>
+  <span class="ml-2">@(Model.SiteName ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Site Address</h2>
 
 <div class="ml-2 mb-2">
   <h5>Address</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.Street ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.Street ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Address 2</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.Street2 ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.Street2 ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>City</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.City ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.City ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Province</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.ProvinceCode ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.ProvinceCode ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Postal Code</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.Postal ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.Postal ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Country</h5>
-  <span class="ml-2">@(Model.PhysicalAddress.CountryCode ?? "-")</span>
+  <span class="ml-2">@(Model.SiteAddress.CountryCode ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Hours of Operation</h2>
@@ -81,16 +81,16 @@
 
 <h2 class="mb-3">Vendors</h2>
 
-@foreach (var siteVendor in Model.SiteVendors) {
+@foreach (var vendor in Model.Vendors) {
 
   <div class="ml-2 mb-2">
     <h5>Vendor Name</h5>
-    <span class="ml-2">@siteVendor.Vendor.Name</span>
+    <span class="ml-2">@vendor.Name</span>
   </div>
 
   <div class="ml-2 mb-2">
     <h5>Vendor Email</h5>
-    <span class="ml-2">@siteVendor.Vendor.Email</span>
+    <span class="ml-2">@vendor.Email</span>
   </div>
 }
 
@@ -100,10 +100,10 @@
 {
   <div class="ml-2 mb-2">
     <h5>Name</h5>
-    <span class="ml-2">@user.FirstName @user.LastName</span>
+    <span class="ml-2">@user.FullName</span>
   </div>
 
-  @foreach(var certificate in @user.RemoteUserCertifications)
+  @foreach(var certificate in @user.Certifications)
   {
     <div class="ml-2 mb-2">
       <strong>Certification</strong>
@@ -111,12 +111,12 @@
 
     <div class="ml-2 mb-2">
       <h5>College</h5>
-      <span class="ml-2">@certificate.College</span>
+      <span class="ml-2">@certificate.CollegeName</span>
     </div>
 
     <div class="ml-2 mb-2">
       <h5>Licence Number</h5>
-      <span class="ml-2">@certificate.LicenseNumber</span>
+      <span class="ml-2">@certificate.LicenceNumber</span>
     </div>
   }
 }
@@ -125,76 +125,76 @@
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
-  <span class="ml-2">@(Model.Provisioner.JobRoleTitle ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.JobTitle ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Name</h5>
-  <span class="ml-2">@(Model.Provisioner.FirstName ?? "-") @(Model.Provisioner.LastName ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.FullName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Phone</h5>
-  <span class="ml-2">@(Model.Provisioner.Phone ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.Phone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Fax</h5>
-  <span class="ml-2">@(Model.Provisioner.Fax ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.Fax ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>SMS Phone</h5>
-  <span class="ml-2">@(Model.Provisioner.SMSPhone ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.SmsPhone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Email</h5>
-  <span class="ml-2">@(Model.Provisioner.Email ?? "-")</span>
+  <span class="ml-2">@(Model.SigningAuthority.Email ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Administrator of PharmaNet Onboarding</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.JobRoleTitle ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.JobTitle ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Name</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.FirstName ?? "-") @(Model.AdministratorPharmaNet.LastName ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.FullName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Phone</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.Phone ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.Phone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Fax</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.Fax ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.Fax ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>SMS Phone</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.SMSPhone ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.SmsPhone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Email</h5>
-  <span class="ml-2">@(Model.AdministratorPharmaNet.Email ?? "-")</span>
+  <span class="ml-2">@(Model.AdministratorOfPharmaNet.Email ?? "-")</span>
 </div>
 
 <h2 class="mb-3">Privacy Officer</h2>
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
-  <span class="ml-2">@(Model.PrivacyOfficer.JobRoleTitle ?? "-")</span>
+  <span class="ml-2">@(Model.PrivacyOfficer.JobTitle ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Name</h5>
-  <span class="ml-2">@(Model.PrivacyOfficer.FirstName ?? "-") @(Model.PrivacyOfficer.LastName ?? "-")</span>
+  <span class="ml-2">@(Model.PrivacyOfficer.FullName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
@@ -209,7 +209,7 @@
 
 <div class="ml-2 mb-2">
   <h5>SMS Phone</h5>
-  <span class="ml-2">@(Model.PrivacyOfficer.SMSPhone ?? "-")</span>
+  <span class="ml-2">@(Model.PrivacyOfficer.SmsPhone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
@@ -221,12 +221,12 @@
 
 <div class="ml-2 mb-2">
   <h5>Job Title</h5>
-  <span class="ml-2">@(Model.TechnicalSupport.JobRoleTitle ?? "-")</span>
+  <span class="ml-2">@(Model.TechnicalSupport.JobTitle ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
   <h5>Name</h5>
-  <span class="ml-2">@(Model.TechnicalSupport.FirstName ?? "-") @(Model.TechnicalSupport.LastName ?? "-")</span>
+  <span class="ml-2">@(Model.TechnicalSupport.FullName ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
@@ -241,7 +241,7 @@
 
 <div class="ml-2 mb-2">
   <h5>SMS Phone</h5>
-  <span class="ml-2">@(Model.TechnicalSupport.SMSPhone ?? "-")</span>
+  <span class="ml-2">@(Model.TechnicalSupport.SmsPhone ?? "-")</span>
 </div>
 
 <div class="ml-2 mb-2">
