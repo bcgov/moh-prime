@@ -35,7 +35,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
-  public knownHealthAuthorities: Config<number>[];
+  // Known Health Authorities
+  public healthAuthorities: Config<number>[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -73,17 +74,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   /**
-   * Representing possible health authorities to select from and whether a given one was selected
-   */
-  public get selectableHealthAuthorities(): FormArray {
-    return this.form.get('selectableHealthAuthorities') as FormArray;
-  }
-
-  /**
-   * Health authorities selected by enrollee, stored as FormGroup objects
-   */
+ * Representing possible health authorities to select from and whether a given one was selected
+ * TODO: Rename property to `selectableHealthAuthorities`
+ */
   public get enrolleeHealthAuthorities(): FormArray {
-    return this.form.get('enrolleeHealthAuthorities') as FormArray;
+    return this.form.get('selectableHealthAuthorities') as FormArray;
   }
 
   public onSubmit() {
@@ -193,18 +188,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.addCareSetting();
     }
 
-    this.knownHealthAuthorities = this.configService.healthAuthorities;
-
-    // Initialize Health Authority form even if it might not be used:
-    // Create unchecked checkboxes for each known Health Authority.
-    this.form.controls.selectableHealthAuthorities = this.fb.array(this.knownHealthAuthorities.map(() => this.fb.control(false)));
-    if (this.enrolment.enrolleeHealthAuthorities.length) {
-      // Update value of checkboxes according to previous selections
-      this.enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
-        const haIndex = this.knownHealthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
-        this.selectableHealthAuthorities.controls[haIndex].setValue(true);
-      });
-    }
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   protected nextRouteAfterSubmit() {

@@ -224,14 +224,17 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
 
+    // Initialize Health Authority form even if it might not be used by end user:
+    // Create unchecked checkboxes for each known Health Authority, according to order of Health Authority list.
+    const selectableHealthAuthorities = this.careSettingsForm.get('selectableHealthAuthorities') as FormArray;
+    selectableHealthAuthorities.clear();
+    this.configService.healthAuthorities.forEach(() =>
+      selectableHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(false)));
     if (enrolment.enrolleeHealthAuthorities.length) {
-      const ehaFormArray = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-      ehaFormArray.clear();
-      // Re-populate selections associated with form after logoff/login situation
+      // Update value of checkboxes according to previous selections
       enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
-        const ehaFormGroup = this.buildEnrolleeHealthAuthorityFormGroup();
-        ehaFormGroup.patchValue(eha);
-        ehaFormArray.push(ehaFormGroup);
+        const haIndex = this.configService.healthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
+        selectableHealthAuthorities.controls[haIndex].setValue(true);
       });
     }
 
@@ -407,23 +410,25 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   private convertCareSettingFormToJson(enrolleeId: number): any {
-    const { careSettings, enrolleeHealthAuthorities, selectableHealthAuthorities } = this.careSettingsForm.getRawValue();
+    // Variable names must match keys for FormArrays in the form to get values
+    const { careSettings, selectableHealthAuthorities } = this.careSettingsForm.getRawValue();
 
-    if (selectableHealthAuthorities?.length) {
-      enrolleeHealthAuthorities.length = 0;
-      // Any checked HA is converted into an enrollee health authority,
-      // which is used to create the payload to back-end
-      selectableHealthAuthorities.forEach((checkState, i) => {
-        if (checkState) {
-          var ha = this.configService.healthAuthorities[i];
-          const enrolleeHA = {
-            enrolleeId,
-            healthAuthorityCode: ha.code
-          };
-          enrolleeHealthAuthorities.push(enrolleeHA);
-        }
-      });
-    }
+    // Any checked HA is converted into an enrollee health authority,
+    // which is used to create the payload to back-end
+    let enrolleeHealthAuthorities = selectableHealthAuthorities.map((checkState, i) => {
+      if (checkState) {
+        var ha = this.configService.healthAuthorities[i];
+        const enrolleeHA = {
+          enrolleeId,
+          healthAuthorityCode: ha.code
+        };
+        return enrolleeHA;
+      }
+      else {
+        return null;
+      }
+    });
+    enrolleeHealthAuthorities = enrolleeHealthAuthorities.filter(e => e != null);
     return { careSettings, enrolleeHealthAuthorities };
   }
 
@@ -535,7 +540,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
       careSettings: this.fb.array([]),
-      enrolleeHealthAuthorities: this.fb.array([])
+      // Naming `selectableHealthAuthorities` rather than `enrolleeHealthAuthorities` to avoid conflicts
+      // during `this.careSettingsForm.patchValue(enrolment);`
+      selectableHealthAuthorities: this.fb.array([])
     });
   }
 
@@ -545,11 +552,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     });
   }
 
-  public buildEnrolleeHealthAuthorityFormGroup(): FormGroup {
-    // Will need to have the fields to carry data to back-end
-    return this.fb.group({
-      healthAuthorityCode: [null, []]
-    });
+  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
+    return this.fb.control(checkState);
   }
 
   private buildSelfDeclarationForm(): FormGroup {
