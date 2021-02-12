@@ -182,7 +182,7 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
 
     const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-    const isPrescribing = this.prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
+    const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
     this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
   }
 
