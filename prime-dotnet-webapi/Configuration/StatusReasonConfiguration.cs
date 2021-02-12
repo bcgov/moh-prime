@@ -12,8 +12,8 @@ namespace Prime.Configuration
                 return new[] {
                     new StatusReason { Code = 1,  Name = "Automatically Adjudicated", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 2,  Name = "Manually Adjudicated", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new StatusReason { Code = 3,  Name = "PharmaNet Error, Licence could not be validated", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new StatusReason { Code = 4,  Name = "College Licence not in PharmaNet practitioner table", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 3,  Name = "PharmaNet Error, License could not be validated", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
+                    new StatusReason { Code = 4,  Name = "College License or Practitioner ID not in PharmaNet table", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 6,  Name = "Birthdate discrepancy in PharmaNet practitioner table", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 5,  Name = "Name discrepancy in PharmaNet practitioner table", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new StatusReason { Code = 7,  Name = "Listed as Non-Practicing in PharmaNet practitioner table", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },

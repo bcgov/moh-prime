@@ -167,7 +167,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   protected initForm() {
     // Always have at least one care setting ready for
     // the enrollee to fill out
-    if (!this.careSettings?.length) {
+    if (!this.careSettings.length) {
       this.addCareSetting();
     }
   }
@@ -178,7 +178,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (jobs.length) {
+    } else if (jobs?.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 
@@ -198,7 +198,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
-    if (!this.careSettings?.controls?.length) {
+    if (!this.careSettings.controls.length) {
       this.addCareSetting();
     }
   }

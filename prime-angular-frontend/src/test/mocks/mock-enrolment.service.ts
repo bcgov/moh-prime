@@ -7,6 +7,8 @@ import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service'
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@shared/models/address.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
@@ -136,4 +138,9 @@ export class MockEnrolmentService implements IEnrolmentService {
   public get isProfileComplete(): boolean {
     return (this.enrolment) ? this.enrolment.profileCompleted : false;
   }
+
+  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
+    return true;
+  }
+
 }

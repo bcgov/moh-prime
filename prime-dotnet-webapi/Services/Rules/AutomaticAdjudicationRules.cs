@@ -88,42 +88,43 @@ namespace Prime.Services.Rules
                     continue;
                 }
 
+                var licenceNumber = cert.License.PrescriberIdType.HasValue
+                    ? cert.PractitionerId
+                    : cert.LicenseNumber;
+
+                var licenceText = $"{cert.License.Prefix}-{licenceNumber}";
+
                 PharmanetCollegeRecord record = null;
-
-                var licenceNumber = cert.License.PrescriberIdType == null
-                    ? cert.LicenseNumber
-                    : cert.PractitionerId;
-
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
                 }
                 catch (PharmanetCollegeApiException)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
                     passed = false;
                     continue;
                 }
                 if (record == null)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
                     passed = false;
                     continue;
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert.FullLicenseNumber} returned \"{record.FirstName} {record.LastName}\".");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{licenceText} returned \"{record.FirstName} {record.LastName}\".");
                     passed = false;
                 }
                 if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert.FullLicenseNumber} returned {record.DateofBirth:d MMM yyyy}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{licenceText} returned {record.DateofBirth:d MMM yyyy}");
                     passed = false;
                 }
                 if (record.Status != "P")
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, licenceText);
                     passed = false;
                 }
             }
