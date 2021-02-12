@@ -56,7 +56,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -68,7 +68,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 

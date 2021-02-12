@@ -8,6 +8,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -34,7 +35,8 @@ export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements O
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -46,7 +48,8 @@ export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements O
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.uploadedFile = false;

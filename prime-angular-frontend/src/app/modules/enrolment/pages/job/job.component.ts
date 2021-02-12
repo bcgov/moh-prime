@@ -14,6 +14,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -46,6 +47,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
     private configService: ConfigService,
     private fb: FormBuilder
   ) {
@@ -59,7 +61,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.jobNames = this.configService.jobNames;

@@ -13,6 +13,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-access-code',
@@ -30,7 +31,8 @@ export class AccessCodeComponent extends BaseEnrolmentProfilePage implements OnI
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -42,7 +44,8 @@ export class AccessCodeComponent extends BaseEnrolmentProfilePage implements OnI
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 

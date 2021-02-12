@@ -11,6 +11,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { FacilityEnum } from '@shared/enums/facility.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -41,6 +42,7 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
     private configService: ConfigService
   ) {
     super(
@@ -53,7 +55,8 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.facilities = this.configService.facilities;

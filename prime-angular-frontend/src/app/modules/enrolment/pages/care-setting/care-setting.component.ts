@@ -46,8 +46,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private configService: ConfigService,
-    private authService: AuthService
+    protected authService: AuthService,
+    private configService: ConfigService
   ) {
     super(
       route,
@@ -59,7 +59,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.careSettingTypes = this.configService.careSettings;

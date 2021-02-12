@@ -18,6 +18,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-self-declaration',
@@ -41,7 +42,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -53,7 +55,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.decisions = [

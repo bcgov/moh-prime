@@ -19,6 +19,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-remote-access',
@@ -45,6 +46,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
     private fb: FormBuilder
   ) {
     super(
@@ -57,7 +59,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 
