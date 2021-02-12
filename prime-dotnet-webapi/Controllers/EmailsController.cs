@@ -25,7 +25,7 @@ namespace Prime.Controllers
         /// Update all logged email statuses sent using the CHES email service
         /// </summary>
         [HttpPost("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
-        [Authorize(Roles = Roles.PrimeApiServiceAccount + "," + Roles.PrimeAdmin)]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -41,7 +41,7 @@ namespace Prime.Controllers
         /// Send enrollee renewal reminder emails
         /// </summary>
         [HttpPost("management/enrollees/renewal", Name = nameof(SendEnrolleeRenewalEmails))]
-        [Authorize(Roles = Roles.PrimeApiServiceAccount + "," + Roles.PrimeAdmin)]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
