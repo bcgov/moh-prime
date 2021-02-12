@@ -1,7 +1,7 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NgxMaskModule } from 'ngx-mask';
@@ -20,7 +20,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
 
 describe('BcscDemographicComponent', () => {
   let component: BcscDemographicComponent;
@@ -37,9 +38,9 @@ describe('BcscDemographicComponent', () => {
           NgxMaskModule.forRoot(),
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule,
-          EnrolmentModule
+          RouterTestingModule
         ],
+        declarations: [BcscDemographicComponent],
         providers: [
           {
             provide: APP_CONFIG,
@@ -57,19 +58,24 @@ describe('BcscDemographicComponent', () => {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
           },
-          KeycloakService,
-          EnrolmentFormStateService
+          KeycloakService
         ]
       }
     ).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BcscDemographicComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  beforeEach(inject(
+    [FormBuilder, FormUtilsService],
+    (fb: FormBuilder, formUtilsService: FormUtilsService) => {
+      fixture = TestBed.createComponent(BcscDemographicComponent);
+      component = fixture.componentInstance;
+      const bcscDemogrphicFormState = new BcscDemographicFormState(fb, formUtilsService);
+      component.form = bcscDemogrphicFormState.form;
+      fixture.detectChanges();
+    }
+  ));
 
+  //TODO fix null form
   it('should create', () => {
     expect(component).toBeTruthy();
   });
