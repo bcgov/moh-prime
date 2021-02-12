@@ -10,6 +10,7 @@ using QRCoder;
 using Prime.Models;
 using Prime.HttpClients;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -250,10 +251,17 @@ namespace Prime.Services
 
             var credential = GetCredentialByConnectionIdAsync(connectionId);
 
-            if (credential == null || credential.AcceptedCredentialDate != null)
+            do
             {
-                return null;
+                credential = GetCredentialByConnectionIdAsync(connectionId);
+                if (credential == null)
+                {
+                    _logger.LogInformation("Cannot issue credential, credential from database is null. waiting 5 seconds ...", credential?.Id, connectionId);
+                    Thread.Sleep(5000);
+                }
+                // return null;
             }
+            while (credential == null || credential.AcceptedCredentialDate != null);
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
