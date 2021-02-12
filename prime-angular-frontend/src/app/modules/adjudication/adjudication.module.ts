@@ -18,8 +18,7 @@ import { EnrolleeAccessTermEnrolmentComponent } from './pages/enrollee-access-te
 import { EnrolleeEventsComponent } from './pages/enrollee-events/enrollee-events.component';
 import { EnrolleeReviewStatusComponent } from './pages/enrollee-review-status/enrollee-review-status.component';
 import { SiteRegistrationsComponent } from './pages/site-registrations/site-registrations.component';
-import { SiteRegistrationComponent } from './pages/site-registration/site-registration.component';
-import { SiteAdjudicationComponent } from './pages/site-adjudication/site-adjudication.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
 import { OrganizationInformationComponent } from './pages/organization-information/organization-information.component';
 import { AdjudicationDashboardComponent } from './shared/components/adjudication-dashboard/adjudication-dashboard.component';
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
@@ -42,6 +41,9 @@ import { AdjudicatorDocumentsComponent } from './shared/components/adjudicator-d
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { AdjudicatorEventsComponent } from './shared/components/adjudicator-events/adjudicator-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
+import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { ContextualEnrolleeNotificationComponent } from './shared/components/contextual-enrollee-notification/contextual-enrollee-notification.component';
+import { ContextualSiteNotificationComponent } from './shared/components/contextual-site-notification/contextual-site-notification.component';
 
 @NgModule({
   declarations: [
@@ -61,11 +63,10 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
     DatedContentTableComponent,
     ReviewStatusContentComponent,
     SiteRegistrationsComponent,
-    SiteRegistrationComponent,
+    SiteInformationComponent,
     SiteRegistrationContainerComponent,
     SiteRegistrationTableComponent,
     SiteRegistrationActionsComponent,
-    SiteAdjudicationComponent,
     OrganizationInformationComponent,
     SiteRemoteUsersComponent,
     AdjudicationDashboardComponent,
@@ -77,7 +78,10 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
     AdjudicatorDocumentsComponent,
     SiteEventsComponent,
     AdjudicatorEventsComponent,
-    EnrolleeOverviewComponent
+    EnrolleeOverviewComponent,
+    SiteOverviewComponent,
+    ContextualEnrolleeNotificationComponent,
+    ContextualSiteNotificationComponent
   ],
   imports: [
     AdjudicationRoutingModule,

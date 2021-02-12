@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ConfigService } from '@config/config.service';
 import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
@@ -58,7 +58,7 @@ export class EnrolmentService implements IEnrolmentService {
    */
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     const isCollegeOfPharmacists = certifications
-      .some(cert => cert.collegeCode === CollegeLicenceClass.CPBC);
+      .some(cert => cert.collegeCode === CollegeLicenceClassEnum.CPBC);
 
     if (isCollegeOfPharmacists || !this.hasAllowedRemoteAccessCareSetting(careSettings)) {
       return false;

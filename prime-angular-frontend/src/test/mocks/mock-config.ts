@@ -505,8 +505,10 @@ export class MockConfig {
           "code": 1,
           "weight": 1,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Full - Family",
           "collegeLicenses": [
             {
@@ -519,8 +521,10 @@ export class MockConfig {
           "code": 2,
           "weight": 2,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Full - Specialty",
           "collegeLicenses": [
             {
@@ -533,8 +537,10 @@ export class MockConfig {
           "code": 3,
           "weight": 12,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Special",
           "collegeLicenses": [
             {
@@ -547,8 +553,10 @@ export class MockConfig {
           "code": 4,
           "weight": 11,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Osteopathic",
           "collegeLicenses": [
             {
@@ -561,8 +569,10 @@ export class MockConfig {
           "code": 5,
           "weight": 3,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional - Family",
           "collegeLicenses": [
             {
@@ -575,8 +585,10 @@ export class MockConfig {
           "code": 6,
           "weight": 4,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional - Specialty",
           "collegeLicenses": [
             {
@@ -589,8 +601,10 @@ export class MockConfig {
           "code": 7,
           "weight": 10,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Academic",
           "collegeLicenses": [
             {
@@ -603,8 +617,10 @@ export class MockConfig {
           "code": 8,
           "weight": 6,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Conditional - Practice Limitations",
           "collegeLicenses": [
             {
@@ -617,8 +633,10 @@ export class MockConfig {
           "code": 9,
           "weight": 5,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Conditional - Practice Setting",
           "collegeLicenses": [
             {
@@ -631,8 +649,10 @@ export class MockConfig {
           "code": 10,
           "weight": 7,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Conditional - Disciplined",
           "collegeLicenses": [
             {
@@ -645,8 +665,10 @@ export class MockConfig {
           "code": 11,
           "weight": 18,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Medical Student",
           "collegeLicenses": [
             {
@@ -659,8 +681,10 @@ export class MockConfig {
           "code": 12,
           "weight": 14,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Postgraduate Resident",
           "collegeLicenses": [
             {
@@ -673,8 +697,10 @@ export class MockConfig {
           "code": 13,
           "weight": 15,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Postgraduate Resident Elective",
           "collegeLicenses": [
             {
@@ -687,8 +713,10 @@ export class MockConfig {
           "code": 14,
           "weight": 16,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Postgraduate Fellow",
           "collegeLicenses": [
             {
@@ -701,8 +729,10 @@ export class MockConfig {
           "code": 15,
           "weight": 17,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Postgraduate Trainee",
           "collegeLicenses": [
             {
@@ -715,8 +745,10 @@ export class MockConfig {
           "code": 16,
           "weight": 9,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Clinical Observership",
           "collegeLicenses": [
             {
@@ -729,8 +761,10 @@ export class MockConfig {
           "code": 17,
           "weight": 13,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Visitor",
           "collegeLicenses": [
             {
@@ -743,8 +777,10 @@ export class MockConfig {
           "code": 18,
           "weight": 22,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Emergency - Family",
           "collegeLicenses": [
             {
@@ -757,8 +793,10 @@ export class MockConfig {
           "code": 19,
           "weight": 23,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Emergency - Specialty",
           "collegeLicenses": [
             {
@@ -771,8 +809,10 @@ export class MockConfig {
           "code": 20,
           "weight": 20,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Retired - Life ",
           "collegeLicenses": [
             {
@@ -785,8 +825,10 @@ export class MockConfig {
           "code": 21,
           "weight": 24,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Temporarily Inactive",
           "collegeLicenses": [
             {
@@ -799,8 +841,10 @@ export class MockConfig {
           "code": 22,
           "weight": 8,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Surgical Assistant",
           "collegeLicenses": [
             {
@@ -813,8 +857,10 @@ export class MockConfig {
           "code": 23,
           "weight": 19,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Administrative",
           "collegeLicenses": [
             {
@@ -827,8 +873,10 @@ export class MockConfig {
           "code": 24,
           "weight": 21,
           "prefix": "91",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Assessment",
           "collegeLicenses": [
             {
@@ -841,8 +889,10 @@ export class MockConfig {
           "code": 25,
           "weight": 1,
           "prefix": "P1",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Full Pharmacist",
           "collegeLicenses": [
             {
@@ -855,8 +905,10 @@ export class MockConfig {
           "code": 26,
           "weight": 2,
           "prefix": "P1",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Limited Pharmacist",
           "collegeLicenses": [
             {
@@ -869,8 +921,10 @@ export class MockConfig {
           "code": 27,
           "weight": 4,
           "prefix": "P1",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Pharmacist",
           "collegeLicenses": [
             {
@@ -883,8 +937,10 @@ export class MockConfig {
           "code": 28,
           "weight": 3,
           "prefix": "P1",
-          "namedInImReg": true,
+          "validate": false,
+          "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Student Pharmacist",
           "collegeLicenses": [
             {
@@ -897,8 +953,10 @@ export class MockConfig {
           "code": 29,
           "weight": 6,
           "prefix": "T9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Pharmacy Technician",
           "collegeLicenses": [
             {
@@ -911,8 +969,10 @@ export class MockConfig {
           "code": 30,
           "weight": 5,
           "prefix": "P1",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Pharmacist",
           "collegeLicenses": [
             {
@@ -925,8 +985,10 @@ export class MockConfig {
           "code": 31,
           "weight": 7,
           "prefix": "T9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Pharmacy Technician",
           "collegeLicenses": [
             {
@@ -939,8 +1001,10 @@ export class MockConfig {
           "code": 32,
           "weight": 6,
           "prefix": "R9",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Practicing Registered Nurse",
           "collegeLicenses": [
             {
@@ -953,8 +1017,10 @@ export class MockConfig {
           "code": 33,
           "weight": 7,
           "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Registered Nurse",
           "collegeLicenses": [
             {
@@ -967,8 +1033,10 @@ export class MockConfig {
           "code": 34,
           "weight": 10,
           "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Registered Nurse",
           "collegeLicenses": [
             {
@@ -980,9 +1048,11 @@ export class MockConfig {
         {
           "code": 35,
           "weight": 12,
-          "prefix": "96",
+          "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Practicing Licensed Graduate Nurse",
           "collegeLicenses": [
             {
@@ -994,9 +1064,11 @@ export class MockConfig {
         {
           "code": 36,
           "weight": 13,
-          "prefix": "96",
+          "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Licensed Graduate Nurse",
           "collegeLicenses": [
             {
@@ -1008,9 +1080,11 @@ export class MockConfig {
         {
           "code": 37,
           "weight": 14,
-          "prefix": "96",
+          "prefix": "R9",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Licensed Graduate Nurse",
           "collegeLicenses": [
             {
@@ -1023,8 +1097,10 @@ export class MockConfig {
           "code": 38,
           "weight": 8,
           "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Temporary Registered Nurse (Special Event)",
           "collegeLicenses": [
             {
@@ -1037,8 +1113,10 @@ export class MockConfig {
           "code": 39,
           "weight": 9,
           "prefix": "R9",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Temporary Registered Nurse (Emergency)",
           "collegeLicenses": [
             {
@@ -1050,9 +1128,11 @@ export class MockConfig {
         {
           "code": 40,
           "weight": 11,
-          "prefix": "96",
+          "prefix": "R9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Employed Student Nurse",
           "collegeLicenses": [
             {
@@ -1065,8 +1145,10 @@ export class MockConfig {
           "code": 41,
           "weight": 15,
           "prefix": "Y9",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Practicing Registered Psychiatric Nurse",
           "collegeLicenses": [
             {
@@ -1079,8 +1161,10 @@ export class MockConfig {
           "code": 42,
           "weight": 16,
           "prefix": "Y9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Registered Psychiatric Nurse",
           "collegeLicenses": [
             {
@@ -1093,8 +1177,10 @@ export class MockConfig {
           "code": 43,
           "weight": 19,
           "prefix": "Y9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Registered Psychiatric Nurse",
           "collegeLicenses": [
             {
@@ -1107,8 +1193,10 @@ export class MockConfig {
           "code": 44,
           "weight": 17,
           "prefix": "Y9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Temporary Registered Psychiatric Nurse (Special Event)",
           "collegeLicenses": [
             {
@@ -1121,8 +1209,10 @@ export class MockConfig {
           "code": 45,
           "weight": 18,
           "prefix": "Y9",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": 1,
           "name": "Temporary Registered Psychiatric Nurse (Emergency)",
           "collegeLicenses": [
             {
@@ -1135,8 +1225,10 @@ export class MockConfig {
           "code": 46,
           "weight": 20,
           "prefix": "Y9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Employed Student Psychiatric Nurse",
           "collegeLicenses": [
             {
@@ -1149,8 +1241,10 @@ export class MockConfig {
           "code": 47,
           "weight": 1,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": 2,
           "name": "Practicing Nurse Practitioner",
           "collegeLicenses": [
             {
@@ -1163,8 +1257,10 @@ export class MockConfig {
           "code": 48,
           "weight": 2,
           "prefix": "96",
+          "validate": false,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Nurse Practitioner",
           "collegeLicenses": [
             {
@@ -1177,8 +1273,10 @@ export class MockConfig {
           "code": 49,
           "weight": 5,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Nurse Practitioner",
           "collegeLicenses": [
             {
@@ -1191,8 +1289,10 @@ export class MockConfig {
           "code": 50,
           "weight": 3,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": 2,
           "name": "Temporary Nurse Practitioner (Special Event)",
           "collegeLicenses": [
             {
@@ -1205,8 +1305,10 @@ export class MockConfig {
           "code": 51,
           "weight": 4,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": 2,
           "name": "Temporary Nurse Practitioner (Emergency)",
           "collegeLicenses": [
             {
@@ -1219,8 +1321,10 @@ export class MockConfig {
           "code": 52,
           "weight": 21,
           "prefix": "L9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Practicing Licensed Practical Nurse",
           "collegeLicenses": [
             {
@@ -1233,8 +1337,10 @@ export class MockConfig {
           "code": 53,
           "weight": 22,
           "prefix": "L9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Licensed Practical Nurse",
           "collegeLicenses": [
             {
@@ -1247,8 +1353,10 @@ export class MockConfig {
           "code": 54,
           "weight": 25,
           "prefix": "L9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Licensed Practical Nurse",
           "collegeLicenses": [
             {
@@ -1261,8 +1369,10 @@ export class MockConfig {
           "code": 55,
           "weight": 23,
           "prefix": "L9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Licensed Practical Nurse (Emergency)",
           "collegeLicenses": [
             {
@@ -1275,8 +1385,10 @@ export class MockConfig {
           "code": 56,
           "weight": 24,
           "prefix": "L9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Licensed Practical Nurse (Special Event)",
           "collegeLicenses": [
             {
@@ -1289,8 +1401,10 @@ export class MockConfig {
           "code": 57,
           "weight": 26,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Non-Practicing Licensed Nurse Practitioner",
           "collegeLicenses": [
             {
@@ -1303,8 +1417,10 @@ export class MockConfig {
           "code": 58,
           "weight": 27,
           "prefix": "96",
+          "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Nurse Practitioner (time-limited)",
           "collegeLicenses": [
             {
@@ -1317,8 +1433,10 @@ export class MockConfig {
           "code": 59,
           "weight": 25,
           "prefix": "93",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Podiatrists",
           "collegeLicenses": [
             {
@@ -1331,8 +1449,10 @@ export class MockConfig {
           "code": 60,
           "weight": 28,
           "prefix": "98",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Practising Midwife",
           "collegeLicenses": [
             {
@@ -1345,8 +1465,10 @@ export class MockConfig {
           "code": 61,
           "weight": 29,
           "prefix": "98",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Provisional Midwife",
           "collegeLicenses": [
             {
@@ -1359,8 +1481,10 @@ export class MockConfig {
           "code": 62,
           "weight": 30,
           "prefix": "98",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Midwife (Emergency)",
           "collegeLicenses": [
             {
@@ -1373,8 +1497,10 @@ export class MockConfig {
           "code": 63,
           "weight": 31,
           "prefix": "98",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Non-Practising Midwife",
           "collegeLicenses": [
             {
@@ -1387,8 +1513,10 @@ export class MockConfig {
           "code": 64,
           "weight": 1,
           "prefix": "",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
+          "prescriberIdType": null,
           "name": "Not Displayed",
           "collegeLicenses": [
             {
@@ -1457,8 +1585,10 @@ export class MockConfig {
           "code": 65,
           "weight": 26,
           "prefix": "93",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Podiatric Surgeon Student (Elective)",
           "collegeLicenses": [
             {
@@ -1471,8 +1601,10 @@ export class MockConfig {
           "code": 66,
           "weight": 27,
           "prefix": "93",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Educational - Podiatric Surgeon Resident (Elective)",
           "collegeLicenses": [
             {
@@ -1485,8 +1617,10 @@ export class MockConfig {
           "code": 67,
           "weight": 28,
           "prefix": "93",
+          "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Conditional - Podiatric Surgeon Disciplined",
           "collegeLicenses": [
             {
@@ -1499,8 +1633,10 @@ export class MockConfig {
           "code": 68,
           "weight": 8,
           "prefix": "T9",
+          "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
+          "prescriberIdType": null,
           "name": "Temporary Pharmacy Technician",
           "collegeLicenses": [
             {

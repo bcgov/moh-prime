@@ -25,7 +25,7 @@ namespace Prime.Models
 
         public int ViewCount { get; set; }
 
-        public Boolean Active { get; set; }
+        public bool Active { get; set; }
 
         [NotMapped]
         public string FrontendUrl

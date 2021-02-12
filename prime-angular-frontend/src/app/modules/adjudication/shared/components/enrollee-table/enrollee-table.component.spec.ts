@@ -6,6 +6,8 @@ import { EnrolleeTableComponent } from './enrollee-table.component';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableDataSource } from '@angular/material/table';
+import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 
 describe('EnrolleeTableComponent', () => {
   let component: EnrolleeTableComponent;
@@ -31,6 +33,7 @@ describe('EnrolleeTableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EnrolleeTableComponent);
     component = fixture.componentInstance;
+    component.dataSource = new MatTableDataSource<EnrolleeListViewModel>();
     fixture.detectChanges();
   });
 

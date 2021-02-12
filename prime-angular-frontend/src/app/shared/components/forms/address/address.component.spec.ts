@@ -59,10 +59,11 @@ describe('AddressComponent', () => {
     fixture = TestBed.createComponent(AddressComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
-    component.form = enrolmentFormStateService.bcscDemographicForm.get('mailingAddress') as FormGroup;
+    component.form = enrolmentFormStateService.bcscDemographicFormState.form.get('mailingAddress') as FormGroup;
     fixture.detectChanges();
   }));
 
+  //TODO fix null address
   it('should create', () => {
     expect(component).toBeTruthy();
   });

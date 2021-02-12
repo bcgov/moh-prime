@@ -20,11 +20,16 @@ namespace Prime.HttpClients
             _client = client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)
         {
-            certification.ThrowIfNull(nameof(certification));
+            licencePrefix.ThrowIfNull(nameof(licencePrefix));
 
-            var requestParams = new CollegeRecordRequestParams(certification);
+            if (string.IsNullOrWhiteSpace(licenceNumber))
+            {
+                return null;
+            }
+
+            var requestParams = new CollegeRecordRequestParams(licencePrefix, licenceNumber);
 
             HttpResponseMessage response = null;
             try
@@ -83,12 +88,12 @@ namespace Prime.HttpClients
             public string LicenceNumber { get; set; }
             public string CollegeReferenceId { get; set; }
 
-            public CollegeRecordRequestParams(Certification cert)
+            public CollegeRecordRequestParams(string licencePrefix, string licenceNumber)
             {
                 ApplicationUUID = Guid.NewGuid().ToString();
                 ProgramArea = "PRIME";
-                LicenceNumber = cert.LicenseNumber ?? throw new ArgumentNullException(nameof(LicenceNumber));
-                CollegeReferenceId = cert.License?.Prefix ?? throw new ArgumentNullException(nameof(CollegeReferenceId));
+                LicenceNumber = licenceNumber;
+                CollegeReferenceId = licencePrefix;
             }
         }
     }

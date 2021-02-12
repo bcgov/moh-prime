@@ -12,8 +12,6 @@ namespace Prime.Services
         Task<string> GetDownloadTokenForIdentificationDocument(int identificationDocumentId);
         Task<string> GetDownloadTokenForEnrolleeAdjudicationDocument(int enrolleeAdjudicationDocumentId);
         Task<string> GetDownloadTokenForSiteAdjudicationDocument(int siteAdjudicationDocumentId);
-        Task<Stream> GetStreamForBusinessLicenceDocument(int siteId);
-        Task<Stream> GetStreamForLatestSignedAgreementDocument(int organizationId);
         Task<string> FinalizeDocumentUpload(Guid documentGuid, string filePath);
     }
 }

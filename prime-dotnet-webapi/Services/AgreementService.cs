@@ -11,6 +11,7 @@ using AutoMapper.QueryableExtensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.ViewModels.Agreements;
 using Prime.HttpClients;
 using Prime.Services.Razor;
 
@@ -221,7 +222,7 @@ namespace Prime.Services
 
         public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
         {
-            RazorTemplate<Tuple<string, DateTimeOffset>> template = (type, forPdf) switch
+            RazorTemplate<OrgAgreementRazorViewModel> template = (type, forPdf) switch
             {
                 (AgreementType.CommunityPharmacyOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPharmacy,
                 (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
@@ -234,7 +235,7 @@ namespace Prime.Services
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderTemplateToStringAsync(template, new Tuple<string, DateTimeOffset>(orgName, displayDate));
+            return await _razorConverterService.RenderTemplateToStringAsync(template, new OrgAgreementRazorViewModel(orgName, displayDate));
         }
 
         /// <summary>

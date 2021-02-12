@@ -38,9 +38,9 @@ export class AuthorizationRedirectGuard extends BaseGuard {
       if (this.authService.isPhsa()) {
         destinationRoute = this.config.routes.phsa;
       } else if (this.authService.isEnrollee()) {
-        destinationRoute = (routePath.slice(1) === AuthRoutes.INFO)
-          ? this.config.routes.enrolment
-          : this.config.routes.site;
+        destinationRoute = (routePath.slice(1) === AuthRoutes.SITE)
+          ? this.config.routes.site
+          : this.config.routes.enrolment;
       } else if (this.authService.hasAdminView()) {
         destinationRoute = this.config.routes.adjudication;
       }

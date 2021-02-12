@@ -1,0 +1,147 @@
+<ng-container [formGroup]="form">
+
+  <app-form-icon-group [show]="total > 1"
+                       (event)="removeCertification()">
+
+    <ng-template #collegeLicences>
+      <mat-form-field class="w-100">
+        <mat-label>College Licences</mat-label>
+        <mat-select formControlName="collegeCode">
+          <mat-option *ngIf="!condensed"
+                      value="">None</mat-option>
+          <mat-option *ngFor="let college of allowedColleges()"
+                      [value]="college.code">
+            {{ college.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="collegeCode.hasError('required')">Required</mat-error>
+      </mat-form-field>
+    </ng-template>
+
+    <div class="row">
+      <div class="col-sm-12">
+        <app-form-icon-group *ngIf="condensed">
+          <ng-container [ngTemplateOutlet]="collegeLicences"></ng-container>
+          <ng-container *ngIf="condensed"
+                        appContextualContent>
+            <p>
+              This is the licence that indicates the practitioner's authority to deliver health care directly to
+              patients in B.C.
+            </p>
+          </ng-container>
+        </app-form-icon-group>
+
+        <ng-container *ngIf="!condensed"
+                      [ngTemplateOutlet]="collegeLicences"></ng-container>
+
+      </div>
+
+      <ng-container *ngIf="collegeCode.value">
+        <div *ngIf="filteredLicenses?.length > 1"
+             class="col-sm-12 pl-5">
+
+          <mat-form-field class="w-100">
+            <mat-label>Licence class issued by the college</mat-label>
+            <mat-select formControlName="licenseCode">
+              <mat-option *ngFor="let license of allowedLicenses()"
+                          [value]="license.code">
+                {{ license.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="licenseCode.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-sm-12 pl-5">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPSBC) ? 'CPSID Number' : 'Licence Number from College'"
+                   formControlName="licenseNumber">
+            <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
+              Must contain only alphanumeric characters
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+
+        <ng-container *ngIf="!condensed">
+
+          <div class="col-sm-12 pl-5">
+
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Next Renewal Date"
+                     [min]="minRenewalDate"
+                     [matDatepicker]="picker"
+                     formControlName="renewalDate"
+                     readonly
+                     (click)="picker.open()">
+              <mat-datepicker-toggle matSuffix
+                                     [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker
+                              startView="multi-year"
+                              [touchUi]="isMobile"></mat-datepicker>
+              <mat-error *ngIf="renewalDate.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+          </div>
+          <div class="col-sm-12 pl-5"
+               *ngIf="hasPractices && shouldShowPractices()">
+
+            <mat-form-field class="w-100">
+              <mat-label>Advanced Practices (Optional)</mat-label>
+              <mat-select formControlName="practiceCode">
+                <mat-option value=""></mat-option>
+                <mat-option *ngFor="let practice of filteredPractices"
+                            [value]="practice.code">
+                  {{ practice.name }}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="practiceCode.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+          </div>
+
+        </ng-container>
+
+        <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
+             class="col-sm-12 pl-5">
+          <div *ngIf="prescriberIdType === PrescriberIdTypeEnum.Optional"
+               class="mb-3">
+            <mat-slide-toggle class="mr-4"
+                              [checked]="practitionerId.value"
+                              (change)="onPrescribing($event)">
+              Do you have a Prescriber ID issued by the College?
+            </mat-slide-toggle>
+          </div>
+
+          <ng-container *ngIf="prescriberIdType === PrescriberIdTypeEnum.Mandatory || isPrescribing">
+
+            <app-form-icon-group>
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Prescriber ID"
+                       formControlName="practitionerId">
+                <mat-error *ngIf="practitionerId.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="practitionerId.hasError('numeric') || practitionerId.hasError('length')">
+                  Must contain only 5 numeric characters
+                </mat-error>
+              </mat-form-field>
+
+              <ng-container appContextualContent>
+                <p>Your Prescriber ID is a 5-digit number assigned to you by the BCCNM, to allow you to prescribe.</p>
+              </ng-container>
+            </app-form-icon-group>
+
+          </ng-container>
+        </div>
+
+      </ng-container>
+
+    </div>
+
+  </app-form-icon-group>
+
+</ng-container>
