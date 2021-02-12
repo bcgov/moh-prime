@@ -161,12 +161,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       return this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
-            const { verifiedAddress, ...remainder } = enrollee;
+            const { firstName, lastName, verifiedAddress, ...remainder } = enrollee;
             const { userId, ...demographic } = enrolment.enrollee;
-            return { ...remainder, ...demographic, verifiedAddress };
+            return { ...remainder, ...demographic, firstName, lastName, verifiedAddress };
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
-          // Populate generated keys within the form state
+          // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
           this.handleResponse()
         );
