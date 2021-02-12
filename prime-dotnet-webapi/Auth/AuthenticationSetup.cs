@@ -66,10 +66,7 @@ namespace Prime.Auth
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy(Policies.User, policy => policy.Requirements.Add(new PrimeUserRequirement()));
                 options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.PrimeAdmin));
-                options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireRole(Roles.PrimeSuperAdmin));
-                options.AddPolicy(Policies.ReadonlyAdmin, policy => policy.RequireRole(Roles.PrimeReadonlyAdmin));
                 options.AddPolicy(Policies.ExternalHpdidAccess, policy => policy.RequireRole(Roles.ExternalHpdidAccess));
                 options.AddPolicy(Policies.ExternalGpidValidation, policy => policy.RequireRole(Roles.ExternalGpidValidation));
             });

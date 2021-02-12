@@ -268,7 +268,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -466,7 +466,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeBusinessEvents))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -492,7 +492,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/reminder", Name = nameof(SendEnrolleeReminderEmail))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -521,7 +521,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(CreateInitiatedEnrolleeEmailEvent))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

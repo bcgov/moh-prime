@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;

@@ -53,10 +53,7 @@ namespace Prime.Auth
 
     public static class Policies
     {
-        public const string SuperAdmin = "super-admin-policy";
         public const string Admin = "admin-policy";
-        public const string ReadonlyAdmin = "readonly-admin-policy";
-        public const string User = "user-policy";
         public const string ExternalHpdidAccess = "external-hpdid-access-policy";
         public const string ExternalGpidValidation = "external-gpid-validation-policy";
     }

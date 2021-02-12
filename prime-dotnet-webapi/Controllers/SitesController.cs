@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SitesController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -825,7 +825,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/site-registration-notes", Name = nameof(GetSiteRegistrationNotes))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -865,7 +865,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{siteId}/events", Name = nameof(GetSiteBusinessEvents))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

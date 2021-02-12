@@ -60,7 +60,7 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
-        [Authorize(Policy = Policies.User)]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -79,7 +79,7 @@ namespace Prime.Controllers
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
         [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Policy = Policies.User)]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

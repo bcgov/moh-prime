@@ -17,8 +17,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    // User needs at least the RO_ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
     public class EnrolleeAgreementsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
