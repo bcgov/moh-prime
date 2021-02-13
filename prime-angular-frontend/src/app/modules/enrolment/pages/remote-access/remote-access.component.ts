@@ -11,6 +11,8 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -139,9 +141,9 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm().subscribe(() => {
+    this.patchForm().subscribe(([_, enrolment]: [BcscUser, Enrolment]) => {
       // TODO refactor and make this invoke initForm
-      if (this.enrolment.enrolleeRemoteUsers.length) {
+      if (enrolment.enrolleeRemoteUsers.length) {
         this.getRemoteAccess();
       }
     });

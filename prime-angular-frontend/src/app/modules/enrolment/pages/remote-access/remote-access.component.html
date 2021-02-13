@@ -27,7 +27,7 @@
       <mat-slide-toggle #requestAccess
                         color="primary"
                         class="mb-4"
-                        [checked]="!!enrolment.enrolleeRemoteUsers.length"
+                        [checked]="!!enrolment?.enrolleeRemoteUsers.length"
                         (change)="onRequestAccess($event)">Request remote access</mat-slide-toggle>
 
       <ng-container *ngIf="requestAccess.checked">
