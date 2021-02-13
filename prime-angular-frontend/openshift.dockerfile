@@ -1,7 +1,11 @@
-### Stage 1: Create build environment ###
-FROM node:10.16
-RUN mkdir /app
-WORKDIR /app
+#########################################
+### Stage 1 - Build environment ###
+#########################################
+FROM node:dubnium
+
+# Set working directory
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
 
 # Set environment variables
 ENV REDIRECT_URL $REDIRECT_URL
@@ -13,37 +17,41 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
-# Copy package definition, install them, then copy everything into working directory and build it
-# COPY package.json package-lock.json ./
-COPY . .
-RUN echo "Populating environment..."
-RUN (eval "echo \"$(cat /app/src/environments/environment.prod.template.ts )\"" ) > /app/src/environments/environment.prod.ts
-RUN npm install
+RUN apt-get update
+
+# Install Angular CLI
 RUN npm install -g @angular/cli
+
+# Install dependencies
+COPY package.json package.json
+RUN npm install --silent
+
+# Add application
+COPY . .
+
+# Fill template with environment variables
+RUN (eval "echo \"$(cat /app/src/environments/environment.prod.template.ts )\"" ) > /app/src/environments/environment.prod.ts
 RUN ng build --prod
 
 
-### Stage 2: Run Angular & Nginx ###
+########################################
+### Stage 2 - Production environment ###
+########################################
 FROM nginx:stable
 
 WORKDIR /app
-
-RUN apt-get update
-RUN touch /etc/nginx/conf.d/default.conf
-RUN chmod -R 777 /etc/nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 
-RUN chmod -R 777 /app/src
-COPY /app/dist/angular-frontend /usr/share/nginx/html
+COPY --from-builder usr/src/app/dist/angular-frontend /usr/share/nginx/html
 
-RUN chmod +x /entrypoint.sh
-RUN chmod 777 /entrypoint.sh
-RUN echo "Build completed."
+# RUN chmod +x /entrypoint.sh
+# RUN chmod 777 /entrypoint.sh
+# RUN echo "Build completed."
 
-COPY ./entrypoint.sh /app
+# COPY ./entrypoint.sh /app
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
