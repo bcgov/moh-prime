@@ -35,7 +35,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
-  // Known Health Authorities
   public healthAuthorities: Config<number>[];
 
   constructor(
@@ -74,11 +73,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   /**
- * Representing possible health authorities to select from and whether a given one was selected
- * TODO: Rename property to `selectableHealthAuthorities`
- */
+   * @description
+   *  Representing possible health authorities to select from and whether a given one was selected
+   */
   public get enrolleeHealthAuthorities(): FormArray {
-    return this.form.get('selectableHealthAuthorities') as FormArray;
+    return this.form.get('enrolleeHealthAuthorities') as FormArray;
   }
 
   public onSubmit() {

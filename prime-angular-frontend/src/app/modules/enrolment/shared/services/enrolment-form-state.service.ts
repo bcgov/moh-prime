@@ -225,18 +225,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     }
 
     // Initialize Health Authority form even if it might not be used by end user:
-    // Create unchecked checkboxes for each known Health Authority, according to order of Health Authority list.
-    const selectableHealthAuthorities = this.careSettingsForm.get('selectableHealthAuthorities') as FormArray;
-    selectableHealthAuthorities.clear();
-    this.configService.healthAuthorities.forEach(() =>
-      selectableHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(false)));
-    if (enrolment.enrolleeHealthAuthorities.length) {
-      // Update value of checkboxes according to previous selections
-      enrolment.enrolleeHealthAuthorities.forEach((eha: HealthAuthority) => {
-        const haIndex = this.configService.healthAuthorities.findIndex(ha => ha.code === eha.healthAuthorityCode);
-        selectableHealthAuthorities.controls[haIndex].setValue(true);
-      });
-    }
+    // Create checkboxes for each known Health Authority, according to order of Health Authority list.
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthorities.clear();
+    // Set value of checkboxes according to previous selections, if any
+    this.configService.healthAuthorities.forEach(ha => {
+      const checked = enrolment.enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
+      enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
+    });
+
+    this.careSettingsForm.get('careSettings').patchValue(enrolment);
 
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
@@ -346,7 +344,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       }, {});
 
     this.selfDeclarationForm.patchValue(selfDeclarations);
-    this.careSettingsForm.patchValue(enrolment);
 
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
@@ -409,25 +406,18 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   private convertCareSettingFormToJson(enrolleeId: number): any {
-    // Variable names must match keys for FormArrays in the form to get values
-    const { careSettings, selectableHealthAuthorities } = this.careSettingsForm.getRawValue();
+    // Variable names must match keys for FormArrays in the FormGroup to get values
+    let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
 
-    // Any checked HA is converted into an enrollee health authority,
+    // Any checked HA is converted into an enrollee health authority object literal,
     // which is used to create the payload to back-end
-    let enrolleeHealthAuthorities = selectableHealthAuthorities.map((checkState, i) => {
-      if (checkState) {
-        var ha = this.configService.healthAuthorities[i];
-        const enrolleeHA = {
+    enrolleeHealthAuthorities = enrolleeHealthAuthorities
+      .map((checkState, i) =>
+        checkState ? {
           enrolleeId,
-          healthAuthorityCode: ha.code
-        };
-        return enrolleeHA;
-      }
-      else {
-        return null;
-      }
-    });
-    enrolleeHealthAuthorities = enrolleeHealthAuthorities.filter(e => e != null);
+          healthAuthorityCode: this.configService.healthAuthorities[i].code
+        } : null)
+      .filter(eha => eha !== null);
     return { careSettings, enrolleeHealthAuthorities };
   }
 
@@ -539,9 +529,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
       careSettings: this.fb.array([]),
-      // Naming `selectableHealthAuthorities` rather than `enrolleeHealthAuthorities` to avoid conflicts
-      // during `this.careSettingsForm.patchValue(enrolment);`
-      selectableHealthAuthorities: this.fb.array([])
+      enrolleeHealthAuthorities: this.fb.array([])
     });
   }
 

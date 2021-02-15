@@ -69,8 +69,8 @@
             </ng-container>
           </app-page-subheader>
 
-          <!-- Create visual checkboxes and bind to `selectableHealthAuthorities` array -->
-          <div formArrayName="selectableHealthAuthorities"
+          <!-- Create visual checkboxes and bind to `enrolleeHealthAuthorities` array -->
+          <div formArrayName="enrolleeHealthAuthorities"
                class="mb-3"
                *ngFor="let eha of enrolleeHealthAuthorities.controls; let i = index">
             <mat-checkbox [formControl]="eha">
