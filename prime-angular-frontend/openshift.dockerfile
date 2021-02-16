@@ -30,7 +30,7 @@ RUN npm install --silent
 COPY . .
 
 # Fill template with environment variables
-RUN (eval "echo \"$(cat /app/src/environments/environment.prod.template.ts )\"" ) > /app/src/environments/environment.prod.ts
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN ng build --prod
 
 
@@ -45,7 +45,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
 
-COPY --from-builder usr/src/app/dist/angular-frontend /usr/share/nginx/html
+COPY --from-builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
