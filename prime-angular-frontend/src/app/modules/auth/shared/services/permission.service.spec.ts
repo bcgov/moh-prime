@@ -1,50 +1,41 @@
 import { inject, TestBed } from '@angular/core/testing';
+import { KeycloakService } from 'keycloak-angular';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+
 import { Role } from '../enum/role.enum';
 import { AccessTokenService } from './access-token.service';
-
 import { PermissionService } from './permission.service';
 
-class MockAccessTokenService {
-  constructor(private _roles: Role[]) {
-
-  }
-  public roles(allRoles?: boolean): string[] {
-    return Object.values(this._roles);
-  }
-}
-
 describe('PermissionService', () => {
-  let permissionService: PermissionService;
-  let accessTokenService: MockAccessTokenService;
   let spy: any;
 
-  beforeEach(() => {
-    accessTokenService = new MockAccessTokenService([Role.ADMIN]);
-    TestBed.configureTestingModule({
-      providers: [
-        {
-          provide: AccessTokenService,
-          useClass: MockAccessTokenService
-        }
-      ],
-    })
-      .compileComponents();
-  });
+  beforeEach(() => TestBed.configureTestingModule({
+    providers: [
+      {
+        provide: AccessTokenService,
+        useClass: MockAccessTokenService
+      },
+      KeycloakService
+    ]
+  }));
 
   it('should be created', inject([PermissionService], (service: PermissionService) => {
     expect(service).toBeTruthy();
   }));
 
-  it('should work for hasRoles', inject([PermissionService], (service: PermissionService) => {
-    expect(service.hasRoles(Role.ADMIN)).toBe(true);
-    expect(service.hasRoles(Role.ENROLLEE)).toBe(false);
-  }));
+  it('should work for hasRoles', inject([PermissionService, AccessTokenService],
+    (permissionService: PermissionService, accessTokenService: AccessTokenService) => {
+      spy = spyOn(accessTokenService, 'roles').and.returnValue([Role.ADMIN, Role.SUPER_ADMIN]);
+      expect(permissionService.hasRoles(Role.ADMIN)).toBe(true);
+      expect(permissionService.hasRoles(Role.ADMIN, Role.SUPER_ADMIN)).toBe(true);
+      expect(permissionService.hasRoles(Role.ENROLLEE)).toBe(false);
+      expect(permissionService.hasRoles(Role.ENROLLEE, Role.PHSA_IMMUNIZER)).toBe(false);
+    }));
 
-  it('should work for hasRoles with mutiple roles', inject([PermissionService], (service: PermissionService) => {
-    expect(service.hasRoles(Role.ENROLLEE, Role.PHSA_IMMUNIZER)).toBe(false);
-  }));
-
-  it('should work for hasAnyRole', inject([PermissionService], (service: PermissionService) => {
-    expect(service.hasAnyRole(Role.ADMIN, Role.SUPER_ADMIN)).toBe(true);
-  }));
+  it('should work for hasAnyRole', inject([PermissionService, AccessTokenService],
+    (permissionService: PermissionService, accessTokenService: AccessTokenService) => {
+      spy = spyOn(accessTokenService, 'roles').and.returnValue([Role.ADMIN, Role.SUPER_ADMIN, Role.ENROLLEE]);
+      expect(permissionService.hasAnyRole(Role.ADMIN, Role.SUPER_ADMIN)).toBe(true);
+      expect(permissionService.hasAnyRole(Role.MANAGE_ENROLLEE)).toBe(false);
+    }));
 });
