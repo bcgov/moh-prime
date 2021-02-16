@@ -1,18 +1,10 @@
+import { Address } from '@shared/models/address.model';
 import { User } from './user.model';
 
 export interface BcscUser extends User {
-  userId: string;
-  hpdid: string;
-  firstName: string;
-  lastName: string;
+  hpdid: string; // BCSC GUID
+  userId: string; // Keycloak identifier
   givenNames: string;
   dateOfBirth: string;
-  physicalAddress: {
-    countryCode: string;
-    provinceCode: string;
-    street: string;
-    city: string;
-    postal: string;
-  };
-  email: string;
+  verifiedAddress: Address;
 }

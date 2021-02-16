@@ -7,6 +7,7 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -32,7 +33,8 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -44,7 +46,8 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.decisions = [
@@ -63,8 +66,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
 
   public ngOnInit() {
     this.createFormInstance();
-    this.initForm();
-    this.patchForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   protected createFormInstance() {

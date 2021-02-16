@@ -49,7 +49,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private authService: AuthService,
+    protected authService: AuthService,
     private fb: FormBuilder
   ) {
     super(
@@ -62,7 +62,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.careSettingTypes = this.configService.careSettings;
@@ -168,8 +169,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy() {
