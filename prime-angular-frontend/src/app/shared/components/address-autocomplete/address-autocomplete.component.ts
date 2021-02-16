@@ -10,12 +10,12 @@ import { AddressAutocompleteFindResponse, AddressAutocompleteRetrieveResponse } 
 import { AddressAutocompleteResource } from '@shared/services/address-autocomplete-resource.service';
 
 @Component({
-  selector: 'app-address-autocomplete',
+  selector: 'app-address-form-autocomplete',
   templateUrl: './address-autocomplete.component.html',
   styleUrls: ['./address-autocomplete.component.scss']
 })
 export class AddressAutocompleteComponent implements OnInit {
-  @Input() bcOnly: boolean;
+  @Input() onlyBc: boolean;
   @Output() autocompleteAddress: EventEmitter<Address>;
 
   public form: FormGroup;
@@ -27,7 +27,7 @@ export class AddressAutocompleteComponent implements OnInit {
     private toastService: ToastService
   ) {
     this.autocompleteAddress = new EventEmitter<Address>();
-    this.bcOnly = false;
+    this.onlyBc = false;
   }
 
   public get autocomplete(): FormControl {
@@ -49,7 +49,7 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode
           );
 
-          (!this.bcOnly || address.provinceCode === 'BC')
+          (!this.onlyBc || address.provinceCode === 'BC')
             ? this.autocompleteAddress.emit(address)
             : this.toastService.openErrorToast('Address must be located in BC');
 

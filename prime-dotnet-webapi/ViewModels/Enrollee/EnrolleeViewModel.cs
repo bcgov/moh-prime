@@ -37,6 +37,8 @@ namespace Prime.ViewModels
 
         public MailingAddress MailingAddress { get; set; }
 
+        public VerifiedAddress VerifiedAddress { get; set; }
+
         public string Email { get; set; }
 
         public string SmsPhone { get; set; }

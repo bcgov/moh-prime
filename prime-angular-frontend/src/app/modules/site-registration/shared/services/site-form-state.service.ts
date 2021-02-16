@@ -8,6 +8,7 @@ import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -38,7 +39,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
 
@@ -279,7 +281,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
 
   private buildSiteAddressForm(): FormGroup {
     return this.fb.group({
-      physicalAddress: this.buildAddressForm({
+      physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         areDisabled: ['provinceCode', 'countryCode'],
         useDefaults: ['provinceCode', 'countryCode'],
@@ -402,7 +404,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
         null,
         [Validators.required, FormControlValidators.email]
       ],
-      physicalAddress: this.buildAddressForm({
+      physicalAddress: this.formUtilsService.buildAddressForm({
         exclude: ['street2']
       })
     });

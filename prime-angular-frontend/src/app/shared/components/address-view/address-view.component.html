@@ -1,0 +1,48 @@
+<section *ngIf="hasAddress || showIfEmpty"
+         class="mb-4">
+
+  <app-page-subheader *ngIf="title">
+    <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+
+    <button *ngIf="showRedirect"
+            mat-icon-button
+            matTooltip="Edit Address"
+            (click)="onRoute(redirectRoutePath)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngTemplateOutlet="(hasAddress) ? addressIf : addressElse"></ng-container>
+
+</section>
+
+<ng-template #addressIf>
+  <app-enrollee-property title="Country">
+    {{ address?.countryCode | configCode: 'countries' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Province">
+    {{ address?.provinceCode | configCode: 'provinces' | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Street Address">
+    {{ address?.street | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property *ngIf="address?.street2"
+                         title="Street Address 2">
+    {{ address?.street2 | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="City">
+    {{ address?.city | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Postal Code">
+    {{ address?.postal | postal | default }}
+  </app-enrollee-property>
+</ng-template>
+
+<ng-template #addressElse>
+  No address entered.
+</ng-template>

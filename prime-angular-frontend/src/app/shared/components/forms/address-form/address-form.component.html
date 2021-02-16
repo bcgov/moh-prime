@@ -1,5 +1,5 @@
-<app-address-autocomplete [bcOnly]="bcOnly"
-                          (autocompleteAddress)="onAutocomplete($event)">
+<app-address-form-autocomplete [onlyBc]="onlyBc"
+                               (autocompleteAddress)="onAutocomplete($event)">
   <button *ngIf="showManualButton"
           mat-button
           type="button"
@@ -9,7 +9,7 @@
     <mat-icon>add</mat-icon>
     Add address manually
   </button>
-</app-address-autocomplete>
+</app-address-form-autocomplete>
 
 <div [formGroup]="form"
      [hidden]="!showAddressFields">

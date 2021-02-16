@@ -18,5 +18,6 @@ namespace Prime.Models
         IdentityProvider = 14,
         RequestingRemoteAccess = 15,
         NoAssignedAgreement = 16,
+        NoVerifiedAddress = 17,
     }
 }
