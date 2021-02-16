@@ -7,6 +7,7 @@
   "editor.renderWhitespace": "boundary",
   "files.autoSave": "onFocusChange",
   "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
   "css.lint.important": "warning",
   "scss.lint.important": "warning",
   "scss.lint.zeroUnits": "warning",
@@ -16,6 +17,5 @@
   "git.ignoreLimitWarning": true,
   "typescript.updateImportsOnFileMove.enabled": "always",
   "typescript.preferences.quoteStyle": "single",
-  "files.insertFinalNewline": true,
   "typescript.tsserver.experimental.enableProjectDiagnostics": true
 }

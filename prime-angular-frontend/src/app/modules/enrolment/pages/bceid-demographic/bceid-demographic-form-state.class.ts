@@ -34,7 +34,7 @@ export class BceidDemographicFormState extends AbstractFormState<Enrollee> {
   }
 
   public buildForm(): void {
-    this.fb.group({
+    this.formInstance = this.fb.group({
       preferredFirstName: [null, [Validators.required]],
       preferredMiddleName: [null, []],
       preferredLastName: [null, [Validators.required]],

@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Prime.Models;
+using Prime.ViewModels.Parties;
 
 namespace Prime.ViewModels
 {
@@ -15,6 +14,6 @@ namespace Prime.ViewModels
 
         public string DoingBusinessAs { get; set; }
 
-        public Party SigningAuthority { get; set; }
+        public SigningAuthorityChangeModel SigningAuthority { get; set; }
     }
 }
