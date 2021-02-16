@@ -92,7 +92,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Remove health authorities if health authority care setting not chosen
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
+      this.enrolmentFormStateService.removeHealthAuthorities();
     }
 
     super.onSubmit();

@@ -545,6 +545,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.control(checkState);
   }
 
+  public removeHealthAuthorities() {
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthorities.controls.forEach(checkbox => { checkbox.setValue(false) });
+  }
+
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
