@@ -97,8 +97,7 @@ namespace Prime.Migrations
                 table: "PartyAddress",
                 column: "PartyId");
 
-            // Migrate data
-            //
+            // // Migrate data
             migrationBuilder.Sql(@"
                 INSERT INTO ""EnrolleeAddress""
                 (
@@ -106,7 +105,8 @@ namespace Prime.Migrations
                     ""EnrolleeId""
                 )
                 SELECT
-                    e.""MailingAddressId"", e.""Id""
+                    e.""MailingAddressId"" as ""AddressId"",
+                    e.""Id"" as ""EnrolleeId""
                 FROM
                     ""Enrollee"" e
                 WHERE
@@ -120,7 +120,8 @@ namespace Prime.Migrations
                     ""EnrolleeId""
                 )
                 SELECT
-                    e.""PhysicalAddressId"", e.""Id""
+                    e.""PhysicalAddressId"" as ""AddressId"",
+                    e.""Id"" as ""EnrolleeId""
                 FROM
                     ""Enrollee"" e
                 WHERE
@@ -134,7 +135,8 @@ namespace Prime.Migrations
                     ""PartyId""
                 )
                 SELECT
-                    p.""MailingAddressId"", p.""Id""
+                    p.""MailingAddressId"" as ""AddressId"",
+                    p.""Id"" as ""PartyId""
                 FROM
                     ""Party"" p
                 WHERE
@@ -148,15 +150,21 @@ namespace Prime.Migrations
                     ""PartyId""
                 )
                 SELECT
-                    p.""PhysicalAddressId"", p.""Id""
+                    p.""PhysicalAddressId"" as ""AddressId"",
+                    p.""Id"" as ""PartyId""
                 FROM
                     ""Party"" p
                 WHERE
                     p.""PhysicalAddressId"" is not null
             ");
 
-            // Drop unnecessary columns
-            //
+            migrationBuilder.Sql(@"
+                UPDATE ""Address""
+                SET ""AddressType"" = 3
+                WHERE ""AddressType"" = 1;
+            ");
+
+            // // Drop unnecessary columns
             migrationBuilder.DropForeignKey(
                 name: "FK_Enrollee_Address_MailingAddressId",
                 table: "Enrollee");
