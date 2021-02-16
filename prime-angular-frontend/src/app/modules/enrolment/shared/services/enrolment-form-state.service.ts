@@ -411,14 +411,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     // Any checked HA is converted into an enrollee health authority object literal,
     // which is used to create the payload to back-end
-    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((accumulator, checked, i) => {
+    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
       if (checked) {
-        accumulator.push({
+        selectedHealthAuthorities.push({
           enrolleeId,
           healthAuthorityCode: this.configService.healthAuthorities[i].code
         })
       }
-      return accumulator;
+      return selectedHealthAuthorities;
     }, []);
     return { careSettings, enrolleeHealthAuthorities };
   }
