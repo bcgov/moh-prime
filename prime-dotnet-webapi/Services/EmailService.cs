@@ -107,6 +107,11 @@ namespace Prime.Services
 
         public async Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers)
         {
+            if (!remoteUsers.Any())
+            {
+                return;
+            }
+
             var recipients = remoteUsers.Select(ru => ru.Email);
             var viewModel = new RemoteUserNotificationEmailViewModel
             {

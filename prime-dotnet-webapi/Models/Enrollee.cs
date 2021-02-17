@@ -50,10 +50,8 @@ namespace Prime.Models
 
         public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public PhysicalAddress PhysicalAddress { get; set; }
-
-        public MailingAddress MailingAddress { get; set; }
+        [JsonIgnore]
+        public ICollection<EnrolleeAddress> Addresses { get; set; }
 
         public string Email { get; set; }
 
@@ -124,6 +122,33 @@ namespace Prime.Models
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [NotMapped]
+        public PhysicalAddress PhysicalAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<PhysicalAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public MailingAddress MailingAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<MailingAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public VerifiedAddress VerifiedAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<VerifiedAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
         public string Base64QRCode
         {
             get => EnrolleeCredentials?
@@ -173,7 +198,7 @@ namespace Prime.Models
         }
 
         /// <summary>
-        /// The date of the Enrollee's most recent applicaiton.
+        /// The date of the Enrollee's most recent application.
         /// </summary>
         [NotMapped]
         [Computed]
