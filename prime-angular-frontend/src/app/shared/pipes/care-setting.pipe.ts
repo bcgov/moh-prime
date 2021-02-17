@@ -6,6 +6,10 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 })
 export class CareSettingPipe implements PipeTransform {
   public transform(value: CareSettingEnum | CareSettingEnum[], format: 'name' | 'abbr' = 'name'): string | string[] {
+    if (!value) {
+      return '';
+    }
+
     return (Array.isArray(value))
       ? value.map(cs => this.format(format, cs))
       : this.format(format, value);

@@ -9,10 +9,8 @@ import { APP_DATE_FORMAT } from '@lib/modules/ngx-material/ngx-material.module';
 })
 export class FormatDatePipe implements PipeTransform {
   public transform(date: string, format: string = APP_DATE_FORMAT): string {
-    if (date) {
-      date = moment(date).format(format);
-    }
-
-    return date;
+    return (date)
+      ? moment(date).format(format)
+      : date;
   }
 }
