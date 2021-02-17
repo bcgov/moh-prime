@@ -16,14 +16,11 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
-import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { ReplacePipe } from '@shared/pipes/replace.pipe';
 import { CasePipe } from '@shared/pipes/case.pipe';
-import { CertificatePipe } from '@shared/pipes/certificate.pipe';
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { WeekdayPipe } from '@shared/pipes/weekday.pipe';
@@ -86,9 +83,6 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
 @NgModule({
   declarations: [
     CapitalizePipe,
-    CertificatePipe,
-    EnrolmentPipe,
-    FirstKeyPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
@@ -177,8 +171,6 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     CapitalizePipe,
     CasePipe,
     DefaultPipe,
-    EnrolmentPipe,
-    FirstKeyPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,

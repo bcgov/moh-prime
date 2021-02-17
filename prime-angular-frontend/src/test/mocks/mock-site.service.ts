@@ -17,8 +17,8 @@ export class MockSiteService implements ISiteService {
     const user = {
       id: faker.random.number(),
       userId: `${faker.random.uuid()}`,
-      validatedAddressId: faker.random.number(),
-      validatedAddress: address,
+      verifiedAddressId: faker.random.number(),
+      verifiedAddress: address,
       mailingAddressId: faker.random.number(),
       mailingAddress: address,
       physicalAddressId: faker.random.number(),
