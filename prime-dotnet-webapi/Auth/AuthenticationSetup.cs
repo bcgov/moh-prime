@@ -20,8 +20,7 @@ namespace Prime.Auth
         public static void Initialize(
             IServiceCollection services,
             IConfiguration configuration,
-            IHostEnvironment environment
-            )
+            IHostEnvironment environment)
         {
             services.ThrowIfNull(nameof(services));
             configuration.ThrowIfNull(nameof(configuration));
@@ -61,8 +60,6 @@ namespace Prime.Auth
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
             });
-
-            services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
         }
 
         private static Task OnTokenValidatedAsync(TokenValidatedContext context)
