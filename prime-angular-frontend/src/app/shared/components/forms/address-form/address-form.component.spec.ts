@@ -10,16 +10,16 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { AddressComponent } from './address.component';
+import { AddressFormComponent } from './address-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
-describe('AddressComponent', () => {
-  let component: AddressComponent;
-  let fixture: ComponentFixture<AddressComponent>;
+describe('AddressFormComponent', () => {
+  let component: AddressFormComponent;
+  let fixture: ComponentFixture<AddressFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
@@ -33,7 +33,7 @@ describe('AddressComponent', () => {
           ReactiveFormsModule
         ],
         declarations: [
-          AddressComponent
+          AddressFormComponent
         ],
         providers: [
           {
@@ -56,7 +56,7 @@ describe('AddressComponent', () => {
   }));
 
   beforeEach(inject([EnrolmentFormStateService], (enrolmentFormStateService: EnrolmentFormStateService) => {
-    fixture = TestBed.createComponent(AddressComponent);
+    fixture = TestBed.createComponent(AddressFormComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
     component.form = enrolmentFormStateService.bcscDemographicFormState.form.get('mailingAddress') as FormGroup;

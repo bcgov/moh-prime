@@ -2,8 +2,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe, from } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, pipe, from, EMPTY, of } from 'rxjs';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ToastService } from '@core/services/toast.service';
@@ -12,6 +12,8 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -76,7 +78,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(route, router);
 
@@ -131,14 +134,40 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    * @description
    * Patch the form with enrollee information.
    */
-  protected patchForm(): Observable<void> {
-    // Store a local copy of the enrolment for views
-    this.enrolment = this.enrolmentService.enrolment;
+  protected patchForm(): Observable<any> {
+    // Will be null if enrolment has not been created
+    const enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
     this.isProfileComplete = this.enrolmentService.isProfileComplete;
 
-    // Attempt to patch the form if not already patched
-    return from(this.enrolmentFormStateService.setForm(this.enrolment));
+    // Attempt to patch the form if not already patched, and ensure the
+    // identity provider information is always populated from the claim
+    return this.authService.getUser$()
+      .pipe(
+        // TODO add idenity provider check to fork for BCeID
+        exhaustMap((bcscUser: BcscUser) => {
+          // An enrolment won't exist until after the first submission, and
+          // patching the form state should occur in that initial view
+          if (enrolment) {
+            // Existing enrolments should have the identity provider
+            // information populated directly from the claim, which
+            // will be patched directly into the form state
+            const { firstName, lastName, givenNames, verifiedAddress } = bcscUser;
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
+          }
+
+          // Store a local copy of the enrolment for views
+          this.enrolment = enrolment;
+
+          // Store a local copy of the enrolment for views, but the
+          // enrolment is also piped through to view for chaining
+          return of([bcscUser, enrolment]);
+        }),
+        exhaustMap(([bcscUser, updatedEnrolment]: [BcscUser, Enrolment]) => {
+          return from(this.enrolmentFormStateService.setForm(updatedEnrolment))
+            .pipe(map(() => [bcscUser, updatedEnrolment]));
+        })
+      );
   }
 
   /**
@@ -147,8 +176,18 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
    */
   protected handleSubmission(beenThroughTheWizard: boolean = false) {
     if (this.isInitialEnrolment) {
-      // Update using the form which could contain changes
-      this.busy = this.performHttpRequest(this.enrolmentFormStateService.json, beenThroughTheWizard)
+      // Update using the form which could contain changes, and ensure identity
+      // provider information was not altered by repopulating in the payload
+      this.busy = this.authService.getUser$()
+        .pipe(
+          // TODO add idenity provider check to fork for BCeID
+          map(({ firstName, lastName, givenNames, verifiedAddress }: BcscUser) => {
+            const enrolment = this.enrolmentFormStateService.json;
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
+            return enrolment;
+          }),
+          exhaustMap((enrolment: Enrolment) => this.performHttpRequest(enrolment, beenThroughTheWizard))
+        )
         .subscribe();
     } else {
       // Allow routing to occur without invoking the deactivation,

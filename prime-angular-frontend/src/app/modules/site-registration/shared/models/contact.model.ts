@@ -3,15 +3,18 @@ import { Person } from '@registration/shared/models/person.model';
 
 export class Contact implements Person {
   public id?: number;
+
+  public email: string;
   public firstName: string;
   public lastName: string;
-  public jobRoleTitle: string;
-  public email: string;
-  public phone: string;
-  public fax?: string;
-  public smsPhone?: string;
-  public physicalAddressId?: number;
-  public physicalAddress: Address;
+
   public mailingAddressId?: number;
   public mailingAddress?: Address;
+  public physicalAddressId?: number;
+  public physicalAddress: Address;
+  public phone: string;
+  public smsPhone?: string;
+
+  public fax?: string;
+  public jobRoleTitle: string;
 }

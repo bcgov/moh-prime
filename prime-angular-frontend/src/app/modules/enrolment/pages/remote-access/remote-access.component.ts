@@ -11,6 +11,8 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
@@ -19,6 +21,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { RemoteAccessSearch } from '@enrolment/shared/models/remote-access-search.model';
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-remote-access',
@@ -45,6 +48,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
     private fb: FormBuilder
   ) {
     super(
@@ -57,7 +61,8 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 
@@ -136,11 +141,12 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
-
-    if (this.enrolment.enrolleeRemoteUsers.length) {
-      this.getRemoteAccess();
-    }
+    this.patchForm().subscribe(([_, enrolment]: [BcscUser, Enrolment]) => {
+      // TODO refactor and make this invoke initForm
+      if (enrolment.enrolleeRemoteUsers.length) {
+        this.getRemoteAccess();
+      }
+    });
   }
 
   protected createFormInstance() {

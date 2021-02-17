@@ -31,8 +31,8 @@ namespace Prime.Services
             {
                 new SelfDeclarationRule(),
                 new AddressRule(),
+                new VerifiedAddressRule(),
                 new PharmanetValidationRule(_collegeLicenceClient),
-                // TODO removed until after Community Practice
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),

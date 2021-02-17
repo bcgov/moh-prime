@@ -16,7 +16,6 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { EnrolleePipe } from '@shared/pipes/enrollee.pipe';
 import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FirstKeyPipe } from '@shared/pipes/first-key.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -34,7 +33,7 @@ import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
 import { PermissionPipe } from '@shared/pipes/permission-pipe';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -54,7 +53,6 @@ import { AlertComponent } from '@shared/components/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
-import { EnrolleeProfileComponent } from '@shared/components/enrollee/enrollee-profile/enrollee-profile.component';
 import { PrimeEmailComponent } from '@shared/components/prime-email/prime-email.component';
 import { PrimePhoneComponent } from '@shared/components/prime-phone/prime-phone.component';
 import { PrimeLogoComponent } from '@shared/components/prime-logo/prime-logo.component';
@@ -77,17 +75,19 @@ import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-r
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
 import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
-import { TriageComponent } from './components/dialogs/content/triage/triage.component';
+import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
-import { EscalationNoteComponent } from './components/dialogs/content/escalation-note/escalation-note.component';
-import { ClaimNoteComponent } from './components/dialogs/content/claim-note/claim-note.component';
+import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
+import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
+import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
+import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
 
 @NgModule({
   declarations: [
     CapitalizePipe,
     CertificatePipe,
-    DefaultPipe,
-    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
@@ -101,7 +101,8 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     CasePipe,
     AddressPipe,
     PermissionPipe,
-    AddressComponent,
+    DefaultPipe,
+    AddressFormComponent,
     ConfirmDialogComponent,
     PageComponent,
     ProgressIndicatorComponent,
@@ -120,7 +121,6 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     AlertComponent,
     EnrolleeReviewComponent,
     EnrolleeSelfDeclarationsComponent,
-    EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     EnrolleePropertyErrorComponent,
     PrimeEmailComponent,
@@ -148,9 +148,14 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     SendEmailComponent,
     CareSettingPipe,
     JoinPipe,
+    PreferredNameFormComponent,
+    ToggleContentComponent,
+    BcscProfileComponent,
+    PreferredNameFormComponent,
     TriageComponent,
     EscalationNoteComponent,
-    ClaimNoteComponent
+    ClaimNoteComponent,
+    AddressViewComponent
   ],
   imports: [
     CommonModule,
@@ -173,9 +178,7 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     ReactiveFormsModule,
     CapitalizePipe,
     CasePipe,
-    CertificatePipe,
     DefaultPipe,
-    EnrolleePipe,
     EnrolmentPipe,
     FirstKeyPipe,
     FormatDatePipe,
@@ -188,7 +191,7 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     SafePipe,
     AddressPipe,
     PermissionPipe,
-    AddressComponent,
+    AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicatorComponent,
@@ -206,7 +209,6 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     AlertComponent,
     EnrolleeReviewComponent,
     EnrolleeSelfDeclarationsComponent,
-    EnrolleeProfileComponent,
     EnrolleePropertyComponent,
     PrimeEmailComponent,
     PrimePhoneComponent,
@@ -226,9 +228,13 @@ import { ClaimNoteComponent } from './components/dialogs/content/claim-note/clai
     ContactInformationFormComponent,
     CareSettingPipe,
     JoinPipe,
+    ToggleContentComponent,
+    BcscProfileComponent,
+    PreferredNameFormComponent,
     TriageComponent,
     EscalationNoteComponent,
-    ClaimNoteComponent
+    ClaimNoteComponent,
+    AddressViewComponent
   ],
   providers: [
     FullnamePipe,

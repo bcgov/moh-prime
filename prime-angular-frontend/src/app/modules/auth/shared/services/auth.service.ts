@@ -5,9 +5,9 @@ import { map, take } from 'rxjs/operators';
 
 import { KeycloakLoginOptions } from 'keycloak-js';
 
-import { LoggerService } from '@core/services/logger.service';
-
 import { ObjectUtils } from '@lib/utils/object-utils.class';
+import { LoggerService } from '@core/services/logger.service';
+import { Address } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
@@ -64,7 +64,7 @@ export class AuthService implements IAuthService {
   }
 
   public identityProvider$(): Observable<IdentityProviderEnum> {
-    return from(this.identityProvider()).pipe(take(1));
+    return from(this.identityProvider());
   }
 
   public logout(redirectUri: string = '/'): Promise<void> {
@@ -78,7 +78,7 @@ export class AuthService implements IAuthService {
    * NOTE: Careful using this in Angular lifecycle hooks. It is preferrable to
    * use the Observable based method getUser$().
    */
-  // TODO should be based this on provider now
+  // TODO should be based on provider now
   // TODO use this as a base method for all other types of users
   // TODO multiple return types through switch-case, and new up objects for narrowing
   public async getUser(forceReload?: boolean): Promise<BcscUser> {
@@ -98,12 +98,18 @@ export class AuthService implements IAuthService {
     } = await this.accessTokenService.loadBrokerProfile(forceReload) as BrokerProfile;
 
     const userId = await this.getUserId();
-    const claims = await this.getTokenAttribsByKey(['hpdid', 'preferred_username']);
+    const claims = await this.getTokenAttribsByKey('preferred_username');
 
     const mapping = {
-      preferred_username: 'username'
+      preferred_username: 'hpdid'
     };
     ObjectUtils.keyMapping(claims, mapping);
+
+    // BCSC does not guarantee an address
+    const address = { countryCode, provinceCode, street, city, postal } as Address;
+    const verifiedAddress = (Address.isNotEmpty(address))
+      ? address
+      : null; // Explicit indicator that address does not exist
 
     return {
       userId,
@@ -111,13 +117,7 @@ export class AuthService implements IAuthService {
       lastName,
       givenNames,
       dateOfBirth,
-      physicalAddress: {
-        countryCode,
-        provinceCode,
-        street,
-        city,
-        postal
-      },
+      verifiedAddress,
       email,
       ...claims
     } as BcscUser;
@@ -146,7 +146,6 @@ export class AuthService implements IAuthService {
     const claims = await this.getTokenAttribsByKey('preferred_username');
 
     const mapping = {
-      // TODO consolidate `idir` into `username` on User
       preferred_username: 'idir'
     };
     ObjectUtils.keyMapping(claims, mapping);
@@ -156,7 +155,7 @@ export class AuthService implements IAuthService {
       firstName,
       lastName,
       email,
-      ...claims
+      ...claims as { idir: string }
     } as Admin;
   }
 
