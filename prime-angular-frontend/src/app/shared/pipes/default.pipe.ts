@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'default'
 })
 export class DefaultPipe implements PipeTransform {
-  transform(value: any, defaultValue: string = '-'): any {
+  public transform(value: any, defaultValue: string = '-'): any {
     return (value) ? value : defaultValue;
   }
 }
