@@ -10,7 +10,6 @@ using QRCoder;
 using Prime.Models;
 using Prime.HttpClients;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
