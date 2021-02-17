@@ -18,17 +18,17 @@ describe('PhonePipe', () => {
 
   it('should not format a phone number that is greater than 10-digits', () => {
     const result = pipe.transform('98765432109');
-    expect(result).toBe('(987) 654-3210');
+    expect(result).toBe('98765432109');
   });
 
   it('should not format a phone number that is less than 10-digits', () => {
     const result = pipe.transform('987654321');
-    expect(result).toBe('(987) 654-3210');
+    expect(result).toBe('987654321');
   });
 
   it('should not format a phone number that is alpha-numeric', () => {
     const result = pipe.transform('987654321a');
-    expect(result).toBe('(987) 654-3210');
+    expect(result).toBe('987654321a');
   });
 
   it('should not format a phone number that is null', () => {

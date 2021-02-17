@@ -1,4 +1,3 @@
-import { WeekDay } from '@angular/common';
 import { WeekdayPipe } from './weekday.pipe';
 
 import * as moment from 'moment';
@@ -13,16 +12,16 @@ describe('WeekdayPipe', () => {
 
   it('should convert WeekDay of 0 through 6 to full day of week Sunday through Saturday', () => {
     const results = weekDays.map((wd: number) => pipe.transform(wd, 'full'));
-    results.forEach((result, i) => expect(result).toBe(moment.weekdays(results[i])));
+    results.forEach((result, i) => expect(result).toBe(moment.weekdays(i)));
   });
 
   it('should convert WeekDay of 0 through 6 to short day of week Sun through Sat', () => {
     const results = weekDays.map((wd: number) => pipe.transform(wd, 'short'));
-    results.forEach((result, i) => expect(result).toBe(moment.weekdaysShort(results[i])));
+    results.forEach((result, i) => expect(result).toBe(moment.weekdaysShort(i)));
   });
 
   it('should convert WeekDay of 0 through 6 to min day of week Su through Sa', () => {
     const results = weekDays.map((wd: number) => pipe.transform(wd, 'min'));
-    results.forEach((result, i) => expect(result).toBe(moment.weekdaysMin(results[i])));
+    results.forEach((result, i) => expect(result).toBe(moment.weekdaysMin(i)));
   });
 });

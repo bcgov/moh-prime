@@ -7,11 +7,11 @@ describe('ReplacePipe', () => {
   it('create an instance', () => expect(pipe).toBeTruthy());
 
   it('should replace all occurences of a string within a string', () => {
-    const value = 'Have a merry merry merry Christmas!';
+    const value = 'Have a happy happy happy Christmas!';
     const replace = 'happy';
     const replaceWith = 'merry';
     expect(value).not.toContain(replaceWith);
-    const result = pipe.transform('Have a happy happy happy Christmas!', replace, replaceWith);
+    const result = pipe.transform(value, replace, replaceWith);
     expect(result).toContain(replaceWith);
     expect(result.split(' ').filter(s => s === replaceWith).length).toBe(3);
     expect(result).toBe('Have a merry merry merry Christmas!');

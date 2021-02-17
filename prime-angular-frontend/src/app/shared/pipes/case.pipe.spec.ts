@@ -12,7 +12,7 @@ describe('CasePipe', () => {
   });
 
   it('should convert from snake case to space case', () => {
-    const result = pipe.transform('space_case', 'space', 'kebab');
+    const result = pipe.transform('space_case', 'snake', 'space');
     expect(result).toBe('space case');
   });
 
