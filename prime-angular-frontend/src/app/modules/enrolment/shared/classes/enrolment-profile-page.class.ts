@@ -12,6 +12,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Address } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -152,7 +153,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
             // Existing enrolments should have the identity provider
             // information populated directly from the claim, which
             // will be patched directly into the form state
-            const { firstName, lastName, givenNames, verifiedAddress } = bcscUser;
+            const { firstName, lastName, givenNames } = bcscUser;
+            const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
             enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
           }
 
