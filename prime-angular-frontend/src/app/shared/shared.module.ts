@@ -33,7 +33,7 @@ import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
 import { PermissionPipe } from '@shared/pipes/permission-pipe';
-import { AddressComponent } from '@shared/components/forms/address/address.component';
+import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
@@ -101,7 +101,7 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     CasePipe,
     AddressPipe,
     PermissionPipe,
-    AddressComponent,
+    AddressFormComponent,
     DefaultPipe,
     ConfirmDialogComponent,
     PageComponent,
@@ -191,7 +191,7 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     SafePipe,
     AddressPipe,
     PermissionPipe,
-    AddressComponent,
+    AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
     ProgressIndicatorComponent,
