@@ -159,9 +159,19 @@ namespace Prime.Migrations
             ");
 
             migrationBuilder.Sql(@"
-                UPDATE ""Address""
+                UPDATE ""Address"" a
                 SET ""AddressType"" = 3
-                WHERE ""AddressType"" = 1;
+                FROM ""EnrolleeAddress"" ea
+                WHERE a.""Id"" = ea.""AddressId""
+                AND a.""AddressType"" = 1;
+            ");
+
+            migrationBuilder.Sql(@"
+                UPDATE ""Address"" a
+                SET ""AddressType"" = 3
+                FROM ""PartyAddress"" pa
+                WHERE a.""Id"" = pa.""AddressId""
+                AND a.""AddressType"" = 1;
             ");
 
             // // Drop unnecessary columns
