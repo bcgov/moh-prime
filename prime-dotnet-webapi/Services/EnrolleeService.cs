@@ -153,6 +153,12 @@ namespace Prime.Services
             createModel.ThrowIfNull(nameof(createModel));
 
             var enrollee = _mapper.Map<Enrollee>(createModel);
+            enrollee.Addresses = new List<EnrolleeAddress>();
+
+            UpdateAddress(enrollee, createModel.MailingAddress);
+            UpdateAddress(enrollee, createModel.PhysicalAddress);
+            UpdateAddress(enrollee, createModel.VerifiedAddress);
+
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             _context.Enrollees.Add(enrollee);
 
@@ -170,8 +176,8 @@ namespace Prime.Services
         public async Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel updateModel, bool profileCompleted = false)
         {
             var enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                 .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
@@ -193,18 +199,11 @@ namespace Prime.Services
                 enrollee.FirstName = updateModel.PreferredFirstName;
                 enrollee.LastName = updateModel.PreferredLastName;
                 enrollee.GivenNames = $"{updateModel.PreferredFirstName} {updateModel.PreferredMiddleName}";
-                UpdatePhysicalAddress(enrollee, new PhysicalAddress
-                {
-                    CountryCode = updateModel.MailingAddress.CountryCode,
-                    ProvinceCode = updateModel.MailingAddress.ProvinceCode,
-                    Street = updateModel.MailingAddress.Street,
-                    Street2 = updateModel.MailingAddress.Street2,
-                    City = updateModel.MailingAddress.City,
-                    Postal = updateModel.MailingAddress.Postal
-                });
             }
 
-            UpdateMailingAddress(enrollee, updateModel.MailingAddress);
+            UpdateAddress(enrollee, updateModel.PhysicalAddress);
+            UpdateAddress(enrollee, updateModel.MailingAddress);
+            UpdateAddress(enrollee, updateModel.VerifiedAddress);
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
@@ -239,41 +238,48 @@ namespace Prime.Services
             }
         }
 
-        private void UpdatePhysicalAddress(Enrollee dbEnrollee, PhysicalAddress newAddress)
+        private void UpdateAddress<T>(Enrollee dbEnrollee, T newAddress) where T : Address
         {
-            if (dbEnrollee.PhysicalAddress != null && newAddress != null)
-            {
-                newAddress.Id = dbEnrollee.PhysicalAddress.Id;
-                _context.Entry(dbEnrollee.PhysicalAddress).CurrentValues.SetValues(newAddress);
-            }
-            else if (newAddress != null)
-            {
-                dbEnrollee.PhysicalAddress = newAddress;
-            }
-        }
+            var existingEnrolleeAddress = dbEnrollee.Addresses
+                .Where(ea => ea.Address is T)
+                .SingleOrDefault();
 
-        private void UpdateMailingAddress(Enrollee dbEnrollee, MailingAddress newAddress)
-        {
-            if (dbEnrollee.MailingAddress != null)
+            if (existingEnrolleeAddress == null)
             {
-                _context.Addresses.Remove(dbEnrollee.MailingAddress);
-            }
-
-            if (newAddress != null)
-            {
-                var address = new MailingAddress
+                if (newAddress == null)
                 {
-                    CountryCode = newAddress.CountryCode,
-                    ProvinceCode = newAddress.ProvinceCode,
-                    Street = newAddress.Street,
-                    Street2 = newAddress.Street2,
-                    City = newAddress.City,
-                    Postal = newAddress.Postal
-                };
-
-                dbEnrollee.MailingAddress = address;
+                    // Noop
+                    return;
+                }
+                else
+                {
+                    // New
+                    newAddress.Id = 0;
+                    dbEnrollee.Addresses.Add(new EnrolleeAddress
+                    {
+                        Enrollee = dbEnrollee,
+                        Address = newAddress
+                    });
+                }
+            }
+            else
+            {
+                if (newAddress == null)
+                {
+                    // Remove
+                    _context.Remove(existingEnrolleeAddress.Address);
+                    _context.Remove(existingEnrolleeAddress);
+                    return;
+                }
+                else
+                {
+                    // Update
+                    newAddress.Id = existingEnrolleeAddress.AddressId;
+                    _context.Entry(existingEnrolleeAddress.Address).CurrentValues.SetValues(newAddress);
+                }
             }
         }
+
 
         private void ReplaceExistingItems<T>(ICollection<T> dbCollection, ICollection<T> newCollection, int enrolleeId) where T : class, IEnrolleeNavigationProperty
         {
@@ -506,8 +512,8 @@ namespace Prime.Services
         private IQueryable<Enrollee> GetBaseEnrolleeQuery()
         {
             return _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)

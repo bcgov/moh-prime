@@ -33,10 +33,27 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (!enrollee.PhysicalAddress.IsInBC
-                || enrollee.MailingAddress?.IsInBC == false)
+            var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
+                .Where(a => a != null);
+
+            if (addresses.Any(a => !a.IsInBC))
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
+    // Enrollees without a verified addresses from BCSC go to manual
+    public class VerifiedAddressRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.VerifiedAddress == null)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.NoVerifiedAddress);
                 return Task.FromResult(false);
             }
 
@@ -71,42 +88,43 @@ namespace Prime.Services.Rules
                     continue;
                 }
 
+                var licenceNumber = cert.License.PrescriberIdType.HasValue
+                    ? cert.PractitionerId
+                    : cert.LicenseNumber;
+
+                var licenceText = $"{cert.License.Prefix}-{licenceNumber}";
+
                 PharmanetCollegeRecord record = null;
-
-                var licenceNumber = cert.License.PrescriberIdType == null
-                    ? cert.LicenseNumber
-                    : cert.PractitionerId;
-
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
                 }
                 catch (PharmanetCollegeApiException)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
                     passed = false;
                     continue;
                 }
                 if (record == null)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
                     passed = false;
                     continue;
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{cert.FullLicenseNumber} returned \"{record.FirstName} {record.LastName}\".");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{licenceText} returned \"{record.FirstName} {record.LastName}\".");
                     passed = false;
                 }
                 if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{cert.FullLicenseNumber} returned {record.DateofBirth:d MMM yyyy}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{licenceText} returned {record.DateofBirth:d MMM yyyy}");
                     passed = false;
                 }
                 if (record.Status != "P")
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, $"{cert.FullLicenseNumber}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, licenceText);
                     passed = false;
                 }
             }

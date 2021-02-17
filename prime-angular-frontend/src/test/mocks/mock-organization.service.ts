@@ -16,13 +16,16 @@ export class MockOrganizationService implements IOrganizationService {
       id: faker.random.number(),
       userId: `${faker.random.uuid()}`,
       addressId: faker.random.number(),
-      physicalAddressId: faker.random.number(),
-      physicalAddress: address,
+      validatedAddressId: faker.random.number(),
+      validatedAddress: address,
       mailingAddressId: faker.random.number(),
       mailingAddress: address,
+      physicalAddressId: faker.random.number(),
+      physicalAddress: address,
       hpdid: faker.random.uuid(),
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
+      givenNames: null,
       preferredFirstName: null,
       preferredMiddleName: null,
       preferredLastName: null,
@@ -43,6 +46,7 @@ export class MockOrganizationService implements IOrganizationService {
       completed: false,
       hasAcceptedAgreement: false,
       hasSubmittedSite: false,
+      sites: []
     });
   }
 

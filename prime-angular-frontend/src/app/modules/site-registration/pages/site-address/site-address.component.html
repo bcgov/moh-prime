@@ -16,11 +16,11 @@
         </ng-container>
       </app-page-subheader2>
 
-      <app-address [form]="physicalAddress"
-                   [formControlNames]="formControlNames"
-                   [bcOnly]="true"
-                   [showManualButton]="true"
-                   [showAddressFields]="showAddressFields"></app-address>
+      <app-address-form [form]="physicalAddress"
+                        [formControlNames]="formControlNames"
+                        [onlyBc]="true"
+                        [showManualButton]="true"
+                        [showAddressFields]="showAddressFields"></app-address-form>
     </section>
 
   </form>

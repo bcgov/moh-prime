@@ -117,7 +117,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolleeViewModel>> CreateEnrollee(EnrolleeCreatePayload payload)
         {
-            if (payload == null || payload.Enrollee == null)
+            if (payload?.Enrollee == null)
             {
                 ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
@@ -130,19 +130,20 @@ namespace Prime.Controllers
             }
 
             var createModel = payload.Enrollee;
-            createModel.MapConditionalProperties(User);
+            createModel.SetPropertiesFromToken(User);
 
-            if (createModel.IsUnder18())
+            if (!createModel.Validate(User))
             {
-                return Forbid();
+                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             string filename = null;
             if (!createModel.IsBcServicesCard())
             {
-                if (payload.IdentificationDocumentGuid != null)
+                if (payload.IdentificationDocumentGuid.HasValue)
                 {
-                    filename = await _documentService.FinalizeDocumentUpload((Guid)payload.IdentificationDocumentGuid, "identification_document");
+                    filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, "identification_document");
                     if (string.IsNullOrWhiteSpace(filename))
                     {
                         ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
@@ -161,7 +162,7 @@ namespace Prime.Controllers
 
             if (filename != null)
             {
-                await _enrolleeService.CreateIdentificationDocument(enrollee.Id, (Guid)payload.IdentificationDocumentGuid, filename);
+                await _enrolleeService.CreateIdentificationDocument(enrollee.Id, payload.IdentificationDocumentGuid.Value, filename);
             }
 
             return CreatedAtAction(
@@ -186,6 +187,12 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateEnrollee(int enrolleeId, EnrolleeUpdateModel enrollee, [FromQuery] bool beenThroughTheWizard)
         {
+            if (enrollee == null)
+            {
+                ModelState.AddModelError("Enrollee", "Profile update model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
@@ -196,14 +203,20 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            enrollee.SetPropertiesFromToken(User);
+
+            if (!enrollee.Validate(User))
+            {
+                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             // If the enrollee is not in the status of 'Editable', it cannot be updated
-            if (!(await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable)))
+            if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
-
-            enrollee.SetTokenProperties(User);
 
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
 

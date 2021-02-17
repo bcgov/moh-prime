@@ -36,9 +36,35 @@ namespace Prime.Models
 
         public string JobRoleTitle { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
+        [JsonIgnore]
+        public ICollection<PartyAddress> Addresses { get; set; }
 
-        public MailingAddress MailingAddress { get; set; }
+        [NotMapped]
+        public PhysicalAddress PhysicalAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<PhysicalAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public MailingAddress MailingAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<MailingAddress>()
+                .SingleOrDefault();
+        }
+
+        [NotMapped]
+        public VerifiedAddress VerifiedAddress
+        {
+            get => Addresses?
+                .Select(a => a.Address)
+                .OfType<VerifiedAddress>()
+                .SingleOrDefault();
+        }
 
         public string Email { get; set; }
 

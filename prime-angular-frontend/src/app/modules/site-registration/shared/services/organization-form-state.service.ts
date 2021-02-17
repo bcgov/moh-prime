@@ -1,27 +1,29 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationSigningAuthorityFormState } from '@registration/pages/organization-signing-authority/organization-signing-authority-form-state.class';
+import { OrganizationNameFormState } from '@registration/pages/organization-name/organization-name-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationFormStateService extends AbstractFormStateService<Organization> {
-  public signingAuthorityForm: FormGroup;
-  public organizationNameForm: FormGroup;
+  public organizationSigningAuthorityFormState: OrganizationSigningAuthorityFormState;
+  public organizationNameFormState: OrganizationNameFormState;
   public organizationAgreementForm: FormGroup;
 
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService
+    protected logger: LoggerService,
+    private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
 
@@ -32,18 +34,21 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    * @description
    * Convert reactive form abstract controls into JSON.
    */
+  // TODO added type aliasing x 2 to stop typing errors, but needs to be fixed
+  // TODO possibly add an Organization DTO, form, or update model
+  // TODO refactor organizationAgreementGuid use or change return type
   public get json(): Organization {
-    const organizationName = this.organizationNameForm.getRawValue();
-    const signingAuthority = this.toPersonJson<Party>(this.signingAuthorityForm.getRawValue(), 'mailingAddress');
+    // OrganizationName is the only form that contains the organization ID
+    const organizationName = this.organizationNameFormState.json as Organization;
+    const signingAuthority = this.organizationSigningAuthorityFormState.json;
     const { organizationAgreementGuid } = this.organizationAgreementForm.getRawValue();
 
     return {
-      // OrganizationName is the only form that contains the organization ID
       ...organizationName,
       signingAuthorityId: signingAuthority?.id,
       signingAuthority,
-      organizationAgreementGuid
-    };
+      organizationAgreementGuid // TODO feels like this shouldn't be stored in the form
+    } as Organization;
   }
 
   /**
@@ -53,8 +58,8 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    */
   public get forms(): AbstractControl[] {
     return [
-      this.signingAuthorityForm,
-      this.organizationNameForm
+      this.organizationSigningAuthorityFormState.form,
+      this.organizationNameFormState.form
     ];
   }
 
@@ -64,8 +69,8 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    * to clear previous form data from the service.
    */
   protected buildForms() {
-    this.signingAuthorityForm = this.buildSigningAuthorityForm();
-    this.organizationNameForm = this.buildOrganizationNameForm();
+    this.organizationSigningAuthorityFormState = new OrganizationSigningAuthorityFormState(this.fb, this.formUtilsService);
+    this.organizationNameFormState = new OrganizationNameFormState(this.fb);
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }
 
@@ -78,100 +83,19 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
       return;
     }
 
-    this.organizationNameForm.patchValue(organization);
-    this.toPersonFormModel<Party>([this.signingAuthorityForm, organization.signingAuthority]);
-  }
+    const { id, name, registrationId, doingBusinessAs, signingAuthority } = organization;
 
+    this.organizationSigningAuthorityFormState.patchValue(signingAuthority);
+    this.organizationNameFormState.patchValue({ id, name, registrationId, doingBusinessAs });
+  }
 
   /**
    * Form Builders and Helpers
    */
 
-  // TODO BCSC information is also in enrolments and can have shared form helpers
-  private buildSigningAuthorityForm(): FormGroup {
-    // Prevent BCSC information from being changed
-    return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      firstName: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      lastName: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      preferredFirstName: [
-        null, []
-      ],
-      preferredMiddleName: [
-        null, []
-      ],
-      preferredLastName: [
-        null, []
-      ],
-      jobRoleTitle: [
-        null,
-        [Validators.required]
-      ],
-      phone: [
-        null,
-        [Validators.required, FormControlValidators.phone]
-      ],
-      fax: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      smsPhone: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ],
-      physicalAddress: this.buildAddressForm({
-        areDisabled: ['street', 'street2', 'city', 'provinceCode', 'countryCode', 'postal'],
-      }),
-      mailingAddress: this.buildAddressForm(),
-      dateOfBirth: [
-        null,
-        [Validators.required]
-      ]
-    });
-  }
-
-  private buildOrganizationNameForm(): FormGroup {
-    return this.fb.group({
-      // OrganizationName is the only form that contains
-      // the organization ID
-      id: [
-        0,
-        []
-      ],
-      name: [
-        null,
-        [Validators.required]
-      ],
-      registrationId: [
-        { value: null, disabled: true },
-        [Validators.required]
-      ],
-      doingBusinessAs: [
-        null,
-        []
-      ]
-    });
-  }
-
   private buildOrganizationAgreementForm(): FormGroup {
     return this.fb.group({
-      organizationAgreementGuid: [
-        '',
-        []
-      ]
+      organizationAgreementGuid: ['', []]
     });
   }
 }
