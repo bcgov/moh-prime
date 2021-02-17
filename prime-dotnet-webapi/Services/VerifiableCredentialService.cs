@@ -262,17 +262,11 @@ namespace Prime.Services
 
             var credential = GetCredentialByConnectionIdAsync(connectionId);
 
-            do
+            if (credential == null || credential.AcceptedCredentialDate != null)
             {
-                credential = GetCredentialByConnectionIdAsync(connectionId);
-                if (credential == null)
-                {
-                    _logger.LogInformation("Cannot issue credential, credential from database is null. waiting 5 seconds ...", credential?.Id, connectionId);
-                    Thread.Sleep(5000);
-                }
-                // return null;
+                _logger.LogInformation("Cannot issue credential, credential with this connectionId:{connectionId} from database is null, or a credential has already been accepted.", connectionId);
+                return null;
             }
-            while (credential == null || credential.AcceptedCredentialDate != null);
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
             var credentialOffer = await CreateCredentialOfferAsync(connectionId, credentialAttributes);
