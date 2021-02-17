@@ -16,7 +16,6 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { EnrolmentPipe } from '@shared/pipes/enrolment.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PhonePipe } from '@shared/pipes/phone.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
@@ -84,7 +83,6 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
 @NgModule({
   declarations: [
     CapitalizePipe,
-    EnrolmentPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
@@ -173,7 +171,6 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     CapitalizePipe,
     CasePipe,
     DefaultPipe,
-    EnrolmentPipe,
     FormatDatePipe,
     PhonePipe,
     PostalPipe,
