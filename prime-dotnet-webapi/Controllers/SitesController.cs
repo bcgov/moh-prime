@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 using AutoMapper;
 
 using Prime.Auth;
@@ -24,34 +22,25 @@ namespace Prime.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
-        private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         private readonly IAdminService _adminService;
-        private readonly IBusinessEventService _businessEventService;
 
         public SitesController(
             IMapper mapper,
             ISiteService siteService,
-            IPartyService partyService,
             IOrganizationService organizationService,
-            IRazorConverterService razorConverterService,
             IEmailService emailService,
             IDocumentService documentService,
-            IAdminService adminService,
-            IBusinessEventService businessEventService)
+            IAdminService adminService)
         {
             _mapper = mapper;
             _siteService = siteService;
-            _partyService = partyService;
             _organizationService = organizationService;
-            _razorConverterService = razorConverterService;
             _emailService = emailService;
             _documentService = documentService;
             _adminService = adminService;
-            _businessEventService = businessEventService;
         }
 
         // GET: api/Sites

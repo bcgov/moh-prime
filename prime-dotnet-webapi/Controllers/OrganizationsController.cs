@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using AutoMapper;
 
 using Prime.Auth;
 using Prime.Models;
@@ -25,33 +21,24 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class OrganizationsController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
 
         private readonly IAgreementService _agreementService;
         private readonly IPartyService _partyService;
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
-        private readonly IPdfService _pdfService;
         private readonly ISiteService _siteService;
 
         public OrganizationsController(
-            IMapper mapper,
             IOrganizationService organizationService,
             IAgreementService agreementService,
             IPartyService partyService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService,
-            IPdfService pdfService,
             ISiteService siteService)
         {
-            _mapper = mapper;
             _organizationService = organizationService;
             _agreementService = agreementService;
             _partyService = partyService;
-            _razorConverterService = razorConverterService;
             _documentService = documentService;
-            _pdfService = pdfService;
             _siteService = siteService;
         }
 

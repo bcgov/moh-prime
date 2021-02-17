@@ -21,32 +21,23 @@ namespace Prime.Controllers
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
-        private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
-            IDocumentService documentService,
-            IRazorConverterService razorConverterService)
+            IDocumentService documentService)
         {
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
             _documentService = documentService;
-            _razorConverterService = razorConverterService;
         }
 
         // GET: api/Enrollees
