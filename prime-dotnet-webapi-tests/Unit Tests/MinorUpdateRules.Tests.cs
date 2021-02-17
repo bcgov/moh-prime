@@ -114,15 +114,15 @@ namespace PrimeTests.UnitTests
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
-        [Fact]
-        public async void TestAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
-        {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
-            enrollee.MailingAddress = null;
+        // [Fact]
+        // public async void TestAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
+        // {
+        //     Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
+        //     EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+        //     enrollee.MailingAddress = null;
 
-            await AssertAllowableChanges(false, enrollee, profile);
-        }
+        //     await AssertAllowableChanges(false, enrollee, profile);
+        // }
 
         [Fact]
         public async void TestAllowableChangesRule_Certifications()
