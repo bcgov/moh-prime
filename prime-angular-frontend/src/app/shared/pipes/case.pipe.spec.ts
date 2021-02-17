@@ -16,7 +16,7 @@ describe('CasePipe', () => {
     expect(result).toBe('space case');
   });
 
-  it('should not fail when passsed an empty string', () => {
+  it('should not fail when passed an empty string', () => {
     const result = pipe.transform('', 'space', 'kebab');
     expect(result).toBe('');
   });
