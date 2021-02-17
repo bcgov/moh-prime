@@ -16,6 +16,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { Enrollee } from '@shared/models/enrollee.model';
+import { Address } from '@shared/models/address.model';
 
 import { BceidUser } from '@auth/shared/models/bceid-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -42,6 +43,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   public user: BceidUser;
   public addressFormControlNames: AddressLine[];
   public maxDateOfBirth: moment.Moment;
+  public hasMailingAddress: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -54,7 +56,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -66,7 +68,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.addressFormControlNames = [
@@ -105,6 +108,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
           this.dateOfBirth.enable();
           this.form.patchValue(enrollee);
         });
+    } else {
+      this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value);
     }
   }
 

@@ -8,7 +8,6 @@
         novalidate>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Personal Information</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -16,28 +15,9 @@
         </ng-container>
       </app-page-subheader>
 
-      <div class="row">
-        <div class="col-sm-12 col-lg-6">
+      <app-preferred-name-form [form]="form"
+                               mode="columns"></app-preferred-name-form>
 
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="First Name"
-                   formControlName="firstName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-        <div class="col-sm-12 col-lg-6">
-
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Last Name"
-                   formControlName="lastName">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-      </div>
       <div class="row">
         <div class="col-sm-6">
 
@@ -59,11 +39,9 @@
 
         </div>
       </div>
-
     </section>
 
     <section class="mb-3">
-
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Address</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -71,8 +49,10 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-address [form]="mailingAddress"
-                   [formControlNames]="addressFormControlNames"></app-address>
+      <app-address-form [form]="mailingAddress"
+                        [showManualButton]="true"
+                        [showAddressFields]="hasMailingAddress"
+                        [formControlNames]="addressFormControlNames"></app-address-form>
 
     </section>
 

@@ -3,20 +3,18 @@ using Prime.Models;
 
 namespace PrimeTests.ModelFactories
 {
-    public class EnrolleeCareSettingFactory : Faker<EnrolleeCareSetting>
+    public class OrganizationFactory : Faker<Organization>
     {
         private static int IdCounter = 1;
 
-        public EnrolleeCareSettingFactory(Enrollee owner)
+        public OrganizationFactory()
         {
-            this.SetBaseRules();
+            // this.SetBaseRules();  ...
 
-            RuleFor(x => x.Id, f => IdCounter++);
-            RuleFor(x => x.Enrollee, f => owner);
-            RuleFor(x => x.EnrolleeId, f => owner.Id);
-            RuleFor(x => x.CareSettingCode, f => f.PickRandom(CareSettingLookup.All).Code);
+            RuleFor(x => x.Id, () => IdCounter++);
+            RuleFor(x => x.Name, f => f.Company.CompanyName());
 
-            Ignore(x => x.CareSetting);
+            // ... Incomplete
         }
     }
 }

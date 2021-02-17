@@ -1,0 +1,16 @@
+<div [formGroup]="form">
+  <div *ngFor="let control of formControlConfig"
+       class="row">
+    <div [class.col-12]="mode === 'column'"
+         [class.col-6]="mode === 'columns'">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               [placeholder]="control.label"
+               [formControlName]="control.name">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+</div>

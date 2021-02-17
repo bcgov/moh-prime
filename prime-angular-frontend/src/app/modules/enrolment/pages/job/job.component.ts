@@ -14,6 +14,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -46,6 +47,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    protected authService: AuthService,
     private configService: ConfigService,
     private fb: FormBuilder
   ) {
@@ -59,7 +61,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.jobNames = this.configService.jobNames;
@@ -189,46 +192,46 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected createFormInstance() {
     this.form = this.enrolmentFormStateService.jobsForm;
   }
-
+  // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching
     this.form.valueChanges
       .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
 
-    this.patchForm();
+    this.patchForm().subscribe(() => {
+      // Add at least one site for each careSetting selected by enrollee
+      this.careSettings?.forEach((careSetting) => {
+        switch (careSetting.careSettingCode) {
+          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+            this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+            if (!this.communityHealthSites.length) {
+              this.addOboSite(careSetting.careSettingCode);
+            }
+            break;
+          }
+          case CareSettingEnum.COMMUNITY_PHARMACIST: {
+            this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+            if (!this.communityPharmacySites.length) {
+              this.addOboSite(careSetting.careSettingCode);
+            }
+            break;
+          }
+          case CareSettingEnum.HEALTH_AUTHORITY: {
+            this.healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
+            if (!this.healthAuthoritySites.length) {
+              this.addOboSite(careSetting.careSettingCode);
+            }
+            break;
+          }
+        }
+      });
 
-    // Add at least one site for each careSetting selected by enrollee
-    this.careSettings?.forEach((careSetting) => {
-      switch (careSetting.careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.communityHealthSites.length) {
-            this.addOboSite(careSetting.careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.communityPharmacySites.length) {
-            this.addOboSite(careSetting.careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          this.healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.healthAuthoritySites.length) {
-            this.addOboSite(careSetting.careSettingCode);
-          }
-          break;
-        }
+      // Always have at least one job ready for
+      // the enrollee to fill out
+      if (!this.jobs.length) {
+        this.addJob();
       }
     });
-
-    // Always have at least one job ready for
-    // the enrollee to fill out
-    if (!this.jobs.length) {
-      this.addJob();
-    }
   }
 
   protected onSubmitFormIsValid() {
@@ -285,16 +288,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       this.addJob();
     }
   }
-
-  // private removeIncompleteCareSettingSites() {
-  //   [
-  //     this.communityHealthSites,
-  //     this.communityPharmacySites,
-  //     this.healthAuthoritySites
-  //   ].forEach(cs => {
-  //     cs.controls
-  //   });
-  // }
 
   /**
    * @description

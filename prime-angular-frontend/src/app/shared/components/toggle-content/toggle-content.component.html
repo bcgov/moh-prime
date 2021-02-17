@@ -1,0 +1,16 @@
+<div class="toggle-container">
+
+  <mat-slide-toggle [color]="color"
+                    [checked]="checked"
+                    (change)="onChange($event)">
+    {{ label }}
+  </mat-slide-toggle>
+
+  <div *ngIf="checked"
+       class="toggle-content">
+
+    <ng-content></ng-content>
+
+  </div>
+
+</div>

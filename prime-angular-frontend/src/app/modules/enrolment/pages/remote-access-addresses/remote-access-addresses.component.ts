@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -33,7 +34,8 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -45,7 +47,8 @@ export class RemoteAccessAddressesComponent extends BaseEnrolmentProfilePage imp
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.formControlNames = [
