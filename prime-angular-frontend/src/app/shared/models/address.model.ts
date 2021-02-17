@@ -44,7 +44,7 @@ export class Address {
    */
   public static isEmpty(address: Address, blacklist: string[] = optionalAddressLineItems): boolean {
     if (!address) {
-      return false;
+      return true;
     }
 
     return Object.keys(address)
