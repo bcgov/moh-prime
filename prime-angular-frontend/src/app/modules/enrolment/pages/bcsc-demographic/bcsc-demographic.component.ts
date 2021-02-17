@@ -118,7 +118,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           if (!enrolment) {
             // Manage patching the form state for a new enrolment
             // that has not been created
-            const { firstName, lastName, givenNames, verifiedAddress } = bcscUser;
+            const { firstName, lastName, givenNames } = bcscUser;
+            const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
             this.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
           }
         })

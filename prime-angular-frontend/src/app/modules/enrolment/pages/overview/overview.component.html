@@ -28,7 +28,7 @@
     Request Remote Access
   </button>
 
-  <app-alert *ngIf="!hasRegOrJob()"
+  <app-alert *ngIf="enrolment && !hasRegOrJob()"
              type="danger"
              icon="warning">
     <ng-container #alertContent
@@ -54,7 +54,7 @@
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer mb-4">
-    <app-alert *ngIf="currentStatus !== EnrolmentStatus.EDITABLE"
+    <app-alert *ngIf="enrolment && currentStatus !== EnrolmentStatus.EDITABLE"
                type="danger"
                icon="warning">
       <ng-container #alertContent
