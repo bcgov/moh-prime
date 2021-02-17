@@ -137,17 +137,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           if (this.enrolmentFormStateService.isPatched) {
             // Replace enrolment with the version from the form
             enrolment = this.enrolmentFormStateService.json;
-            // Merge current BCSC information that may not be stored in the form
-            // for use within the view
-            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, dateOfBirth, verifiedAddress };
           }
-
-          // Store a local copy of the enrolment for views
-          this.enrolment = enrolment;
-          this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
-
-          // Attempt to patch the form if not already patched
-          this.enrolmentFormStateService.setForm(enrolment);
 
           // Allow for BCSC information to be updated on each submission of the enrolment
           // regardless of whether they visited the demographic view to make adjustments
@@ -156,7 +146,17 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
             this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as FormGroup);
             verifiedAddress = new Address();
           }
-          form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
+
+          // Merge current BCSC information that may not be stored in the form
+          // or in the enrolment for use within the view
+          enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, dateOfBirth, verifiedAddress };
+
+          // Store a local copy of the enrolment for views
+          this.enrolment = enrolment;
+          this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+
+          // Attempt to patch the form if not already patched
+          this.enrolmentFormStateService.setForm(enrolment);
         })
       ).subscribe();
   }
