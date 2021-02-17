@@ -124,7 +124,6 @@ namespace Prime.Services
                 .Include(ec => ec.Credential)
                 .Where(ec => ec.EnrolleeId == enrolleeId)
                 .Where(ec => ec.Credential.CredentialExchangeId != null)
-                .Where(ec => ec.Credential.AcceptedCredentialDate != null)
                 .Where(ec => ec.Credential.RevokedCredentialDate == null)
                 .Select(ec => ec.Credential)
                 .ToListAsync();
