@@ -39,7 +39,8 @@ export class OrganizationService {
 
   public get organization(): Organization {
     // Allow access to current value, but prevent updates by reference
-    return { ...this._organization.value };
+    const value = this._organization.value;
+    return (value) ? { ...this._organization.value } : null;
   }
 
   public get organization$(): Observable<Organization> {

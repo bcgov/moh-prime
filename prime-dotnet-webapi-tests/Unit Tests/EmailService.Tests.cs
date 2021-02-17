@@ -13,6 +13,7 @@ using PrimeTests.Utils;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
+using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
@@ -79,6 +80,20 @@ namespace PrimeTests.UnitTests
                 A.CallTo(() => smtpEmailClient.SendAsync(A<Email>._)).MustNotHaveHappened();
             }
         }
+
+        [Fact]
+        public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsers()
+        {
+            var site = new SiteFactory().Generate();
+            var remoteUsers = new HashSet<RemoteUser>();
+
+            var service = CreateService();
+            await service.SendRemoteUserNotificationsAsync(site, remoteUsers);
+
+            // Don't expect error when no remote users
+        }
+
+
 
         public enum ExpectedEmail
         {
