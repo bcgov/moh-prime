@@ -114,9 +114,13 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    const enrollee = this.form.getRawValue();
+    // BCeID has to match BCSC for submission, which requires givenNames
+    const givenNames = enrollee.firstName;
+
     if (!enrolment.id && this.isInitialEnrolment) {
       const payload = {
-        enrollee: this.form.getRawValue(),
+        enrollee: { ...enrollee, givenNames },
         identificationDocumentGuid: this.enrolmentFormStateService.identityDocumentForm.get('identificationDocumentGuid').value
       };
       return this.enrolmentResource.createEnrollee(payload)
@@ -131,6 +135,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
           this.handleResponse()
         );
     } else {
+      enrolment.enrollee.givenNames = givenNames;
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
   }
@@ -152,8 +157,8 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
-            preferredFirstName: firstName,
-            preferredLastName: lastName,
+            firstName,
+            lastName,
             email
           } as Enrollee;
         })

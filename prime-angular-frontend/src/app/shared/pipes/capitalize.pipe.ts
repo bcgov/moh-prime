@@ -5,7 +5,7 @@ import { StringUtils } from '@lib/utils/string-utils.class';
   name: 'capitalize'
 })
 export class CapitalizePipe implements PipeTransform {
-  transform(value: string, all: boolean = false): string {
+  public transform(value: string, all: boolean = false): string {
     if (!value) {
       return value;
     }

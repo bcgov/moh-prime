@@ -12,7 +12,7 @@ export class Party implements Person {
   public lastName: string;
   public givenNames: string;
   public dateOfBirth: string;
-  public validatedAddressId?: number;
+  public verifiedAddressId?: number;
   public verifiedAddress: Address;
 
   public preferredFirstName?: string = null;
