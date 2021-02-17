@@ -152,7 +152,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Allow for BCSC information to be updated on each submission of the enrolment
           // regardless of whether they visited the demographic view to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
-          verifiedAddress = verifiedAddress ?? new Address();
+          if (!verifiedAddress) {
+            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as FormGroup);
+            verifiedAddress = new Address();
+          }
           form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
         })
       ).subscribe();
