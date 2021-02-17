@@ -1,7 +1,7 @@
 #########################################
 ### Stage 1 - Build environment ###
 #########################################
-FROM node:dubnium
+FROM docker.io/node:dubnium
 
 # Set working directory
 RUN mkdir /usr/src/app
@@ -37,7 +37,7 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM nginx:stable
+FROM docker.io/nginx:stable
 
 WORKDIR /app
 

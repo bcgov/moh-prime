@@ -110,7 +110,8 @@ objects:
             initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            # timeoutSeconds: 1
+            timeoutSeconds: 30
           volumeMounts:
             - mountPath: /etc/nginx/certs
               name: vanity-tls-certs
