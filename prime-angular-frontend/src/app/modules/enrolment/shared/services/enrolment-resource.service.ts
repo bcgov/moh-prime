@@ -434,7 +434,7 @@ export class EnrolmentResource {
 
   private enrolmentAdapterRequest(enrolment: Enrolment): HttpEnrollee {
     addressTypes.forEach((addressType: AddressType) => {
-      if (enrolment.enrollee[addressType].postal) {
+      if (enrolment.enrollee[addressType]?.postal) {
         enrolment.enrollee[addressType].id = enrolment.enrollee[addressType].id ?? 0;
         enrolment.enrollee[addressType].postal = enrolment.enrollee[addressType].postal.toUpperCase();
       } else {
