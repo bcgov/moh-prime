@@ -141,7 +141,7 @@ namespace Prime.Controllers
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpids", Name = nameof(HpdidLookup))]
-        [Authorize(Policy = Policies.ExternalHpdidAccess)]
+        [Authorize(Roles = Roles.ExternalHpdidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
@@ -157,7 +157,7 @@ namespace Prime.Controllers
         /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
         /// </summary>
         [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [Authorize(Policy = Policies.ExternalGpidValidation)]
+        [Authorize(Roles = Roles.ExternalGpidValidation)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

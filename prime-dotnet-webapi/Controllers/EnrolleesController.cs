@@ -294,7 +294,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         /// <param name="link"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -334,7 +334,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-reference", Name = nameof(CreateEnrolmentReference))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -365,7 +365,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -404,7 +404,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -439,7 +439,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -606,7 +606,8 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="identificationDocumentId"></param>
         [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -636,7 +637,8 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -665,7 +667,8 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -689,7 +692,8 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="documentId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -713,7 +717,8 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="documentId"></param>
         [HttpDelete("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(DeleteEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -763,7 +768,7 @@ namespace Prime.Controllers
         /// <param name="adjudicatorNoteId"></param>
         /// <param name="assigneeId"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(CreateEnrolleeNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -793,7 +798,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorNoteId"></param>
         [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(DeleteEnrolleeNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -821,7 +826,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/notifications", Name = nameof(GetNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -846,7 +851,8 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/notifications", Name = nameof(DeleteEnrolleeNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        // TODO: Confirm correct role
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

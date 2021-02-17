@@ -50,11 +50,4 @@ namespace Prime.Auth
         public const string ViewSite = "site_view";
         public const string EditSite = "site_edit";
     }
-
-    public static class Policies
-    {
-        public const string Admin = "admin-policy";
-        public const string ExternalHpdidAccess = "external-hpdid-access-policy";
-        public const string ExternalGpidValidation = "external-gpid-validation-policy";
-    }
 }

@@ -63,13 +63,6 @@ namespace Prime.Auth
             });
 
             services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.PrimeAdmin));
-                options.AddPolicy(Policies.ExternalHpdidAccess, policy => policy.RequireRole(Roles.ExternalHpdidAccess));
-                options.AddPolicy(Policies.ExternalGpidValidation, policy => policy.RequireRole(Roles.ExternalGpidValidation));
-            });
         }
 
         private static Task OnTokenValidatedAsync(TokenValidatedContext context)
