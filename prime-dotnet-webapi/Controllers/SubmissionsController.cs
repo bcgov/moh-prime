@@ -53,6 +53,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeViewModel>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
+            if (updatedProfile == null)
+            {
+                ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
@@ -62,9 +68,12 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (updatedProfile == null)
+
+            updatedProfile.SetPropertiesFromToken(User);
+
+            if (!updatedProfile.Validate(User))
             {
-                ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
+                ModelState.AddModelError("EnrolleeUpdateModel", "One or more Properties did not match the information on the card.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -73,8 +82,6 @@ namespace Prime.Controllers
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
-
-            updatedProfile.SetTokenProperties(User);
 
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 

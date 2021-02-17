@@ -46,6 +46,9 @@ namespace Prime.Services
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
         {
             return await _context.Organizations
+                .Include(o => o.SigningAuthority)
+                        .ThenInclude(sa => sa.Addresses)
+                            .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
@@ -102,9 +105,9 @@ namespace Prime.Services
             _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
             _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
 
-            _partyService.UpdatePartyPhysicalAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
-
-            _partyService.UpdatePartyMailingAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.PhysicalAddress);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.MailingAddress);
+            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.VerifiedAddress);
 
             // Keep userId the same from BCSC card, do not update
             currentOrganization.SigningAuthority.UserId = userId;
@@ -227,12 +230,6 @@ namespace Prime.Services
             }
         }
 
-        public async Task<Organization> GetOrganizationByPartyIdAsync(int partyId)
-        {
-            return await _context.Organizations
-                .SingleOrDefaultAsync(o => o.SigningAuthorityId == partyId);
-        }
-
         public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
@@ -281,9 +278,8 @@ namespace Prime.Services
                 .Include(o => o.Agreements)
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.PhysicalAddress)
-                .Include(o => o.SigningAuthority)
-                    .ThenInclude(p => p.MailingAddress);
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address);
         }
     }
 }

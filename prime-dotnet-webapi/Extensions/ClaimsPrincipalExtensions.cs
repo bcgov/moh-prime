@@ -58,17 +58,17 @@ namespace Prime
             return user.FindFirstValue(Claims.FamilyName);
         }
 
-        public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
+        public static VerifiedAddress GetVerifiedAddress(this ClaimsPrincipal User)
         {
             string addressClaim = User?.FindFirstValue(Claims.Address);
-            if (addressClaim == null)
+            if (string.IsNullOrWhiteSpace(addressClaim))
             {
                 return null;
             }
 
             var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim);
 
-            return address?.ToModel();
+            return address?.AsVerifiedAddress();
         }
 
         private class TokenAddress
@@ -79,9 +79,15 @@ namespace Prime
             public string Postal_code { get; set; }
             public string Country { get; set; }
 
-            public PhysicalAddress ToModel()
+            public VerifiedAddress AsVerifiedAddress()
             {
-                return new PhysicalAddress
+                // Partial addresses are not accepted; reject if any fields are not present.
+                if (new[] { Street_address, Locality, Region, Postal_code, Country }.Any(x => string.IsNullOrWhiteSpace(x)))
+                {
+                    return null;
+                }
+
+                return new VerifiedAddress
                 {
                     CountryCode = Country,
                     ProvinceCode = Region,

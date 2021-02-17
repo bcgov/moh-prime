@@ -15,6 +15,7 @@ namespace Prime.Auth
         public const string FamilyName = "family_name";
         public const string Address = "address";
         public const string Birthdate = "birthdate";
+        public const string Email = "email";
 
         public const string RealmAccess = "realm_access";
         public const string AssuranceLevel = "identity_assurance_level";

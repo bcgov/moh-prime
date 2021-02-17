@@ -55,14 +55,13 @@ export class MockAuthService implements IAuthService {
 
   public getUser(forceReload?: boolean): Promise<BcscUser> {
     return new Promise((resolve, reject) => resolve({
-      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past().toISOString(),
-      physicalAddress: {
+      validatedAddress: {
         countryCode: faker.address.countryCode(),
         provinceCode: faker.address.stateAbbr(),
         street: faker.address.streetAddress(),
@@ -79,7 +78,8 @@ export class MockAuthService implements IAuthService {
 
   public getAdmin(forceReload?: boolean): Promise<Admin> {
     return new Promise((resolve, reject) => resolve({
-      username: `${faker.internet.userName()}`,
+      // TODO drop use of idir through mapping
+      // username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
