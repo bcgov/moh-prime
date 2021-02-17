@@ -269,7 +269,7 @@ namespace Prime.HttpClients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::DeleteCredentialAsync");
+                return false;
             }
 
             _logger.LogInformation("Deleting credential cred_ex_id={id} success", credential.CredentialExchangeId);
