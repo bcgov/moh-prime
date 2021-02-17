@@ -77,6 +77,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * can't be loaded during instantiation.
    */
   public async setForm(enrolment: Enrolment, forcePatch: boolean = false): Promise<void> {
+    if (!enrolment) {
+      return;
+    }
+
     // Must delay loading of the identity provider otherwise race
     // conditions occur when views initialize and the form instances
     // are not necessarily available

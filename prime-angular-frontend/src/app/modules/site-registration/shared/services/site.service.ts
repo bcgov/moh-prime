@@ -32,7 +32,8 @@ export class SiteService {
 
   public get site(): Site {
     // Allow access to current value, but prevent updates by reference
-    return { ...this._site.value };
+    const value = this._site.value;
+    return (value) ? { ...this._site.value } : null;
   }
 
   public get site$(): Observable<Site> {

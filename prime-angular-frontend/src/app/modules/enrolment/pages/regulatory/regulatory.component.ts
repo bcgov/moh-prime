@@ -17,6 +17,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -36,7 +37,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -48,7 +50,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 

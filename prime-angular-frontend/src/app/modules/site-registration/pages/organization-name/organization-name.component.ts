@@ -145,7 +145,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
   }
 
   private createFormInstance() {
-    this.form = this.organizationFormStateService.organizationNameForm;
+    this.form = this.organizationFormStateService.organizationNameFormState.form;
   }
 
   private initForm() {
