@@ -58,7 +58,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 1. `ng build` to build the application, which is stored in `/dist` directory.  Use the `--prod` flag for a production build, which significantly decreases the size of the application
 1. `ng g <blueprint>` to create code scaffolding for a directive, pipe, service, class, guard, interface, enum, and module
 1. `ng lint` to lint the application code using TSLint.
-1. `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io). The test runner has a variety of options that can be used to refine how the test suite is executed that can be found by running `ng test --help`.  One of these options allows for the narrowing of the tests run through the use of globbing patterns - `ng test --include='**/*.pipe.spec.ts'`.
 1. `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ##### Getting Help
