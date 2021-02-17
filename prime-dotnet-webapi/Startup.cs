@@ -85,11 +85,6 @@ namespace Prime
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
                 });
 
-            services.Configure<RouteOptions>(options =>
-            {
-                options.ConstraintMap.Add("submissionAction", typeof(EnumRouteConstraint<SubmissionAction>));
-            });
-
             services.AddCors(options =>
             {
                 options.AddPolicy(AllowSpecificOrigins,
