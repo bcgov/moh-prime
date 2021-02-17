@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable } from 'rxjs';
@@ -7,10 +8,12 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Address } from '@shared/models/address.model';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -47,6 +50,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
+    private formUtilsService: FormUtilsService,
     private logger: LoggerService
   ) {
     super(route, router);
@@ -85,6 +89,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
         });
     } else {
+      this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
     }
   }
@@ -147,6 +152,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // Allow for BCSC information to be updated on each submission of the enrolment
           // regardless of whether they visited the demographic view to make adjustments
           const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
+          verifiedAddress = verifiedAddress ?? new Address();
           form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
         })
       ).subscribe();
