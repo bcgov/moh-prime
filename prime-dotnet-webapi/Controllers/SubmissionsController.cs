@@ -15,29 +15,19 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
-        private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IBusinessEventService _businessEventService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
-            IAdminService adminService,
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
             IBusinessEventService businessEventService)
         {
             _submissionService = submissionService;
-            _adminService = adminService;
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
             _businessEventService = businessEventService;
         }
 
@@ -46,6 +36,7 @@ namespace Prime.Controllers
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
         [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -95,6 +86,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/approve", Name = nameof(ApproveSubmission))]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -113,6 +105,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="documentGuid"></param>
         [HttpPost("{enrolleeId}/submission/accept-toa", Name = nameof(AcceptToa))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -129,6 +122,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/decline-toa", Name = nameof(DeclineToa))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -145,6 +139,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/enable-editing", Name = nameof(EnableEditing))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -161,6 +156,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/lock-profile", Name = nameof(LockProfile))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -177,6 +173,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/decline-profile", Name = nameof(DeclineProfile))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -193,6 +190,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/rerun-rules", Name = nameof(RerunRules))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -233,8 +231,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="agreementType"></param>
         [HttpPut("{enrolleeId}/submissions/latest/type", Name = nameof(AssignToaAgreementType))]
-        // TODO: Confirm correct role
-        [Authorize(Roles = Roles.ManageEnrollee)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -279,7 +276,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/always-manual", Name = nameof(SetEnrolleeManualFlag))]
-        // TODO: Confirm correct role
         [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -296,7 +292,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/always-manual", Name = nameof(RemoveEnrolleeManualFlag))]
-        // TODO: Confirm correct role
         [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
