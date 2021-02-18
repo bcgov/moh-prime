@@ -40,6 +40,7 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.SelfDeclarationDocuments, f => null);
             RuleFor(x => x.IdentificationDocuments, f => null);
 
+            RuleFor(x => x.Addresses, (f, x) => new EnrolleeAddressFactory(x).Generate(1));
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
             RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrDefault(f, .75f, new List<Certification>()));
             RuleFor(x => x.Jobs, (f, x) => x.Certifications.Any() ? new List<Job>() : new JobFactory(x).Generate(1));
@@ -50,7 +51,6 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.AssignedPrivileges, f => null);
             RuleFor(x => x.Submissions, f => null);
             // TODO: create rule sets for these ignores?
-            Ignore(x => x.Addresses);
             Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
             Ignore(x => x.AdjudicatorId);
