@@ -129,7 +129,11 @@ namespace Prime.Services
 
             foreach (var credential in enrolleeCredentials)
             {
-                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
+                var success = credential.AcceptedCredentialDate == null
+                    ? await _verifiableCredentialClient.DeleteCredentialAsync(credential)
+                    : await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+
+                if (success)
                 {
                     credential.RevokedCredentialDate = DateTimeOffset.Now;
                 }
