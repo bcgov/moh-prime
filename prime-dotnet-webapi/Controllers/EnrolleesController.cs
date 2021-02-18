@@ -396,7 +396,8 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, admin.Id, accessAgreementNote);
 
             return Ok(ApiResponse.Result(updatedNote));
         }
