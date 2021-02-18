@@ -10,6 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -108,10 +109,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const { jobs, oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
-    const careSettings = this.careSettingsForm.getRawValue();
-
-    const enrolleeHealthAuthorities = this.healthAuthoritiesFormState.json;
-
+    const careSettings = this.convertCareSettingFormToJson(id);
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const remoteAccessSites = this.convertRemoteAccessSitesToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -127,7 +125,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       jobs,
       oboSites,
       ...careSettings,
-      enrolleeHealthAuthorities,
       enrolleeRemoteUsers,
       remoteAccessSites,
       ...remoteAccessLocations,
@@ -230,6 +227,18 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         careSettings.push(careSetting);
       });
     }
+
+    // Initialize Health Authority form even if it might not be used by end user:
+    // Create checkboxes for each known Health Authority, according to order of Health Authority list.
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthorities.clear();
+    // Set value of checkboxes according to previous selections, if any
+    this.configService.healthAuthorities.forEach(ha => {
+      const checked = enrolment.enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
+      enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
+    });
+
+    this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
 
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
@@ -339,7 +348,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       }, {});
 
     this.selfDeclarationForm.patchValue(selfDeclarations);
-    this.careSettingsForm.patchValue(enrolment);
 
     this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
@@ -399,6 +407,24 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         } as Site,
       } as RemoteAccessSite;
     });
+  }
+
+  private convertCareSettingFormToJson(enrolleeId: number): any {
+    // Variable names must match keys for FormArrays in the FormGroup to get values
+    let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
+
+    // Any checked HA is converted into an enrollee health authority object literal,
+    // which is used to create the payload to back-end
+    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
+      if (checked) {
+        selectedHealthAuthorities.push({
+          enrolleeId,
+          healthAuthorityCode: this.configService.healthAuthorities[i].code
+        })
+      }
+      return selectedHealthAuthorities;
+    }, []);
+    return { careSettings, enrolleeHealthAuthorities };
   }
 
   /**
@@ -508,7 +534,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   private buildCareSettingsForm(): FormGroup {
     return this.fb.group({
-      careSettings: this.fb.array([])
+      careSettings: this.fb.array([]),
+      enrolleeHealthAuthorities: this.fb.array([])
     });
   }
 
@@ -516,6 +543,15 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     return this.fb.group({
       careSettingCode: [code, [Validators.required]]
     });
+  }
+
+  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
+    return this.fb.control(checkState);
+  }
+
+  public removeHealthAuthorities() {
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    enrolleeHealthAuthorities.controls.forEach(checkbox => { checkbox.setValue(false) });
   }
 
   private buildSelfDeclarationForm(): FormGroup {
