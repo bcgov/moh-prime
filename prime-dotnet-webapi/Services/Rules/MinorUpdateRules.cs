@@ -52,7 +52,8 @@ namespace Prime.Services.Rules
     }
 
     /// <summary>
-    /// Update must only change certain allowed properties
+    /// Update must only change certain allowed properties.
+    /// See `InitComparitor` method to see what is considered a minor update.
     /// </summary>
     public class AllowableChangesRule : MinorUpdateRule
     {
@@ -93,6 +94,11 @@ namespace Prime.Services.Rules
             }
 
             if (!CompareCollections(comparitor, enrollee.EnrolleeCareSettings, _updatedProfile.EnrolleeCareSettings))
+            {
+                return Task.FromResult(false);
+            }
+
+            if (!CompareCollections(comparitor, enrollee.EnrolleeHealthAuthorities, _updatedProfile.EnrolleeHealthAuthorities))
             {
                 return Task.FromResult(false);
             }

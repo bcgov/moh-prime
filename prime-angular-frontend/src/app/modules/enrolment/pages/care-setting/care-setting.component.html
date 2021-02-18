@@ -60,8 +60,25 @@
           </button>
 
         </div>
-      </div>
+        <div *ngIf="hasSelectedHACareSetting()"
+             class="col col-sm-10 py-3">
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Health Authority</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Please select all the health authorities in which you work.
+            </ng-container>
+          </app-page-subheader>
 
+          <!-- Create visual checkboxes and bind to `enrolleeHealthAuthorities` array -->
+          <div formArrayName="enrolleeHealthAuthorities"
+               class="mb-3"
+               *ngFor="let eha of enrolleeHealthAuthorities.controls; let i = index">
+            <mat-checkbox [formControl]="eha">
+              {{ healthAuthorities[i].name }}
+            </mat-checkbox>
+          </div>
+        </div>
+      </div>
     </section>
 
   </form>
