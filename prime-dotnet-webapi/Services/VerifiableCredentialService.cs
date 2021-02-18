@@ -101,12 +101,12 @@ namespace Prime.Services
 
             var created = await _context.SaveChangesAsync();
 
-            await CreateInvitation(enrolleeCredential.Credential);
-
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not store connection invitation.");
             }
+
+            await CreateInvitation(enrolleeCredential.Credential);
 
             return true;
         }
