@@ -1,7 +1,7 @@
 #########################################
 ### Stage 1 - Build environment ###
 #########################################
-FROM docker.io/node:dubnium
+FROM docker-remote.artifacts.developer.gov.bc.ca/node:12
 
 # Set working directory
 RUN mkdir /usr/src/app
