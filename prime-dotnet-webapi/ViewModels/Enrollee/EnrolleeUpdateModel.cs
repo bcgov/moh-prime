@@ -50,8 +50,7 @@ namespace Prime.ViewModels
 
         public ICollection<OboSite> OboSites { get; set; }
 
-        // Removed Temporarily
-        // public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
+        public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         [JsonConverter(typeof(EmptyStringToNullJsonConverter))]
         public string DeviceProviderNumber { get; set; }

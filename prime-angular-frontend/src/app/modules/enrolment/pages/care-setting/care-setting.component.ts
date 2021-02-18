@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -13,6 +13,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
@@ -34,6 +35,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
+  public healthAuthorities: Config<number>[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -46,8 +48,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     protected authService: AuthService,
-    private configService: ConfigService
+    private fb: FormBuilder
   ) {
     super(
       route,
@@ -64,10 +67,19 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     );
 
     this.careSettingTypes = this.configService.careSettings;
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   public get careSettings(): FormArray {
     return this.form.get('careSettings') as FormArray;
+  }
+
+  /**
+   * @description
+   *  Representing possible health authorities to select from and whether a given one was selected
+   */
+  public get enrolleeHealthAuthorities(): FormArray {
+    return this.form.get('enrolleeHealthAuthorities') as FormArray;
   }
 
   public onSubmit() {
@@ -82,7 +94,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Remove health authorities if health authority care setting not chosen
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
+      this.enrolmentFormStateService.removeHealthAuthorities();
     }
 
     super.onSubmit();
@@ -130,6 +142,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // Otherwise, provide the entire list of care setting types
     return this.careSettingTypes;
   }
+
+
+  public hasSelectedHACareSetting(): boolean {
+    return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  }
+
 
   public routeBackTo() {
     this.authService.identityProvider$()
