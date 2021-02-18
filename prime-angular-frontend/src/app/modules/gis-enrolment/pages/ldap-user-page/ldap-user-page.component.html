@@ -1,0 +1,25 @@
+<app-page>
+  <app-page-header>{{ title }}</app-page-header>
+
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <app-page-section>
+    <app-page-subheader2 [showUnderline]="false">
+      <ng-container appPageSubheader2Title>
+        LDAP User
+      </ng-container>
+    </app-page-subheader2>
+
+    <p>Are you an existing LDAP user?</p>
+
+    <form [formGroup]="form"
+          (ngOnSubmit)="onSubmit()"
+          novalidate>
+      <mat-radio-group aria-label="Are you an existing LDAP user?"
+                       formControlName="ldapUser">
+        <mat-radio-button value="yes">Yes</mat-radio-button>
+        <mat-radio-button value="no">No</mat-radio-button>
+      </mat-radio-group>
+    </form>
+  </app-page-section>
+</app-page>

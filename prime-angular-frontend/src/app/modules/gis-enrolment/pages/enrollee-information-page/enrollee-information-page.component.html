@@ -1,0 +1,45 @@
+<app-page>
+  <app-page-header>{{ title }}</app-page-header>
+
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <app-page-section>
+    <app-page-subheader2 [showUnderline]="false">
+      <ng-container appPageSubheader2Title>
+        Enrollee Information
+      </ng-container>
+    </app-page-subheader2>
+
+    <p>
+      This information comes from your LDAP credential, provide missing information or update your information usng the
+      edit button.
+    </p>
+
+    <form [formGroup]="form"
+          (ngOnSubmit)="onSubmit()"
+          novalidate>
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="LDAP User Name"
+                   formControlName="phone">
+            <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="LDAP Password"
+                   formControlName="email">
+            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </form>
+  </app-page-section>
+</app-page>

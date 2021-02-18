@@ -79,6 +79,7 @@ import { PreferredNameFormComponent } from '@shared/components/forms/preferred-n
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
+import { PageSectionComponent } from './components/page-section/page-section.component';
 
 @NgModule({
   declarations: [
@@ -147,7 +148,8 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent,
-    AddressViewComponent
+    AddressViewComponent,
+    PageSectionComponent
   ],
   imports: [
     CommonModule,
@@ -223,7 +225,8 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent,
-    AddressViewComponent
+    AddressViewComponent,
+    PageSectionComponent
   ],
   providers: [
     FullnamePipe,
