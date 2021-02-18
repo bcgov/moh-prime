@@ -92,7 +92,9 @@ objects:
         uri: "${SOURCE_REPOSITORY_URL}"
       type: Git
     strategy:
-      dockerStrategy: 
+      dockerStrategy:
+        pullSecret:
+          name: docker-creds
         dockerfilePath: openshift.dockerfile
         noCache: true
         env:
