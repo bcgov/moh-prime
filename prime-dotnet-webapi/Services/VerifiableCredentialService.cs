@@ -86,25 +86,22 @@ namespace Prime.Services
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            var credential = new Credential
-            {
-                SchemaId = schemaId,
-                CredentialDefinitionId = credentialDefinitionId,
-                Alias = alias
-            };
-            _context.Credentials.Add(credential);
-
             var enrolleeCredential = new EnrolleeCredential
             {
                 EnrolleeId = enrollee.Id,
-                CredentialId = credential.Id
+                Credential = new Credential
+                {
+                    SchemaId = schemaId,
+                    CredentialDefinitionId = credentialDefinitionId,
+                    Alias = alias
+                }
             };
 
             _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
 
-            await CreateInvitation(credential);
+            await CreateInvitation(enrolleeCredential.Credential);
 
             if (created < 1)
             {
