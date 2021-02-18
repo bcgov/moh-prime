@@ -19,7 +19,7 @@ namespace Prime.Services
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
         public const string RevocationRegistry = "revocation_registry";
-        public const string BasicMessage = "basic_message";
+        public const string BasicMessage = "basicmessages";
     }
 
     public class ConnectionState
