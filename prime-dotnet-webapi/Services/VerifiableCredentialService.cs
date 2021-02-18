@@ -111,21 +111,6 @@ namespace Prime.Services
             return true;
         }
 
-        private async Task<Object> CreateInvitation(Credential credential)
-        {
-            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
-            var invitationUrl = invitation.Value<string>("invitation_url");
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
-
-            credential.Base64QRCode = qrCodeImageAsBase64;
-            await _context.SaveChangesAsync();
-            return invitation;
-        }
-
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
         {
             var enrolleeCredentials = await _context.EnrolleeCredentials
@@ -151,6 +136,20 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private async Task<int> CreateInvitation(Credential credential)
+        {
+            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
+            var invitationUrl = invitation.Value<string>("invitation_url");
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
+
+            credential.Base64QRCode = qrCodeImageAsBase64;
+            return await _context.SaveChangesAsync();
         }
 
         // Handle webhook events for connection states.
