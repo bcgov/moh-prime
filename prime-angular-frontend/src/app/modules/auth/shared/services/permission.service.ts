@@ -5,8 +5,8 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export interface IPermissionService {
-  hasRoles(...roles: Role[]): boolean;
-  hasAnyRole(...roles: Role[]): boolean;
+  hasRoles(roles: Role | Role[]): boolean;
+  hasAnyRole(roles: Role | Role[]): boolean;
 }
 
 @Injectable({
@@ -18,12 +18,14 @@ export class PermissionService implements IPermissionService {
     private accessTokenService: AccessTokenService
   ) { }
 
-  public hasRoles(...roles: Role[]): boolean {
+  public hasRoles(roles: Role | Role[]): boolean {
+    roles = (Array.isArray(roles)) ? roles : [roles];
     const assignedRoles = this.accessTokenService.roles();
     return roles.every(r => assignedRoles.includes(r));
   }
 
-  public hasAnyRole(...roles: Role[]): boolean {
+  public hasAnyRole(roles: Role | Role[]): boolean {
+    roles = (Array.isArray(roles)) ? roles : [roles];
     const assignedRoles = this.accessTokenService.roles();
     return roles.some(r => assignedRoles.includes(r));
   }
