@@ -19,6 +19,7 @@ namespace Prime.Services
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
         public const string RevocationRegistry = "revocation_registry";
+        public const string BasicMessage = "basic_message";
     }
 
     public class ConnectionState
@@ -67,6 +68,9 @@ namespace Prime.Services
                     return await HandleIssueCredentialAsync(data);
                 case WebhookTopic.RevocationRegistry:
                     _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return true;
+                case WebhookTopic.BasicMessage:
+                    _logger.LogInformation("Basic Message data: for {@JObject}", JsonConvert.SerializeObject(data));
                     return true;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
