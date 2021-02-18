@@ -251,6 +251,32 @@ namespace Prime.HttpClients
             return body;
         }
 
+        public async Task<bool> DeleteCredentialAsync(Credential credential)
+        {
+            _logger.LogInformation("Deleting credential cred_ex-Id={id}", credential.CredentialExchangeId);
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.DeleteAsync($"issue-credential/records/{credential.CredentialExchangeId}");
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to delete a credential: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                return false;
+            }
+
+            _logger.LogInformation("Deleting credential cred_ex_id={id} success", credential.CredentialExchangeId);
+
+            return true;
+        }
+
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
         {
             await LogError(null, response, exception);
