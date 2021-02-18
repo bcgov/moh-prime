@@ -103,7 +103,7 @@ namespace Prime.Services
 
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not store connection invitation.");
+                throw new InvalidOperationException("Could not store credential.");
             }
 
             await CreateInvitation(enrolleeCredential.Credential);
