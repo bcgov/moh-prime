@@ -238,7 +238,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
     });
 
-    this.careSettingsForm.get('careSettings').patchValue(enrolment);
+    this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
 
     if (enrolment.jobs.length) {
       const jobs = this.jobsForm.get('jobs') as FormArray;
