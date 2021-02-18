@@ -67,6 +67,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     );
 
     this.careSettingTypes = this.configService.careSettings;
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   public get careSettings(): FormArray {
@@ -186,8 +187,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     if (!this.careSettings.length) {
       this.addCareSetting();
     }
-
-    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   protected nextRouteAfterSubmit() {
