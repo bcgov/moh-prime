@@ -133,7 +133,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Health Authority"
-            (click)="onRoute(EnrolmentRoutes.HEALTH_AUTHORITY)">
+            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -143,15 +143,6 @@
     <app-enrollee-property title="Health Authority"
                            [makeBold]="true">
       <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
-
-      <app-enrollee-property title="Facility">
-        <ul class="list-unstyled">
-          <li *ngFor="let facilitiy of healthAuthority.facilityCodes"
-              class="mb-2">
-            {{ facilitiy | configCode: 'facilities' }}
-          </li>
-        </ul>
-      </app-enrollee-property>
     </app-enrollee-property>
 
   </ng-container>
