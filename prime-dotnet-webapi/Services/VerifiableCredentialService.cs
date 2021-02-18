@@ -19,6 +19,7 @@ namespace Prime.Services
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
         public const string RevocationRegistry = "revocation_registry";
+        public const string BasicMessage = "basicmessages";
     }
 
     public class ConnectionState
@@ -68,6 +69,9 @@ namespace Prime.Services
                 case WebhookTopic.RevocationRegistry:
                     _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
                     return true;
+                case WebhookTopic.BasicMessage:
+                    _logger.LogInformation("Basic Message data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return false;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
@@ -75,46 +79,36 @@ namespace Prime.Services
         }
 
         // Create an invitation to establish a connection between the agents.
-        public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
+        public async Task<bool> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
-            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
-            var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
-
-            var credential = new Credential
-            {
-                SchemaId = schemaId,
-                CredentialDefinitionId = credentialDefinitionId,
-                Alias = alias,
-                Base64QRCode = qrCodeImageAsBase64
-            };
-            _context.Credentials.Add(credential);
-            await _context.SaveChangesAsync();
 
             var enrolleeCredential = new EnrolleeCredential
             {
                 EnrolleeId = enrollee.Id,
-                CredentialId = credential.Id
+                Credential = new Credential
+                {
+                    SchemaId = schemaId,
+                    CredentialDefinitionId = credentialDefinitionId,
+                    Alias = alias
+                }
             };
 
             _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
+
             if (created < 1)
             {
-                throw new InvalidOperationException("Could not store connection invitation.");
+                throw new InvalidOperationException("Could not store credential.");
             }
 
-            // TODO after testing don't need to pass back the invitation
-            return invitation;
+            await CreateInvitation(enrolleeCredential.Credential);
+
+            return true;
         }
 
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
@@ -136,11 +130,26 @@ namespace Prime.Services
                 if (success)
                 {
                     credential.RevokedCredentialDate = DateTimeOffset.Now;
+                    await _verifiableCredentialClient.SendMessageAsync(credential.ConnectionId, "This credential has been revoked.");
                 }
             }
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private async Task<int> CreateInvitation(Credential credential)
+        {
+            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
+            var invitationUrl = invitation.Value<string>("invitation_url");
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
+
+            credential.Base64QRCode = qrCodeImageAsBase64;
+            return await _context.SaveChangesAsync();
         }
 
         // Handle webhook events for connection states.
