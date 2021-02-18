@@ -136,6 +136,7 @@ namespace Prime.Services
                 if (success)
                 {
                     credential.RevokedCredentialDate = DateTimeOffset.Now;
+                    await _verifiableCredentialClient.SendMessageAsync(credential.ConnectionId, "This credential has been revoked.");
                 }
             }
 
