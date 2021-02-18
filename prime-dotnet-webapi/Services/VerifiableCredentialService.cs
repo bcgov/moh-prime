@@ -72,7 +72,7 @@ namespace Prime.Services
                     return true;
                 case WebhookTopic.BasicMessage:
                     _logger.LogInformation("Basic Message data: for {@JObject}", JsonConvert.SerializeObject(data));
-                    return true;
+                    return false;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
