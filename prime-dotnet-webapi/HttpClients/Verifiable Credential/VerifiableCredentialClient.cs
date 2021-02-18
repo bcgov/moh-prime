@@ -121,7 +121,6 @@ namespace Prime.HttpClients
             return true;
         }
 
-
         public async Task<string> GetSchemaId(string did)
         {
             HttpResponseMessage response = null;
@@ -271,10 +270,41 @@ namespace Prime.HttpClients
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::DeleteCredentialAsync");
+                return false;
             }
 
             _logger.LogInformation("Deleting credential cred_ex_id={id} success", credential.CredentialExchangeId);
+
+            return true;
+        }
+
+        public async Task<bool> SendMessageAsync(string connectionId, string content)
+        {
+            _logger.LogInformation("Sending a message to connection_id={id}", connectionId);
+
+            JObject messageObject = new JObject
+            {
+                { "content", content }
+            };
+
+            var httpContent = new StringContent(messageObject.ToString(), Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = null;
+            try
+            {
+                response = await _client.PostAsync($"connections/{connectionId}/send-message", httpContent);
+            }
+            catch (Exception ex)
+            {
+                await LogError(response, ex);
+                throw new VerifiableCredentialApiException("Error occurred attempting to send a message to the connection: ", ex);
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await LogError(response);
+                return false;
+            }
 
             return true;
         }

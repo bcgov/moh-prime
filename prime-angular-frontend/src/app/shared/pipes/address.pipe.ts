@@ -6,10 +6,18 @@ import { StringUtils } from '@lib/utils/string-utils.class';
   name: 'address'
 })
 export class AddressPipe implements PipeTransform {
-  // TODO include country if/when needed, and use second param to exclude
-  public transform(model: Address): string {
-    return (model?.street && model?.city && model?.provinceCode && model?.postal)
-      ? `${model.street}, ${model.city} ${model.provinceCode}. ${StringUtils.splice(model.postal.toUpperCase(), 3, ' ')}`
-      : '';
+  public transform(address: Address): string {
+    if (Address.isEmpty(address)) {
+      return '';
+    }
+
+    const street2 = (address?.street2) ? ` ${address?.street2}` : '';
+    const postal = StringUtils.splice(address.postal.replace(/\s/g, '').toUpperCase(), 3, ' ');
+
+    if (address?.street && address?.city && address?.provinceCode && address?.postal) {
+
+    }
+
+    return `${address.street}${street2}, ${address.city} ${address.provinceCode}. ${postal}`;
   }
 }

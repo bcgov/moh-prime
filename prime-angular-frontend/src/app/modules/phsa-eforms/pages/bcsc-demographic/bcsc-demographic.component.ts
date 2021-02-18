@@ -27,7 +27,7 @@ export class BcscDemographicComponent implements OnInit {
   public enrollee: PhsaEnrollee;
   public form: FormGroup;
   public busy: Subscription;
-  public hasValidatedAddress: boolean;
+  public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
@@ -70,7 +70,7 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasValidatedAddress);
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   public ngOnInit(): void {
@@ -96,8 +96,8 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   private initForm(): void {
-    this.hasValidatedAddress = Address.isNotEmpty(this.enrollee.verifiedAddress);
-    if (!this.hasValidatedAddress) {
+    this.hasVerifiedAddress = Address.isNotEmpty(this.enrollee.verifiedAddress);
+    if (!this.hasVerifiedAddress) {
       this.clearAddressValidator(this.verifiedAddress);
       this.setAddressValidator(this.physicalAddress);
     }
