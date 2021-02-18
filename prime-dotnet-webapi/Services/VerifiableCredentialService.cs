@@ -79,29 +79,20 @@ namespace Prime.Services
         }
 
         // Create an invitation to establish a connection between the agents.
-        public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
+        public async Task<bool> CreateConnectionAsync(Enrollee enrollee)
         {
             var alias = enrollee.Id.ToString();
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
-            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
-            var invitationUrl = invitation.Value<string>("invitation_url");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
             var credential = new Credential
             {
                 SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
-                Alias = alias,
-                Base64QRCode = qrCodeImageAsBase64
+                Alias = alias
             };
             _context.Credentials.Add(credential);
-            await _context.SaveChangesAsync();
 
             var enrolleeCredential = new EnrolleeCredential
             {
@@ -112,12 +103,29 @@ namespace Prime.Services
             _context.EnrolleeCredentials.Add(enrolleeCredential);
 
             var created = await _context.SaveChangesAsync();
+
+            await CreateInvitation(credential);
+
             if (created < 1)
             {
                 throw new InvalidOperationException("Could not store connection invitation.");
             }
 
-            // TODO after testing don't need to pass back the invitation
+            return true;
+        }
+
+        private async Task<Object> CreateInvitation(Credential credential)
+        {
+            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
+            var invitationUrl = invitation.Value<string>("invitation_url");
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
+
+            credential.Base64QRCode = qrCodeImageAsBase64;
+            await _context.SaveChangesAsync();
             return invitation;
         }
 
