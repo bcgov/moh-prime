@@ -64,8 +64,8 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
     this.vendorChangeDialogOptions = {
       title: 'Vendor Change',
       message: `CareConnect does not support remote access to PharmaNet, all the remote
-                  practitioners you have submitted in the application will be deleted and
-                  do not have permission to access PharmaNet remotely.`
+                practitioners you have submitted in the application will be deleted and
+                do not have permission to access PharmaNet remotely.`
     };
     this.filteredVendorConfig = [];
   }

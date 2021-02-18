@@ -54,6 +54,26 @@ namespace Prime.Services
             _logger = logger;
         }
 
+        // Handle webhook events pushed by the issuing agent.
+        public async Task<bool> WebhookAsync(JObject data, string topic)
+        {
+            _logger.LogInformation("Webhook topic \"{topic}\"", topic);
+
+            switch (topic)
+            {
+                case WebhookTopic.Connections:
+                    return await HandleConnectionAsync(data);
+                case WebhookTopic.IssueCredential:
+                    return await HandleIssueCredentialAsync(data);
+                case WebhookTopic.RevocationRegistry:
+                    _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return true;
+                default:
+                    _logger.LogError("Webhook {topic} is not supported", topic);
+                    return false;
+            }
+        }
+
         // Create an invitation to establish a connection between the agents.
         public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
         {
@@ -97,26 +117,6 @@ namespace Prime.Services
             return invitation;
         }
 
-        // Handle webhook events pushed by the issuing agent.
-        public async Task<bool> WebhookAsync(JObject data, string topic)
-        {
-            _logger.LogInformation("Webhook topic \"{topic}\"", topic);
-
-            switch (topic)
-            {
-                case WebhookTopic.Connections:
-                    return await HandleConnectionAsync(data);
-                case WebhookTopic.IssueCredential:
-                    return await HandleIssueCredentialAsync(data);
-                case WebhookTopic.RevocationRegistry:
-                    _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
-                    return true;
-                default:
-                    _logger.LogError("Webhook {topic} is not supported", topic);
-                    return false;
-            }
-        }
-
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
         {
             var enrolleeCredentials = await _context.EnrolleeCredentials
@@ -129,7 +129,11 @@ namespace Prime.Services
 
             foreach (var credential in enrolleeCredentials)
             {
-                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
+                var success = credential.AcceptedCredentialDate == null
+                    ? await _verifiableCredentialClient.DeleteCredentialAsync(credential)
+                    : await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+
+                if (success)
                 {
                     credential.RevokedCredentialDate = DateTimeOffset.Now;
                 }
@@ -150,11 +154,11 @@ namespace Prime.Services
             switch (state)
             {
                 case ConnectionState.Invitation:
+                    // Enrollee Id stored as alias on invitation
+                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
                     return true;
 
                 case ConnectionState.Request:
-                    // Enrollee Id stored as alias on invitation
-                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
                     return true;
 
                 case ConnectionState.Response:
@@ -252,6 +256,7 @@ namespace Prime.Services
 
             if (credential == null || credential.AcceptedCredentialDate != null)
             {
+                _logger.LogInformation("Cannot issue credential, credential with this connectionId:{connectionId} from database is null, or a credential has already been accepted.", connectionId);
                 return null;
             }
 

@@ -61,7 +61,7 @@ export class MockAuthService implements IAuthService {
       lastName: faker.name.lastName(),
       givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past().toISOString(),
-      validatedAddress: {
+      verifiedAddress: {
         countryCode: faker.address.countryCode(),
         provinceCode: faker.address.stateAbbr(),
         street: faker.address.streetAddress(),

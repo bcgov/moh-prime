@@ -29,7 +29,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         preferredMiddleName: null,
         preferredLastName: null,
         dateOfBirth: faker.date.past(2).toDateString(),
-        validatedAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
+        verifiedAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
         mailingAddress: new Address(),
         physicalAddress: new Address(),
         email: faker.internet.email(),
