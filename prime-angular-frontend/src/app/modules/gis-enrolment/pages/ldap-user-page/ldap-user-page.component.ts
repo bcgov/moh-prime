@@ -53,7 +53,7 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected patchForm(): void {
-    this.form.
+
   }
 
   protected initForm(): void {
