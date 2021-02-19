@@ -10,14 +10,9 @@ namespace Prime.Models
     {
         public Guid UserId { get; set; }
 
-        public bool EditableBy(ClaimsPrincipal user)
+        public bool AccessableBy(ClaimsPrincipal user)
         {
-            return user.IsAdmin() || MatchesUserIdOf(user);
-        }
-
-        public bool ViewableBy(ClaimsPrincipal user)
-        {
-            return user.HasAdminView() || MatchesUserIdOf(user);
+            return user.IsAdministrant() || MatchesUserIdOf(user);
         }
 
         public bool MatchesUserIdOf(ClaimsPrincipal user)

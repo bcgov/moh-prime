@@ -5,7 +5,9 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { AuthRoutes } from '@auth/auth.routes';
+import { Role } from '../enum/role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,7 @@ export class AuthorizationRedirectGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
+    private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
@@ -35,13 +38,13 @@ export class AuthorizationRedirectGuard extends BaseGuard {
 
       let destinationRoute = this.config.routes.denied;
 
-      if (this.authService.isPhsa()) {
+      if (this.permissionService.hasAnyRole([Role.PHSA_LABTECH, Role.PHSA_IMMUNIZER])) {
         destinationRoute = this.config.routes.phsa;
-      } else if (this.authService.isEnrollee()) {
+      } else if (this.permissionService.hasRoles(Role.ENROLLEE)) {
         destinationRoute = (routePath.slice(1) === AuthRoutes.SITE)
           ? this.config.routes.site
           : this.config.routes.enrolment;
-      } else if (this.authService.hasAdminView()) {
+      } else if (this.permissionService.hasRoles(Role.ADMIN)) {
         destinationRoute = this.config.routes.adjudication;
       }
 

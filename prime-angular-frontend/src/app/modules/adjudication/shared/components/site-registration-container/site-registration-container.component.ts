@@ -17,11 +17,12 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { Role } from '@auth/shared/enum/role.enum';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
@@ -57,7 +58,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     protected organizationResource: OrganizationResource,
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
-    private authService: AuthService,
+    private permissionService: PermissionService,
     private utilResource: UtilsService,
     private dialog: MatDialog
   ) {
@@ -340,7 +341,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   private deleteResource<T>(dialogOptions: DialogOptions, deleteRequest$: Observable<T>): Observable<T> {
-    if (this.authService.isSuperAdmin()) {
+    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
       return this.dialog.open(ConfirmDialogComponent, { data: dialogOptions })
         .afterClosed()
         .pipe(

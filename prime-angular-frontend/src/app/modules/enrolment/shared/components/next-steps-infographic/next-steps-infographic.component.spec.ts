@@ -8,6 +8,8 @@ import { NextStepsInfographicComponent } from './next-steps-infographic.componen
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { MockPermissionService } from 'test/mocks/mock-permission-service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 
 describe('NextStepsInfographicComponent', () => {
@@ -28,6 +30,10 @@ describe('NextStepsInfographicComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         },
         KeycloakService
       ]

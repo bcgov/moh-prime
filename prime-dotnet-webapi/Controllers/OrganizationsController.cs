@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-using AutoMapper;
 
 using Prime.Auth;
 using Prime.Models;
@@ -22,36 +18,27 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class OrganizationsController : ControllerBase
     {
-        private readonly IMapper _mapper;
         private readonly IOrganizationService _organizationService;
 
         private readonly IAgreementService _agreementService;
         private readonly IPartyService _partyService;
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IDocumentService _documentService;
-        private readonly IPdfService _pdfService;
         private readonly ISiteService _siteService;
 
         public OrganizationsController(
-            IMapper mapper,
             IOrganizationService organizationService,
             IAgreementService agreementService,
             IPartyService partyService,
             IDocumentService documentService,
-            IRazorConverterService razorConverterService,
-            IPdfService pdfService,
             ISiteService siteService)
         {
-            _mapper = mapper;
             _organizationService = organizationService;
             _agreementService = agreementService;
             _partyService = partyService;
-            _razorConverterService = razorConverterService;
             _documentService = documentService;
-            _pdfService = pdfService;
             _siteService = siteService;
         }
 
@@ -67,7 +54,7 @@ namespace Prime.Controllers
         {
             IEnumerable<OrganizationListViewModel> organizations;
 
-            if (User.HasAdminView())
+            if (User.IsAdministrant())
             {
                 var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
                 organizations = await _organizationService.GetOrganizationsAsync();
@@ -103,7 +90,7 @@ namespace Prime.Controllers
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -200,7 +187,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpDelete("{organizationId}", Name = nameof(DeleteOrganization))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -212,7 +199,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -259,7 +246,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -359,7 +346,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -397,7 +384,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
