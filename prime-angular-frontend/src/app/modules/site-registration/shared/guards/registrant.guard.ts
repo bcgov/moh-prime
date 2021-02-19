@@ -1,10 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Role } from '@auth/shared/enum/role.enum';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ export class RegistrantGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
+    private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
@@ -26,7 +29,7 @@ export class RegistrantGuard extends BaseGuard {
    */
   protected canAccess(authenticated: boolean, routePath: string): Promise<boolean> {
     return new Promise(async (resolve, reject) => {
-      if (authenticated && this.authService.isEnrollee()) {
+      if (authenticated && this.permissionService.hasRoles(Role.ENROLLEE)) {
         return resolve(true);
       }
 

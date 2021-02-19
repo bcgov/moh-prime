@@ -11,11 +11,14 @@ import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { AuthRoutes } from '@auth/auth.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+
 
 interface DashboardNavSectionV1 {
   items: DashboardNavSectionItemV1[];
@@ -54,6 +57,7 @@ export class DashboardV1Component implements OnInit {
     private router: Router,
     private routeStateService: RouteStateService,
     private authService: AuthService,
+    private permissionService: PermissionService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
     private logger: LoggerService
@@ -87,7 +91,7 @@ export class DashboardV1Component implements OnInit {
     // the existence of PHSA
     let routePath = AuthRoutes.routePath(AuthRoutes.INFO);
 
-    if (this.authService.hasAdminView()) {
+    if (this.permissionService.hasRoles(Role.ADMIN)) {
       routePath = `${routePath}/${AuthRoutes.ADMIN}`;
     }
 
@@ -101,7 +105,7 @@ export class DashboardV1Component implements OnInit {
     // Initialize the side navigation based on the type of user
     this.dashboardNavSections = this.getSideNavSections();
 
-    if (this.authService.isEnrollee()) {
+    if (this.permissionService.hasRoles(Role.ENROLLEE)) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
       merge(

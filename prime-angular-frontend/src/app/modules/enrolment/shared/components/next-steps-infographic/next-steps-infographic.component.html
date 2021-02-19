@@ -27,7 +27,7 @@
       PharmaNet administrator contacts you.
     </p>
   </div>
-  <div *ngIf="hasVCIssuance"
+  <div *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
        class="col-12 info">
     <h5>
       3. Access your verified credential (optional)
@@ -36,7 +36,7 @@
       <button mat-flat-button
               type="button"
               color="primary"
-              *ngIf="hasVCIssuance"
+              *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
               (click)="openQR($event)">
         Verified Credential
       </button>

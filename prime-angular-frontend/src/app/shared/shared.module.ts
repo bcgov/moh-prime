@@ -29,6 +29,8 @@ import { SafePipe } from '@shared/pipes/safe.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
+import { RolePipe } from '@shared/pipes/role-pipe';
+import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { PageComponent } from '@shared/components/page/page.component';
@@ -94,8 +96,10 @@ import { PageSectionComponent } from './components/page-section/page-section.com
     SafePipe,
     CasePipe,
     AddressPipe,
-    DefaultPipe,
+    RolePipe,
+    InRolePipe,
     AddressFormComponent,
+    DefaultPipe,
     ConfirmDialogComponent,
     PageComponent,
     ProgressIndicatorComponent,
@@ -182,6 +186,8 @@ import { PageSectionComponent } from './components/page-section/page-section.com
     FullnamePipe,
     SafePipe,
     AddressPipe,
+    RolePipe,
+    InRolePipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
