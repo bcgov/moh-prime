@@ -30,13 +30,11 @@ describe('InRolePipe', () => {
     (permissionService: PermissionService, inRolePipe: InRolePipe) => {
       spy = spyOn(permissionService, 'hasRoles').and.returnValue(true);
       expect(inRolePipe.transform(Role.ADMIN)).toBe(true);
-      expect(inRolePipe.transform(Role.ADMIN, false)).toBe(false);
     }));
 
   it('should transform from multiple roles', inject([PermissionService, InRolePipe],
     (permissionService: PermissionService, inRolePipe: InRolePipe) => {
       spy = spyOn(permissionService, 'hasRoles').and.returnValue(true);
       expect(inRolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN])).toBe(true);
-      expect(inRolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN], false)).toBe(false);
     }));
 });

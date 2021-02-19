@@ -11,7 +11,7 @@ export class InRolePipe implements PipeTransform {
     private rolePipe: RolePipe
   ) { }
 
-  public transform(roles: Role | Role[], onlyIf: boolean = true): boolean {
-    return this.rolePipe.transform(roles, 'in', onlyIf);
+  public transform(roles: Role | Role[]): boolean {
+    return this.rolePipe.transform(roles, 'in');
   }
 }

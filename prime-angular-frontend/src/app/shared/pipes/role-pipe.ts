@@ -15,10 +15,10 @@ export class RolePipe implements PipeTransform {
     private permissionService: PermissionService
   ) { }
 
-  public transform(roles: Role | Role[], mode: 'in' | 'notIn' = 'in', onlyIf: boolean = true): boolean {
+  public transform(roles: Role | Role[], mode: 'in' | 'notIn' = 'in'): boolean {
     // For simplicity, notIn is now just implmented as a straight negate of 'in'
     // 'notIn' will yield equivilant result of not having any role from the input
     // roles.
-    return (mode === 'in') && this.permissionService.hasRoles(roles) && onlyIf;
+    return (mode === 'in') && this.permissionService.hasRoles(roles);
   }
 }
