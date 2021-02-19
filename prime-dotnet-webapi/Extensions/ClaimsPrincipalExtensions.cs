@@ -24,16 +24,6 @@ namespace Prime
             return User.IsInRole(Roles.PrimeAdministrant);
         }
 
-        public static bool HasViewEnrollee(this ClaimsPrincipal User)
-        {
-            return User.IsInRole(Roles.ViewEnrollee);
-        }
-
-        public static bool HasViewSite(this ClaimsPrincipal User)
-        {
-            return User.IsInRole(Roles.ViewSite);
-        }
-
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
         {
             string assuranceLevel = User?.FindFirstValue(Claims.AssuranceLevel);

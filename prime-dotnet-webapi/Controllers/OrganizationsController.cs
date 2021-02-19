@@ -54,7 +54,7 @@ namespace Prime.Controllers
         {
             IEnumerable<OrganizationListViewModel> organizations;
 
-            if (User.HasViewSite())
+            if (User.IsAdmin())
             {
                 var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
                 organizations = await _organizationService.GetOrganizationsAsync();

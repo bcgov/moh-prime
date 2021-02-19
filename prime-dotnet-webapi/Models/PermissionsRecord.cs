@@ -17,8 +17,7 @@ namespace Prime.Models
 
         public bool ViewableBy(ClaimsPrincipal user)
         {
-            // TODO: Tighten restrictions
-            return user.HasViewEnrollee() || user.HasViewSite() || MatchesUserIdOf(user);
+            return user.IsAdmin() || MatchesUserIdOf(user);
         }
 
         public bool MatchesUserIdOf(ClaimsPrincipal user)
