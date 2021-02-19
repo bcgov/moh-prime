@@ -55,7 +55,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -208,7 +208,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }

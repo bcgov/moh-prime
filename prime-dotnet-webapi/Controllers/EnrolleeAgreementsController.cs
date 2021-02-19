@@ -61,14 +61,14 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
 
             var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
@@ -94,7 +94,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -117,7 +117,7 @@ namespace Prime.Controllers
                 enrolmentCards.Add(card);
             }
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
@@ -144,7 +144,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -155,7 +155,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
@@ -182,7 +182,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -199,7 +199,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
             }
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
@@ -226,7 +226,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }

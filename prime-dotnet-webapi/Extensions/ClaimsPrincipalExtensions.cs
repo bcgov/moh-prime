@@ -19,7 +19,7 @@ namespace Prime
             return userId == null ? Guid.Empty : new Guid(userId);
         }
 
-        public static bool IsAdmin(this ClaimsPrincipal User)
+        public static bool IsAdministrant(this ClaimsPrincipal User)
         {
             return User.IsInRole(Roles.PrimeAdministrant);
         }

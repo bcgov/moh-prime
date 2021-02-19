@@ -51,7 +51,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
@@ -78,17 +78,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeViewModel>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdmin());
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdministrant());
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!enrollee.PermissionsRecord().ViewableBy(User))
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
             }
@@ -170,6 +170,7 @@ namespace Prime.Controllers
         /// <param name="enrollee"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -188,7 +189,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -256,7 +257,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -553,6 +554,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocument"></param>
         [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(CreateSelfDeclarationDocument))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -565,7 +567,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -594,7 +596,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -624,7 +626,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }

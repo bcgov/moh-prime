@@ -54,7 +54,7 @@ namespace Prime.Controllers
         {
             IEnumerable<OrganizationListViewModel> organizations;
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
                 organizations = await _organizationService.GetOrganizationsAsync();
@@ -90,7 +90,7 @@ namespace Prime.Controllers
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -199,7 +199,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -246,7 +246,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -346,7 +346,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -384,7 +384,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
-            if (!organization.SigningAuthority.PermissionsRecord().EditableBy(User))
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }

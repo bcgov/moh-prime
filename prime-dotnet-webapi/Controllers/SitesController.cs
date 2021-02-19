@@ -91,7 +91,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -147,7 +147,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -175,7 +175,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -266,7 +266,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -292,7 +292,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -325,7 +325,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -364,7 +364,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -402,7 +402,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -455,7 +455,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -485,7 +485,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -601,7 +601,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -628,7 +628,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -685,7 +685,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -716,7 +716,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
