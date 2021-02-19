@@ -7,7 +7,7 @@ namespace Prime.Services
 {
     public interface IVerifiableCredentialService
     {
-        Task<JObject> CreateConnectionAsync(Enrollee enrollee);
+        Task<bool> CreateConnectionAsync(Enrollee enrollee);
         Task<bool> WebhookAsync(JObject data, string topic);
         Task<bool> RevokeCredentialsAsync(int enrolleeId);
     }
