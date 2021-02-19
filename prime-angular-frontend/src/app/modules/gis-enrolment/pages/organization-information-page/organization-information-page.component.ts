@@ -8,6 +8,7 @@ import { ConfigService } from '@config/config.service';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
+import { OrganizationInformationPageFormState } from './organization-information-page-form-state.class';
 
 @Component({
   selector: 'app-organization-information-page',
@@ -17,6 +18,7 @@ import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment
 export class OrganizationInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;
   public title: string;
+  public formState: OrganizationInformationPageFormState;
   public form: FormGroup;
 
   constructor(
@@ -48,12 +50,12 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   protected createFormInstance(): void {
-    this.formState = this.formStateService.ldapUserPageFormState;
+    this.formState = this.formStateService.organizationInformationPageFormState;
     this.form = this.formState.form;
   }
 
   protected patchForm(): void {
-
+    throw new Error('Method not implemented.');
   }
 
   protected initForm(): void {

@@ -8,6 +8,7 @@ import { ConfigService } from '@config/config.service';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
+import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
 @Component({
   selector: 'app-ldap-information-page',
@@ -17,6 +18,7 @@ import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;
   public title: string;
+  public formState: LdapInformationPageFormState;
   public form: FormGroup;
 
   constructor(
@@ -48,12 +50,12 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected createFormInstance(): void {
-    this.formState = this.formStateService.ldapUserPageFormState;
+    this.formState = this.formStateService.ldapInformationPageFormState;
     this.form = this.formState.form;
   }
 
   protected patchForm(): void {
-
+    throw new Error('Method not implemented.');
   }
 
   protected initForm(): void {
