@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GisGuardGuard } from './gis-guard.guard';
+import { GisEnrolmentGuard } from './gis-enrolment.guard';
 
-describe('GisGuardGuard', () => {
-  let guard: GisGuardGuard;
+describe('GisEnrolmentGuard', () => {
+  let guard: GisEnrolmentGuard;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    guard = TestBed.inject(GisGuardGuard);
+    guard = TestBed.inject(GisEnrolmentGuard);
   });
 
   it('should be created', () => {

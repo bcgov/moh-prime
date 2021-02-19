@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { EnrolleeInformationPageComponent } from './enrollee-information-page.component';
 
-export const route: string = 'enrollee-info';
-
 const routes: Routes = [
   {
     path: '',

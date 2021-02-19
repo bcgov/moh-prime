@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { GisLoginPageComponent } from './gis-login-page.component';
 
-export const route: string = 'gis';
-
 const routes: Routes = [
   {
     path: '',

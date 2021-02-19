@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LdapInformationPageComponent } from './ldap-information-page.component';
 
-export const route: string = 'ldap-info';
-
 const routes: Routes = [
   {
     path: '',

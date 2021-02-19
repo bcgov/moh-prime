@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { OrganizationInformationPageComponent } from './organization-information-page.component';
 
-export const route: string = 'org-info';
-
 const routes: Routes = [
   {
     path: '',

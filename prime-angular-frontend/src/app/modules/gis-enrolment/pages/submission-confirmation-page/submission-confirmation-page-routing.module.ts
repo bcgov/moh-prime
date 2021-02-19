@@ -3,8 +3,6 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { SubmissionConfirmationPageComponent } from './submission-confirmation-page.component';
 
-export const route: string = 'confirmation';
-
 const routes: Routes = [
   {
     path: '',

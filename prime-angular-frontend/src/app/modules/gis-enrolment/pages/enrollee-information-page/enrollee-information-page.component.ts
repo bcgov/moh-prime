@@ -5,8 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 
 import { ConfigService } from '@config/config.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { EnrolleeInformationPageFormState } from './enrollee-information-page-form-state.class';
 
@@ -21,6 +23,8 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   public formState: EnrolleeInformationPageFormState;
   public form: FormGroup;
 
+  private routeUtils: RouteUtils;
+
   constructor(
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
@@ -31,6 +35,7 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
     super(formUtilsService);
 
     this.title = route.snapshot.data.title;
+    this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
   public get phone(): FormControl {
@@ -42,7 +47,7 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   }
 
   public onSubmit() {
-
+    this.routeUtils.routeRelativeTo([`${GisEnrolmentRoutes.SUBMISSION_CONFIRMATION}`]);
   }
 
   public ngOnInit(): void {
