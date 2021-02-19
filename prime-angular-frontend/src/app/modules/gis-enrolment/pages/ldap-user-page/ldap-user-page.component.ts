@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -29,8 +28,7 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
-    private formStateService: GisEnrolmentFormStateService,
-    private configService: ConfigService
+    private formStateService: GisEnrolmentFormStateService
   ) {
     super(
       formUtilsService
