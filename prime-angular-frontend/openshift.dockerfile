@@ -2,7 +2,7 @@
 ### Stage 1 - Build environment ###
 ###################################
 # FROM docker-remote.artifacts.developer.gov.bc.ca/node:12
-FROM https://index.docker.io/v1/node:dubnium
+FROM public.ecr.aws/bitnami/node:14
 
 # Set working directory
 RUN mkdir /usr/src/app
@@ -38,7 +38,7 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM https://index.docker.io/v1/nginx:stable
+FROM public.ecr.aws/nginx/nginx:stable
 
 WORKDIR /app
 
