@@ -19,20 +19,28 @@ describe('RolePipe', () => {
     });
   });
 
-  it('should create', inject([RolePipe], (pipe: RolePipe) => {
-    expect(pipe).toBeTruthy();
+  it('should create', inject([RolePipe], (rolePipe: RolePipe) => {
+    expect(rolePipe).toBeTruthy();
   }));
 
   it('should transform', inject([RolePipe, PermissionService],
-    (pipe: RolePipe, permissionService: PermissionService) => {
+    (rolePipe: RolePipe, permissionService: PermissionService) => {
       spy = spyOn(permissionService, 'hasRoles').and.returnValue(true);
-      expect(pipe.transform(Role.ADMIN)).toBe(true);
+      expect(rolePipe.transform(Role.ADMIN)).toBe(true);
+      expect(rolePipe.transform(Role.ADMIN, undefined, false)).toBe(false);
+      expect(rolePipe.transform(Role.ADMIN, 'in')).toBe(true);
+      expect(rolePipe.transform(Role.ADMIN, 'in', false)).toBe(false);
+      expect(rolePipe.transform(Role.ADMIN, 'notIn')).toBe(false);
+      expect(rolePipe.transform(Role.ADMIN, 'notIn', false)).toBe(false)
     }));
 
   it('should transform from multiple roles', inject([RolePipe, PermissionService],
-    (pipe: RolePipe, permissionService: PermissionService) => {
+    (rolePipe: RolePipe, permissionService: PermissionService) => {
       spy = spyOn(permissionService, 'hasRoles').and.returnValue(true);
-      expect(pipe.transform([Role.ADMIN, Role.SUPER_ADMIN])).toBe(true);
+      expect(rolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN])).toBe(true);
+      expect(rolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN], undefined, false)).toBe(false);
+      expect(rolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN], 'in')).toBe(true);
+      expect(rolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN], 'in', false)).toBe(false);
+      expect(rolePipe.transform([Role.ADMIN, Role.SUPER_ADMIN], 'notIn', false)).toBe(false);
     }));
-
 });
