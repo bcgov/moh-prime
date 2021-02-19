@@ -93,8 +93,6 @@ objects:
       type: Git
     strategy:
       dockerStrategy:
-        pullSecret:
-          name: docker-creds
         dockerfilePath: openshift.dockerfile
         noCache: true
         env:
