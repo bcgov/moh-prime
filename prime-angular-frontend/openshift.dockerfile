@@ -1,8 +1,8 @@
-#########################################
+###################################
 ### Stage 1 - Build environment ###
-#########################################
+###################################
 # FROM docker-remote.artifacts.developer.gov.bc.ca/node:12
-FROM docker.io/node:dubnium
+FROM https://index.docker.io/v1/node:dubnium
 
 # Set working directory
 RUN mkdir /usr/src/app
@@ -38,7 +38,7 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM docker.io/nginx:stable
+FROM https://index.docker.io/v1/nginx:stable
 
 WORKDIR /app
 
