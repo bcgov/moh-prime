@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -46,8 +46,8 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
     return this.form.get('email') as FormControl;
   }
 
-  public onSubmit() {
-    this.routeUtils.routeRelativeTo([`${GisEnrolmentRoutes.SUBMISSION_CONFIRMATION}`]);
+  public onBack() {
+    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
   }
 
   public ngOnInit(): void {
@@ -67,7 +67,11 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
     throw new Error('Method not implemented.');
   }
 
-  protected performSubmission(): Observable<unknown> {
-    throw new Error('Method not implemented.');
+  protected performSubmission(): Observable<null> {
+    return of(null);
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.SUBMISSION_CONFIRMATION}`]);
   }
 }

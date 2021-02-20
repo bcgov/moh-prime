@@ -8,15 +8,16 @@
       <ng-container appPageSubheader2Title>
         LDAP Information
       </ng-container>
+      <ng-container appPageSubheader2Summary>
+        Enter your LDAP information below
+      </ng-container>
     </app-page-subheader2>
-
-    <p>Enter your LDAP information below</p>
 
     <form [formGroup]="form"
           (ngOnSubmit)="onSubmit()"
           novalidate>
       <div class="row">
-        <div class="col">
+        <div class="col-12">
 
           <mat-form-field class="w-100">
             <input matInput
@@ -26,7 +27,7 @@
           </mat-form-field>
 
         </div>
-        <div class="col">
+        <div class="col-12">
 
           <mat-form-field class="w-100">
             <input matInput
@@ -36,7 +37,17 @@
           </mat-form-field>
 
         </div>
+        <div class="col-12 text-right">
+          <button mat-button
+                  type="button"
+                  color="primary">Forgot your password?</button>
+        </div>
       </div>
     </form>
   </app-page-section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   (back)="onBack()"
+                   (save)="onSubmit()"></app-page-footer>
 </app-page>

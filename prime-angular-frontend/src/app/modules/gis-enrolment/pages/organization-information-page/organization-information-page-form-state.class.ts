@@ -1,9 +1,12 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-export interface OrganizationInformationPageFormModel { }
+export interface OrganizationInformationPageFormModel {
+  organization: string;
+  role: string;
+}
 
 export class OrganizationInformationPageFormState extends AbstractFormState<OrganizationInformationPageFormModel> {
   public constructor(
@@ -33,8 +36,8 @@ export class OrganizationInformationPageFormState extends AbstractFormState<Orga
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      phone: [null, []],
-      email: [null, []]
+      organization: [null, [Validators.required]],
+      role: [null, [Validators.required]]
     });
   }
 }

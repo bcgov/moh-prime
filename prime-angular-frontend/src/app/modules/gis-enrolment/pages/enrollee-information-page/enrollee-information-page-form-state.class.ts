@@ -1,7 +1,8 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 export interface EnrolleeInformationPageFormModel { }
 
@@ -33,8 +34,14 @@ export class EnrolleeInformationPageFormState extends AbstractFormState<Enrollee
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      organization: [null, []],
-      role: [null, []]
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]],
+      phone: [null, [
+        Validators.required,
+        FormControlValidators.phone
+      ]]
     });
   }
 }

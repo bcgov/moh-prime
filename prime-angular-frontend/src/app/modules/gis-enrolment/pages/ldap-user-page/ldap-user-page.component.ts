@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -42,10 +42,6 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     return this.form.get('ldapUser') as FormControl;
   }
 
-  public onSubmit() {
-    this.routeUtils.routeRelativeTo([`${GisEnrolmentRoutes.LDAP_INFO_PAGE}`]);
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
   }
@@ -63,7 +59,11 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     throw new Error('Method not implemented.');
   }
 
-  protected performSubmission(): Observable<unknown> {
-    throw new Error('Method not implemented.');
+  protected performSubmission(): Observable<null> {
+    return of(null);
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.LDAP_INFO_PAGE}`]);
   }
 }

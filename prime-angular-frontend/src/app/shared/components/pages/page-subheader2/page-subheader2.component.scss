@@ -15,14 +15,13 @@
   .summary {
     color: $paragraph-colour;
     // When description exists increase the margin between the title and description
-    margin-top: .45rem;
+    margin-top: 1rem;
     margin-bottom: 0;
   }
 
   .title + .more-info,
   .summary + .more-info {
     margin-top: .75rem;
-    // margin-bottom: .75rem;
   }
 
   .action-icon {

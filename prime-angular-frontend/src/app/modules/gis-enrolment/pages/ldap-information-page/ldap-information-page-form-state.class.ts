@@ -1,9 +1,12 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-export interface LdapInformationPageFormModel { }
+export interface LdapInformationPageFormModel {
+  ldapUsername: string;
+  ldapPassword: string;
+}
 
 export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageFormModel> {
   public constructor(
@@ -33,8 +36,8 @@ export class LdapInformationPageFormState extends AbstractFormState<LdapInformat
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      ldapUsername: [null, []],
-      ldapPassword: [null, []]
+      ldapUsername: [null, [Validators.required]],
+      ldapPassword: [null, [Validators.required]]
     });
   }
 }

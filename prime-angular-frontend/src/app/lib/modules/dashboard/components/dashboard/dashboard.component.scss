@@ -18,8 +18,8 @@
 // open when there is no content
 @mixin logo-spacing($width: 90px) {
   width: $width;
-  margin-left: $width / 2;
-  margin-right: $width / 2;
+  margin-left: $width;
+  margin-right: $width;
 }
 
 .logo {

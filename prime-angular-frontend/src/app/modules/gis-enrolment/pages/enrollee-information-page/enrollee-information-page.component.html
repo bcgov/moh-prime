@@ -8,38 +8,47 @@
       <ng-container appPageSubheader2Title>
         Enrollee Information
       </ng-container>
+      <ng-container appPageSubheader2Summary>
+        This information comes from your LDAP credential, provide missing information or update your information usng
+        the edit button.
+      </ng-container>
     </app-page-subheader2>
-
-    <p>
-      This information comes from your LDAP credential, provide missing information or update your information usng the
-      edit button.
-    </p>
 
     <form [formGroup]="form"
           (ngOnSubmit)="onSubmit()"
           novalidate>
       <div class="row">
-        <div class="col">
+        <div class="col-12">
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="LDAP User Name"
-                   formControlName="phone">
+                   placeholder="Phone"
+                   placeholder="Phone Number"
+                   formControlName="phone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
             <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
         </div>
-        <div class="col">
+        <div class="col-12">
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="LDAP Password"
+                   placeholder="Email"
                    formControlName="email">
             <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
           </mat-form-field>
 
         </div>
       </div>
     </form>
   </app-page-section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   (back)="onBack()"
+                   (save)="onSubmit()"></app-page-footer>
 </app-page>

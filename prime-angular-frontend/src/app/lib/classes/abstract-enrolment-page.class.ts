@@ -36,6 +36,12 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   public busy: Subscription;
   public abstract formState: AbstractFormState<unknown>;
   public form: FormGroup;
+  /**
+   * @description
+   * Indicator applied after an initial submission of
+   * the form occurs.
+   */
+  public hasAttemptedSubmission: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -45,6 +51,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   ) { }
 
   public onSubmit(): void {
+    this.hasAttemptedSubmission = true;
+
     if (this.formUtilsService.checkValidity(this.form)) {
       this.onSubmitFormIsValid();
       // Indicate whether the enrolment process has reached the terminal view, or
