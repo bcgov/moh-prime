@@ -1,8 +1,8 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-# FROM public.ecr.aws/bitnami/node:14
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1
+FROM public.ecr.aws/bitnami/node:14
+# FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 # Set working directory
 RUN mkdir /usr/src/app

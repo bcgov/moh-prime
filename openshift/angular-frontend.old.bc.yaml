@@ -1,0 +1,136 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: angular-frontend-bc
+  description: >-
+    Build configuration template for PRIME's Angular frontend component.
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: true
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
+- name: VANITY_URL
+  required: true
+  value: 'pharmanetenrolment.gov.bc.ca'
+- name: HTTP_SCHEMA
+  required: true
+  value: 'HTTPS'
+- name: HTTP_PORT
+  required: true
+  value: '8443'
+- name: TERMINATION_TYPE
+  required: true
+  value: 'passthrough'
+- name: REDIRECT_URL
+  required: true
+  value: "https://pharmanetenrolment.gov.bc.ca"
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: 
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+    tags:
+    - annotations: 
+      from:
+        kind: DockerImage
+        name: "${NAME}${SUFFIX}"
+      generation: 
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ''
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+      kompose.version: 1.18.0 (06a2e56)
+    creationTimestamp: 
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    completionDeadlineSeconds: 6000
+    nodeSelector: 
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "${NAME}${SUFFIX}:latest"
+    postCommit: {}
+    resources:
+      requests:
+        cpu: '1'
+        memory: 1Gi
+      limits:
+        cpu: '2'
+        memory: 4Gi
+    runPolicy: Serial
+    source:
+      contextDir: "${SOURCE_CONTEXT_DIR}"
+      git:
+        ref: "${SOURCE_REPOSITORY_REF}"
+        uri: "${SOURCE_REPOSITORY_URL}"
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: openshift.dockerfile
+        noCache: true
+        env:
+          - name: SUFFIX
+            value: "${SUFFIX}"
+          - name: REDIRECT_URL
+            value: "${REDIRECT_URL}"
+          - name: OC_APP
+            value: ${OC_APP}
+          
+          # Document Manager related environment variables
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://${VANITY_URL}/api/docman"
+
+          # Keycloak related environment variables
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: jwt_well_known_config                
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_client_id                
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_realm                
+          - name: KEYCLOAK_URL
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_url                
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+  status:
+    lastVersion: 0
