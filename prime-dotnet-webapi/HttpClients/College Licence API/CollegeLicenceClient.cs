@@ -54,7 +54,9 @@ namespace Prime.HttpClients
             // If we get a record back, it should have the same transaction UUID as our request.
             if (practicionerRecord != null && practicionerRecord.ApplicationUUID != requestParams.ApplicationUUID)
             {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.ApplicationUUID}\".");
+                var ex = new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.ApplicationUUID}\".");
+                await LogError(requestParams, response, ex);
+                throw ex;
             }
 
             return practicionerRecord;
