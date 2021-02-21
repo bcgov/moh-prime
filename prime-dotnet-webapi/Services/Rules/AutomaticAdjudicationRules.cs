@@ -65,10 +65,14 @@ namespace Prime.Services.Rules
     public class PharmanetValidationRule : AutomaticAdjudicationRule
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IBusinessEventService _businessEventService;
 
-        public PharmanetValidationRule(ICollegeLicenceClient collegeLicenceClient)
+        public PharmanetValidationRule(
+            ICollegeLicenceClient collegeLicenceClient,
+            IBusinessEventService businessEventService)
         {
             _collegeLicenceClient = collegeLicenceClient;
+            _businessEventService = businessEventService;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -98,10 +102,12 @@ namespace Prime.Services.Rules
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, $"API call to {Prime.PrimeEnvironment.PharmanetApi.Url} completed without basic errors.");
                 }
-                catch (PharmanetCollegeApiException)
+                catch (PharmanetCollegeApiException e)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, e.Message);
                     passed = false;
                     continue;
                 }
