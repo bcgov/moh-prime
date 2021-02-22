@@ -19,6 +19,6 @@ namespace Prime.Services
         Task SendSiteRegistrationSubmissionAsync(int siteId);
 
         Task SendEnrolleeRenewalEmails();
-        Task<int> UpdateEmailLogStatuses(int limit);
+        Task<int> UpdateEmailLogStatuses();
     }
 }

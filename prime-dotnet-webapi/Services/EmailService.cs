@@ -207,7 +207,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateEmailLogStatuses(int limit = 10)
+        public async Task<int> UpdateEmailLogStatuses()
         {
             var totalCount = await _context.EmailLogs
                 .Where(e => e.SendType == SendType.Ches
