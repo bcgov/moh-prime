@@ -19,6 +19,8 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
 RUN apt-get update
 
+COPY . .
+
 # Fill template with environment variables
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 
@@ -30,7 +32,6 @@ RUN npm install -g @angular/cli
 RUN npm install --silent
 
 # Add application
-COPY . .
 RUN ng build --prod
 
 
