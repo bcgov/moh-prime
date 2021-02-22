@@ -1,9 +1,24 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
+using Prime.Models;
 
-namespace Prime.Models
+namespace Prime.HttpClients.PharmanetCollegeApiDefinitions
 {
-    [NotMapped]
+    public class CollegeRecordRequestParams
+    {
+        public string ApplicationUUID { get; set; }
+        public string ProgramArea { get; set; }
+        public string LicenceNumber { get; set; }
+        public string CollegeReferenceId { get; set; }
+
+        public CollegeRecordRequestParams(string licencePrefix, string licenceNumber)
+        {
+            ApplicationUUID = Guid.NewGuid().ToString();
+            ProgramArea = "PRIME";
+            LicenceNumber = licenceNumber;
+            CollegeReferenceId = licencePrefix;
+        }
+    }
+
     public class PharmanetCollegeRecord
     {
         public string ApplicationUUID { get; set; }
