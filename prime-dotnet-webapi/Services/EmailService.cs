@@ -207,12 +207,19 @@ namespace Prime.Services
             }
         }
 
-        public async Task<bool> UpdateEmailLogStatuses()
+        public async Task<int> UpdateEmailLogStatuses(int limit = 10)
         {
+            var totalCount = await _context.EmailLogs
+                .Where(e => e.SendType == SendType.Ches
+                    && e.MsgId != null
+                    && e.LatestStatus != ChesStatus.Completed)
+                .CountAsync();
+
             var emailLogs = await _context.EmailLogs
                 .Where(e => e.SendType == SendType.Ches
                     && e.MsgId != null
                     && e.LatestStatus != ChesStatus.Completed)
+                .Take(limit)
                 .ToListAsync();
 
             foreach (var email in emailLogs)
@@ -223,8 +230,9 @@ namespace Prime.Services
                     email.LatestStatus = status;
                 }
             }
+            await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync() != 0;
+            return totalCount;
         }
 
         private async Task Send(Email email)
