@@ -32,7 +32,7 @@ export class GisDashboardComponent implements OnInit {
       showMobileToggle: false
     };
     this.dashboardSideNavConfig = {
-      imgSrc: '/assets/gis_brand.jpeg',
+      imgSrc: '/assets/gis_brand.png',
       imgAlt: 'GIS Logo'
     };
     this.dashboardMenuItems = this.getDashboardMenuItems();
