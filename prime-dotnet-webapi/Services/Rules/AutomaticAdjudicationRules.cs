@@ -102,7 +102,6 @@ namespace Prime.Services.Rules
                 try
                 {
                     record = await _collegeLicenceClient.GetCollegeRecordAsync(cert.License.Prefix, licenceNumber);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, $"API call to {Prime.PrimeEnvironment.PharmanetApi.Url} completed without basic errors.");
                 }
                 catch (PharmanetCollegeApiException e)
                 {
@@ -114,25 +113,32 @@ namespace Prime.Services.Rules
                 if (record == null)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Record not found in Pharmanet.");
                     passed = false;
                     continue;
                 }
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, $"{licenceText} returned \"{record.FirstName} {record.LastName}\".");
+                    string message = $"{licenceText} returned \"{record.FirstName} {record.LastName}\".";
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, message);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, message);
                     passed = false;
                 }
                 if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, $"{licenceText} returned {record.DateofBirth:d MMM yyyy}");
+                    string message = $"{licenceText} returned {record.DateofBirth:d MMM yyyy}";
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, message);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, message);
                     passed = false;
                 }
                 if (record.Status != "P")
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.Practicing, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Enrollee is not practicing.");
                     passed = false;
                 }
+                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Pharmanet API call matched successfully.");
             }
 
             return passed;
