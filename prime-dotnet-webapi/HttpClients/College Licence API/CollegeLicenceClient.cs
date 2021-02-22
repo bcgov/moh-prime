@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-using Prime.Models;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.HttpClients
 {
@@ -38,13 +38,13 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
-                await LogError(requestParams, response, ex);
+                await LogError(requestParams.ApplicationUUID, response, ex);
                 throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                await LogError(requestParams, response);
+                await LogError(requestParams.ApplicationUUID, response);
                 throw new PharmanetCollegeApiException($"Error code {response.StatusCode} was returned when calling Pharmanet API.");
             }
 
@@ -61,7 +61,7 @@ namespace Prime.HttpClients
         }
 
         // TODO use real logger
-        private async Task LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
+        private async Task LogError(string requestUUID, HttpResponseMessage response, Exception exception = null)
         {
             string secondaryMessage;
             if (exception != null)
@@ -78,23 +78,7 @@ namespace Prime.HttpClients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestParams.ApplicationUUID}, with {secondaryMessage}.");
-        }
-
-        private class CollegeRecordRequestParams
-        {
-            public string ApplicationUUID { get; set; }
-            public string ProgramArea { get; set; }
-            public string LicenceNumber { get; set; }
-            public string CollegeReferenceId { get; set; }
-
-            public CollegeRecordRequestParams(string licencePrefix, string licenceNumber)
-            {
-                ApplicationUUID = Guid.NewGuid().ToString();
-                ProgramArea = "PRIME";
-                LicenceNumber = licenceNumber;
-                CollegeReferenceId = licencePrefix;
-            }
+            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestUUID}, with {secondaryMessage}.");
         }
     }
 
