@@ -1,11 +1,9 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 using AutoMapper;
 
 using Prime.Auth;
@@ -19,39 +17,30 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SitesController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
-        private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
         private readonly IAdminService _adminService;
-        private readonly IBusinessEventService _businessEventService;
 
         public SitesController(
             IMapper mapper,
             ISiteService siteService,
-            IPartyService partyService,
             IOrganizationService organizationService,
-            IRazorConverterService razorConverterService,
             IEmailService emailService,
             IDocumentService documentService,
-            IAdminService adminService,
-            IBusinessEventService businessEventService)
+            IAdminService adminService)
         {
             _mapper = mapper;
             _siteService = siteService;
-            _partyService = partyService;
             _organizationService = organizationService;
-            _razorConverterService = razorConverterService;
             _emailService = emailService;
             _documentService = documentService;
             _adminService = adminService;
-            _businessEventService = businessEventService;
         }
 
         // GET: api/Sites
@@ -102,7 +91,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -158,7 +147,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -186,7 +175,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -203,7 +192,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="adjudicatorId"></param>
         [HttpPut("{siteId}/adjudicator", Name = nameof(SetSiteAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -239,7 +228,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/adjudicator", Name = nameof(RemoveSiteAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -277,7 +266,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -303,7 +292,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -336,7 +325,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -375,7 +364,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -413,7 +402,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -466,7 +455,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -496,7 +485,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -513,7 +502,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/adjudication-documents", Name = nameof(CreateSiteAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -543,7 +532,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -568,7 +557,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="documentId"></param>
         [HttpGet("{siteId}/adjudication-documents/{documentId}", Name = nameof(GetSiteAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -612,7 +601,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -639,7 +628,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
-            if (!site.Provisioner.PermissionsRecord().EditableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -696,7 +685,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -727,7 +716,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
             }
 
-            if (!site.Provisioner.PermissionsRecord().ViewableBy(User))
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -742,7 +731,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/approve", Name = nameof(ApproveSite))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -769,7 +758,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/decline", Name = nameof(DeclineSite))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -793,7 +782,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="note"></param>
         [HttpPost("{siteId}/site-registration-notes", Name = nameof(CreateSiteRegistrationNote))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -825,7 +814,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/site-registration-notes", Name = nameof(GetSiteRegistrationNotes))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -865,7 +854,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{siteId}/events", Name = nameof(GetSiteBusinessEvents))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -889,7 +878,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="documentId"></param>
         [HttpDelete("{siteId}/adjudication-documents/{documentId}", Name = nameof(DeleteSiteAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -915,7 +904,7 @@ namespace Prime.Controllers
         /// <param name="siteRegistrationNoteId"></param>
         /// <param name="assigneeId"></param>
         [HttpPost("{siteId}/site-registration-notes/{siteRegistrationNoteId}/notification", Name = nameof(CreateSiteNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -946,7 +935,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="siteRegistrationNoteId"></param>
         [HttpDelete("{siteId}/site-registration-notes/{siteRegistrationNoteId}/notification", Name = nameof(DeleteSiteNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -975,7 +964,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/notifications", Name = nameof(GetSiteNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1001,7 +990,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/notifications", Name = nameof(DeleteSiteNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

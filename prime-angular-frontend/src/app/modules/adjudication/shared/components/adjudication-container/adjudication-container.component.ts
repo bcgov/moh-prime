@@ -14,6 +14,7 @@ import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -22,7 +23,7 @@ import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manu
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -53,7 +54,7 @@ export class AdjudicationContainerComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
-    private authService: AuthService,
+    private permissionService: PermissionService,
     private dialog: MatDialog,
     private utilsService: UtilsService,
     private toastService: ToastService,
@@ -314,7 +315,7 @@ export class AdjudicationContainerComponent implements OnInit {
       component: NoteComponent,
     };
 
-    if (this.authService.isSuperAdmin()) {
+    if (this.permissionService.hasRoles(Role.SUPER_ADMIN)) {
       this.busy = this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(

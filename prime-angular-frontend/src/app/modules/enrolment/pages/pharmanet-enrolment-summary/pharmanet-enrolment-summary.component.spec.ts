@@ -4,7 +4,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
-
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { MockPermissionService } from 'test/mocks/mock-permission-service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
@@ -15,6 +16,7 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+
 
 describe('PharmanetEnrolmentSummaryComponent', () => {
   let component: PharmanetEnrolmentSummaryComponent;
@@ -45,6 +47,10 @@ describe('PharmanetEnrolmentSummaryComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: PermissionService,
+            useClass: MockPermissionService
           },
           KeycloakService
         ]

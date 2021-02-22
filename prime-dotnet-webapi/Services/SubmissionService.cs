@@ -105,7 +105,7 @@ namespace Prime.Services
         /// Performs a submission action on an Enrollee.
         /// Returns true if the Action was successfully performed.
         /// </summary>
-        public async Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, object additionalParameters = null)
+        public async Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, object additionalParameters = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Addresses)
@@ -121,7 +121,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (!SubmissionStateEngine.AllowableAction(action, enrollee, isAdmin))
+            if (!SubmissionStateEngine.AllowableAction(action, enrollee.CurrentStatus))
             {
                 return false;
             }

@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/document")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
     public class DocumentManagerController : ControllerBase
     {
         private readonly IDocumentManagerClient _client;

@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -26,10 +26,10 @@ export class SiteRegistrationTableComponent implements OnInit {
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public Role = Role;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
   ) {
     this.columns = [
       'prefixes',
@@ -51,10 +51,6 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.notify = new EventEmitter<number>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
   }
 
   public onAssign(siteId: number): void {
