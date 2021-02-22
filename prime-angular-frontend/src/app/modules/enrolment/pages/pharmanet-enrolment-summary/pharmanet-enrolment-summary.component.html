@@ -24,6 +24,19 @@
           </ng-container>
         </form>
 
+        <div>
+          <h6 class="mb-2">
+            For your reference your GPID is:
+          </h6>
+          <a mat-icon-button
+            aria-label="Copy to clipboard"
+            [cdkCopyToClipboard]="getGPID()"
+            class="small">
+            <mat-icon>content_copy</mat-icon>
+          </a>
+          <span class="ml-2">{{ getGPID() }}</span>
+        </div>
+
         <ng-template #settingEmail
                      let-setting="setting"
                      let-settingPlural="settingPlural"
