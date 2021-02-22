@@ -1,4 +1,5 @@
 @import 'palette';
+@import 'variables';
 @import 'bootstrap/bootstrap-imports';
 
 // NOTE: mat-sidenav is modified globally
@@ -8,7 +9,8 @@
   position: absolute;
   // Compensate for the application header, and the
   // progress indicator for HTTP requests and routing
-  top: 73px;
+  // @see dashboard-header.component.scss
+  top: $dashboard-header-height + 3px; // .mat-toolbar height + 3px
   bottom: 0;
   left: 0;
   right: 0;

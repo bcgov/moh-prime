@@ -1,2 +1,5 @@
-<app-dashboard [dashboardMenuItems]="dashboardMenuItems | async"
+<app-dashboard [headerConfig]="dashboardHeaderConfig"
+               [sideNavConfig]="dashboardSideNavConfig"
+               [menuItems]="dashboardMenuItems | async"
+               [responsiveMenuItems]="dashboardResponsiveMenuItems"
                [logoutRedirectUrl]="logoutRedirectUrl"></app-dashboard>
