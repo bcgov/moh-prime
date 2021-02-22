@@ -9,8 +9,6 @@ import { UtilsService } from '@core/services/utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
-import { AuthService } from '@auth/shared/services/auth.service';
-
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
@@ -29,14 +27,9 @@ export class OrganizationInformationComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private organizationResource: OrganizationResource,
-    private authService: AuthService,
     private utilsService: UtilsService
   ) {
     this.hasActions = true;
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
   }
 
   public viewAgreement(organization: Organization, organizationAgreement: OrganizationAgreementViewModel): void {

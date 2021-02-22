@@ -208,8 +208,7 @@ namespace Prime.Services
             ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
-            // Removed Temporarily
-            // ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
+            ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
 
             UpdateEnrolleeRemoteUsers(enrollee, updateModel);
             UpdateRemoteAccessSites(enrollee, updateModel);
@@ -689,7 +688,7 @@ namespace Prime.Services
             return reference;
         }
 
-        public async Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IBaseEnrolleeNote newNote)
+        public async Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, int adminId, IBaseEnrolleeNote newNote)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
@@ -723,6 +722,9 @@ namespace Prime.Services
             else if (newNote != null)
             {
                 newNote.EnrolleeId = enrolleeId;
+                // Know instance of AccessAgreementNote
+                ((AccessAgreementNote)newNote).AdjudicatorId = adminId;
+                newNote.NoteDate = DateTimeOffset.Now;
                 _context.Add(newNote);
             }
 

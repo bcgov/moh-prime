@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210208163321_StoreOnlySelectedHealthAuthorities")]
+    partial class StoreOnlySelectedHealthAuthorities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -13505,11 +13507,17 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
+
+                    b.Property<int>("PhysicalAddressId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("PreferredFirstName")
                         .HasColumnType("text");
@@ -13545,45 +13553,14 @@ namespace Prime.Migrations
                     b.HasIndex("HPDID")
                         .IsUnique();
 
+                    b.HasIndex("MailingAddressId");
+
+                    b.HasIndex("PhysicalAddressId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Enrollee");
-                });
-
-            modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("EnrolleeId", "AddressId")
-                        .IsUnique();
-
-                    b.ToTable("EnrolleeAddress");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeAdjudicationDocument", b =>
@@ -14328,9 +14305,6 @@ namespace Prime.Migrations
                     b.Property<string>("Prefix")
                         .HasColumnType("text");
 
-                    b.Property<int?>("PrescriberIdType")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -14806,11 +14780,11 @@ namespace Prime.Migrations
                             LicensedToProvideCare = true,
                             Manual = false,
                             Name = "Student Pharmacist",
-                            NamedInImReg = false,
+                            NamedInImReg = true,
                             Prefix = "P1",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false,
+                            Validate = true,
                             Weight = 3
                         },
                         new
@@ -14898,7 +14872,6 @@ namespace Prime.Migrations
                             Name = "Practicing Nurse Practitioner",
                             NamedInImReg = true,
                             Prefix = "96",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14929,7 +14902,6 @@ namespace Prime.Migrations
                             Name = "Temporary Nurse Practitioner (Special Event)",
                             NamedInImReg = true,
                             Prefix = "96",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14945,7 +14917,6 @@ namespace Prime.Migrations
                             Name = "Temporary Nurse Practitioner (Emergency)",
                             NamedInImReg = true,
                             Prefix = "96",
-                            PrescriberIdType = 2,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14976,7 +14947,6 @@ namespace Prime.Migrations
                             Name = "Practicing Registered Nurse",
                             NamedInImReg = false,
                             Prefix = "R9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -14994,7 +14964,7 @@ namespace Prime.Migrations
                             Prefix = "R9",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = false,
+                            Validate = true,
                             Weight = 7
                         },
                         new
@@ -15007,7 +14977,6 @@ namespace Prime.Migrations
                             Name = "Temporary Registered Nurse (Special Event)",
                             NamedInImReg = false,
                             Prefix = "R9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15023,10 +14992,9 @@ namespace Prime.Migrations
                             Name = "Temporary Registered Nurse (Emergency)",
                             NamedInImReg = false,
                             Prefix = "R9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Validate = true,
+                            Validate = false,
                             Weight = 9
                         },
                         new
@@ -15053,7 +15021,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Employed Student Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15068,8 +15036,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15084,7 +15051,7 @@ namespace Prime.Migrations
                             Manual = true,
                             Name = "Provisional Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15099,7 +15066,7 @@ namespace Prime.Migrations
                             Manual = false,
                             Name = "Non-Practicing Licensed Graduate Nurse",
                             NamedInImReg = false,
-                            Prefix = "R9",
+                            Prefix = "96",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15115,7 +15082,6 @@ namespace Prime.Migrations
                             Name = "Practicing Registered Psychiatric Nurse",
                             NamedInImReg = false,
                             Prefix = "Y9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15146,7 +15112,6 @@ namespace Prime.Migrations
                             Name = "Temporary Registered Psychiatric Nurse (Special Event)",
                             NamedInImReg = false,
                             Prefix = "Y9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = false,
@@ -15162,7 +15127,6 @@ namespace Prime.Migrations
                             Name = "Temporary Registered Psychiatric Nurse (Emergency)",
                             NamedInImReg = false,
                             Prefix = "Y9",
-                            PrescriberIdType = 1,
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Validate = true,
@@ -15542,11 +15506,17 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("MailingAddressId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneExtension")
                         .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("PreferredFirstName")
                         .HasColumnType("text");
@@ -15571,45 +15541,14 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MailingAddressId");
+
+                    b.HasIndex("PhysicalAddressId");
+
                     b.HasIndex("UserId")
                         .IsUnique();
 
                     b.ToTable("Party");
-                });
-
-            modelBuilder.Entity("Prime.Models.PartyAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("PartyId", "AddressId")
-                        .IsUnique();
-
-                    b.ToTable("PartyAddress");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>
@@ -17574,7 +17513,7 @@ namespace Prime.Migrations
                             Code = 3,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "PharmaNet Error, License could not be validated",
+                            Name = "PharmaNet Error, Licence could not be validated",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -17583,7 +17522,7 @@ namespace Prime.Migrations
                             Code = 4,
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "College License or Practitioner ID not in PharmaNet table",
+                            Name = "College Licence not in PharmaNet practitioner table",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         },
@@ -17692,15 +17631,6 @@ namespace Prime.Migrations
                             CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             Name = "Terms of Access to be determined by an Adjudicator",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Code = 17,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "No address from BCSC. Enrollee entered address.",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -17946,15 +17876,6 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(1);
                 });
 
-            modelBuilder.Entity("Prime.Models.VerifiedAddress", b =>
-                {
-                    b.HasBaseType("Prime.Models.Address");
-
-                    b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(3);
-                });
-
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -18162,19 +18083,14 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
                         .WithMany("Enrollees")
                         .HasForeignKey("AdjudicatorId");
-                });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeAddress", b =>
-                {
-                    b.HasOne("Prime.Models.Address", "Address")
+                    b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MailingAddressId");
 
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany("Addresses")
-                        .HasForeignKey("EnrolleeId")
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -18394,19 +18310,15 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.PartyAddress", b =>
+            modelBuilder.Entity("Prime.Models.Party", b =>
                 {
-                    b.HasOne("Prime.Models.Address", "Address")
+                    b.HasOne("Prime.Models.MailingAddress", "MailingAddress")
                         .WithMany()
-                        .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MailingAddressId");
 
-                    b.HasOne("Prime.Models.Party", "Party")
-                        .WithMany("Addresses")
-                        .HasForeignKey("PartyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
                 });
 
             modelBuilder.Entity("Prime.Models.PartyEnrolment", b =>

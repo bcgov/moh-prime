@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
@@ -15,8 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs the ADMIN role to use this controller
-    [Authorize(Policy = Policies.Admin)]
+    [Authorize(Roles = Roles.PrimeAdministrant)]
     public class AdminsController : ControllerBase
     {
         private readonly IAdminService _adminService;
