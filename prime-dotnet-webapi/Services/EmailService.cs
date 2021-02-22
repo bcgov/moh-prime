@@ -11,6 +11,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
 using Prime.HttpClients.Mail.ChesApiDefinitions;
+using LinqKit;
 
 namespace Prime.Services
 {
@@ -207,18 +208,19 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateEmailLogStatuses()
+        public async Task<int> UpdateEmailLogStatuses(int limit)
         {
+            var predicate = PredicateBuilder.New<EmailLog>()
+            .Start(e => e.SendType == SendType.Ches
+                   && e.MsgId != null
+                   && e.LatestStatus != ChesStatus.Completed);
+
             var totalCount = await _context.EmailLogs
-                .Where(e => e.SendType == SendType.Ches
-                    && e.MsgId != null
-                    && e.LatestStatus != ChesStatus.Completed)
+                .Where(predicate)
                 .CountAsync();
 
             var emailLogs = await _context.EmailLogs
-                .Where(e => e.SendType == SendType.Ches
-                    && e.MsgId != null
-                    && e.LatestStatus != ChesStatus.Completed)
+                .Where(predicate)
                 .Take(limit)
                 .ToListAsync();
 

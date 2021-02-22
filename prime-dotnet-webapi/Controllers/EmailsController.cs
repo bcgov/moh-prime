@@ -31,7 +31,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> UpdateEmailLogStatuses(int limit = 10)
+        public async Task<ActionResult<string>> UpdateEmailLogStatuses([FromQuery] int limit = 10)
         {
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
