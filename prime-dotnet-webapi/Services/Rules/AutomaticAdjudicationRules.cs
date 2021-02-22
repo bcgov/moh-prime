@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.HttpClients;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.Services.Rules
 {
