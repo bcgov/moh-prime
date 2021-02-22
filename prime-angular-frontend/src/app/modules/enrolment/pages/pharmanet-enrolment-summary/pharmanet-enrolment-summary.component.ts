@@ -95,6 +95,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.form.get('healthAuthorityEmails') as FormControl;
   }
 
+  public get GPID(): string {
+    return this.enrollee.gpid;
+  }
+
   public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
     if (formControl) {
       formControl.reset();
@@ -113,10 +117,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
         break;
       }
     }
-  }
-
-  public getGPID(): string {
-    return this.enrollee.gpid;
   }
 
   public isEmailVisible(careSettingCode: number): boolean {

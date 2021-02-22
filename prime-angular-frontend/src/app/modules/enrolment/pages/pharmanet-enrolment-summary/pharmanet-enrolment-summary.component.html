@@ -30,11 +30,11 @@
           </h6>
           <a mat-icon-button
             aria-label="Copy to clipboard"
-            [cdkCopyToClipboard]="getGPID()"
+            [cdkCopyToClipboard]="GPID"
             class="small">
             <mat-icon>content_copy</mat-icon>
           </a>
-          <span class="ml-2">{{ getGPID() }}</span>
+          <span class="ml-2">{{ GPID }}</span>
         </div>
 
         <ng-template #settingEmail
