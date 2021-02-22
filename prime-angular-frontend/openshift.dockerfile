@@ -4,7 +4,7 @@
 FROM public.ecr.aws/bitnami/node:14.15.5-prod AS builder
 
 # Set working directory
-USER 0
+RUN id -u
 WORKDIR /usr/src/app
 
 # Set environment variables
@@ -22,6 +22,8 @@ RUN apt-get update
 COPY . .
 
 # Fill template with environment variables
+RUN pwd
+RUN echo hello
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 
 # Install Angular CLI
@@ -29,7 +31,7 @@ RUN npm install -g @angular/cli
 
 # Install dependencies
 # COPY package.json package.json
-RUN npm install --silent
+RUN npm install
 
 # Add application
 RUN ng build --prod
