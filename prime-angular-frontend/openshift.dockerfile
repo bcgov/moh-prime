@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM node:lts-alpine3.10 AS builder
+FROM public.ecr.aws/bitnami/node:14.15.5-prod AS builder
 # FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 # Set working directory
@@ -38,7 +38,7 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM nginx:stable
+FROM public.ecr.aws/lts/nginx:latest
 
 WORKDIR /app
 
