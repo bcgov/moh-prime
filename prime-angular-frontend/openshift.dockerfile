@@ -20,7 +20,7 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 RUN apt-get update
 
 # Install Angular CLI
-RUN npm install -g @angular/cli sonar-scanner
+RUN npm install -g @angular/cli
 
 # Install dependencies
 COPY package.json package.json
