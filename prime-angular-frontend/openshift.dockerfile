@@ -2,10 +2,10 @@
 ### Stage 1 - Build environment ###
 ###################################
 FROM public.ecr.aws/bitnami/node:14.15.5-prod AS builder
-# FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
 # Set working directory
-WORKDIR ~/app
+USER 0
+WORKDIR /usr/src/app
 
 # Set environment variables
 ENV REDIRECT_URL $REDIRECT_URL
@@ -19,18 +19,18 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
 RUN apt-get update
 
+# Fill template with environment variables
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+
 # Install Angular CLI
 RUN npm install -g @angular/cli
 
 # Install dependencies
-COPY package.json package.json
+# COPY package.json package.json
 RUN npm install --silent
 
 # Add application
 COPY . .
-
-# Fill template with environment variables
-RUN (eval "echo \"$(cat ~/app/src/environments/environment.prod.template.ts )\"" ) > ~/app/src/environments/environment.prod.ts
 RUN ng build --prod
 
 
@@ -39,11 +39,11 @@ RUN ng build --prod
 ########################################
 FROM public.ecr.aws/lts/nginx:latest
 
-WORKDIR ~/app
+WORKDIR /app
 
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
-COPY entrypoint.sh ~/
+COPY entrypoint.sh /
 
 COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 
@@ -52,7 +52,7 @@ COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 # RUN echo "Build completed."
 
 # COPY ./entrypoint.sh /app
-RUN chmod +x ~/entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
