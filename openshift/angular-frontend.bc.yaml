@@ -1,109 +1,136 @@
-kind: Template
+---
 apiVersion: v1
+kind: Template
 metadata:
-  name: "${BUILDER_IMAGE_NAME}"
-  creationTimestamp: null
-  annotations:
-    tags: "builder,nodejs,yarn"
-    iconClass: icon-nodejs
-    description: >-
-      This template defines resources needed to build Angular frontend
-      applications. This is your builder image that compiles the Angular source
-      code. This builder image uses YARN instead of NPM to build the frontend.
-objects:
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      name: "${BUILDER_IMAGE_NAME}"
-      annotations:
-        description: Keeps track of changes in this builder image.
-  - kind: BuildConfig
-    apiVersion: v1
-    metadata:
-      name: "${BUILDER_IMAGE_NAME}"
-      creationTimestamp: null
-      annotations:
-        description: Defines how to build Angular applications from source code.
-    spec:
-      runPolicy: Serial
-      triggers:
-        - type: ConfigChange
-        - type: ImageChange
-      source:
-        type: Git
-        git:
-          ref: "${GIT_REF}"
-          uri: "${GIT_REPO_URL}"
-        contextDir: "${SOURCE_CONTEXT_DIR}"
-      strategy:
-        type: Docker
-        dockerStrategy:
-          dockerfilePath: openshift.dockerfile
-          env:
-            - name: SUFFIX
-              value: "${SUFFIX}"
-            - name: REDIRECT_URL
-              value: "${REDIRECT_URL}"
-            - name: OC_APP
-              value: ${OC_APP}
-            
-            # Document Manager related environment variables
-            - name: DOCUMENT_MANAGER_URL
-              value: "https://${VANITY_URL}/api/docman"
-
-            # Keycloak related environment variables
-            - name: JWT_WELL_KNOWN_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: "keycloak"
-                  key: jwt_well_known_config                
-            - name: KEYCLOAK_CLIENT_ID
-              valueFrom:
-                configMapKeyRef:
-                  name: "keycloak"
-                  key: keycloak_client_id                
-            - name: KEYCLOAK_REALM
-              valueFrom:
-                configMapKeyRef:
-                  name: "keycloak"
-                  key: keycloak_realm                
-            - name: KEYCLOAK_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: "keycloak"
-                  key: keycloak_url
-      output:
-        to:
-          kind: ImageStreamTag
-          name: "${BUILDER_IMAGE_NAME}:latest"
-      resources: {}
-      postCommit: {}
-    status:
-      lastVersion: 0
+  name: angular-frontend-bc
+  description: >-
+    Build configuration template for PRIME's Angular frontend component.
 parameters:
-  - name: BUILDER_IMAGE_NAME
-    displayName: Builder Image
-    description: >-
-      The name assigned to the builder image defined in this template. You
-      should keep this as default unless you know what you are doing.
-    required: true
-    value: angular-frontend-develop-temp-ocp4
-  - name: GIT_REPO_URL
-    displayName: Git Repository URL
-    description: The URL of the repository with your application source code.
-    required: true
-    value: "https://github.com/bcgov/moh-prime.git"
-  - name: GIT_REF
-    displayName: Git Reference
-    description: >-
-      Set this to a branch name, tag or other ref of your repository if you are
-      not using the default branch.
-    required: true
-    value: "feature/prime-1195-1197-ocp4-jenkins"
-  - name: SOURCE_CONTEXT_DIR
-    displayName: Context Directory
-    description: >-
-      Set this to the relative path to the Dockerfile that describes this
-      builder image, if it is not in the root of your repository.
-    required: true
-    # value: openshift/templates/builder/
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: true
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
+- name: VANITY_URL
+  required: true
+  value: 'pharmanetenrolment.gov.bc.ca'
+- name: HTTP_SCHEMA
+  required: true
+  value: 'HTTPS'
+- name: HTTP_PORT
+  required: true
+  value: '8443'
+- name: TERMINATION_TYPE
+  required: true
+  value: 'passthrough'
+- name: REDIRECT_URL
+  required: true
+  value: "https://pharmanetenrolment.gov.bc.ca"
+objects:
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    creationTimestamp: 
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+    tags:
+    - annotations: 
+      from:
+        kind: DockerImage
+        name: "${NAME}${SUFFIX}"
+      generation: 
+      importPolicy: {}
+      name: latest
+  status:
+    dockerImageRepository: ''
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+      kompose.version: 1.18.0 (06a2e56)
+    creationTimestamp: 
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    completionDeadlineSeconds: 6000
+    nodeSelector: 
+    output:
+      to:
+        kind: ImageStreamTag
+        name: "${NAME}${SUFFIX}:latest"
+    postCommit: {}
+    resources:
+      requests:
+        cpu: '1'
+        memory: 1Gi
+      limits:
+        cpu: '2'
+        memory: 4Gi
+    runPolicy: Serial
+    source:
+      contextDir: "${SOURCE_CONTEXT_DIR}"
+      git:
+        ref: "${SOURCE_REPOSITORY_REF}"
+        uri: "${SOURCE_REPOSITORY_URL}"
+      type: Git
+    strategy:
+      dockerStrategy:
+        dockerfilePath: openshift.dockerfile
+        noCache: true
+        env:
+          - name: SUFFIX
+            value: "${SUFFIX}"
+          - name: REDIRECT_URL
+            value: "${REDIRECT_URL}"
+          - name: OC_APP
+            value: ${OC_APP}
+          
+          # Document Manager related environment variables
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://${VANITY_URL}/api/docman"
+
+          # Keycloak related environment variables
+          - name: JWT_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: jwt_well_known_config                
+          - name: KEYCLOAK_CLIENT_ID
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_client_id                
+          - name: KEYCLOAK_REALM
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_realm                
+          - name: KEYCLOAK_URL
+            valueFrom:
+              configMapKeyRef:
+                name: "keycloak"
+                key: keycloak_url                
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+  status:
+    lastVersion: 0
