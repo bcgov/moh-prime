@@ -44,6 +44,7 @@ FROM public.ecr.aws/lts/nginx:latest
 
 WORKDIR /app
 
+RUN touch /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
