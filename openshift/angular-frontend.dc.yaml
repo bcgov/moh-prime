@@ -102,7 +102,7 @@ objects:
           - containerPort: 8443
           - containerPort: 8888
           securityContext:
-            runAsUser: nginx
+            runAsUser: 101
             allowPrivilegeEscalation: false
           resources:
             limits:
