@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
@@ -207,12 +208,21 @@ namespace Prime.Services
             }
         }
 
-        public async Task<bool> UpdateEmailLogStatuses()
+        public async Task<int> UpdateEmailLogStatuses(int limit)
         {
+            Expression<Func<EmailLog, bool>> predicate = log =>
+                log.SendType == SendType.Ches
+                && log.MsgId != null
+                && log.LatestStatus != ChesStatus.Completed;
+
+            var totalCount = await _context.EmailLogs
+                .Where(predicate)
+                .CountAsync();
+
             var emailLogs = await _context.EmailLogs
-                .Where(e => e.SendType == SendType.Ches
-                    && e.MsgId != null
-                    && e.LatestStatus != ChesStatus.Completed)
+                .Where(predicate)
+                .OrderBy(e => e.UpdatedTimeStamp)
+                .Take(limit)
                 .ToListAsync();
 
             foreach (var email in emailLogs)
@@ -223,8 +233,9 @@ namespace Prime.Services
                     email.LatestStatus = status;
                 }
             }
+            await _context.SaveChangesAsync();
 
-            return await _context.SaveChangesAsync() != 0;
+            return totalCount;
         }
 
         private async Task Send(Email email)

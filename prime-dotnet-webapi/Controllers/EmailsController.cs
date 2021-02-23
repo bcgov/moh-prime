@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
@@ -25,15 +26,16 @@ namespace Prime.Controllers
         /// <summary>
         /// Update all logged email statuses sent using the CHES email service
         /// </summary>
+        /// <param name="limit"></param>
         [HttpPost("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<StatusCodeResult> UpdateEmailLogStatuses()
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailLogStatuses([FromQuery] int limit = 10)
         {
-            await _emailService.UpdateEmailLogStatuses();
+            var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return NoContent();
+            return Ok(ApiResponse.Result($"Updated {limit} of {total}."));
         }
 
         // POST: api/Emails/management/enrollees/renewal
