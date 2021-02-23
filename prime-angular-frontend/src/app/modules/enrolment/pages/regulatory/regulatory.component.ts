@@ -26,6 +26,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
+  private hasRemoteAccess: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -84,6 +85,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.routeTo(EnrolmentRoutes.CARE_SETTING);
   }
 
+  public shouldRemoveRemoteAccess(): boolean {
+    return this.hasRemoteAccess && !this.isInitialEnrolment &&
+      !this.canRequestRemoteAccess();
+  }
+
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
@@ -104,11 +110,17 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.certifications.length) {
       this.addEmptyCollegeCertification();
     }
+
+    this.hasRemoteAccess = this.canRequestRemoteAccess();
   }
 
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeJobs();
+    // Remove remote access data when enrollee is no longer elegible, e.g. licence type changes
+    if (this.shouldRemoveRemoteAccess()) {
+      this.removeRemoteAccessData();
+    }
   }
 
   protected afterSubmitIsSuccessful() {
@@ -167,5 +179,21 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       jobs.clear();
       oboSites.clear();
     }
+  }
+
+  private canRequestRemoteAccess(): boolean {
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+
+    return this.enrolmentService
+      .canRequestRemoteAccess(certifications, careSettings);
+  }
+
+  private removeRemoteAccessData(): void {
+    const remoteAccessForm = this.enrolmentFormStateService.remoteAccessForm;
+    const remoteAccessSites = remoteAccessForm.get('remoteAccessSites') as FormArray;
+    const enrolleeRemoteUsers = remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+    const remoteLocations = this.enrolmentFormStateService.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
   }
 }
