@@ -66,7 +66,7 @@ objects:
         labels:
           io.kompose.service: "${NAME}${SUFFIX}"
       spec:
-        containers:
+        containers:          
         - env:
           - name: SUFFIX
             value: "${SUFFIX}"
@@ -101,6 +101,9 @@ objects:
           - containerPort: 8080
           - containerPort: 8443
           - containerPort: 8888
+          securityContext:
+            runAsUser: nginx
+            allowPrivilegeEscalation: false
           resources:
             limits:
               cpu: 500m
