@@ -1,4 +1,5 @@
-<app-dashboard-header [isMobile]="isMobile"
+<app-dashboard-header [headerConfig]="headerConfig"
+                      [isMobile]="isMobile"
                       [username]="username"
                       (toggle)="sidenav.toggle()"
                       (logout)="onLogout()"></app-dashboard-header>
@@ -14,12 +15,12 @@
                class="d-print-none">
     <div class="logo"
          [class.hidden]="!showBrand">
-      <img src="/assets/prime_logo.svg"
-           alt="PRIME Logo"
+      <img [src]="sideNavConfig.imgSrc"
+           [attr.alt]="sideNavConfig.imgAlt"
            [class.fixed]="!responsiveMenuItems">
     </div>
 
-    <app-dashboard-menu [dashboardMenuItems]="dashboardMenuItems"
+    <app-dashboard-menu [menuItems]="menuItems"
                         [responsiveMenuItems]="responsiveMenuItems"
                         [showMenuItemIcons]="showMenuItemIcons"
                         (action)="onAction($event)">

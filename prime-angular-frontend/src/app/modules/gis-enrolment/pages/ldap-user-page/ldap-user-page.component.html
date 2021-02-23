@@ -1,0 +1,42 @@
+<app-page>
+  <app-page-header>{{ title }}</app-page-header>
+
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <app-page-section>
+    <app-page-subheader2 [showUnderline]="false">
+      <ng-container appPageSubheader2Title>
+        LDAP User
+      </ng-container>
+      <ng-container appPageSubheader2Summary>
+        Are you an existing LDAP user?
+      </ng-container>
+    </app-page-subheader2>
+
+    <form [formGroup]="form"
+          (ngOnSubmit)="onSubmit()"
+          novalidate>
+      <mat-radio-group aria-label="Are you an existing LDAP user?"
+                       formControlName="ldapUser">
+        <mat-radio-button *ngFor="let option of [true, false]"
+                          class="mr-5 mb-3"
+                          [value]="option">
+          {{ option | yesNo }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <app-alert *ngIf="hasAttemptedSubmission && ldapUser.hasError('boolean')"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          Must indicate whether you are an existing LDAP user or not
+        </ng-container>
+      </app-alert>
+    </form>
+  </app-page-section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="false"
+                   (save)="onSubmit()"></app-page-footer>
+</app-page>

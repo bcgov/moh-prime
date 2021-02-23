@@ -33,18 +33,21 @@ import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { PageComponent } from '@shared/components/page/page.component';
-import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
-import { PageSubheaderTitleDirective } from '@shared/components/page-subheader/page-subheader-title.directive';
-import { PageSubheaderSummaryDirective } from '@shared/components/page-subheader/page-subheader-summary.directive';
-import { PageSubheader2Component } from '@shared/components/page-subheader2/page-subheader2.component';
-import { PageSubheader2TitleDirective } from '@shared/components/page-subheader2/page-subheader2-title.directive';
-import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
-import { PageSubheader2SummaryDirective } from '@shared/components/page-subheader2/page-subheader2-summary.directive';
+
+import { PageComponent } from '@shared/components/pages/page/page.component';
+import { PageHeaderComponent } from '@shared/components/pages/page-header/page-header.component';
+import { PageSubheaderComponent } from '@shared/components/pages/page-subheader/page-subheader.component';
+import { PageSubheaderTitleDirective } from '@shared/components/pages/page-subheader/page-subheader-title.directive';
+import { PageSubheaderSummaryDirective } from '@shared/components/pages/page-subheader/page-subheader-summary.directive';
+import { PageSubheader2Component } from '@shared/components/pages/page-subheader2/page-subheader2.component';
+import { PageSubheader2TitleDirective } from '@shared/components/pages/page-subheader2/page-subheader2-title.directive';
+import { PageSubheader2SummaryDirective } from '@shared/components/pages/page-subheader2/page-subheader2-summary.directive';
+import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
+import { PageSectionComponent } from './components/pages/page-section/page-section.component';
+import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
+
 import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
-import { PageFooterComponent } from '@shared/components/page-footer/page-footer.component';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
 import { AlertComponent } from '@shared/components/alert/alert.component';
@@ -151,7 +154,8 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent,
-    AddressViewComponent
+    AddressViewComponent,
+    PageSectionComponent
   ],
   imports: [
     CommonModule,
@@ -229,7 +233,8 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     TriageComponent,
     EscalationNoteComponent,
     ClaimNoteComponent,
-    AddressViewComponent
+    AddressViewComponent,
+    PageSectionComponent
   ],
   providers: [
     FullnamePipe,

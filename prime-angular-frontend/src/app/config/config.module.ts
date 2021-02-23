@@ -1,14 +1,12 @@
 import { NgModule } from '@angular/core';
 
-import { ConfigService } from './config.service';
 import { ConfigCodePipe } from './config-code.pipe';
 
 @NgModule({
-  providers: [
-    ConfigService,
+  declarations: [
     ConfigCodePipe
   ],
-  declarations: [
+  providers: [
     ConfigCodePipe
   ],
   exports: [
