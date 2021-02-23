@@ -19,3 +19,12 @@ td {
   color: theme_palette(green);
 }
 
+a.small {
+  height: 24px;
+  width: 24px;
+  line-height: 24px;
+  .mat-icon {
+    font-size: 18px;
+   }
+ }
+
