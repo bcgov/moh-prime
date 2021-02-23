@@ -72,10 +72,6 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private viewportService: ViewportService
   ) {
-    this.headerConfig = {
-      theme: 'blue',
-      showMobileToggle: true
-    };
     this.sideNavConfig = {
       imgSrc: '/assets/prime_brand.svg',
       imgAlt: 'PRIME Logo'

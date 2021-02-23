@@ -44,6 +44,10 @@ export class DashboardHeaderComponent implements OnInit {
   public brandImgSrc: string;
 
   constructor() {
+    this.headerConfig = {
+      theme: 'blue',
+      showMobileToggle: true
+    };
     this.toggle = new EventEmitter<void>();
     this.logout = new EventEmitter<void>();
   }
