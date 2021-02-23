@@ -1,0 +1,28 @@
+<app-dashboard-header [headerConfig]="dashboardHeaderConfig"></app-dashboard-header>
+
+<div class="container">
+  <div class="row align-items-center header">
+    <div class="col-auto">
+
+      <img src="/assets/gis_brand.png"
+           alt="GIS Logo"
+           class="logo">
+
+    </div>
+    <div class="col">
+
+      <h1>{{ title }}</h1>
+
+    </div>
+  </div>
+  <div class="row actions">
+    <div class="col">
+
+      <button mat-flat-button
+              color="primary"
+              class="large"
+              (click)="login()">Logon with PHSA</button>
+
+    </div>
+  </div>
+</div>

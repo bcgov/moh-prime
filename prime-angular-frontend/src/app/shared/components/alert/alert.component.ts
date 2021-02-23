@@ -6,9 +6,9 @@ import { Component, Input, ContentChildren, QueryList, TemplateRef } from '@angu
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent {
-  @Input() type: 'info' | 'warn' | 'danger';
-  @Input() icon: string;
-  @Input() class: string;
+  @Input() public type: 'info' | 'warn' | 'danger';
+  @Input() public icon: string;
+  @Input() public class: string;
 
   @ContentChildren('alertTitle', { descendants: true })
   public alertTitleChildren: QueryList<TemplateRef<any>>;

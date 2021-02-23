@@ -1,10 +1,10 @@
 @import 'palette';
+@import './material/material-variables';
 
 $h1-colour: theme-palette(blue, dark);
 $h2-colour: theme-palette(blue, base);
 $h3-colour: theme-palette(blue, light);
 
-// Bold
 $h3-font-weight: 700;
 
 $paragraph-colour: theme-palette(blue, base);

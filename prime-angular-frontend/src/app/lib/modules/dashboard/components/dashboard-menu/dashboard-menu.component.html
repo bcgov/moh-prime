@@ -1,8 +1,8 @@
 <mat-nav-list [disableRipple]="true">
-  <ng-container *ngFor="let dashboardMenuItem of dashboardMenuItems"
+  <ng-container *ngFor="let menuItem of menuItems"
                 [ngSwitch]="true">
-    <app-dashboard-route-menu-item *ngSwitchCase="isDashboardRouteMenuItem(dashboardMenuItem)"
-                                   [routeMenuItem]="dashboardMenuItem"
+    <app-dashboard-route-menu-item *ngSwitchCase="isDashboardRouteMenuItem(menuItem)"
+                                   [routeMenuItem]="menuItem"
                                    [responsiveMenuItems]="responsiveMenuItems"
                                    [showMenuItemIcons]="showMenuItemIcons"
                                    (route)="onAction($event)">
