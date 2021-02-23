@@ -1,6 +1,5 @@
 #!/bin/sh
 whoami
-usermod -a -G nginx 1001350000
 echo "Substituting environment..."
 envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf 
 echo "Running nginx..."

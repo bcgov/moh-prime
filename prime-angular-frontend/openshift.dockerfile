@@ -40,9 +40,10 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM public.ecr.aws/lts/nginx:latest
+FROM public.ecr.aws/nginx/nginx:1.18
 
 WORKDIR /app
+RUN usermod -a -G nginx 1001350000
 
 RUN touch /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
