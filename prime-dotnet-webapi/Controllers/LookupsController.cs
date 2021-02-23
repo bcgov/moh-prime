@@ -4,18 +4,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // Lookups are available to every user of PRIME and service accounts
-    [Authorize]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
@@ -27,13 +25,14 @@ namespace Prime.Controllers
             _collegeLicenceClient = collegeLicenceClient;
         }
 
-        //GET: /api/Lookup
+        //GET: /api/Lookups
         /// <summary>
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<LookupEntity>> GetLookups()
+        public async Task<ActionResult> GetLookups()
         {
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
@@ -46,7 +45,8 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string licenceNumber)
+        [ProducesResponseType(typeof(ApiResultResponse<PharmanetCollegeRecord>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
