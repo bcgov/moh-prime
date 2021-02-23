@@ -47,7 +47,7 @@ WORKDIR /app
 # Edit folder permissions
 RUN chmod 766 /etc/nginx
 RUN chmod 666 /var/cache/nginx
-RUN chmod 666 /var/lib/nginx
+# RUN chmod 666 /var/lib/nginx
 
 RUN touch /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
