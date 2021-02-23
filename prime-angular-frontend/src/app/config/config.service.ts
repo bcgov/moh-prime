@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig } from '@config/config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, IWeightedConfig } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
@@ -48,7 +48,7 @@ export class ConfigService implements IConfigService {
 
   public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
-      .sort(this.sortConfigByWeight());
+      .sort(this.sortConfigByWeight<LicenseConfig>());
   }
 
   public get careSettings(): Config<number>[] {
@@ -135,7 +135,7 @@ export class ConfigService implements IConfigService {
    * @description
    * Sort the configuration by code.
    */
-  private sortConfigByCode() {
+  private sortConfigByCode(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
     return this.sortConfigByKey('code');
   }
 
@@ -143,7 +143,7 @@ export class ConfigService implements IConfigService {
    * @description
    * Sort the configuration by name.
    */
-  private sortConfigByName() {
+  private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
     return this.sortConfigByKey('name');
   }
 
@@ -160,8 +160,8 @@ export class ConfigService implements IConfigService {
    * @description
    * Sort the configuration by weight.
    */
-  private sortConfigByWeight(): (a: LicenseConfig, b: LicenseConfig) => SortWeight {
-    return (a: LicenseConfig, b: LicenseConfig) =>
-      this.utilsService.sortByKey<LicenseConfig>(a, b, 'weight');
+  private sortConfigByWeight<T extends IWeightedConfig>(): (a: T, b: T) => SortWeight {
+    return (a: T, b: T) =>
+      this.utilsService.sortByKey<T>(a, b, 'weight');
   }
 }
