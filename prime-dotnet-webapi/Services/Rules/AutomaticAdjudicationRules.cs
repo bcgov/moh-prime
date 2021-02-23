@@ -123,14 +123,14 @@ namespace Prime.Services.Rules
                 {
                     string message = $"{licenceText} returned \"{record.FirstName} {record.LastName}\".";
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NameDiscrepancy, message);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, message);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "(Name Discrepancy) " + message);
                     passed = false;
                 }
                 if (record.DateofBirth.Date != enrollee.DateOfBirth.Date)
                 {
                     string message = $"{licenceText} returned {record.DateofBirth:d MMM yyyy}";
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.BirthdateDiscrepancy, message);
-                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, message);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "(Birthdate Discrepancy) " + message);
                     passed = false;
                 }
                 if (record.Status != "P")
@@ -139,7 +139,10 @@ namespace Prime.Services.Rules
                     await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Enrollee is not practicing.");
                     passed = false;
                 }
-                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Pharmanet API call matched successfully.");
+                if (passed)
+                {
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Pharmanet API call matched successfully.");
+                }
             }
 
             return passed;
