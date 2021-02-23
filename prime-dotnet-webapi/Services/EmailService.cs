@@ -221,6 +221,7 @@ namespace Prime.Services
 
             var emailLogs = await _context.EmailLogs
                 .Where(predicate)
+                .OrderBy(e => e.UpdatedTimeStamp)
                 .Take(limit)
                 .ToListAsync();
 
