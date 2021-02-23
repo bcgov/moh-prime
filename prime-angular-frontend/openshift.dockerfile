@@ -43,11 +43,7 @@ RUN ng build --prod
 FROM public.ecr.aws/nginx/nginx:1.18
 
 WORKDIR /app
-
-# Edit folder permissions
-RUN chmod -R 766 /etc/nginx
-RUN chmod -R 666 /var/cache/nginx
-RUN chmod -R 666 /var/lib/nginx
+RUN usermod -a -G nginx 1001350000
 
 RUN touch /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
