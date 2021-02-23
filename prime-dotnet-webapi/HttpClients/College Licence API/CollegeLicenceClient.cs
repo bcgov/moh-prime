@@ -55,7 +55,7 @@ namespace Prime.HttpClients
             if (practicionerRecord != null && practicionerRecord.ApplicationUUID != requestParams.ApplicationUUID)
             {
                 var ex = new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.ApplicationUUID}\".");
-                await LogError(requestParams, response, ex);
+                await LogError(requestParams.ApplicationUUID, response, ex);
                 throw ex;
             }
 
