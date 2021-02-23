@@ -1,5 +1,3 @@
-using System;
-
 using Prime.Models;
 using Prime.Models.Api;
 
@@ -7,37 +5,31 @@ namespace Prime.Engines
 {
     public static class SubmissionStateEngine
     {
-        public static bool AllowableAction(SubmissionAction action, Enrollee enrollee, bool asAdmin)
+        public static bool AllowableAction(SubmissionAction action, EnrolmentStatus currentStatus)
         {
-            enrollee.ThrowIfNull(nameof(enrollee));
-            if (enrollee.CurrentStatus == null)
+            currentStatus.ThrowIfNull(nameof(currentStatus));
+
+            return (currentStatus.GetStatusType(), action) switch
             {
-                throw new ArgumentException("Enrollee must have a CurrentStatus", nameof(enrollee));
-            }
+                (StatusType.Editable, SubmissionAction.LockProfile)       => true,
+                (StatusType.Editable, SubmissionAction.DeclineProfile)    => true,
 
-            var status = enrollee.CurrentStatus.GetStatusType();
+                (StatusType.UnderReview, SubmissionAction.Approve)        => true,
+                (StatusType.UnderReview, SubmissionAction.EnableEditing)  => true,
+                (StatusType.UnderReview, SubmissionAction.LockProfile)    => true,
+                (StatusType.UnderReview, SubmissionAction.DeclineProfile) => true,
+                (StatusType.UnderReview, SubmissionAction.RerunRules)     => true,
 
-            return (status, action) switch
-            {
-                (StatusType.Editable, SubmissionAction.LockProfile)       => asAdmin,
-                (StatusType.Editable, SubmissionAction.DeclineProfile)    => asAdmin,
+                (StatusType.RequiresToa, SubmissionAction.AcceptToa)      => true,
+                (StatusType.RequiresToa, SubmissionAction.DeclineToa)     => true,
+                (StatusType.RequiresToa, SubmissionAction.EnableEditing)  => true,
+                (StatusType.RequiresToa, SubmissionAction.LockProfile)    => true,
+                (StatusType.RequiresToa, SubmissionAction.DeclineProfile) => true,
 
-                (StatusType.UnderReview, SubmissionAction.Approve)        => asAdmin,
-                (StatusType.UnderReview, SubmissionAction.EnableEditing)  => asAdmin,
-                (StatusType.UnderReview, SubmissionAction.LockProfile)    => asAdmin,
-                (StatusType.UnderReview, SubmissionAction.DeclineProfile) => asAdmin,
-                (StatusType.UnderReview, SubmissionAction.RerunRules)     => asAdmin,
+                (StatusType.Locked, SubmissionAction.EnableEditing)       => true,
+                (StatusType.Locked, SubmissionAction.DeclineProfile)      => true,
 
-                (StatusType.RequiresToa, SubmissionAction.AcceptToa)      => !asAdmin,
-                (StatusType.RequiresToa, SubmissionAction.DeclineToa)     => !asAdmin,
-                (StatusType.RequiresToa, SubmissionAction.EnableEditing)  => asAdmin,
-                (StatusType.RequiresToa, SubmissionAction.LockProfile)    => asAdmin,
-                (StatusType.RequiresToa, SubmissionAction.DeclineProfile) => asAdmin,
-
-                (StatusType.Locked, SubmissionAction.EnableEditing)       => asAdmin,
-                (StatusType.Locked, SubmissionAction.DeclineProfile)      => asAdmin,
-
-                (StatusType.Declined, SubmissionAction.EnableEditing)     => asAdmin,
+                (StatusType.Declined, SubmissionAction.EnableEditing)     => true,
 
                 _ => false
             };

@@ -16,7 +16,7 @@
       <div class="text-right">
         <button mat-flat-button
                 color="primary"
-                [disabled]="!canEdit && !note.value?.length">Save Note</button>
+                [disabled]="!((Role.MANAGE_ENROLLEE | inRole) && !note.value?.length)">Save Note</button>
       </div>
 
     </div>

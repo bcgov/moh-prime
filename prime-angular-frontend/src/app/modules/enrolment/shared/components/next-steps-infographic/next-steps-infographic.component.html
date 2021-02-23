@@ -20,14 +20,14 @@
   </div>
   <div class="col-12 info">
     <h5>
-      2. Your PharmaNet administrator will let you know when your access is set up.
+      2. Your PharmaNet administrator will set up your account.
     </h5>
     <p>
-      Your PRIME enrolment is complete; you do not need to take further steps for PharmaNet access until your
-      PharmaNet administrator contacts you.
+      Your PRIME enrolment is complete. Your PharmaNet administrator or PharmaNet software vendor now needs to set up
+      your access before you can use PharmaNet. They will contact you when that is complete.
     </p>
   </div>
-  <div *ngIf="hasVCIssuance"
+  <div *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
        class="col-12 info">
     <h5>
       3. Access your verified credential (optional)
@@ -36,7 +36,7 @@
       <button mat-flat-button
               type="button"
               color="primary"
-              *ngIf="hasVCIssuance"
+              *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
               (click)="openQR($event)">
         Verified Credential
       </button>

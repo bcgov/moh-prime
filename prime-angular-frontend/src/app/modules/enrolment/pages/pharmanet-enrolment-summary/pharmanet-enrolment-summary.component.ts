@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -92,6 +93,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public get healthAuthorityEmails(): FormControl {
     return this.form.get('healthAuthorityEmails') as FormControl;
+  }
+
+  public get GPID(): string {
+    return this.enrollee.gpid;
   }
 
   public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {

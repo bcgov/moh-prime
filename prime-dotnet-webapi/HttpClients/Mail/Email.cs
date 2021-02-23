@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Net.Mail;
 
 using Prime.Models.Documents;
-using Prime.Models;
 
 namespace Prime.HttpClients.Mail
 {
