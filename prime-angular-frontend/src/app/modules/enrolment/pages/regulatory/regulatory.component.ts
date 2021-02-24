@@ -3,6 +3,8 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { map } from 'rxjs/operators';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -26,8 +28,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
-  public shouldRemoveRemoteAccess: boolean;
-  private hasRemoteAccess: boolean;
+  public cannotRequestRemoteAccess: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -55,6 +56,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       formUtilsService,
       authService
     );
+
+    this.cannotRequestRemoteAccess = false;
   }
 
   public get certifications(): FormArray {
@@ -90,10 +93,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
 
-    this.form.valueChanges.subscribe(() => {
-      this.shouldRemoveRemoteAccess = this.hasRemoteAccess && !this.isInitialEnrolment &&
-        !this.canRequestRemoteAccess();
-    });
+    const initialRemoteAccess = this.canRequestRemoteAccess();
+
+    this.form.valueChanges
+      .pipe(map((_) => initialRemoteAccess))
+      .subscribe(() => {
+        this.cannotRequestRemoteAccess = initialRemoteAccess && !this.isInitialEnrolment && !this.canRequestRemoteAccess();
+      });
   }
 
   public ngOnDestroy() {
@@ -111,16 +117,13 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.certifications.length) {
       this.addEmptyCollegeCertification();
     }
-
-    this.hasRemoteAccess = this.canRequestRemoteAccess();
-    this.shouldRemoveRemoteAccess = false;
   }
 
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeJobs();
     // Remove remote access data when enrollee is no longer elegible, e.g. licence type changes
-    if (this.shouldRemoveRemoteAccess) {
+    if (this.cannotRequestRemoteAccess) {
       this.removeRemoteAccessData();
     }
   }
