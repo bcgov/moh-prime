@@ -28,8 +28,8 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
   ],
   imports: [
     SharedModule,
-    PhsaEformsRoutingModule,
-    DashboardModule
+    DashboardModule,
+    PhsaEformsRoutingModule
   ]
 })
 export class PhsaEformsModule { }

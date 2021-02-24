@@ -7,9 +7,11 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { ViewportService } from '@core/services/viewport.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 
-import { DashboardMenuProps } from '@lib/modules/dashboard/models/dashboard-menu-props.model';
+import { DashboardSidenavProps } from '@lib/modules/dashboard/models/dashboard-sidenav-props.model';
 import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-item.model';
+import { DashboardHeaderConfig } from '../dashboard-header/dashboard-header.component';
 
+// TODO move services and models for auth into core
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
@@ -19,6 +21,27 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  /**
+   * @description
+   * Dashboard header configuration for theming.
+   */
+  @Input() public headerConfig: DashboardHeaderConfig;
+  /**
+   * @description
+   * Dashboard sidenav configuration for theming.
+   */
+  @Input() public sideNavConfig: { imgSrc: string, imgAlt: string };
+  /**
+   * @description
+   * Show the sidenav default branding.
+   */
+  @Input() public showBrand: boolean;
+  /**
+   * @description
+   * List of dashboard details used to populate the side navigation
+   * links for routing within the application.
+   */
+  @Input() public menuItems: DashboardMenuItem[];
   /**
    * @description
    * Whether the dashboard menu items are responsive, and collapse
@@ -32,27 +55,16 @@ export class DashboardComponent implements OnInit {
   @Input() public showMenuItemIcons: boolean;
   /**
    * @description
-   * List of dashboard details used to populate the side navigation
-   * links for routing within the application.
-   */
-  @Input() public dashboardMenuItems: DashboardMenuItem[];
-  /**
-   * @description
    * Redirect URL after logout.
    */
   @Input() public logoutRedirectUrl: string;
-  /**
-   * @description
-   * Show the sidenav default branding.
-   */
-  @Input() public showBrand: boolean;
   /**
    * @description
    * Side navigation reference.
    */
   @ViewChild('sidenav') public sideNav: MatSidenav;
 
-  public sideNavProps: DashboardMenuProps;
+  public sideNavProps: DashboardSidenavProps;
   public username: string;
 
   constructor(
@@ -60,6 +72,14 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService,
     private viewportService: ViewportService
   ) {
+    this.headerConfig = {
+      theme: 'blue',
+      showMobileToggle: true
+    };
+    this.sideNavConfig = {
+      imgSrc: '/assets/prime_brand.svg',
+      imgAlt: 'PRIME Logo'
+    };
     this.responsiveMenuItems = true;
     this.showMenuItemIcons = true;
     this.showBrand = true;
@@ -106,15 +126,15 @@ export class DashboardComponent implements OnInit {
       );
   }
 
-  private getDashboardNavProps(device: DeviceResolution): DashboardMenuProps {
+  private getDashboardNavProps(device: DeviceResolution): DashboardSidenavProps {
     switch (device) {
       case DeviceResolution.WIDE:
       case DeviceResolution.DESKTOP:
-        return new DashboardMenuProps('side', true, false);
+        return new DashboardSidenavProps('side', true, false);
       case DeviceResolution.TABLET:
-        return new DashboardMenuProps('side', true, false);
+        return new DashboardSidenavProps('side', true, false);
       default:
-        return new DashboardMenuProps('over', false, false);
+        return new DashboardSidenavProps('over', false, false);
     }
   }
 }

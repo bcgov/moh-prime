@@ -10,6 +10,12 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboar
 export class DashboardMenuComponent implements OnInit {
   /**
    * @description
+   * List of dashboard details used to populate the side navigation
+   * links for routing within the application.
+   */
+  @Input() public menuItems: DashboardMenuItem[];
+  /**
+   * @description
    * Whether the dashboard menu items are responsive, and collapse
    * on mobile viewports.
    */
@@ -19,12 +25,6 @@ export class DashboardMenuComponent implements OnInit {
    * Whether the dashboard menu items should display their icons.
    */
   @Input() public showMenuItemIcons: boolean;
-  /**
-   * @description
-   * List of dashboard details used to populate the side navigation
-   * links for routing within the application.
-   */
-  @Input() public dashboardMenuItems: DashboardMenuItem[];
   /**
    * @description
    * Dashboard menu item action emitter.
