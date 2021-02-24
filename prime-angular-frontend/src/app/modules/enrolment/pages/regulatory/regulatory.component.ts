@@ -26,6 +26,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
+  public shouldRemoveRemoteAccess: boolean;
   private hasRemoteAccess: boolean;
 
   constructor(
@@ -85,14 +86,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.routeTo(EnrolmentRoutes.CARE_SETTING);
   }
 
-  public shouldRemoveRemoteAccess(): boolean {
-    return this.hasRemoteAccess && !this.isInitialEnrolment &&
-      !this.canRequestRemoteAccess();
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
+
+    this.form.valueChanges.subscribe(() => {
+      this.shouldRemoveRemoteAccess = this.hasRemoteAccess && !this.isInitialEnrolment &&
+        !this.canRequestRemoteAccess();
+    });
   }
 
   public ngOnDestroy() {
@@ -112,13 +113,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     }
 
     this.hasRemoteAccess = this.canRequestRemoteAccess();
+    this.shouldRemoveRemoteAccess = false;
   }
 
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeJobs();
     // Remove remote access data when enrollee is no longer elegible, e.g. licence type changes
-    if (this.shouldRemoveRemoteAccess()) {
+    if (this.shouldRemoveRemoteAccess) {
       this.removeRemoteAccessData();
     }
   }
