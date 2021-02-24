@@ -5,7 +5,7 @@ import { MatDrawerMode } from '@angular/material/sidenav';
  * Dashboard menu properties provided to the Angular
  * Material sidenav.
  */
-export class DashboardMenuProps {
+export class DashboardSidenavProps {
   /**
    * @description
    * Mode of the drawer; one of 'over', 'push' or 'side'.
