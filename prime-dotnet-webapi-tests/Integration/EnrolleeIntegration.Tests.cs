@@ -36,13 +36,13 @@ namespace PrimeTests.Integration
         {
             var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
             return _dbContext.Enrollees
-                        .Include(e => e.PhysicalAddress)
-                        .Include(e => e.MailingAddress)
-                        .Include(e => e.Certifications)
-                        .Include(e => e.Jobs)
-                        .Include(e => e.EnrolleeCareSettings)
-                        .Include(e => e.EnrolmentStatuses)
-                        .AsNoTracking().Single(e => e.Id == enrolleeId);
+                .Include(e => e.PhysicalAddress)
+                .Include(e => e.MailingAddress)
+                .Include(e => e.Certifications)
+                .Include(e => e.Jobs)
+                .Include(e => e.EnrolleeCareSettings)
+                .Include(e => e.EnrolmentStatuses)
+                .AsNoTracking().Single(e => e.Id == enrolleeId);
         }
 
         [Fact]
@@ -50,11 +50,11 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", Guid.NewGuid());
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees");
+                TestUtils.AddAdminAuth(request);
 
-                // send the request
                 var response = await _client.SendAsync(request);
+
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
         }
@@ -64,14 +64,11 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                var enrollee = this.CreateEnrollee(scope);
+                var enrollee = CreateEnrollee(scope);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees");
+                TestUtils.AddEnrolleeAuth(request, enrollee);
 
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees", enrollee.UserId);
-
-                // send the request
                 var response = await _client.SendAsync(request);
-                var body = await response.Content.ReadAsStringAsync();
 
                 Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             }
@@ -87,15 +84,13 @@ namespace PrimeTests.Integration
                 {
                     Enrollee = testEnrollee
                 };
-
-                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", testEnrollee.UserId, payload);
+                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", payload);
+                TestUtils.AddEnrolleeAuth(request, testEnrollee);
 
                 var response = await _client.SendAsync(request);
+
                 Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-
-                var body = await response.Content.ReadAsStringAsync();
-                Enrollee createdEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
-
+                var createdEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
                 Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
             }
         }
@@ -105,42 +100,34 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                var enrollee = this.CreateEnrollee(scope);
-                int expectedEnrolleeId = (int)enrollee.Id;
-                Guid expectedUserId = enrollee.UserId;
+                var expectedEnrollee = CreateEnrollee(scope);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrollee.Id}");
+                TestUtils.AddEnrolleeAuth(request, expectedEnrollee);
 
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrolleeId}", enrollee.UserId);
-
-                // Get enrollee by Id
                 var response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                var body = await response.Content.ReadAsStringAsync();
-                Enrollee responseEnrollee = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee>>(body).Result;
-                Assert.Equal(expectedEnrolleeId, responseEnrollee.Id);
-                Assert.Equal(expectedUserId, responseEnrollee.UserId);
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var responseEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
+                Assert.Equal(expectedEnrollee.Id, responseEnrollee.Id);
+                Assert.Equal(expectedEnrollee.UserId, responseEnrollee.UserId);
             }
         }
 
-        [Fact(Skip = "Test fails for an unknown reason")]
+        [Fact(Skip = "Test fails with an error specific to the In-Memory databse we are using when projecting to the Enrollee List ViewModel")]
         public async void TestGetAllEnrollees()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                this.CreateEnrollee(scope);
-                this.CreateEnrollee(scope);
-                this.CreateEnrollee(scope);
+                CreateEnrollee(scope);
+                CreateEnrollee(scope);
+                CreateEnrollee(scope);
+                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees");
+                TestUtils.AddAdminAuth(request);
 
-                // create a request with an AUTH token
-                var request = TestUtils.CreateAdminRequest(HttpMethod.Get, $"/api/enrollees", Guid.NewGuid());
-
-                // Get all enrollees for ADMIN user
                 var response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                var body = await response.Content.ReadAsStringAsync();
-                Enrollee[] responseEnrollees = JsonConvert.DeserializeObject<ApiResultResponse<Enrollee[]>>(body).Result;
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                Enrollee[] responseEnrollees = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee[]>>()).Result;
                 Assert.Equal(3, responseEnrollees.Count());
             }
         }
@@ -150,25 +137,17 @@ namespace PrimeTests.Integration
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                Enrollee enrollee = this.CreateEnrollee(scope);
-                string expectedFirstName = "NewFirstName";
+                Enrollee enrollee = CreateEnrollee(scope);
+                var updateModel = enrollee.CopyToUpdateModel();
+                updateModel.Email = enrollee.Email.Bump();
+                var request = TestUtils.CreateRequest(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", updateModel);
+                TestUtils.AddEnrolleeAuth(request, enrollee);
 
-                Assert.NotEqual(expectedFirstName, enrollee.FirstName);
-
-                var enrolleeProfile = new EnrolleeUpdateModel
-                {
-                    PreferredFirstName = expectedFirstName
-                };
-
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Put, $"/api/enrollees/{enrollee.Id}", enrollee.UserId, enrolleeProfile);
-
-                // try to update the enrollee
                 var response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
 
-                Enrollee updatedEnrollee = this.GetEnrollee(scope, enrollee.Id);
-                Assert.Equal(expectedFirstName, updatedEnrollee.PreferredFirstName);
+                Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+                Enrollee updatedEnrollee = GetEnrollee(scope, enrollee.Id);
+                Assert.Equal(updateModel.Email, updatedEnrollee.Email);
             }
         }
     }

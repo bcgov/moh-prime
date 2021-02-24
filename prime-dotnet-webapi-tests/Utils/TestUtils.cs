@@ -1,22 +1,20 @@
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+using System.Net.Http;
+using System.Security.Claims;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using IdentityModel.Client;
 using Bogus;
+
 using Prime;
 using Prime.Auth;
 using Prime.Models;
-using Prime.Services;
 using PrimeTests.Utils.Auth;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
-using System.Net.Http.Headers;
-using Microsoft.EntityFrameworkCore.Internal;
-using Newtonsoft.Json.Linq;
 
 namespace PrimeTests.Utils
 {
@@ -25,7 +23,6 @@ namespace PrimeTests.Utils
     /// </summary>
     public class TestUtils
     {
-
         public static string[] countries = new[] { "CA" };
 
         public static string[] provinces = new[] { "AB", "BC", "MB", "NB", "NL", "NS", "ON", "PE", "QC", "SK", "NT", "NU", "YT" };
@@ -75,8 +72,8 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.LastName, f => f.Name.LastName())
             .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
             .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
-            .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
-            .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
+            // .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
+            // .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
             .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
@@ -109,20 +106,6 @@ namespace PrimeTests.Utils
         public static string RandomDeviceProviderNumber()
         {
             return new Faker().Random.Int(100000, 999999).ToString().Substring(1);
-        }
-
-        public static void AddAdminRoleToUser(ClaimsPrincipal user)
-        {
-            var identity = user.Identity as ClaimsIdentity;
-            identity.AddClaim(new Claim(ClaimTypes.Role, Roles.PrimeAdmin));
-        }
-
-        public static void RemoveAdminRoleFromUser(ClaimsPrincipal user)
-        {
-            var claim = user.Claims
-                .Single(c => c.Value == Roles.PrimeAdmin);
-            var identity = user.Identity as ClaimsIdentity;
-            identity.RemoveClaim(claim);
         }
 
         public static void InitializeDbForTests(ApiDbContext db)
@@ -285,33 +268,6 @@ namespace PrimeTests.Utils
             db.SaveChanges();
         }
 
-        public static void ReinitializeDbForTests(ApiDbContext db)
-        {
-            // db.Enrollees.RemoveRange(db.Enrollees);
-            InitializeDbForTests(db);
-        }
-
-
-        public static StringContent GetStringContent(object obj)
-        {
-            return new StringContent(JsonConvert.SerializeObject(obj), Encoding.Default, "application/json");
-        }
-
-        public static async Task<string> GetBodyFromResponse(HttpResponseMessage response)
-        {
-            return await response.Content.ReadAsStringAsync();
-        }
-
-        public static T DeserializeBody<T>(string body)
-        {
-            return JsonConvert.DeserializeObject<T>(body);
-        }
-
-        public static async Task<T> DeserializeResponse<T>(HttpResponseMessage response)
-        {
-            return DeserializeBody<T>(await GetBodyFromResponse(response));
-        }
-
         public static void DetachAllEntities(ApiDbContext _dbContext)
         {
             var changedEntriesCopy = _dbContext.ChangeTracker.Entries()
@@ -327,98 +283,57 @@ namespace PrimeTests.Utils
             }
         }
 
-        public static BearerTokenBuilder TokenBuilder()
+        public static HttpRequestMessage CreateRequest(HttpMethod method, string requestUri, object payload = null)
         {
-            return new BearerTokenBuilder()
-                        .ForAudience(TestAuthorizationConstants.Audience)
-                        .IssuedBy(TestAuthorizationConstants.Issuer)
-                        .WithSigningCertificate(EmbeddedResourceReader.GetCertificate(TestAuthorizationConstants.CertificatePassword));
-        }
-
-        public static HttpRequestMessage CreateRequest(
-            HttpMethod method,
-            string requestUri,
-            Guid subject)
-        {
-            return CreateRequest(method, requestUri, subject, null);
-        }
-
-        public static HttpRequestMessage CreateAdminRequest(
-            HttpMethod method,
-            string requestUri,
-            Guid subject)
-        {
-            return CreateAdminRequest(method, requestUri, subject, null);
-        }
-
-        public static HttpRequestMessage CreateRequest(
-            HttpMethod method,
-            string requestUri,
-            Guid subject,
-            object payload)
-        {
-            // create a request with an AUTH token
             var request = new HttpRequestMessage(method, requestUri);
-            var _token = TestUtils.TokenBuilder()
-                .ForAudience(AuthConstants.Audience)
-                .ForSubject(subject.ToString())
-                .WithClaim(ClaimTypes.Role, Roles.PrimeEnrollee)
-                .WithClaim(Claims.AssuranceLevel, "3")
-                .WithClaim(Claims.IdentityProvider, "bcsc")
-                .WithClaim(Claims.Address, "{}")
-                .BuildToken();
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
 
             if (payload != null)
             {
-                request.Content = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
+                request.Content = new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json");
             }
 
             return request;
         }
 
-        public static HttpRequestMessage CreateAdminRequest(
-            HttpMethod method,
-            string requestUri,
-            Guid subject,
-            object payload)
+        public static void AddEnrolleeAuth(HttpRequestMessage request, Enrollee enrollee)
         {
-            var request = CreateRequest(method, requestUri, subject, payload);
-
-            // replace the token - with an admin version of the token
-            var _token = TestUtils.TokenBuilder()
-                 .ForAudience(AuthConstants.Audience)
-                 .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, Roles.PrimeAdmin)
-                 .WithClaim(ClaimTypes.Role, Roles.PrimeReadonlyAdmin)
-                 .BuildToken();
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
-
-            return request;
+            var token = CreateTokenWithClaims(enrollee.UserId,
+                (ClaimTypes.Role, Roles.PrimeEnrollee),
+                (Claims.GivenName, enrollee.FirstName),
+                (Claims.GivenNames, enrollee.GivenNames),
+                (Claims.FamilyName, enrollee.LastName),
+                (Claims.PreferredUsername, enrollee.HPDID),
+                (Claims.Birthdate, enrollee.DateOfBirth.ToString()),
+                (Claims.Address, JsonConvert.SerializeObject(enrollee.VerifiedAddress)),
+                (Claims.AssuranceLevel, "3"),
+                (Claims.IdentityProvider, "bcsc")
+                );
+            request.SetBearerToken(token);
         }
 
-
-        public static HttpRequestMessage CreateSuperAdminRequest(
-            HttpMethod method,
-            string requestUri,
-            Guid subject,
-            object payload)
+        public static void AddAdminAuth(HttpRequestMessage request, Guid userId = default)
         {
-            var request = CreateRequest(method, requestUri, subject, payload);
-
-            // replace the token - with an admin version of the token
-            var _token = TestUtils.TokenBuilder()
-                 .ForAudience(AuthConstants.Audience)
-                 .ForSubject(subject.ToString())
-                 .WithClaim(ClaimTypes.Role, Roles.PrimeSuperAdmin)
-                 .BuildToken();
-
-            request.Headers.Authorization = new AuthenticationHeaderValue("bearer", _token);
-
-            return request;
+            var token = CreateTokenWithClaims(userId,
+                (ClaimTypes.Role, Roles.PrimeAdministrant),
+                (ClaimTypes.Role, Roles.ViewEnrollee),
+                (ClaimTypes.Role, Roles.TriageEnrollee),
+                (ClaimTypes.Role, Roles.ApproveEnrollee),
+                (ClaimTypes.Role, Roles.ManageEnrollee),
+                (ClaimTypes.Role, Roles.ViewSite),
+                (ClaimTypes.Role, Roles.EditSite)
+                );
+            request.SetBearerToken(token);
         }
 
+        private static string CreateTokenWithClaims(Guid subject, params (string ClaimType, string Value)[] claims)
+        {
+            return new BearerTokenBuilder()
+                .ForAudience(AuthConstants.Audience)
+                .IssuedBy(TestAuthorizationConstants.Issuer)
+                .WithSigningCertificate(EmbeddedResourceReader.GetCertificate(TestAuthorizationConstants.CertificatePassword))
+                .ForSubject(subject.ToString())
+                .WithClaims(claims)
+                .BuildToken();
+        }
     }
 }

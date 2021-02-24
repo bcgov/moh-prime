@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +20,8 @@ namespace PrimeTests.Integration
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 // Arrange
-                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/lookups", Guid.NewGuid());
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/lookups");
+                TestUtils.AddAdminAuth(request);
 
                 // Act
                 var response = await _client.SendAsync(request);
