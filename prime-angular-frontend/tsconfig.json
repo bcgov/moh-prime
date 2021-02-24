@@ -55,6 +55,9 @@
       ],
       "@phsa/*": [
         "./app/modules/phsa-eforms/*"
+      ],
+      "@gis/*": [
+        "./app/modules/gis-enrolment/*"
       ]
     }
   },

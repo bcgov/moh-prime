@@ -11,6 +11,7 @@ import { BceidComponent } from './pages/bceid/bceid.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { SiteComponent } from './pages/site/site.component';
 import { PhsaComponent } from './pages/phsa/phsa.component';
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
+  },
+  {
+    path: GisEnrolmentRoutes.LOGIN_PAGE,
+    loadChildren: () => import('../gis-enrolment/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
   }
 ];
 
