@@ -101,9 +101,6 @@ objects:
           - containerPort: 8080
           - containerPort: 8443
           - containerPort: 8888
-          securityContext:
-            runAsUser: 101
-            allowPrivilegeEscalation: false
           resources:
             limits:
               cpu: 500m
