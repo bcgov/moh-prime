@@ -27,9 +27,9 @@ namespace PrimeTests
             EnrolleeUpdateModel profile = JsonConvert.DeserializeObject<EnrolleeUpdateModel>(serialized);
 
             // Finalize remaing fields
-            profile.VerifiedAddress = enrollee.VerifiedAddress;
-            profile.PhysicalAddress = enrollee.PhysicalAddress;
-            profile.MailingAddress = enrollee.MailingAddress;
+            profile.VerifiedAddress = new VerifiedAddress().SetValues(enrollee.VerifiedAddress);
+            profile.PhysicalAddress = new PhysicalAddress().SetValues(enrollee.PhysicalAddress);
+            profile.MailingAddress = new MailingAddress().SetValues(enrollee.MailingAddress);
             profile.IdentityAssuranceLevel = enrollee.IdentityAssuranceLevel;
             profile.IdentityProvider = enrollee.IdentityProvider;
             return profile;
