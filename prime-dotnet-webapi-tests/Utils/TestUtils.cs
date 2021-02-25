@@ -63,17 +63,15 @@ namespace PrimeTests.Utils
 
         public static Faker<EnrolmentStatus> EnrolmentStatusFaker = new Faker<EnrolmentStatus>()
             .RuleFor(es => es.StatusCode, f => (int)StatusType.Editable)
-            // .RuleFor(es => es.Status, f => new Status { Code = Status.ACTIVE_CODE, Name = "Active Code" })
             .RuleFor(es => es.StatusDate, f => DateTime.Now);
 
         public static Faker<Enrollee> EnrolleeFaker = new Faker<Enrollee>()
             .RuleFor(e => e.UserId, f => Guid.NewGuid())
+            .RuleFor(e => e.HPDID, f => Guid.NewGuid().ToString())
             .RuleFor(e => e.FirstName, f => f.Name.FirstName())
             .RuleFor(e => e.LastName, f => f.Name.LastName())
             .RuleFor(e => e.GivenNames, f => f.Name.FirstName())
-            .RuleFor(e => e.DateOfBirth, f => f.Date.Past(20, DateTime.Now.AddYears(-18)))
-            // .RuleFor(e => e.PhysicalAddress, f => PhysicalAddressFaker.Generate())
-            // .RuleFor(e => e.MailingAddress, f => MailingAddressFaker.Generate())
+            .RuleFor(e => e.DateOfBirth, f => (f.Date.Past(20, DateTime.Now.AddYears(-18))).Date)
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
             .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
@@ -303,7 +301,7 @@ namespace PrimeTests.Utils
                 (Claims.GivenNames, enrollee.GivenNames),
                 (Claims.FamilyName, enrollee.LastName),
                 (Claims.PreferredUsername, enrollee.HPDID),
-                (Claims.Birthdate, enrollee.DateOfBirth.ToString()),
+                (Claims.Birthdate, enrollee.DateOfBirth.ToString("yyyy-MM-dd")),
                 (Claims.Address, JsonConvert.SerializeObject(enrollee.VerifiedAddress)),
                 (Claims.AssuranceLevel, "3"),
                 (Claims.IdentityProvider, "bcsc")
