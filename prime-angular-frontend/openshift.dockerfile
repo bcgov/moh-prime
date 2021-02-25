@@ -4,7 +4,6 @@
 FROM public.ecr.aws/bitnami/node:14.15.5-prod AS builder
 
 # Set working directory
-RUN id -u
 WORKDIR /usr/src/app
 
 # Set environment variables
@@ -22,8 +21,6 @@ RUN apt-get update
 COPY . .
 
 # Fill template with environment variables
-RUN pwd
-RUN echo hello
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 
 # Install Angular CLI
@@ -40,19 +37,19 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM public.ecr.aws/nginx/nginx:1.18
+FROM docker.io/nginx:1.18.0
 
 WORKDIR /app
 
 # Edit folder permissions
-RUN chmod 766 /etc/nginx
-RUN chmod 666 /var/cache/nginx
+RUN chmod 766 -R /etc/nginx
+# RUN chmod 666 /var/cache/nginx
 # RUN chmod 666 /var/lib/nginx
 
 RUN touch /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.template.conf /etc/nginx/nginx.template.conf
-COPY entrypoint.sh /
+COPY nginx.template.conf /etc/nginx/conf.d/default.conf
+# COPY entrypoint.sh /
 
 COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 
@@ -61,8 +58,9 @@ COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 # RUN echo "Build completed."
 
 # COPY ./entrypoint.sh /app
-RUN chmod +x /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
-CMD /entrypoint.sh
+# CMD /entrypoint.sh
+CMD ["nginx", "-g", "daemon off;"]

@@ -144,6 +144,34 @@ objects:
         type: ImageChange
   status: {}
 
+# # Route definition to direct internal traffic to Document Manager
+# - apiVersion: v1
+#   kind: Route
+#   metadata:
+#     name: "angular-frontend-to-document-manager"
+#   spec:
+#     rules:
+#     - host: "${VANITY_URL}"
+#       http:
+#         paths:
+#         - backend:
+#             serviceName: "document-manager${SUFFIX}-backend"
+#             servicePort: 6001
+
+# # Route definition to direct internal traffic to .NET Web API
+# - apiVersion: v1
+#   kind: Route
+#   metadata:
+#     name: "angular-frontend-to-dotnet-webapi"
+#   spec:
+#     rules:
+#     - host: "${VANITY_URL}"
+#       http:
+#         paths:
+#         - backend:
+#             serviceName: "dotnet-webapi${SUFFIX}"
+#             servicePort: 8080
+
 # Route definition to direct external traffic via Pharmanet Enrolment URL
 - apiVersion: v1
   kind: Route
