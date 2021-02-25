@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Hosting;
 
 using Serilog;
@@ -39,7 +40,15 @@ namespace Prime
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureKestrel(o =>
+                        {
+                            o.ConfigureHttpsDefaults(o =>
+                                o.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
+                        });
+                    webBuilder.UseStartup<Startup>();
+                })
                 .UseSerilog();
 
         private static void CreateLogger()
