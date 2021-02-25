@@ -292,6 +292,8 @@ export abstract class AbstractFormStateService<T> {
 
     this.buildForms();
 
-    this.routeStateResetListener(resetRoutes);
+    if (resetRoutes?.length) {
+      this.routeStateResetListener(resetRoutes);
+    }
   }
 }
