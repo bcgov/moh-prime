@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
+using FakeItEasy;
 
 using Prime.Models;
+using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.HttpClientMocks;
@@ -200,7 +202,7 @@ namespace PrimeTests.UnitTests
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes));
+            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>());
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
