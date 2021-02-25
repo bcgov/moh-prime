@@ -15,6 +15,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Admin } from '@auth/shared/models/admin.model';
 
 @Component({
   selector: 'app-enrollee-table',
@@ -34,9 +35,11 @@ export class EnrolleeTableComponent implements OnInit {
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
+  public hasAssignedToFilter = false;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
   public Role = Role;
+  public adjudicatorIdir: string;
 
   constructor(
     private authService: AuthService,
@@ -118,6 +121,13 @@ export class EnrolleeTableComponent implements OnInit {
     this.hasRenewalDateRange = false;
   }
 
+  public toggleFilterAssigned() {
+    this.hasAssignedToFilter = !this.hasAssignedToFilter;
+    this.dataSource.filter = this.hasAssignedToFilter
+      ? { ...this.form.value, adjudicatorIdir: this.adjudicatorIdir } as string
+      : this.dataSource.filter = { ...this.form.value };
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -133,6 +143,9 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private initForm() {
+    this.authService.getAdmin$()
+      .subscribe(({ idir }: Admin) => this.adjudicatorIdir = idir);
+
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.form.valueChanges.subscribe(value => {
@@ -155,18 +168,28 @@ export class EnrolleeTableComponent implements OnInit {
 
   private getFilterPredicate() {
     return (row: EnrolleeListViewModel, filter) => {
-      const appliedDate = moment.utc(row.appliedDate);
-      const renewalDate = moment.utc(row.expiryDate);
       // Add 1 day to range end date for inclusive check
-      const searchByAppliedDate =
-        (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
-        && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
-      const searchByRenewalDate =
-        (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
-        && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+
       const matchFilter = [];
-      matchFilter.push(searchByAppliedDate);
-      matchFilter.push(searchByRenewalDate);
+      if (this.hasAppliedDateRange) {
+        const appliedDate = moment.utc(row.appliedDate);
+        const searchByAppliedDate =
+          (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
+          && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
+        matchFilter.push(searchByAppliedDate);
+      }
+      if (this.hasRenewalDateRange) {
+        const renewalDate = moment.utc(row.expiryDate);
+        const searchByRenewalDate =
+          (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
+          && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+        matchFilter.push(searchByRenewalDate);
+      }
+      if (this.hasAssignedToFilter) {
+        const searchByIdir = row.adjudicatorIdir === filter.adjudicatorIdir;
+        matchFilter.push(searchByIdir);
+      }
+
       return matchFilter.every(Boolean);
     };
   }

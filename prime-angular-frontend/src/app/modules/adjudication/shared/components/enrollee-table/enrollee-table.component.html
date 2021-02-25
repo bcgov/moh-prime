@@ -150,7 +150,15 @@
         <ng-container matColumnDef="assignedTo">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Assigned To </th>
+              scope="col">
+            Assigned To
+            <button mat-icon-button
+                    [class]="hasAssignedToFilter ? 'blueIcon' : ''"
+                    matTooltip="Filter assigned to me"
+                    (click)="toggleFilterAssigned()">
+              <mat-icon>assignment_ind icon</mat-icon>
+            </button>
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
         </ng-container>
