@@ -114,11 +114,11 @@ objects:
               path: /info
               port: 8443
               scheme: HTTPS
-            initialDelaySeconds: 5
-            periodSeconds: 10
+            initialDelaySeconds: 180
+            periodSeconds: 180
             successThreshold: 1
             # timeoutSeconds: 1
-            timeoutSeconds: 30
+            timeoutSeconds: 180
           volumeMounts:
             - mountPath: /etc/nginx/certs
               name: vanity-tls-certs

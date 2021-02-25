@@ -277,11 +277,11 @@ objects:
                 path: /api/healthcheck
                 port: 8080
                 scheme: "HTTP"
-              initialDelaySeconds: 30
-              periodSeconds: 30
+              initialDelaySeconds: 180
+              periodSeconds: 180
               successThreshold: 1
               # timeoutSeconds: 10
-              timeoutSeconds: 30
+              timeoutSeconds: 180
             volumeMounts:
               # Create directory for storing .NET Web API SSL certificate
               - name: cert-volume
