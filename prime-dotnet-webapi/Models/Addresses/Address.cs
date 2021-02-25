@@ -44,14 +44,13 @@ namespace Prime.Models
 
         /// <summary>
         /// Updates this Address with the values from another address, if not null.
-        /// Returns the modified object, for convienience.
         /// </summary>
         /// <param name="other"></param>
-        public Address SetValues(Address other)
+        public void SetValues(Address other)
         {
             if (other == null)
             {
-                return this;
+                return;
             }
 
             CountryCode = other.CountryCode;
@@ -60,8 +59,6 @@ namespace Prime.Models
             Street2 = other.Street2;
             City = other.City;
             Postal = other.Postal;
-
-            return this;
         }
 
         public override bool Equals(object obj)
