@@ -14,12 +14,9 @@ namespace PrimeTests.ModelFactories
             RuleFor(x => x.Id, f => _idCounter++);
             RuleFor(x => x.EnrolleeId, f => owner.Id);
             RuleFor(x => x.Enrollee, f => owner);
-
             RuleFor(x => x.HealthAuthorityCode, f => f.PickRandom(HealthAuthorityLookup.All).Code);
-            RuleFor(x => x.FacilityCode, f => f.PickRandom(FacilityLookup.All).Code);
 
             Ignore(x => x.HealthAuthority);
-            Ignore(x => x.Facility);
         }
     }
 }

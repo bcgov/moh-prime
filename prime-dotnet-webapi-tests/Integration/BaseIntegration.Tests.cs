@@ -21,7 +21,7 @@ namespace PrimeTests.Integration
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
                 var _dbContext = scope.ServiceProvider.GetRequiredService<ApiDbContext>();
-                TestUtils.ReinitializeDbForTests(_dbContext);
+                TestUtils.InitializeDbForTests(_dbContext);
             }
         }
 
