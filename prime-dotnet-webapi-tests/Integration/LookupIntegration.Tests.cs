@@ -1,40 +1,37 @@
-using System;
 using System.Net;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Prime.Models;
+using Xunit;
+
 using Prime.Models.Api;
 using PrimeTests.Utils;
-using Xunit;
 
 namespace PrimeTests.Integration
 {
     public class LookupIntegrationTests : BaseIntegrationTests
     {
-        public LookupIntegrationTests(CustomWebApplicationFactory<TestStartup> factory) : base(factory)
-        {
-        }
+        public LookupIntegrationTests(CustomWebApplicationFactory<TestStartup> factory)
+            : base(factory)
+        { }
 
         [Fact]
         public async void TestGetLookups()
         {
             using (var scope = _factory.Server.Host.Services.CreateScope())
             {
-                // create a request with an AUTH token
-                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/lookups", Guid.NewGuid());
+                // Arrange
+                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/lookups");
+                TestUtils.AddAdminAuth(request);
 
-                // send the request
+                // Act
                 var response = await _client.SendAsync(request);
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-                var apiResponse = TestUtils.DeserializeResponse<ApiResultResponse<LookupEntity>>(response).Result;
-                Assert.NotNull(apiResponse);
-                Assert.NotEmpty(apiResponse.Result.Colleges);
-                Assert.NotEmpty(apiResponse.Result.JobNames);
-                Assert.NotEmpty(apiResponse.Result.Licenses);
-                Assert.NotEmpty(apiResponse.Result.CareSettings);
-                Assert.NotEmpty(apiResponse.Result.Practices);
-                Assert.NotEmpty(apiResponse.Result.Statuses);
+                // Assert
+                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+                var lookupsResult = await response.Content.ReadAsAsync<ApiResultResponse<LookupEntity>>();
+                Assert.NotNull(lookupsResult);
+                Assert.NotNull(lookupsResult.Result);
+                Assert.NotEmpty(lookupsResult.Result.Licenses);
             }
         }
     }

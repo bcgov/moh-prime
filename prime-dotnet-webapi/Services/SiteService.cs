@@ -511,6 +511,7 @@ namespace Prime.Services
             return await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
                 .Where(predicate)
                 .Select(ruc => ruc.RemoteUser)
                 .Distinct()

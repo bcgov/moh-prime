@@ -41,6 +41,72 @@
   "roles": {
     "realm": [
       {
+        "id": "c7dab878-6105-4112-b950-8703c0b1fb47",
+        "name": "site_edit",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "73406245-eeeb-401b-ae3c-d4c2e4ed2d83",
+        "name": "feature_site_pharmacist",
+        "description": "Community Pharmacy for Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "6491e5ea-4980-4078-855c-b74834768f20",
+        "name": "prime_readonly_admin",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "a53ce329-b78b-4f72-998b-155174c1ce72",
+        "name": "enrollee_view",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "ce5db9c0-0914-49db-88b8-6d3602c17fc4",
+        "name": "prime_api_service_account",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "3b33e07d-ae24-401f-8411-6d0ea4b047f8",
+        "name": "site_view",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "fd0f3306-1c87-45a6-9d45-08c7981e9afa",
+        "name": "enrollee_triage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "cb33c4dd-2416-42bc-ac4d-cdb7252e486d",
+        "name": "offline_access",
+        "description": "${role_offline-access}",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "9bef3a33-bdaa-4284-baee-33d07ef1c66d",
         "name": "prime_admin",
         "description": "IDIR authenticated admin role",
@@ -57,14 +123,6 @@
       {
         "id": "facc11fb-1efc-4c64-967a-93c25bd197fd",
         "name": "phsa_eforms_labtech",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "73406245-eeeb-401b-ae3c-d4c2e4ed2d83",
-        "name": "feature_site_pharmacist",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -102,14 +160,6 @@
         "attributes": {}
       },
       {
-        "id": "6491e5ea-4980-4078-855c-b74834768f20",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "36f84275-b9f0-4202-a9c2-8fbf858183dd",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -122,6 +172,14 @@
         "id": "30b4eba8-a6f9-4fde-b655-ab55117b3229",
         "name": "external_hpdid_access",
         "description": "Access to the HPDID => GPID API endpoint",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "d685fc5a-f24c-4503-ba58-b633212b01f9",
+        "name": "enrollee_approve",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -145,9 +203,17 @@
         "attributes": {}
       },
       {
-        "id": "cb33c4dd-2416-42bc-ac4d-cdb7252e486d",
-        "name": "offline_access",
-        "description": "${role_offline-access}",
+        "id": "81b63f17-4df5-494b-b121-89f43f3c15e4",
+        "name": "prime_administrant",
+        "description": "A role representing the basic ability of the user is to access the \"admin\" portion of PRIME.",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "475e42c5-9162-4288-9178-2474933bc98d",
+        "name": "enrollee_elevated_management",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -462,12 +528,63 @@
   },
   "groups": [
     {
-      "id": "8770410e-ed92-4a9b-a568-4a24bd44b25c",
-      "name": "Prime Admin",
-      "path": "/Prime Admin",
+      "id": "8a5aa405-1e32-431c-ab9f-4a447643a64f",
+      "name": "Analyst",
+      "path": "/Analyst",
       "attributes": {},
       "realmRoles": [
-        "prime_super_admin"
+        "site_edit",
+        "enrollee_view",
+        "site_view",
+        "enrollee_approve",
+        "enrollee_triage",
+        "prime_administrant"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "06b14dfd-13fd-463b-81a9-b228d78d5971",
+      "name": "Clerk",
+      "path": "/Clerk",
+      "attributes": {},
+      "realmRoles": [
+        "site_edit",
+        "enrollee_view",
+        "site_view",
+        "enrollee_triage",
+        "prime_administrant"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "46572c96-9f35-4102-925c-cf90dfe087dd",
+      "name": "HIBCHelpdesk",
+      "path": "/HIBCHelpdesk",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "site_view",
+        "prime_administrant"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "8770410e-ed92-4a9b-a568-4a24bd44b25c",
+      "name": "Manager",
+      "path": "/Manager",
+      "attributes": {},
+      "realmRoles": [
+        "prime_admin",
+        "site_edit",
+        "enrollee_view",
+        "site_view",
+        "enrollee_approve",
+        "enrollee_triage",
+        "prime_administrant",
+        "enrollee_elevated_management"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -2329,8 +2446,8 @@
       "linkOnly": false,
       "firstBrokerLoginFlowAlias": "first broker login",
       "config": {
-        "hideOnLoginPage": "",
         "validateSignature": "true",
+        "hideOnLoginPage": "",
         "userInfoUrl": "https://idtest.gov.bc.ca/oauth2/userinfo",
         "uiLocales": "",
         "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
@@ -3346,6 +3463,6 @@
   "clientAuthenticationFlow": "clients",
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {},
-  "keycloakVersion": "7.4.2.GA",
+  "keycloakVersion": "7.4.4.GA",
   "userManagedAccessAllowed": false
 }
