@@ -882,7 +882,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult<SiteAdjudicationDocument>> DeleteSiteAdjudicationDocument(int documentId)
         {
             var document = await _siteService.GetSiteAdjudicationDocumentAsync(documentId);
