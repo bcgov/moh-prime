@@ -41,15 +41,6 @@
   "roles": {
     "realm": [
       {
-        "id": "a44432b1-041a-4a63-87d8-a4ee3f287cf6",
-        "name": "feature_community_pharmacist",
-        "description": "Community Pharmacist feature flag",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "8ac87be8-340e-4449-8326-1ba4de1b4e74",
         "name": "phsa_eforms_labtech",
         "composite": false,
@@ -66,17 +57,17 @@
         "attributes": {}
       },
       {
-        "id": "5f4c16dd-507f-4e8f-b44a-b2a0e188f248",
-        "name": "prime_readonly_admin",
+        "id": "aa118bc3-2b67-4d57-926d-9693412ab437",
+        "name": "prime_administrant",
+        "description": "A role representing the basic ability of the user is to access the \"admin\" portion of PRIME.",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
       },
       {
-        "id": "839e1a7e-31a5-43bd-b303-8e8f6f00bbf6",
-        "name": "feature_site_registration",
-        "description": "Site Registration feature flag",
+        "id": "5f4c16dd-507f-4e8f-b44a-b2a0e188f248",
+        "name": "prime_readonly_admin",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -101,8 +92,24 @@
         "attributes": {}
       },
       {
+        "id": "fe705bd3-2bc2-4560-bf07-27ab4630837a",
+        "name": "site_edit",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "8fcd00ab-8fcf-4f16-aa9f-a9a3407b9736",
         "name": "prime_api_service_account",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "76e42aa8-7565-43d0-be49-f2fc85bfd5b0",
+        "name": "enrollee_view",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -125,6 +132,30 @@
         "id": "def9681d-e4c8-41cd-8909-81abbd6c2a33",
         "name": "offline_access",
         "description": "${role_offline-access}",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "54ca322e-edf3-4c72-80f8-9c1ac8891526",
+        "name": "enrollee_elevated_management",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "6f6dcaa7-e8e3-462f-8cb9-945c40c52697",
+        "name": "enrollee_triage",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "8f6415e5-3fc4-4ebc-a4b6-c89f52cf742a",
+        "name": "site_view",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -154,9 +185,8 @@
         "attributes": {}
       },
       {
-        "id": "483c75d5-515c-41c1-a218-c2cfc625beaa",
-        "name": "feature_health_authority",
-        "description": "Health Authority feature flag",
+        "id": "336564bc-460e-4a2c-87d1-d5492c1167c1",
+        "name": "enrollee_approve",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -486,6 +516,80 @@
     }
   },
   "groups": [
+    {
+      "id": "b0e37e5b-a4a9-45fe-96fe-894ab06b6a47",
+      "name": "Analyst",
+      "path": "/Analyst",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "prime_administrant",
+        "enrollee_triage",
+        "site_view",
+        "site_edit",
+        "enrollee_approve"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "c8e7286c-d6a1-4d06-9c29-c12cf125b93e",
+      "name": "Clerk",
+      "path": "/Clerk",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "prime_administrant",
+        "enrollee_triage",
+        "site_view",
+        "site_edit"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "5322ee88-eef1-4575-90c4-f5abd9c626b5",
+      "name": "HIBCHelpdesk",
+      "path": "/HIBCHelpdesk",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "prime_administrant",
+        "site_view"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "e23f8410-1d6f-4a0b-bed5-e59047678f67",
+      "name": "Manager",
+      "path": "/Manager",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "prime_administrant",
+        "enrollee_elevated_management",
+        "enrollee_triage",
+        "site_view",
+        "enrollee_approve",
+        "site_edit"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "7c97538b-c5c6-4384-a815-2d3c28bf2ec0",
+      "name": "Read-only Adjudicator",
+      "path": "/Read-only Adjudicator",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "prime_administrant",
+        "site_view"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
     {
       "id": "a70ff07f-9479-4941-8c49-0b257d5b7a34",
       "name": "Realm Administrator",
@@ -1275,26 +1379,6 @@
           }
         },
         {
-          "id": "0dfa8e2b-10c8-419f-a7e6-cb7dc060860c",
-          "name": "feature-site_registration",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_site_registration"
-          }
-        },
-        {
-          "id": "d0745dc9-a4bd-48cf-8006-2d8359c23a81",
-          "name": "feature-community_pharmacy",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_community_pharmacist"
-          }
-        },
-        {
           "id": "0befb97b-5a9a-46d1-80b2-74a4d8cc3d88",
           "name": "Client Host",
           "protocol": "openid-connect",
@@ -1306,16 +1390,6 @@
             "access.token.claim": "true",
             "claim.name": "clientHost",
             "jsonType.label": "String"
-          }
-        },
-        {
-          "id": "f4bfae35-f32a-40e5-a8e0-6bf66b02a700",
-          "name": "feature-health_authority",
-          "protocol": "openid-connect",
-          "protocolMapper": "oidc-hardcoded-role-mapper",
-          "consentRequired": false,
-          "config": {
-            "role": "feature_health_authority"
           }
         },
         {
@@ -3679,6 +3753,6 @@
   "clientAuthenticationFlow": "clients",
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {},
-  "keycloakVersion": "7.4.2.GA",
+  "keycloakVersion": "7.4.4.GA",
   "userManagedAccessAllowed": false
 }
