@@ -81,20 +81,6 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        [Fact]
-        public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsers()
-        {
-            var site = new SiteFactory().Generate();
-            var remoteUsers = new HashSet<RemoteUser>();
-
-            var service = CreateService();
-            await service.SendRemoteUserNotificationsAsync(site, remoteUsers);
-
-            // Don't expect error when no remote users
-        }
-
-
-
         public enum ExpectedEmail
         {
             None,
@@ -118,6 +104,18 @@ namespace PrimeTests.UnitTests
                     yield return new object[] { day, ExpectedEmail.None };
                 }
             }
+        }
+
+        [Fact]
+        public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
+        {
+            var service = CreateService();
+            var site = new SiteFactory().Generate();
+            var remoteUsers = Enumerable.Empty<RemoteUser>();
+
+            var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site, remoteUsers));
+
+            Assert.Null(exceptions);
         }
     }
 }
