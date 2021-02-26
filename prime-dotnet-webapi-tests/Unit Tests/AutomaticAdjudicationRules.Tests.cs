@@ -2,8 +2,10 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Xunit;
+using FakeItEasy;
 
 using Prime.Models;
+using Prime.Services;
 using Prime.Services.Rules;
 using PrimeTests.Utils;
 using PrimeTests.HttpClientMocks;
@@ -87,19 +89,31 @@ namespace PrimeTests.UnitTests
             return decl;
         }
 
-        private void UpdateAddresses(Enrollee enrollee, bool physInBc, bool? mailInBc)
+        private void UpdateAddresses(Enrollee enrollee, AddressCase verified, AddressCase physical, AddressCase mailing)
         {
-            string withRulesFor(bool inBc) => inBc ? null : "default,notBC";
+            string withRulesFor(AddressCase address) => address == AddressCase.OutsideBc ? "default,notBC" : null;
 
-            enrollee.PhysicalAddress = new PhysicalAddressFactory().Generate(withRulesFor(physInBc));
+            enrollee.Addresses = new List<EnrolleeAddress>();
 
-            if (mailInBc.HasValue)
+            enrollee.Addresses.Add(new EnrolleeAddress
             {
-                enrollee.MailingAddress = new MailingAddressFactory().Generate(withRulesFor(mailInBc.Value));
+                Address = new VerifiedAddressFactory().Generate(withRulesFor(verified))
+            });
+
+            if (physical != AddressCase.Null)
+            {
+                enrollee.Addresses.Add(new EnrolleeAddress
+                {
+                    Address = new PhysicalAddressFactory().Generate(withRulesFor(physical))
+                });
             }
-            else
+
+            if (mailing != AddressCase.Null)
             {
-                enrollee.MailingAddress = null;
+                enrollee.Addresses.Add(new EnrolleeAddress
+                {
+                    Address = new MailingAddressFactory().Generate(withRulesFor(mailing))
+                });
             }
         }
 
@@ -141,19 +155,17 @@ namespace PrimeTests.UnitTests
         }
 
         [Theory]
-        [InlineData(true, null, true)]
-        [InlineData(false, null, false)]
-        [InlineData(true, true, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, false)]
-        public async void TestAddressRule(bool physInBc, bool? mailInBc, bool expected)
+        [MemberData(nameof(AddressTestCases))]
+        public async void TestAddressRule(AddressCase verified, AddressCase physical, AddressCase mailing)
         {
-            Enrollee enrollee = new EnrolleeFactory().Generate();
-            UpdateAddresses(enrollee, physInBc, mailInBc);
             var rule = new AddressRule();
+            Enrollee enrollee = new EnrolleeFactory().Generate();
+            UpdateAddresses(enrollee, verified, physical, mailing);
+            var expected = new[] { verified, physical, mailing }.All(a => a != AddressCase.OutsideBc);
 
-            Assert.Equal(expected, await rule.ProcessRule(enrollee));
+            var result = await rule.ProcessRule(enrollee);
+
+            Assert.Equal(expected, result);
             if (expected)
             {
                 AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons);
@@ -164,13 +176,33 @@ namespace PrimeTests.UnitTests
             }
         }
 
+        public enum AddressCase
+        {
+            Null,
+            InBc,
+            OutsideBc
+        }
+        public static IEnumerable<object[]> AddressTestCases()
+        {
+            foreach (var v in new[] { AddressCase.InBc, AddressCase.OutsideBc })
+            {
+                foreach (var p in new[] { AddressCase.Null, AddressCase.InBc, AddressCase.OutsideBc })
+                {
+                    foreach (var m in new[] { AddressCase.Null, AddressCase.InBc, AddressCase.OutsideBc })
+                    {
+                        yield return new object[] { v, p, m };
+                    }
+                }
+            }
+        }
+
         [Theory]
         [MemberData(nameof(CertificationRuleData))]
         public async void TestCertificationRule(OperationMode[] apiModes, bool expected, StatusReasonType[] expectedReasons)
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes));
+            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>());
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);

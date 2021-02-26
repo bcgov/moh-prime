@@ -8,16 +8,16 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace PrimeTests.Utils.Auth
 {
-    public class BearerTokenBuilder 
+    public class BearerTokenBuilder
     {
         private X509Certificate2 _signingCertificate;
         private string _issuer = "https://issuer.com";
         private string _audience = "https://subject.com";
         private TimeSpan _life = TimeSpan.FromHours(1);
-        private DateTime _notBefore = DateTime.UtcNow;        
+        private DateTime _notBefore = DateTime.UtcNow;
         private readonly List<Claim> _claims = new List<Claim>();
         private readonly JwtSecurityTokenHandler _securityTokenHandler = new JwtSecurityTokenHandler();
-      
+
         public BearerTokenBuilder IssuedBy(string issuer)
         {
             if (string.IsNullOrEmpty(issuer))
@@ -81,6 +81,16 @@ namespace PrimeTests.Utils.Auth
             return this;
         }
 
+        public BearerTokenBuilder WithClaims(params (string ClaimType, string Value)[] claims)
+        {
+            foreach (var claim in claims)
+            {
+                this.WithClaim(claim.ClaimType, claim.Value);
+            }
+
+            return this;
+        }
+
         public BearerTokenBuilder WithLifetime(TimeSpan life)
         {
             if (life == null)
@@ -104,7 +114,7 @@ namespace PrimeTests.Utils.Auth
 
             return this;
         }
-    
+
         public string BuildToken()
         {
             if (_signingCertificate == null)
@@ -120,7 +130,7 @@ namespace PrimeTests.Utils.Auth
 
             var notBefore = _notBefore;
             var expires = notBefore.Add(_life);
-           
+
             var identity = new ClaimsIdentity(_claims);
 
             var securityTokenDescriptor = new SecurityTokenDescriptor
