@@ -11,7 +11,11 @@ namespace PrimeTests
 {
     public static class EnrolleeExtensions
     {
-        public static EnrolleeUpdateModel ToUpdateModel(this Enrollee enrollee)
+        /// <summary>
+        /// Copies all values from an Enrollee to a new EnrolleeUpdateModel
+        /// </summary>
+        /// <param name="enrollee"></param>
+        public static EnrolleeUpdateModel CopyToUpdateModel(this Enrollee enrollee)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
@@ -21,6 +25,11 @@ namespace PrimeTests
 
             var serialized = JsonConvert.SerializeObject(enrollee, settings);
             EnrolleeUpdateModel profile = JsonConvert.DeserializeObject<EnrolleeUpdateModel>(serialized);
+
+            // Finalize remaing fields
+            profile.VerifiedAddress = JsonConvert.DeserializeObject<VerifiedAddress>(JsonConvert.SerializeObject(enrollee.VerifiedAddress));
+            profile.PhysicalAddress = JsonConvert.DeserializeObject<PhysicalAddress>(JsonConvert.SerializeObject(enrollee.PhysicalAddress));
+            profile.MailingAddress = JsonConvert.DeserializeObject<MailingAddress>(JsonConvert.SerializeObject(enrollee.MailingAddress));
             profile.IdentityAssuranceLevel = enrollee.IdentityAssuranceLevel;
             profile.IdentityProvider = enrollee.IdentityProvider;
             return profile;
