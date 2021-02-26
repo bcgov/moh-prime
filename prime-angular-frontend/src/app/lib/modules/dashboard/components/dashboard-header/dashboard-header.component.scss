@@ -1,14 +1,40 @@
 @import 'palette';
+@import 'variables';
 
-.mat-toolbar {
-  height: 70px;
+@mixin dashboard-header-theme($bgColor, $color, $brandMarginTop) {
+  background-color: $bgColor;
+  color: $color;
 
   img {
-    margin-top: -15px;
+    margin-top: $brandMarginTop;
+  }
+}
 
-    &.hasMobileSidemenu {
+.mat-toolbar {
+  height: $dashboard-header-height;
+
+  &.is-mobile {
+    img {
       // Provide space between sidemenu toggle and BC Gov. logo
       margin-left: 15px;
+    }
+  }
+
+  // Default theme
+  @include dashboard-header-theme(theme-palette(blue), white, -15px);
+
+  &.theme-white {
+    @include dashboard-header-theme(white, theme-palette(blue), 0);
+
+    img {
+      border-right: 2px solid theme-palette(yellow);
+      // Force the right border to extend above/below the image
+      padding: 5px 30px 5px 0;
+      width: 255px;
+    }
+
+    &.is-mobile img {
+      width: 200px;
     }
   }
 

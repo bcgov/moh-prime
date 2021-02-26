@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChildren, QueryList } from '@angular/core';
+import { Component, Input, OnInit, ContentChildren, QueryList } from '@angular/core';
 
 import { PageSubheader2SummaryDirective } from './page-subheader2-summary.directive';
 import { PageSubheader2MoreInfoDirective } from './page-subheader2-more-info.directive';
@@ -9,14 +9,16 @@ import { PageSubheader2MoreInfoDirective } from './page-subheader2-more-info.dir
   styleUrls: ['./page-subheader2.component.scss']
 })
 export class PageSubheader2Component implements OnInit {
+  @Input() public showUnderline: boolean;
   @ContentChildren(PageSubheader2SummaryDirective, { descendants: true })
   public pageSubheaderSummaryChildren: QueryList<PageSubheader2SummaryDirective>;
   @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
-
   public showMoreInfo: boolean;
 
-  constructor() { }
+  constructor() {
+    this.showUnderline = true;
+  }
 
   public get hasPageSubheaderSummary(): boolean {
     return !!this.pageSubheaderSummaryChildren.length;
