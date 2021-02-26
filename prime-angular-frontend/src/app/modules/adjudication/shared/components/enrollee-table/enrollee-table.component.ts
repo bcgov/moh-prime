@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 
 import moment from 'moment';
 
@@ -35,7 +35,7 @@ export class EnrolleeTableComponent implements OnInit {
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
-  public hasAssignedToFilter = false;
+  public hasAssignedToFilter: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
   public Role = Role;
@@ -65,6 +65,7 @@ export class EnrolleeTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
+    this.hasAssignedToFilter = new BehaviorSubject<boolean>(false);
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -122,10 +123,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public toggleFilterAssigned() {
-    this.hasAssignedToFilter = !this.hasAssignedToFilter;
-    this.dataSource.filter = this.hasAssignedToFilter
-      ? { ...this.form.value, adjudicatorIdir: this.adjudicatorIdir } as string
-      : this.dataSource.filter = { ...this.form.value };
+    this.hasAssignedToFilter.next(!this.hasAssignedToFilter.value);
   }
 
   public ngOnInit(): void {
@@ -139,6 +137,7 @@ export class EnrolleeTableComponent implements OnInit {
       appliedDateRangeEnd: '',
       renewalDateRangeStart: '',
       renewalDateRangeEnd: '',
+      assignedTo: ''
     });
   }
 
@@ -151,6 +150,10 @@ export class EnrolleeTableComponent implements OnInit {
     this.form.valueChanges.subscribe(value => {
       const filter = { ...value, name: value.name } as string;
       this.dataSource.filter = filter;
+    });
+
+    this.hasAssignedToFilter.subscribe(value => {
+      this.form.get('assignedTo').patchValue(value ? this.adjudicatorIdir : "");
     });
 
     for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
@@ -185,8 +188,8 @@ export class EnrolleeTableComponent implements OnInit {
           && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
         matchFilter.push(searchByRenewalDate);
       }
-      if (this.hasAssignedToFilter) {
-        const searchByIdir = row.adjudicatorIdir === filter.adjudicatorIdir;
+      if (this.hasAssignedToFilter.value) {
+        const searchByIdir = row.adjudicatorIdir === filter.assignedTo;
         matchFilter.push(searchByIdir);
       }
 
