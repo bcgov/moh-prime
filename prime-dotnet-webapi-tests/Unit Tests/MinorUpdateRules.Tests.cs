@@ -74,12 +74,12 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_AllowedUpdates()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
 
-            profile.Email += "change";
-            profile.SmsPhone += "change";
-            profile.Phone += "change";
-            profile.PhoneExtension += "change";
+            profile.Email = profile.Email.Bump();
+            profile.SmsPhone = profile.SmsPhone.Bump();
+            profile.Phone = profile.Phone.Bump();
+            profile.PhoneExtension = profile.PhoneExtension.Bump();
 
             await AssertAllowableChanges(true, enrollee, profile);
         }
@@ -88,8 +88,8 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_SimpleDissallowedChange_SimpleProperty()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
-            profile.PreferredFirstName = "BIG CHANGES";
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
+            profile.PreferredFirstName = profile.PreferredFirstName.Bump();
 
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -98,8 +98,9 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_SimpleDissallowedChange_RemoveChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
-            profile.MailingAddress = null;
+            enrollee.Addresses = new EnrolleeAddressFactory(enrollee).Generate(1);
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
+            profile.VerifiedAddress = null;
 
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -108,8 +109,9 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_SimpleDissallowedChange_PropertyOnChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
-            profile.MailingAddress.City = "Flavortown, USA";
+            enrollee.Addresses = new EnrolleeAddressFactory(enrollee).Generate(1);
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
+            profile.VerifiedAddress.City = profile.VerifiedAddress.City.Bump();
 
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -118,8 +120,8 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_SimpleDissallowedChange_AddChildObject()
         {
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
-            enrollee.MailingAddress = null;
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
+            profile.MailingAddress = new MailingAddressFactory().Generate();
 
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -130,17 +132,17 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New cert
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
             profile.Certifications.Add(new Certification { CollegeCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit cert
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.Certifications.First().LicenseNumber += "6";
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove cert
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.Certifications = profile.Certifications.Skip(1).ToList();
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -162,17 +164,17 @@ namespace PrimeTests.UnitTests
             }
 
             // New job
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
             profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
             await AssertAllowableChanges(expected, enrollee, profile);
 
             // Edit job
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.Jobs.First().Title = "Bespoke lifehack crafter";
             await AssertAllowableChanges(expected, enrollee, profile);
 
             // Remove job
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.Jobs = profile.Jobs.Skip(1).ToList();
             await AssertAllowableChanges(expected, enrollee, profile);
         }
@@ -183,17 +185,17 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
 
             // New org
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
             profile.EnrolleeCareSettings.Add(new EnrolleeCareSetting { CareSettingCode = 1 });
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit org
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.EnrolleeCareSettings.First().CareSettingCode++;
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove org
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.EnrolleeCareSettings = profile.EnrolleeCareSettings.Skip(1).ToList();
             await AssertAllowableChanges(false, enrollee, profile);
         }
@@ -213,7 +215,7 @@ namespace PrimeTests.UnitTests
             Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
             enrollee.SelfDeclarations = new List<SelfDeclaration>();
 
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
             profile.SelfDeclarations.Add(new SelfDeclaration
             {
                 SelfDeclarationTypeCode = declarationType.Code,
@@ -237,7 +239,7 @@ namespace PrimeTests.UnitTests
             enrollee.SelfDeclarations = new[] { declaration };
 
             // New declaration
-            EnrolleeUpdateModel profile = enrollee.ToUpdateModel();
+            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
             profile.SelfDeclarations.Add(new SelfDeclaration
             {
                 SelfDeclarationTypeCode = (declaration.SelfDeclarationTypeCode % 4) + 1 // Pick a different code that exists
@@ -245,18 +247,18 @@ namespace PrimeTests.UnitTests
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Edit declaration
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.SelfDeclarations.Single().SelfDeclarationDetails += "and another thing...";
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Remove declaration
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             profile.SelfDeclarations.Clear();
             await AssertAllowableChanges(false, enrollee, profile);
 
             // Any document GUID in a self declaration update should be considered a change (even if it somehow matches an existing document)
             declaration.DocumentGuids = new[] { new Guid() };
-            profile = enrollee.ToUpdateModel();
+            profile = enrollee.CopyToUpdateModel();
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
@@ -270,6 +272,8 @@ namespace PrimeTests.UnitTests
                 typeof(string),
                 typeof(bool?),
                 typeof(bool),
+                typeof(VerifiedAddress),
+                typeof(PhysicalAddress),
                 typeof(MailingAddress),
                 typeof(ICollection<Certification>),
                 typeof(ICollection<Job>),
