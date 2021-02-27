@@ -1,5 +1,4 @@
-import { AddressLine } from '@lib/types/address-line.type';
-
+export type AddressLine = 'street' | 'street2' | 'city' | 'provinceCode' | 'countryCode' | 'postal';
 export type AddressType = 'verifiedAddress' | 'physicalAddress' | 'mailingAddress';
 
 export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress', 'physicalAddress'];

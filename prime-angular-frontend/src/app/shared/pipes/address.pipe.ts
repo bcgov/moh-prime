@@ -1,13 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Address } from '@shared/models/address.model';
+import { Address, AddressLine } from '@shared/models/address.model';
 import { StringUtils } from '@lib/utils/string-utils.class';
 
 @Pipe({
   name: 'address'
 })
 export class AddressPipe implements PipeTransform {
-  public transform(address: Address): string {
-    if (Address.isEmpty(address)) {
+  public transform(address: Address, blacklist: AddressLine[]): string {
+    if (Address.isEmpty(address, blacklist)) {
       return '';
     }
 
