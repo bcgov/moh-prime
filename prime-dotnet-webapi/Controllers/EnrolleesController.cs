@@ -403,9 +403,9 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // PUT: api/Enrollees/5/adjudicator
+        // PUT: api/Enrollees/5/adjudicator?adjudicatorId=1
         /// <summary>
-        /// Add an enrollee's assigned adjudicator.
+        /// Set an enrollee's assigned adjudicator.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorId"></param>
@@ -414,29 +414,23 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int adjudicatorId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            Admin admin = (adjudicatorId.HasValue)
-                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
-                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
-
-            if (admin == null)
+            if (!await _adminService.AdminExistsAsync(adjudicatorId))
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
             }
 
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin.Id);
+            await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
-            return Ok(ApiResponse.Result(updatedEnrollee));
+            return NoContent();
         }
 
         // DELETE: api/Enrollees/5/adjudicator
@@ -449,20 +443,18 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> RemoveEnrolleeAdjudicator(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> RemoveEnrolleeAdjudicator(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
+            await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin disclaimed enrollee");
 
-            return Ok(ApiResponse.Result(updatedEnrollee));
+            return NoContent();
         }
 
         // GET: api/Enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2

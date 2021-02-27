@@ -49,7 +49,7 @@ namespace Prime.Services
 
         Task<int> GetEnrolleeCountAsync();
 
-        Task<EnrolleeViewModel> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
+        Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
 
