@@ -92,14 +92,6 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm().subscribe(() => this.initForm());
-
-    const initialRemoteAccess = this.canRequestRemoteAccess();
-
-    this.form.valueChanges
-      .pipe(map((_) => initialRemoteAccess))
-      .subscribe(() => {
-        this.cannotRequestRemoteAccess = initialRemoteAccess && !this.isInitialEnrolment && !this.canRequestRemoteAccess();
-      });
   }
 
   public ngOnDestroy() {
@@ -117,6 +109,14 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.certifications.length) {
       this.addEmptyCollegeCertification();
     }
+
+    const initialRemoteAccess = this.canRequestRemoteAccess();
+
+    this.form.valueChanges
+      .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
+      .subscribe((couldRequestRemoteAccess: boolean) =>
+        this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
+      );
   }
 
   protected onSubmitFormIsValid() {
