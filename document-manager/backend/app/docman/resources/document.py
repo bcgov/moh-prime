@@ -2,6 +2,7 @@ import magic
 import uuid
 import os
 from datetime import datetime
+import base64
 
 from werkzeug.exceptions import BadRequest, NotFound, Conflict, RequestEntityTooLarge, InternalServerError
 from flask import request, current_app, send_file, make_response, jsonify
@@ -51,15 +52,11 @@ def validate_file_size(file_size):
 
 @api.route('/documents/uploads')
 class DocumentUploadResource(Resource):
-    @jwt.requires_auth
     def post(self):
         if request.headers.get('Tus-Resumable') is None:
             raise BadRequest('Received file upload for unsupported file transfer protocol')
 
-        parser = reqparse.RequestParser(trim=True)
-        parser.add_argument('filename', type=str, required=True, help='File name + extension of the document.')
-
-        filename = validate_filename(parser.parse_args().get('filename'))
+        filename = str(base64.b64decode(request.headers.get('Upload-MetaData').split(' ')[1]))
         file_size = validate_file_size(request.headers.get('Upload-Length'))
 
         document_guid = str(uuid.uuid4())

@@ -122,7 +122,7 @@ export class DocumentUploadComponent implements OnInit {
       const { name: filename, type: filetype } = file;
 
       const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/document`,
+        endpoint: `${environment.documentManagerUrl}/documents/uploads`,
         metadata: { filename, filetype },
         chunkSize: 1048576, // 1 MB
         removeFingerprintOnSuccess: true,
