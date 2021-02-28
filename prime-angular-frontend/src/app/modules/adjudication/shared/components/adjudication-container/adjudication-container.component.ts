@@ -108,41 +108,27 @@ export class AdjudicationContainerComponent implements OnInit {
         type: ClaimType.ENROLLEE
       }
     };
+    const assignPipe = pipe(
+      exhaustMap((action: AssignAction) => {
+        const response = { assigneeId: action.adjudicatorId };
+        const request$ = (action.note)
+          ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
+          : of(response)
 
-    this.busy = this.dialog.open(ClaimNoteComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((action: AssignAction) =>
-          this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId)
-            .pipe(map(() => action))
-        ),
-        exhaustMap((action: AssignAction) => {
-          const response = { assigneeId: action.adjudicatorId };
-          const request$ = (action.note)
-            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-              .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
-            : of(response)
+        return request$;
+      }),
+      exhaustMap((response: { note: EnrolleeNote, assigneeId: number }) => {
+        const request$ = (response.note)
+          ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.assigneeId)
+          : of(null);
 
-          return request$;
-        }),
-        exhaustMap((response: { note: EnrolleeNote, assigneeId: number }) => {
-          const request$ = (response.note)
-            ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.assigneeId)
-            : of(null);
+        return request$.pipe(map((_) => response.assigneeId));
+      }),
+      exhaustMap((adjudicatorId: number) => this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, adjudicatorId))
+    );
 
-          return request$.pipe(map((_) => response.assigneeId));
-        }),
-        exhaustMap((adjudicatorId: number) => this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, adjudicatorId)),
-        map((enrollee: HttpEnrollee) => {
-          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
-          row.adjudicatorIdir = enrollee.adjudicator?.idir;
-          return row;
-        })
-      )
-      .subscribe((enrollee: EnrolleeListViewModel) =>
-        MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee)
-      );
+    this.busy = this.alterClaim(enrolleeId, data, assignPipe).subscribe();
   }
 
   public onReassign(enrolleeId: number) {
@@ -154,46 +140,32 @@ export class AdjudicationContainerComponent implements OnInit {
         type: ClaimType.ENROLLEE
       }
     };
+    const reassignPipe = pipe(
+      exhaustMap((action: AssignAction) => {
+        const response = { action };
+        const request$ = (action.note)
+          ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
+          : of(response);
 
-    this.busy = this.dialog.open(ClaimNoteComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
-        exhaustMap((action: AssignAction) =>
-          this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId)
-            .pipe(map(() => action))
-        ),
-        exhaustMap((action: AssignAction) => {
-          const response = { action };
-          const request$ = (action.note)
-            ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-              .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
-            : of(response);
+        return request$;
+      }),
+      exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
+        const request$ = (response.note)
+          ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.action.adjudicatorId)
+          : of(null)
 
-          return request$;
-        }),
-        exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
-          const request$ = (response.note)
-            ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.action.adjudicatorId)
-            : of(null)
+        return request$.pipe(map((_) => response.action))
+      }),
+      exhaustMap((action: AssignAction) => {
+        const remove$ = this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
+        return (action.action === AssignActionEnum.Disclaim)
+          ? remove$
+          : concat(remove$, this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, action.adjudicatorId));
+      })
+    );
 
-          return request$.pipe(map((_) => response.action))
-        }),
-        exhaustMap((action: AssignAction) => {
-          const remove$ = this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
-          return (action.action === AssignActionEnum.Disclaim)
-            ? remove$
-            : concat(remove$, this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, action.adjudicatorId));
-        }),
-        map((enrollee: HttpEnrollee) => {
-          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
-          row.adjudicatorIdir = enrollee.adjudicator?.idir;
-          return row;
-        })
-      )
-      .subscribe((enrollee: EnrolleeListViewModel) =>
-        MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee)
-      );
+    this.busy = this.alterClaim(enrolleeId, data, reassignPipe).subscribe();
   }
 
   public onApprove({ enrolleeId, agreementName }: { enrolleeId: number, agreementName: string }) {
@@ -450,6 +422,35 @@ export class AdjudicationContainerComponent implements OnInit {
       ),
       exhaustMap(() => this.adjudicationResource.getEnrolleeById(enrolleeId))
     );
+  }
+
+  /**
+   * @description
+   * Common claim logic with a custom pipe to manage
+   * an assignment through a claim or disclaim.
+   *
+   * @see onAssign
+   * @see onDeassign
+   */
+  private alterClaim(enrolleeId: number, data: DialogOptions, customPipe: OperatorFunction<AssignAction, HttpEnrollee>): Observable<void> {
+    return this.dialog.open(ClaimNoteComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
+        exhaustMap((action: AssignAction) =>
+          this.adjudicationResource.deleteEnrolleeNotifications(enrolleeId)
+            .pipe(map(() => action))
+        ),
+        customPipe,
+        map((enrollee: HttpEnrollee) => {
+          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
+          row.adjudicatorIdir = enrollee.adjudicator?.idir;
+          return row;
+        }),
+        map((enrollee: EnrolleeListViewModel) => {
+          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee)
+        })
+      );
   }
 
   private toEnrolleeListViewModel(enrollee: HttpEnrollee): EnrolleeListViewModel {
