@@ -88,7 +88,6 @@ export class AdjudicationResource {
     return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        map((enrollee: HttpEnrollee) => enrollee),
         tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned');
@@ -102,7 +101,6 @@ export class AdjudicationResource {
     return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        map((enrollee: HttpEnrollee) => enrollee),
         tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be unassigned');
