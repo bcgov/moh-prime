@@ -8,7 +8,6 @@ using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -29,11 +28,7 @@ using Prime.Services;
 using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
-using Prime.Models.Api;
 using Prime.Infrastructure;
-using Microsoft.AspNetCore.Authentication.Certificate;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Prime
 {
@@ -122,49 +117,6 @@ namespace Prime
             ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services, Configuration, Environment);
-
-            services.AddAuthentication(
-                CertificateAuthenticationDefaults.AuthenticationScheme)
-                .AddCertificate(options =>
-                {
-                    Console.WriteLine($"AddCertificate: {options}");
-
-                    // TODO: Necessary for self-signed certificates?
-                    // options.AllowedCertificateTypes = CertificateTypes.All;
-                    options.Events = new CertificateAuthenticationEvents
-                    {
-                        OnCertificateValidated = context =>
-                        {
-                            Console.WriteLine($"OnCertificateValidated: {context}");
-
-                            var claims = new[]
-                            {
-                                new Claim(
-                                    ClaimTypes.NameIdentifier,
-                                    context.ClientCertificate.Subject,
-                                    ClaimValueTypes.String,
-                                    context.Options.ClaimsIssuer),
-                                new Claim(ClaimTypes.Name,
-                                    context.ClientCertificate.Subject,
-                                    ClaimValueTypes.String,
-                                    context.Options.ClaimsIssuer)
-                            };
-
-                            context.Principal = new ClaimsPrincipal(
-                                new ClaimsIdentity(claims, context.Scheme.Name));
-                            context.Success();
-                            // context.Fail("debugging");
-
-                            return Task.CompletedTask;
-                        },
-                        OnAuthenticationFailed = context =>
-                        {
-                            Console.WriteLine($"OnAuthenticationFailed: {context}");
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
-            services.AddAuthorization();
         }
 
         protected void ConfigureClients(IServiceCollection services)
@@ -274,9 +226,7 @@ namespace Prime
             });
 
             // Matches request to an endpoint
-            app.UseHttpsRedirection();   // TODO: useful?
             app.UseRouting();
-            app.UseCertificateForwarding();   // TODO: useful?
             app.UseCors(AllowSpecificOrigins);
 
             app.UseAuthentication();
@@ -297,7 +247,7 @@ namespace Prime
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", new BasicHttpBinding(), SoapSerializer.XmlSerializer);   // .RequireAuthorization();
+                endpoints.UseSoapEndpoint<ISoapService>("/api/PLRHL7", binding, SoapSerializer.XmlSerializer);
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
