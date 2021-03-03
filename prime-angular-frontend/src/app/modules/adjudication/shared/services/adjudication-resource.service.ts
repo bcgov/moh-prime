@@ -83,12 +83,11 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<HttpEnrollee> {
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): NoContent {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned');
           this.logger.error('[Adjudication] AdjudicationResource::setEnrolleeAdjudicator error has occurred: ', error);
@@ -97,11 +96,10 @@ export class AdjudicationResource {
       );
   }
 
-  public removeEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
+  public removeEnrolleeAdjudicator(enrolleeId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`enrollees/${enrolleeId}/adjudicator`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be unassigned');
           this.logger.error('[Adjudication] AdjudicationResource::removeEnrolleeAdjudicator error has occurred: ', error);
