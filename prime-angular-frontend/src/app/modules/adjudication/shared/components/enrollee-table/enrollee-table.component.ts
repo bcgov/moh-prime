@@ -39,9 +39,9 @@ export class EnrolleeTableComponent implements OnInit {
   public Role = Role;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private utilsService: UtilsService,
-    private fb: FormBuilder,
   ) {
     this.notify = new EventEmitter<number>();
     this.assign = new EventEmitter<number>();
