@@ -1,16 +1,15 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Xml.XPath;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Prime.Helpers;
+using Microsoft.Extensions.Primitives;
 using SoapCore.Extensibility;
 
 namespace Prime.Services
@@ -22,9 +21,40 @@ namespace Prime.Services
 
         public void Tune(HttpContext httpContext, object serviceInstance, SoapCore.ServiceModel.OperationDescription operation)
         {
+            // This must be the header used by proxies that first receive the client certificate
+            // (and pass on via HTTP Header)
+            const string CLIENT_CERT_HEADER = "X-SSL-CERT";
+
             if (serviceInstance is SoapService service)
             {
-                service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
+                string urlEncoded;
+                StringValues paramValue;
+                if (httpContext.Request.Headers.TryGetValue(CLIENT_CERT_HEADER, out paramValue))
+                {
+                    urlEncoded = paramValue[0];
+                }
+                else
+                {
+                    throw new ArgumentException("Client certificate expected to be provided.");
+                }
+
+                if (PrimeEnvironment.PlrIntegration.ClientCertThumbprint == null)
+                {
+                    throw new SystemException("Receiving system is not configured properly; please advise system administrator.");
+                }
+
+                string decoded = HttpUtility.UrlDecode(urlEncoded);
+                // https://stackoverflow.com/questions/65349878/c-sharp-convert-certificate-string-into-x509-certificate
+                byte[] certAsBytes = Encoding.ASCII.GetBytes(decoded);
+                var clientCert = new X509Certificate2(certAsBytes);
+                if (clientCert.Thumbprint.Equals(PrimeEnvironment.PlrIntegration.ClientCertThumbprint))
+                {
+                    service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
+                }
+                else
+                {
+                    throw new ArgumentException($"The certificate with thumbprint {clientCert.Thumbprint} is invalid to the receiving system.");
+                }
             }
         }
 
