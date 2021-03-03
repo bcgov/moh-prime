@@ -432,7 +432,7 @@ export class AdjudicationContainerComponent implements OnInit {
    * @see onAssign
    * @see onDeassign
    */
-  private alterClaim(enrolleeId: number, data: DialogOptions, customPipe: OperatorFunction<AssignAction, HttpEnrollee>): Observable<void> {
+  private alterClaim(enrolleeId: number, data: DialogOptions, customPipe: OperatorFunction<AssignAction, string | void>): Observable<void> {
     return this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
@@ -442,9 +442,9 @@ export class AdjudicationContainerComponent implements OnInit {
             .pipe(map(() => action))
         ),
         customPipe,
-        map((enrollee: HttpEnrollee) => {
-          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
-          row.adjudicatorIdir = enrollee.adjudicator?.idir;
+        map((idir: string) => {
+          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrolleeId);
+          row.adjudicatorIdir = idir ?? null;
           return row;
         }),
         map((enrollee: EnrolleeListViewModel) => {

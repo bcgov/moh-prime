@@ -83,11 +83,11 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): NoContent {
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<string> {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/adjudicator`, null, params)
+    return this.apiResource.put<string>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned');
           this.logger.error('[Adjudication] AdjudicationResource::setEnrolleeAdjudicator error has occurred: ', error);
