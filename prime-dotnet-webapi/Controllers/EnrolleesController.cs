@@ -414,15 +414,16 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int adjudicatorId)
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromBody] int adjudicatorId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            if (!await _adminService.AdminExistsAsync(adjudicatorId))
+            var idir = _adminService.GetAdminIdirAsync(adjudicatorId);
+            if (idir == null)
             {
                 return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
             }
@@ -430,7 +431,7 @@ namespace Prime.Controllers
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
-            return NoContent();
+            return Ok(ApiResponse.Result(idir));
         }
 
         // DELETE: api/Enrollees/5/adjudicator
