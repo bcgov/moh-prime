@@ -415,7 +415,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromBody] int adjudicatorId)
+        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int adjudicatorId)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
