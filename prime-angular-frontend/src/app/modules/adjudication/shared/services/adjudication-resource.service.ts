@@ -84,7 +84,7 @@ export class AdjudicationResource {
   }
 
   public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<string> {
-    return this.apiResource.put<string>(`enrollees/${enrolleeId}/adjudicator`, { adjudicatorId })
+    return this.apiResource.put<string>(`enrollees/${enrolleeId}/adjudicator`, adjudicatorId)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
