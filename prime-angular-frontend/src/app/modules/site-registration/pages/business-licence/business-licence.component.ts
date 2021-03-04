@@ -62,7 +62,7 @@ export class BusinessLicenceComponent implements OnInit {
     this.doingBusinessAsNames = [];
 
     this.businessLicenceDocuments = [];
-    this.businessLicence = new BusinessLicence(this.siteService.site.id);
+    this.businessLicence = new BusinessLicence(this.siteService.site?.id);
   }
 
   public get businessLicenceGuid(): FormControl {
