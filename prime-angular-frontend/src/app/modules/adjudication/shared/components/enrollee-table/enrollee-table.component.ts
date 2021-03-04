@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
@@ -11,12 +12,12 @@ import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Admin } from '@auth/shared/models/admin.model';
 
+
+@UntilDestroy()
 @Component({
   selector: 'app-enrollee-table',
   templateUrl: './enrollee-table.component.html',
@@ -35,7 +36,7 @@ export class EnrolleeTableComponent implements OnInit {
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
-  public hasAssignedToFilter: BehaviorSubject<boolean>;
+  public $hasAssignedToFilter: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
   public Role = Role;
@@ -65,7 +66,7 @@ export class EnrolleeTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
-    this.hasAssignedToFilter = new BehaviorSubject<boolean>(false);
+    this.$hasAssignedToFilter = new BehaviorSubject<boolean>(false);
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -123,7 +124,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public toggleFilterAssigned() {
-    this.hasAssignedToFilter.next(!this.hasAssignedToFilter.value);
+    this.$hasAssignedToFilter.next(!this.$hasAssignedToFilter.value);
   }
 
   public ngOnInit(): void {
@@ -142,19 +143,24 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private initForm() {
+    let adjudicatorIdir: string;
+
     this.authService.getAdmin$()
-      .subscribe(({ idir }: Admin) => this.adjudicatorIdir = idir);
+      .subscribe(({ idir }) => adjudicatorIdir = idir);
 
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.form.valueChanges.subscribe(value => {
-      const filter = { ...value, name: value.name } as string;
+      const filter = { ...value, name: value.name };
       this.dataSource.filter = filter;
     });
 
-    this.hasAssignedToFilter.subscribe(value => {
-      this.form.get('assignedTo').patchValue(value ? this.adjudicatorIdir : "");
-    });
+    this.$hasAssignedToFilter
+      .pipe(untilDestroyed(this))
+      .subscribe(value => {
+        this.form.get('assignedTo').patchValue(value ? adjudicatorIdir : '');
+      }
+      );
 
     for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
       this.form.get(name).valueChanges.subscribe(value => {
@@ -170,7 +176,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private getFilterPredicate() {
-    return (row: EnrolleeListViewModel, filter) => {
+    return (row: EnrolleeListViewModel, filter: any) => {
       // Add 1 day to range end date for inclusive check
 
       const matchFilter = [];
@@ -188,7 +194,7 @@ export class EnrolleeTableComponent implements OnInit {
           && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
         matchFilter.push(searchByRenewalDate);
       }
-      if (this.hasAssignedToFilter.value) {
+      if (this.$hasAssignedToFilter.value) {
         const searchByIdir = row.adjudicatorIdir === filter.assignedTo;
         matchFilter.push(searchByIdir);
       }
