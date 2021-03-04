@@ -422,7 +422,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var idir = _adminService.GetAdminIdirAsync(adjudicatorId);
+            var idir = await _adminService.GetAdminIdirAsync(adjudicatorId);
             if (idir == null)
             {
                 return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
