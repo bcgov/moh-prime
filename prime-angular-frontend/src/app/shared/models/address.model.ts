@@ -1,5 +1,4 @@
-import { AddressLine } from '@lib/types/address-line.type';
-
+export type AddressLine = Exclude<keyof Address, 'id'>;
 export type AddressType = 'verifiedAddress' | 'physicalAddress' | 'mailingAddress';
 
 export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress', 'physicalAddress'];
@@ -8,7 +7,7 @@ export const addressTypes: AddressType[] = ['verifiedAddress', 'mailingAddress',
  * @description
  * List of optional address line items.
  */
-export const optionalAddressLineItems: ('id' | AddressLine)[] = ['id', 'street2'];
+export const optionalAddressLineItems: (keyof Address)[] = ['id', 'street2'];
 
 export class Address {
   id?: number = null;
@@ -42,13 +41,13 @@ export class Address {
    * NOTE: Most usecases don't require `street2`, and therefore it has
    * been excluded by default as optional.
    */
-  public static isEmpty(address: Address, blacklist: string[] = optionalAddressLineItems): boolean {
+  public static isEmpty(address: Address, blacklist: (keyof Address)[] = optionalAddressLineItems): boolean {
     if (!address) {
       return true;
     }
 
     return Object.keys(address)
-      .filter(key => !blacklist.includes(key))
+      .filter((key: keyof Address) => !blacklist.includes(key))
       .every(k => !address[k]);
   }
 
@@ -56,7 +55,7 @@ export class Address {
    * @description
    * Checks for a partial address.
    */
-  public static isNotEmpty(address: Address, blacklist?: string[]): boolean {
+  public static isNotEmpty(address: Address, blacklist?: (keyof Address)[]): boolean {
     if (!address) {
       return false;
     }
