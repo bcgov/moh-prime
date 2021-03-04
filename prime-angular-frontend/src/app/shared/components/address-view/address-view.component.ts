@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AddressLine } from '@lib/types/address-line.type';
-import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+import { Address, AddressLine, optionalAddressLineItems } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address-view',
