@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, IWeightedConfig } from '@config/config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, IWeightedConfig, VendorConfig } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
@@ -28,27 +28,27 @@ export class ConfigService implements IConfigService {
 
   public get practices(): PracticeConfig[] {
     return [...this.configuration.practices]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<PracticeConfig>('name'));
   }
 
   public get colleges(): CollegeConfig[] {
     return [...this.configuration.colleges]
-      .sort(this.sortConfigByCode());
+      .sort(this.utilsService.sortByKey<CollegeConfig>('code'));
   }
 
   public get countries(): Config<string>[] {
     return [...this.configuration.countries]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<string>>('name'));
   }
 
   public get jobNames(): Config<number>[] {
     return [...this.configuration.jobNames]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
   public get licenses(): LicenseConfig[] {
     return [...this.configuration.licenses]
-      .sort(this.sortConfigByWeight<LicenseConfig>());
+      .sort(this.utilsService.sortByKey<LicenseConfig>('weight'));
   }
 
   public get careSettings(): Config<number>[] {
@@ -56,7 +56,7 @@ export class ConfigService implements IConfigService {
       .find(o => o.code === 2);
 
     return [...this.configuration.careSettings]
-      .sort(this.sortConfigByName())
+      .sort(this.utilsService.sortByKey<Config<number>>('name'))
       // Move community practice to the top
       // TODO remove after community practice
       .filter(o => o.code !== 2)
@@ -68,32 +68,32 @@ export class ConfigService implements IConfigService {
 
   public get provinces(): ProvinceConfig[] {
     return [...this.configuration.provinces]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<ProvinceConfig>('name'));
   }
 
   public get statuses(): Config<number>[] {
     return [...this.configuration.statuses]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
-  public get statusReasons() {
+  public get statusReasons(): Config<number>[] {
     return [...this.configuration.statusReasons]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
-  public get vendors() {
+  public get vendors(): VendorConfig[] {
     return [...this.configuration.vendors]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<VendorConfig>('name'));
   }
 
-  public get healthAuthorities() {
+  public get healthAuthorities(): Config<number>[] {
     return [...this.configuration.healthAuthorities]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
-  public get facilities() {
+  public get facilities(): Config<number>[] {
     return [...this.configuration.facilities]
-      .sort(this.sortConfigByName());
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
   }
 
   /**
@@ -129,39 +129,5 @@ export class ConfigService implements IConfigService {
           return configuration;
         })
       );
-  }
-
-  /**
-   * @description
-   * Sort the configuration by code.
-   */
-  private sortConfigByCode(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
-    return this.sortConfigByKey('code');
-  }
-
-  /**
-   * @description
-   * Sort the configuration by name.
-   */
-  private sortConfigByName(): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
-    return this.sortConfigByKey('name');
-  }
-
-  /**
-   * @description
-   * Sort the configuration by a specific key.
-   */
-  private sortConfigByKey(key: string): (a: Config<number | string>, b: Config<number | string>) => SortWeight {
-    return (a: Config<number | string>, b: Config<number | string>) =>
-      this.utilsService.sortByKey<Config<number | string>>(a, b, key);
-  }
-
-  /**
-   * @description
-   * Sort the configuration by weight.
-   */
-  private sortConfigByWeight<T extends IWeightedConfig>(): (a: T, b: T) => SortWeight {
-    return (a: T, b: T) =>
-      this.utilsService.sortByKey<T>(a, b, 'weight');
   }
 }
