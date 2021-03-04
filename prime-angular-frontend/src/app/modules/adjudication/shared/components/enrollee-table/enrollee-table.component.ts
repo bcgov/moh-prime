@@ -40,7 +40,6 @@ export class EnrolleeTableComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
   public Role = Role;
-  public adjudicatorIdir: string;
 
   constructor(
     private authService: AuthService,
