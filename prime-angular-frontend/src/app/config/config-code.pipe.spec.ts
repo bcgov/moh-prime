@@ -8,6 +8,9 @@ import { ConfigService } from './config.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('ConfigCodePipe', () => {
+  let pipe: ConfigCodePipe;
+  beforeEach(inject([ConfigService], (configService: ConfigService) => pipe = new ConfigCodePipe(configService)));
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -26,14 +29,17 @@ describe('ConfigCodePipe', () => {
     });
   }));
 
-  it('create an instance of Config Code Pipe', inject([ConfigService], (configService: ConfigService) => {
-    const pipe = new ConfigCodePipe(configService);
-    expect(pipe).toBeTruthy();
+  it('create an instance', () => expect(pipe).toBeTruthy());
+
+  it('should get a config name from a config code', inject([ConfigService], (configService: ConfigService) => {
+    const country = configService.countries[0];
+    const result = pipe.transform(country.code, 'countries');
+    expect(result).toBe(country.name);
   }));
 
-  it('should get college name from a config code', inject([ConfigService], (configService: ConfigService) => {
-    const pipe = new ConfigCodePipe(configService);
-    const code = pipe.transform(configService.colleges[0].code, 'colleges');
-    expect(code).toBe(configService.colleges[0].name);
+  it('should not fail when passed a null', inject([ConfigService], (configService: ConfigService) => {
+    const country = configService.countries[0];
+    const result = pipe.transform(null, 'countries');
+    expect(result).toBe(country.name);
   }));
 });
