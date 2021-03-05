@@ -4,10 +4,6 @@ using AutoMapper;
 using Prime.Models;
 using Prime.ViewModels;
 
-/**
- * Automapper Documentation
- * @see https://docs.automapper.org/en/stable
- */
 namespace Prime.Infrastructure.AutoMapperProfiles
 {
     public class SiteRegistrationMappingConfigurations : Profile

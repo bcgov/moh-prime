@@ -5,10 +5,6 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.DTOs.AgreementEngine;
 
-/**
- * Automapper Documentation
- * @see https://docs.automapper.org/en/stable
- */
 namespace Prime.Infrastructure.AutoMapperProfiles
 {
     public class EnrolleeMappingConfigurations : Profile
