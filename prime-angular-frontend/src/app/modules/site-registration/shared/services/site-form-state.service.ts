@@ -53,6 +53,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * only be set more than once when explicitly forced.
    */
   public setForm(site: Site, forcePatch: boolean = false) {
+    if (!site) {
+      return;
+    }
     // Store required site identifiers not captured in forms
     this.siteId = site.id;
     this.organizationId = site.organizationId;

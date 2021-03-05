@@ -195,9 +195,10 @@ export class BusinessLicenceComponent implements OnInit {
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
     this.form.markAsPristine();
-
-    this.getBusinessLicence(site);
-    this.getDoingBusinessAs(site);
+    if (!site) {
+      this.getBusinessLicence(site);
+      this.getDoingBusinessAs(site);
+    }
   }
 
   private getBusinessLicence(site: Site) {
