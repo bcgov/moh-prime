@@ -239,18 +239,44 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee));
         }
 
+        // GET: api/Enrollees/5/demographic
+        /// <summary>
+        /// Gets the demographic information for a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/demographic", Name = nameof(GetEnrolleeDemographicInformation))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeDemographicViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeDemographicInformation(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var demo = await _enrolleeService.GetDemographicInfoAsync(enrolleeId);
+
+            return Ok(ApiResponse.Result(demo));
+        }
+
         // GET: api/Enrollees/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolmentStatus>>> GetEnrolmentStatuses(int enrolleeId)
+        public async Task<ActionResult> GetEnrolmentStatuses(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)

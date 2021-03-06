@@ -99,6 +99,14 @@ namespace Prime.Services
                 opt => opt.AfterMap((src, dest) => dest.HasNewestAgreement = newestAgreementIds.Any(n => n == src.CurrentAgreementId)));
         }
 
+        public async Task<EnrolleeDemographicViewModel> GetDemographicInfoAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .ProjectTo<EnrolleeDemographicViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();
