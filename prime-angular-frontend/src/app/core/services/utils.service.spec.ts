@@ -2,7 +2,12 @@ import { TestBed } from '@angular/core/testing';
 
 import { UtilsService } from './utils.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { Config, IWeightedConfig } from '@config/config.model';
+
+interface SortableModel {
+  code: number;
+  name: string;
+  weight: number;
+}
 
 describe('UtilsService', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -19,22 +24,18 @@ describe('UtilsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should sortByKey', () => {
+  it('should sort by a key contained within an object literal', () => {
     const service: UtilsService = TestBed.inject(UtilsService);
-    const configs: Config<number>[] = [
-      { name: 'b', code: 2 },
-      { name: 'a', code: 1 },
-      { name: 'c', code: 3 },
+    const sortableModels: SortableModel[] = [
+      { name: 'b', code: 2, weight: 1 },
+      { name: 'a', code: 1, weight: 3 },
+      { name: 'c', code: 3, weight: 2 }
     ];
-    const result = configs.sort(service.sortByKey<Config<number>>('name'));
-    expect(result[0].name).toBe('a');
-    expect(result[2].code).toBe(3);
 
-    const weightedConfigs: IWeightedConfig[] = [
-      { weight: 2 },
-      { weight: 1 },
-      { weight: 3 },
-    ];
-    expect(weightedConfigs.sort(service.sortByKey<IWeightedConfig>('weight'))[0].weight).toBe(1);
+    let results = sortableModels.sort(service.sortByKey<SortableModel>('name'));
+    expect(results.map(r => r.code)).toEqual([1, 2, 3]);
+
+    results = results.sort(service.sortByKey<SortableModel>('weight'));
+    expect(results.map(r => r.name)).toEqual(['b', 'c', 'a']);
   });
 });
