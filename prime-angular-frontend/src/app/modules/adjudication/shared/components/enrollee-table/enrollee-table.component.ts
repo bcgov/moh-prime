@@ -8,6 +8,7 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 import moment from 'moment';
 
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
@@ -133,21 +134,17 @@ export class EnrolleeTableComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      appliedDateRangeStart: '',
-      appliedDateRangeEnd: '',
-      renewalDateRangeStart: '',
-      renewalDateRangeEnd: '',
-      assignedTo: ''
+      appliedDateRangeStart: ['', []],
+      appliedDateRangeEnd: ['', []],
+      renewalDateRangeStart: ['', []],
+      renewalDateRangeEnd: ['', []],
+      assignedTo: ['', []]
     });
   }
 
   private initForm() {
     this.dataSource.filterPredicate = this.getFilterPredicate();
-
-    this.form.valueChanges.subscribe(value => {
-      const filter = { ...value, name: value.name };
-      this.dataSource.filter = filter;
-    });
+    this.form.valueChanges.subscribe(value => this.dataSource.filter = value);
 
     combineLatest([
       this.authService.getAdmin$(),
@@ -158,41 +155,33 @@ export class EnrolleeTableComponent implements OnInit {
         this.form.get('assignedTo').patchValue((value) ? idir : '')
       );
 
-    for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
-      this.form.get(name).valueChanges.subscribe(value => {
-        this.hasAppliedDateRange = value || this.hasAppliedDateRange;
-      });
-    }
+    ['appliedDateRangeStart', 'appliedDateRangeEnd'].forEach(controlName =>
+      this.form.get(controlName).valueChanges
+        .subscribe(value => this.hasAppliedDateRange = value ?? this.hasAppliedDateRange)
+    );
 
-    for (const name of ['renewalDateRangeStart', 'renewalDateRangeEnd']) {
-      this.form.get(name).valueChanges.subscribe(value => {
-        this.hasRenewalDateRange = value || this.hasRenewalDateRange;
-      });
-    }
+    ['renewalDateRangeStart', 'renewalDateRangeEnd'].forEach(controlName =>
+      this.form.get(controlName).valueChanges
+        .subscribe(value => this.hasRenewalDateRange = value ?? this.hasRenewalDateRange)
+    );
   }
 
   private getFilterPredicate() {
     return (row: EnrolleeListViewModel, filter: any) => {
-      // Add 1 day to range end date for inclusive check
-
       const matchFilter = [];
-      if (this.hasAppliedDateRange) {
-        const appliedDate = moment.utc(row.appliedDate);
-        const searchByAppliedDate =
-          (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
-          && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
-        matchFilter.push(searchByAppliedDate);
+
+      if (this.hasAppliedDateRange && filter.appliedDateRangeStart && filter.appliedDateRangeEnd) {
+        const date = moment(row.appliedDate).local();
+        matchFilter.push(DateUtils.isWithinDateRange(date, filter.appliedDateRangeStart, filter.appliedDateRangeEnd));
       }
-      if (this.hasRenewalDateRange) {
-        const renewalDate = moment.utc(row.expiryDate);
-        const searchByRenewalDate =
-          (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
-          && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
-        matchFilter.push(searchByRenewalDate);
+
+      if (this.hasRenewalDateRange && filter.renewalDateRangeStart && filter.renewalDateRangeEnd) {
+        const date = moment(row.expiryDate).local();
+        matchFilter.push(DateUtils.isWithinDateRange(date, filter.renewalDateRangeStart, filter.renewalDateRangeEnd));
       }
+
       if (this.hasAssignedToFilter$.value) {
-        const searchByIdir = row.adjudicatorIdir === filter.assignedTo;
-        matchFilter.push(searchByIdir);
+        matchFilter.push(row.adjudicatorIdir === filter.assignedTo);
       }
 
       return matchFilter.every(Boolean);

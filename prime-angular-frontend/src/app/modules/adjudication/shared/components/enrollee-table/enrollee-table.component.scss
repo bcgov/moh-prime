@@ -4,15 +4,13 @@
 
 mat-date-range-input {
   display: inline-block;
-  width: 1px;
   visibility: hidden;
+  width: 1px;
 }
 
 .flex-container {
   height: 48px;
   width: 24px;
-}
-
-.blueIcon {
-  color: blue;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
