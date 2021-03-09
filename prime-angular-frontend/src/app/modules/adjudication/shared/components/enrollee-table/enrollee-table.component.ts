@@ -190,7 +190,7 @@ export class EnrolleeTableComponent implements OnInit {
           && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
         matchFilter.push(searchByRenewalDate);
       }
-      if (this.$hasAssignedToFilter.value) {
+      if (this.hasAssignedToFilter$.value) {
         const searchByIdir = row.adjudicatorIdir === filter.assignedTo;
         matchFilter.push(searchByIdir);
       }
