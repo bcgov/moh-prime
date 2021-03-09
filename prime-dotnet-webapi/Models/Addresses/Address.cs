@@ -36,6 +36,7 @@ namespace Prime.Models
 
         public string Postal { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
         public bool IsInBC
         {
