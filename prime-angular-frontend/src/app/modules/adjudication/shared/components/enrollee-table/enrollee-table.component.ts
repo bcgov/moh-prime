@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { BehaviorSubject, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 import moment from 'moment';
 
@@ -13,9 +13,9 @@ import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-
 
 @UntilDestroy()
 @Component({
@@ -36,7 +36,7 @@ export class EnrolleeTableComponent implements OnInit {
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
-  public $hasAssignedToFilter: BehaviorSubject<boolean>;
+  public hasAssignedToFilter$: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
   public Role = Role;
@@ -65,7 +65,7 @@ export class EnrolleeTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
-    this.$hasAssignedToFilter = new BehaviorSubject<boolean>(false);
+    this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -123,7 +123,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public toggleFilterAssigned() {
-    this.$hasAssignedToFilter.next(!this.$hasAssignedToFilter.value);
+    this.hasAssignedToFilter$.next(!this.hasAssignedToFilter$.value);
   }
 
   public ngOnInit(): void {
@@ -142,11 +142,6 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private initForm() {
-    let adjudicatorIdir: string;
-
-    this.authService.getAdmin$()
-      .subscribe(({ idir }) => adjudicatorIdir = idir);
-
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.form.valueChanges.subscribe(value => {
@@ -154,11 +149,13 @@ export class EnrolleeTableComponent implements OnInit {
       this.dataSource.filter = filter;
     });
 
-    this.$hasAssignedToFilter
+    combineLatest([
+      this.authService.getAdmin$(),
+      this.hasAssignedToFilter$
+    ])
       .pipe(untilDestroyed(this))
-      .subscribe(value => {
-        this.form.get('assignedTo').patchValue(value ? adjudicatorIdir : '');
-      }
+      .subscribe(([{ idir }, value]: [Admin, boolean]) =>
+        this.form.get('assignedTo').patchValue((value) ? idir : '')
       );
 
     for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
