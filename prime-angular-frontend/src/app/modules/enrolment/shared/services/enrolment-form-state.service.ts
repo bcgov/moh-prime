@@ -302,6 +302,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessSites.clear();
       enrolment.remoteAccessSites.forEach((ras: RemoteAccessSite) => {
         const remoteAccessSite = this.remoteAccessSiteFormGroup();
+        // Add the vendors, and then patch the remaining fields
+        const siteVendors = remoteAccessSite.get('siteVendors') as FormArray;
+        ras.site.siteVendors
+          .forEach(v => siteVendors.push(this.fb.group({ vendorCode: v.vendorCode })));
+
         remoteAccessSite.patchValue({
           enrolleeId: ras.enrolleeId,
           siteId: ras.siteId,
@@ -504,8 +509,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       enrolleeId: [null, []],
       siteId: [null, []],
       doingBusinessAs: [null, []],
-      physicalAddress: [null, []],
-      siteVendors: [null, []]
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2']
+      }),
+      siteVendors: this.fb.array([])
     });
   }
 
