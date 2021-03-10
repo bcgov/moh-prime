@@ -362,7 +362,7 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
-    this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
+    this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
   }
 
