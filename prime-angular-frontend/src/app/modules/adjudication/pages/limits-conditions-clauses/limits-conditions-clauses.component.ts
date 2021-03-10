@@ -78,8 +78,8 @@ export class LimitsConditionsClausesComponent implements OnInit {
     });
   }
 
-  private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode)
+  private getEnrollee(enrolleeId: number) {
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
         if (enrollee.accessAgreementNote) {
