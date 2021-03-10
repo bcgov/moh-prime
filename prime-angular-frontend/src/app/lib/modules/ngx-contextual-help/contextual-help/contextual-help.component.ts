@@ -1,4 +1,4 @@
-import { Component, Input, ContentChildren, QueryList } from '@angular/core';
+import { Component, Input, ContentChildren, QueryList, EventEmitter, Output } from '@angular/core';
 import { MenuPositionX, MenuPositionY } from '@angular/material/menu';
 import { ThemePalette } from '@angular/material/core';
 
@@ -18,6 +18,7 @@ export class ContextualHelpComponent {
   @Input() public small: boolean;
   @Input() public advanced: boolean;
   @Input() public titleIcon: string;
+  @Output() public opened: EventEmitter<void>;
 
   @ContentChildren(ContextualTitleDirective, { descendants: true })
   public contextualHelpTitleChildren: QueryList<ContextualTitleDirective>;
@@ -31,5 +32,11 @@ export class ContextualHelpComponent {
     this.menuIconColor = 'primary';
     this.small = false;
     this.advanced = false;
+    this.opened = new EventEmitter<void>();
+  }
+
+  public onOpen(event: Event) {
+    event.stopPropagation();
+    this.opened.emit();
   }
 }
