@@ -157,12 +157,11 @@ export class AdjudicationContainerComponent implements OnInit {
 
         return request$.pipe(map((_) => response.action))
       }),
-      exhaustMap((action: AssignAction) => {
-        const remove$ = this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId);
-        return (action.action === AssignActionEnum.Disclaim)
-          ? remove$
-          : concat(remove$, this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, action.adjudicatorId));
-      })
+      exhaustMap((action: AssignAction) =>
+        (action.action === AssignActionEnum.Disclaim)
+          ? this.adjudicationResource.removeEnrolleeAdjudicator(enrolleeId)
+          : this.adjudicationResource.setEnrolleeAdjudicator(enrolleeId, action.adjudicatorId)
+      )
     );
 
     this.busy = this.alterClaim(enrolleeId, data, reassignPipe).subscribe();
