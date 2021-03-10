@@ -1,4 +1,3 @@
-
 import { PostalPipe } from './postal.pipe';
 
 describe('PostalPipe', () => {
