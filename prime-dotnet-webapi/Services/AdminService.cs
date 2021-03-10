@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -66,6 +67,14 @@ namespace Prime.Services
         {
             return await _context.Admins
                 .SingleOrDefaultAsync(a => a.UserId == userId);
+        }
+
+        public async Task<string> GetAdminIdirAsync(int adminId)
+        {
+            return await _context.Admins
+                .Where(a => a.Id == adminId)
+                .Select(a => a.IDIR)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Admin>> GetAdminsAsync()
