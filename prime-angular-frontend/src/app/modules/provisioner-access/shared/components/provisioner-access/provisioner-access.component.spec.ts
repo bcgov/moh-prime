@@ -7,7 +7,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
-import { PageSubheaderComponent } from '@shared/components/page-subheader/page-subheader.component';
+import { PageSubheaderComponent } from '@shared/components/pages/page-subheader/page-subheader.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 
 describe('ProvisionerAccessComponent', () => {
