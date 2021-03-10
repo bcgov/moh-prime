@@ -196,6 +196,11 @@ namespace Prime
             {
                 client.BaseAddress = new Uri(PrimeEnvironment.AddressAutocompleteApi.Url.EnsureTrailingSlash());
             });
+
+            services.AddHttpClient<ILdapClient, LdapClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
