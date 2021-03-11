@@ -34,9 +34,12 @@ namespace Prime.Controllers
         {
             var result = await _gisService.LdapLogin(username, password);
 
-            return result
-            ? Unauthorized()
-            : Ok();
+            if (result == true)
+            {
+                return Ok();
+            }
+
+            return Unauthorized();
         }
     }
 }
