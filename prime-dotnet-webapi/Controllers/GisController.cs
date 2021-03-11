@@ -33,7 +33,10 @@ namespace Prime.Controllers
         public async Task<ActionResult> LdapLogin(string username, string password)
         {
             var result = await _gisService.LdapLogin(username, password);
-            return Ok(ApiResponse.Result(result));
+
+            return result
+            ? Unauthorized()
+            : Ok();
         }
     }
 }
