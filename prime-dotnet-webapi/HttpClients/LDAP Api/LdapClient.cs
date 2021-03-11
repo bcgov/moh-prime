@@ -24,11 +24,6 @@ namespace Prime.HttpClients
 
         public async Task<JObject> GetUserAsync(string userId, string password)
         {
-            var passwordObj = new JObject
-            {
-                {"userPassword", password}
-            };
-
             HttpResponseMessage response = null;
             try
             {
@@ -36,7 +31,7 @@ namespace Prime.HttpClients
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri($"{_client.BaseAddress}users/{userId}"),
-                    Content = new StringContent(passwordObj.ToString(), Encoding.UTF8, "application/json"),
+                    Content = new StringContent(password, Encoding.UTF8, "application/json"),
                 };
                 response = await _client.SendAsync(request).ConfigureAwait(false);
             }
