@@ -25,7 +25,7 @@ jobs:
     environment: Development
     env:
       VERSION: v1
-      IMAGE_NAME: angular-frontend-develop
+      IMAGE_NAME: nginx-angular
       IMAGE_TAGS: latest
       
     steps:
