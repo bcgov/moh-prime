@@ -4,14 +4,9 @@ using Prime.Models;
 
 namespace PrimeTests.ModelFactories
 {
-    public class PhysicalAddressFactory : AddressFactory<PhysicalAddress>
-    {
-        public PhysicalAddressFactory() : base() { }
-    }
-    public class MailingAddressFactory : AddressFactory<MailingAddress>
-    {
-        public MailingAddressFactory() : base() { }
-    }
+    public class VerifiedAddressFactory : AddressFactory<VerifiedAddress> { }
+    public class PhysicalAddressFactory : AddressFactory<PhysicalAddress> { }
+    public class MailingAddressFactory : AddressFactory<MailingAddress> { }
 
     public abstract class AddressFactory<T> : Faker<T> where T : Address
     {

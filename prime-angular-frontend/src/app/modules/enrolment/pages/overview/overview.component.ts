@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { Address } from '@shared/models/address.model';
 
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -46,6 +50,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
+    private formUtilsService: FormUtilsService,
     private logger: LoggerService
   ) {
     super(route, router);
@@ -84,6 +89,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.routeTo(EnrolmentRoutes.CHANGES_SAVED);
         });
     } else {
+      this.enrolmentFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
     }
   }
@@ -115,29 +121,43 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit() {
-    let enrolment = this.enrolmentService.enrolment;
+    this.authService.getUser$()
+      .pipe(
+        map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+          // Initial assumption is a user has authenticated, been redirected to
+          // this view, and not made any changes to the state of their enrolment
+          // so use the source of truth that is populated from the server
+          let enrolment = this.enrolmentService.enrolment;
 
-    // Store current status as it will be truncated for initial enrolment
-    this.currentStatus = enrolment.currentStatus.statusCode;
+          // Store current status as it will be truncated for initial enrolment
+          this.currentStatus = enrolment.currentStatus.statusCode;
 
-    if (this.enrolmentFormStateService.isPatched) {
-      enrolment = this.enrolmentFormStateService.json;
-      // Merge BCSC information in for use within the view
-      const {
-        firstName,
-        lastName,
-        dateOfBirth,
-        physicalAddress
-      } = this.enrolmentService.enrolment.enrollee;
-      enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, dateOfBirth, physicalAddress };
-    }
+          // Form being patched indicates that there is possibly changes that reside
+          // in the form for submission, and they should be reflected in the view
+          if (this.enrolmentFormStateService.isPatched) {
+            // Replace enrolment with the version from the form
+            enrolment = this.enrolmentFormStateService.json;
+          }
 
-    // Store a local copy of the enrolment for views
-    this.enrolment = enrolment;
-    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+          // Allow for BCSC information to be updated on each submission of the enrolment
+          // regardless of whether they visited the demographic view to make adjustments
+          const form = this.enrolmentFormStateService.bcscDemographicFormState.form;
+          if (!verifiedAddress) {
+            this.formUtilsService.resetAndClearValidators(form.get('verifiedAddress') as FormGroup);
+            verifiedAddress = new Address();
+          }
 
-    // Attempt to patch the form if not already patched
-    this.enrolmentFormStateService.setForm(enrolment);
+          // Merge current BCSC information that may not be stored in the form
+          // or in the enrolment for use within the view
+          enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, dateOfBirth, verifiedAddress };
+
+          // Store a local copy of the enrolment for views
+          this.enrolment = enrolment;
+          this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+
+          // Attempt to patch the form if not already patched
+          this.enrolmentFormStateService.setForm(enrolment);
+        })
+      ).subscribe();
   }
 }
-

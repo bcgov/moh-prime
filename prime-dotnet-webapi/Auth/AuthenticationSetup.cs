@@ -11,8 +11,6 @@ using Microsoft.IdentityModel.Logging;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
-using Prime.Auth.Internal;
-
 namespace Prime.Auth
 {
     public static class AuthenticationSetup
@@ -20,8 +18,7 @@ namespace Prime.Auth
         public static void Initialize(
             IServiceCollection services,
             IConfiguration configuration,
-            IHostEnvironment environment
-            )
+            IHostEnvironment environment)
         {
             services.ThrowIfNull(nameof(services));
             configuration.ThrowIfNull(nameof(configuration));
@@ -60,18 +57,6 @@ namespace Prime.Auth
                     },
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
-            });
-
-            services.AddSingleton<IAuthorizationHandler, PrimeUserAuthHandler>();
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(Policies.User, policy => policy.Requirements.Add(new PrimeUserRequirement()));
-                options.AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.PrimeAdmin));
-                options.AddPolicy(Policies.SuperAdmin, policy => policy.RequireRole(Roles.PrimeSuperAdmin));
-                options.AddPolicy(Policies.ReadonlyAdmin, policy => policy.RequireRole(Roles.PrimeReadonlyAdmin));
-                options.AddPolicy(Policies.ExternalHpdidAccess, policy => policy.RequireRole(Roles.ExternalHpdidAccess));
-                options.AddPolicy(Policies.ExternalGpidValidation, policy => policy.RequireRole(Roles.ExternalGpidValidation));
             });
         }
 

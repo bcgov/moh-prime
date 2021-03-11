@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -28,7 +28,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
-    authService: AuthService,
+    permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
     toastService: ToastService,
@@ -37,7 +37,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
       route,
       router,
       adjudicationResource,
-      authService,
+      permissionService,
       dialog,
       utilsService,
       toastService);
@@ -72,8 +72,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
       dateOfBirth,
       gpid,
       hpdid,
-      physicalAddress,
+      verifiedAddress,
       mailingAddress,
+      physicalAddress,
       email,
       smsPhone,
       phone,
@@ -93,8 +94,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
         dateOfBirth,
         gpid,
         hpdid,
-        physicalAddress,
+        verifiedAddress,
         mailingAddress,
+        physicalAddress,
         email,
         smsPhone,
         phone,

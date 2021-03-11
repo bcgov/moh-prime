@@ -12,7 +12,7 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { Address } from '@shared/models/address.model';
+import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
@@ -83,13 +83,11 @@ export class AdjudicationResource {
       );
   }
 
-  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId?: number): Observable<HttpEnrollee> {
+  public setEnrolleeAdjudicator(enrolleeId: number, adjudicatorId: number): Observable<string> {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
-    return this.apiResource.put<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`, null, params)
+    return this.apiResource.put<string>(`enrollees/${enrolleeId}/adjudicator`, null, params)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        map((enrollee: HttpEnrollee) => enrollee),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be assigned');
           this.logger.error('[Adjudication] AdjudicationResource::setEnrolleeAdjudicator error has occurred: ', error);
@@ -98,12 +96,10 @@ export class AdjudicationResource {
       );
   }
 
-  public removeEnrolleeAdjudicator(enrolleeId: number): Observable<HttpEnrollee> {
-    return this.apiResource.delete<HttpEnrollee>(`enrollees/${enrolleeId}/adjudicator`)
+  public removeEnrolleeAdjudicator(enrolleeId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`enrollees/${enrolleeId}/adjudicator`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        map((enrollee: HttpEnrollee) => enrollee),
-        tap((enrollee: HttpEnrollee) => this.logger.info('UPDATED_ENROLLEE', enrollee)),
+        NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Adjudicator could not be unassigned');
           this.logger.error('[Adjudication] AdjudicationResource::removeEnrolleeAdjudicator error has occurred: ', error);
@@ -483,9 +479,11 @@ export class AdjudicationResource {
   // ---
 
   private enrolleeAdapterResponse(enrollee: HttpEnrollee): HttpEnrollee {
-    if (!enrollee.mailingAddress) {
-      enrollee.mailingAddress = new Address();
-    }
+    addressTypes.forEach((addressType: AddressType) => {
+      if (!enrollee[addressType]) {
+        enrollee[addressType] = new Address();
+      }
+    });
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];

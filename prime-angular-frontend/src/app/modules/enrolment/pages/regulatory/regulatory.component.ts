@@ -3,6 +3,8 @@ import { FormGroup, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { map } from 'rxjs/operators';
+
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -17,6 +19,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 import { RegulatoryFormState } from './regulatory-form-state';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 @Component({
   selector: 'app-regulatory',
@@ -25,6 +28,7 @@ import { RegulatoryFormState } from './regulatory-form-state';
 })
 export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
+  public cannotRequestRemoteAccess: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -36,7 +40,8 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
-    protected formUtilsService: FormUtilsService
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -48,8 +53,11 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
+
+    this.cannotRequestRemoteAccess = false;
   }
 
   public get certifications(): FormArray {
@@ -101,11 +109,23 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     if (!this.certifications.length) {
       this.addEmptyCollegeCertification();
     }
+
+    const initialRemoteAccess = this.canRequestRemoteAccess();
+
+    this.form.valueChanges
+      .pipe(map((_) => initialRemoteAccess && !this.isInitialEnrolment))
+      .subscribe((couldRequestRemoteAccess: boolean) =>
+        this.cannotRequestRemoteAccess = couldRequestRemoteAccess && !this.canRequestRemoteAccess()
+      );
   }
 
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeJobs();
+    // Remove remote access data when enrollee is no longer elegible, e.g. licence type changes
+    if (this.cannotRequestRemoteAccess) {
+      this.removeRemoteAccessData();
+    }
   }
 
   protected afterSubmitIsSuccessful() {
@@ -164,5 +184,21 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
       jobs.clear();
       oboSites.clear();
     }
+  }
+
+  private canRequestRemoteAccess(): boolean {
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
+    const careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
+
+    return this.enrolmentService
+      .canRequestRemoteAccess(certifications, careSettings);
+  }
+
+  private removeRemoteAccessData(): void {
+    const remoteAccessForm = this.enrolmentFormStateService.remoteAccessForm;
+    const remoteAccessSites = remoteAccessForm.get('remoteAccessSites') as FormArray;
+    const enrolleeRemoteUsers = remoteAccessForm.get('enrolleeRemoteUsers') as FormArray;
+    const remoteLocations = this.enrolmentFormStateService.remoteAccessLocationsForm.get('remoteAccessLocations') as FormArray;
+    [remoteAccessSites, enrolleeRemoteUsers, remoteLocations].forEach(f => f.clear());
   }
 }

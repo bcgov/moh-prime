@@ -41,6 +41,11 @@
                 "glob": "**/*",
                 "input": "node_modules/tinymce/plugins",
                 "output": "/tinymce/plugins/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/tinymce/icons",
+                "output": "/tinymce/icons/"
               }
             ],
             "styles": [

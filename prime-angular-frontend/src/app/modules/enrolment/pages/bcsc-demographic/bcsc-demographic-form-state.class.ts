@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -22,6 +22,8 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       return;
     }
 
+    // TODO adapt the data after getting values, ie. address(es)
+
     return this.formInstance.getRawValue();
   }
 
@@ -30,24 +32,35 @@ export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
       return;
     }
 
+    // TODO adapt the data before patching values, ie. address(es)
+
     this.formInstance.patchValue(enrollee);
   }
 
+  // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
+      firstName: [{ value: null, disabled: true }, [Validators.required]],
+      lastName: [{ value: null, disabled: true }, [Validators.required]],
+      givenNames: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],
+      // Expected in most cases provided by BCSC identity provider
+      verifiedAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
+      }),
+      physicalAddress: this.formUtilsService.buildAddressForm(),
       mailingAddress: this.formUtilsService.buildAddressForm(),
+      email: [null, [
+        Validators.required,
+        FormControlValidators.email
+      ]],
       phone: [null, [
         Validators.required,
         FormControlValidators.phone
       ]],
       phoneExtension: [null, [FormControlValidators.numeric]],
-      email: [null, [
-        Validators.required,
-        FormControlValidators.email
-      ]],
       smsPhone: [null, [FormControlValidators.phone]]
     });
   }

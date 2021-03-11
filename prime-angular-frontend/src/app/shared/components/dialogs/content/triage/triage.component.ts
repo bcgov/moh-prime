@@ -9,6 +9,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { Role } from '@auth/shared/enum/role.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 
@@ -30,6 +31,7 @@ export class TriageComponent implements OnInit {
 
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
+  public Role = Role;
 
   constructor(
     private enrolmentResource: EnrolmentResource,
@@ -43,8 +45,8 @@ export class TriageComponent implements OnInit {
     this.assigned = false;
   }
 
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
+  public onOpen() {
+    this.getCurrentStatus();
   }
 
   public onEscalate() {
@@ -89,9 +91,7 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  public ngOnInit(): void {
-    this.getCurrentStatus();
-  }
+  public ngOnInit(): void { }
 
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);

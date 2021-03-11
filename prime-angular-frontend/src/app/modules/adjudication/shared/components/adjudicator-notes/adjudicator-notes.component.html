@@ -16,13 +16,14 @@
       <div class="text-right">
         <button mat-flat-button
                 color="primary"
-                [disabled]="!canEdit && !note.value?.length">Save Note</button>
+                [disabled]="!((Role.MANAGE_ENROLLEE | inRole) && !note.value?.length)">Save Note</button>
       </div>
 
     </div>
     <div class="col-sm-12 col-lg-9 col-xl-7">
 
-      <div class="mb-4">
+      <div class="mb-4"
+           *ngIf="Role.APPROVE_ENROLLEE| inRole">
         <button mat-stroked-button
                 color="primary"
                 type="button"

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Observable } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
@@ -12,6 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -33,12 +35,15 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public formState: BcscDemographicFormState;
   /**
    * @description
-   * Enrollee information from the provider not
-   * contained within the form.
+   * User information from the provider not contained
+   * within the form for use in creation.
    */
-  public enrollee: Enrollee;
+  public bcscUser: BcscUser;
+
   public hasPreferredName: boolean;
+  public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
+  public hasPhysicalAddress: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -51,7 +56,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -63,7 +68,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
   }
 
@@ -75,6 +81,10 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('preferredLastName') as FormControl;
   }
 
+  public get verifiedAddress(): FormGroup {
+    return this.form.get('verifiedAddress') as FormGroup;
+  }
+
   public get physicalAddress(): FormGroup {
     return this.form.get('physicalAddress') as FormGroup;
   }
@@ -83,50 +93,60 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     return this.form.get('mailingAddress') as FormGroup;
   }
 
-  public onPreferredNameChange() {
-    this.hasPreferredName = !this.hasPreferredName;
-
+  public onPreferredNameChange({ checked }: MatSlideToggleChange) {
     if (!this.hasPreferredName) {
       this.form.get('preferredMiddleName').reset();
     }
 
-    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
+    this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
   }
 
-  public onMailingAddressChange() {
-    this.hasMailingAddress = !this.hasMailingAddress;
-    this.toggleMailingAddressValidators(this.mailingAddress, ['id', 'street2']);
+  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
+    this.toggleAddressLineValidators(checked, this.physicalAddress);
   }
 
-  public ngOnInit() {
+  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
+    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
+  }
+
+  public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
-
-    this.getUser$().subscribe((enrollee: Enrollee) => this.enrollee = enrollee);
+    this.patchForm()
+      .pipe(
+        map(([bcscUser, enrolment]: [BcscUser, Enrolment]) => {
+          this.bcscUser = bcscUser;
+          if (!enrolment) {
+            // Manage patching the form state for a new enrolment
+            // that has not been created
+            const { firstName, lastName, givenNames } = bcscUser;
+            const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
+            this.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
+          }
+        })
+      )
+      .subscribe(() => this.initForm());
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = this.enrolmentFormStateService.bcscDemographicFormState;
     this.form = this.formState.form;
   }
 
-  protected initForm() {
-    // Show preferred name if it exists
-    this.hasPreferredName = !!(
-      this.preferredFirstName.value ||
-      this.preferredLastName.value
-    );
+  protected initForm(): void {
+    this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
+    this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
-    this.togglePreferredNameValidators(this.preferredFirstName, this.preferredLastName);
+    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress)
+    if (!this.hasVerifiedAddress) {
+      this.clearAddressValidator(this.verifiedAddress);
+      this.setAddressValidator(this.physicalAddress);
+    } else {
+      this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
+      this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+    }
 
-    // Show mailing address if it exists
-    const mailingAddress = this.mailingAddress.value;
-    const blacklisted = ['id', 'street2'];
-    this.hasMailingAddress = Object.keys(mailingAddress)
-      .filter(key => !blacklisted.includes(key))
-      .some(key => mailingAddress[key])
-
-    this.toggleMailingAddressValidators(this.mailingAddress, blacklisted);
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
@@ -134,11 +154,12 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       return this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
+            const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
             const { userId, ...demographic } = enrolment.enrollee;
-            return { ...enrollee, ...demographic };
+            return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
           }),
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
-          // Populate generated keys within the form state
+          // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
           this.handleResponse()
         );
@@ -147,7 +168,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  protected nextRouteAfterSubmit() {
+  protected nextRouteAfterSubmit(): void {
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.CARE_SETTING;
@@ -156,8 +177,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     super.nextRouteAfterSubmit(nextRoutePath);
   }
 
-  private togglePreferredNameValidators(preferredFirstName: FormControl, preferredLastName: FormControl) {
-    if (!this.hasPreferredName) {
+  private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
+    if (!hasPreferredName) {
       this.formUtilsService.resetAndClearValidators(preferredFirstName);
       this.formUtilsService.resetAndClearValidators(preferredLastName);
     } else {
@@ -166,18 +187,28 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     }
   }
 
-  private toggleMailingAddressValidators(mailingAddress: FormGroup, blacklist: string[] = []) {
-    if (!this.hasMailingAddress) {
-      this.formUtilsService.resetAndClearValidators(mailingAddress, blacklist);
-    } else {
-      this.formUtilsService.setValidators(mailingAddress, [Validators.required], blacklist);
+  private toggleAddressLineValidators(hasAddressLine: boolean, addressLine: FormGroup, shouldToggle: boolean = true): void {
+    if (!shouldToggle) {
+      return;
     }
+
+    (!hasAddressLine)
+      ? this.clearAddressValidator(addressLine)
+      : this.setAddressValidator(addressLine);
+  }
+
+  private clearAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+  }
+
+  private setAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
   }
 
   private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, physicalAddress }: BcscUser) => {
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
@@ -188,7 +219,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
             lastName,
             givenNames,
             dateOfBirth,
-            physicalAddress,
+            verifiedAddress,
             phone: null,
             email: null
           } as Enrollee;
