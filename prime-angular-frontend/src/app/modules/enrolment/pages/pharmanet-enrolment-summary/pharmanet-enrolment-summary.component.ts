@@ -99,6 +99,10 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.enrollee.gpid;
   }
 
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
   public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
     if (formControl) {
       formControl.reset();
