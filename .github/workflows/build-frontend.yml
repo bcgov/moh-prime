@@ -20,7 +20,7 @@ on:
       # - master
 
 jobs:
-  build-main:
+  build:
     runs-on: ubuntu-20.04
     environment: Development
     env:
@@ -53,12 +53,12 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker tag jag-traffic-courts-online_${{ env.IMAGE_NAME }} ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
+          docker tag prime_$IMAGE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
       - name: Push To Registry via Docker
         id: push-image-docker
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker login ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }} -u ${{ secrets.OPENSHIFT_SA_USERNAME }} -p ${{ secrets.OPENSHIFT_SA_PASSWORD }}
-          docker image push --all-tags ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
+          docker login ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }} -u ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }} -p ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+          docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
