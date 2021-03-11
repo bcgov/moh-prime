@@ -15,6 +15,8 @@ namespace Prime.Services
 
         Task<Admin> GetAdminAsync(Guid userId);
 
+        Task<string> GetAdminIdirAsync(int adminId);
+
         Task<IEnumerable<Admin>> GetAdminsAsync();
 
         Task<int> CreateAdminAsync(Admin admin);
