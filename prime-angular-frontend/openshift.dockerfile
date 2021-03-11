@@ -1,9 +1,11 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM public.ecr.aws/bitnami/node:14.15.5-prod AS builder
+FROM public.ecr.aws/bitnami/node:14.15.5-prod AS build-deps
 
 # Set working directory
+ENV NODE_ROOT /usr/src/app
+RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Set environment variables
@@ -16,7 +18,7 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
-RUN apt-get update
+COPY package.json package-lock.json ./
 
 COPY . .
 
@@ -37,21 +39,23 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM docker.io/nginx:1.18.0
+FROM registry.redhat.io/rhel8/nginx-118
 
 WORKDIR /app
 
 # Edit folder permissions
-RUN chmod 766 -R /etc/nginx
+# RUN chmod 766 -R /etc/nginx
 # RUN chmod 666 /var/cache/nginx
 # RUN chmod 666 /var/lib/nginx
 
-RUN touch /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY nginx.template.conf /etc/nginx/conf.d/default.conf
+# RUN touch /etc/nginx/conf.d/default.conf
+# COPY nginx.conf /etc/nginx/nginx.conf
+# COPY nginx.template.conf /etc/nginx/conf.d/default.conf
 # COPY entrypoint.sh /
 
-COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/dist/prime-angular-frontend /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
@@ -63,4 +67,4 @@ COPY --from=builder /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 EXPOSE 80 8080 4200:8080
 
 # CMD /entrypoint.sh
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["sh", "-c", "envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]

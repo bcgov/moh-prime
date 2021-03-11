@@ -1,0 +1,2 @@
+# This workflow will build PRIME's .NET web API backend component image first, then deploy it to the 
+# respective OpenShift namespace image registry.

@@ -1,0 +1,65 @@
+# This workflow will build PRIME's Angular frontend component image first, then deploy it to the 
+# respective OpenShift namespace image registry.
+
+name: Build Angular Frontend Image and Deploy to OpenShift Image Registry
+
+on:
+  push:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
+      # - fix/*
+      # - develop
+      # - test
+      # - master
+  workflow_dispatch:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
+      # - fix/*
+      # - develop
+      # - test
+      # - master
+
+jobs:
+  build-main:
+    runs-on: ubuntu-20.04
+    env:
+      VERSION: v1
+      IMAGE_NAME: angular-frontend-develop
+      IMAGE_TAGS: latest
+      
+    steps:
+      - name: "Checkout the repo"
+      - uses: actions/checkout@v2
+
+      - name: "Build Angular frontend image"
+        id: build-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |          
+          docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
+          docker-compose build \
+          --build-arg USE_MOCK_SERVICES=${{ secrets.USE_MOCK_SERVICES }} \
+          --build-arg USE_KEYCLOAK= "true" \
+          --build-arg API_URL=${{ secrets.API_URL }} \
+          --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
+          --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${ secrets.KEYCLOAK_CLIENT_ID }} \
+          ${{ env.IMAGE_NAME }}
+      - name: Tag the Image
+        id: tag-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker tag jag-traffic-courts-online_${{ env.IMAGE_NAME }} ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/${{ env.IMAGE_NAME }}
+      - name: Push To Registry via Docker
+        id: push-image-docker
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker login ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }} -u ${{ secrets.OPENSHIFT_SA_USERNAME }} -p ${{ secrets.OPENSHIFT_SA_PASSWORD }}
+          docker image push --all-tags ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/${{ env.IMAGE_NAME }}
+
+
