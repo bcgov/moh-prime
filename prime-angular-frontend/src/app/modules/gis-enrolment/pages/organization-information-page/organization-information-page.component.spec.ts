@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { OrganizationInformationPageComponent } from './organization-information-page.component';
 
@@ -11,6 +12,7 @@ describe('OrganizationInformationPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ReactiveFormsModule,
+        RouterTestingModule,
       ],
       declarations: [OrganizationInformationPageComponent]
     })

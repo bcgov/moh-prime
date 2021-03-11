@@ -1,6 +1,7 @@
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { LdapInformationPageComponent } from './ldap-information-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -19,6 +20,7 @@ describe('LdapInformationPageComponent', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
+        HttpClientTestingModule,
       ],
       providers: [
         {

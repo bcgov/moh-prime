@@ -1,3 +1,4 @@
+import { SharedModule } from '@shared/shared.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -26,15 +27,11 @@ describe('BcscProfileComponent', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SharedModule
       ],
       declarations: [
         BcscProfileComponent,
-        DefaultPipe,
-        FullnamePipe,
-        FormatDatePipe,
-        ConfigCodePipe,
-        PostalPipe,
       ],
       providers: [
         {
