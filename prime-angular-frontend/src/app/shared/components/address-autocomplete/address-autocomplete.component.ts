@@ -15,7 +15,7 @@ import { AddressAutocompleteResource } from '@shared/services/address-autocomple
   styleUrls: ['./address-autocomplete.component.scss']
 })
 export class AddressAutocompleteComponent implements OnInit {
-  @Input() onlyBc: boolean;
+  @Input() inBc: boolean;
   @Output() autocompleteAddress: EventEmitter<Address>;
 
   public form: FormGroup;
@@ -27,7 +27,7 @@ export class AddressAutocompleteComponent implements OnInit {
     private toastService: ToastService
   ) {
     this.autocompleteAddress = new EventEmitter<Address>();
-    this.onlyBc = false;
+    this.inBc = false;
   }
 
   public get autocomplete(): FormControl {
@@ -49,7 +49,7 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode
           );
 
-          (!this.onlyBc || address.provinceCode === 'BC')
+          (!this.inBc || address.provinceCode === 'BC')
             ? this.autocompleteAddress.emit(address)
             : this.toastService.openErrorToast('Address must be located in BC');
 
