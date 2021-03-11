@@ -68,7 +68,8 @@ services:
     container_name: primeweb
     build:
          context: prime-angular-frontend/
-    command: "nginx -g 'daemon off;'"
+         dockerfile: openshift.dockerfile
+    # command: "nginx -g 'daemon off;'"
     restart: always
     ports:
        - "8080:8080"
