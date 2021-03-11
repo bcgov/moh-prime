@@ -42,6 +42,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public isNewSite: FormControl;
 
   public vendorChangeDialogOptions: DialogOptions;
 
@@ -68,6 +69,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
                 do not have permission to access PharmaNet remotely.`
     };
     this.filteredVendorConfig = [];
+    this.isNewSite = new FormControl(false);
   }
 
   public get careSettingCode(): FormControl {
@@ -76,6 +78,10 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
 
   public get vendorCode(): FormControl {
     return this.form.get('vendorCode') as FormControl;
+  }
+
+  public get pec(): FormControl {
+    return this.form.get('pec') as FormControl;
   }
 
   public onSubmit() {
@@ -107,7 +113,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
           this.form.markAsPristine();
           this.nextRoute();
         });
-    } else {
+    } else if (!this.vendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -179,9 +185,21 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
         this.vendorCode.patchValue(null);
       });
 
+    this.isNewSite.valueChanges
+      .subscribe(value => {
+        if (value) {
+          this.pec.patchValue(null);
+          this.pec.disable();
+        }
+        else {
+          this.pec.enable();
+        }
+      });
+
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.isNewSite.setValue(this.pec.disabled);
     this.form.markAsPristine();
   }
 }
