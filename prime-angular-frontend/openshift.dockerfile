@@ -41,8 +41,6 @@ RUN ng build --prod
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
 
-WORKDIR /app
-
 # Edit folder permissions
 # RUN chmod 766 -R /etc/nginx
 # RUN chmod 666 /var/cache/nginx
