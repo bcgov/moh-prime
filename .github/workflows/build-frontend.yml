@@ -4,10 +4,9 @@
 name: Build Angular Frontend Image and Deploy to OpenShift Image Registry
 
 on:
-  [pull_request]
   push:
-  #   branches:
-  #     - feature/prime-1195-1197-ocp4-jenkins
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
   #     # - fix/*
   #     # - develop
   #     # - test
