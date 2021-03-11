@@ -58,7 +58,17 @@ export class MockAccessTokenService implements IAccessTokenService {
 
   public loadBrokerProfile(forceReload?: boolean): Promise<BrokerProfile> {
     return new Promise((resolve, reject) => {
-      const profile: BrokerProfile = <BrokerProfile>{};
+      const profile: BrokerProfile = {
+        attributes: {
+          birthdate: [],
+          country: [],
+          region: [],
+          givenNames: [],
+          locality: [],
+          postalCode: [],
+          streetAddress: [],
+        }
+      };
       return resolve(profile);
     });
   }
