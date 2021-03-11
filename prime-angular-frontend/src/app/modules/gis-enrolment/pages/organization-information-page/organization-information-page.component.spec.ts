@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { OrganizationInformationPageComponent } from './organization-information-page.component';
 
@@ -8,9 +9,12 @@ describe('OrganizationInformationPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrganizationInformationPageComponent ]
+      imports: [
+        ReactiveFormsModule,
+      ],
+      declarations: [OrganizationInformationPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
