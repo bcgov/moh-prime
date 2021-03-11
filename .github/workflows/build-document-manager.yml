@@ -1,2 +1,0 @@
-# This workflow will build PRIME's Document Manager microservice image first, then deploy it to the 
-# respective OpenShift namespace image registry.

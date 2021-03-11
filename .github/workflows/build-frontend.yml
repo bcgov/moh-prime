@@ -30,7 +30,7 @@ jobs:
       
     steps:
       - name: "Checkout the repo"
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
       - name: "Build Angular frontend image"
         id: build-image
@@ -39,12 +39,13 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |          
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
-          docker build \
+          docker-compose build \
           --build-arg REDIRECT_URL=${{ secrets.REDIRECT_URL }} \
           --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
           --build-arg KEYCLOAK_CLIENT_ID=${ secrets.KEYCLOAK_CLIENT_ID }} \
           $IMAGE_NAME
+      
       - name: Tag the Image
         id: tag-image
         env:
@@ -52,6 +53,7 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker tag prime_$IMAGE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
+      
       - name: Push To Registry via Docker
         id: push-image-docker
         env:
