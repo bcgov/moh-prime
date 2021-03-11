@@ -63,12 +63,13 @@ export class ClaimNoteComponent implements OnInit {
   }
 
   public onClaim(): void {
-    this.authService.getAdmin$().subscribe((admin: Admin) => {
-      const output = new AssignAction();
-      output.action = AssignActionEnum.Assign;
-      output.adjudicatorId = admin.id;
-      this.dialogRef.close({ output });
-    })
+    this.authService.getAdmin$()
+      .subscribe((admin: Admin) => {
+        const output = new AssignAction();
+        output.action = AssignActionEnum.Assign;
+        output.adjudicatorId = this.adjudicators$.value.find(a => a.userId === admin.userId).id;
+        this.dialogRef.close({ output });
+      });
   }
 
   public onAssign(adminId: number): void {
@@ -79,6 +80,7 @@ export class ClaimNoteComponent implements OnInit {
       output.note = this.note.value;
       this.dialogRef.close({ output });
     }
+
     this.note.markAsTouched();
   }
 
@@ -98,7 +100,7 @@ export class ClaimNoteComponent implements OnInit {
       ]
     });
   }
-  
+
   private getAdjudicators(): void {
     this.adjudicationResource.getAdjudicators()
       .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));

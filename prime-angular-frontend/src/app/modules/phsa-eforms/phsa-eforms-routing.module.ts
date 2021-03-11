@@ -17,7 +17,7 @@ import { CollectionNoticeComponent } from './pages/collection-notice/collection-
 
 const routes: Routes = [
   {
-    path: PhsaEformsRoutes.MODULE_PATH,
+    path: '',
     component: PhsaEformsDashboardComponent,
     canActivate: [
       AuthenticationGuard

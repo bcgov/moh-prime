@@ -1,9 +1,9 @@
 <app-contextual-help icon="topic"
+                     titleIcon="network_check"
+                     class="test"
                      [small]="true"
                      [advanced]="true"
-                     titleIcon="network_check"
-                     class="test">
-
+                     (opened)="onOpen()">
   <ng-container appContextualTitle>
     Triage
   </ng-container>

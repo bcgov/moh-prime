@@ -3,7 +3,7 @@
    aria-label="Help"
    [class.small]="small"
    [matMenuTriggerFor]="help"
-   (click)="$event.stopPropagation()">
+   (click)="onOpen($event)">
   <mat-icon>{{ icon }}</mat-icon>
 </a>
 <mat-menu #help="matMenu"

@@ -1,10 +1,33 @@
 import { MatTableDataSource } from '@angular/material/table';
 
 export class MatTableDataSourceUtils {
+  /**
+   * @description
+   * Find the first item in a datasource that matches a predicate.
+   *
+   * @example
+   * this.dataSource.data = MatTableDataSourceUtils
+   *   .first(this.dataSource, 'id', 384);
+   */
+  public static first<T>(dataSource: MatTableDataSource<T>, key: string, value: any): T {
+    return this.find(dataSource, key, value).shift();
+  }
 
   /**
    * @description
-   * Update an item in a datasource based on a predicate.
+   * Find an item(s) in a datasource that match a predicate.
+   *
+   * @example
+   * this.dataSource.data = MatTableDataSourceUtils
+   *   .find(this.dataSource, 'id', 384);
+   */
+  public static find<T>(dataSource: MatTableDataSource<T>, key: string, value: any): T[] {
+    return dataSource.data.filter((model: T) => model[key] === value);
+  }
+
+  /**
+   * @description
+   * Update an item in a datasource that match a predicate.
    *
    * @example
    * this.dataSource.data = MatTableDataSourceUtils
