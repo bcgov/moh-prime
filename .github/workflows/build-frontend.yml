@@ -11,9 +11,9 @@ on:
   #     # - develop
   #     # - test
   #     # - master
-  # workflow_dispatch:
-  #   branches:
-  #     - feature/prime-1195-1197-ocp4-jenkins
+  workflow_dispatch:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
   #     # - fix/*
   #     # - develop
   #     # - test
@@ -43,7 +43,7 @@ jobs:
           --build-arg REDIRECT_URL=${{ secrets.REDIRECT_URL }} \
           --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${ secrets.KEYCLOAK_CLIENT_ID }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
           $IMAGE_NAME
       
       - name: Tag the Image
