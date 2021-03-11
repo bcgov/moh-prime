@@ -74,6 +74,7 @@ namespace Prime
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
+            services.AddScoped<IGisService, GisService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

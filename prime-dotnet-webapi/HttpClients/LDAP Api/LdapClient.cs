@@ -1,10 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using IdentityModel.Client;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -24,26 +24,36 @@ namespace Prime.HttpClients
 
         public async Task<JObject> GetUserAsync(string userId, string password)
         {
+            var passwordObj = new JObject
+            {
+                {"userPassword", password}
+            };
+
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"users/{userId}?userPassword={password}");
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"{_client.BaseAddress}users/{userId}"),
+                    Content = new StringContent(passwordObj.ToString(), Encoding.UTF8, "application/json"),
+                };
+                response = await _client.SendAsync(request).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 await LogError(response, ex);
-                throw new LdapApiException("Error occurred attempting to get the schema id by issuer did: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
                 await LogError(response);
-                throw new LdapApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
             }
 
             JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
             _logger.LogInformation("GIS_USER_ROLE: {gisuserrole}", (string)body.SelectToken("gisuserrole"));
+            _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
 
             return body;
         }
@@ -74,10 +84,4 @@ namespace Prime.HttpClients
         }
     }
 
-    public class LdapApiException : Exception
-    {
-        public LdapApiException() : base() { }
-        public LdapApiException(string message) : base(message) { }
-        public LdapApiException(string message, Exception inner) : base(message, inner) { }
-    }
 }
