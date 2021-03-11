@@ -33,7 +33,7 @@ export interface PracticeConfig extends Config<number> {
   collegePractices: CollegePracticeConfig[];
 }
 
-export interface LicenseConfig extends Config<number> {
+export class LicenseConfig extends Config<number> implements IWeightedConfig {
   prefix: string;
   collegeLicenses: CollegeLicenseConfig[];
   licensedToProvideCare: boolean;
@@ -59,4 +59,8 @@ export interface VendorConfig extends Config<number> {
 
 export interface ProvinceConfig extends Config<string> {
   countryCode: string;
+}
+
+export interface IWeightedConfig {
+  weight: number;
 }
