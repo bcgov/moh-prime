@@ -34,7 +34,10 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public async decodeToken(): Promise<AccessTokenParsed | null> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve, reject) => {
+      const token: AccessTokenParsed = <AccessTokenParsed>{};
+      resolve(token)
+    });
   }
 
   public clearToken(): void {
@@ -54,7 +57,10 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public loadBrokerProfile(forceReload?: boolean): Promise<BrokerProfile> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve, reject) => {
+      const profile: BrokerProfile = <BrokerProfile>{};
+      return resolve(profile);
+    });
   }
 
   public roles(allRoles?: boolean): string[] {
