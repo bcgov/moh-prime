@@ -22,6 +22,7 @@ on:
 jobs:
   build-main:
     runs-on: ubuntu-20.04
+    environment: Development
     env:
       VERSION: v1
       IMAGE_NAME: angular-frontend-develop
@@ -45,14 +46,14 @@ jobs:
           --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
           --build-arg KEYCLOAK_CLIENT_ID=${ secrets.KEYCLOAK_CLIENT_ID }} \
-          ${{ env.IMAGE_NAME }}
+          $IMAGE_NAME
       - name: Tag the Image
         id: tag-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker tag jag-traffic-courts-online_${{ env.IMAGE_NAME }} ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/${{ env.IMAGE_NAME }}
+          docker tag jag-traffic-courts-online_${{ env.IMAGE_NAME }} ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
       - name: Push To Registry via Docker
         id: push-image-docker
         env:
@@ -60,6 +61,4 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker login ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }} -u ${{ secrets.OPENSHIFT_SA_USERNAME }} -p ${{ secrets.OPENSHIFT_SA_PASSWORD }}
-          docker image push --all-tags ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_TOOLS_NAMESPACE }}/${{ env.IMAGE_NAME }}
-
-
+          docker image push --all-tags ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
