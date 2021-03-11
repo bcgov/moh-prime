@@ -45,6 +45,10 @@ export class TriageComponent implements OnInit {
     this.assigned = false;
   }
 
+  public onOpen() {
+    this.getCurrentStatus();
+  }
+
   public onEscalate() {
     const data: DialogOptions = {
       data: {
@@ -87,9 +91,7 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  public ngOnInit(): void {
-    this.getCurrentStatus();
-  }
+  public ngOnInit(): void { }
 
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);

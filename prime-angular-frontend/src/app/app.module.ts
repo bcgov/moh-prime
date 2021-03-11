@@ -13,7 +13,6 @@ import { AuthModule } from '@auth/auth.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
-import { PhsaEformsModule } from '@phsa/phsa-eforms.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +26,6 @@ import { PhsaEformsModule } from '@phsa/phsa-eforms.module';
     EnrolmentModule, // TODO lazy load this module
     AdjudicationModule, // TODO lazy load this module
     SiteRegistrationModule, // TODO lazy load this module
-    PhsaEformsModule, // TODO lazy load this module
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
   bootstrap: [AppComponent]
