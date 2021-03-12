@@ -37,6 +37,8 @@ namespace Prime.Infrastructure.AutoMapperProfiles
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
 
             CreateMap<Certification, CertificationDto>();
+
+            CreateMap<SelfDeclaration, SelfDeclarationViewModel>();
         }
     }
 }

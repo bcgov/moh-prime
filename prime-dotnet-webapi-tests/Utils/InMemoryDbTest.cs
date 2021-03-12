@@ -76,7 +76,7 @@ namespace PrimeTests.Utils
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new AutoMapping());
+                cfg.AddMaps(typeof(Prime.Startup));
             }).CreateMapper();
         }
     }

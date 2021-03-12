@@ -17,6 +17,8 @@ namespace Prime.Infrastructure.AutoMapperProfiles
                     opt.MapFrom(src => src.SignedAgreement.DocumentGuid);
                 })
                 .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementVersion.AgreementType));
+
+            CreateMap<Address, AddressViewModel>();
         }
     }
 }

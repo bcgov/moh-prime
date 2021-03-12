@@ -1,5 +1,4 @@
 using System;
-using Prime.Models;
 
 namespace Prime.ViewModels
 {
@@ -19,9 +18,9 @@ namespace Prime.ViewModels
         public string Phone { get; set; }
         public string PhoneExtension { get; set; }
 
-        public VerifiedAddress VerifiedAddress { get; set; }
-        public PhysicalAddress PhysicalAddress { get; set; }
-        public MailingAddress MailingAddress { get; set; }
+        public AddressViewModel VerifiedAddress { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
+        public AddressViewModel MailingAddress { get; set; }
 
         public string GPID { get; set; }
 
