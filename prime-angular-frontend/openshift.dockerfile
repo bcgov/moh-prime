@@ -37,10 +37,13 @@ RUN ng build --prod
 RUN pwd && \
     ls -alh && \
     cd /usr/src && \
+    pwd && \
     ls -alh && \
     cd app && \
+    pwd && \
     ls -alh && \
     cd src && \
+    pwd && \
     ls -alh
 ########################################
 ### Stage 2 - Production environment ###
@@ -57,7 +60,7 @@ FROM registry.redhat.io/rhel8/nginx-118
 # COPY nginx.template.conf /etc/nginx/conf.d/default.conf
 # COPY entrypoint.sh /
 
-COPY --from=build-deps /usr/src/app/dist/prime-angular-frontend /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/src /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
