@@ -51,7 +51,7 @@ FROM registry.redhat.io/rhel8/nginx-118
 # COPY entrypoint.sh /
 
 COPY --from=build-deps /usr/src/app/src /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/openshift.nginx.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
 # RUN chmod +x /entrypoint.sh
@@ -64,4 +64,5 @@ COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.templat
 EXPOSE 80 8080 4200:8080
 
 # CMD /entrypoint.sh
-CMD ["sh", "-c", "envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
+# CMD ["sh", "-c", "envsubst '$SUFFIX' < /etc/nginx/nginx.template.conf > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"]
+CMD ["sh","-c","nginx -g 'daemon off;'"]
