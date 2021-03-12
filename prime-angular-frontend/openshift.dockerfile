@@ -34,8 +34,14 @@ RUN npm install
 
 # Add application
 RUN ng build --prod
-
-
+RUN pwd && \
+    ls -alh && \
+    cd /usr/src && \
+    ls -alh && \
+    cd app && \
+    ls -alh && \
+    cd src && \
+    ls -alh
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
