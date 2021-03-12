@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
-    [Table("Gis")]
-    public class Gis : BaseAuditable
+    [Table("GisEnrolment")]
+    public class GisEnrolment : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
