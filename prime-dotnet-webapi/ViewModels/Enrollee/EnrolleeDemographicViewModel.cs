@@ -23,10 +23,5 @@ namespace Prime.ViewModels
         public AddressViewModel MailingAddress { get; set; }
 
         public string GPID { get; set; }
-
-        public string FullName
-        {
-            get => $"{FirstName} {LastName}";
-        }
     }
 }

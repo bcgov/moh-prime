@@ -5,7 +5,9 @@ namespace Prime.ViewModels
 {
     public class EnrolleeOverviewViewModel
     {
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string GivenNames { get; set; }
         public DateTime DateOfBirth { get; set; }
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
