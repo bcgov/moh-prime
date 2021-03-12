@@ -25,7 +25,8 @@ jobs:
     environment: Development
     env:
       VERSION: v1
-      IMAGE_NAME: nginx-angular
+      SERVICE_NAME: nginx-angular
+      CONTAINER_NAME: primeweb
       IMAGE_TAGS: latest
       
     steps:
@@ -44,21 +45,7 @@ jobs:
           --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
           --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
-          $IMAGE_NAME
-      
-      - name: Tag the Image
-        id: tag-image
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-        run: |
-          docker tag prime_$IMAGE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
-      
-      - name: Push To Registry via Docker
-        id: push-image-docker
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-        run: |
+          $SERVICE_NAME
+          docker tag moh-prime_$CONTAINER_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
           docker login ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }} -u ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }} -p ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
-          docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
+          docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
