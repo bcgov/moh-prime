@@ -36,6 +36,12 @@
 
 </section>
 
+<app-address-view title="Verified Address"
+                  [address]="enrollee.verifiedAddress"
+                  [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="true"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
+
 <app-address-view title="Physical Address"
                   [address]="enrollee.physicalAddress"
                   [showRedirect]="showEditRedirect"
