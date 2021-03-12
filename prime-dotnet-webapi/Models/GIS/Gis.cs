@@ -1,9 +1,6 @@
 using System;
-using System.Linq;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -16,6 +13,10 @@ namespace Prime.Models
         public int PartyId { get; set; }
 
         public Party Party { get; set; }
+
+        public string LdapUsername { get; set; }
+
+        public DateTimeOffset? LdapLoginSuccessDate { get; set; }
 
         public string Organization { get; set; }
 

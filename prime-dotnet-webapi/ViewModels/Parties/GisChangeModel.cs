@@ -9,11 +9,10 @@ namespace Prime.ViewModels.Parties
 {
     public class GisChangeModel : IPartyChangeModel
     {
-        /// <summary> Required </summary>
         public string Email { get; set; }
-
-        /// <summary> Required </summary>
         public string Phone { get; set; }
+        public string Organization { get; set; }
+        public string Role { get; set; }
 
         /// <summary>
         /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types in the Party's PartyEnrolments.
