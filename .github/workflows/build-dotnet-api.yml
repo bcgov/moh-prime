@@ -1,0 +1,53 @@
+# This workflow will build PRIME's Angular frontend component image first, then deploy it to the 
+# respective OpenShift namespace image registry.
+
+name: Build .NET API and Deploy to OpenShift Image Registry
+
+on:
+  push:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
+  #     # - fix/*
+  #     # - develop
+  #     # - test
+  #     # - master
+  workflow_dispatch:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
+  #     # - fix/*
+  #     # - develop
+  #     # - test
+  #     # - master
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    environment: Development
+    env:
+      VERSION: v1
+      SERVICE_NAME: dotnet-webapi
+      CONTAINER_NAME: primeapi
+      IMAGE_TAGS: latest
+      
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - name: "Build API"
+        id: build-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |          
+          docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
+          docker-compose build $SERVICE_NAME
+      - name: "Tag it and bag it"
+        id: push-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |
+          docker image ls
+          docker tag moh-prime_$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
+          docker login ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }} -u ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }} -p ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+          docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
