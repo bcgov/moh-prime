@@ -53,6 +53,6 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker image ls
-          docker tag moh-prime_$CONTAINER_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
           docker login ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }} -u ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }} -p ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
           docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
