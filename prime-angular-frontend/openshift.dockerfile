@@ -21,8 +21,11 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
-RUN apt-get install software-properties-common && \
-    add-apt-repository ppa:nginx/stable
+# Got "Unable to locate package software-properties-common"
+# RUN apt-get install software-properties-common && \
+#     add-apt-repository ppa:nginx/stable
+
+COPY nginx.list /etc/apt/sources.list.d/nginx.list
 
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \

@@ -1,0 +1,3 @@
+deb https://nginx.org/packages/ubuntu/ xenial nginx
+deb-src https://nginx.org/packages/ubuntu/ xenial nginx
+
