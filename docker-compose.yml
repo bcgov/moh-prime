@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  ####################### PostgreSQL Database Definition #######################
+####################### PostgreSQL Database Definition #######################
   postgres:
     restart: always
     container_name: primedb
@@ -17,22 +17,22 @@ services:
     networks:
       - primenet
 
-  ####################### MongoDB Definition #######################
-  # mongo:
-  #   restart: always
-  #   container_name: primemongodb
-  #   image: mongo:3
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: prime
-  #   ports:
-  #     - 8081:8081
-  #   volumes:
-  #     - local_mongodb_data:/var/lib/mongodb/data
-  #   networks:
-  #     - primenet
+####################### MongoDB Definition #######################
+  mongo:
+    restart: always
+    container_name: primemongodb
+    image: mongo:3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prime
+    ports:
+      - 8081:8081
+    volumes:
+      - local_mongodb_data:/var/lib/mongodb/data
+    networks:
+      - primenet
 
-  ####################### Redis Definition #######################
+####################### Redis Definition #######################
   redis:
     image: redis:3.2-alpine
     container_name: prime_cache
@@ -43,45 +43,45 @@ services:
     networks:
       - primenet
 
-  ####################### API Backend Definition #######################
-  # dotnet-webapi:
-  #   container_name: primeapi
-  #   restart: always
-  #   build:
-  #     context: prime-dotnet-webapi/
-  #   environment:
-  #     DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
-  #     ASPNETCORE_HTTPS_PORT: "5001"
-  #     ASPNETCORE_ENVIRONMENT: "Development"
-  #     ASPNETCORE_URLS: "http://+:8080"
-  #     DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
-  #   ports:
-  #     - "5000:8080"
-  #     - "5001:5001"
-  #   networks:
-  #     - primenet
-  #   depends_on:
-  #     - postgres
+####################### API Backend Definition #######################
+  dotnet-webapi:
+    container_name: primeapi
+    restart: always
+    build:
+      context: prime-dotnet-webapi/
+    environment:
+      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    ports:
+      - "5000:8080"
+      - "5001:5001"
+    networks:
+      - primenet
+    depends_on:
+      - postgres
 
-  ####################### Web Frontend Definition #######################
-  # nginx-angular:
-  #   container_name: primeweb
-  #   build:
-  #        context: prime-angular-frontend/
-  #   command: "nginx -g 'daemon off;'"
-  #   restart: always
-  #   ports:
-  #      - "8080:8080"
-  #      - "4200:8080"
-  #   expose:
-  #      - "8080"
-  #      - "4200"
-  #   networks:
-  #     - primenet
-  #   depends_on:
-  #     - dotnet-webapi
+####################### Web Frontend Definition #######################
+  nginx-angular:
+    container_name: primeweb
+    build:
+         context: prime-angular-frontend/
+    command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+       - "8080:8080"
+       - "4200:8080"
+    expose:
+       - "8080"
+       - "4200"
+    networks:
+      - primenet
+    depends_on:
+      - dotnet-webapi
 
-  ####################### Local SMTP Server Definition #######################
+####################### Local SMTP Server Definition #######################
   mailhog:
     container_name: mailhog
     restart: always
@@ -93,38 +93,38 @@ services:
     networks:
       - primenet
 
-  ####################### Database Inspection Definition #######################
-  # schema-spy:
-  #   container_name: schema-spy
-  #   build:
-  #     context: schemaspy/
-  #   image: openjdk:jre-alpine
-  #   ports:
-  #     - "8069:8069"
-  #     - "80:8069"
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - primenet
+####################### Database Inspection Definition #######################
+  schema-spy:
+    container_name: schema-spy
+    build:
+      context: schemaspy/
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    depends_on:
+      - postgres
+    networks:
+      - primenet
 
-  ####################### Backup Definition #######################
-  # backup:
-  #   container_name: backup
-  #   build:
-  #     context: prime-database-backup
-  #   ports:
-  #     - 6432:5432
-  #     - 9081:8081
-  #   depends_on:
-  #     - postgres
-  #     - mongo
-  #   volumes:
-  #     - db_backup_data:/opt/backup
-  #     - local_postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - primenet
+####################### Backup Definition #######################
+  backup:
+    container_name: backup
+    build:
+      context: prime-database-backup
+    ports:
+      - 6432:5432
+      - 9081:8081
+    depends_on:
+      - postgres
+      - mongo
+    volumes:
+      - db_backup_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
 
-  ####################### Document Manager Definition #######################
+####################### Document Manager Definition #######################
   document_manager_backend:
     restart: always
     container_name: document-manager-backend
@@ -165,5 +165,5 @@ networks:
 ####################### Volumes Definition #######################
 volumes:
   local_postgres_data:
-  # local_mongodb_data:
-  # db_backup_data:
+  local_mongodb_data:
+  db_backup_data:
