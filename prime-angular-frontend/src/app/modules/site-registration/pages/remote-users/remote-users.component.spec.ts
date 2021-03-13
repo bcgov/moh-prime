@@ -5,11 +5,15 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { KeycloakService } from 'keycloak-angular';
+
+import { MockSiteService } from 'test/mocks/mock-site.service';
+
 import { RemoteUsersComponent } from './remote-users.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AddressPipe } from '@shared/pipes/address.pipe';
-import { KeycloakService } from 'keycloak-angular';
+import { SiteService } from '@registration/shared/services/site.service';
 
 describe('RemoteUsersComponent', () => {
   let component: RemoteUsersComponent;
@@ -32,6 +36,10 @@ describe('RemoteUsersComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: SiteService,
+          useClass: MockSiteService
         },
         AddressPipe,
         KeycloakService

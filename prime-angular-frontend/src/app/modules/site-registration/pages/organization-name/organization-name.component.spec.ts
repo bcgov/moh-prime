@@ -5,9 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MockOrganizationService } from 'test/mocks/mock-organization.service';
+
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { OrganizationNameComponent } from './organization-name.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { OrganizationService } from '@registration/shared/services/organization.service';
 
 describe('OrganizationNameComponent', () => {
   let component: OrganizationNameComponent;
@@ -29,6 +32,10 @@ describe('OrganizationNameComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: OrganizationService,
+          useClass: MockOrganizationService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]

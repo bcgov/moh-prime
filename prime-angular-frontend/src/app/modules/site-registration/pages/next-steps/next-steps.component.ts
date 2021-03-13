@@ -31,6 +31,6 @@ export class NextStepsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.isCompleted = this.organizationService.organization?.completed;
+    this.isCompleted = this.organizationService.organization.completed;
   }
 }

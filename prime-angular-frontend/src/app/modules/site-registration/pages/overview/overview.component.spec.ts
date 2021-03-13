@@ -8,10 +8,13 @@ import { ActivatedRoute } from '@angular/router';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockSiteService } from 'test/mocks/mock-site.service';
+
 import { OverviewComponent } from './overview.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { SiteService } from '@registration/shared/services/site.service';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -42,6 +45,10 @@ describe('OverviewComponent', () => {
         {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute
+        },
+        {
+          provide: SiteService,
+          useClass: MockSiteService
         },
         KeycloakService
       ],

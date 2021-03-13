@@ -7,9 +7,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockSiteService } from 'test/mocks/mock-site.service';
+
 import { BusinessLicenceComponent } from './business-licence.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SiteService } from '@registration/shared/services/site.service';
 
 describe('BusinessLicenceComponent', () => {
   let component: BusinessLicenceComponent;
@@ -31,6 +34,10 @@ describe('BusinessLicenceComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: SiteService,
+          useClass: MockSiteService
         },
         KeycloakService
       ],

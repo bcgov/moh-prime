@@ -134,7 +134,7 @@ export class RemoteUsersComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
-    if (this.siteService.site?.submittedDate) {
+    if (this.siteService.site.submittedDate) {
       this.submitButtonText = 'Save and Submit';
     }
   }

@@ -94,8 +94,8 @@ export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
   public getOrgBookLink(orgId: string, display: boolean = false) {
     const url = 'https://www.orgbook.gov.bc.ca/en/organization';
     return (display)
-      ? `${url}/${orgId}`
-      : `${url}/registration.registries.ca/${orgId}`;
+      ? `${ url }/${ orgId }`
+      : `${ url }/registration.registries.ca/${ orgId }`;
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
@@ -156,7 +156,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
 
     this.usedOrgBook = !!organization?.registrationId;
 
-    if (organization?.registrationId) {
+    if (organization.registrationId) {
       this.busy = of(organization.registrationId)
         .pipe(take(1), this.getDoingBusinessAs())
         .subscribe();

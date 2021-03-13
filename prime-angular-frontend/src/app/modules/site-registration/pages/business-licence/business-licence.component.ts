@@ -62,7 +62,7 @@ export class BusinessLicenceComponent implements OnInit {
     this.doingBusinessAsNames = [];
 
     this.businessLicenceDocuments = [];
-    this.businessLicence = new BusinessLicence(this.siteService.site?.id);
+    this.businessLicence = new BusinessLicence(this.siteService.site.id);
   }
 
   public get businessLicenceGuid(): FormControl {
@@ -78,7 +78,7 @@ export class BusinessLicenceComponent implements OnInit {
   }
 
   public isCommPharm() {
-    return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public onSubmit() {
@@ -195,10 +195,8 @@ export class BusinessLicenceComponent implements OnInit {
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
     this.form.markAsPristine();
-    if (site) {
-      this.getBusinessLicence(site);
-      this.getDoingBusinessAs(site);
-    }
+    this.getBusinessLicence(site);
+    this.getDoingBusinessAs(site);
   }
 
   private getBusinessLicence(site: Site) {
