@@ -26,6 +26,8 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 #     add-apt-repository ppa:nginx/stable
 
 COPY nginx.list /etc/apt/sources.list.d/nginx.list
+# Got "GPG error: https://nginx.org/packages/ubuntu xenial InRelease: The following signatures couldn't be verified because the public key is not available: NO_PUBKEY ABF5BD827BD9BF62"
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ABF5BD827BD9BF62
 
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
