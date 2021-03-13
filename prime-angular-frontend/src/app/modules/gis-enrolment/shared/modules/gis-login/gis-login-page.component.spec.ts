@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { GisLoginPageComponent } from './gis-login-page.component';
 
@@ -8,6 +9,9 @@ describe('GisLoginPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule,
+      ],
       declarations: [GisLoginPageComponent]
     }).compileComponents();
   });
