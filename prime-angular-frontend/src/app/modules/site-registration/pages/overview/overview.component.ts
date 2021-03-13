@@ -97,7 +97,7 @@ export class OverviewComponent implements OnInit {
       this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
-      this.showSubmissionAction = !this.site.submittedDate;
+      this.showSubmissionAction = !this.site?.submittedDate;
     }
   }
 
