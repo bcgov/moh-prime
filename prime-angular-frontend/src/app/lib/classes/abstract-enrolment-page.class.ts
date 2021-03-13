@@ -1,7 +1,7 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -46,7 +46,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   protected allowRoutingWhenDirty: boolean;
 
   constructor(
-    // protected dialog: MatDialog,
+    protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService
   ) { }
 
@@ -64,12 +64,12 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
     }
   }
 
-  // public canDeactivate(): Observable<boolean> | boolean {
-  //   const data = 'unsaved';
-  //   return (this.form.dirty && !this.allowRoutingWhenDirty)
-  //     ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-  //     : true;
-  // }
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty && !this.allowRoutingWhenDirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
+  }
 
   /**
    * @description
@@ -81,7 +81,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Initialize the form instance with model data.
    */
-  protected abstract patchForm(): void;
+  protected abstract patchForm(): unknown;
 
   /**
    * @description
