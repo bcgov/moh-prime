@@ -20,6 +20,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 describe('JobComponent', () => {
   let component: JobComponent;
@@ -53,6 +55,10 @@ describe('JobComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provde: AccessTokenService,
+          useClass: MockAccessTokenService
         },
         EnrolmentFormStateService,
         KeycloakService
