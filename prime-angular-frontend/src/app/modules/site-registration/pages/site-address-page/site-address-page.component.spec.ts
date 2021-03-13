@@ -5,18 +5,21 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { HoursOperationComponent } from './hours-operation.component';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+
+import { SiteAddressPageComponent } from './site-address-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { ConfigService } from '@config/config.service';
 
-describe('HoursOperationComponent', () => {
-  let component: HoursOperationComponent;
-  let fixture: ComponentFixture<HoursOperationComponent>;
+describe('SiteAddressPageComponent', () => {
+  let component: SiteAddressPageComponent;
+  let fixture: ComponentFixture<SiteAddressPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        HoursOperationComponent
+        SiteAddressPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -29,6 +32,10 @@ describe('HoursOperationComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -36,7 +43,7 @@ describe('HoursOperationComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HoursOperationComponent);
+    fixture = TestBed.createComponent(SiteAddressPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

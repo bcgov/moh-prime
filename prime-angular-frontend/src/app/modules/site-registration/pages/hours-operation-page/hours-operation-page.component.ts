@@ -34,11 +34,11 @@ export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatc
 }
 
 @Component({
-  selector: 'app-hours-operation',
-  templateUrl: './hours-operation.component.html',
-  styleUrls: ['./hours-operation.component.scss']
+  selector: 'app-hours-operation-page',
+  templateUrl: './hours-operation-page.component.html',
+  styleUrls: ['./hours-operation-page.component.scss']
 })
-export class HoursOperationComponent extends AbstractEnrolmentPage implements OnInit {
+export class HoursOperationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: HoursOperationPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

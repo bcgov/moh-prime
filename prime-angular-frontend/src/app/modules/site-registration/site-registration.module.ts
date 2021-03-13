@@ -21,8 +21,8 @@ import { OrganizationAgreementComponent } from './pages/organization-agreement/o
 
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
-import { SiteAddressPageComponent } from './pages/site-address/site-address-page.component';
-import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
+import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
+import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
@@ -43,7 +43,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     CareSettingComponent,
     BusinessLicenceComponent,
     SiteAddressPageComponent,
-    HoursOperationComponent,
+    HoursOperationPageComponent,
     RemoteUsersComponent,
     RemoteUserComponent,
     AdministratorComponent,

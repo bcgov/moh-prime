@@ -14,8 +14,8 @@ import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
-import { SiteAddressPageFormState } from '@registration/pages/site-address/site-address-page-form-state.class';
-import { HoursOperationPageFormState } from '@registration/pages/hours-operation/hours-operation-page-form-state.class';
+import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
+import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
