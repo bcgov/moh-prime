@@ -18,6 +18,7 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { SiteAddressPageFormState } from '@registration/pages/site-address/site-address-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,7 @@ import { RemoteUserCertification } from '@registration/shared/models/remote-user
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingTypeForm: FormGroup;
   public businessForm: FormGroup;
-  public siteAddressForm: FormGroup;
+  public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationForm: FormGroup;
   public remoteUsersForm: FormGroup;
   public administratorPharmaNetForm: FormGroup;
@@ -56,6 +57,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     if (!site) {
       return;
     }
+
     // Store required site identifiers not captured in forms
     this.siteId = site.id;
     this.organizationId = site.organizationId;
@@ -71,7 +73,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public get json(): Site {
     const { careSettingCode, vendorCode, pec } = this.careSettingTypeForm.getRawValue();
     const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
-    const { physicalAddress } = this.siteAddressForm.getRawValue();
+    const siteAddressFormState = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationForm.getRawValue().businessDays
       .map((hours: BusinessDayHours, dayOfWeek: number) => {
         if (hours.startTime && hours.endTime) {
@@ -110,8 +112,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceGuid,
       deferredLicenceReason,
       doingBusinessAs,
-      physicalAddressId: physicalAddress?.id,
-      physicalAddress,
+      physicalAddressId: siteAddressFormState.physicalAddress?.id, // TODO can this be dropped?
+      ...siteAddressFormState,
       businessHours,
       remoteUsers,
       administratorPharmaNetId: administratorPharmaNet?.id,
@@ -135,7 +137,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     return [
       this.careSettingTypeForm,
       this.businessForm,
-      this.siteAddressForm,
+      this.siteAddressPageFormState.form,
       this.hoursOperationForm,
       this.remoteUsersForm,
       this.administratorPharmaNetForm,
@@ -152,7 +154,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   protected buildForms() {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
     this.businessForm = this.buildBusinessForm();
-    this.siteAddressForm = this.buildSiteAddressForm();
+    this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationForm = this.buildHoursOperationForm();
     this.remoteUsersForm = this.buildRemoteUsersForm();
     this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
@@ -184,7 +186,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     }
 
     if (site.physicalAddress) {
-      this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
+      this.siteAddressPageFormState.patchValue({ physicalAddress: site.physicalAddress });
     }
 
     if (site.businessHours?.length) {
@@ -283,17 +285,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
         '',
         [Validators.required]
       ]
-    });
-  }
-
-  private buildSiteAddressForm(): FormGroup {
-    return this.fb.group({
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        areDisabled: ['provinceCode', 'countryCode'],
-        useDefaults: ['provinceCode', 'countryCode'],
-        exclude: ['street2']
-      })
     });
   }
 

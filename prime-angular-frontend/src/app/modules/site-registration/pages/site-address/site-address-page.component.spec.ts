@@ -7,19 +7,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { SiteAddressComponent } from './site-address.component';
+import { SiteAddressPageComponent } from './site-address-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
-describe('SiteAddressComponent', () => {
-  let component: SiteAddressComponent;
-  let fixture: ComponentFixture<SiteAddressComponent>;
+describe('SiteAddressPageComponent', () => {
+  let component: SiteAddressPageComponent;
+  let fixture: ComponentFixture<SiteAddressPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SiteAddressComponent
+        SiteAddressPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -43,7 +43,7 @@ describe('SiteAddressComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteAddressComponent);
+    fixture = TestBed.createComponent(SiteAddressPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
