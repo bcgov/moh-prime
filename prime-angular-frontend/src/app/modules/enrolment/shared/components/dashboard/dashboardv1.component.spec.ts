@@ -12,6 +12,10 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { HeaderComponent } from '../header/header.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { KeycloakService } from 'keycloak-angular';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+import { MockPermissionService } from 'test/mocks/mock-permission-service';
 
 describe('DashboardComponent', () => {
   let component: DashboardV1Component;
@@ -39,6 +43,14 @@ describe('DashboardComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
+          },
+          {
+            provide: PermissionService,
+            useClass: MockPermissionService
+          },
+          {
+            provide: AccessTokenService,
+            useClass: MockAccessTokenService
           },
           KeycloakService
         ]

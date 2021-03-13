@@ -35,7 +35,7 @@ export class AddressFormComponent implements OnInit {
    * Whether BC addresses can only be selected using
    * autocomplete.
    */
-  @Input() public onlyBc: boolean;
+  @Input() public inBc: boolean;
   /**
    * @description
    * Whether to show the manual address.
