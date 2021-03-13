@@ -512,8 +512,8 @@
       "attributes": {},
       "realmRoles": [
         "enrollee_view",
-        "site_view",
         "site_edit",
+        "site_view",
         "prime_administrant",
         "enrollee_approve",
         "enrollee_triage"
@@ -528,8 +528,8 @@
       "attributes": {},
       "realmRoles": [
         "enrollee_view",
-        "site_edit",
         "site_view",
+        "site_edit",
         "prime_administrant",
         "enrollee_triage"
       ],
