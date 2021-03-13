@@ -102,6 +102,7 @@ namespace Prime.Services
         public async Task<EnrolleeDemographicViewModel> GetDemographicInfoAsync(int enrolleeId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .ProjectTo<EnrolleeDemographicViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -110,6 +111,7 @@ namespace Prime.Services
         public async Task<EnrolleeOverviewViewModel> GetOverviewAsync(int enrolleeId)
         {
             return await _context.Enrollees
+                .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
                 .ProjectTo<EnrolleeOverviewViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
