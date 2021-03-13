@@ -20,6 +20,10 @@ ENV KEYCLOAK_REALM $KEYCLOAK_REALM
 ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
+
+RUN apt-get install software-properties-common && \
+    add-apt-repository ppa:nginx/stable
+
 RUN apt-get update && \
     apt-get install -y nginx gettext-base && \
     mkdir -p /var/cache/nginx && \
