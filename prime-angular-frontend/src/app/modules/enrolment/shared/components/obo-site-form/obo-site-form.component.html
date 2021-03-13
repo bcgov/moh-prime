@@ -34,7 +34,7 @@
 
       <app-address-form [form]="site.get('physicalAddress')"
                         [formControlNames]="formControlNames"
-                        [onlyBc]="true"></app-address-form>
+                        [inBc]="true"></app-address-form>
 
       <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
            class="row">
