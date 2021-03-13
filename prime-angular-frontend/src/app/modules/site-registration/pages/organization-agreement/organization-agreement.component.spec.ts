@@ -10,6 +10,8 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SafePipe } from '@shared/pipes/safe.pipe';
 import { KeycloakService } from 'keycloak-angular';
+import { OrganizationService } from '@registration/shared/services/organization.service';
+import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 describe('OrganizationAgreementComponent', () => {
   let component: OrganizationAgreementComponent;
@@ -32,6 +34,10 @@ describe('OrganizationAgreementComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: OrganizationService,
+          useClass: MockOrganizationService
         },
         KeycloakService
       ],
