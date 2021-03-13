@@ -6,6 +6,8 @@ import { FormIconGroupComponent } from './form-icon-group.component';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 describe('FormIconGroupComponent', () => {
   let component: FormIconGroupComponent;
@@ -25,7 +27,11 @@ describe('FormIconGroupComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
-          }
+          },
+          {
+            provide: AccessTokenService,
+            useClass: MockAccessTokenService
+          },
         ]
       }
     ).compileComponents();

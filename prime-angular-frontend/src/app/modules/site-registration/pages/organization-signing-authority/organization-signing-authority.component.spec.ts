@@ -19,6 +19,8 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('OrganizationSigningAuthorityComponent', () => {
   let component: OrganizationSigningAuthorityComponent;
@@ -53,6 +55,10 @@ describe('OrganizationSigningAuthorityComponent', () => {
         {
           provide: OrganizationService,
           useClass: MockOrganizationService
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         OrganizationFormStateService
       ],
