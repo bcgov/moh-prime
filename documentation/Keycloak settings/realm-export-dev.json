@@ -185,6 +185,15 @@
         "attributes": {}
       },
       {
+        "id": "7144c2a6-44a2-4d2e-b6c4-2b058252426b",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "bac891a6-46f8-41a6-bfdf-735d125d4c00",
         "name": "feature_vc_issuance",
         "description": "Verified Credential feature flag",
