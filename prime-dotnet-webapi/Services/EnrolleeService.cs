@@ -107,6 +107,15 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
+        public async Task<EnrolleeOverviewViewModel> GetOverviewAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .ProjectTo<EnrolleeOverviewViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null)
         {
             searchOptions ??= new EnrolleeSearchOptions();

@@ -266,6 +266,33 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(demo));
         }
 
+        // GET: api/Enrollees/5/overview
+        /// <summary>
+        /// Gets the overview information for a specific Enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/overview", Name = nameof(GetEnrolleeOverview))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeOverviewViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeOverview(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var overview = await _enrolleeService.GetOverviewAsync(enrolleeId);
+
+            return Ok(ApiResponse.Result(overview));
+        }
+
         // GET: api/Enrollees/5/statuses
         /// <summary>
         /// Gets all of the status changes for a specific Enrollee.

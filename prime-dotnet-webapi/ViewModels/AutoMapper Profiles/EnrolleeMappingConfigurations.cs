@@ -26,15 +26,9 @@ namespace Prime.Infrastructure.AutoMapperProfiles
                 .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
                 .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
 
-            CreateMap<Enrollee, EnrolleeDemographicViewModel>()
-                .ForMember(dest => dest.VerifiedAddress, opt => opt.MapFrom(src => src.Addresses.OfType<VerifiedAddress>().SingleOrDefault()))
-                .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Addresses.OfType<PhysicalAddress>().SingleOrDefault()))
-                .ForMember(dest => dest.MailingAddress, opt => opt.MapFrom(src => src.Addresses.OfType<MailingAddress>().SingleOrDefault()));
+            CreateMap<Enrollee, EnrolleeDemographicViewModel>();
 
             CreateMap<Enrollee, EnrolleeOverviewViewModel>()
-                .ForMember(dest => dest.VerifiedAddress, opt => opt.MapFrom(src => src.Addresses.OfType<VerifiedAddress>().SingleOrDefault()))
-                .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Addresses.OfType<PhysicalAddress>().SingleOrDefault()))
-                .ForMember(dest => dest.MailingAddress, opt => opt.MapFrom(src => src.Addresses.OfType<MailingAddress>().SingleOrDefault()))
                 .ForMember(dest => dest.CareSettings, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(x => x.CareSettingCode)))
                 .ForMember(dest => dest.Jobs, opt => opt.MapFrom(src => src.Jobs.Select(x => x.Title)));
 

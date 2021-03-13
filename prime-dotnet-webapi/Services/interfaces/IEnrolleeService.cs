@@ -29,6 +29,8 @@ namespace Prime.Services
 
         Task<EnrolleeDemographicViewModel> GetDemographicInfoAsync(int enrolleeId);
 
+        Task<EnrolleeOverviewViewModel> GetOverviewAsync(int enrolleeId);
+
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
 
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
