@@ -141,9 +141,6 @@ export class OrganizationAgreementComponent implements OnInit, IPage {
     const organization = this.organizationService.organization;
     const siteId = this.route.snapshot.params.sid;
     this.isCompleted = organization?.completed;
-    if (!organization) {
-      return;
-    }
     this.organizationFormStateService.setForm(organization);
 
     this.busy = this.organizationResource
