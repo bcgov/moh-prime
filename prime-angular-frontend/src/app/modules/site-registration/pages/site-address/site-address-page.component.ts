@@ -30,21 +30,21 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   public routeUtils: RouteUtils;
   public formControlNames: AddressLine[];
   public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public showAddressFields: boolean;
+  public SiteRoutes = SiteRoutes;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService
+    private siteFormStateService: SiteFormStateService,
+    route: ActivatedRoute,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
-    this.title = this.route.snapshot.data.title;
+    this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
 
     this.formControlNames = [
@@ -67,13 +67,6 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
 
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
@@ -89,6 +82,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     this.isCompleted = site?.completed;
     // Force the site to be patched each time
     this.siteFormStateService.setForm(site, true);
+    this.form.markAsPristine();
   }
 
   protected initForm() {

@@ -33,16 +33,34 @@ export interface IEnrolmentPage {
 }
 
 export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
+  /**
+   * @description
+   * Busy subscription for use when blocking content from
+   * being interacted with in the template. For example,
+   * during but not limited to HTTP requests.
+   */
   public busy: Subscription;
-  public abstract formState: AbstractFormState<unknown>;
+  /**
+   * @description
+   * Form instance of the component.
+   */
   public form: FormGroup;
+  /**
+   * @description
+   * Form state
+   */
+  public abstract formState: AbstractFormState<unknown>;
   /**
    * @description
    * Indicator applied after an initial submission of
    * the form occurs.
    */
   public hasAttemptedSubmission: boolean;
-
+  /**
+   * @description
+   * Whether routing should be allowed after any form
+   * control's value has been changed.
+   */
   protected allowRoutingWhenDirty: boolean;
 
   constructor(
@@ -53,7 +71,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.formUtilsService.checkValidity(this.form)) {
+    if (this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue())) {
       this.onSubmitFormIsValid();
       // Indicate whether the enrolment process has reached the terminal view, or
       // "Been Through The Wizard - Heidi G. 2019"
@@ -80,6 +98,15 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
    * Initialize the form instance with model data.
+   *
+   * Implementation Details:
+   * Typically invoked before form initialization using the initForm
+   * method, but also useful if invoked from within the initForm method
+   * when listeners need to be setup before and after patching the form.
+   *
+   * @returns unknown to allow for flexibility when implemented, which
+   * is can be useful as an observable when the sequence during patching
+   * is asynchronous, but otherwise should be void
    */
   protected abstract patchForm(): unknown;
 
@@ -87,7 +114,19 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Setup form listeners.
    */
-  protected abstract initForm(): void;
+  protected initForm(): void {
+    // Optional method for setting up form listeners, but
+    // when no listeners are required is NOOP
+  }
+
+  /**
+   * @description
+   * Additional checks outside of the form validity that
+   * should gate form submission.
+   */
+  protected additionalValidityChecks(formValue: unknown): boolean {
+    return true;
+  }
 
   /**
    * @description

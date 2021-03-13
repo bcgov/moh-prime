@@ -8,7 +8,7 @@ export interface SiteAddressPageFormModel {
   physicalAddress: Address;
 }
 
-export class SiteAddressPageFormState extends AbstractFormState<SiteAddressPageFormModel> {
+export class SiteAddressPageFormState extends AbstractFormState<Address> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -18,20 +18,20 @@ export class SiteAddressPageFormState extends AbstractFormState<SiteAddressPageF
     this.buildForm();
   }
 
-  public get json(): SiteAddressPageFormModel {
+  public get json(): Address {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    return this.formInstance.getRawValue().physicalAddress;
   }
 
-  public patchValue(model: SiteAddressPageFormModel): void {
-    if (!this.formInstance) {
+  public patchValue(physicalAddress: Address): void {
+    if (!this.formInstance || !physicalAddress) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    this.formInstance.patchValue({ physicalAddress });
   }
 
   public buildForm(): void {

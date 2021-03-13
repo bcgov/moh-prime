@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
-import { StringUtils } from '@lib/utils/string-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -15,10 +13,9 @@ import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address/site-address-page-form-state.class';
+import { HoursOperationPageFormState } from '@registration/pages/hours-operation/hours-operation-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +24,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingTypeForm: FormGroup;
   public businessForm: FormGroup;
   public siteAddressPageFormState: SiteAddressPageFormState;
-  public hoursOperationForm: FormGroup;
+  public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersForm: FormGroup;
   public administratorPharmaNetForm: FormGroup;
   public privacyOfficerForm: FormGroup;
@@ -73,16 +70,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public get json(): Site {
     const { careSettingCode, vendorCode, pec } = this.careSettingTypeForm.getRawValue();
     const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
-    const siteAddressFormState = this.siteAddressPageFormState.json;
-    const businessHours = this.hoursOperationForm.getRawValue().businessDays
-      .map((hours: BusinessDayHours, dayOfWeek: number) => {
-        if (hours.startTime && hours.endTime) {
-          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
-          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
-        }
-        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
-      })
-      .filter((day: BusinessDay) => day.startTime !== null);
+    const physicalAddress = this.siteAddressPageFormState.json;
+    const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
       .map((ru: RemoteUser) => {
         // Remove the ID from the remote user to simplify updates on the server
@@ -112,8 +101,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       businessLicenceGuid,
       deferredLicenceReason,
       doingBusinessAs,
-      physicalAddressId: siteAddressFormState.physicalAddress?.id, // TODO can this be dropped?
-      ...siteAddressFormState,
+      physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
+      physicalAddress,
       businessHours,
       remoteUsers,
       administratorPharmaNetId: administratorPharmaNet?.id,
@@ -138,7 +127,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.careSettingTypeForm,
       this.businessForm,
       this.siteAddressPageFormState.form,
-      this.hoursOperationForm,
+      this.hoursOperationPageFormState.form,
       this.remoteUsersForm,
       this.administratorPharmaNetForm,
       this.privacyOfficerForm,
@@ -155,7 +144,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.careSettingTypeForm = this.buildCareSettingTypeForm();
     this.businessForm = this.buildBusinessForm();
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
-    this.hoursOperationForm = this.buildHoursOperationForm();
+    this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersForm = this.buildRemoteUsersForm();
     this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
     this.privacyOfficerForm = this.buildPrivacyOfficerForm();
@@ -185,23 +174,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.businessForm.get('deferredLicenceReason').patchValue(site.businessLicence.deferredLicenceReason);
     }
 
-    if (site.physicalAddress) {
-      this.siteAddressPageFormState.patchValue({ physicalAddress: site.physicalAddress });
-    }
-
-    if (site.businessHours?.length) {
-      const businessDays = [...Array(7).keys()]
-        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
-          const day = site.businessHours.find(bh => bh.day === dayOfWeek);
-          if (day) {
-            day.startTime = day.startTime.replace(':', '');
-            day.endTime = day.endTime.replace(':', '');
-          }
-          days.push(day ?? {});
-          return days;
-        }, []);
-      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
-    }
+    this.siteAddressPageFormState.patchValue(site?.physicalAddress);
+    this.hoursOperationPageFormState.patchValue(site?.businessHours);
 
     const remoteUsersForm = this.remoteUsersForm;
     const remoteUsersFormArray = remoteUsersForm.get('remoteUsers') as FormArray;
@@ -285,21 +259,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
         '',
         [Validators.required]
       ]
-    });
-  }
-
-  private buildHoursOperationForm(): FormGroup {
-    const groups = [...new Array(7)].map(() =>
-      this.fb.group({
-        startTime: [null, []],
-        endTime: [null, []],
-      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
-    );
-
-    return this.fb.group({
-      businessDays: this.fb.array(groups)
-      // TODO at least one business hours is required
-      // [FormArrayValidators.atLeast(1)]
     });
   }
 
