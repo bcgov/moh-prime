@@ -19,6 +19,10 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('RegulatoryComponent', () => {
   let component: RegulatoryComponent;
@@ -50,6 +54,14 @@ describe('RegulatoryComponent', () => {
           {
             provide: EnrolmentService,
             useClass: MockEnrolmentService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
+          },
+          {
+            provide: AccessTokenService,
+            useClass: MockAccessTokenService
           },
           KeycloakService
         ]

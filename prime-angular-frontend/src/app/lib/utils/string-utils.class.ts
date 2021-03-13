@@ -1,7 +1,8 @@
 export class StringUtils {
   public static capitalize(value: string): string {
+    const strValue: String = new String(value);
     return (value)
-      ? `${value.charAt(0).toUpperCase()}${value.slice(1).toLowerCase()}`
+      ? `${strValue.charAt(0).toUpperCase()}${strValue.slice(1).toLowerCase()}`
       : value;
   }
 
