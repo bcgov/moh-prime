@@ -37,13 +37,13 @@
 </section>
 
 <app-address-view title="Physical Address"
-                  [address]="enrollee.physicalAddress"
+                  [address]="enrollee?.physicalAddress"
                   [showRedirect]="showEditRedirect"
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
 <app-address-view title="Mailing Address"
-                  [address]="enrollee.mailingAddress"
+                  [address]="enrollee?.mailingAddress"
                   [showRedirect]="showEditRedirect"
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
