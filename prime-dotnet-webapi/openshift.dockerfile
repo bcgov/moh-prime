@@ -4,7 +4,7 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 WORKDIR /app
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/app/.dotnet/tools:/root/.dotnet/tools"
-
+ENV API_PORT 8080
 # Copy everything and build
 COPY . .
 RUN dotnet restore "prime.csproj"
