@@ -1,7 +1,8 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+# FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
+FROM registry.redhat.io/rhel8/dotnet-31 AS build
 WORKDIR /app
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/app/.dotnet/tools:/root/.dotnet/tools"
 ENV API_PORT 8080
