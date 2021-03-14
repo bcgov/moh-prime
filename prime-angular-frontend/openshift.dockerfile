@@ -50,8 +50,8 @@ FROM registry.redhat.io/rhel8/nginx-118
 # COPY nginx.template.conf /etc/nginx/conf.d/default.conf
 # COPY entrypoint.sh /
 
-COPY --from=build-deps /usr/src/app/src /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/openshift.nginx.conf
+COPY --from=build-deps /usr/src/app/src /opt/app-root/src
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
 # RUN chmod +x /entrypoint.sh
