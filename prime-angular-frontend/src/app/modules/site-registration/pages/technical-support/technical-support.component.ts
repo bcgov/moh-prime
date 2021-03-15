@@ -113,7 +113,7 @@ export class TechnicalSupportComponent implements OnInit, IPage, IFormPage {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.technicalSupportForm;
+    this.form = this.siteFormStateService.technicalSupportFormState.form;
   }
 
   private initForm() {

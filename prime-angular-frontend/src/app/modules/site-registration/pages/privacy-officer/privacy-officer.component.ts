@@ -91,7 +91,7 @@ export class PrivacyOfficerComponent implements OnInit, IPage, IFormPage {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.privacyOfficerForm;
+    this.form = this.siteFormStateService.privacyOfficerFormState.form;
   }
 
   private initForm() {

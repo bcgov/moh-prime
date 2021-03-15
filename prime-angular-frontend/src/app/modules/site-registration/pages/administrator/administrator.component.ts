@@ -20,6 +20,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { Contact } from '@registration/shared/models/contact.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
+import { AdministratorFormState } from './administrator-form-state.class';
 
 @Component({
   selector: 'app-administrator',
@@ -101,7 +102,7 @@ export class AdministratorComponent implements OnInit, IPage, IFormPage {
   }
 
   private createFormInstance() {
-    this.form = this.siteFormStateService.administratorPharmaNetForm;
+    this.form = this.siteFormStateService.administratorPharmaNetFormState.form;
   }
 
   private initForm() {
