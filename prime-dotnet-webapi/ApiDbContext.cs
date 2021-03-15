@@ -106,6 +106,12 @@ namespace Prime
         public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
         public DbSet<SiteNotification> SiteNotifications { get; set; }
 
+
+        // PLR Integration
+        public DbSet<PlrProvider> PlrProviders { get; set; }
+
+
+
         public override int SaveChanges()
         {
             ApplyAudits();
