@@ -82,6 +82,15 @@
         "attributes": {}
       },
       {
+        "id": "8344f55e-4a94-41f7-96f2-769b0dc52075",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "fd0f3306-1c87-45a6-9d45-08c7981e9afa",
         "name": "enrollee_triage",
         "composite": false,
