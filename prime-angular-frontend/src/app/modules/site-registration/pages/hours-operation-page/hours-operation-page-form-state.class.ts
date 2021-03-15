@@ -37,7 +37,7 @@ export class HoursOperationPageFormState extends AbstractFormState<BusinessDay[]
   }
 
   public patchValue(businessHours: BusinessDay[]): void {
-    if (!this.formInstance || !businessHours.length) {
+    if (!this.formInstance || !businessHours?.length) {
       return;
     }
 
