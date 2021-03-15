@@ -4,6 +4,7 @@ using AutoMapper;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.DTOs.AgreementEngine;
+using Prime.ViewModels.Parties;
 
 /**
  * Automapper Documentation
@@ -50,5 +51,11 @@ public class AutoMapping : Profile
         CreateMap<Enrollee, AgreementEngineDto>()
             .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
         CreateMap<Certification, CertificationDto>();
+
+        CreateMap<GisChangeModel, GisEnrolment>();
+
+        CreateMap<GisEnrolment, GisViewModel>()
+            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
+            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
     }
 }

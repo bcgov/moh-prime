@@ -26,9 +26,9 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
-        // POST: api/parties/gis
+        // POST: api/gis
         /// <summary>
-        /// Creates a new Gis Party
+        /// Creates a new Gis Enrolment
         /// </summary>
         [HttpPost(Name = nameof(CreateGisParty))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
@@ -43,27 +43,103 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            if (await _partyService.CreateOrUpdatePartyAsync(changeModel, User) == -1)
+            var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
+
+            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
+
+            return CreatedAtAction(
+                nameof(GetGisEnrolmentById),
+                new { gisId = createdGisId },
+                ApiResponse.Result(gisEnrolment)
+            );
+        }
+
+        // PUT: api/Gis/5
+        /// <summary>
+        /// Updates a specific Gis party.
+        /// </summary>
+        /// <param name="gisId"></param>
+        /// <param name="changeModel"></param>
+        [HttpPut("{gisId}", Name = nameof(UpdateGisEnrollee))]
+        // [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateGisEnrollee(int gisId, GisChangeModel changeModel)
+        {
+            if (changeModel == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when saving the Party." });
+                ModelState.AddModelError("GisEnrolment", "Profile update model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            return Ok();
+            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            if (gisEnrolment == null)
+            {
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+            }
+            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
+
+            return NoContent();
+        }
+
+        // GET: api/Gis/5
+        /// <summary>
+        /// Gets a specific Gis Enrolment.
+        /// </summary>
+        /// <param name="gisId"></param>
+        [HttpGet("{gisId}", Name = nameof(GetGisEnrolmentById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GisViewModel>> GetGisEnrolmentById(int gisId)
+        {
+            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            if (gisEnrolment == null)
+            {
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+            }
+            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(ApiResponse.Result(gisEnrolment));
         }
 
         // POST: api/gis/ldap/login
         /// <summary>
         /// Login to ldap using username and password
         /// </summary>
+        /// <param name="gisId"></param>
         /// <param name="username"></param>
         /// <param name="password"></param>
         [HttpPost("ldap/login", Name = nameof(LdapLogin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> LdapLogin(string username, string password)
+        public async Task<ActionResult> LdapLogin(int gisId, string username, string password)
         {
-            var result = await _gisService.LdapLogin(username, password);
+            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            if (gisEnrolment == null)
+            {
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+            }
+            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var result = await _gisService.LdapLogin(username, password, User);
 
             if (result == true)
             {

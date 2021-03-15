@@ -1,29 +1,92 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Prime.HttpClients;
+using Prime.Models;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
     public class GisService : BaseService, IGisService
     {
+        private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
+
         public GisService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            IMapper mapper,
             ILdapClient ldapClient)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _ldapClient = ldapClient;
         }
 
-        public async Task<bool> LdapLogin(string username, string password)
+        public async Task<GisViewModel> GetGisEnrolmentByIdAsync(int gisId)
+        {
+            return await _context.GisEnrolments
+                .AsNoTracking()
+                .ProjectTo<GisViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(g => g.Id == gisId);
+        }
+
+        public async Task<int> CreateOrUpdateGisEnrolmentAsync(GisChangeModel changeModel, ClaimsPrincipal user)
+        {
+            var currentGisEnrolment = await _context.GisEnrolments
+                .Include(g => g.Party)
+                .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
+
+            if (currentGisEnrolment == null)
+            {
+                currentGisEnrolment = new GisEnrolment
+                {
+                    Party = new Party()
+                };
+                _context.GisEnrolments.Add(currentGisEnrolment);
+            }
+
+            changeModel.UpdateGisParty(currentGisEnrolment, user);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return -1;
+            }
+
+            return currentGisEnrolment.Id;
+        }
+
+        public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var result = await _ldapClient.GetUserAsync(username, password);
 
             var gisUserRole = (string)result.SelectToken("gisuserrole");
 
-            return gisUserRole == "GISUSER";
+            var success = gisUserRole == "GISUSER";
+
+            if (success)
+            {
+                var gisEnrolment = await _context.GisEnrolments
+                .Include(g => g.Party)
+                .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
+
+                gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
+
+                await _context.SaveChangesAsync();
+            }
+
+            return success;
         }
+
+
     }
 }
