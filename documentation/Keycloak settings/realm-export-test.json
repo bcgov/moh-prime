@@ -58,14 +58,6 @@
         "attributes": {}
       },
       {
-        "id": "6491e5ea-4980-4078-855c-b74834768f20",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "a53ce329-b78b-4f72-998b-155174c1ce72",
         "name": "enrollee_view",
         "composite": false,
@@ -107,20 +99,6 @@
         "attributes": {}
       },
       {
-        "id": "9bef3a33-bdaa-4284-baee-33d07ef1c66d",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "facc11fb-1efc-4c64-967a-93c25bd197fd",
         "name": "phsa_eforms_labtech",
         "composite": false,
@@ -149,12 +127,7 @@
       {
         "id": "a6623ca5-3983-4b07-ae46-4c2617301c63",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -577,7 +550,6 @@
       "path": "/Manager",
       "attributes": {},
       "realmRoles": [
-        "prime_admin",
         "site_edit",
         "enrollee_view",
         "site_view",
