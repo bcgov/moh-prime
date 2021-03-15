@@ -5,6 +5,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { Country } from '@shared/enums/country.enum'; // TODO move into @lib
 import { Province } from '@shared/enums/province.enum'; // TODO move into @lib
 import { AddressLine } from '@shared/models/address.model';
+import { Person } from '@registration/shared/models/person.model';
 
 @Injectable({
   providedIn: 'root'
@@ -116,7 +117,7 @@ export class FormUtilsService {
    * @description
    * Get all the errors contained within a form.
    */
-  public getFormErrors(form: FormGroup | FormArray): { [key: string]: any } | null {
+  public getFormErrors(form: FormGroup | FormArray): { [key: string]: any; } | null {
     if (!form) {
       return null;
     }
@@ -161,7 +162,7 @@ export class FormUtilsService {
     areRequired?: AddressLine[],
     areDisabled?: AddressLine[],
     useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[],
-    exclude?: AddressLine[]
+    exclude?: AddressLine[];
   } = null): FormGroup {
     const controlsConfig = {
       id: [
@@ -198,7 +199,7 @@ export class FormUtilsService {
       .filter((key: AddressLine) => !options?.exclude?.includes(key))
       .forEach((key: AddressLine, index: number) => {
         const control = controlsConfig[key];
-        const controlProps = control[0] as { value: any, disabled: boolean };
+        const controlProps = control[0] as { value: any, disabled: boolean; };
         const controlValidators = control[1] as Array<ValidatorFn>;
 
         if (options?.areDisabled?.includes(key)) {
@@ -220,5 +221,55 @@ export class FormUtilsService {
       });
 
     return this.fb.group(controlsConfig);
+  }
+
+  /**
+   * @description
+   * Convert party JSON to form model for reactive forms.
+   */
+  public toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
+    if (data) {
+      const { physicalAddress, mailingAddress, ...person } = data;
+
+      formGroup.patchValue(person);
+
+      if (physicalAddress) {
+        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+        (physicalAddress)
+          ? physicalAddressFormGroup.patchValue(physicalAddress)
+          : physicalAddressFormGroup.reset({ id: 0 });
+      }
+
+      // Parties don't always have a mailing address section in the form
+      if (formGroup.get('mailingAddress') && mailingAddress) {
+        const mailingAddressFormGroup = formGroup.get('mailingAddress');
+        (mailingAddress)
+          ? mailingAddressFormGroup.patchValue(mailingAddress)
+          : mailingAddressFormGroup.reset({ id: 0 });
+      }
+    }
+  }
+
+  /**
+   * @description
+   * Convert the party form model into JSON.
+   */
+  public toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
+    if (!person.firstName) {
+      person = null;
+    } else if (person[addressKey] && !person[addressKey].street) {
+      person[addressKey] = null;
+    } else if (person[addressKey].street && !person[addressKey].id) {
+      person[addressKey].id = 0;
+    }
+
+    if (person) {
+      // Add the address reference ID to the party
+      person[`${ addressKey }Id`] = (!!person[addressKey]?.id)
+        ? person[addressKey].id
+        : 0;
+    }
+
+    return person;
   }
 }

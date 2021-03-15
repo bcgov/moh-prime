@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray } from '@angular/forms';
 
-import { Subscription } from 'rxjs';
+import { noop, Observable, of, Subscription } from 'rxjs';
 
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AddressLine } from '@shared/models/address.model';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -17,34 +19,56 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { MatDialog } from '@angular/material/dialog';
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
   selector: 'app-remote-user',
   templateUrl: './remote-user.component.html',
   styleUrls: ['./remote-user.component.scss']
 })
-export class RemoteUserComponent implements OnInit {
-  public busy: Subscription;
+export class RemoteUserComponent extends AbstractEnrolmentPage implements OnInit {
+  /**
+   * @description
+   * FormState of the parent form, which has reuse in child form
+   * with regards to helper methods.
+   */
+  public formState: RemoteUsersPageFormState;
+  /**
+   * @description
+   * Parent form for the view.
+   */
   public parent: FormGroup;
-  public form: FormGroup;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  /**
+   * @description
+   * URL parameter indicating the ID of the remote user, or
+   * `new` when the user does not already exist.
+   */
+  public remoteUserIndex: string;
   public remoteUser: RemoteUser;
   public licenses: LicenseConfig[];
   public formControlNames: AddressLine[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
-    private formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private enrolmentService: EnrolmentService
+    private enrolmentService: EnrolmentService,
+    route: ActivatedRoute,
+    router: Router
   ) {
+    super(dialog, formUtilsService);
+
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.licenses = this.configService.licenses;
+    this.remoteUserIndex = route.snapshot.params.index;
   }
 
   public get remoteUserCertifications(): FormArray {
@@ -56,42 +80,9 @@ export class RemoteUserComponent implements OnInit {
       .map((certification: RemoteUserCertification) => +certification.collegeCode);
   }
 
-  public onSubmit() {
-    if (this.formUtilsService.checkValidity(this.form)) {
-
-      this.removeIncompleteCertifications(true);
-
-      const remoteUserIndex = this.route.snapshot.params.index;
-      const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
-
-      if (remoteUserIndex !== 'new') {
-        const remoteUserFormGroup = remoteUsersFormArray.at(remoteUserIndex);
-        const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
-
-        // Changes in the amount of certificates requires adjusting the number of
-        // certificates in the parent, which is not handled automatically
-        if (this.remoteUserCertifications.length !== certificationFormArray.length) {
-          certificationFormArray.clear();
-
-          Object.keys(this.remoteUserCertifications.controls)
-            .map(() => this.siteFormStateService.remoteUserCertificationFormGroup())
-            .forEach((group: FormGroup) => certificationFormArray.push(group));
-        }
-
-        // Replace the updated remote user in the parent form for submission
-        remoteUserFormGroup.reset(this.form.getRawValue());
-      } else {
-        // Store the new remote user in the parent form for submission
-        remoteUsersFormArray.push(this.form);
-      }
-
-      this.nextRoute();
-    }
-  }
-
   public addCertification() {
-    const remoteUserCertification = this.siteFormStateService.remoteUserCertificationFormGroup();
-    this.remoteUserCertifications.push(remoteUserCertification);
+    const newRemoteUserCertification = this.formState.remoteUserCertificationFormGroup();
+    this.remoteUserCertifications.push(newRemoteUserCertification);
   }
 
   /**
@@ -107,13 +98,7 @@ export class RemoteUserComponent implements OnInit {
   }
 
   public onBack() {
-    // TODO canDeactive check if unsaved changes
     this.routeUtils.routeRelativeTo(['./']);
-  }
-
-  public nextRoute() {
-    // Inform the remote users view not to patch the form, otherwise updates will be lost
-    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
   public collegeFilterPredicate() {
@@ -128,16 +113,17 @@ export class RemoteUserComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
+    this.patchForm();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
+    this.formState = this.siteFormStateService.remoteUsersPageFormState;
     // Set the parent form for updating on submission, but otherwise use the
-    // local form group for all changes
-    this.parent = this.siteFormStateService.remoteUsersForm;
+    // local form group for all changes prior to submission
+    this.parent = this.formState.form;
   }
 
-  private initForm() {
+  protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
 
@@ -145,22 +131,56 @@ export class RemoteUserComponent implements OnInit {
     // update the form state as it will drop unsaved updates
     this.siteFormStateService.setForm(site);
 
-    const remoteUserIndex = this.route.snapshot.params.index;
-    const remoteUser = this.parent.getRawValue().remoteUsers[remoteUserIndex] as RemoteUser;
+    const remoteUser = this.parent.getRawValue().remoteUsers[this.remoteUserIndex] as RemoteUser;
 
     // Remote user at index does not exist likely due to a browser
     // refresh on this page, and the URL param should be update
-    if (remoteUserIndex !== 'new' && !remoteUser) {
+    if (this.remoteUserIndex !== 'new' && !remoteUser) {
       this.routeUtils.routeRelativeTo(['new']);
     }
 
     // Create a local form group for creating or updating remote users
-    this.form = this.siteFormStateService
-      .createEmptyRemoteUserFormAndPatch(remoteUser);
+    this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
 
     if (!this.remoteUserCertifications.length) {
       this.addCertification();
     }
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.removeIncompleteCertifications(true);
+  }
+
+  protected performSubmission(): NoContent {
+    const remoteUsersFormArray = this.parent.get('remoteUsers') as FormArray;
+
+    if (this.remoteUserIndex !== 'new') {
+      const remoteUserFormGroup = remoteUsersFormArray.at(+this.remoteUserIndex);
+      const certificationFormArray = remoteUserFormGroup.get('remoteUserCertifications') as FormArray;
+
+      // Changes in the amount of certificates requires adjusting the number of
+      // certificates in the parent, which is not handled automatically
+      if (this.remoteUserCertifications.length !== certificationFormArray.length) {
+        certificationFormArray.clear();
+
+        Object.keys(this.remoteUserCertifications.controls)
+          .map(() => this.formState.remoteUserCertificationFormGroup())
+          .forEach((group: FormGroup) => certificationFormArray.push(group));
+      }
+
+      // Replace the updated remote user in the parent form for submission
+      remoteUserFormGroup.reset(this.form.getRawValue());
+    } else {
+      // Store the new remote user in the parent form for submission
+      remoteUsersFormArray.push(this.form);
+    }
+
+    return of(noop());
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    // Inform the remote users view not to patch the form, otherwise updates will be lost
+    this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }
 
   /**

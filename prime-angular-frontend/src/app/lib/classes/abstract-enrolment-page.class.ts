@@ -1,7 +1,7 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of, Subscription } from 'rxjs';
+import { isObservable, Observable, Subscription } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -24,12 +24,12 @@ export interface IEnrolmentPage {
    * Handle submission of forms.
    */
   onSubmit(): void;
-  // /**
-  //  * @description
-  //  * Handle redirection from the view when the form is
-  //  * dirty to prevent loss of form data.
-  //  */
-  // canDeactivate(): Observable<boolean> | boolean;
+  /**
+   * @description
+   * Handle redirection from the view when the form is
+   * dirty to prevent loss of form data.
+   */
+  canDeactivate(): Observable<boolean> | boolean;
 }
 
 export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
@@ -62,6 +62,20 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * control's value has been changed.
    */
   protected allowRoutingWhenDirty: boolean;
+  /**
+   * @description
+   * Whitelisted set of control names that can be dirty, but
+   * still allow routing. Allows for targeted route gating
+   * on specific controls.
+   *
+   * @example
+   * Form control checkboxes used as indicators, but are
+   * not user entered data that could be lost.
+   *
+   * NOTE: allowRoutingWhenDirty must be falsey, as only one
+   * of the routing checks can be used at a time.
+   */
+  protected canDeactivateWhitelist: string[];
 
   constructor(
     protected dialog: MatDialog,
@@ -73,8 +87,6 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
 
     if (this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue())) {
       this.onSubmitFormIsValid();
-      // Indicate whether the enrolment process has reached the terminal view, or
-      // "Been Through The Wizard - Heidi G. 2019"
       this.busy = this.performSubmission()
         .subscribe(() => this.afterSubmitIsSuccessful());
     } else {
@@ -84,7 +96,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
 
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.form.dirty && !this.allowRoutingWhenDirty)
+    return (this.form.dirty && !this.checkDeactivationIsAllowed())
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
@@ -156,5 +168,20 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   protected afterSubmitIsSuccessful(): void {
     // Optional submission hook, otherwise NOOP
+  }
+
+  /**
+   * @description
+   * Check that deactivation of the view is allowed in general
+   * or specifically gated on a set of whitelisted control names.
+   */
+  private checkDeactivationIsAllowed(): boolean {
+    if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
+      return Object.keys(this.form.controls)
+        .filter(key => !this.canDeactivateWhitelist.includes(key))
+        .every(key => !this.form.controls[key].dirty);
+    }
+
+    return this.allowRoutingWhenDirty;
   }
 }
