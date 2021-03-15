@@ -16,6 +16,9 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
+import { AdministratorFormState } from '@registration/pages/administrator/administrator-form-state.class';
+import { PrivacyOfficerFormState } from '@registration/pages/privacy-officer/privacy-officer-form-state.class';
+import { TechnicalSupportFormState } from '@registration/pages/technical-support/technical-support-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -26,9 +29,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersForm: FormGroup;
-  public administratorPharmaNetForm: FormGroup;
-  public privacyOfficerForm: FormGroup;
-  public technicalSupportForm: FormGroup;
+  public administratorPharmaNetFormState: AdministratorFormState;
+  public privacyOfficerFormState: PrivacyOfficerFormState;
+  public technicalSupportFormState: TechnicalSupportFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -79,9 +82,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
         return remoteUser;
       });
     const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
-      this.administratorPharmaNetForm.getRawValue(),
-      this.privacyOfficerForm.getRawValue(),
-      this.technicalSupportForm.getRawValue()
+      this.administratorPharmaNetFormState.json,
+      this.privacyOfficerFormState.json,
+      this.technicalSupportFormState.json
     ].map((contact: Contact) => this.toPersonJson<Contact>(contact));
 
     // Includes site related keys to uphold relationships, and allow for updates
@@ -129,9 +132,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
       this.remoteUsersForm,
-      this.administratorPharmaNetForm,
-      this.privacyOfficerForm,
-      this.technicalSupportForm
+      this.administratorPharmaNetFormState.form,
+      this.privacyOfficerFormState.form,
+      this.technicalSupportFormState.form
     ];
   }
 
@@ -146,9 +149,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersForm = this.buildRemoteUsersForm();
-    this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
-    this.privacyOfficerForm = this.buildPrivacyOfficerForm();
-    this.technicalSupportForm = this.buildTechnicalSupportForm();
+    this.administratorPharmaNetFormState = new AdministratorFormState(this.fb, this.formUtilsService);
+    this.privacyOfficerFormState = new PrivacyOfficerFormState(this.fb, this.formUtilsService);
+    this.technicalSupportFormState = new TechnicalSupportFormState(this.fb, this.formUtilsService);
   }
 
   /**
@@ -192,9 +195,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     }
 
     [
-      [this.administratorPharmaNetForm, site.administratorPharmaNet],
-      [this.privacyOfficerForm, site.privacyOfficer],
-      [this.technicalSupportForm, site.technicalSupport]
+      [this.administratorPharmaNetFormState.form, site.administratorPharmaNet],
+      [this.privacyOfficerFormState.form, site.privacyOfficer],
+      [this.technicalSupportFormState.form, site.technicalSupport]
     ]
       .filter(([form, data]: [FormGroup, Party]) => data)
       .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
@@ -312,58 +315,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // fields are made visible to allow empty submissions
       licenseNumber: [null, []],
       licenseCode: [null, []]
-    });
-  }
-
-  private buildAdministratorPharmaNetForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private buildPrivacyOfficerForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private buildTechnicalSupportForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private partyFormGroup(disabled: boolean = false): FormGroup {
-    return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      firstName: [
-        { value: null, disabled },
-        [Validators.required]
-      ],
-      lastName: [
-        { value: null, disabled },
-        [Validators.required]
-      ],
-      jobRoleTitle: [
-        null,
-        [Validators.required]
-      ],
-      phone: [
-        null,
-        [Validators.required, FormControlValidators.phone]
-      ],
-      fax: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      smsPhone: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ],
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        exclude: ['street2']
-      })
     });
   }
 }
