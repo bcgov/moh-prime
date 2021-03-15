@@ -17,11 +17,11 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 @Component({
-  selector: 'app-remote-users',
-  templateUrl: './remote-users.component.html',
-  styleUrls: ['./remote-users.component.scss']
+  selector: 'app-remote-users-page',
+  templateUrl: './remote-users-page.component.html',
+  styleUrls: ['./remote-users-page.component.scss']
 })
-export class RemoteUsersComponent implements OnInit {
+export class RemoteUsersPageComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

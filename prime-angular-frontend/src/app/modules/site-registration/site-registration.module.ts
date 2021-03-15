@@ -26,7 +26,7 @@ import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-
 import { AdministratorComponent } from './pages/administrator/administrator.component';
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
+import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
 import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
@@ -44,7 +44,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     BusinessLicenceComponent,
     SiteAddressPageComponent,
     HoursOperationPageComponent,
-    RemoteUsersComponent,
+    RemoteUsersPageComponent,
     RemoteUserComponent,
     AdministratorComponent,
     PrivacyOfficerComponent,

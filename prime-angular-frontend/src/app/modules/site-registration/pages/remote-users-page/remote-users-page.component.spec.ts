@@ -9,20 +9,20 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { RemoteUsersComponent } from './remote-users.component';
+import { RemoteUsersPageComponent } from './remote-users-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { SiteService } from '@registration/shared/services/site.service';
 
-describe('RemoteUsersComponent', () => {
-  let component: RemoteUsersComponent;
-  let fixture: ComponentFixture<RemoteUsersComponent>;
+describe('RemoteUsersPageComponent', () => {
+  let component: RemoteUsersPageComponent;
+  let fixture: ComponentFixture<RemoteUsersPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RemoteUsersComponent,
+        RemoteUsersPageComponent,
         AddressPipe
       ],
       imports: [
@@ -49,7 +49,7 @@ describe('RemoteUsersComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RemoteUsersComponent);
+    fixture = TestBed.createComponent(RemoteUsersPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
