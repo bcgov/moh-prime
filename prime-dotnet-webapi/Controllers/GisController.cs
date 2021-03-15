@@ -56,7 +56,7 @@ namespace Prime.Controllers
 
         // PUT: api/Gis/5
         /// <summary>
-        /// Updates a specific Gis party.
+        /// Updates a specific Gis Enrolment.
         /// </summary>
         /// <param name="gisId"></param>
         /// <param name="changeModel"></param>
