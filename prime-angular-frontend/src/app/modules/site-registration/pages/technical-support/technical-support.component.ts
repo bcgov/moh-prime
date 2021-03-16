@@ -7,7 +7,7 @@ import { Subscription, Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -16,20 +16,20 @@ import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { Address } from '@shared/models/address.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Contact } from '@registration/shared/models/contact.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { TechnicalSupportFormState } from './technical-support-form-state.class';
 
 @Component({
   selector: 'app-technical-support',
   templateUrl: './technical-support.component.html',
   styleUrls: ['./technical-support.component.scss']
 })
-export class TechnicalSupportComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: TechnicalSupportFormState;
+export class TechnicalSupportComponent implements OnInit, IPage, IFormPage {
+  public busy: Subscription;
+  public form: FormGroup;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
@@ -38,19 +38,47 @@ export class TechnicalSupportComponent extends AbstractEnrolmentPage implements 
   private site: Site;
 
   constructor(
-    protected dialog: MatDialog,
-    protected formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
-    private route: ActivatedRoute,
-    router: Router
+    private formUtilsService: FormUtilsService,
+    private dialog: MatDialog
   ) {
-    super(dialog, formUtilsService);
-
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
+  }
+
+  public onSubmit() {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      const payload = this.siteFormStateService.json;
+      const organizationId = this.route.snapshot.params.oid;
+      const site = this.siteService.site;
+
+      this.busy = this.organizationResource
+        .updateOrganizationAgreement(organizationId, site.id)
+        .pipe(
+          map((agreement: OrganizationAgreement) => !!agreement),
+          exhaustMap((needsOrgAgreement: boolean) =>
+            this.siteResource.updateSite(payload)
+              .pipe(map(() => needsOrgAgreement))
+          ),
+          exhaustMap((needsOrgAgreement: boolean) =>
+            // Mark the site as completed if an organization
+            // agreement does not need to be signed
+            (!needsOrgAgreement)
+              ? this.siteResource.updateCompleted(site.id)
+                .pipe(map(() => needsOrgAgreement))
+              : of(needsOrgAgreement)
+          )
+        )
+        .subscribe((needsOrgAgreement: boolean) => {
+          this.form.markAsPristine();
+          this.nextRoute(needsOrgAgreement);
+        });
+    }
   }
 
   public onSelect(contact: Contact) {
@@ -64,52 +92,34 @@ export class TechnicalSupportComponent extends AbstractEnrolmentPage implements 
     this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
   }
 
+  public nextRoute(needsOrgAgreement: boolean) {
+    if (needsOrgAgreement) {
+      this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_AGREEMENT);
+    } else {
+      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
+    }
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    const data = 'unsaved';
+    return (this.form.dirty)
+      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
+      : true;
+  }
+
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
+    this.initForm();
   }
 
-  protected createFormInstance() {
-    this.formState = this.siteFormStateService.technicalSupportFormState;
-    this.form = this.formState.form;
+  private createFormInstance() {
+    this.form = this.siteFormStateService.technicalSupportFormState.form;
   }
 
-  protected patchForm(): void {
+  private initForm() {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
     this.form.markAsPristine();
-  }
-
-  protected performSubmission(): Observable<boolean> {
-    const payload = this.siteFormStateService.json;
-    const organizationId = this.route.snapshot.params.oid;
-    const site = this.siteService.site;
-
-    return this.organizationResource
-      .updateOrganizationAgreement(organizationId, site.id)
-      .pipe(
-        map((agreement: OrganizationAgreement) => !!agreement),
-        exhaustMap((needsOrgAgreement: boolean) =>
-          this.siteResource.updateSite(payload)
-            .pipe(map(() => needsOrgAgreement))
-        ),
-        exhaustMap((needsOrgAgreement: boolean) =>
-          // Mark the site as completed if an organization
-          // agreement does not need to be signed
-          (!needsOrgAgreement)
-            ? this.siteResource.updateCompleted(site.id)
-              .pipe(map(() => needsOrgAgreement))
-            : of(needsOrgAgreement)
-        )
-      );
-  }
-
-  protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
-    const routePath = (needsOrgAgreement)
-      ? SiteRoutes.ORGANIZATION_AGREEMENT
-      : SiteRoutes.SITE_REVIEW;
-
-    this.routeUtils.routeRelativeTo(routePath);
   }
 }

@@ -88,7 +88,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
     if (this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue())) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
-        .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
+        .subscribe(() => this.afterSubmitIsSuccessful());
     } else {
       this.onSubmitFormIsInvalid();
     }
@@ -166,7 +166,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Post-submission hook for execution.
    */
-  protected afterSubmitIsSuccessful(response?: unknown): void {
+  protected afterSubmitIsSuccessful(): void {
     // Optional submission hook, otherwise NOOP
   }
 

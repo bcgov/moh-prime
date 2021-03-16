@@ -27,7 +27,7 @@ import { AdministratorComponent } from './pages/administrator/administrator.comp
 import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
 import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
 import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
-import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
+import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
@@ -130,7 +130,7 @@ const routes: Routes = [
                       },
                       {
                         path: ':index',
-                        component: RemoteUserPageComponent,
+                        component: RemoteUserComponent,
                         canActivate: [SiteGuard],
                         canDeactivate: [CanDeactivateFormGuard],
                         data: { title: 'Remote User' }
