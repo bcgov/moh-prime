@@ -50,13 +50,6 @@ namespace Prime.ViewModels.Parties
             party.GivenNames = user.FindFirstValue(Claims.GivenNames);
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
-            // party.UserId = new System.Guid();
-            // party.HPDID = "aef58bb2-4b6d-41fd-93b3-ffe315592c5c";
-            // party.FirstName = "Anais";
-            // party.LastName = "Hebert";
-            // party.GivenNames = "Anais";
-            // party.DateOfBirth = DateTime.Now;
-
             party.SetPartyTypes(PartyType.Gis);
 
             return party;
