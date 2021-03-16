@@ -60,8 +60,11 @@
                 <div class="text-right">
                   <a mat-raised-button
                      color="primary"
-                     [href]="getOrgBookLink(registrationId.value)"
-                     target="_blank">View organization in OrgBook</a>
+                     target="_blank"
+                     class="mt-3"
+                     [href]="getOrgBookLink(registrationId.value)">
+                    View organization in OrgBook
+                  </a>
                 </div>
               </ng-container>
             </app-alert>
