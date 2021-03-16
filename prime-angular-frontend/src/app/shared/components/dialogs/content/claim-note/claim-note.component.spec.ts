@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -20,7 +21,8 @@ describe('ClaimNoteComponent', () => {
         MatDialogModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        BrowserAnimationsModule,
       ],
       declarations: [
         ClaimNoteComponent,

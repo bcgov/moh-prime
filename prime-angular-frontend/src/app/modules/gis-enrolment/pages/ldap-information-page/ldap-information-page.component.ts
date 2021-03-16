@@ -8,8 +8,10 @@ import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
+import { GisResource } from '@gis/shared/resources/gis-resource.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
 @Component({
@@ -30,6 +32,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     private route: ActivatedRoute,
     private router: Router,
     private formStateService: GisEnrolmentFormStateService,
+    private gisResource: GisResource,
     private configService: ConfigService
   ) {
     super(formUtilsService);
@@ -67,8 +70,8 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     throw new Error('Method not implemented.');
   }
 
-  protected performSubmission(): Observable<null> {
-    return of(null);
+  protected performSubmission(): Observable<NoContent> {
+    return this.gisResource.ldapLogin(this.form.value);
   }
 
   protected afterSubmitIsSuccessful(): void {

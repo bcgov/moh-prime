@@ -22,6 +22,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
+import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 
 describe('BcscDemographicComponent', () => {
   let component: BcscDemographicComponent;
@@ -40,7 +41,7 @@ describe('BcscDemographicComponent', () => {
           ReactiveFormsModule,
           RouterTestingModule
         ],
-        declarations: [BcscDemographicComponent],
+        declarations: [BcscDemographicComponent, AddressFormComponent],
         providers: [
           {
             provide: APP_CONFIG,
