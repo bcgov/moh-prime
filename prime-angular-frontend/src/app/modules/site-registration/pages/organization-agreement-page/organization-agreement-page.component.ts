@@ -21,11 +21,11 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
-  selector: 'app-organization-agreement',
-  templateUrl: './organization-agreement.component.html',
-  styleUrls: ['./organization-agreement.component.scss']
+  selector: 'app-organization-agreement-page',
+  templateUrl: './organization-agreement-page.component.html',
+  styleUrls: ['./organization-agreement-page.component.scss']
 })
-export class OrganizationAgreementComponent implements OnInit {
+export class OrganizationAgreementPageComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;

@@ -16,7 +16,7 @@ import { CollectionNoticePageComponent } from './pages/collection-notice-page/co
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { OrganizationNamePageComponent } from './pages/organization-name-page/organization-name-page.component';
-import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
+import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
@@ -158,7 +158,7 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.ORGANIZATION_AGREEMENT,
-                    component: OrganizationAgreementComponent,
+                    component: OrganizationAgreementPageComponent,
                     canActivate: [SiteGuard, OrganizationGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Organization Agreement' }

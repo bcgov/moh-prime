@@ -5,7 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { OrganizationAgreementComponent } from './organization-agreement.component';
+import { OrganizationAgreementPageComponent } from './organization-agreement-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SafePipe } from '@shared/pipes/safe.pipe';
@@ -13,14 +13,14 @@ import { KeycloakService } from 'keycloak-angular';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
-describe('OrganizationAgreementComponent', () => {
-  let component: OrganizationAgreementComponent;
-  let fixture: ComponentFixture<OrganizationAgreementComponent>;
+describe('OrganizationAgreementPageComponent', () => {
+  let component: OrganizationAgreementPageComponent;
+  let fixture: ComponentFixture<OrganizationAgreementPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrganizationAgreementComponent,
+        OrganizationAgreementPageComponent,
         SafePipe
       ],
       imports: [
@@ -46,7 +46,7 @@ describe('OrganizationAgreementComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrganizationAgreementComponent);
+    fixture = TestBed.createComponent(OrganizationAgreementPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
