@@ -6,8 +6,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { Party } from '@registration/shared/models/party.model';
 
-export interface OrganizationSigningAuthorityFormModel { }
-
 export class OrganizationSigningAuthorityPageFormState extends AbstractFormState<Party> {
   public constructor(
     private fb: FormBuilder,

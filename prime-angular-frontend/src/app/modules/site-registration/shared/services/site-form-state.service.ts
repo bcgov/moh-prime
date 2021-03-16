@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, AbstractControl } from '@angular/forms';
+import { FormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { Party } from '@registration/shared/models/party.model';
-import { Contact } from '@lib/models/contact.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 import { AdministratorPageFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
@@ -153,8 +150,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    this.careSettingPageFormState.patchValue(site);
-    this.businessLicencePageFormState.patchValue(site);
+    const { careSettingCode, siteVendors, pec, businessLicenceGuid, deferredLicenceReason, doingBusinessAs } = site;
+
+    this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors, pec });
+    this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs });
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

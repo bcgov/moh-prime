@@ -101,7 +101,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected createFormInstance() {
-    this.formState = this.organizationFormStateService.organizationNameFormState;
+    this.formState = this.organizationFormStateService.organizationNamePageFormState;
     this.form = this.formState.form;
   }
 

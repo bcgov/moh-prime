@@ -3,9 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Organization } from '@registration/shared/models/organization.model';
 
-export interface OrganizationNamePageFormModel extends Pick<Organization, 'id' | 'name' | 'registrationId' | 'doingBusinessAs'> { }
+interface OrganizationNamePageDataModel extends Pick<Organization, 'id' | 'name' | 'registrationId' | 'doingBusinessAs'> { }
 
-export class OrganizationNamePageFormState extends AbstractFormState<OrganizationNamePageFormModel> {
+export class OrganizationNamePageFormState extends AbstractFormState<OrganizationNamePageDataModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -14,7 +14,7 @@ export class OrganizationNamePageFormState extends AbstractFormState<Organizatio
     this.buildForm();
   }
 
-  public get json(): OrganizationNamePageFormModel {
+  public get json(): OrganizationNamePageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -22,7 +22,7 @@ export class OrganizationNamePageFormState extends AbstractFormState<Organizatio
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(organization: OrganizationNamePageFormModel): void {
+  public patchValue(organization: OrganizationNamePageDataModel): void {
     if (!this.formInstance) {
       return;
     }
@@ -35,6 +35,7 @@ export class OrganizationNamePageFormState extends AbstractFormState<Organizatio
     this.formInstance = this.fb.group({
       // OrganizationName is the only form that contains
       // the organization ID
+      // TODO refactor and remove ID from the form state and add in form state service
       id: [0, []],
       name: [null, [Validators.required]],
       registrationId: [{ value: null, disabled: true }, [Validators.required]],

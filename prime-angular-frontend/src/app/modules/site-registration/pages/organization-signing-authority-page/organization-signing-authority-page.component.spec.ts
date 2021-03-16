@@ -73,7 +73,7 @@ describe('OrganizationSigningAuthorityPageComponent', () => {
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);
       // Add the bound FormGroup to the component
-      component.form = organizationFormStateService.organizationSigningAuthorityFormState.form;
+      component.form = organizationFormStateService.organizationSigningAuthorityPageFormState.form;
       fixture.detectChanges();
     })
   );

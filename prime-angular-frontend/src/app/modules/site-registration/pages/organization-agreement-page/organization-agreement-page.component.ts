@@ -2,15 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
-import { Subscription, EMPTY, of, noop } from 'rxjs';
+import { EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -19,15 +22,15 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { OrganizationAgreementPageFormState } from './organization-agreement-page-form-state.class';
 
 @Component({
   selector: 'app-organization-agreement-page',
   templateUrl: './organization-agreement-page.component.html',
   styleUrls: ['./organization-agreement-page.component.scss']
 })
-export class OrganizationAgreementPageComponent implements OnInit {
-  public busy: Subscription;
-  public form: FormGroup;
+export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: OrganizationAgreementPageFormState;
   public routeUtils: RouteUtils;
   public agreementId: number;
   public organizationAgreementContent: string;
@@ -41,56 +44,24 @@ export class OrganizationAgreementPageComponent implements OnInit {
   @ViewChild('accept') public accepted: MatCheckbox;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
-    private dialog: MatDialog,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private route: ActivatedRoute,
+    router: Router
   ) {
+    super(dialog, formUtilsService);
+
     this.organizationAgreementContent = null;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
   public get organizationAgreementGuid(): FormControl {
     return this.form.get('organizationAgreementGuid') as FormControl;
-  }
-
-  public onSubmit() {
-    if (this.accepted?.checked || this.hasUploadedFile) {
-      const organizationId = this.route.snapshot.params.oid;
-      const data: DialogOptions = {
-        title: 'Organization Agreement',
-        message: 'Are you sure you want to accept the Organization Agreement?',
-        actionText: 'Accept Organization Agreement'
-      };
-
-      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) =>
-            (result)
-              ? of(noop)
-              : EMPTY
-          ),
-          exhaustMap(() =>
-            (this.organizationAgreementGuid.value)
-              ? this.organizationResource
-                .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
-              : this.organizationResource
-                .acceptOrganizationAgreement(organizationId, this.agreementId)
-          ),
-          exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
-        )
-        .subscribe(() => {
-          // Remove the org agreement GUID to prevent 404 already
-          // submitted if resubmited in the same session
-          this.organizationAgreementGuid.patchValue(null);
-          this.nextRoute();
-        });
-    }
   }
 
   public onDownload() {
@@ -121,25 +92,26 @@ export class OrganizationAgreementPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(SiteRoutes.TECHNICAL_SUPPORT);
   }
 
-  public nextRoute() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
     this.initForm();
   }
 
-  private createFormInstance() {
-    this.form = this.organizationFormStateService.organizationAgreementForm;
+  protected createFormInstance() {
+    this.formState = this.organizationFormStateService.organizationAgreementPageFormState;
+    this.form = this.formState.form;
   }
 
-  private initForm() {
+  protected patchForm(): void {
     const organization = this.organizationService.organization;
-    const siteId = this.route.snapshot.params.sid;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization);
+  }
 
+  protected initForm() {
+    const organization = this.organizationService.organization;
+    const siteId = this.route.snapshot.params.sid;
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, siteId)
       .pipe(
@@ -153,5 +125,44 @@ export class OrganizationAgreementPageComponent implements OnInit {
       .subscribe(({ agreementContent }: OrganizationAgreementViewModel) =>
         this.organizationAgreementContent = agreementContent
       );
+  }
+
+  protected checkValidity(): boolean {
+    return this.accepted?.checked || this.hasUploadedFile;
+  }
+
+  protected performSubmission(): NoContent {
+    const organizationId = this.route.snapshot.params.oid;
+    const data: DialogOptions = {
+      title: 'Organization Agreement',
+      message: 'Are you sure you want to accept the Organization Agreement?',
+      actionText: 'Accept Organization Agreement'
+    };
+
+    return this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? of(noop)
+            : EMPTY
+        ),
+        exhaustMap(() =>
+          (this.organizationAgreementGuid.value)
+            ? this.organizationResource
+              .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
+            : this.organizationResource
+              .acceptOrganizationAgreement(organizationId, this.agreementId)
+        ),
+        exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
+      );
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    // Remove the org agreement GUID to prevent 404 already
+    // submitted if resubmited in the same session
+    this.organizationAgreementGuid.patchValue(null);
+
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 }
