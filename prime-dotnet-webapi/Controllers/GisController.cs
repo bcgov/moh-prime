@@ -1,13 +1,10 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels.Parties;
-using Prime.Models;
 
 namespace Prime.Controllers
 {
@@ -17,13 +14,9 @@ namespace Prime.Controllers
     public class GisController : ControllerBase
     {
         private readonly IGisService _gisService;
-        private readonly IPartyService _partyService;
-        public GisController(
-            IGisService gisService,
-            IPartyService partyService)
+        public GisController(IGisService gisService)
         {
             _gisService = gisService;
-            _partyService = partyService;
         }
 
         // POST: api/gis
