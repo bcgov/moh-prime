@@ -167,8 +167,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.form.markAsPristine();
+
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
+
     if (
       site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
       site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
@@ -177,6 +180,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     } else if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;
     }
+
     this.routeUtils.routeRelativeTo(routePath);
   }
 

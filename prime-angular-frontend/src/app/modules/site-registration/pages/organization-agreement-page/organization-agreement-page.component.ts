@@ -162,6 +162,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
     // Remove the org agreement GUID to prevent 404 already
     // submitted if resubmited in the same session
     this.organizationAgreementGuid.patchValue(null);
+    this.form.markAsPristine();
 
     this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }

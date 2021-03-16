@@ -178,8 +178,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.form.markAsPristine();
+
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
+
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {

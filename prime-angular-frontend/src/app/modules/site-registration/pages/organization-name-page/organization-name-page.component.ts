@@ -154,8 +154,11 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(siteId?: number): void {
+    this.form.markAsPristine();
+
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
+
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {

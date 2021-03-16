@@ -193,6 +193,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.form.markAsPristine();
+
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.BUSINESS_LICENCE;

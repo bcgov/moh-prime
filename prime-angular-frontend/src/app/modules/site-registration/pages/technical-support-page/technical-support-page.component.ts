@@ -103,6 +103,8 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
+    this.form.markAsPristine();
+
     const routePath = (needsOrgAgreement)
       ? SiteRoutes.ORGANIZATION_AGREEMENT
       : SiteRoutes.SITE_REVIEW;

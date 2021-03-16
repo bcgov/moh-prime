@@ -90,7 +90,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     return this.siteResource.updateSite(payload);
   }
 
-  protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
+  protected afterSubmitIsSuccessful(): void {
+    this.form.markAsPristine();
+
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.PRIVACY_OFFICER;
