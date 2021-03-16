@@ -8,7 +8,6 @@ import { Subscription, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -17,7 +16,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -27,7 +25,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
   templateUrl: './organization-signing-authority.component.html',
   styleUrls: ['./organization-signing-authority.component.scss']
 })
-export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFormPage {
+export class OrganizationSigningAuthorityComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;
@@ -190,7 +188,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
-    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress)
+    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress);
     if (!this.hasVerifiedAddress) {
       this.clearAddressValidator(this.verifiedAddress);
       this.setAddressValidator(this.physicalAddress);
@@ -199,7 +197,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
       this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
     }
 
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value);
     this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
@@ -224,7 +222,7 @@ export class OrganizationSigningAuthorityComponent implements OnInit, IPage, IFo
   }
 
   private clearAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

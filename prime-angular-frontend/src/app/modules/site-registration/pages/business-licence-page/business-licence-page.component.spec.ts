@@ -9,19 +9,19 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { BusinessLicenceComponent } from './business-licence.component';
+import { BusinessLicencePageComponent } from './business-licence-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteService } from '@registration/shared/services/site.service';
 
-describe('BusinessLicenceComponent', () => {
-  let component: BusinessLicenceComponent;
-  let fixture: ComponentFixture<BusinessLicenceComponent>;
+describe('BusinessLicencePageComponent', () => {
+  let component: BusinessLicencePageComponent;
+  let fixture: ComponentFixture<BusinessLicencePageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        BusinessLicenceComponent
+        BusinessLicencePageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -46,7 +46,7 @@ describe('BusinessLicenceComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BusinessLicenceComponent);
+    fixture = TestBed.createComponent(BusinessLicencePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

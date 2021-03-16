@@ -20,7 +20,7 @@ import { OrganizationNameComponent } from './pages/organization-name/organizatio
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
-import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
+import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
@@ -99,7 +99,7 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.BUSINESS_LICENCE,
-                    component: BusinessLicenceComponent,
+                    component: BusinessLicencePageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Business Licence' }
