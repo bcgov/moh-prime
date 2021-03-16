@@ -234,16 +234,17 @@ export class FormUtilsService {
 
       formGroup.patchValue(person);
 
-      if (physicalAddress) {
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
+      // Safety check first, ensure the form is not null
+      const physicalAddressFormGroup = formGroup.get('physicalAddress');
+      if (physicalAddressFormGroup) {
         (physicalAddress)
           ? physicalAddressFormGroup.patchValue(physicalAddress)
           : physicalAddressFormGroup.reset({ id: 0 });
       }
 
       // Parties don't always have a mailing address section in the form
-      if (formGroup.get('mailingAddress') && mailingAddress) {
-        const mailingAddressFormGroup = formGroup.get('mailingAddress');
+      const mailingAddressFormGroup = formGroup.get('mailingAddress');
+      if (mailingAddressFormGroup) {
         (mailingAddress)
           ? mailingAddressFormGroup.patchValue(mailingAddress)
           : mailingAddressFormGroup.reset({ id: 0 });
