@@ -3,10 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Organization } from '@registration/shared/models/organization.model';
 
-export interface OrganizationNameFormModel
-  extends Pick<Organization, 'id' | 'name' | 'registrationId' | 'doingBusinessAs'> { }
+export interface OrganizationNamePageFormModel extends Pick<Organization, 'id' | 'name' | 'registrationId' | 'doingBusinessAs'> { }
 
-export class OrganizationNameFormState extends AbstractFormState<OrganizationNameFormModel> {
+export class OrganizationNamePageFormState extends AbstractFormState<OrganizationNamePageFormModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -15,7 +14,7 @@ export class OrganizationNameFormState extends AbstractFormState<OrganizationNam
     this.buildForm();
   }
 
-  public get json(): OrganizationNameFormModel {
+  public get json(): OrganizationNamePageFormModel {
     if (!this.formInstance) {
       return;
     }
@@ -23,7 +22,7 @@ export class OrganizationNameFormState extends AbstractFormState<OrganizationNam
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(organization: OrganizationNameFormModel): void {
+  public patchValue(organization: OrganizationNamePageFormModel): void {
     if (!this.formInstance) {
       return;
     }

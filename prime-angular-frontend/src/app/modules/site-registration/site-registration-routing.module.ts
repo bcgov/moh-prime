@@ -15,7 +15,7 @@ import { SiteRegistrationDashboardComponent } from './shared/components/site-reg
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
-import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
+import { OrganizationNamePageComponent } from './pages/organization-name-page/organization-name-page.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
@@ -68,7 +68,7 @@ const routes: Routes = [
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
-                component: OrganizationNameComponent,
+                component: OrganizationNamePageComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Information' }

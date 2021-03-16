@@ -21,11 +21,11 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 @Component({
-  selector: 'app-organization-name',
-  templateUrl: './organization-name.component.html',
-  styleUrls: ['./organization-name.component.scss']
+  selector: 'app-organization-name-page',
+  templateUrl: './organization-name-page.component.html',
+  styleUrls: ['./organization-name-page.component.scss']
 })
-export class OrganizationNameComponent implements OnInit {
+export class OrganizationNamePageComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

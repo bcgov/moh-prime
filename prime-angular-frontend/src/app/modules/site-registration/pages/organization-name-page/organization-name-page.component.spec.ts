@@ -8,18 +8,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { OrganizationNameComponent } from './organization-name.component';
+import { OrganizationNamePageComponent } from './organization-name-page.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
-describe('OrganizationNameComponent', () => {
-  let component: OrganizationNameComponent;
-  let fixture: ComponentFixture<OrganizationNameComponent>;
+describe('OrganizationNamePageComponent', () => {
+  let component: OrganizationNamePageComponent;
+  let fixture: ComponentFixture<OrganizationNamePageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrganizationNameComponent
+        OrganizationNamePageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -43,7 +43,7 @@ describe('OrganizationNameComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrganizationNameComponent);
+    fixture = TestBed.createComponent(OrganizationNamePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

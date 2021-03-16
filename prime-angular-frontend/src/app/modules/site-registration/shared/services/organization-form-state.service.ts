@@ -9,14 +9,14 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSigningAuthorityPageFormState } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page-form-state.class';
-import { OrganizationNameFormState } from '@registration/pages/organization-name/organization-name-form-state.class';
+import { OrganizationNamePageFormState } from '@registration/pages/organization-name-page/organization-name-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationFormStateService extends AbstractFormStateService<Organization> {
   public organizationSigningAuthorityFormState: OrganizationSigningAuthorityPageFormState;
-  public organizationNameFormState: OrganizationNameFormState;
+  public organizationNameFormState: OrganizationNamePageFormState;
   public organizationAgreementForm: FormGroup;
 
   constructor(
@@ -70,7 +70,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    */
   protected buildForms() {
     this.organizationSigningAuthorityFormState = new OrganizationSigningAuthorityPageFormState(this.fb, this.formUtilsService);
-    this.organizationNameFormState = new OrganizationNameFormState(this.fb);
+    this.organizationNameFormState = new OrganizationNamePageFormState(this.fb);
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }
 
