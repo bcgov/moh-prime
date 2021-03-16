@@ -18,11 +18,11 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.scss']
+  selector: 'app-overview-page',
+  templateUrl: './overview-page.component.html',
+  styleUrls: ['./overview-page.component.scss']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
   public organization: Organization;

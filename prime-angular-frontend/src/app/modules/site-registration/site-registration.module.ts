@@ -26,7 +26,7 @@ import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privac
 import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
 import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
-import { OverviewComponent } from './pages/overview/overview.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 @NgModule({
@@ -50,7 +50,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     ContactProfileFormComponent,
     SameAsComponent,
     SummaryCardComponent,
-    OverviewComponent,
+    OverviewPageComponent,
     NextStepsComponent
   ],
   imports: [

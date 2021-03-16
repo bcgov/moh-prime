@@ -26,7 +26,7 @@ import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privac
 import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
 import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
-import { OverviewComponent } from './pages/overview/overview.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
@@ -75,7 +75,7 @@ const routes: Routes = [
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
-                component: OverviewComponent,
+                component: OverviewPageComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
@@ -166,7 +166,7 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.SITE_REVIEW,
                     canActivate: [SiteGuard, OrganizationGuard],
-                    component: OverviewComponent,
+                    component: OverviewPageComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {

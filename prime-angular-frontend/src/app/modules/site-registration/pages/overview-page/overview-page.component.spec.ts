@@ -10,15 +10,15 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { OverviewComponent } from './overview.component';
+import { OverviewPageComponent } from './overview-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 
-describe('OverviewComponent', () => {
-  let component: OverviewComponent;
-  let fixture: ComponentFixture<OverviewComponent>;
+describe('OverviewPageComponent', () => {
+  let component: OverviewPageComponent;
+  let fixture: ComponentFixture<OverviewPageComponent>;
   const mockActivatedRoute = {
     snapshot: {
       routeConfig: SiteRoutes.ORGANIZATION_REVIEW
@@ -28,7 +28,7 @@ describe('OverviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OverviewComponent
+        OverviewPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -57,7 +57,7 @@ describe('OverviewComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OverviewComponent);
+    fixture = TestBed.createComponent(OverviewPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
