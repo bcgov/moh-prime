@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Prime.HttpClients
 {
-    public class LdapClient : ILdapClient
+    public class LdapClient : BaseClient, ILdapClient
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;
@@ -15,6 +15,7 @@ namespace Prime.HttpClients
         public LdapClient(
             HttpClient client,
             ILogger<LdapClient> logger)
+            : base(PropertySerialization.CamelCase)
         {
             // Auth header and api-key are injected in Startup.cs
             _client = client;
@@ -30,7 +31,7 @@ namespace Prime.HttpClients
                 {
                     Method = HttpMethod.Get,
                     RequestUri = new Uri($"{_client.BaseAddress}users/{userId}"),
-                    Content = new StringContent(password, Encoding.UTF8, "application/json"),
+                    Content = CreateStringContent(password)
                 };
                 response = await _client.SendAsync(request).ConfigureAwait(false);
             }
