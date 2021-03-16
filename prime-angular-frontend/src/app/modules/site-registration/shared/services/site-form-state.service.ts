@@ -76,11 +76,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
-    const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
-      this.administratorPharmaNetFormState.json,
-      this.privacyOfficerFormState.json,
-      this.technicalSupportFormState.json
-    ].map((contact: Contact) => this.formUtilsService.toPersonJson<Contact>(contact));
+    const administratorPharmaNet = this.administratorPharmaNetFormState.json;
+    const privacyOfficer = this.privacyOfficerFormState.json;
+    const technicalSupport = this.technicalSupportFormState.json;
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -160,16 +158,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
-    // TODO should do this conversion within the FormState to keep everything encapsulated
-    // this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);
-    // this.privacyOfficerFormState.patchValue(site?.privacyOfficer);
-    // this.technicalSupportFormState.patchValue(site?.technicalSupport);
-    [
-      [this.administratorPharmaNetFormState.form, site?.administratorPharmaNet],
-      [this.privacyOfficerFormState.form, site?.privacyOfficer],
-      [this.technicalSupportFormState.form, site?.technicalSupport]
-    ]
-      .filter(([_, data]: [FormGroup, Party]) => data)
-      .forEach((form: [FormGroup, Party]) => this.formUtilsService.toPersonFormModel<Contact>(form));
+    this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);
+    this.privacyOfficerFormState.patchValue(site?.privacyOfficer);
+    this.technicalSupportFormState.patchValue(site?.technicalSupport);
   }
 }

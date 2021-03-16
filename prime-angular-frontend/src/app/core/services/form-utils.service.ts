@@ -227,6 +227,7 @@ export class FormUtilsService {
    * @description
    * Convert party JSON to form model for reactive forms.
    */
+  // TODO usecase has changed and should be refactored
   public toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
     if (data) {
       const { physicalAddress, mailingAddress, ...person } = data;
