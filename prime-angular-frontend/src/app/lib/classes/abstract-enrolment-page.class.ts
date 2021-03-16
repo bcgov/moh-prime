@@ -37,6 +37,8 @@ export interface IEnrolmentPage {
  * Class is used to provide a set of submission hooks and
  * functionality to pages used in enrolments.
  */
+// TODO make AbstractFormState generic on AbstractEnrolmentPage
+// export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
 export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
@@ -54,6 +56,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Form state
    */
+  // TODO make AbstractFormState generic on AbstractEnrolmentPage
+  // public abstract formState: T;
   public abstract formState: AbstractFormState<unknown>;
   /**
    * @description
@@ -94,7 +98,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue())) {
+    if (this.checkValidity()) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
@@ -142,6 +146,15 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   protected initForm(): void {
     // Optional method for setting up form listeners, but
     // when no listeners are required is NOOP
+  }
+
+  /**
+   * @description
+   * Check the validity of the form, as well as, perform
+   * additional validation.
+   */
+  protected checkValidity(): boolean {
+    return this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue());
   }
 
   /**
