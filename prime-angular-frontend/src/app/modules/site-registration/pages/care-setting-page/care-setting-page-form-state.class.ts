@@ -2,21 +2,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { Vendor } from '@registration/shared/models/vendor.model';
+import { Site } from '@registration/shared/models/site.model';
 
-interface CareSettingModel {
-  careSettingCode: number;
-  siteVendors: Vendor[];
-  pec: string;
-}
+interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode' | 'siteVendors' | 'pec'> { }
 
-interface CareSettingPageFormModel {
-  careSettingCode: number;
-  vendorCode: number;
-  pec: string;
-}
-
-export class CareSettingPageFormState extends AbstractFormState<CareSettingModel> {
+export class CareSettingPageFormState extends AbstractFormState<CareSettingPageDataModel> {
   private siteId: number;
 
   public constructor(
@@ -27,7 +17,7 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingModel
     this.buildForm();
   }
 
-  public get json(): CareSettingModel {
+  public get json(): CareSettingPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -42,7 +32,7 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingModel
     return { careSettingCode, siteVendors, pec };
   }
 
-  public patchValue({ careSettingCode, siteVendors, pec }: CareSettingModel): void {
+  public patchValue({ careSettingCode, siteVendors, pec }: CareSettingPageDataModel): void {
     if (!this.formInstance) {
       return;
     }

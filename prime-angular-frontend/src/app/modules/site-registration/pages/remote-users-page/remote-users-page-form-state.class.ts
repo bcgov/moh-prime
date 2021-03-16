@@ -6,11 +6,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
-export interface RemoteUsersPageFormModel {
-  hasRemoteUsers: boolean;
-  remoteUsers: {}[];
-}
-
 export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   public constructor(
     private fb: FormBuilder

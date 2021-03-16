@@ -16,7 +16,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { Contact } from '@lib/models/contact.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { AdministratorFormState } from './administrator-page-form-state.class';
+import { AdministratorPageFormState } from './administrator-page-form-state.class';
 
 @Component({
   selector: 'app-administrator-page',
@@ -24,7 +24,7 @@ import { AdministratorFormState } from './administrator-page-form-state.class';
   styleUrls: ['./administrator-page.component.scss']
 })
 export class AdministratorPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: AdministratorFormState;
+  public formState: AdministratorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;

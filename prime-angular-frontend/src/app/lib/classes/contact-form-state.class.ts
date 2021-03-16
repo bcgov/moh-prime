@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
+import { Contact } from '@lib/models/contact.model';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AbstractFormState } from './abstract-form-state.class';
-import { Contact } from '@lib/models/contact.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,12 +28,12 @@ export class ContactFormState extends AbstractFormState<Contact> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: Contact): void {
-    if (!data) {
+  public patchValue(model: Contact): void {
+    if (!model) {
       return;
     }
 
-    this.formInstance.patchValue(data);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(disabled: boolean = false): void {

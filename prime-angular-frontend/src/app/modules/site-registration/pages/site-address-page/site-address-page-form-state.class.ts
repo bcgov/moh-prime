@@ -4,10 +4,6 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
 
-export interface SiteAddressPageFormModel {
-  physicalAddress: Address;
-}
-
 export class SiteAddressPageFormState extends AbstractFormState<Address> {
   public constructor(
     private fb: FormBuilder,

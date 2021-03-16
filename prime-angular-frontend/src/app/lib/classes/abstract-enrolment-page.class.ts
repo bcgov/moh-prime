@@ -32,6 +32,11 @@ export interface IEnrolmentPage {
   canDeactivate(): Observable<boolean> | boolean;
 }
 
+/**
+ * @description
+ * Class is used to provide a set of submission hooks and
+ * functionality to pages used in enrolments.
+ */
 export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description

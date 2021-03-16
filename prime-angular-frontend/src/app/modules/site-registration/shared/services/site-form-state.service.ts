@@ -13,22 +13,23 @@ import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@lib/models/contact.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
-import { AdministratorFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
+import { AdministratorPageFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
 import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
 import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
+import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
-  public businessForm: FormGroup;
+  public businessLicencePageFormState: BusinessLicencePageFormState;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
-  public administratorPharmaNetFormState: AdministratorFormState;
+  public administratorPharmaNetFormState: AdministratorPageFormState;
   public privacyOfficerFormState: PrivacyOfficerPageFormState;
   public technicalSupportFormState: TechnicalSupportPageFormState;
 
@@ -71,7 +72,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors, pec } = this.careSettingPageFormState.json;
-    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
+    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -98,17 +99,18 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       physicalAddress,
       businessHours,
       remoteUsers,
-      administratorPharmaNetId: administratorPharmaNet?.id,
+      administratorPharmaNetId: administratorPharmaNet?.id, // TODO can this be dropped?
       administratorPharmaNet,
-      privacyOfficerId: privacyOfficer?.id,
+      privacyOfficerId: privacyOfficer?.id, // TODO can this be dropped?
       privacyOfficer,
-      technicalSupportId: technicalSupport?.id,
+      technicalSupportId: technicalSupport?.id, // TODO can this be dropped?
       technicalSupport,
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec
-    } as Site; // Enforced type
+      // TODO output should be a Site-like model instead due to missing properties
+    } as Site; // Enforced type due to N/A properties
   }
 
   /**
@@ -118,7 +120,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public get forms(): AbstractControl[] {
     return [
       this.careSettingPageFormState.form,
-      this.businessForm,
+      this.businessLicencePageFormState.form,
       this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
       this.remoteUsersPageFormState.form,
@@ -135,11 +137,11 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   protected buildForms() {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessForm = this.buildBusinessForm();
+    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
-    this.administratorPharmaNetFormState = new AdministratorFormState(this.fb, this.formUtilsService);
+    this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
     this.privacyOfficerFormState = new PrivacyOfficerPageFormState(this.fb, this.formUtilsService);
     this.technicalSupportFormState = new TechnicalSupportPageFormState(this.fb, this.formUtilsService);
   }
@@ -154,18 +156,14 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     }
 
     this.careSettingPageFormState.patchValue(site);
-
-    if (site.doingBusinessAs) {
-      this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
-    }
-
-    if (site.businessLicence) {
-      this.businessForm.get('deferredLicenceReason').patchValue(site.businessLicence.deferredLicenceReason);
-    }
-
+    this.businessLicencePageFormState.patchValue(site);
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
+    // TODO should do this conversion within the FormState to keep everything encapsulated
+    // this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);
+    // this.privacyOfficerFormState.patchValue(site?.privacyOfficer);
+    // this.technicalSupportFormState.patchValue(site?.technicalSupport);
     [
       [this.administratorPharmaNetFormState.form, site?.administratorPharmaNet],
       [this.privacyOfficerFormState.form, site?.privacyOfficer],
@@ -173,26 +171,5 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     ]
       .filter(([_, data]: [FormGroup, Party]) => data)
       .forEach((form: [FormGroup, Party]) => this.formUtilsService.toPersonFormModel<Contact>(form));
-  }
-
-  /**
-   * Form Builders and Helpers
-   */
-
-  private buildBusinessForm(): FormGroup {
-    return this.fb.group({
-      businessLicenceGuid: [
-        '',
-        []
-      ],
-      deferredLicenceReason: [
-        '',
-        []
-      ],
-      doingBusinessAs: [
-        '',
-        [Validators.required]
-      ]
-    });
   }
 }
