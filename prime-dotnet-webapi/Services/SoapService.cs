@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 using SoapCore.Extensibility;
+using Prime;
+
 
 namespace Prime.Services
 {
@@ -19,21 +21,17 @@ namespace Prime.Services
         public const string Prefix = "plr";
         public const string Uri = "urn:hl7-org:v3";
 
+        // This must be the header used by proxies that first receive the client certificate
+        // and pass on via HTTP Header
+        public const string ClientCertHeader = "X-SSL-CERT";
+
+
         public void Tune(HttpContext httpContext, object serviceInstance, SoapCore.ServiceModel.OperationDescription operation)
         {
-            // This must be the header used by proxies that first receive the client certificate
-            // (and pass on via HTTP Header)
-            const string CLIENT_CERT_HEADER = "X-SSL-CERT";
-
             if (serviceInstance is SoapService service)
             {
-                string urlEncoded;
-                StringValues paramValue;
-                if (httpContext.Request.Headers.TryGetValue(CLIENT_CERT_HEADER, out paramValue))
-                {
-                    urlEncoded = paramValue[0];
-                }
-                else
+                string urlEncoded = httpContext.Request.GetHeader(ClientCertHeader);
+                if (urlEncoded == null)
                 {
                     throw new ArgumentException("Client certificate expected to be provided.");
                 }
@@ -44,16 +42,16 @@ namespace Prime.Services
                 }
 
                 string decoded = HttpUtility.UrlDecode(urlEncoded);
-                // https://stackoverflow.com/questions/65349878/c-sharp-convert-certificate-string-into-x509-certificate
                 byte[] certAsBytes = Encoding.ASCII.GetBytes(decoded);
                 var clientCert = new X509Certificate2(certAsBytes);
-                if (clientCert.Thumbprint.Equals(PrimeEnvironment.PlrIntegration.ClientCertThumbprint))
+                if (clientCert.Thumbprint == PrimeEnvironment.PlrIntegration.ClientCertThumbprint)
                 {
                     service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
                 }
                 else
                 {
-                    throw new ArgumentException($"The certificate with thumbprint {clientCert.Thumbprint} is invalid to the receiving system.");
+                    ((SoapService)serviceInstance).LogWarning($"A client provided an unrecognized certifcate with thumbprint {clientCert.Thumbprint}.");
+                    throw new ArgumentException("The provided certificate is invalid to the receiving system.");
                 }
             }
         }
@@ -115,6 +113,11 @@ namespace Prime.Services
         {
             _logger.LogInformation("Update BC Provider");
             Console.WriteLine(DocumentRoot.ToString());
+        }
+
+        public void LogWarning(string warningMessage)
+        {
+            _logger.LogWarning(warningMessage);
         }
     }
 }

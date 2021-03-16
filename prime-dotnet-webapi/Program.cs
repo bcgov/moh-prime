@@ -42,11 +42,6 @@ namespace Prime
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    // webBuilder.ConfigureKestrel(o =>
-                    //     {
-                    //         o.ConfigureHttpsDefaults(o =>
-                    //             o.ClientCertificateMode = ClientCertificateMode.RequireCertificate);
-                    //     });
                     webBuilder.UseStartup<Startup>();
                 })
                 .UseSerilog();
