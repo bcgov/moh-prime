@@ -1,23 +1,24 @@
+using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Services
 {
     public interface IEmailService
     {
-        Task SendReminderEmailAsync(int enrolleeId);
-        Task SendProvisionerLinkAsync(string[] recipients, EnrolmentCertificateAccessToken token, int careSettingCode);
-        Task SendSiteRegistrationAsync(Site site);
-        Task SendRemoteUsersUpdatedAsync(Site site);
-        Task SendRemoteUsersNotificationAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
-        Task<string> GetPharmaNetProvisionerEmailAsync(string provisionerName);
-        Task<IEnumerable<string>> GetPharmaNetProvisionerNamesAsync();
-        Task<bool> UpdateEmailLogStatuses();
-        Task SendEnrolleeRenewalEmails();
         Task SendBusinessLicenceUploadedAsync(Site site);
+        Task SendProvisionerLinkAsync(IEnumerable<string> recipientEmails, EnrolmentCertificateAccessToken token, int careSettingCode);
+        Task SendReminderEmailAsync(int enrolleeId);
+        Task SendRemoteUserNotificationsAsync(Site site, IEnumerable<RemoteUser> remoteUsers);
+        Task SendRemoteUsersUpdatedAsync(Site site);
+        Task SendSiteApprovedHIBCAsync(Site site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
         Task SendSiteApprovedSigningAuthorityAsync(Site site);
-        Task SendSiteApprovedHIBCAsync(Site site);
+        Task SendSiteRegistrationSubmissionAsync(int siteId);
+
+        Task SendEnrolleeRenewalEmails();
+        Task<int> UpdateEmailLogStatuses(int limit);
     }
 }

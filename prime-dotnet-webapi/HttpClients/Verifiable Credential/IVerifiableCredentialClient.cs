@@ -14,5 +14,7 @@ namespace Prime.HttpClients
         Task<string> GetIssuerDidAsync();
         Task<string> GetCredentialDefinitionIdAsync(string schemaId);
         Task<JObject> GetPresentationProof(string presentationExchangeId);
+        Task<bool> DeleteCredentialAsync(Credential credential);
+        Task<bool> SendMessageAsync(string connectionId, string content);
     }
 }

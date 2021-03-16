@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { AuthService } from '@auth/shared/services/auth.service';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
@@ -25,16 +24,20 @@ interface SelfDeclarationComposite {
 })
 export class EnrolleeSelfDeclarationsComponent implements OnInit {
   @Input() public enrolment: Enrolment;
+  /**
+   * @description
+   * Show all self declaration questions regardless of whether
+   * the enrollee made a declaration or not.
+   */
+  @Input() public showAllSelfDeclarationsQuestions: boolean;
 
-  public isEnrollee: boolean;
   public selfDeclarationComposites: SelfDeclarationComposite[];
 
   constructor(
     private enrolmentResource: EnrolmentResource,
-    private utilsService: UtilsService,
-    private authService: AuthService
+    private utilsService: UtilsService
   ) {
-    this.isEnrollee = this.authService.isEnrollee();
+    this.showAllSelfDeclarationsQuestions = true;
   }
 
   public downloadSelfDeclarationDocument(documentId: number): void {
@@ -47,9 +50,12 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
   }
 
   private createSelfDeclarationComposites() {
+    if (!this.enrolment) {
+      return;
+    }
     const answered = this.enrolment.selfDeclarations
       .map(s => s.selfDeclarationTypeCode);
-    const unanswered = (this.isEnrollee)
+    const unanswered = (this.showAllSelfDeclarationsQuestions)
       ? EnumUtils.values(SelfDeclarationTypeEnum)
         .filter(type => !answered.includes(type))
         .map(type => this.createSelfDeclarationComposite(type))

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription, EMPTY, ObservableInput } from 'rxjs';
+import { Observable, Subscription, EMPTY } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -10,11 +10,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
@@ -27,12 +26,9 @@ export class OverviewComponent implements OnInit {
   public busy: Subscription;
   public site: Site;
   public organization: Organization;
-
+  public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
-
-  public showSubmission: boolean;
-
 
   constructor(
     protected route: ActivatedRoute,
@@ -41,11 +37,19 @@ export class OverviewComponent implements OnInit {
     private dialog: MatDialog,
     private siteService: SiteService,
     private organizationService: OrganizationService,
-    private logger: LoggerService,
+    private logger: LoggerService
   ) {
     this.routeUtils = (this.isOrganizationReview)
       ? new RouteUtils(route, router, SiteRoutes.routePath(SiteRoutes.ORGANIZATION_REVIEW))
       : new RouteUtils(route, router, SiteRoutes.routePath(SiteRoutes.SITE_REVIEW));
+  }
+
+  public get isOrganizationReview(): boolean {
+    return this.route.snapshot.routeConfig.path === SiteRoutes.ORGANIZATION_REVIEW;
+  }
+
+  public get isSiteReview(): boolean {
+    return this.route.snapshot.routeConfig.path === SiteRoutes.SITE_REVIEW;
   }
 
   public onSubmit(): void {
@@ -69,14 +73,6 @@ export class OverviewComponent implements OnInit {
       .subscribe(() => this.nextRoute());
   }
 
-  public get isSiteReview(): boolean {
-    return this.route.snapshot.routeConfig.path === SiteRoutes.SITE_REVIEW;
-  }
-
-  public get isOrganizationReview(): boolean {
-    return this.route.snapshot.routeConfig.path === SiteRoutes.ORGANIZATION_REVIEW;
-  }
-
   public onRoute(routePath: string): void {
     this.routeUtils.routeRelativeTo(routePath);
   }
@@ -86,43 +82,36 @@ export class OverviewComponent implements OnInit {
   }
 
   public nextRoute(): void {
-    this.busy = this.determineOrgAgreementRequired$()
-      .subscribe(
-        (wasRequired: boolean) => {
-          if (wasRequired) {
-            this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS);
-          } else {
-            this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
-          }
-        });
+    this.busy = this.isOrgAgreementRequired$()
+      .subscribe((wasRequired: boolean) =>
+        (wasRequired)
+          ? this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS)
+          : this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT])
+      );
   }
 
   public ngOnInit(): void {
     this.organization = this.organizationService.organization;
-    this.site = this.siteService.site;
 
     if (this.isOrganizationReview) {
-      this.showSubmission = false;
+      this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
-      this.showSubmission = !this.site.submittedDate;
+      this.showSubmissionAction = !this.site?.submittedDate;
     }
   }
 
   /**
    * @description
-   * Infer whether user was required to accept an Organization Agreement.
-   * User saw an Organization Agreement if the current Site has a care setting that is unique
-   * for that Organization.
-   * @returns
-   * Was Org Agreement required to be shown (yes if there is only 1 site with current care setting)
+   * Check whether an organization agreement is required for a site based on
+   * whether a care setting already exists of the same type since each
+   * unique care setting type requires an organization agreement.
    */
-  private determineOrgAgreementRequired$(): Observable<boolean> {
-    const currentCareSettingCode: CareSettingEnum = this.site.careSettingCode;
-
+  private isOrgAgreementRequired$(): Observable<boolean> {
+    const currentCareSettingCode = this.site.careSettingCode;
     return this.siteResource.getSites(this.organization.id)
       .pipe(
-        map(sites =>
-          sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2));
+        map(sites => sites.filter(site => site.careSettingCode === currentCareSettingCode).length < 2)
+      );
   }
 }

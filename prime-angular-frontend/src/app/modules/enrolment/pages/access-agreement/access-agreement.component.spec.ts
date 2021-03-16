@@ -14,6 +14,8 @@ import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 describe('AccessAgreementComponent', () => {
   let component: AccessAgreementComponent;
@@ -43,6 +45,10 @@ describe('AccessAgreementComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
+          },
+          {
+            provde: AccessTokenService,
+            useClass: MockAccessTokenService
           },
           KeycloakService
         ]

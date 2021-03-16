@@ -14,26 +14,58 @@
         </ng-container>
       </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
-                            [showAddress]="false"></app-enrollee-profile>
+      <app-bcsc-profile [user]="enrollee"
+                        [showAddress]="false"></app-bcsc-profile>
     </section>
 
-    <section class="mb-3">
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Address</ng-container>
-        <ng-container appPageSubheaderSummary>
-          This information comes from the your BC Services Card.
-        </ng-container>
-      </app-page-subheader>
+    <!-- <section class="mb-3">
+      <ng-container *ngIf="hasVerifiedAddress; else noAddress">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Address</ng-container>
+          <ng-container appPageSubheaderSummary>
+            This information comes from the your BC Services Card.
+          </ng-container>
+        </app-page-subheader>
 
-      <app-enrollee-profile [enrollee]="enrollee"
-                            [showPersonal]="false"
-                            [showAddressTitle]="false"></app-enrollee-profile>
-    </section>
+        <app-bcsc-profile [user]="enrollee"
+                          [showPersonal]="false"
+                          [showAddressTitle]="false"></app-bcsc-profile>
+      </ng-container>
+
+      <ng-template #noAddress>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>Address</ng-container>
+          <ng-container appPageSubheaderSummary>
+            Provide your physical address.
+          </ng-container>
+        </app-page-subheader>
+
+        <app-address-form [form]="physicalAddress"
+                          [onlyBc]="true"
+                          [showManualButton]="true"
+                          [showAddressFields]="hasPhysicalAddress"></app-address-form>
+      </ng-template>
+
+      <app-toggle-content label="Provide your preferred physical address, if you have one"
+                          [checked]="hasPhysicalAddress"
+                          (toggle)="onPhysicalAddressChange($event)">
+
+        <section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Mailing Address</ng-container>
+          </app-page-subheader>
+
+          <app-address-form [form]="mailingAddress"
+                            [showManualButton]="true"
+                            [showAddressFields]="hasMailingAddress"></app-address-form>
+        </section>
+
+      </app-toggle-content>
+    </section> -->
 
     <app-contact-information-form [form]="form"
                                   [showSmsPhone]="false">
-      <ng-container notificationInfoSummary>
+      <ng-container appNotificationInfoSummary>
         Please provide the email address you have provided to your Health Authority
         to be associated with your eForms enrolment.
       </ng-container>

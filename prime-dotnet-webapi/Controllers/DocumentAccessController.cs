@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using Prime.Auth;
 using Prime.Models.Api;
 using Prime.Services;
@@ -37,22 +38,19 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
-
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
             if (documentAccessToken == null)
             {
                 return NotFound();
             }
 
-            var response = await _documentManagerClient.GetFileAsync(documentAccessToken.DocumentGuid);
-
+            var response = await _documentManagerClient.GetFileResponseAsync(documentAccessToken.DocumentGuid);
             if (response == null)
             {
                 return NotFound();
             }
 
             Response.Headers.Add("Content-Disposition", response.Content.Headers.ContentDisposition.ToString());
-
             return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
         }
 
@@ -61,13 +59,13 @@ namespace Prime.Controllers
         /// Delete a Document Access Token.
         /// </summary>
         [HttpDelete("{accessTokenId}", Name = nameof(DeleteDocumentAccessToken))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteDocumentAccessToken(Guid accessTokenId)
         {
-            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessNoTrackingAsync(accessTokenId);
+            var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
 
             if (documentAccessToken == null)
             {

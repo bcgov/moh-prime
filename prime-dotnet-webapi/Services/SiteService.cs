@@ -11,6 +11,7 @@ using LinqKit;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
+using System.Security.Claims;
 
 namespace Prime.Services
 {
@@ -510,6 +511,7 @@ namespace Prime.Services
             return await _context.RemoteUserCertifications
                 .AsNoTracking()
                 .AsExpandable()
+                .Where(ruc => ruc.RemoteUser.Site.ApprovedDate != null)
                 .Where(predicate)
                 .Select(ruc => ruc.RemoteUser)
                 .Distinct()
@@ -553,6 +555,17 @@ namespace Prime.Services
                 .OrderByDescending(srn => srn.NoteDate)
                 .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
+        }
+
+        public async Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(srn => srn.SiteId == siteId)
+                .Include(srn => srn.Adjudicator)
+                .Include(srn => srn.SiteNotification)
+                    .ThenInclude(sre => sre.Admin)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(srn => srn.Id == siteRegistrationNoteId);
         }
 
         public async Task<IEnumerable<BusinessEvent>> GetSiteBusinessEventsAsync(int siteId, IEnumerable<int> businessEventTypeCodes)
@@ -614,6 +627,69 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<SiteNotification> CreateSiteNotificationAsync(int siteRegistrationNoteId, int adminId, int assineeId)
+        {
+            var notification = new SiteNotification
+            {
+                SiteRegistrationNoteId = siteRegistrationNoteId,
+                AdminId = adminId,
+                AssigneeId = assineeId,
+            };
+
+            _context.SiteNotifications.Add(notification);
+
+            await _context.SaveChangesAsync();
+
+            return notification;
+        }
+
+        public async Task RemoveSiteNotificationAsync(int siteNotificationId)
+        {
+            var notification = await _context.SiteNotifications
+                .SingleOrDefaultAsync(se => se.Id == siteNotificationId);
+            if (notification == null)
+            {
+                return;
+            }
+            _context.SiteNotifications.Remove(notification);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<SiteNotification> GetSiteNotificationAsync(int siteNotificationId)
+        {
+            return await _context.SiteNotifications.SingleOrDefaultAsync(sn => sn.Id == siteNotificationId);
+        }
+        public async Task<IEnumerable<SiteRegistrationNoteViewModel>> GetNotificationsAsync(int siteId, int adminId)
+        {
+            return await _context.SiteRegistrationNotes
+                .Include(n => n.Adjudicator)
+                .Include(n => n.SiteNotification)
+                    .ThenInclude(ee => ee.Admin)
+                .Where(n => n.SiteId == siteId)
+                .Where(n => n.SiteNotification != null && n.SiteNotification.AssigneeId == adminId)
+                .ProjectTo<SiteRegistrationNoteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task RemoveNotificationsAsync(int siteId)
+        {
+            var notifications = await _context.SiteNotifications
+                .Where(en => en.SiteRegistrationNote.SiteId == siteId)
+                .ToListAsync();
+
+            _context.SiteNotifications.RemoveRange(notifications);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
+        {
+            return await _context.SiteRegistrationNotes
+                .Where(en => en.SiteNotification != null && en.SiteNotification.Assignee.UserId == user.GetPrimeUserId())
+                .Select(en => en.SiteId)
+                .ToListAsync();
+        }
+
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites
@@ -623,10 +699,8 @@ namespace Prime.Services
                 .Include(s => s.CareSetting)
                 .Include(s => s.Organization)
                     .ThenInclude(o => o.SigningAuthority)
-                        .ThenInclude(p => p.PhysicalAddress)
-                .Include(s => s.Organization)
-                    .ThenInclude(o => o.SigningAuthority)
-                        .ThenInclude(p => p.MailingAddress)
+                        .ThenInclude(sa => sa.Addresses)
+                            .ThenInclude(pa => pa.Address)
                 .Include(s => s.PhysicalAddress)
                 .Include(s => s.PrivacyOfficer)
                     .ThenInclude(p => p.PhysicalAddress)

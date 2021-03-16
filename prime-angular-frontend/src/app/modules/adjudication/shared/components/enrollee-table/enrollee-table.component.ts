@@ -2,19 +2,22 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { MatDialog } from '@angular/material/dialog';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 import moment from 'moment';
 
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
+@UntilDestroy()
 @Component({
   selector: 'app-enrollee-table',
   templateUrl: './enrollee-table.component.html',
@@ -23,26 +26,30 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class EnrolleeTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<EnrolleeListViewModel>;
   @Output() public notify: EventEmitter<number>;
-  @Output() public claim: EventEmitter<number>;
-  @Output() public disclaim: EventEmitter<number>;
+  @Output() public assign: EventEmitter<number>;
+  @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
+  @Output() public reload: EventEmitter<number>;
 
   public busy: Subscription;
   public form: FormGroup;
   public columns: string[];
   public hasAppliedDateRange = false;
   public hasRenewalDateRange = false;
+  public hasAssignedToFilter$: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
+  public Role = Role;
 
   constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private utilsService: UtilsService,
-    private fb: FormBuilder,
   ) {
     this.notify = new EventEmitter<number>();
-    this.claim = new EventEmitter<number>();
-    this.disclaim = new EventEmitter<number>();
+    this.assign = new EventEmitter<number>();
+    this.reassign = new EventEmitter<number>();
+    this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
       'prefixes',
@@ -54,14 +61,11 @@ export class EnrolleeTableComponent implements OnInit {
       'remoteAccess',
       'renewalDate',
       'currentTOA',
-      'claimedBy',
+      'assignedTo',
       'careSetting',
       'actions'
     ];
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
+    this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -75,16 +79,20 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify.emit(enrolleeId);
   }
 
-  public onClaim(enrolleeId: number): void {
-    this.claim.emit(enrolleeId);
+  public onAssign(enrolleeId: number): void {
+    this.assign.emit(enrolleeId);
   }
 
-  public onDisclaim(enrolleeId: number): void {
-    this.disclaim.emit(enrolleeId);
+  public onReassign(enrolleeId: number): void {
+    this.reassign.emit(enrolleeId);
   }
 
   public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
+  }
+
+  public onReload(enrolleeId: number): void {
+    this.reload.emit(enrolleeId);
   }
 
   public sortData(sort: Sort) {
@@ -114,6 +122,10 @@ export class EnrolleeTableComponent implements OnInit {
     this.hasRenewalDateRange = false;
   }
 
+  public toggleFilterAssigned() {
+    this.hasAssignedToFilter$.next(!this.hasAssignedToFilter$.value);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -125,6 +137,7 @@ export class EnrolleeTableComponent implements OnInit {
       appliedDateRangeEnd: '',
       renewalDateRangeStart: '',
       renewalDateRangeEnd: '',
+      assignedTo: ''
     });
   }
 
@@ -132,9 +145,18 @@ export class EnrolleeTableComponent implements OnInit {
     this.dataSource.filterPredicate = this.getFilterPredicate();
 
     this.form.valueChanges.subscribe(value => {
-      const filter = { ...value, name: value.name } as string;
+      const filter = { ...value, name: value.name };
       this.dataSource.filter = filter;
     });
+
+    combineLatest([
+      this.authService.getAdmin$(),
+      this.hasAssignedToFilter$
+    ])
+      .pipe(untilDestroyed(this))
+      .subscribe(([{ idir }, value]: [Admin, boolean]) =>
+        this.form.get('assignedTo').patchValue((value) ? idir : '')
+      );
 
     for (const name of ['appliedDateRangeStart', 'appliedDateRangeEnd']) {
       this.form.get(name).valueChanges.subscribe(value => {
@@ -150,19 +172,29 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private getFilterPredicate() {
-    return (row: EnrolleeListViewModel, filter) => {
-      const appliedDate = moment.utc(row.appliedDate);
-      const renewalDate = moment.utc(row.expiryDate);
+    return (row: EnrolleeListViewModel, filter: any) => {
       // Add 1 day to range end date for inclusive check
-      const searchByAppliedDate =
-        (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
-        && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
-      const searchByRenewalDate =
-        (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
-        && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+
       const matchFilter = [];
-      matchFilter.push(searchByAppliedDate);
-      matchFilter.push(searchByRenewalDate);
+      if (this.hasAppliedDateRange) {
+        const appliedDate = moment.utc(row.appliedDate);
+        const searchByAppliedDate =
+          (!filter.appliedDateRangeStart || moment(filter.appliedDateRangeStart) <= appliedDate)
+          && (!filter.appliedDateRangeEnd || appliedDate <= moment(filter.appliedDateRangeEnd).add(1, 'd'));
+        matchFilter.push(searchByAppliedDate);
+      }
+      if (this.hasRenewalDateRange) {
+        const renewalDate = moment.utc(row.expiryDate);
+        const searchByRenewalDate =
+          (!filter.renewalDateRangeStart || moment(filter.renewalDateRangeStart) <= renewalDate)
+          && (!filter.renewalDateRangeEnd || renewalDate <= moment(filter.renewalDateRangeEnd).add(1, 'd'));
+        matchFilter.push(searchByRenewalDate);
+      }
+      if (this.hasAssignedToFilter$.value) {
+        const searchByIdir = row.adjudicatorIdir === filter.assignedTo;
+        matchFilter.push(searchByIdir);
+      }
+
       return matchFilter.every(Boolean);
     };
   }

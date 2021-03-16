@@ -7,6 +7,8 @@ import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service'
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@shared/models/address.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
   // tslint:disable-next-line: variable-name
@@ -27,8 +29,9 @@ export class MockEnrolmentService implements IEnrolmentService {
         preferredMiddleName: null,
         preferredLastName: null,
         dateOfBirth: faker.date.past(2).toDateString(),
-        physicalAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
+        verifiedAddress: new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode()),
         mailingAddress: new Address(),
+        physicalAddress: new Address(),
         email: faker.internet.email(),
         smsPhone: faker.phone.phoneNumber(),
         phone: faker.phone.phoneNumber(),
@@ -47,6 +50,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       isInsulinPumpProvider: null,
       jobs: [],
       oboSites: [],
+      enrolleeHealthAuthorities: [],
       selfDeclarations: [],
       selfDeclarationDocuments: [],
       identificationDocuments: [],
@@ -134,4 +138,9 @@ export class MockEnrolmentService implements IEnrolmentService {
   public get isProfileComplete(): boolean {
     return (this.enrolment) ? this.enrolment.profileCompleted : false;
   }
+
+  public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
+    return true;
+  }
+
 }

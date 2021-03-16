@@ -7,10 +7,15 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { exhaustMap } from 'rxjs/operators';
+import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-adjudicator-actions',
@@ -29,15 +34,18 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public assign: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
+  @Output() public assignToa: EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>;
+  @Output() public reload: EventEmitter<boolean>;
+
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
   public EnrolmentStatus = EnrolmentStatus;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public Role = Role;
 
   constructor(
-    private authService: AuthService,
+    private permissionService: PermissionService,
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog
@@ -50,9 +58,10 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.enableEditing = new EventEmitter<number>();
     this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
-    this.assign = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
+    this.assignToa = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
+    this.reload = new EventEmitter<boolean>();
 
     this.termsOfAccessAgreements = [
       { type: 0, name: 'None' },
@@ -67,20 +76,13 @@ export class AdjudicatorActionsComponent implements OnInit {
     return this.form.get('assignedTOAType') as FormControl;
   }
 
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
-  }
-
-  public get canDelete(): boolean {
-    return this.authService.isSuperAdmin();
-  }
-
   public get isUnderReview(): boolean {
     return (this.enrollee && this.enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
   }
 
   public onApprove() {
-    if (this.formUtilsService.checkValidity(this.form) && this.canEdit && this.isUnderReview) {
+    if (this.formUtilsService.checkValidity(this.form) &&
+      this.permissionService.hasRoles(Role.APPROVE_ENROLLEE) && this.isUnderReview) {
       const agreementName = this.termsOfAccessAgreements
         .filter(t => t.type === this.assignedTOAType.value)[0]
         .name;
@@ -89,54 +91,66 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public onDecline() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.decline.emit(this.enrollee.id);
     }
   }
 
   public onLock() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.lock.emit(this.enrollee.id);
     }
   }
 
   public onUnlock() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.unlock.emit(this.enrollee.id);
     }
   }
 
   public onDelete() {
-    if (this.canDelete) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.delete.emit(this.enrollee.id);
     }
   }
 
   public onEnableEnrollee() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.enableEnrollee.emit(this.enrollee.id);
     }
   }
 
   public onEnableEditing() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.APPROVE_ENROLLEE)) {
       this.enableEditing.emit(this.enrollee.id);
     }
   }
 
   public onRerunRules() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.TRIAGE_ENROLLEE)) {
       this.rerunRules.emit(this.enrollee.id);
     }
   }
 
   public onToggleManualAdj() {
-    if (this.canEdit) {
+    if (this.permissionService.hasRoles(Role.MANAGE_ENROLLEE)) {
       this.toggleManualAdj.emit({
         enrolleeId: this.enrollee.id,
         alwaysManual: !this.enrollee.alwaysManual
       });
     }
+  }
+
+  public onEscalate() {
+    const data: DialogOptions = {
+      data: {
+        id: this.enrollee.id,
+        escalationType: EscalationType.ENROLLEE
+      }
+    };
+
+    this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.reload.emit(true) : noop);
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -162,7 +176,7 @@ export class AdjudicatorActionsComponent implements OnInit {
 
     this.assignedTOAType.valueChanges
       .subscribe((agreementType: AgreementType) =>
-        this.assign.emit({ enrolleeId: this.enrollee.id, agreementType })
+        this.assignToa.emit({ enrolleeId: this.enrollee.id, agreementType })
       );
   }
 }

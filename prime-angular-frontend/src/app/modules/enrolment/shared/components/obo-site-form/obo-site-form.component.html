@@ -32,9 +32,9 @@
         </div>
       </div>
 
-      <app-address [form]="site.get('physicalAddress')"
-                   [formControlNames]="formControlNames"
-                   [bcOnly]="true"></app-address>
+      <app-address-form [form]="site.get('physicalAddress')"
+                        [formControlNames]="formControlNames"
+                        [inBc]="true"></app-address-form>
 
       <div *ngIf="careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
            class="row">

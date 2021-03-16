@@ -15,6 +15,7 @@ namespace Prime.Auth
         public const string FamilyName = "family_name";
         public const string Address = "address";
         public const string Birthdate = "birthdate";
+        public const string Email = "email";
 
         public const string RealmAccess = "realm_access";
         public const string AssuranceLevel = "identity_assurance_level";
@@ -28,26 +29,24 @@ namespace Prime.Auth
 
     public static class Roles
     {
-        public const string PrimeSuperAdmin = "prime_super_admin";
-        public const string PrimeAdmin = "prime_admin";
-        public const string PrimeReadonlyAdmin = "prime_readonly_admin";
+        // User Roles
         public const string PrimeEnrollee = "prime_user";
+        public const string PrimeSuperAdmin = "prime_super_admin";
+        public const string PrimeAdministrant = "prime_administrant";
+        public const string ViewEnrollee = "enrollee_view";
+        public const string TriageEnrollee = "enrollee_triage";
+        public const string ApproveEnrollee = "enrollee_approve";
+        public const string ManageEnrollee = "enrollee_elevated_management";
+        public const string ViewSite = "site_view";
+        public const string EditSite = "site_edit";
 
+        // Service Account Roles
         public const string ExternalHpdidAccess = "external_hpdid_access";
         public const string ExternalGpidValidation = "external_gpid_validation";
         public const string PrimeApiServiceAccount = "prime_api_service_account";
 
+        // Roles for External Systems
         public const string PhsaLabtech = "phsa_eforms_labtech";
         public const string PhsaImmunizer = "phsa_eforms_immunizer_covid19";
-    }
-
-    public static class Policies
-    {
-        public const string SuperAdmin = "super-admin-policy";
-        public const string Admin = "admin-policy";
-        public const string ReadonlyAdmin = "readonly-admin-policy";
-        public const string User = "user-policy";
-        public const string ExternalHpdidAccess = "external-hpdid-access-policy";
-        public const string ExternalGpidValidation = "external-gpid-validation-policy";
     }
 }

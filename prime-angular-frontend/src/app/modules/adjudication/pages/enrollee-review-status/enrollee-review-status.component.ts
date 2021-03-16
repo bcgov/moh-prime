@@ -21,7 +21,15 @@ export class EnrolleeReviewStatusComponent implements OnInit {
     this.hasActions = true;
   }
 
+  public onAction() {
+    this.getEnrolleeById();
+  }
+
   public ngOnInit(): void {
+    this.getEnrolleeById();
+  }
+
+  private getEnrolleeById() {
     const enrolleeId = this.route.snapshot.params.id;
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);

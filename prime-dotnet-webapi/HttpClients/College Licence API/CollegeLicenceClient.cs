@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
-using Prime.Models;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.HttpClients
 {
@@ -20,11 +20,16 @@ namespace Prime.HttpClients
             _client = client;
         }
 
-        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(Certification certification)
+        public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)
         {
-            certification.ThrowIfNull(nameof(certification));
+            licencePrefix.ThrowIfNull(nameof(licencePrefix));
 
-            var requestParams = new CollegeRecordRequestParams(certification);
+            if (string.IsNullOrWhiteSpace(licenceNumber))
+            {
+                return null;
+            }
+
+            var requestParams = new CollegeRecordRequestParams(licencePrefix, licenceNumber);
 
             HttpResponseMessage response = null;
             try
@@ -33,13 +38,13 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
-                await LogError(requestParams, response, ex);
+                await LogError(requestParams.ApplicationUUID, response, ex);
                 throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                await LogError(requestParams, response);
+                await LogError(requestParams.ApplicationUUID, response);
                 throw new PharmanetCollegeApiException($"Error code {response.StatusCode} was returned when calling Pharmanet API.");
             }
 
@@ -49,14 +54,16 @@ namespace Prime.HttpClients
             // If we get a record back, it should have the same transaction UUID as our request.
             if (practicionerRecord != null && practicionerRecord.ApplicationUUID != requestParams.ApplicationUUID)
             {
-                throw new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.ApplicationUUID}\".");
+                var ex = new PharmanetCollegeApiException($"Expected matching applicationUUIDs between request data and response data. Request was \"{requestParams.ApplicationUUID}\", response was \"{practicionerRecord.ApplicationUUID}\".");
+                await LogError(requestParams.ApplicationUUID, response, ex);
+                throw ex;
             }
 
             return practicionerRecord;
         }
 
         // TODO use real logger
-        private async Task LogError(CollegeRecordRequestParams requestParams, HttpResponseMessage response, Exception exception = null)
+        private async Task LogError(string requestUUID, HttpResponseMessage response, Exception exception = null)
         {
             string secondaryMessage;
             if (exception != null)
@@ -73,23 +80,7 @@ namespace Prime.HttpClients
                 secondaryMessage = "no additional message. Http response and exception were null.";
             }
 
-            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestParams.ApplicationUUID}, with {secondaryMessage}.");
-        }
-
-        private class CollegeRecordRequestParams
-        {
-            public string ApplicationUUID { get; set; }
-            public string ProgramArea { get; set; }
-            public string LicenceNumber { get; set; }
-            public string CollegeReferenceId { get; set; }
-
-            public CollegeRecordRequestParams(Certification cert)
-            {
-                ApplicationUUID = Guid.NewGuid().ToString();
-                ProgramArea = "PRIME";
-                LicenceNumber = cert.PractitionerId ?? throw new ArgumentNullException(nameof(LicenceNumber));
-                CollegeReferenceId = cert.License?.Prefix ?? throw new ArgumentNullException(nameof(CollegeReferenceId));
-            }
+            Console.WriteLine($"{DateTime.Now} - Error validating college licence. UUID:{requestUUID}, with {secondaryMessage}.");
         }
     }
 

@@ -15,9 +15,10 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { VendorEnum } from '@shared/enums/vendor.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { IPage } from '@registration/shared/interfaces/page.interface';
@@ -41,6 +42,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
   public hasNoVendorError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public isNewSite: FormControl;
 
   public vendorChangeDialogOptions: DialogOptions;
 
@@ -53,7 +55,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
     private formUtilsService: FormUtilsService,
     private dialog: MatDialog,
     private configService: ConfigService,
-    private authService: AuthService
+    private permissionService: PermissionService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -63,9 +65,11 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
     this.vendorChangeDialogOptions = {
       title: 'Vendor Change',
       message: `CareConnect does not support remote access to PharmaNet, all the remote
-                  practitioners you have submitted in the application will be deleted and
-                  do not have permission to access PharmaNet remotely.`
+                practitioners you have submitted in the application will be deleted and
+                do not have permission to access PharmaNet remotely.`
     };
+    this.filteredVendorConfig = [];
+    this.isNewSite = new FormControl(false);
   }
 
   public get careSettingCode(): FormControl {
@@ -74,6 +78,10 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
 
   public get vendorCode(): FormControl {
     return this.form.get('vendorCode') as FormControl;
+  }
+
+  public get pec(): FormControl {
+    return this.form.get('pec') as FormControl;
   }
 
   public onSubmit() {
@@ -105,7 +113,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
           this.form.markAsPristine();
           this.nextRoute();
         });
-    } else {
+    } else if (!this.vendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -129,7 +137,7 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
         return true;
       case CareSettingEnum.COMMUNITY_PHARMACIST:
-        return this.authService.hasSitePharmacist();
+        return this.permissionService.hasRoles(Role.FEATURE_SITE_PHARMACIST);
       default:
         return false;
     }
@@ -177,9 +185,21 @@ export class CareSettingComponent implements OnInit, IPage, IFormPage {
         this.vendorCode.patchValue(null);
       });
 
+    this.isNewSite.valueChanges
+      .subscribe(value => {
+        if (value) {
+          this.pec.patchValue(null);
+          this.pec.disable();
+        }
+        else {
+          this.pec.enable();
+        }
+      });
+
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
+    this.isNewSite.setValue(this.pec.disabled);
     this.form.markAsPristine();
   }
 }

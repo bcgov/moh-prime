@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 using Prime.Models;
@@ -40,13 +41,15 @@ namespace Prime.Services
 
         Task<IEnumerable<EnrolleeNoteViewModel>> GetEnrolleeAdjudicatorNotesAsync(int enrolleeId);
 
+        Task<EnrolleeNoteViewModel> GetEnrolleeAdjudicatorNoteAsync(int enrolleeId, int noteId);
+
         Task<EnrolleeNote> CreateEnrolleeAdjudicatorNoteAsync(int enrolleeId, string note, int adminId);
 
-        Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IBaseEnrolleeNote newNote);
+        Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, int adminId, IBaseEnrolleeNote newNote);
 
         Task<int> GetEnrolleeCountAsync();
 
-        Task<EnrolleeViewModel> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
+        Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null);
 
         Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes);
 
@@ -70,6 +73,12 @@ namespace Prime.Services
 
         Task DeleteEnrolleeAdjudicationDocumentAsync(int documentId);
 
-        Task<EnrolmentStatus> GetEnrolleeCurrentStatus(int enrolleeId);
+        Task<EnrolmentStatus> GetEnrolleeCurrentStatusAsync(int enrolleeId);
+        Task<EnrolleeNotification> CreateEnrolleeNotificationAsync(int EnrolleeNoteId, int adminId, int assigneeId);
+        Task RemoveEnrolleeNotificationAsync(int enrolleeNotificationId);
+        Task<EnrolleeNotification> GetEnrolleeNotificationAsync(int enrolleeNotificationId);
+        Task<IEnumerable<EnrolleeNoteViewModel>> GetNotificationsAsync(int enrolleeId, int adminId);
+        Task RemoveNotificationsAsync(int enrolleeId);
+        Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
     }
 }

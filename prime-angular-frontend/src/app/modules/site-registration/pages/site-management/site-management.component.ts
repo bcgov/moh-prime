@@ -12,13 +12,15 @@ import { LoggerService } from '@core/services/logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { VendorEnum } from '@shared/enums/vendor.enum';
+import { optionalAddressLineItems } from '@shared/models/address.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { Organization, OrganizationListViewModel } from '@registration/shared/models/organization.model';
+import { Organization } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
@@ -31,12 +33,13 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 export class SiteManagementComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  public organizations: OrganizationListViewModel[];
+  public organizations: Organization[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
   public AgreementType = AgreementType;
+  public CareSettingEnum = CareSettingEnum;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -57,7 +60,7 @@ export class SiteManagementComponent implements OnInit {
     this.organizations = [];
   }
 
-  public viewOrganization(organization: OrganizationListViewModel): void {
+  public viewOrganization(organization: Organization): void {
     const routePath = (!organization.completed)
       ? [SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
       : []; // Defaults to overview
@@ -96,7 +99,7 @@ export class SiteManagementComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: OrganizationListViewModel): { key: string, value: string }[] {
+  public getOrganizationProperties(organization: Organization): { key: string, value: string }[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -108,7 +111,7 @@ export class SiteManagementComponent implements OnInit {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress) },
+      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
@@ -171,10 +174,10 @@ export class SiteManagementComponent implements OnInit {
   private getOrganizations(): void {
     this.busy = this.organizationResource.getOrganizations()
       .pipe(
-        map((organizations: OrganizationListViewModel[]) =>
+        map((organizations: Organization[]) =>
           this.organizations = organizations
         ),
-        exhaustMap((organization: OrganizationListViewModel[]) =>
+        exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )
       )

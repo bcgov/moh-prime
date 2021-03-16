@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -15,9 +15,10 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
-  @Output() public claim: EventEmitter<number>;
-  @Output() public disclaim: EventEmitter<number>;
+  @Output() public assign: EventEmitter<number>;
+  @Output() public reassign: EventEmitter<number>;
   @Output() public notify: EventEmitter<number>;
+  @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public columns: string[];
@@ -25,18 +26,19 @@ export class SiteRegistrationTableComponent implements OnInit {
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public Role = Role;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
   ) {
     this.columns = [
+      'prefixes',
       'displayId',
       'organizationName',
       'signingAuthority',
       'siteDoingBusinessAs',
       'submissionDate',
-      'claimedBy',
+      'assignedTo',
       'state',
       'siteId',
       'remoteUsers',
@@ -44,26 +46,27 @@ export class SiteRegistrationTableComponent implements OnInit {
       'missingBusinessLicence',
       'actions'
     ];
-    this.claim = new EventEmitter<number>();
-    this.disclaim = new EventEmitter<number>();
+    this.assign = new EventEmitter<number>();
+    this.reassign = new EventEmitter<number>();
     this.notify = new EventEmitter<number>();
+    this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
   }
 
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
+  public onAssign(siteId: number): void {
+    this.assign.emit(siteId);
   }
 
-  public onClaim(siteId: number): void {
-    this.claim.emit(siteId);
-  }
-
-  public onDisclaim(siteId: number): void {
-    this.disclaim.emit(siteId);
+  public onReassign(siteId: number): void {
+    this.reassign.emit(siteId);
   }
 
   public onNotify(siteId: number): void {
     this.notify.emit(siteId);
+  }
+
+  public onReload(siteId: number): void {
+    this.reload.emit(siteId);
   }
 
   public onRoute(routePath: string | (string | number)[]) {

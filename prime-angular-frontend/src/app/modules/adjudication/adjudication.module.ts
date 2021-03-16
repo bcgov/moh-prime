@@ -42,6 +42,8 @@ import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { AdjudicatorEventsComponent } from './shared/components/adjudicator-events/adjudicator-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { ContextualEnrolleeNotificationComponent } from './shared/components/contextual-enrollee-notification/contextual-enrollee-notification.component';
+import { ContextualSiteNotificationComponent } from './shared/components/contextual-site-notification/contextual-site-notification.component';
 
 @NgModule({
   declarations: [
@@ -77,7 +79,9 @@ import { SiteOverviewComponent } from './pages/site-overview/site-overview.compo
     SiteEventsComponent,
     AdjudicatorEventsComponent,
     EnrolleeOverviewComponent,
-    SiteOverviewComponent
+    SiteOverviewComponent,
+    ContextualEnrolleeNotificationComponent,
+    ContextualSiteNotificationComponent
   ],
   imports: [
     AdjudicationRoutingModule,

@@ -13,11 +13,12 @@ public class AutoMapping : Profile
 {
     public AutoMapping()
     {
-        CreateMap<Organization, OrganizationListViewModel>();
+        CreateMap<Organization, OrganizationListViewModel>()
+            .ForMember(dest => dest.HasAcceptedAgreement, opt => opt.MapFrom(src => src.Agreements.Any(a => a.AcceptedDate.HasValue)))
+            .ForMember(dest => dest.HasSubmittedSite, opt => opt.MapFrom(src => src.Sites.Any(s => s.SubmittedDate.HasValue)));
         CreateMap<Site, SiteListViewModel>()
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
-            .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count))
-            .ForMember(dest => dest.BusinessLicence, opt => opt.MapFrom(src => src.BusinessLicence));
+            .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
 
         CreateMap<EnrolleeCreateModel, Enrollee>();
 

@@ -40,15 +40,6 @@ namespace Prime.ViewModels.Parties
             party.GivenNames = user.FindFirstValue(Claims.GivenNames);
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
-            if (party.PhysicalAddress == null)
-            {
-                party.PhysicalAddress = user.GetPhysicalAddress();
-            }
-            else
-            {
-                party.PhysicalAddress.SetValues(user.GetPhysicalAddress());
-            }
-
             party.SetPartyTypes(PartyTypes.ToArray());
 
             return party;

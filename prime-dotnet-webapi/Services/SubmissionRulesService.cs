@@ -12,13 +12,17 @@ namespace Prime.Services
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IBusinessEventService _businessEventService;
 
         public SubmissionRulesService(
-            ApiDbContext context, IHttpContextAccessor httpContext,
-            ICollegeLicenceClient collegeLicenceClient)
+            ApiDbContext context,
+            IHttpContextAccessor httpContext,
+            ICollegeLicenceClient collegeLicenceClient,
+            IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _collegeLicenceClient = collegeLicenceClient;
+            _businessEventService = businessEventService;
         }
 
         /// <summary>
@@ -31,8 +35,8 @@ namespace Prime.Services
             {
                 new SelfDeclarationRule(),
                 new AddressRule(),
-                new PharmanetValidationRule(_collegeLicenceClient),
-                // TODO removed until after Community Practice
+                new VerifiedAddressRule(),
+                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService),
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),

@@ -77,8 +77,8 @@ export class UtilsService {
    * @description
    * Generic sorting of a JSON object by key.
    */
-  public sortByKey<T>(a: { [key: string]: any }, b: { [key: string]: any }, key: string): SortWeight {
-    return this.sort<T>(a[key], b[key]);
+  public sortByKey<T extends { [key: string]: any }>(key: keyof T): (a: T, b: T) => SortWeight {
+    return (a: T, b: T) => this.sort<T>(a[key], b[key]);
   }
 
   /**

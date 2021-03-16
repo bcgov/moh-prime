@@ -1,0 +1,108 @@
+<app-address-form-autocomplete [inBc]="inBc"
+                               (autocompleteAddress)="onAutocomplete($event)">
+  <button *ngIf="showManualButton"
+          mat-button
+          type="button"
+          color="primary"
+          [disabled]="showAddressFields"
+          (click)="showManualAddress()">
+    <mat-icon>add</mat-icon>
+    Add address manually
+  </button>
+</app-address-form-autocomplete>
+
+<div [formGroup]="form"
+     [hidden]="!showAddressFields">
+
+  <div class="row">
+
+    <div *ngIf="showFormControl('countryCode')"
+         class="col-12"
+         [class]="getFormControlOrder('countryCode')">
+
+      <mat-form-field class="w-100">
+        <mat-label>Country</mat-label>
+        <mat-select formControlName="countryCode"
+                    [required]="isRequired('countryCode')">
+          <mat-option *ngFor="let country of countries"
+                      [value]="country.code">
+            {{ country.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div *ngIf="showFormControl('provinceCode')"
+         class="col-12"
+         [class]="getFormControlOrder('provinceCode')">
+
+      <mat-form-field class="w-100">
+        <mat-label>{{ provinceLabel }}</mat-label>
+        <mat-select formControlName="provinceCode"
+                    [required]="isRequired('provinceCode')">
+          <mat-option *ngFor="let province of filteredProvinces"
+                      [value]="province.code">
+            {{ province.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div *ngIf="showFormControl('street')"
+         class="col-12"
+         [class]="getFormControlOrder('street')">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Street Address"
+               formControlName="street"
+               [required]="isRequired('street')">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div *ngIf="showFormControl('street2')"
+         class="col-12"
+         [class]="getFormControlOrder('street2')">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Street Address 2"
+               formControlName="street2"
+               [required]="isRequired('street2')">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div *ngIf="showFormControl('city')"
+         class="col-12"
+         [class]="getFormControlOrder('city')">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="City"
+               formControlName="city"
+               [required]="isRequired('city')">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div *ngIf="showFormControl('postal')"
+         class="col-12"
+         [class]="getFormControlOrder('postal')">
+
+      <mat-form-field class="w-100">
+        <mat-label>{{ postalLabel }}</mat-label>
+        <input matInput
+               [mask]="postalMask"
+               formControlName="postal"
+               [required]="isRequired('postal')">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+</div>

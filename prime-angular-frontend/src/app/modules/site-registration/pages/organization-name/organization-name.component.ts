@@ -145,7 +145,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
   }
 
   private createFormInstance() {
-    this.form = this.organizationFormStateService.organizationNameForm;
+    this.form = this.organizationFormStateService.organizationNameFormState.form;
   }
 
   private initForm() {
@@ -156,7 +156,7 @@ export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
 
     this.usedOrgBook = !!organization?.registrationId;
 
-    if (organization.registrationId) {
+    if (organization?.registrationId) {
       this.busy = of(organization.registrationId)
         .pipe(take(1), this.getDoingBusinessAs())
         .subscribe();

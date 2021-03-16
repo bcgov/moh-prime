@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { Role } from '@auth/shared/enum/role.enum';
 
-import { AuthService } from '@auth/shared/services/auth.service';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
@@ -22,12 +22,12 @@ export class LimitsConditionsClausesComponent implements OnInit {
   public preview: string;
   public hasActions: boolean;
   public editorConfig: Record<string, string>;
+  public Role = Role;
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private adjudicationResource: AdjudicationResource,
-    private authService: AuthService
   ) {
     this.hasActions = false;
     this.editorConfig = {
@@ -38,10 +38,6 @@ export class LimitsConditionsClausesComponent implements OnInit {
       toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
       menubar: 'false'
     };
-  }
-
-  public get canEdit(): boolean {
-    return this.authService.isAdmin();
   }
 
   public get note(): FormControl {
@@ -82,8 +78,8 @@ export class LimitsConditionsClausesComponent implements OnInit {
     });
   }
 
-  private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode)
+  private getEnrollee(enrolleeId: number) {
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
         if (enrollee.accessAgreementNote) {

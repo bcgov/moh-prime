@@ -19,6 +19,8 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('OrganizationSigningAuthorityComponent', () => {
   let component: OrganizationSigningAuthorityComponent;
@@ -54,6 +56,10 @@ describe('OrganizationSigningAuthorityComponent', () => {
           provide: OrganizationService,
           useClass: MockOrganizationService
         },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        },
         OrganizationFormStateService
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -67,7 +73,7 @@ describe('OrganizationSigningAuthorityComponent', () => {
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);
       // Add the bound FormGroup to the component
-      component.form = organizationFormStateService.signingAuthorityForm as FormGroup;
+      component.form = organizationFormStateService.organizationSigningAuthorityFormState.form;
       fixture.detectChanges();
     })
   );

@@ -13,7 +13,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
 
-import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -51,7 +51,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     protected siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    authService: AuthService,
+    permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService
   ) {
@@ -60,7 +60,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       router,
       organizationResource,
       siteResource,
-      authService,
+      adjudicationResource,
+      permissionService,
       utilsService,
       dialog);
 

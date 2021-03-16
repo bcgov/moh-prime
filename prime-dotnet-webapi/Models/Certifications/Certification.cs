@@ -31,7 +31,7 @@ namespace Prime.Models
         public string LicenseNumber { get; set; }
 
         /// <summary>
-        ///  5-digit numeric number that the PharmaNet College API expects
+        /// 5-digit numeric number that the PharmaNet College API expects
         /// </summary>
         [RegularExpression(@"([0-9]{5})", ErrorMessage = "Practitioner ID should be 5 numeric characters")]
         public string PractitionerId { get; set; }
@@ -45,9 +45,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Practice Practice { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public string FullLicenseNumber { get { return $"{License?.Prefix}-{LicenseNumber}"; } }
     }
 }

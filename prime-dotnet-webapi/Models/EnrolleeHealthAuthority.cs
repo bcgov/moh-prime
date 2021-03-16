@@ -18,10 +18,5 @@ namespace Prime.Models
 
         [JsonIgnore]
         public HealthAuthority HealthAuthority { get; set; }
-
-        public FacilityCode FacilityCode { get; set; }
-
-        [JsonIgnore]
-        public Facility Facility { get; set; }
     }
 }

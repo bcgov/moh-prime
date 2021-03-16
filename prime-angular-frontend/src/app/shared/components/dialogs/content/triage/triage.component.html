@@ -1,9 +1,9 @@
 <app-contextual-help icon="topic"
+                     titleIcon="network_check"
+                     class="test"
                      [small]="true"
                      [advanced]="true"
-                     titleIcon="network_check"
-                     class="test">
-
+                     (opened)="onOpen()">
   <ng-container appContextualTitle>
     Triage
   </ng-container>
@@ -31,25 +31,25 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="!canEdit"
+            [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
             (click)="onEscalate()">
       <mat-icon>error_outline</mat-icon>
       <span>Enrolment Escalation</span>
     </button>
     <button mat-menu-item
-            [disabled]="!canEdit"
+            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
             (click)="onEnableEditing()">
       <mat-icon>lock_open</mat-icon>
       <span>Enable Editing</span>
     </button>
     <button mat-menu-item
-            [disabled]="!canEdit"
+            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
             (click)="onRerunRules()">
       <mat-icon>redo</mat-icon>
       <span>Rerun Rules</span>
     </button>
     <button mat-menu-item
-            [disabled]="!canEdit"
+            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
             (click)="onNotify()">
       <mat-icon>mail</mat-icon>
       <span>Send Email</span>

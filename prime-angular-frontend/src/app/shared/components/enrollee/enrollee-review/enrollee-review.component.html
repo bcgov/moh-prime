@@ -1,6 +1,6 @@
-<app-enrollee-profile [enrollee]="enrollee"></app-enrollee-profile>
+<app-bcsc-profile [user]="enrollee"></app-bcsc-profile>
 
-<section *ngIf="hasPreferredName && (identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR)"
+<section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR"
          class="mb-4">
   <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
        so it is pointless to show the preferred names -->
@@ -16,60 +16,37 @@
     </button>
   </app-page-subheader>
 
-  <app-enrollee-property title="Preferred First Name">
-    {{ enrollee?.preferredFirstName | default }}
-  </app-enrollee-property>
+  <ng-container *ngIf="hasPreferredName; else noPreferredName">
+    <app-enrollee-property title="Preferred First Name">
+      {{ enrollee?.preferredFirstName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Middle Name">
-    {{ enrollee?.preferredMiddleName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Middle Name">
+      {{ enrollee?.preferredMiddleName | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Preferred Last Name">
-    {{ enrollee?.preferredLastName | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Preferred Last Name">
+      {{ enrollee?.preferredLastName | default }}
+    </app-enrollee-property>
+  </ng-container>
 
-</section>
-
-<section *ngIf="hasMailingAddress"
-         class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Preferred Address</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Preferred Address"
-            (click)="onRoute(demographicRoutePath)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Country">
-    {{ enrollee.mailingAddress?.countryCode | configCode: 'countries' | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Province">
-    {{ enrollee.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Street Address">
-    {{ enrollee.mailingAddress?.street | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property *ngIf="enrollee.mailingAddress?.street2"
-                         title="Street Address 2">
-    {{ enrollee.mailingAddress?.street2 | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="City">
-    {{ enrollee.mailingAddress?.city | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Postal Code">
-    {{ enrollee.mailingAddress?.postal | postal | default }}
-  </app-enrollee-property>
+  <ng-template #noPreferredName>
+    No preferred name entered.
+  </ng-template>
 
 </section>
+
+<app-address-view title="Physical Address"
+                  [address]="enrollee?.physicalAddress"
+                  [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="true"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
+
+<app-address-view title="Mailing Address"
+                  [address]="enrollee?.mailingAddress"
+                  [showRedirect]="showEditRedirect"
+                  [showIfEmpty]="true"
+                  (route)="onRoute(demographicRoutePath)"></app-address-view>
 
 <section class="mb-4">
 
@@ -156,7 +133,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Health Authority"
-            (click)="onRoute(EnrolmentRoutes.HEALTH_AUTHORITY)">
+            (click)="onRoute(EnrolmentRoutes.CARE_SETTING)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -166,15 +143,6 @@
     <app-enrollee-property title="Health Authority"
                            [makeBold]="true">
       <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
-
-      <app-enrollee-property title="Facility">
-        <ul class="list-unstyled">
-          <li *ngFor="let facilitiy of healthAuthority.facilityCodes"
-              class="mb-2">
-            {{ facilitiy | configCode: 'facilities' }}
-          </li>
-        </ul>
-      </app-enrollee-property>
     </app-enrollee-property>
 
   </ng-container>
@@ -209,7 +177,7 @@
       {{ certification.licenseNumber | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Pratitioner ID">
+    <app-enrollee-property title="Prescriber ID">
       {{ certification.practitionerId | default }}
     </app-enrollee-property>
 
@@ -326,8 +294,12 @@
             {{ site.pec | default }}
           </app-enrollee-property>
 
-          <app-enrollee-property title="Site Address">
-            <div class="mb-3">{{ site.physicalAddress?.street | default }}</div>
+          <app-enrollee-property title="Site Address"
+                                 [makeBold]="true">
+            <!-- <div class="mb-3">{{ site.physicalAddress?.street | default }}</div> -->
+            <app-enrollee-property title="Street">
+              {{ site.physicalAddress?.street | default }}
+            </app-enrollee-property>
 
             <app-enrollee-property title="City">
               {{ site.physicalAddress?.city | default }}

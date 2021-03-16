@@ -19,14 +19,9 @@ namespace Prime
             return userId == null ? Guid.Empty : new Guid(userId);
         }
 
-        public static bool IsAdmin(this ClaimsPrincipal User)
+        public static bool IsAdministrant(this ClaimsPrincipal User)
         {
-            return User.IsInRole(Roles.PrimeAdmin);
-        }
-
-        public static bool HasAdminView(this ClaimsPrincipal User)
-        {
-            return User.IsInRole(Roles.PrimeReadonlyAdmin);
+            return User.IsInRole(Roles.PrimeAdministrant);
         }
 
         public static int GetIdentityAssuranceLevel(this ClaimsPrincipal User)
@@ -53,17 +48,17 @@ namespace Prime
             return user.FindFirstValue(Claims.FamilyName);
         }
 
-        public static PhysicalAddress GetPhysicalAddress(this ClaimsPrincipal User)
+        public static VerifiedAddress GetVerifiedAddress(this ClaimsPrincipal User)
         {
             string addressClaim = User?.FindFirstValue(Claims.Address);
-            if (addressClaim == null)
+            if (string.IsNullOrWhiteSpace(addressClaim))
             {
                 return null;
             }
 
             var address = JsonConvert.DeserializeObject<TokenAddress>(addressClaim);
 
-            return address?.ToModel();
+            return address?.AsVerifiedAddress();
         }
 
         private class TokenAddress
@@ -74,9 +69,15 @@ namespace Prime
             public string Postal_code { get; set; }
             public string Country { get; set; }
 
-            public PhysicalAddress ToModel()
+            public VerifiedAddress AsVerifiedAddress()
             {
-                return new PhysicalAddress
+                // Partial addresses are not accepted; reject if any fields are not present.
+                if (new[] { Street_address, Locality, Region, Postal_code, Country }.Any(x => string.IsNullOrWhiteSpace(x)))
+                {
+                    return null;
+                }
+
+                return new VerifiedAddress
                 {
                     CountryCode = Country,
                     ProvinceCode = Region,

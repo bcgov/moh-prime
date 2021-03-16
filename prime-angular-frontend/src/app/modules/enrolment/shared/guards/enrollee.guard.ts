@@ -1,10 +1,12 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Role } from '@auth/shared/enum/role.enum';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ export class EnrolleeGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
+    private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
@@ -30,10 +33,10 @@ export class EnrolleeGuard extends BaseGuard {
 
       if (!authenticated) {
         destinationRoute = this.config.routes.auth;
-      } else if (this.authService.isEnrollee()) {
+      } else if (this.permissionService.hasRoles(Role.ENROLLEE)) {
         // Allow route to resolve
         return resolve(true);
-      } else if (this.authService.isAdmin()) {
+      } else if (this.permissionService.hasRoles(Role.ADMIN)) {
         destinationRoute = this.config.routes.adjudication;
       }
 

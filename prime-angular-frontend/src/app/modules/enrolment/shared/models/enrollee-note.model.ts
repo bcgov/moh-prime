@@ -1,5 +1,6 @@
 //
 export class EnrolleeNote {
+  id: number;
   enrolleeId: number = null;
   note: string = null;
 

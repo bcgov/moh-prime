@@ -1,13 +1,9 @@
-@using Prime.Services
-@model EmailParams
-
-@{
-  var site = Model.Site;
-}
+@using Prime.ViewModels.Emails
+@model SiteApprovalEmailViewModel
 
 <p>
-  The site you registered in PRIME, @site.DoingBusinessAs, has been approved by
-  the Ministry of Health. Your SiteID is @site.PEC.
+  The site you registered in PRIME, @Model.DoingBusinessAs, has been approved by
+  the Ministry of Health. Your SiteID is @Model.Pec.
 </p>
 
 <p>

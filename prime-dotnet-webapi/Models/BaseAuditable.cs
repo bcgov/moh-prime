@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public class BaseAuditable : IAuditable
+    public class BaseAuditable
     {
         protected BaseAuditable()
         { }

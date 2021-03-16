@@ -9,16 +9,22 @@ import { HelpComponent } from '@lib/modules/root-routes/components/help/help.com
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
+import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 const routes: Routes = [
   {
     path: ProvisionerAccessRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/provisioner-access/provisioner-access.module').then(m => m.ProvisionerAccessModule)
   },
-  // {
-  //   path: PhsaEformsRoutes.MODULE_PATH,
-  //   loadChildren: () => import('./modules/phsa-eforms/phsa-eforms.module').then(m => m.PhsaEformsModule)
-  // },
+  {
+    path: PhsaEformsRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/phsa-eforms/phsa-eforms.module').then(m => m.PhsaEformsModule)
+  },
+  {
+    path: GisEnrolmentRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/gis-enrolment/gis-enrolment.module').then(m => m.GisEnrolmentModule)
+  },
   {
     path: AppRoutes.DENIED,
     component: AccessDeniedComponent,

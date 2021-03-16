@@ -10,6 +10,7 @@ using Prime.Auth;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.HttpClients.Mail;
 
 namespace Prime.Controllers
 {
@@ -59,7 +60,7 @@ namespace Prime.Controllers
         /// Gets all of the access tokens for the user.
         /// </summary>
         [HttpGet("token", Name = nameof(GetAccessTokens))]
-        [Authorize(Policy = Policies.User)]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
@@ -78,25 +79,17 @@ namespace Prime.Controllers
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
         [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Policy = Policies.User)]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
         public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
         {
-            if (string.IsNullOrWhiteSpace(providedEmails))
+            var emails = Email.ParseCommaSeparatedEmails(providedEmails);
+            if (!emails.Any())
             {
-                ModelState.AddModelError("Email(s)", "No emails were provided.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
-            }
-
-            string[] emails = ((string)providedEmails).Split(",");
-
-            // Emails are either "Other" provisioners, or office manager(s)
-            if (emails.Any() && !EmailService.AreValidEmails(emails))
-            {
-                ModelState.AddModelError("Email(s)", "The email(s) provided are not valid.");
+                ModelState.AddModelError("Emails", "The email(s) provided are not valid.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -119,7 +112,7 @@ namespace Prime.Controllers
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Provisioner link sent to email(s): " + string.Join(",", emails));
+            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
@@ -148,7 +141,7 @@ namespace Prime.Controllers
         /// Gets the GPID and renewal date for the user(s) with the provided HPDIDs (if they exist). Requires a valid direct access grant token.
         /// </summary>
         [HttpGet("gpids", Name = nameof(HpdidLookup))]
-        [Authorize(Policy = Policies.ExternalHpdidAccess)]
+        [Authorize(Roles = Roles.ExternalHpdidAccess)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
@@ -164,7 +157,7 @@ namespace Prime.Controllers
         /// Validates the supplied information against the enrollee record with the given GPID. Requires a valid direct access grant token.
         /// </summary>
         [HttpPost("gpids/{gpid}/validate", Name = nameof(ValidateGpid))]
-        [Authorize(Policy = Policies.ExternalGpidValidation)]
+        [Authorize(Roles = Roles.ExternalGpidValidation)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

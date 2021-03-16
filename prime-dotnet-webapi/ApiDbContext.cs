@@ -1,14 +1,14 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Prime.Models;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using System.IO;
+
+using Prime.Models;
 
 namespace Prime
 {
@@ -40,8 +40,6 @@ namespace Prime
 
     public class ApiDbContext : DbContext
     {
-        private readonly DateTimeOffset SEEDING_DATE = DateTimeOffset.Now;
-
         private readonly IHttpContextAccessor _context;
 
         public ApiDbContext(
@@ -102,9 +100,11 @@ namespace Prime
         public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
         public DbSet<SiteAdjudicationDocument> SiteAdjudicationDocuments { get; set; }
         public DbSet<SiteRegistrationReviewDocument> SiteRegistrationReviewDocuments { get; set; }
-        public DbSet<DocumentAccessToken> DocumentAccessToken { get; set; }
+        public DbSet<DocumentAccessToken> DocumentAccessTokens { get; set; }
 
         public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
+        public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
+        public DbSet<SiteNotification> SiteNotifications { get; set; }
 
         public override int SaveChanges()
         {
@@ -123,29 +123,27 @@ namespace Prime
         private void ApplyAudits()
         {
             ChangeTracker.DetectChanges();
+            var updated = ChangeTracker.Entries()
+                .Where(x => x.Entity is BaseAuditable
+                    && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-            var created = ChangeTracker.Entries().Where(x => x.State == EntityState.Added);
-            var modified = ChangeTracker.Entries().Where(x => x.State == EntityState.Modified);
             var currentUser = _context?.HttpContext?.User.GetPrimeUserId() ?? Guid.Empty;
-            var currentDateTime = SEEDING_DATE;
+            var currentTime = DateTimeOffset.Now;
 
-            foreach (var item in created)
+            foreach (var entry in updated)
             {
-                if (item.Entity is IAuditable entity)
+                entry.CurrentValues[nameof(BaseAuditable.UpdatedUserId)] = currentUser;
+                entry.CurrentValues[nameof(BaseAuditable.UpdatedTimeStamp)] = currentTime;
+
+                if (entry.State == EntityState.Added)
                 {
-                    item.CurrentValues[nameof(IAuditable.CreatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.CreatedTimeStamp)] = currentDateTime;
-                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
+                    entry.CurrentValues[nameof(BaseAuditable.CreatedUserId)] = currentUser;
+                    entry.CurrentValues[nameof(BaseAuditable.CreatedTimeStamp)] = currentTime;
                 }
-            }
-
-            foreach (var item in modified)
-            {
-                if (item.Entity is IAuditable entity)
+                else
                 {
-                    item.CurrentValues[nameof(IAuditable.UpdatedUserId)] = currentUser;
-                    item.CurrentValues[nameof(IAuditable.UpdatedTimeStamp)] = currentDateTime;
+                    entry.Property(nameof(BaseAuditable.CreatedUserId)).IsModified = false;
+                    entry.Property(nameof(BaseAuditable.CreatedTimeStamp)).IsModified = false;
                 }
             }
         }
@@ -158,21 +156,8 @@ namespace Prime
             modelBuilder.Entity<Address>()
                 .HasDiscriminator<AddressType>("AddressType")
                 .HasValue<PhysicalAddress>(AddressType.Physical)
-                .HasValue<MailingAddress>(AddressType.Mailing);
-            #endregion
-
-            #region IAuditable
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                if (typeof(IAuditable).IsAssignableFrom(entityType.ClrType))
-                {
-                    entityType.FindProperty(nameof(IAuditable.CreatedUserId))
-                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-
-                    entityType.FindProperty(nameof(IAuditable.CreatedTimeStamp))
-                        .SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
-                }
-            }
+                .HasValue<MailingAddress>(AddressType.Mailing)
+                .HasValue<VerifiedAddress>(AddressType.Verified);
             #endregion
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);

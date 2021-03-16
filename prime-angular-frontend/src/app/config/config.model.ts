@@ -1,3 +1,5 @@
+import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+
 export interface Configuration {
   practices: PracticeConfig[];
   colleges: CollegeConfig[];
@@ -31,13 +33,14 @@ export interface PracticeConfig extends Config<number> {
   collegePractices: CollegePracticeConfig[];
 }
 
-export interface LicenseConfig extends Config<number> {
+export class LicenseConfig extends Config<number> implements IWeightedConfig {
   prefix: string;
   collegeLicenses: CollegeLicenseConfig[];
   licensedToProvideCare: boolean;
   namedInImReg: boolean;
   weight: number;
   validate: boolean;
+  prescriberIdType: PrescriberIdTypeEnum;
 }
 
 export interface CollegeLicenseConfig {
@@ -56,4 +59,8 @@ export interface VendorConfig extends Config<number> {
 
 export interface ProvinceConfig extends Config<string> {
   countryCode: string;
+}
+
+export interface IWeightedConfig {
+  weight: number;
 }

@@ -7,9 +7,9 @@ import { Subscription } from 'rxjs';
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { CollegeLicenceClass } from '@shared/enums/college-licence-class.enum';
+import { AddressLine } from '@shared/models/address.model';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -118,7 +118,7 @@ export class RemoteUserComponent implements OnInit {
 
   public collegeFilterPredicate() {
     return (collegeConfig: CollegeConfig) =>
-      (collegeConfig.code === CollegeLicenceClass.CPSBC || collegeConfig.code === CollegeLicenceClass.BCCNM);
+      (collegeConfig.code === CollegeLicenceClassEnum.CPSBC || collegeConfig.code === CollegeLicenceClassEnum.BCCNM);
   }
 
   public licenceFilterPredicate() {

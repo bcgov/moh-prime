@@ -10,7 +10,8 @@ namespace Prime.Services
 {
     public interface IOrganizationService
     {
-        Task<IEnumerable<Organization>> GetOrganizationsAsync(int? partyId = null);
+        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync();
+        Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
         Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
@@ -19,7 +20,6 @@ namespace Prime.Services
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
         Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId);
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
-        Task<Organization> GetOrganizationByPartyIdAsync(int partyId);
         Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);

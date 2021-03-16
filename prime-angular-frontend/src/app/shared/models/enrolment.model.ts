@@ -56,6 +56,7 @@ export interface HttpEnrollee extends Enrollee {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
+  gpid: string;
 }
 
 /**
@@ -126,4 +127,5 @@ export interface EnrolleeListViewModel {
   alwaysManual: boolean;
   remoteAccess: boolean;
   careSettingCodes: number[];
+  hasNotification: boolean;
 }

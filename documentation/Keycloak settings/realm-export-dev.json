@@ -52,12 +52,7 @@
       {
         "id": "1d6a0282-481f-4423-a924-de008ffc1b3a",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -72,8 +67,32 @@
         "attributes": {}
       },
       {
-        "id": "648cf4c5-ad27-45e7-9f0f-47ef1b18d0e3",
-        "name": "prime_readonly_admin",
+        "id": "c3872565-c41d-452e-89a1-b223e00b86b8",
+        "name": "enrollee_view",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "fa86dac6-48e1-4d69-9300-75d45fd1ad32",
+        "name": "site_view",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "65e88a6c-22f5-4990-8ca6-9bc3288d213e",
+        "name": "site_edit",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "68a816d8-8a86-4472-aeeb-bbfd3a74477d",
+        "name": "enrollee_elevated_management",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -89,15 +108,18 @@
         "attributes": {}
       },
       {
-        "id": "57efb107-0882-49d1-bae8-199ff82344f3",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
+        "id": "943fb54a-7873-4b73-bad7-7692c38642d6",
+        "name": "prime_administrant",
+        "description": "A role representing the basic ability of the user is to access the \"admin\" portion of PRIME.",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "dc232d2e-ff00-4fb9-88e8-0f014dfbe5e8",
+        "name": "enrollee_triage",
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -146,9 +168,26 @@
         "attributes": {}
       },
       {
+        "id": "515bf6c3-3b8d-463d-ba0f-09302b07251c",
+        "name": "enrollee_approve",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "301349dc-e58b-4666-90c0-f6d9782af655",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "7144c2a6-44a2-4d2e-b6c4-2b058252426b",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -475,6 +514,67 @@
     }
   },
   "groups": [
+    {
+      "id": "01a2dc49-8002-4529-96b5-28b13a228975",
+      "name": "Analyst",
+      "path": "/Analyst",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "site_edit",
+        "site_view",
+        "prime_administrant",
+        "enrollee_approve",
+        "enrollee_triage"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "230b943f-a68f-4c36-8833-6622ba077342",
+      "name": "Clerk",
+      "path": "/Clerk",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "site_edit",
+        "site_view",
+        "prime_administrant",
+        "enrollee_triage"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "bf2ca378-1b78-40d2-af3b-2571459d567e",
+      "name": "HIBCHelpdesk",
+      "path": "/HIBCHelpdesk",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "site_view",
+        "prime_administrant"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
+    {
+      "id": "858942b2-4963-46c0-8cb2-97aa6f8fa5da",
+      "name": "Manager",
+      "path": "/Manager",
+      "attributes": {},
+      "realmRoles": [
+        "enrollee_view",
+        "site_edit",
+        "site_view",
+        "enrollee_elevated_management",
+        "prime_administrant",
+        "enrollee_approve",
+        "enrollee_triage"
+      ],
+      "clientRoles": {},
+      "subGroups": []
+    },
     {
       "id": "cd651a56-722e-401a-a4d1-6cd8c5f934a8",
       "name": "Realm Administrator",
@@ -4017,6 +4117,6 @@
   "clientAuthenticationFlow": "clients",
   "dockerAuthenticationFlow": "docker auth",
   "attributes": {},
-  "keycloakVersion": "7.4.2.GA",
+  "keycloakVersion": "7.4.4.GA",
   "userManagedAccessAllowed": false
 }

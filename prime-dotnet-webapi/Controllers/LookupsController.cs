@@ -4,18 +4,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = Policies.User)]
     public class LookupsController : ControllerBase
     {
         private readonly ILookupService _lookupService;
@@ -27,13 +25,14 @@ namespace Prime.Controllers
             _collegeLicenceClient = collegeLicenceClient;
         }
 
-        //GET: /api/Lookup
+        //GET: /api/Lookups
         /// <summary>
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<LookupEntity>> GetLookups()
+        public async Task<ActionResult> GetLookups()
         {
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
@@ -45,19 +44,11 @@ namespace Prime.Controllers
         /// For testing college licence validation
         /// </summary>
         [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
-        [Authorize(Policy = Policies.SuperAdmin)]
-        public async Task<ActionResult<PharmanetCollegeRecord>> LicenceCodeTest(string collegePrefix, string practitionerId)
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(typeof(ApiResultResponse<PharmanetCollegeRecord>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> LicenceCodeTest(string collegePrefix, string licenceNumber)
         {
-            var cert = new Certification
-            {
-                PractitionerId = practitionerId,
-                License = new License
-                {
-                    Prefix = collegePrefix
-                }
-            };
-
-            var record = await _collegeLicenceClient.GetCollegeRecordAsync(cert);
+            var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
             return Ok(ApiResponse.Result(record));
         }
