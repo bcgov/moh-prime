@@ -9,7 +9,8 @@
     </ng-container>
   </app-page-subheader>
 
-  <app-enrollee-review [enrolment]="enrolmentSubmission?.profileSnapshot"></app-enrollee-review>
+  <app-enrollee-review *ngIf="enrolmentSubmission"
+                       [enrolment]="enrolmentSubmission?.profileSnapshot"></app-enrollee-review>
 
   <div class="row justify-content-between">
     <div class="col pt-4">
