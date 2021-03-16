@@ -8,14 +8,12 @@ import { Subscription, Observable, of, pipe } from 'rxjs';
 import { debounceTime, switchMap, tap, exhaustMap, take } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { IPage } from '@registration/shared/interfaces/page.interface';
 import { Site } from '@registration/shared/models/site.model';
 import { OrgBookAutocompleteHttpResponse } from '@registration/shared/models/orgbook.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -27,7 +25,7 @@ import { OrgBookResource } from '@registration/shared/services/org-book-resource
   templateUrl: './organization-name.component.html',
   styleUrls: ['./organization-name.component.scss']
 })
-export class OrganizationNameComponent implements OnInit, IPage, IFormPage {
+export class OrganizationNameComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

@@ -20,7 +20,7 @@ import { OrganizationNameComponent } from './pages/organization-name/organizatio
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
-import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
+import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
@@ -41,7 +41,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     OrganizationAgreementComponent,
 
     CareSettingPageComponent,
-    BusinessLicenceComponent,
+    BusinessLicencePageComponent,
     SiteAddressPageComponent,
     HoursOperationPageComponent,
     RemoteUsersPageComponent,

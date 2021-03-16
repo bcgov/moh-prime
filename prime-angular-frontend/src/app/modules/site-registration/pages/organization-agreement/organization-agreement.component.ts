@@ -7,8 +7,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription, EMPTY, of, noop } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
-import * as moment from 'moment';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -19,7 +17,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { IPage } from '@registration/shared/interfaces/page.interface';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
@@ -28,7 +25,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
   templateUrl: './organization-agreement.component.html',
   styleUrls: ['./organization-agreement.component.scss']
 })
-export class OrganizationAgreementComponent implements OnInit, IPage {
+export class OrganizationAgreementComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public routeUtils: RouteUtils;

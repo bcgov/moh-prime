@@ -1,16 +1,19 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
@@ -22,15 +25,15 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
 
 @Component({
-  selector: 'app-business-licence',
-  templateUrl: './business-licence.component.html',
-  styleUrls: ['./business-licence.component.scss']
+  selector: 'app-business-licence-page',
+  templateUrl: './business-licence-page.component.html',
+  styleUrls: ['./business-licence-page.component.scss']
 })
-export class BusinessLicenceComponent implements OnInit {
-  public busy: Subscription;
-  public form: FormGroup;
+export class BusinessLicencePageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: BusinessLicencePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicence: BusinessLicence;
@@ -45,16 +48,19 @@ export class BusinessLicenceComponent implements OnInit {
   @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
-    private formUtilsService: FormUtilsService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private route: ActivatedRoute,
+    router: Router
   ) {
+    super(dialog, formUtilsService);
+
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.uploadedFile = false;
@@ -81,59 +87,6 @@ export class BusinessLicenceComponent implements OnInit {
     return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
-  public onSubmit() {
-    const siteId = this.route.snapshot.params.sid;
-    let method$: Observable<any>;
-    if (
-      this.formUtilsService.checkValidity(this.form) &&
-      (this.uploadedFile || this.deferredLicenceToggle?.checked || this.businessLicence?.businessLicenceDocument)
-    ) {
-      const payload = this.siteFormStateService.json;
-
-      if (this.deferredLicenceToggle?.checked) {
-
-        this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
-        if (this.businessLicence.id) {
-          method$ = (this.businessLicence.businessLicenceDocument)
-            // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
-            ? this.siteResource.removeBusinessLicenceDocument(siteId)
-              .pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
-            // Returning: [] * [Business Licence Updated] --> [...]
-            : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
-        } else {
-          // First time through: [] * [Business Licence Created] --> [...]
-          method$ = this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
-        }
-      } else {
-        const updateSite = this.siteResource.updateSite(payload);
-
-        if (this.businessLicence.id) {
-          method$ = (!this.uploadedFile)
-            // Returning: [Previously attached document] * [Site Updated] --> [...]
-            ? updateSite
-            // Returning: [Previously attached document] * [Site Updated, New document uploaded] --> [...]
-            : updateSite.pipe(exhaustMap(() =>
-              this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)));
-        } else {
-          // First time through: [] * [Business Licence Created, New document uploaded] --> [...]
-          method$ = updateSite.pipe(exhaustMap(() =>
-            this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
-        }
-      }
-
-      method$.subscribe(() => {
-        // TODO should make this cleaner, but for now good enough
-        // Remove the business licence GUID to prevent 404 already
-        // submitted if resubmited in same session
-        this.businessLicenceGuid.patchValue(null);
-        this.form.markAsPristine();
-        this.nextRoute();
-      });
-    } else if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
-      this.hasNoBusinessLicenceError = true;
-    }
-  }
-
   public onUpload(document: BaseDocument) {
     this.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
@@ -147,14 +100,6 @@ export class BusinessLicenceComponent implements OnInit {
 
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
-  }
-
-  public nextRoute() {
-    if (this.isCompleted) {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
-    } else {
-      this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
-    }
   }
 
   public downloadBusinessLicence(event: Event) {
@@ -183,20 +128,91 @@ export class BusinessLicenceComponent implements OnInit {
 
   public ngOnInit() {
     this.createFormInstance();
+    this.patchForm();
     this.initForm();
   }
 
-  private createFormInstance() {
+  protected createFormInstance() {
     this.form = this.siteFormStateService.businessForm;
   }
 
-  private initForm() {
+  protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
     this.form.markAsPristine();
+  }
+
+  protected initForm(): void {
+    const site = this.siteService.site;
     this.getBusinessLicence(site);
     this.getDoingBusinessAs(site);
+  }
+
+  protected additionalValidityChecks(): boolean {
+    return this.uploadedFile || this.deferredLicenceToggle?.checked || !!this.businessLicence?.businessLicenceDocument;
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoBusinessLicenceError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (!this.uploadedFile && !this.deferredLicenceToggle?.checked && !this.businessLicence?.businessLicenceDocument) {
+      this.hasNoBusinessLicenceError = true;
+    }
+  }
+
+  protected performSubmission(): Observable<BusinessLicence | BusinessLicenceDocument> | NoContent {
+    const siteId = this.route.snapshot.params.sid;
+    const payload = this.siteFormStateService.json;
+    let request$: Observable<BusinessLicence | BusinessLicenceDocument> | NoContent;
+
+    if (this.deferredLicenceToggle?.checked) {
+      this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
+
+      if (this.businessLicence.id) {
+        request$ = (this.businessLicence.businessLicenceDocument)
+          // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
+          ? this.siteResource.removeBusinessLicenceDocument(siteId)
+            .pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
+          // Returning: [] * [Business Licence Updated] --> [...]
+          : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
+      } else {
+        // First time through: [] * [Business Licence Created] --> [...]
+        request$ = this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
+      }
+    } else {
+      const updateSite = this.siteResource.updateSite(payload);
+
+      if (this.businessLicence.id) {
+        request$ = (!this.uploadedFile)
+          // Returning: [Previously attached document] * [Site Updated] --> [...]
+          ? updateSite
+          // Returning: [Previously attached document] * [Site Updated, New document uploaded] --> [...]
+          : updateSite.pipe(exhaustMap(() =>
+            this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)));
+      } else {
+        // First time through: [] * [Business Licence Created, New document uploaded] --> [...]
+        request$ = updateSite.pipe(exhaustMap(() =>
+          this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
+      }
+    }
+
+    return request$;
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    // Remove the business licence GUID to prevent 404 already
+    // submitted if resubmited in same session
+    this.businessLicenceGuid.patchValue(null);
+    this.form.markAsPristine();
+
+    const routePath = (this.isCompleted)
+      ? SiteRoutes.SITE_REVIEW
+      : SiteRoutes.SITE_ADDRESS;
+
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   private getBusinessLicence(site: Site) {
