@@ -173,29 +173,29 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
       this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
 
       if (this.businessLicence.id) {
+        // Update the business licence, and if a document already exists remove it
+        const updateBusinessLicence$ = this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
         request$ = (this.businessLicence.businessLicenceDocument)
-          // Returning: [Previously attached document] * [Document removed, Business Licence Updated] --> [...]
-          ? this.siteResource.removeBusinessLicenceDocument(siteId)
-            .pipe(exhaustMap(() => this.siteResource.updateBusinessLicence(siteId, this.businessLicence)))
-          // Returning: [] * [Business Licence Updated] --> [...]
-          : this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
-      } else {
-        // First time through: [] * [Business Licence Created] --> [...]
+          ? this.siteResource.removeBusinessLicenceDocument(siteId).pipe(exhaustMap(() => updateBusinessLicence$))
+          : updateBusinessLicence$;
+      }
+      else {
+        // Initial time through, and no business licence exists
         request$ = this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
       }
-    } else {
-      const updateSite = this.siteResource.updateSite(payload);
+    }
+    else {
+      const updateSite$ = this.siteResource.updateSite(payload);
 
       if (this.businessLicence.id) {
-        request$ = (!this.uploadedFile)
-          // Returning: [Previously attached document] * [Site Updated] --> [...]
-          ? updateSite
-          // Returning: [Previously attached document] * [Site Updated, New document uploaded] --> [...]
-          : updateSite.pipe(exhaustMap(() =>
-            this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)));
-      } else {
-        // First time through: [] * [Business Licence Created, New document uploaded] --> [...]
-        request$ = updateSite.pipe(exhaustMap(() =>
+        // Update the site, and if a document has been uploaded create a new business licence
+        request$ = (this.uploadedFile)
+          ? updateSite$.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)))
+          : updateSite$;
+      }
+      else {
+        // Initial time through and no business licence exists
+        request$ = updateSite$.pipe(exhaustMap(() =>
           this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
       }
     }
