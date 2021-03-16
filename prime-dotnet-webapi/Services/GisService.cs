@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -51,9 +52,19 @@ namespace Prime.Services
 
             if (currentGisEnrolment == null)
             {
+                var currentParty = await _context.Parties
+                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
+
+                if (currentParty == null)
+                {
+                    currentParty = new Party();
+                    _context.Parties.Add(currentParty);
+                    currentParty.Addresses = new List<PartyAddress>();
+                }
+
                 currentGisEnrolment = new GisEnrolment
                 {
-                    Party = new Party()
+                    Party = currentParty
                 };
                 _context.GisEnrolments.Add(currentGisEnrolment);
             }
