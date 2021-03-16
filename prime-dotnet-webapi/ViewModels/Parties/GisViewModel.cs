@@ -8,7 +8,7 @@ namespace Prime.ViewModels.Parties
     {
         public int Id { get; set; }
         public string LdapUsername { get; set; }
-        public DateTimeOffset LdapLoginSuccessDate { get; set; }
+        public DateTimeOffset? LdapLoginSuccessDate { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Organization { get; set; }
