@@ -17,12 +17,13 @@ import { AdministratorFormState } from '@registration/pages/administrator-page/a
 import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
 import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
+import { CareSettingPageFormState } from '@registration/pages/care-setting/care-setting-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormStateService<Site> {
-  public careSettingTypeForm: FormGroup;
+  public careSettingPageFormState: CareSettingPageFormState;
   public businessForm: FormGroup;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
@@ -69,7 +70,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { careSettingCode, vendorCode, pec } = this.careSettingTypeForm.getRawValue();
+    const { careSettingCode, siteVendors, pec } = this.careSettingPageFormState.json;
     const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
@@ -89,10 +90,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       provisionerId: this.provisionerId,
       // provisioner (N/A)
       careSettingCode,
-      siteVendors: [{ // TODO only use a single vendor, should look at dropping vendors for vendor
-        siteId: this.siteId,
-        vendorCode
-      }],
+      siteVendors,
       businessLicenceGuid,
       deferredLicenceReason,
       doingBusinessAs,
@@ -119,7 +117,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get forms(): AbstractControl[] {
     return [
-      this.careSettingTypeForm,
+      this.careSettingPageFormState.form,
       this.businessForm,
       this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
@@ -136,7 +134,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * clear previous form data from the service.
    */
   protected buildForms() {
-    this.careSettingTypeForm = this.buildCareSettingTypeForm();
+    this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
     this.businessForm = this.buildBusinessForm();
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
@@ -155,11 +153,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    this.careSettingTypeForm.patchValue(site);
-
-    if (site.siteVendors?.length) {
-      this.careSettingTypeForm.get('vendorCode').patchValue(site.siteVendors[0].vendorCode);
-    }
+    this.careSettingPageFormState.patchValue(site);
 
     if (site.doingBusinessAs) {
       this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
@@ -184,23 +178,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   /**
    * Form Builders and Helpers
    */
-
-  private buildCareSettingTypeForm(code: number = null, pec: string = null): FormGroup {
-    return this.fb.group({
-      careSettingCode: [
-        code,
-        [Validators.required]
-      ],
-      vendorCode: [
-        0,
-        [FormControlValidators.requiredIndex]
-      ],
-      pec: [
-        pec,
-        [Validators.required]
-      ]
-    });
-  }
 
   private buildBusinessForm(): FormGroup {
     return this.fb.group({
