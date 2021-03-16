@@ -25,11 +25,11 @@ import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page
 import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
-  selector: 'app-remote-user',
-  templateUrl: './remote-user.component.html',
-  styleUrls: ['./remote-user.component.scss']
+  selector: 'app-remote-user-page',
+  templateUrl: './remote-user-page.component.html',
+  styleUrls: ['./remote-user-page.component.scss']
 })
-export class RemoteUserComponent extends AbstractEnrolmentPage implements OnInit {
+export class RemoteUserPageComponent extends AbstractEnrolmentPage implements OnInit {
   /**
    * @description
    * FormState of the parent form, which has reuse in child form

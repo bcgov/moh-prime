@@ -7,19 +7,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { RemoteUserComponent } from './remote-user.component';
+import { RemoteUserPageComponent } from './remote-user-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
-describe('RemoteUserComponent', () => {
-  let component: RemoteUserComponent;
-  let fixture: ComponentFixture<RemoteUserComponent>;
+describe('RemoteUserPageComponent', () => {
+  let component: RemoteUserPageComponent;
+  let fixture: ComponentFixture<RemoteUserPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RemoteUserComponent
+        RemoteUserPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -27,7 +27,7 @@ describe('RemoteUserComponent', () => {
         RouterTestingModule.withRoutes([
           {
             path: 'new',
-            component: RemoteUserComponent
+            component: RemoteUserPageComponent
           }
         ]),
         ReactiveFormsModule,
@@ -48,7 +48,7 @@ describe('RemoteUserComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RemoteUserComponent);
+    fixture = TestBed.createComponent(RemoteUserPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
