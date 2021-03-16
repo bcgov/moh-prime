@@ -6,7 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { MockPermissionService } from 'test/mocks/mock-permission-service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 import { SiteOverviewComponent } from './site-overview.component';
 

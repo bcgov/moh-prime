@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, of, Subscription } from 'rxjs';
 
@@ -25,14 +26,13 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
   private routeUtils: RouteUtils;
 
   constructor(
+    protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
     private formStateService: GisEnrolmentFormStateService
   ) {
-    super(
-      formUtilsService
-    );
+    super(dialog, formUtilsService);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
@@ -64,6 +64,6 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.LDAP_INFO_PAGE}`]);
+    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
   }
 }
