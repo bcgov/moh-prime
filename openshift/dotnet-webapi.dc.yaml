@@ -255,6 +255,13 @@ objects:
                   secretKeyRef:
                     key: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
                     name: "verifiable-credential-secrets"
+
+              # LDAP login environment variables
+              - name: LDAP_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: LDAP_API_URL
+                    name: "ldap-secrets"
             image: " "
             name: primeapi
             ports:
