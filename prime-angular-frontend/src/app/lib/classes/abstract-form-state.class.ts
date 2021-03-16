@@ -2,6 +2,11 @@ import { FormGroup } from '@angular/forms';
 
 import { IForm } from '@lib/interfaces/form.interface';
 
+/**
+ * @description
+ * Class is used to encapsulate page component form functionality, and
+ * adaptation between the business model and form model.
+ */
 export abstract class AbstractFormState<T> implements IForm {
   protected formInstance: FormGroup;
 

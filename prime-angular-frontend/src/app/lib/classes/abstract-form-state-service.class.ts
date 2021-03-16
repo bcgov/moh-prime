@@ -7,6 +7,12 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 
+/**
+ * @description
+ * Class is used to manage the state of a form that spans multiple pages, and
+ * when implemented should use page component form state to encapsulate the
+ * individual functionality of each page's form.
+ */
 export abstract class AbstractFormStateService<T> {
   protected patched: boolean;
 
