@@ -4,13 +4,13 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Subscription, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { NoContent } from '@core/resources/abstract-resource';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -19,19 +19,19 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
 @Component({
   selector: 'app-organization-signing-authority-page',
   templateUrl: './organization-signing-authority-page.component.html',
   styleUrls: ['./organization-signing-authority-page.component.scss']
 })
-export class OrganizationSigningAuthorityPageComponent implements OnInit {
-  public busy: Subscription;
-  public form: FormGroup;
+export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: OrganizationSigningAuthorityPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public organization: Organization;
   public isCompleted: boolean;
+  public organization: Organization;
   public SiteRoutes = SiteRoutes;
   /**
    * @description
@@ -45,15 +45,17 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
   public hasPhysicalAddress: boolean;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private organizationService: OrganizationService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
-    private formUtilsService: FormUtilsService,
-    private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    router: Router
   ) {
+    super(dialog, formUtilsService);
+
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
@@ -94,17 +96,6 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
     return this.form.get('email') as FormControl;
   }
 
-  public onSubmit(): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const payload = this.organizationFormStateService.json;
-      this.organizationResource.updateOrganization(payload)
-        .subscribe(() => {
-          this.form.markAsPristine();
-          this.nextRoute();
-        });
-    }
-  }
-
   public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
     if (!this.hasPreferredName) {
       this.form.get('preferredMiddleName').reset();
@@ -123,26 +114,6 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
 
   public onBack(): void {
     this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
-  }
-
-  public nextRoute(): void {
-    const redirectPath = this.route.snapshot.queryParams.redirect;
-    if (redirectPath) {
-      this.routeUtils.routeRelativeTo([redirectPath, SiteRoutes.SITE_REVIEW]);
-    } else {
-      const routePath = (this.isCompleted)
-        ? SiteRoutes.ORGANIZATION_REVIEW
-        : SiteRoutes.ORGANIZATION_NAME;
-
-      this.routeUtils.routeRelativeTo(routePath);
-    }
-  }
-
-  public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-    return (this.form.dirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
   }
 
   public ngOnInit(): void {
@@ -170,12 +141,12 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
       .subscribe(() => this.initForm());
   }
 
-  private createFormInstance(): void {
-    const formState = this.organizationFormStateService.organizationSigningAuthorityFormState;
-    this.form = formState.form;
+  protected createFormInstance(): void {
+    this.formState = this.organizationFormStateService.organizationSigningAuthorityFormState;
+    this.form = this.formState.form;
   }
 
-  private patchForm(): void {
+  protected patchForm(): void {
     // Store a local copy of the organization for views
     this.organization = this.organizationService.organization;
     this.isCompleted = this.organization?.completed;
@@ -184,7 +155,7 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
     this.organizationFormStateService.setForm(this.organization, true);
   }
 
-  private initForm(): void {
+  protected initForm(): void {
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
@@ -199,6 +170,25 @@ export class OrganizationSigningAuthorityPageComponent implements OnInit {
 
     this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value);
     this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
+  }
+
+  protected performSubmission(): NoContent {
+    const payload = this.organizationFormStateService.json;
+    return this.organizationResource.updateOrganization(payload);
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    const redirectPath = this.route.snapshot.queryParams.redirect;
+    let routePath: string | string[];
+    if (redirectPath) {
+      routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
+    } else {
+      routePath = (this.isCompleted)
+        ? SiteRoutes.ORGANIZATION_REVIEW
+        : SiteRoutes.ORGANIZATION_NAME;
+    }
+
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {

@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { Observable, EMPTY } from 'rxjs';
+import { EMPTY } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
@@ -13,6 +13,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { VendorEnum } from '@shared/enums/vendor.enum';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -167,7 +168,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     }
   }
 
-  protected performSubmission(): Observable<unknown> {
+  protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
     const data: DialogOptions = {
       ...this.vendorChangeDialogOptions,
