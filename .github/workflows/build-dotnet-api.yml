@@ -20,34 +20,64 @@ on:
   #     # - master
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-20.04
     environment: Development
     env:
       VERSION: v1
       SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: primeapi
+      CONTAINER_NAME: prime-webapi-backend
       IMAGE_TAGS: latest
       
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
 
-      - name: "Build API"
+      - name: "Login into OpenShift with service account"
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_username: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }}
+          openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+          namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
+
+      # Use OpenShift CLI to retrieve necessary environment variables stored in OpenShift to build the frontend
+      - name: "Retrieve OpenShift Keycloak environment variables"
+        id: oc-env-vars-keycloak
+        run: |
+          echo ::set-output name=jwt_well_known_config::$(oc describe configmap keycloak | grep 'jwt_well_known_config' -A 2 | grep 'https')
+          echo ::set-output name=keycloak_url::$(oc describe configmap keycloak | grep 'keycloak_url' -A 2 | grep 'https')
+          echo ::set-output name=keycloak_realm::$(oc describe configmap keycloak | grep 'keycloak_realm' -A 2 | grep '[^keycloak_realm][a-z]*[0-9]*\w')
+          echo ::set-output name=keycloak_client_id::$(oc describe configmap keycloak | grep 'keycloak_client_id' -A 2 | grep '[^keycloak_client_id][a-z]*[0-9]*\w')
+
+      - name: "Build .NET web API image"
         id: build-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |          
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
-          docker-compose build $SERVICE_NAME
-      - name: "Tag it and bag it"
+          docker-compose build \
+          --build-arg ASPNETCORE_ENVIRONMENT=${{ secrets.API_ASPNETCORE_ENVIRONMENT }} \
+          --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
+          --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
+          $SERVICE_NAME
+          $SERVICE_NAME
+      
+      - name: "Tag .NET web API image"
         id: push-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker image ls
-          docker tag moh-prime_$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
+          docker tag moh-prime-$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
+      
+      - name: "Push .NET web API image to OpenShift registry"
+        id: push-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+        run: |
           docker login ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }} -u ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }} -p ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
           docker image push --all-tags ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME

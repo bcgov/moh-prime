@@ -30,7 +30,7 @@ RUN npm install -g @angular/cli
 
 # Install dependencies
 # COPY package.json package.json
-RUN npm install
+RUN npm ci
 
 # Add application
 RUN ng build --prod
