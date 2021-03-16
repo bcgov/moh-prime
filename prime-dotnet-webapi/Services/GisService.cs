@@ -36,6 +36,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(g => g.Id == gisId);
         }
 
+        public async Task<GisViewModel> GetGisEnrolmentByUserIdAsync(Guid userId)
+        {
+            return await _context.GisEnrolments
+                .AsNoTracking()
+                .ProjectTo<GisViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(g => g.Party.UserId == userId);
+        }
+
         public async Task<int> CreateOrUpdateGisEnrolmentAsync(GisChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentGisEnrolment = await _context.GisEnrolments

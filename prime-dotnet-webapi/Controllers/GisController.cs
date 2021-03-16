@@ -116,6 +116,31 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(gisEnrolment));
         }
 
+        // GET: api/Gis/5
+        /// <summary>
+        /// Gets a specific Gis Enrolment using the logged in User.
+        /// </summary>
+        [HttpGet("", Name = nameof(GetGisEnrolmentByUserId))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GisViewModel>> GetGisEnrolmentByUserId()
+        {
+            var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(User.GetPrimeUserId());
+            if (gisEnrolment == null)
+            {
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
+            }
+            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(ApiResponse.Result(gisEnrolment));
+        }
+
         // POST: api/gis/ldap/login
         /// <summary>
         /// Login to ldap using username and password
