@@ -10,7 +10,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Party } from '@registration/shared/models/party.model';
-import { Contact } from '@registration/shared/models/contact.model';
+import { Contact } from '@lib/models/contact.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 import { AdministratorFormState } from '@registration/pages/administrator/administrator-form-state.class';

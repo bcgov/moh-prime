@@ -5,7 +5,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 import { AbstractFormState } from './abstract-form-state.class';
-import { Contact } from '@registration/shared/models/contact.model';
+import { Contact } from '@lib/models/contact.model';
 
 @Injectable({
   providedIn: 'root'

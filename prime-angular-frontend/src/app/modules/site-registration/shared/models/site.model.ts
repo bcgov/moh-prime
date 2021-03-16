@@ -6,7 +6,7 @@ import { BusinessDay } from './business-day.model';
 import { Party } from './party.model';
 import { RemoteUser } from './remote-user.model';
 import { Vendor } from './vendor.model';
-import { Contact } from './contact.model';
+import { Contact } from '../../../../lib/models/contact.model';
 import { SiteStatusType } from '../enum/site-status.enum';
 import { BusinessLicence } from './business-licence.model';
 

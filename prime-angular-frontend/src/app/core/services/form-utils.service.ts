@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder, Validators } from '@angular/forms';
 
+import { Person } from '@lib/models/person.model';
 import { LoggerService } from '@core/services/logger.service';
 import { Country } from '@shared/enums/country.enum'; // TODO move into @lib
 import { Province } from '@shared/enums/province.enum'; // TODO move into @lib
 import { AddressLine } from '@shared/models/address.model';
-import { Person } from '@registration/shared/models/person.model';
 
 @Injectable({
   providedIn: 'root'
