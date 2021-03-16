@@ -34,7 +34,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
   }
 
   public patchValue(remoteUsers: RemoteUser[]): void {
-    if (!this.formInstance || !remoteUsers.length) {
+    if (!this.formInstance || !remoteUsers?.length) {
       return;
     }
 
