@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { CareSettingComponent } from './care-setting.component';
+import { CareSettingPageComponent } from './care-setting-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -18,13 +18,13 @@ import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('CareSettingComponent', () => {
-  let component: CareSettingComponent;
-  let fixture: ComponentFixture<CareSettingComponent>;
+  let component: CareSettingPageComponent;
+  let fixture: ComponentFixture<CareSettingPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        CareSettingComponent
+        CareSettingPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -57,7 +57,7 @@ describe('CareSettingComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CareSettingComponent);
+    fixture = TestBed.createComponent(CareSettingPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

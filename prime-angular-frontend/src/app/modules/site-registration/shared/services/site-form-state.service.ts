@@ -17,7 +17,7 @@ import { AdministratorFormState } from '@registration/pages/administrator-page/a
 import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
 import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
-import { CareSettingPageFormState } from '@registration/pages/care-setting/care-setting-page-form-state.class';
+import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'

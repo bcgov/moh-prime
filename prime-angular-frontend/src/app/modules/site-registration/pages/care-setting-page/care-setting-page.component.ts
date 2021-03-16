@@ -26,11 +26,11 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 
 @Component({
-  selector: 'app-care-setting',
-  templateUrl: './care-setting.component.html',
-  styleUrls: ['./care-setting.component.scss']
+  selector: 'app-care-setting-page',
+  templateUrl: './care-setting-page.component.html',
+  styleUrls: ['./care-setting-page.component.scss']
 })
-export class CareSettingComponent extends AbstractEnrolmentPage implements OnInit {
+export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: CareSettingPageFormState;
   public title: string;
   public routeUtils: RouteUtils;

@@ -20,7 +20,6 @@ export interface Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicence: BusinessLicence;
-
   businessLicenceDocuments: BusinessLicenceDocument[];
   businessLicenceGuid: string;
   deferredLicenceReason: string;

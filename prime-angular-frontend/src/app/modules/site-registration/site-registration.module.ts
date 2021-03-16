@@ -19,7 +19,7 @@ import { OrganizationSigningAuthorityComponent } from './pages/organization-sign
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 
-import { CareSettingComponent } from './pages/care-setting/care-setting.component';
+import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
@@ -40,7 +40,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     OrganizationNameComponent,
     OrganizationAgreementComponent,
 
-    CareSettingComponent,
+    CareSettingPageComponent,
     BusinessLicenceComponent,
     SiteAddressPageComponent,
     HoursOperationPageComponent,
@@ -62,6 +62,6 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     SiteRegistrationRoutingModule,
     SharedModule,
     DashboardModule
-  ],
+  ]
 })
 export class SiteRegistrationModule { }
