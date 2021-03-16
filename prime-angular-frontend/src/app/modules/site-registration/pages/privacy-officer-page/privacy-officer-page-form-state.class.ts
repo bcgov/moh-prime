@@ -1,3 +1,3 @@
 import { ContactFormState } from '@lib/classes/contact-form-state.class';
 
-export class PrivacyOfficerFormState extends ContactFormState { }
+export class PrivacyOfficerPageFormState extends ContactFormState { }

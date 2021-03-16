@@ -7,20 +7,20 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { AdministratorComponent } from './administrator.component';
+import { AdministratorPageComponent } from './administrator-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteService } from '@registration/shared/services/site.service';
 import { KeycloakService } from 'keycloak-angular';
 
 describe('AdministratorComponent', () => {
-  let component: AdministratorComponent;
-  let fixture: ComponentFixture<AdministratorComponent>;
+  let component: AdministratorPageComponent;
+  let fixture: ComponentFixture<AdministratorPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AdministratorComponent
+        AdministratorPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -45,7 +45,7 @@ describe('AdministratorComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdministratorComponent);
+    fixture = TestBed.createComponent(AdministratorPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

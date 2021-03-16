@@ -13,9 +13,9 @@ import { Party } from '@registration/shared/models/party.model';
 import { Contact } from '@lib/models/contact.model';
 import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
 import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
-import { AdministratorFormState } from '@registration/pages/administrator/administrator-form-state.class';
-import { PrivacyOfficerFormState } from '@registration/pages/privacy-officer/privacy-officer-form-state.class';
-import { TechnicalSupportFormState } from '@registration/pages/technical-support/technical-support-form-state.class';
+import { AdministratorFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
+import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
+import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
 
 @Injectable({
@@ -28,8 +28,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
   public administratorPharmaNetFormState: AdministratorFormState;
-  public privacyOfficerFormState: PrivacyOfficerFormState;
-  public technicalSupportFormState: TechnicalSupportFormState;
+  public privacyOfficerFormState: PrivacyOfficerPageFormState;
+  public technicalSupportFormState: TechnicalSupportPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -142,8 +142,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
     this.administratorPharmaNetFormState = new AdministratorFormState(this.fb, this.formUtilsService);
-    this.privacyOfficerFormState = new PrivacyOfficerFormState(this.fb, this.formUtilsService);
-    this.technicalSupportFormState = new TechnicalSupportFormState(this.fb, this.formUtilsService);
+    this.privacyOfficerFormState = new PrivacyOfficerPageFormState(this.fb, this.formUtilsService);
+    this.technicalSupportFormState = new TechnicalSupportPageFormState(this.fb, this.formUtilsService);
   }
 
   /**

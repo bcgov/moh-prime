@@ -23,11 +23,11 @@ import { CareSettingComponent } from './pages/care-setting/care-setting.componen
 import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
 import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
-import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
+import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
+import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
 import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
-import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
+import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewComponent } from './pages/overview/overview.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
@@ -130,7 +130,7 @@ const routes: Routes = [
                       },
                       {
                         path: ':index',
-                        component: RemoteUserComponent,
+                        component: RemoteUserPageComponent,
                         canActivate: [SiteGuard],
                         canDeactivate: [CanDeactivateFormGuard],
                         data: { title: 'Remote User' }
@@ -139,21 +139,21 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.ADMINISTRATOR,
-                    component: AdministratorComponent,
+                    component: AdministratorPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'PharmaNet Administrator' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,
-                    component: PrivacyOfficerComponent,
+                    component: PrivacyOfficerPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Privacy Officer' }
                   },
                   {
                     path: SiteRoutes.TECHNICAL_SUPPORT,
-                    component: TechnicalSupportComponent,
+                    component: TechnicalSupportPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }

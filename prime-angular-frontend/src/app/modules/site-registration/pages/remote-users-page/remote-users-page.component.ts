@@ -9,7 +9,7 @@ import { exhaustMap } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 

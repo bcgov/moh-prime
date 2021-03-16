@@ -82,18 +82,26 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
     protected formUtilsService: FormUtilsService
   ) { }
 
+  /**
+   * @description
+   * Form submission event handler.
+   */
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
     if (this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue())) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
-        .subscribe(() => this.afterSubmitIsSuccessful());
+        .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();
     }
   }
 
+  /**
+   * @description
+   * Deactivation guard handler.
+   */
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
     return (this.form.dirty && !this.checkDeactivationIsAllowed())
@@ -166,7 +174,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Post-submission hook for execution.
    */
-  protected afterSubmitIsSuccessful(): void {
+  protected afterSubmitIsSuccessful(response?: unknown): void {
     // Optional submission hook, otherwise NOOP
   }
 

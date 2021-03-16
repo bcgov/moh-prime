@@ -5,31 +5,26 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { RemoteUserComponent } from './remote-user.component';
+import { TechnicalSupportPageComponent } from './technical-support-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SiteService } from '@registration/shared/services/site.service';
 
-describe('RemoteUserComponent', () => {
-  let component: RemoteUserComponent;
-  let fixture: ComponentFixture<RemoteUserComponent>;
+describe('TechnicalSupportPageComponent', () => {
+  let component: TechnicalSupportPageComponent;
+  let fixture: ComponentFixture<TechnicalSupportPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        RemoteUserComponent
+        TechnicalSupportPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
-        RouterTestingModule.withRoutes([
-          {
-            path: 'new',
-            component: RemoteUserComponent
-          }
-        ]),
+        RouterTestingModule,
         ReactiveFormsModule,
         NgxMaterialModule
       ],
@@ -39,8 +34,8 @@ describe('RemoteUserComponent', () => {
           useValue: APP_DI_CONFIG
         },
         {
-          provide: ConfigService,
-          useClass: MockConfigService
+          provide: SiteService,
+          useClass: MockSiteService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
@@ -48,7 +43,7 @@ describe('RemoteUserComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RemoteUserComponent);
+    fixture = TestBed.createComponent(TechnicalSupportPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -7,19 +7,19 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { PrivacyOfficerComponent } from './privacy-officer.component';
+import { PrivacyOfficerPageComponent } from './privacy-officer-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { SiteService } from '@registration/shared/services/site.service';
 
-describe('PrivacyOfficerComponent', () => {
-  let component: PrivacyOfficerComponent;
-  let fixture: ComponentFixture<PrivacyOfficerComponent>;
+describe('PrivacyOfficerPageComponent', () => {
+  let component: PrivacyOfficerPageComponent;
+  let fixture: ComponentFixture<PrivacyOfficerPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        PrivacyOfficerComponent
+        PrivacyOfficerPageComponent
       ],
       imports: [
         BrowserAnimationsModule,
@@ -43,7 +43,7 @@ describe('PrivacyOfficerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivacyOfficerComponent);
+    fixture = TestBed.createComponent(PrivacyOfficerPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
