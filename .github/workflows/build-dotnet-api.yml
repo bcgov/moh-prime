@@ -36,7 +36,7 @@ jobs:
       - name: "Login into OpenShift with service account"
         uses: redhat-actions/oc-login@v1
         with:
-          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
           openshift_username: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }}
           openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
