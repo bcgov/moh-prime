@@ -27,7 +27,7 @@ import { TechnicalSupportPageComponent } from './pages/technical-support-page/te
 import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
-import { NextStepsComponent } from './pages/next-steps/next-steps.component';
+import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 
 const routes: Routes = [
   {
@@ -172,7 +172,7 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.NEXT_STEPS,
                     canActivate: [SiteGuard, OrganizationGuard],
-                    component: NextStepsComponent,
+                    component: NextStepsPageComponent,
                     data: { title: 'Next Steps' }
                   },
                   {

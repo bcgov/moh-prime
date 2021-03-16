@@ -3,12 +3,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
-import { NextStepsComponent } from './next-steps.component';
+import { NextStepsPageComponent } from './next-steps-page.component';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
-describe('NextStepsComponent', () => {
-  let component: NextStepsComponent;
-  let fixture: ComponentFixture<NextStepsComponent>;
+describe('NextStepsPageComponent', () => {
+  let component: NextStepsPageComponent;
+  let fixture: ComponentFixture<NextStepsPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,13 +21,13 @@ describe('NextStepsComponent', () => {
           useClass: MockOrganizationService
         }
       ],
-      declarations: [NextStepsComponent]
+      declarations: [NextStepsPageComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NextStepsComponent);
+    fixture = TestBed.createComponent(NextStepsPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
