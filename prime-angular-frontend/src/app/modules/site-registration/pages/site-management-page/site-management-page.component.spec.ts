@@ -9,7 +9,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { SiteManagementComponent } from './site-management.component';
+import { SiteManagementPageComponent } from './site-management-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -17,14 +17,14 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 
-describe('SiteManagementComponent', () => {
-  let component: SiteManagementComponent;
-  let fixture: ComponentFixture<SiteManagementComponent>;
+describe('SiteManagementPageComponent', () => {
+  let component: SiteManagementPageComponent;
+  let fixture: ComponentFixture<SiteManagementPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SiteManagementComponent,
+        SiteManagementPageComponent,
         FullnamePipe,
         AddressPipe,
         ConfigCodePipe
@@ -55,7 +55,7 @@ describe('SiteManagementComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteManagementComponent);
+    fixture = TestBed.createComponent(SiteManagementPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

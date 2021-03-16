@@ -13,7 +13,7 @@ import { SiteProgressIndicatorComponent } from './shared/components/site-progres
 import { SummaryCardComponent } from './shared/components/summary-card/summary-card.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { SiteManagementComponent } from './pages/site-management/site-management.component';
+import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
@@ -34,7 +34,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 @NgModule({
   declarations: [
     CollectionNoticeComponent,
-    SiteManagementComponent,
+    SiteManagementPageComponent,
 
     OrganizationSigningAuthorityComponent,
     OrganizationNameComponent,

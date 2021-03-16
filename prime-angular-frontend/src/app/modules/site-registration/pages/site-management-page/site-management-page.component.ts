@@ -26,11 +26,11 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
-  selector: 'app-site-management',
-  templateUrl: './site-management.component.html',
-  styleUrls: ['./site-management.component.scss']
+  selector: 'app-site-management-page',
+  templateUrl: './site-management-page.component.html',
+  styleUrls: ['./site-management-page.component.scss']
 })
-export class SiteManagementComponent implements OnInit {
+export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
@@ -99,7 +99,7 @@ export class SiteManagementComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: Organization): { key: string, value: string }[] {
+  public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -107,7 +107,7 @@ export class SiteManagementComponent implements OnInit {
     ];
   }
 
-  public getSiteProperties(site: SiteListViewModel): { key: string, value: string }[] {
+  public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
@@ -154,7 +154,7 @@ export class SiteManagementComponent implements OnInit {
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
-      text: `Site Approved<br>Site ID: ${site.pec}`
+      text: `Site Approved<br>Site ID: ${ site.pec }`
     };
   }
 

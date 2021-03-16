@@ -13,7 +13,7 @@ import { SiteGuard } from './shared/guards/site.guard';
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { SiteManagementComponent } from './pages/site-management/site-management.component';
+import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
 
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
@@ -55,7 +55,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: SiteManagementComponent,
+            component: SiteManagementPageComponent,
             data: { title: 'Site Management' },
           },
           {
