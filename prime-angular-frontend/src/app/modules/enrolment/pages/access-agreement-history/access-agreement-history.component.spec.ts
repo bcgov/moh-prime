@@ -13,6 +13,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 describe('AccessAgreementHistoryComponent', () => {
   let component: AccessAgreementHistoryComponent;
@@ -42,6 +44,10 @@ describe('AccessAgreementHistoryComponent', () => {
           {
             provide: AuthService,
             useClass: MockAuthService
+          },
+          {
+            provide: AccessTokenService,
+            useClass: MockAccessTokenService
           },
           KeycloakService
         ]

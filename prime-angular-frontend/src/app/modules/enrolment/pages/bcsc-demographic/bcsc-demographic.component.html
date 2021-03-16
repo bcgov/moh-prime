@@ -84,7 +84,7 @@
         </app-page-subheader2>
 
         <app-address-form [form]="physicalAddress"
-                          [onlyBc]="true"
+                          [inBc]="true"
                           [showManualButton]="true"
                           [showAddressFields]="hasPhysicalAddress"></app-address-form>
       </ng-template>
@@ -99,7 +99,7 @@
           </app-page-subheader2>
 
           <app-address-form [form]="mailingAddress"
-                            [onlyBc]="true"
+                            [inBc]="true"
                             [showManualButton]="true"
                             [showAddressFields]="hasMailingAddress"></app-address-form>
         </section>
