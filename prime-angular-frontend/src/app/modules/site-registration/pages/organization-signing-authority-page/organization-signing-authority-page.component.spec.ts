@@ -8,7 +8,7 @@ import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
-import { OrganizationSigningAuthorityComponent } from './organization-signing-authority.component';
+import { OrganizationSigningAuthorityPageComponent } from './organization-signing-authority-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { ConfigCodePipe } from '@config/config-code.pipe';
@@ -22,14 +22,14 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
-describe('OrganizationSigningAuthorityComponent', () => {
-  let component: OrganizationSigningAuthorityComponent;
-  let fixture: ComponentFixture<OrganizationSigningAuthorityComponent>;
+describe('OrganizationSigningAuthorityPageComponent', () => {
+  let component: OrganizationSigningAuthorityPageComponent;
+  let fixture: ComponentFixture<OrganizationSigningAuthorityPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        OrganizationSigningAuthorityComponent,
+        OrganizationSigningAuthorityPageComponent,
         DefaultPipe,
         FullnamePipe,
         FormatDatePipe,
@@ -69,7 +69,7 @@ describe('OrganizationSigningAuthorityComponent', () => {
   beforeEach(inject(
     [OrganizationService, OrganizationFormStateService],
     (organizationService: OrganizationService, organizationFormStateService: OrganizationFormStateService) => {
-      fixture = TestBed.createComponent(OrganizationSigningAuthorityComponent);
+      fixture = TestBed.createComponent(OrganizationSigningAuthorityPageComponent);
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);
       // Add the bound FormGroup to the component

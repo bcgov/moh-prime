@@ -8,7 +8,7 @@ import { Party } from '@registration/shared/models/party.model';
 
 export interface OrganizationSigningAuthorityFormModel { }
 
-export class OrganizationSigningAuthorityFormState extends AbstractFormState<Party> {
+export class OrganizationSigningAuthorityPageFormState extends AbstractFormState<Party> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -108,7 +108,7 @@ export class OrganizationSigningAuthorityFormState extends AbstractFormState<Par
         }
 
         // Add the address reference ID to the party
-        party[`${addressType}Id`] = (!!party[addressType]?.id)
+        party[`${ addressType }Id`] = (!!party[addressType]?.id)
           ? party[addressType].id
           : 0;
       });

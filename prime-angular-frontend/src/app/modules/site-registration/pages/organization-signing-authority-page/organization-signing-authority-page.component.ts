@@ -21,11 +21,11 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
-  selector: 'app-organization-signing-authority',
-  templateUrl: './organization-signing-authority.component.html',
-  styleUrls: ['./organization-signing-authority.component.scss']
+  selector: 'app-organization-signing-authority-page',
+  templateUrl: './organization-signing-authority-page.component.html',
+  styleUrls: ['./organization-signing-authority-page.component.scss']
 })
-export class OrganizationSigningAuthorityComponent implements OnInit {
+export class OrganizationSigningAuthorityPageComponent implements OnInit {
   public busy: Subscription;
   public form: FormGroup;
   public title: string;

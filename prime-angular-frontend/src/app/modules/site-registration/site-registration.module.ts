@@ -14,7 +14,7 @@ import { SummaryCardComponent } from './shared/components/summary-card/summary-c
 
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
-import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
+import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
@@ -33,7 +33,7 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
   declarations: [
     CollectionNoticePageComponent,
     SiteManagementPageComponent,
-    OrganizationSigningAuthorityComponent,
+    OrganizationSigningAuthorityPageComponent,
     OrganizationNameComponent,
     OrganizationAgreementComponent,
     CareSettingPageComponent,

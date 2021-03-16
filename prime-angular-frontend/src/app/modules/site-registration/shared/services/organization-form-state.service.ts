@@ -8,14 +8,14 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationSigningAuthorityFormState } from '@registration/pages/organization-signing-authority/organization-signing-authority-form-state.class';
+import { OrganizationSigningAuthorityPageFormState } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page-form-state.class';
 import { OrganizationNameFormState } from '@registration/pages/organization-name/organization-name-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrganizationFormStateService extends AbstractFormStateService<Organization> {
-  public organizationSigningAuthorityFormState: OrganizationSigningAuthorityFormState;
+  public organizationSigningAuthorityFormState: OrganizationSigningAuthorityPageFormState;
   public organizationNameFormState: OrganizationNameFormState;
   public organizationAgreementForm: FormGroup;
 
@@ -69,7 +69,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
    * to clear previous form data from the service.
    */
   protected buildForms() {
-    this.organizationSigningAuthorityFormState = new OrganizationSigningAuthorityFormState(this.fb, this.formUtilsService);
+    this.organizationSigningAuthorityFormState = new OrganizationSigningAuthorityPageFormState(this.fb, this.formUtilsService);
     this.organizationNameFormState = new OrganizationNameFormState(this.fb);
     this.organizationAgreementForm = this.buildOrganizationAgreementForm();
   }

@@ -10,9 +10,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import {
-  OrganizationSigningAuthorityComponent
-} from '@registration/pages/organization-signing-authority/organization-signing-authority.component';
+import { OrganizationSigningAuthorityPageComponent } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page.component';
 
 describe('CollectionNoticePageComponent', () => {
   let component: CollectionNoticePageComponent;
@@ -31,7 +29,7 @@ describe('CollectionNoticePageComponent', () => {
                 children: [
                   {
                     path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
-                    component: OrganizationSigningAuthorityComponent
+                    component: OrganizationSigningAuthorityPageComponent
                   }
                 ]
               }
