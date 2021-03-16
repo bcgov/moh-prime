@@ -1,4 +1,4 @@
-# Stage 1: Build an Angular Docker Image
+# Stage 1:  Build an Angular Docker Image
 FROM node:10.16 as build
 
 USER 0
@@ -22,15 +22,6 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
-
-
-# WORKDIR /app
-# COPY package*.json /app/
-# RUN npm install
-# COPY . /app
-# ARG configuration=production
-# RUN npm run build -- --outputPath=./dist/out --configuration $configuration
-
 RUN echo "Populating environment..." && \
     (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 RUN cat /usr/src/app/src/environments/environment.prod.ts && \
@@ -40,10 +31,8 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
     echo "NPM packages installed..."
 
 
-
-
-# Stage 2, use the compiled app, ready for production with Nginx
-FROM nginx
+# Stage 2:  Use the compiled app, ready for production with Nginx
+FROM nginx:1.18.0
 
 RUN apt-get update && \
     apt-get install -y gettext-base && \
@@ -59,9 +48,7 @@ RUN apt-get update && \
     chmod -R 777 /var/lib && \
     chmod -R 777 /var/log
 
-
 COPY --from=build /usr/src/app/dist/angular-frontend /usr/share/nginx/html
-# COPY /nginx-custom.conf /etc/nginx/conf.d/default.conf
 
 COPY nginx.conf /etc/nginx/
 COPY nginx.template.conf /etc/nginx/nginx.template.conf
@@ -76,5 +63,4 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 80 8080 4200:8080
 
-#CMD /etc/nginx/entrypoint.sh
 CMD /entrypoint.sh
