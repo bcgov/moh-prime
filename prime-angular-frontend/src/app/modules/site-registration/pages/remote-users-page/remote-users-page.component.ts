@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
+import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -163,12 +164,12 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
         exhaustMap(() =>
           (site.submittedDate)
             ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : NoContentResponse
+            : of(noop())
         ),
         exhaustMap(() =>
           (site.submittedDate && newRemoteUsers)
             ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
-            : NoContentResponse
+            : of(noop())
         )
       );
   }
