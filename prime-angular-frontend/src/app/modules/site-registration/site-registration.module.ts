@@ -12,13 +12,11 @@ import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
 import { SummaryCardComponent } from './shared/components/summary-card/summary-card.component';
 
-import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
-
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
-
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
@@ -33,13 +31,11 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 @NgModule({
   declarations: [
-    CollectionNoticeComponent,
+    CollectionNoticePageComponent,
     SiteManagementPageComponent,
-
     OrganizationSigningAuthorityComponent,
     OrganizationNameComponent,
     OrganizationAgreementComponent,
-
     CareSettingPageComponent,
     BusinessLicencePageComponent,
     SiteAddressPageComponent,
@@ -49,7 +45,6 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     AdministratorPageComponent,
     PrivacyOfficerPageComponent,
     TechnicalSupportPageComponent,
-
     SiteRegistrationDashboardComponent,
     SiteProgressIndicatorComponent,
     ContactProfileFormComponent,

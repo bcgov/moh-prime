@@ -5,7 +5,7 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
-import { CollectionNoticeComponent } from './collection-notice.component';
+import { CollectionNoticePageComponent } from './collection-notice-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
@@ -14,9 +14,9 @@ import {
   OrganizationSigningAuthorityComponent
 } from '@registration/pages/organization-signing-authority/organization-signing-authority.component';
 
-describe('CollectionNoticeComponent', () => {
-  let component: CollectionNoticeComponent;
-  let fixture: ComponentFixture<CollectionNoticeComponent>;
+describe('CollectionNoticePageComponent', () => {
+  let component: CollectionNoticePageComponent;
+  let fixture: ComponentFixture<CollectionNoticePageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -54,7 +54,7 @@ describe('CollectionNoticeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CollectionNoticeComponent);
+    fixture = TestBed.createComponent(CollectionNoticePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

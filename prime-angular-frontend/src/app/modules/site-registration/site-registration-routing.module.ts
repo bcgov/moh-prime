@@ -12,13 +12,11 @@ import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
-import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
-
 import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
 import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
 import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
-
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
 import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
@@ -47,7 +45,7 @@ const routes: Routes = [
     children: [
       {
         path: SiteRoutes.COLLECTION_NOTICE,
-        component: CollectionNoticeComponent,
+        component: CollectionNoticePageComponent,
         data: { title: 'Collection Notice' }
       },
       {

@@ -9,11 +9,11 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 @Component({
-  selector: 'app-collection-notice',
-  templateUrl: './collection-notice.component.html',
-  styleUrls: ['./collection-notice.component.scss']
+  selector: 'app-collection-notice-page',
+  templateUrl: './collection-notice-page.component.html',
+  styleUrls: ['./collection-notice-page.component.scss']
 })
-export class CollectionNoticeComponent implements OnInit {
+export class CollectionNoticePageComponent implements OnInit {
   public isFull: boolean;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
