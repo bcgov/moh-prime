@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { GisEnrolmentRoutes } from './gis-enrolment.routes';
 import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-dashboard.component';
-import { GisEnrolmentGuard } from './shared/guards/gis-enrolment.guard';
+import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 
 const routes: Routes = [
   {
@@ -17,8 +17,11 @@ const routes: Routes = [
       GisEnrolmentGuard
     ],
     children: [
-      // TODO lazy loading every page on small enrolment looking for gotchas
       {
+        path: GisEnrolmentRoutes.COLLECTION_NOTICE,
+        component: CollectionNoticePageComponent,
+        data: { title: 'Collection Notice' }
+      },
         path: GisEnrolmentRoutes.LDAP_USER_PAGE,
         loadChildren: () => import('./pages/ldap-user-page/ldap-user-page.module').then(m => m.LdapUserPageModule)
       },
