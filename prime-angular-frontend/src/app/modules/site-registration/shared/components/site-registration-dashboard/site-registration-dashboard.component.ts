@@ -6,7 +6,6 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboar
 import { IDashboard } from '@lib/modules/dashboard/interfaces/dashboard.interface';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { AuthRoutes } from '@auth/auth.routes';
 import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Component({
@@ -21,7 +20,7 @@ export class SiteRegistrationDashboardComponent implements OnInit, IDashboard {
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig
   ) {
-    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.SITE)}`;
+    this.logoutRedirectUrl = `${ this.config.loginRedirectUrl }/${ SiteRoutes.LOGIN_PAGE }`;
   }
 
   public ngOnInit(): void {

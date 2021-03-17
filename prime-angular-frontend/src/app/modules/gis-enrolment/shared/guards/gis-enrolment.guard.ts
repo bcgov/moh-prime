@@ -12,11 +12,13 @@ export class GisEnrolmentGuard implements CanActivate, CanActivateChild, CanDeac
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return true;
   }
+
   public canActivateChild(
     childRoute: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return true;
   }
+
   public canDeactivate(
     component: unknown,
     currentRoute: ActivatedRouteSnapshot,
@@ -24,6 +26,7 @@ export class GisEnrolmentGuard implements CanActivate, CanActivateChild, CanDeac
     nextState?: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return true;
   }
+
   public canLoad(
     route: Route,
     segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {

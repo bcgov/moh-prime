@@ -136,7 +136,7 @@ const routes: Routes = [
             data: { title: 'Site Banner' }
           },
           {
-            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
+            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
             children: [
               {
                 path: '',
