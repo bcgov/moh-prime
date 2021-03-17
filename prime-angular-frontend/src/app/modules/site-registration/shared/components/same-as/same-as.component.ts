@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
+import { Person } from '@lib/models/person.model';
 import { Address, AddressType } from '@shared/models/address.model';
 import { SiteService } from '@registration/shared/services/site.service';
-import { Contact } from '@registration/shared/models/contact.model';
-import { Person } from '@registration/shared/models/person.model';
+import { Contact } from '@lib/models/contact.model';
 import { Party } from '@registration/shared/models/party.model';
 
 @Component({
@@ -15,7 +15,7 @@ export class SameAsComponent implements OnInit {
   // When not provided selections are not displayed
   @Input() public selectFor: string;
   @Output() public selected: EventEmitter<Contact>;
-  public contacts: { key: string, display: string, data: Contact }[];
+  public contacts: { key: string, display: string, data: Contact; }[];
 
   constructor(
     private siteService: SiteService
@@ -78,7 +78,7 @@ export class SameAsComponent implements OnInit {
     ['physicalAddress', 'mailingAddress']
       .forEach((addressType: AddressType) => {
         if (person[addressType]) {
-          person[`${addressType}Id`] = 0;
+          person[`${ addressType }Id`] = 0;
           person[addressType].id = 0;
         }
       });

@@ -1,0 +1,118 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          An organization is the legal entity that owns/operates one or more sites where PharmaNet is accessed, e.g., a
+          sole proprietorship, partnership, corporation, society.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input type="text"
+                   matInput
+                   placeholder="Organization Name (Legal Entity Operating Site)"
+                   formControlName="name"
+                   [matAutocomplete]="nameAuto"
+                   (input)="onInput()">
+            <mat-autocomplete autoActiveFirstOption
+                              #nameAuto="matAutocomplete"
+                              (optionSelected)="onSelect($event)">
+              <mat-option *ngIf="organizations?.length"
+                          [disabled]="true">Top 10 results of {{ totalResults }} potential results</mat-option>
+              <mat-option *ngFor="let organization of organizations"
+                          [value]="organization">
+                {{ organization }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <ng-container *ngIf="usedOrgBook">
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field class="w-100">
+              <input matInput
+                     placeholder="Organization Registration ID"
+                     formControlName="registrationId">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+
+            <app-alert type="info"
+                       icon="info">
+              <ng-container #alertContent
+                            class="alert-content">
+                We found the organization’s name and registration number in OrgBook.
+                <div class="text-right">
+                  <a mat-raised-button
+                     color="primary"
+                     target="_blank"
+                     class="mt-3"
+                     [href]="getOrgBookLink(registrationId.value)">
+                    View organization in OrgBook
+                  </a>
+                </div>
+              </ng-container>
+            </app-alert>
+
+          </div>
+        </div>
+      </ng-container>
+
+    </section>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Doing Business As</ng-container>
+        <ng-container appPageSubheader2Summary>
+          If the organization does business under a different name than the one above, enter that name here. If you
+          entered a numbered corporation above, you must provide a "doing business as" name.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input type="text"
+                   matInput
+                   placeholder="Doing Business As (Optional)"
+                   formControlName="doingBusinessAs"
+                   [matAutocomplete]="doingBusinessAsAuto">
+            <mat-autocomplete autoActiveFirstOption
+                              #doingBusinessAsAuto="matAutocomplete">
+              <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                          [value]="doingBusinessAsName">
+                {{ doingBusinessAsName }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

@@ -5,7 +5,7 @@ export class SiteRoutes {
   // Kept as organizations so route paths indicate hierarchy of resources
   // TODO maybe don't make site management the root so paths make sense on site management
   public static SITE_MANAGEMENT = 'organizations';
-  // TODO make this the roote path for organizations and sites
+  // TODO make this the route path for organizations and sites
   // public static ORGANIZATIONS = 'organizations';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
@@ -34,7 +34,7 @@ export class SiteRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${SiteRoutes.MODULE_PATH}/${route}`;
+    return `/${ SiteRoutes.MODULE_PATH }/${ route }`;
   }
 
   // Used to indicate the routes and order of registration for an initial
