@@ -124,7 +124,7 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
+            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
             children: [
               {
                 path: '',
