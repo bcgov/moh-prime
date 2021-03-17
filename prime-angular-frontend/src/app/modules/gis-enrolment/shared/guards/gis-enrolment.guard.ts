@@ -9,11 +9,11 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
-import { Party } from '@registration/shared/models/party.model';
+
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentService } from '../services/gis-enrolment.service';
 import { GisEnrolmentResource } from '../resources/gis-enrolment-resource.service';
 import { GisEnrolment } from '../models/gis-enrolment.model';
-import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +34,8 @@ export class GisEnrolmentGuard extends BaseGuard {
     const user$ = this.authService.getUser$();
     const createEnrolment$ = user$
       .pipe(
-        map((user: BcscUser) => new Party(user)),
-        exhaustMap((party: Party) => this.gisEnrolmentResource.createEnrolment(party))
+        map((user: BcscUser) => GisEnrolment.fromBcscUser(user)),
+        exhaustMap((enrolment: GisEnrolment) => this.gisEnrolmentResource.createEnrolment(enrolment))
       );
 
     return this.gisEnrolmentResource.getEnrolment()
@@ -63,7 +63,7 @@ export class GisEnrolmentGuard extends BaseGuard {
     if (routePath.includes(GisEnrolmentRoutes.COLLECTION_NOTICE)) {
       return true;
     } else if (enrolment) {
-      return (enrolment.completed)
+      return (enrolment.submittedDate)
         ? this.manageCompleteEnrolmentRouting(routePath, enrolment)
         : this.manageIncompleteEnrolmentRouting(routePath, enrolment);
     }
