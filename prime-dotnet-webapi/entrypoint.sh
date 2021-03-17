@@ -2,7 +2,7 @@
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
-if [ -z "${database-name}" ]
+if [ ! -n "${database-name}" ]
 then 
 export POSTGRESQL_PASSWORD=${database-password
 }
