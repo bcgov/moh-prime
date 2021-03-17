@@ -178,5 +178,34 @@ namespace Prime.Controllers
 
             return Unauthorized();
         }
+
+        // POST: api/Gis/5/submission
+        /// <summary>
+        /// Submits the given Gis enrolment.
+        /// </summary>
+        [HttpPost("{gisId}/submission", Name = nameof(SubmitGis))]
+        // [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GisViewModel>> SubmitGis(int gisId)
+        {
+            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            if (gisEnrolment == null)
+            {
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+            }
+            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _gisService.SubmitApplicationAsync(gisId);
+
+            gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            return Ok(ApiResponse.Result(gisEnrolment));
+        }
     }
 }

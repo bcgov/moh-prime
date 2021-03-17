@@ -12,5 +12,6 @@ namespace Prime.Services
         Task<GisViewModel> GetGisEnrolmentByUserIdAsync(Guid userId);
         Task<int> CreateOrUpdateGisEnrolmentAsync(GisChangeModel changeModel, ClaimsPrincipal user);
         Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user);
+        Task<int> SubmitApplicationAsync(int gisId);
     }
 }

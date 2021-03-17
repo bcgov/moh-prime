@@ -22,7 +22,8 @@ namespace Prime.Migrations
                     LdapUsername = table.Column<string>(nullable: true),
                     LdapLoginSuccessDate = table.Column<DateTimeOffset>(nullable: true),
                     Organization = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    Role = table.Column<string>(nullable: true),
+                    SubmittedDate = table.Column<DateTimeOffset>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,7 +46,6 @@ namespace Prime.Migrations
         {
             migrationBuilder.DropTable(
                 name: "GisEnrolment");
-
         }
     }
 }
