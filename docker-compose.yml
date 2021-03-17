@@ -60,9 +60,9 @@ services:
     environment:
       DB_HOST: primedb
       PGPASSWORD: postgres
-      POSTGRES_ADMIN_PASSWORD: postgres
-      POSTGRES_USERNAME: postgres
-      POSTGRES_DATABASE: postgres
+      POSTGRESQL_ADMIN_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_DATABASE: postgres
       DB_CONNECTION_STRING: "host=primedb;port=5432;database=postgres;username=postgres;password=postgres"
       ASPNETCORE_HTTPS_PORT: "5001"
       ASPNETCORE_ENVIRONMENT: "Development"
