@@ -44,7 +44,7 @@ const routes: Routes = [
         path: GisEnrolmentRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
-      },
+      }, 
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
