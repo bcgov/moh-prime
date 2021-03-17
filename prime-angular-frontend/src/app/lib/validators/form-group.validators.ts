@@ -48,6 +48,34 @@ export class FormGroupValidators {
 
   /**
    * @description
+   * Checks that the start key value is less than end key value.
+   */
+  public static lessThanDateTime(startGroupKey: string, endGroupKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const startGroup = group.controls[startGroupKey] as FormGroup;
+      const endGroup = group.controls[endGroupKey] as FormGroup;
+
+      const startDate = moment(startGroup.controls['date'].value);
+      const endDate = moment(endGroup.controls['date'].value);
+
+      if (startDate.isBefore(endDate)) {
+        return null;
+      }
+      if (startDate.isAfter(endDate)) {
+        return { lessthan: true }
+      }
+
+      const startTime = startGroup.controls['time'].value;
+      const endTime = endGroup.controls['time'].value;
+
+      if (!startTime || !endTime) { return null; }
+      const valid = (startTime < endTime);
+      return (valid) ? null : { lessthan: true };
+    };
+  }
+
+  /**
+   * @description
    * Compares date range start and end.
    */
   public static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {

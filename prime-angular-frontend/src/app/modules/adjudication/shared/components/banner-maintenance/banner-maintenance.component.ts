@@ -3,6 +3,8 @@ import { ThrowStmt } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Role } from '@auth/shared/enum/role.enum';
+import { FormGroupValidators } from '@lib/validators/form-group.validators';
+import { BusinessDayHoursErrorStateMatcher } from '@registration/pages/hours-operation-page/hours-operation-page.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner } from '@shared/models/banner.model';
@@ -27,6 +29,13 @@ export class BannerMaintenanceComponent implements OnInit {
   public Role = Role;
   public BannerType = BannerType;
   public BannerLocationCode = BannerLocationCode;
+
+  public hoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
+  public readonly hoursTimePattern = {
+    A: { pattern: /[0-2]/ },
+    B: { pattern: /[0-9]/ },
+    C: { pattern: /[0-5]/ }
+  };
 
   constructor(
     private fb: FormBuilder,
@@ -67,6 +76,10 @@ export class BannerMaintenanceComponent implements OnInit {
     return this.form.get('endDate') as FormControl;
   }
 
+  public get timeRange(): FormGroup {
+    return this.form.get('timeRange') as FormGroup;
+  }
+
   public onSubmit() {
     if (this.form.valid) {
       this.banner = this.json;
@@ -78,6 +91,7 @@ export class BannerMaintenanceComponent implements OnInit {
           .subscribe();
       }
     }
+    this.form.markAllAsTouched();
   }
 
   public onUpdate(event: { editor: any }) {
@@ -106,6 +120,7 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   private get json(): Banner {
+    console.log(this.timeRange);
     return {
       id: this.banner?.id,
       adminId: this.banner?.adminId,
@@ -113,8 +128,8 @@ export class BannerMaintenanceComponent implements OnInit {
       bannerLocationCode: this.bannerLocationCode.value,
       title: this.title.value,
       content: this.content.value,
-      startDate: this.startDate.value,
-      endDate: this.endDate.value,
+      startDate: null,
+      endDate: null,
     }
   }
 
@@ -148,21 +163,26 @@ export class BannerMaintenanceComponent implements OnInit {
         },
         [Validators.required]
       ],
-      startDate: [
+      timeRange: this.fb.group(
         {
-          value: '',
-          disabled: false
+          start: this.fb.group(
+            {
+              date: [null, [Validators.required]],
+              time: [null, [Validators.required]],
+            },
+            [Validators.required]
+          ),
+          end: this.fb.group(
+            {
+              date: [null, [Validators.required]],
+              time: [null, [Validators.required]],
+            },
+            [Validators.required]
+          ),
         },
-        [Validators.required]
-      ],
-      endDate: [
-        {
-          value: '',
-          disabled: false
-        },
-        [Validators.required]
-      ],
+        { validator: FormGroupValidators.lessThanDateTime('start', 'end') })
     });
+    this.hoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
   }
 
 }
