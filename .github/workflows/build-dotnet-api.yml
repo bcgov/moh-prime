@@ -64,7 +64,6 @@ jobs:
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
           --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
           $SERVICE_NAME
-          $SERVICE_NAME
       
       - name: "Tag .NET web API image"
         id: tag-image
@@ -72,6 +71,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
+          docker ls 
           docker tag moh-prime-$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
       
       - name: "Push .NET web API image to OpenShift registry"
