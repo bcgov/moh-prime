@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 
-interface BusinessLicencePageDataModel extends Pick<Site, 'businessLicenceGuid' | 'deferredLicenceReason' | 'doingBusinessAs'> { }
+interface BusinessLicencePageDataModel extends Pick<Site, 'businessLicenceGuid' | 'deferredLicenceReason' | 'doingBusinessAs' | 'pec'> { }
 
 export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
   public constructor(
@@ -42,6 +42,10 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       ],
       doingBusinessAs: [
         '',
+        [Validators.required]
+      ],
+      pec: [
+        null,
         [Validators.required]
       ]
     });

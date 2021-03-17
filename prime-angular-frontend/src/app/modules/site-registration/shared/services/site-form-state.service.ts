@@ -68,8 +68,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { careSettingCode, siteVendors, pec } = this.careSettingPageFormState.json;
-    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessLicencePageFormState.json;
+    const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
+    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason, pec } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -152,8 +152,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
 
     const { careSettingCode, siteVendors, pec, businessLicenceGuid, deferredLicenceReason, doingBusinessAs } = site;
 
-    this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors, pec });
-    this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs });
+    this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
+    this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs, pec });
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
