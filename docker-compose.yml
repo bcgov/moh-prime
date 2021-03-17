@@ -58,7 +58,12 @@ services:
     build:
       context: prime-dotnet-webapi/
     environment:
-      DB_CONNECTION_STRING: "host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_PASSWORD}"
+      DB_HOST: primedb
+      PGPASSWORD: postgres
+      POSTGRES_ADMIN_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DATABASE: postgres
+      DB_CONNECTION_STRING: "host=primedb;port=5432;database=postgres;username=postgres;password=postgres"
       ASPNETCORE_HTTPS_PORT: "5001"
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"

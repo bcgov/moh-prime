@@ -53,7 +53,7 @@ FROM registry.redhat.io/rhel8/nginx-118
 # COPY nginx.template.conf /etc/nginx/conf.d/default.conf
 # COPY entrypoint.sh /
 
-COPY --from=build-deps /usr/src/app /opt/app-root/src
+COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
