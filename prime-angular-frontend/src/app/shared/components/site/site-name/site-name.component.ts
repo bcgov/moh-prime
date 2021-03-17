@@ -6,7 +6,6 @@ import { map, tap } from 'rxjs/operators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
-import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
 @Component({
@@ -16,7 +15,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 })
 export class SiteNameComponent implements OnInit {
   @Input() public form: FormGroup;
-  @Input() public site: Site;
+  @Input() public organizationId: number;
 
   public busy: Subscription;
   public doingBusinessAsNames: string[];
@@ -43,7 +42,7 @@ export class SiteNameComponent implements OnInit {
   }
 
   protected initForm(): void {
-    this.getDoingBusinessAs(this.site);
+    this.getDoingBusinessAs(this.organizationId);
 
     this.isNewSite.valueChanges
       .subscribe(value => {
@@ -59,11 +58,8 @@ export class SiteNameComponent implements OnInit {
     this.isNewSite.setValue(this.pec.disabled);
   }
 
-  private getDoingBusinessAs(site: Site) {
-    if (!site) {
-      return;
-    }
-    this.busy = this.organizationResource.getOrganizationById(site.organizationId)
+  private getDoingBusinessAs(organizationId: number) {
+    this.busy = this.organizationResource.getOrganizationById(organizationId)
       .pipe(
         map((organization: Organization) => organization.registrationId),
         this.orgBookResource.doingBusinessAsMap(),
