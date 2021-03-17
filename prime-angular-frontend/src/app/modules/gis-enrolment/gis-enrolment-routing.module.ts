@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+
 import { GisEnrolmentRoutes } from './gis-enrolment.routes';
 import { GisEnrolmentGuard } from './shared/guards/gis-enrolment.guard';
 import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-dashboard.component';
@@ -16,10 +18,12 @@ const routes: Routes = [
     path: '',
     component: GisDashboardComponent,
     canLoad: [
+      AuthenticationGuard,
       GisEnrolmentGuard
     ],
     canActivate: [],
     canActivateChild: [
+      AuthenticationGuard,
       GisEnrolmentGuard
     ],
     children: [
