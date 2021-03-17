@@ -45,7 +45,7 @@
       </ng-container>
     </section>
 
-    <section class="mb-3">
+    <!-- <section class="mb-3">
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Site Name</ng-container>
         <ng-container appPageSubheader2Summary>
@@ -72,7 +72,11 @@
 
         </div>
       </div>
-    </section>
+    </section> -->
+
+    <app-site-name [form]="form"
+                   [site]="site">
+    </app-site-name>
 
     <ng-container *ngIf="isCommPharm()">
 
