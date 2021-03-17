@@ -23,17 +23,18 @@ COPY package.json package-lock.json ./
 COPY . .
 
 # Fill template with environment variables
-RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
-
+#RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 # Install Angular CLI
 RUN npm install -g @angular/cli
-
 # Install dependencies
 # COPY package.json package.json
 RUN npm ci
 
 # Add application
 RUN ng build --prod
+USER 0
+RUN chmod 766 /usr/src/app/src/environments/environment.prod.template.ts && \
+    envsubst < /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.ts
 
 # Debugging
 # RUN find -type f -name *.js
@@ -57,9 +58,7 @@ COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-USER 0
-RUN chmod 766 ./environments/environment.ts && \
-    envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
+
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
 # RUN echo "Build completed."
