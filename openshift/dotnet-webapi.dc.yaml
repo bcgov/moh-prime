@@ -255,6 +255,9 @@ objects:
                   secretKeyRef:
                     key: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
                     name: "verifiable-credential-secrets"
+
+              - name: PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT
+                value: "6FA357305008C8EA814EA98768C21783DCCA374E"
             image: " "
             name: primeapi
             ports:
