@@ -1,0 +1,10 @@
+<app-alert [type]="getType()">
+  <ng-container #alertTitle
+                class="alert-title">
+    {{ banner?.title }}
+  </ng-container>
+  <ng-container #alertContent
+                class="alert-content">
+    <div [innerHTML]="banner?.content"></div>
+  </ng-container>
+</app-alert>

@@ -9,6 +9,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 @Component({
   selector: 'app-info',
@@ -19,12 +20,15 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
   ]
 })
 export class InfoComponent extends AbstractComponent implements OnInit {
+  public locationCode: BannerLocationCode;
+
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private viewportService: ViewportService
   ) {
     super();
+    this.locationCode = BannerLocationCode.ENROLMENT_LANDING_PAGE;
   }
 
   public get isMobile(): boolean {

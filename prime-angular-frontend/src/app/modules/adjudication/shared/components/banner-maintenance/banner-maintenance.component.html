@@ -1,0 +1,85 @@
+<app-page-header>Create Banner</app-page-header>
+
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <div class="row mb-4">
+    <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Title"
+               formControlName="title">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+      <div>
+        <mat-form-field class="w-90">
+          <mat-label>Location</mat-label>
+          <mat-select [formControl]="bannerLocationCode">
+            <mat-option [value]="locationCode">
+              {{ BannerLocationCode[locationCode] | replace: '_':' ' | capitalize }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+        <app-contextual-help>
+          Select which page the banner will be displayed on.
+        </app-contextual-help>
+      </div>
+      <div>
+        <mat-form-field class="w-90">
+          <mat-label>Type</mat-label>
+          <mat-select [formControl]="bannerType">
+            <mat-option [value]="BannerType.INFO">
+              {{ BannerType[BannerType.INFO] | capitalize }}
+            </mat-option>
+            <mat-option [value]="BannerType.DANGER">
+              {{ BannerType[BannerType.DANGER] | capitalize }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="w-100">
+        <input matInput
+               type="datetime-local"
+               placeholder="Start date"
+               [formControl]="startDate">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <input matInput
+               type="datetime-local"
+               placeholder="End date"
+               [formControl]="endDate">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+    </div>
+    <div class="col-sm-12 col-lg-9 col-xl-7">
+
+      <editor class="mb-4"
+              [init]="editorConfig"
+              (onKeyUp)="onUpdate($event)"
+              (onChange)="onUpdate($event)"
+              formControlName="content">
+      </editor>
+
+    </div>
+  </div>
+
+  <div class="text-right">
+    <button mat-flat-button
+            [disabled]="!(Role.ADMIN | inRole)"
+            color="primary">Publish Banner</button>
+  </div>
+
+</form>
+
+<h2 class="mb-2">Preview</h2>
+
+<app-banner [banner]="banner"></app-banner>

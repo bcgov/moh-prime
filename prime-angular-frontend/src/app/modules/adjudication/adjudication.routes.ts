@@ -13,6 +13,7 @@ export class AdjudicationRoutes {
   public static EVENT_LOG = 'event-log';
   public static DOCUMENT_UPLOAD = 'documents';
   public static ENROLLEE_OVERVIEW = 'overview';
+  public static BANNER = 'banner';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';

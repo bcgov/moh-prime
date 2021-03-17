@@ -19,11 +19,13 @@ namespace Prime.Controllers
     {
         private readonly IBannerService _bannerService;
         private readonly IMetabaseService _metabaseService;
+        private readonly IAdminService _adminService;
 
-        public BannersController(IBannerService bannerService, IMetabaseService metabaseService)
+        public BannersController(IBannerService bannerService, IMetabaseService metabaseService, IAdminService adminService)
         {
             _bannerService = bannerService;
             _metabaseService = metabaseService;
+            _adminService = adminService;
         }
 
         // POST: api/Banners
@@ -44,6 +46,9 @@ namespace Prime.Controllers
                 ModelState.AddModelError("Banner", "Could not create a Banner, the passed in Banner cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            banner.AdminId = admin.Id;
 
             await _bannerService.CreateBannerAsync(banner);
 
@@ -142,7 +147,7 @@ namespace Prime.Controllers
         /// Gets an active Banner by location code. Returns null result if no active banner
         /// </summary>
         /// <param name="locationCode"></param>
-        [HttpGet("active", Name = nameof(GetBannerById))]
+        [HttpGet("active", Name = nameof(GetActiveBannerByLocationCode))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<BannerViewModel>> GetActiveBannerByLocationCode([FromQuery] BannerLocationCode locationCode)

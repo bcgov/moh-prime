@@ -174,14 +174,15 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;</th>
+              scope="col">
+            <ng-container [ngTemplateOutlet]="bulkActions"></ng-container>
+          </th>
           <td mat-cell
               *matCellDef="let row;"
               class="text-right">
 
             <ng-container [ngTemplateOutlet]="menu"
                           [ngTemplateOutletContext]="{ row: row }"></ng-container>
-
           </td>
         </ng-container>
 
@@ -196,6 +197,22 @@
        class="px-4 py-2 text-muted">
       No Enrolments Found
     </p>
+
+    <ng-template #bulkActions
+                 let-row="row">
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.BANNER])">
+          <mat-icon>bookmark</mat-icon>
+          <span>Create Banner</span>
+        </button>
+      </mat-menu>
+    </ng-template>
 
     <ng-template #menu
                  let-row="row">

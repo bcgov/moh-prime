@@ -1,4 +1,4 @@
 export enum BannerType {
-  NOTICE = 1,
-  WARNING = 2,
+  INFO = 1,
+  DANGER = 2,
 }

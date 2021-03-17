@@ -9,6 +9,7 @@ import { ViewportService } from '@core/services/viewport.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 @Component({
   selector: 'app-site',
@@ -19,12 +20,14 @@ import { SiteRoutes } from '@registration/site-registration.routes';
   ]
 })
 export class SiteComponent extends AbstractComponent implements OnInit {
+  public locationCode: BannerLocationCode;
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private authService: AuthService,
     private viewportService: ViewportService
   ) {
     super();
+    this.locationCode = BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE;
   }
 
   public get isMobile(): boolean {

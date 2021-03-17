@@ -27,6 +27,8 @@ import { EnrolleeAdjudicatorDocumentsComponent } from './pages/enrollee-adjudica
 import { SiteEventsComponent } from './pages/site-events/site-events.component';
 import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-overview.component';
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
+import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
+import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 
 const routes: Routes = [
   {
@@ -47,6 +49,11 @@ const routes: Routes = [
             path: '',
             component: EnrolleesComponent,
             data: { title: 'Enrollees' }
+          },
+          {
+            path: AdjudicationRoutes.BANNER,
+            component: EnrolleeBannerPageComponent,
+            data: { title: 'Enrollee Banner' }
           },
           {
             path: ':id',
@@ -122,6 +129,11 @@ const routes: Routes = [
             path: '',
             component: SiteRegistrationsComponent,
             data: { title: 'Site Registrations' }
+          },
+          {
+            path: AdjudicationRoutes.BANNER,
+            component: SiteBannerPageComponent,
+            data: { title: 'Site Banner' }
           },
           {
             path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
