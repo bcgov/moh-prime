@@ -21,21 +21,19 @@ import { LdapInformationPageFormState } from './ldap-information-page-form-state
   styleUrls: ['./ldap-information-page.component.scss']
 })
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public busy: Subscription;
   public title: string;
   public formState: LdapInformationPageFormState;
-  public form: FormGroup;
 
   private routeUtils: RouteUtils;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private formStateService: GisEnrolmentFormStateService,
     private gisResource: GisResource,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     super(dialog, formUtilsService);
 
@@ -52,7 +50,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
   }
 
   public ngOnInit(): void {
@@ -77,6 +75,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
 }

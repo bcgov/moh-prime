@@ -33,10 +33,24 @@
           Must indicate whether you are an existing LDAP user or not
         </ng-container>
       </app-alert>
+
+      <app-alert *ngIf="hasAttemptedSubmission && ldapUser.value === false"
+                 type="danger">
+        <ng-container #alertTitle
+                      class="alert-title">
+          No Access Available
+        </ng-container>
+
+        <ng-container #alertContent
+                      class="alert-content">
+          In order to enrol with GIS you must be an active LDAP user.
+        </ng-container>
+      </app-alert>
     </form>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="false"
+                   [disableSave]="hasAttemptedSubmission && ldapUser.value === false"
                    (save)="onSubmit()"></app-page-footer>
 </app-page>

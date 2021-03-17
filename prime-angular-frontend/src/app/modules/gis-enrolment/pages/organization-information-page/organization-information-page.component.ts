@@ -49,7 +49,7 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
   }
 
   public ngOnInit(): void {
@@ -74,6 +74,6 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.ENROLLEE_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ENROLLEE_INFO_PAGE }`]);
   }
 }

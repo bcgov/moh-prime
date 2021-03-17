@@ -49,7 +49,7 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
 
   public ngOnInit(): void {
@@ -74,6 +74,6 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.SUBMISSION_CONFIRMATION }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.SUBMISSION_CONFIRMATION }`]);
   }
 }
