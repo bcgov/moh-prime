@@ -9,6 +9,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 const routes: Routes = [
   {
@@ -43,6 +44,11 @@ const routes: Routes = [
         path: GisEnrolmentRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
+      },
+      {
+        path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@health-auth/shared/modules/health-auth-site-reg-login-page/health-auth-site-reg-login-page.module').then(m => m.HealthAuthSiteRegLoginPageModule)
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
