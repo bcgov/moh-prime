@@ -49,12 +49,12 @@ namespace Prime.ViewModels.Parties
             party.Email = Email;
             party.Phone = Phone;
 
-            party.UserId = user.GetPrimeUserId();
-            party.HPDID = user.FindFirstValue(Claims.PreferredUsername);
-            party.FirstName = user.GetFirstName();
-            party.LastName = user.GetLastName();
-            party.GivenNames = user.FindFirstValue(Claims.GivenNames);
-            party.DateOfBirth = user.GetDateOfBirth().Value;
+            party.UserId = UserId;
+            party.HPDID = HPDID;
+            party.FirstName = FirstName;
+            party.LastName = LastName;
+            party.GivenNames = GivenNames;
+            party.DateOfBirth = DateOfBirth;
 
             party.SetPartyTypes(PartyType.Gis);
 
