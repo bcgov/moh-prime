@@ -84,6 +84,7 @@ import { PreferredNameFormComponent } from '@shared/components/forms/preferred-n
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
+import { SiteNameComponent } from '@shared/components/site/site-name/site-name.component';
 import { SiteRegAccessComponent } from './components/auth/site-reg-access/site-reg-access.component';
 import { PillComponent } from './components/auth/pill/pill.component';
 import { SimpleAccessComponent } from './components/auth/simple-access/simple-access.component';
@@ -160,6 +161,7 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     ClaimNoteComponent,
     AddressViewComponent,
     PageSectionComponent,
+    SiteNameComponent,
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
@@ -243,6 +245,7 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     ClaimNoteComponent,
     AddressViewComponent,
     PageSectionComponent,
+    SiteNameComponent,
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,

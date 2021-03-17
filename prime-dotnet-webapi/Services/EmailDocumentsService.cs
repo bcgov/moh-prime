@@ -83,6 +83,7 @@ namespace Prime.Services.EmailInternal
                     OrganizationDoingBusinessAs = s.Organization.DoingBusinessAs,
                     SiteName = s.DoingBusinessAs,
                     SiteAddress = s.PhysicalAddress,
+                    PEC = s.PEC,
                     BusinessHours = s.BusinessHours.Select(h => new BusinessHourViewModel
                     {
                         Day = h.Day,
