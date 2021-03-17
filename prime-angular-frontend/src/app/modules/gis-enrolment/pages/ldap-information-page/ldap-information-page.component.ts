@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, of, Subscription } from 'rxjs';
 
@@ -28,6 +29,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   private routeUtils: RouteUtils;
 
   constructor(
+    protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     private router: Router,
@@ -35,7 +37,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     private gisResource: GisResource,
     private configService: ConfigService
   ) {
-    super(formUtilsService);
+    super(dialog, formUtilsService);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
@@ -50,7 +52,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.LDAP_USER_PAGE}`]);
+    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
   }
 
   public ngOnInit(): void {
@@ -75,6 +77,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
+    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
 }

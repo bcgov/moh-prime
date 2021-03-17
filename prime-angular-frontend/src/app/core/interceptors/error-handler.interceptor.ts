@@ -23,7 +23,7 @@ export class ErrorHandlerInterceptor {
    * Intercept 401 responses to redirect to login if a user
    * is not authenticated.
    */
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req)
       .pipe(
         catchError((error: any, caught) => {
