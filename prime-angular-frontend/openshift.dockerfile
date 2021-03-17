@@ -33,8 +33,6 @@ RUN npm ci
 # Add application
 RUN ng build --prod
 USER 0
-RUN chmod 766 /usr/src/app/src/environments/environment.prod.template.ts && \
-    envsubst < /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.ts
 
 # Debugging
 # RUN find -type f -name *.js
@@ -43,6 +41,17 @@ RUN chmod 766 /usr/src/app/src/environments/environment.prod.template.ts && \
 ### Stage 2 - Production environment ###
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
+ENV REDIRECT_URL $REDIRECT_URL
+ENV VANITY_URL $VANITY_URL
+ENV OC_APP $OC_APP
+ENV KEYCLOAK_URL $KEYCLOAK_URL
+ENV KEYCLOAK_REALM $KEYCLOAK_REALM
+ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
+ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
+ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
+
+RUN chmod 766 /usr/src/app/src/environments/environment.prod.template.ts && \
+    envsubst < /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.ts
 
 # Edit folder permissions
 # RUN chmod 766 -R /etc/nginx
