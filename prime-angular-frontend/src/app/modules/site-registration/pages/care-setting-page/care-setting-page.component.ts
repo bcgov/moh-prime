@@ -42,7 +42,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
   public vendorChangeDialogOptions: DialogOptions;
-  public isNewSite: FormControl;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -68,7 +67,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       message: 'CareConnect does not support remote access to PharmaNet, all the remote practitioners you have submitted in the application will be deleted and do not have permission to access PharmaNet remotely.'
     };
     this.filteredVendorConfig = [];
-    this.isNewSite = new FormControl(false);
   }
 
   public get careSettingCode(): FormControl {
@@ -77,10 +75,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public get vendorCode(): FormControl {
     return this.form.get('vendorCode') as FormControl;
-  }
-
-  public get pec(): FormControl {
-    return this.form.get('pec') as FormControl;
   }
 
   public onVendorChange(change: MatRadioChange) {
@@ -126,7 +120,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-    this.isNewSite.setValue(this.pec.disabled);
     this.form.markAsPristine();
   }
 
@@ -142,17 +135,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       ).subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;
         this.vendorCode.patchValue(null);
-      });
-
-    this.isNewSite.valueChanges
-      .subscribe(value => {
-        if (value) {
-          this.pec.patchValue(null);
-          this.pec.disable();
-        }
-        else {
-          this.pec.enable();
-        }
       });
 
     this.patchForm();
