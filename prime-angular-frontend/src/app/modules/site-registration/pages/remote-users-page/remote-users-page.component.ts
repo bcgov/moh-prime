@@ -1,0 +1,186 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+
+import { noop, of } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { NoContent } from '@core/resources/abstract-resource';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
+
+import { SiteRoutes } from '@registration/site-registration.routes';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { SiteService } from '@registration/shared/services/site.service';
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
+
+@Component({
+  selector: 'app-remote-users-page',
+  templateUrl: './remote-users-page.component.html',
+  styleUrls: ['./remote-users-page.component.scss']
+})
+export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: RemoteUsersPageFormState;
+  public title: string;
+  public routeUtils: RouteUtils;
+  public isCompleted: boolean;
+  public hasNoRemoteUserError: boolean;
+  public hasNoEmailError: boolean;
+  public submitButtonText: string;
+  public SiteRoutes = SiteRoutes;
+
+  constructor(
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private siteService: SiteService,
+    private siteResource: SiteResource,
+    private siteFormStateService: SiteFormStateService
+  ) {
+    super(dialog, formUtilsService);
+
+    this.canDeactivateWhitelist = ['hasRemoteUsers'];
+
+    this.title = this.route.snapshot.data.title;
+    this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.submitButtonText = 'Save and Continue';
+  }
+
+  public get remoteUsers(): FormArray {
+    return this.form.get('remoteUsers') as FormArray;
+  }
+
+  public get hasRemoteUsers(): FormControl {
+    return this.form.get('hasRemoteUsers') as FormControl;
+  }
+
+  public getRemoteUserProperties(remoteUser: FormGroup) {
+    const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
+
+    const collegeLicence = (remoteUserCertifications.length > 1)
+      ? 'More than one College licence'
+      : (remoteUserCertifications.length === 0)
+        ? 'No College licence'
+        : remoteUserCertifications.value[0].licenseNumber;
+
+    return [
+      {
+        key: 'College Licence',
+        value: collegeLicence
+      }
+    ];
+  }
+
+  public onRemove(index: number) {
+    this.remoteUsers.removeAt(index);
+  }
+
+  public onEdit(index: number) {
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.REMOTE_USERS, index]);
+  }
+
+  public onBack() {
+    this.routeUtils.routeRelativeTo(['../', SiteRoutes.HOURS_OPERATION]);
+  }
+
+  public ngOnInit(): void {
+    this.createFormInstance();
+    this.initForm();
+
+    if (this.siteService.site.submittedDate) {
+      this.submitButtonText = 'Save and Submit';
+    }
+  }
+
+  protected createFormInstance() {
+    this.formState = this.siteFormStateService.remoteUsersPageFormState;
+    this.form = this.formState.form;
+  }
+
+  protected patchForm(): void {
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
+    // Inform the parent not to patch the form as there are outstanding changes
+    // to the remote users that need to be persisted
+    const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    // Remove query param from URL without refreshing
+    this.router.navigate([], { queryParams: { fromRemoteUser: null } });
+    this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.form.markAsPristine();
+  }
+
+  protected initForm() {
+    this.remoteUsers.valueChanges
+      .subscribe((remoteUsers: RemoteUser[]) => {
+        (remoteUsers.length)
+          ? this.hasRemoteUsers.disable({ emitEvent: false })
+          : this.hasRemoteUsers.enable({ emitEvent: false });
+      });
+
+    this.hasRemoteUsers.valueChanges
+      .subscribe((hasRemoteUsers: boolean) => {
+        (hasRemoteUsers)
+          ? this.remoteUsers.setValidators(FormArrayValidators.atLeast(1))
+          : this.remoteUsers.clearValidators();
+
+        this.hasNoRemoteUserError = false;
+        this.remoteUsers.updateValueAndValidity({ emitEvent: false });
+      });
+
+    this.patchForm();
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoRemoteUserError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.hasNoRemoteUserError = true;
+  }
+
+  protected performSubmission(): NoContent {
+    const payload = this.siteFormStateService.json;
+    const site = this.siteService.site;
+    const newRemoteUsers = this.siteFormStateService.remoteUsersPageFormState.json
+      .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+        if (!site.remoteUsers.find((current: RemoteUser) =>
+          current.firstName === updated.firstName &&
+          current.lastName === updated.lastName &&
+          current.email === updated.email
+        )) {
+          newRemoteUsersAcc.push(updated);
+        }
+        return newRemoteUsersAcc;
+      }, []);
+
+    return this.siteResource.updateSite(payload)
+      .pipe(
+        exhaustMap(() =>
+          (site.submittedDate)
+            ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
+            : of(noop())
+        ),
+        exhaustMap(() =>
+          (site.submittedDate && newRemoteUsers)
+            ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
+            : of(noop())
+        )
+      );
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.form.markAsPristine();
+
+    const routePath = (this.isCompleted)
+      ? SiteRoutes.SITE_REVIEW
+      : SiteRoutes.ADMINISTRATOR;
+
+    this.routeUtils.routeRelativeTo(['../', routePath]);
+  }
+}
