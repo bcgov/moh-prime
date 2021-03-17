@@ -33,18 +33,18 @@ namespace PlrIntakeUtility
             provider.Expertise = reader.GetString(GetIndex("P"));
             provider.Languages = reader.GetString(GetIndex("Q"));
 
-            provider.Address1_Line1 = reader.GetString(GetIndex("R"));
-            provider.Address1_Line2 = reader.GetString(GetIndex("S"));
-            provider.Address1_Line3 = reader.GetString(GetIndex("T"));
+            provider.Address1Line1 = reader.GetString(GetIndex("R"));
+            provider.Address1Line2 = reader.GetString(GetIndex("S"));
+            provider.Address1Line3 = reader.GetString(GetIndex("T"));
             provider.City1 = reader.GetString(GetIndex("U"));
             provider.Province1 = reader.GetString(GetIndex("V"));
             provider.Country1 = reader.GetString(GetIndex("W"));
             provider.PostalCode1 = reader.GetString(GetIndex("X"));
             provider.Address1StartDate = TryGetDateTime(reader, "Y");
 
-            provider.Address2_Line1 = reader.GetString(GetIndex("Z"));
-            provider.Address2_Line2 = reader.GetString(GetIndex("AA"));
-            provider.Address2_Line3 = reader.GetString(GetIndex("AB"));
+            provider.Address2Line1 = reader.GetString(GetIndex("Z"));
+            provider.Address2Line2 = reader.GetString(GetIndex("AA"));
+            provider.Address2Line3 = reader.GetString(GetIndex("AB"));
             provider.City2 = reader.GetString(GetIndex("AC"));
             provider.Province2 = reader.GetString(GetIndex("AD"));
             provider.Country2 = reader.GetString(GetIndex("AE"));
@@ -85,7 +85,7 @@ namespace PlrIntakeUtility
             CheckRequiredField(provider.StatusReasonCode, nameof(provider.StatusReasonCode), rowNum);
             CheckRequiredField(provider.StatusStartDate, nameof(provider.StatusStartDate), rowNum);
             CheckRequiredField(provider.StatusExpiryDate, nameof(provider.StatusExpiryDate), rowNum);
-            CheckRequiredField(provider.Address1_Line1, nameof(provider.Address1_Line1), rowNum);
+            CheckRequiredField(provider.Address1Line1, nameof(provider.Address1Line1), rowNum);
             CheckRequiredField(provider.City1, nameof(provider.City1), rowNum);
             CheckRequiredField(provider.Province1, nameof(provider.Province1), rowNum);
             CheckRequiredField(provider.PostalCode1, nameof(provider.PostalCode1), rowNum);

@@ -51,7 +51,7 @@ namespace PlrIntakeUtility.Tests
                     Assert.Equal("PRAC", provider.StatusReasonCode);
                     Assert.Equal(new DateTime(2020, 1, 10), provider.StatusStartDate);
                     Assert.Equal(new DateTime(9999, 12, 30), provider.StatusExpiryDate);
-                    Assert.Equal("7887 Fallen Circus", provider.Address1_Line1);
+                    Assert.Equal("7887 Fallen Circus", provider.Address1Line1);
                     Assert.Equal("Burnaby", provider.City1);
                     Assert.Equal("BC", provider.Province1);
                     Assert.Equal("V3N3N6", provider.PostalCode1);
