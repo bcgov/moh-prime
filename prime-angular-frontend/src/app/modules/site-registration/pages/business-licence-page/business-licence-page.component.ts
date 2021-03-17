@@ -39,6 +39,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   public hasNoBusinessLicenceError: boolean;
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public site: Site;
 
   @ViewChild('deferredLicence') public deferredLicenceToggle: MatSlideToggle;
   @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
@@ -73,10 +74,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   public get doingBusinessAs(): FormControl {
     return this.form.get('doingBusinessAs') as FormControl;
-  }
-
-  public get site(): Site {
-    return this.siteService.site;
   }
 
   public isCommPharm() {
@@ -141,8 +138,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected initForm(): void {
-    const site = this.siteService.site;
-    this.getBusinessLicence(site);
+    this.site = this.siteService.site;
+    this.getBusinessLicence(this.site);
   }
 
   protected additionalValidityChecks(): boolean {
