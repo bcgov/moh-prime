@@ -1,5 +1,7 @@
 export class SiteRoutes {
-  public static SITE_REGISTRATION = 'site-registration';
+  public static LOGIN_PAGE = 'site';
+
+  public static MODULE_PATH = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
 
   // Kept as organizations so route paths indicate hierarchy of resources
@@ -26,8 +28,6 @@ export class SiteRoutes {
   public static REMOTE_USER = 'remote-user';
   public static SITE_REVIEW = 'site-review';
   public static NEXT_STEPS = 'next-steps';
-
-  public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
 
   /**
    * @description
