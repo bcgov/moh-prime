@@ -26,7 +26,7 @@ jobs:
     env:
       VERSION: v1
       SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: prime-webapi-backend
+      CONTAINER_NAME: primeapi
       IMAGE_TAGS: latest
       
     steps:
@@ -58,7 +58,7 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |          
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
-          docker-compose build \
+          docker-compose -f openshift-compose.yml build \
           --build-arg ASPNETCORE_ENVIRONMENT=${{ secrets.API_ASPNETCORE_ENVIRONMENT }} \
           --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
           --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
