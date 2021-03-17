@@ -60,6 +60,9 @@ export class SiteNameComponent implements OnInit {
   }
 
   private getDoingBusinessAs(site: Site) {
+    if (!site) {
+      return;
+    }
     this.busy = this.organizationResource.getOrganizationById(site.organizationId)
       .pipe(
         map((organization: Organization) => organization.registrationId),
