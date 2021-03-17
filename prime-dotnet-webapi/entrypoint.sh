@@ -2,12 +2,11 @@
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
-if [ ! -n "${database-name}" ]
+if [ ! -n $(printenv database-name) ]
 then 
-export POSTGRESQL_PASSWORD=${database-password
-}
-export POSTGRESQL_USERNAME=${database-user}
-export POSTGRESQL_DATABASE=${database-name}
+export POSTGRESQL_PASSWORD=$(printenv database-password)
+export POSTGRESQL_USERNAME=$(printenv database-user)
+export POSTGRESQL_DATABASE=$(printenv database-name)
 fi
 
 if [ -z "${DB_CONNECTION_STRING}" ]
