@@ -71,8 +71,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker image ls 
-          docker tag moh-prime-$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
       
       - name: "Push .NET web API image to OpenShift registry"
         id: push-image
