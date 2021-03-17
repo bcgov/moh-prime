@@ -6,10 +6,21 @@ import { SharedModule } from '@shared/shared.module';
 import { GisEnrolmentRoutingModule } from './gis-enrolment-routing.module';
 import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-dashboard.component';
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
+import { LdapUserPageComponent } from './pages/ldap-user-page/ldap-user-page.component';
+import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap-information-page.component';
+import { OrganizationInformationPageComponent } from './pages/organization-information-page/organization-information-page.component';
+import { EnrolleeInformationPageComponent } from './pages/enrollee-information-page/enrollee-information-page.component';
+import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
 
 @NgModule({
   declarations: [
+    GisDashboardComponent,
     CollectionNoticePageComponent,
+    LdapUserPageComponent,
+    LdapInformationPageComponent,
+    OrganizationInformationPageComponent,
+    EnrolleeInformationPageComponent,
+    SubmissionConfirmationPageComponent
   ],
   imports: [
     SharedModule,

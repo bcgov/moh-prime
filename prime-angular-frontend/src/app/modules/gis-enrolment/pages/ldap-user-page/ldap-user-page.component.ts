@@ -18,19 +18,17 @@ import { LdapUserPageFormState } from './ldap-user-page-form-state.class';
   styleUrls: ['./ldap-user-page.component.scss']
 })
 export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public busy: Subscription;
   public title: string;
   public formState: LdapUserPageFormState;
-  public form: FormGroup;
 
   private routeUtils: RouteUtils;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private formStateService: GisEnrolmentFormStateService,
     private route: ActivatedRoute,
     private router: Router,
-    private formStateService: GisEnrolmentFormStateService
   ) {
     super(dialog, formUtilsService);
 
