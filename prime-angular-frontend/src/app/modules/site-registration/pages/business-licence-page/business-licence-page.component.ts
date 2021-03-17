@@ -5,25 +5,22 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { Organization } from '@registration/shared/models/organization.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
 
@@ -40,9 +37,9 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   public businessLicenceDocuments: BusinessLicenceDocument[];
   public uploadedFile: boolean;
   public hasNoBusinessLicenceError: boolean;
-  public doingBusinessAsNames: string[];
   public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
+  public site: Site;
 
   @ViewChild('deferredLicence') public deferredLicenceToggle: MatSlideToggle;
   @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
@@ -52,8 +49,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     protected formUtilsService: FormUtilsService,
     private siteService: SiteService,
     private siteFormStateService: SiteFormStateService,
-    private organizationResource: OrganizationResource,
-    private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
@@ -64,8 +59,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.uploadedFile = false;
-
-    this.doingBusinessAsNames = [];
 
     this.businessLicenceDocuments = [];
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
@@ -145,9 +138,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected initForm(): void {
-    const site = this.siteService.site;
-    this.getBusinessLicence(site);
-    this.getDoingBusinessAs(site);
+    this.site = this.siteService.site;
+    this.getBusinessLicence(this.site);
   }
 
   protected additionalValidityChecks(): boolean {
@@ -229,17 +221,5 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
           this.documentUpload.disable();
         }
       });
-  }
-
-  private getDoingBusinessAs(site: Site) {
-    this.busy = this.organizationResource.getOrganizationById(site.organizationId)
-      .pipe(
-        map((organization: Organization) => organization.registrationId),
-        this.orgBookResource.doingBusinessAsMap(),
-        tap((doingBusinessAsNames: string[]) =>
-          this.doingBusinessAsNames = doingBusinessAsNames
-        )
-      )
-      .subscribe();
   }
 }
