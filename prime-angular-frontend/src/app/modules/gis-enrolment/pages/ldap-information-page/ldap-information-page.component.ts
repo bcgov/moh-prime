@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
-import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
-import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
+import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
 @Component({
@@ -30,10 +29,9 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
-    private gisResource: GisEnrolmentResource,
-    private configService: ConfigService,
-    private route: ActivatedRoute,
-    private router: Router,
+    private gisEnrolmentResource: GisEnrolmentResource,
+    route: ActivatedRoute,
+    router: Router,
   ) {
     super(dialog, formUtilsService);
 
@@ -70,8 +68,11 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     throw new Error('Method not implemented.');
   }
 
-  protected performSubmission(): Observable<NoContent> {
-    return this.gisResource.ldapLogin(this.form.value);
+  protected performSubmission(): NoContent {
+    return this.gisEnrolmentResource.ldapLogin(this.form.value)
+      .pipe(
+        exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {

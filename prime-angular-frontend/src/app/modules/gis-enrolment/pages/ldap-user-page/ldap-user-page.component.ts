@@ -27,8 +27,8 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
-    private route: ActivatedRoute,
-    private router: Router,
+    route: ActivatedRoute,
+    router: Router,
   ) {
     super(dialog, formUtilsService);
 

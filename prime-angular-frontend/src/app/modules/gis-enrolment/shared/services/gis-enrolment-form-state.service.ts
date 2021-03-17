@@ -58,7 +58,7 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<any> 
       this.ldapInformationPageFormState.form,
       this.organizationInformationPageFormState.form,
       this.enrolleeInformationPageFormState.form
-    ]
+    ];
   }
 
   /**
@@ -67,10 +67,10 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<any> 
    * to clear previous form data from the service.
    */
   protected buildForms(): void {
-    this.ldapUserPageFormState = new LdapUserPageFormState(this.fb, this.formUtilsService);
-    this.ldapInformationPageFormState = new LdapInformationPageFormState(this.fb, this.formUtilsService);
-    this.organizationInformationPageFormState = new OrganizationInformationPageFormState(this.fb, this.formUtilsService);
-    this.enrolleeInformationPageFormState = new EnrolleeInformationPageFormState(this.fb, this.formUtilsService);
+    this.ldapUserPageFormState = new LdapUserPageFormState(this.fb);
+    this.ldapInformationPageFormState = new LdapInformationPageFormState(this.fb);
+    this.organizationInformationPageFormState = new OrganizationInformationPageFormState(this.fb);
+    this.enrolleeInformationPageFormState = new EnrolleeInformationPageFormState(this.fb);
   }
 
   /**

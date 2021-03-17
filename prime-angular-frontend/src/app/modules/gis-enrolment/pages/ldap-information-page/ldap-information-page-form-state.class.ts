@@ -1,24 +1,22 @@
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-export interface LdapInformationPageFormModel {
+export interface LdapInformationPageDataModel {
   ldapUsername: string;
   ldapPassword: string;
 }
 
-export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageFormModel> {
+export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageDataModel> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private fb: FormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get json(): LdapInformationPageFormModel {
+  public get json(): LdapInformationPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -26,7 +24,7 @@ export class LdapInformationPageFormState extends AbstractFormState<LdapInformat
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: LdapInformationPageFormModel): void {
+  public patchValue(model: LdapInformationPageDataModel): void {
     if (!this.formInstance) {
       return;
     }

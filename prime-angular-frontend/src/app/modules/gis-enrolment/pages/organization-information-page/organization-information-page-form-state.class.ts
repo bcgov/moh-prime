@@ -1,24 +1,22 @@
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-export interface OrganizationInformationPageFormModel {
+interface OrganizationInformationPageDataModel {
   organization: string;
   role: string;
 }
 
-export class OrganizationInformationPageFormState extends AbstractFormState<OrganizationInformationPageFormModel> {
+export class OrganizationInformationPageFormState extends AbstractFormState<OrganizationInformationPageDataModel> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private fb: FormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get json(): OrganizationInformationPageFormModel {
+  public get json(): OrganizationInformationPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -26,7 +24,7 @@ export class OrganizationInformationPageFormState extends AbstractFormState<Orga
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: OrganizationInformationPageFormModel): void {
+  public patchValue(model: OrganizationInformationPageDataModel): void {
     if (!this.formInstance) {
       return;
     }

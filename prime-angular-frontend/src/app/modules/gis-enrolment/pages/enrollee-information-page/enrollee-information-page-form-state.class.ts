@@ -1,22 +1,23 @@
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
-export interface EnrolleeInformationPageFormModel { }
+export interface EnrolleeInformationPageDataModel {
+  email: string;
+  phone: string;
+}
 
-export class EnrolleeInformationPageFormState extends AbstractFormState<EnrolleeInformationPageFormModel> {
+export class EnrolleeInformationPageFormState extends AbstractFormState<EnrolleeInformationPageDataModel> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private fb: FormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get json(): EnrolleeInformationPageFormModel {
+  public get json(): EnrolleeInformationPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -24,7 +25,7 @@ export class EnrolleeInformationPageFormState extends AbstractFormState<Enrollee
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: EnrolleeInformationPageFormModel): void {
+  public patchValue(model: EnrolleeInformationPageDataModel): void {
     if (!this.formInstance) {
       return;
     }
