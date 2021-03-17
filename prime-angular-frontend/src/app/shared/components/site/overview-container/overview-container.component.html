@@ -71,6 +71,11 @@
       {{ site?.doingBusinessAs | default }}
     </app-enrollee-property>
 
+    <app-enrollee-property title="Site ID"
+                           *ngIf="site?.pec">
+      {{ site?.pec | default }}
+    </app-enrollee-property>
+
     <app-enrollee-property title="Deferred Business Licence Reason"
                            *ngIf="site.businessLicence?.deferredLicenceReason">
       {{ site.businessLicence.deferredLicenceReason | default }}
