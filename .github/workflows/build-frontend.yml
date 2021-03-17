@@ -72,7 +72,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker ls
+          docker image ls
           docker tag moh-prime-$SERVICE_NAME ${{ secrets.OPENSHIFT_IMAGE_REGISTRY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$IMAGE_NAME
       
       - name: "Push Angular frontend image to OpenShift registry"
