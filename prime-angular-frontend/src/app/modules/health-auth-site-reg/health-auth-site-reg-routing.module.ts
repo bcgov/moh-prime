@@ -24,6 +24,85 @@ const routes: Routes = [
         data: { title: '' }
       },
       {
+        path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
+        component: AuthorizedUserComponent,
+        data: { title: '' }
+      },
+      // {
+      //   path: 'health-authority/:hid/sites/:sid',
+      //   children: [
+      //     {
+      //       path: HealthAuthSiteRegRoutes.VENDOR,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.HOURS_OPERATION,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.REMOTE_USERS,
+      //       children: [
+      //         // {
+      //         //   path: '',
+      //         //   component: RemoteUsersPageComponent,
+      //         //   // canActivate: [SiteGuard],
+      //         //   // canDeactivate: [CanDeactivateFormGuard],
+      //         //   data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+      //         // },
+      //         // {
+      //         //   path: ':index',
+      //         //   component: RemoteUserPageComponent,
+      //         //   // canActivate: [SiteGuard],
+      //         //   // canDeactivate: [CanDeactivateFormGuard],
+      //         //   data: { title: 'Remote User' }
+      //         // }
+      //       ]
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.PRIVACY_OFFICER,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.SITE_REVIEW,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     },
+      //     {
+      //       path: HealthAuthSiteRegRoutes.NEXT_STEPS,
+      //       component: AuthorizedUserComponent,
+      //       data: { title: '' }
+      //     }
+      //   ]
+      // },
+      {
         path: '', // Equivalent to `/` and alias for default view
         // TODO change to site management and hook up guards, but for demo use AuthorizedUser
         // redirectTo: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
