@@ -51,7 +51,15 @@ export class MockEnrolmentService implements IEnrolmentService {
       jobs: [],
       oboSites: [],
       enrolleeHealthAuthorities: [],
-      selfDeclarations: [],
+      selfDeclarations: [
+        {
+          id: faker.random.number(),
+          enrolleeId: faker.random.number(),
+          selfDeclarationTypeCode: faker.random.number({ min: 1, max: 4 }), // SelfDeclarationTypeEnum
+          selfDeclarationDetails: faker.lorem.words(10),
+          documentGuids: []
+        }
+      ],
       selfDeclarationDocuments: [],
       identificationDocuments: [],
       careSettings: [
@@ -142,5 +150,4 @@ export class MockEnrolmentService implements IEnrolmentService {
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     return true;
   }
-
 }

@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { MockPermissionService } from 'test/mocks/mock-permission-service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
