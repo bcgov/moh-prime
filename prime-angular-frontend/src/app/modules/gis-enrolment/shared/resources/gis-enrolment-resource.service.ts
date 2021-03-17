@@ -17,7 +17,7 @@ import { GisEnrolment } from '../models/gis-enrolment.model';
 @Injectable({
   providedIn: 'root'
 })
-export class GisResource {
+export class GisEnrolmentResource {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
@@ -37,13 +37,25 @@ export class GisResource {
       );
   }
 
-  public getEnrolment(gisId: number): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`gis/${ gisId }`)
+  public getEnrolment(): Observable<GisEnrolment> {
+    return this.apiResource.get<GisEnrolment>(`gis`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('');
           this.logger.error('[GisModule] GisResource::getEnrolment error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolmentById(gisId: number): Observable<GisEnrolment> {
+    return this.apiResource.get<GisEnrolment>(`gis/${ gisId }`)
+      .pipe(
+        map((response: ApiHttpResponse<GisEnrolment>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('');
+          this.logger.error('[GisModule] GisResource::getEnrolmentById error has occurred: ', error);
           throw error;
         })
       );

@@ -12,7 +12,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
-import { GisResource } from '@gis/shared/resources/gis-resource.service';
+import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
 @Component({
@@ -30,7 +30,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
-    private gisResource: GisResource,
+    private gisResource: GisEnrolmentResource,
     private configService: ConfigService,
     private route: ActivatedRoute,
     private router: Router,

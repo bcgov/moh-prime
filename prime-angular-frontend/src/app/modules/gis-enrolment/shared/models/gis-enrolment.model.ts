@@ -6,4 +6,5 @@ export interface GisEnrolment {
   phone: string;
   organization: string;
   role: string;
+  completed: boolean;
 }
