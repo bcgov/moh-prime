@@ -10,23 +10,14 @@ export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
 export logfile=prime.logfile.out
 # Wait for database connection
 function PG_IS_READY() { 
-psql -h $DB_HOST -U ${POSTGRES_USERNAME} -d ${POSTGRES_DATABASE} -t -c "select 'READY'"
+psql -h $DB_HOST -U ${POSTGRES_USERNAME} -d ${POSTGRES_DATABASE} -t -c "select 'READY'" | awk '{print $1}'
 }
 
-
-n=0
-while  [[ $n -ge 5 || ($(PG_IS_READY) == *"READY"*) ]]
+until PG_IS_READY | grep -m 1 "READY";
 do
     echo "Waiting for the database ..." ;
     sleep 3 ;
-    n=$[$n+1]
 done
-if [[ $n -ge 5 ]]
-then
-    echo "Failed to connect to database."
-    exit 1
-fi
-
 
 psql -h $DB_HOST -U ${POSTGRES_USERNAME} -d ${POSTGRES_DATABASE} -a -f ./out/databaseMigrations.sql
 

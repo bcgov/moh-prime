@@ -35,8 +35,8 @@ RUN npm ci
 # Add application
 RUN ng build --prod
 
-# Debuggging
-RUN find -type f -name *.js
+# Debugging
+# RUN find -type f -name *.js
 
 ########################################
 ### Stage 2 - Production environment ###
@@ -54,7 +54,8 @@ FROM registry.redhat.io/rhel8/nginx-118
 # COPY entrypoint.sh /
 
 COPY --from=build-deps /usr/src/app /opt/app-root/
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/conf.d/prime.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
 # RUN chmod +x /entrypoint.sh
