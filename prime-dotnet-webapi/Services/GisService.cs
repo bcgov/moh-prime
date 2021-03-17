@@ -105,6 +105,15 @@ namespace Prime.Services
             return success;
         }
 
+        public async Task<int> SubmitApplicationAsync(int gisId)
+        {
+            var gisEnrolment = await _context.GisEnrolments
+                .Include(g => g.Party)
+                .SingleOrDefaultAsync(g => g.Id == gisId);
 
+            gisEnrolment.SubmittedDate = DateTime.Now;
+
+            return await _context.SaveChangesAsync();
+        }
     }
 }

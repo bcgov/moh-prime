@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210312204114_AddGis")]
+    [Migration("20210317201707_AddGis")]
     partial class AddGis
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -14109,6 +14109,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("Role")
                         .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
