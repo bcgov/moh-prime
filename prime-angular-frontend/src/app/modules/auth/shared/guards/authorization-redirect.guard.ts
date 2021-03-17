@@ -6,8 +6,8 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { AuthRoutes } from '@auth/auth.routes';
 import { Role } from '../enum/role.enum';
+import { SiteRoutes } from '@registration/site-registration.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +41,7 @@ export class AuthorizationRedirectGuard extends BaseGuard {
       if (this.permissionService.hasAnyRole([Role.PHSA_LABTECH, Role.PHSA_IMMUNIZER])) {
         destinationRoute = this.config.routes.phsa;
       } else if (this.permissionService.hasRoles(Role.ENROLLEE)) {
-        destinationRoute = (routePath.slice(1) === AuthRoutes.SITE)
+        destinationRoute = (routePath.slice(1) === SiteRoutes.LOGIN_PAGE)
           ? this.config.routes.site
           : this.config.routes.enrolment;
       } else if (this.permissionService.hasRoles(Role.ADMIN)) {

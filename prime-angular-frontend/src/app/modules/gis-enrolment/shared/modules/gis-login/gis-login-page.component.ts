@@ -18,13 +18,10 @@ export class GisLoginPageComponent implements OnInit {
     private router: Router
   ) {
     this.title = route.snapshot.data.title;
-    this.dashboardHeaderConfig = {
-      theme: 'white',
-      showMobileToggle: true
-    };
+    this.dashboardHeaderConfig = { theme: 'white' };
   }
 
-  public login() {
+  public onLogin() {
     this.router.navigate([GisEnrolmentRoutes.MODULE_PATH]);
   }
 
