@@ -38,8 +38,9 @@ jobs:
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER_URL }}
-          openshift_username: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }}
-          openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
+          openshift_token: ${{ secrets.OPENSHIFT_SERVICE_TOKEN }}
+          # openshift_username: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME }}
+          # openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
       # Use OpenShift CLI to retrieve necessary environment variables stored in OpenShift to build the frontend
