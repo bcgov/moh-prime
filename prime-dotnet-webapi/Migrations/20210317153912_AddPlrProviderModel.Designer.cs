@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210315233308_AddPlrProviderModel")]
+    [Migration("20210317153912_AddPlrProviderModel")]
     partial class AddPlrProviderModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -15662,29 +15662,29 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("Address1Line1")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Address1Line2")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Address1Line3")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Address1StartDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Address1_Line1")
+                    b.Property<string>("Address2Line1")
                         .HasColumnType("text");
 
-                    b.Property<string>("Address1_Line2")
+                    b.Property<string>("Address2Line2")
                         .HasColumnType("text");
 
-                    b.Property<string>("Address1_Line3")
+                    b.Property<string>("Address2Line3")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Address2StartDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Address2_Line1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2_Line2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2_Line3")
-                        .HasColumnType("text");
 
                     b.Property<string>("City1")
                         .HasColumnType("text");

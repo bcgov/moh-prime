@@ -45,11 +45,11 @@ namespace Prime.Models
 
         public string Languages { get; set; }
 
-        public string Address1_Line1 { get; set; }
+        public string Address1Line1 { get; set; }
 
-        public string Address1_Line2 { get; set; }
+        public string Address1Line2 { get; set; }
 
-        public string Address1_Line3 { get; set; }
+        public string Address1Line3 { get; set; }
 
         public string City1 { get; set; }
 
@@ -61,11 +61,11 @@ namespace Prime.Models
 
         public DateTime Address1StartDate { get; set; }
 
-        public string Address2_Line1 { get; set; }
+        public string Address2Line1 { get; set; }
 
-        public string Address2_Line2 { get; set; }
+        public string Address2Line2 { get; set; }
 
-        public string Address2_Line3 { get; set; }
+        public string Address2Line3 { get; set; }
 
         public string City2 { get; set; }
 
