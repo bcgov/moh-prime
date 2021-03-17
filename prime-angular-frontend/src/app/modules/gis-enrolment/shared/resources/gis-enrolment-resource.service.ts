@@ -10,9 +10,9 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { Party } from '@registration/shared/models/party.model';
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -61,8 +61,8 @@ export class GisEnrolmentResource {
       );
   }
 
-  public createEnrolment(party: Party): Observable<GisEnrolment> {
-    return this.apiResource.post<GisEnrolment>('gis', party)
+  public createEnrolment(enrolment: GisEnrolment): Observable<GisEnrolment> {
+    return this.apiResource.post<GisEnrolment>('gis', enrolment)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         tap((newEnrolment: GisEnrolment) => {
