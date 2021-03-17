@@ -22,18 +22,20 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        public async Task<JObject> GetUserAsync(string userId, string password)
+        public async Task<JObject> GetUserAsync(string username, string password)
         {
+            JObject messageObject = new JObject
+            {
+                { "userName", username },
+                { "password", password }
+            };
+
+            var httpContent = CreateStringContent(messageObject);
+
             HttpResponseMessage response = null;
             try
             {
-                var request = new HttpRequestMessage
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri($"{_client.BaseAddress}users/{userId}"),
-                    Content = CreateStringContent(password)
-                };
-                response = await _client.SendAsync(request).ConfigureAwait(false);
+                response = await _client.PostAsync($"users", httpContent);
             }
             catch (Exception ex)
             {

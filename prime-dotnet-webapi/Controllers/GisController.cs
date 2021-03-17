@@ -36,6 +36,12 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
+            if (!changeModel.Validate(User))
+            {
+                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
 
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
@@ -76,6 +82,12 @@ namespace Prime.Controllers
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
+            }
+
+            if (!changeModel.Validate(User))
+            {
+                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);

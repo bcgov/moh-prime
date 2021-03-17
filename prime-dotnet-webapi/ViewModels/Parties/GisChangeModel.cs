@@ -13,6 +13,12 @@ namespace Prime.ViewModels.Parties
     {
         [JsonIgnore]
         public Party Party { get; set; }
+        public Guid UserId { get; set; }
+        public string HPDID { get; set; }
+        public string FirstName { get; set; }
+        public string GivenNames { get; set; }
+        public string LastName { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string LdapUsername { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -53,6 +59,16 @@ namespace Prime.ViewModels.Parties
             party.SetPartyTypes(PartyType.Gis);
 
             return party;
+        }
+
+        public bool Validate(ClaimsPrincipal user)
+        {
+            return UserId == user.GetPrimeUserId()
+                && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+                && FirstName == user.FindFirstValue(Claims.GivenName)
+                && LastName == user.FindFirstValue(Claims.FamilyName)
+                && GivenNames == user.FindFirstValue(Claims.GivenNames)
+                && DateOfBirth == user.GetDateOfBirth();
         }
     }
 }
