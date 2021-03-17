@@ -1,6 +1,10 @@
 export class EnrolmentRoutes {
-  public static ENROLMENT = 'enrolment';
+  public static BCSC_LOGIN = 'info';
+  public static BCEID_LOGIN = 'bceid';
+
+  public static MODULE_PATH = 'enrolment';
   public static COLLECTION_NOTICE = 'collection-notice';
+
   // Enrollee overview:
   public static OVERVIEW = 'overview';
   // Enrollee access:
@@ -32,11 +36,10 @@ export class EnrolmentRoutes {
   public static PHARMANET_ENROLMENT_SUMMARY = 'pharmanet-enrolment-summary';
   public static PHARMANET_TRANSACTIONS = 'pharmanet-transactions';
   public static ACCESS_TERMS = 'access-terms';
-
-  public static MODULE_PATH = EnrolmentRoutes.ENROLMENT;
+  public static ENROLMENT = 'enrolment';
 
   public static routePath(route: string): string {
-    return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
+    return `/${ EnrolmentRoutes.MODULE_PATH }/${ route }`;
   }
 
   // Use by the progress indicator to calculate percent completion
