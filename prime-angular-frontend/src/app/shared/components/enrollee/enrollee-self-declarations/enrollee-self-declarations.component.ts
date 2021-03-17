@@ -50,9 +50,6 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
   }
 
   private createSelfDeclarationComposites() {
-    if (!this.enrolment) {
-      return;
-    }
     const answered = this.enrolment.selfDeclarations
       .map(s => s.selfDeclarationTypeCode);
     const unanswered = (this.showAllSelfDeclarationsQuestions)
