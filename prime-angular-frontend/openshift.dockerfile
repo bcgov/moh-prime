@@ -50,8 +50,6 @@ ENV KEYCLOAK_CLIENT_ID $KEYCLOAK_CLIENT_ID
 ENV JWT_WELL_KNOWN_CONFIG $JWT_WELL_KNOWN_CONFIG
 ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 
-RUN chmod 766 /usr/src/app/src/environments/environment.prod.template.ts && \
-    envsubst < /usr/src/app/src/environments/environment.prod.template.ts > /usr/src/app/src/environments/environment.ts
 
 # Edit folder permissions
 # RUN chmod 766 -R /etc/nginx
@@ -68,6 +66,8 @@ COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
+RUN chmod 766 ./environments/environment.prod.template.ts && \
+    envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
 # RUN echo "Build completed."
