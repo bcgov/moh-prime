@@ -25,10 +25,8 @@ export class GisEnrolmentResource {
   ) { }
 
   public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
-    // const payload = { gisId: enrolmentId, ...credentials };
-    // return this.apiResource.post<NoContent>('gis/ldap/login', payload)
-    const params = this.apiResourceUtilsService.makeHttpParams({ gisId: enrolmentId, ...credentials });
-    return this.apiResource.post<NoContent>('gis/ldap/login', null, params)
+    const payload = { gisId: enrolmentId, ...credentials };
+    return this.apiResource.post<NoContent>('gis/ldap/login', payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
