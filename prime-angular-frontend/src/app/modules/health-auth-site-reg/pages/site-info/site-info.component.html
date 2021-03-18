@@ -1,0 +1,19 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form">
+
+    <app-site-name [form]="form">
+    </app-site-name>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

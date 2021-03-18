@@ -1,3 +1,4 @@
+import { SiteInfoComponent } from './pages/site-info/site-info.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -5,6 +6,8 @@ import { DashboardComponent } from '@lib/modules/dashboard/components/dashboard/
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
 import { AuthorizedUserComponent } from './pages/authorized-user/authorized-user.component';
+import { VendorComponent } from './pages/vendor/vendor.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 
 const routes: Routes = [
   {
@@ -28,24 +31,21 @@ const routes: Routes = [
         component: AuthorizedUserComponent,
         data: { title: '' }
       },
-      // {
-      //   path: 'health-authority/:hid/sites/:sid',
-      //   children: [
-      //     {
-      //       path: HealthAuthSiteRegRoutes.VENDOR,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
+      {
+        path: HealthAuthSiteRegRoutes.VENDOR,
+        component: VendorComponent,
+        data: { title: 'Vendor' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
+        component: CareSettingComponent,
+        data: { title: 'Health Authority Care Setting' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
+        component: SiteInfoComponent,
+        data: { title: 'Site Information' }
+      },
       //     {
       //       path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
       //       component: AuthorizedUserComponent,

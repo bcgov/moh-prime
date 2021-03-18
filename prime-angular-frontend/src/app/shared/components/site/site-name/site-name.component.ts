@@ -15,7 +15,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 })
 export class SiteNameComponent implements OnInit {
   @Input() public form: FormGroup;
-  @Input() public organizationId: number;
+  @Input() public organizationId?: number;
 
   public busy: Subscription;
   public doingBusinessAsNames: string[];
@@ -42,7 +42,9 @@ export class SiteNameComponent implements OnInit {
   }
 
   protected initForm(): void {
-    this.getDoingBusinessAs(this.organizationId);
+    if (this.organizationId) {
+      this.getDoingBusinessAs(this.organizationId);
+    }
 
     this.isNewSite.valueChanges
       .subscribe(value => {
