@@ -1,3 +1,4 @@
+import { SiteInfoComponent } from './pages/site-info/site-info.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -40,11 +41,11 @@ const routes: Routes = [
         component: CareSettingComponent,
         data: { title: 'Health Authority Care Setting' }
       },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
+      {
+        path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
+        component: SiteInfoComponent,
+        data: { title: 'Site Information' }
+      },
       //     {
       //       path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
       //       component: AuthorizedUserComponent,

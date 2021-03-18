@@ -1,3 +1,4 @@
+import { SiteInfoPageFormState } from './../../pages/site-info/site-info-page-form-state.class';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -17,6 +18,7 @@ import { VendorPageFormState } from '../../pages/vendor/vendor-page-form-state.c
 export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<Site> {
   public vendorPageFormState: VendorPageFormState;
   public careSettingPageFormState: CareSettingPageFormState;
+  public siteInfoPageFormState: SiteInfoPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -36,7 +38,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   public get json(): Site {
     const { siteVendors } = this.vendorPageFormState.json;
     const { careSettingCode } = this.careSettingPageFormState.json;
-    // const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason, pec } = this.businessLicencePageFormState.json;
+    const { doingBusinessAs, pec } = this.siteInfoPageFormState.json;
     // const physicalAddress = this.siteAddressPageFormState.json;
     // const businessHours = this.hoursOperationPageFormState.json;
     // const remoteUsers = this.remoteUsersPageFormState.json;
@@ -56,7 +58,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       siteVendors,
       // businessLicenceGuid,
       // deferredLicenceReason,
-      // doingBusinessAs,
+      doingBusinessAs,
       // physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       // physicalAddress,
       // businessHours,
@@ -70,7 +72,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
-      // pec
+      pec
       // TODO output should be a Site-like model instead due to missing properties
     } as Site; // Enforced type due to N/A properties
   }
@@ -79,7 +81,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     return [
       this.vendorPageFormState.form,
       this.careSettingPageFormState.form,
-      // this.businessLicencePageFormState.form,
+      this.siteInfoPageFormState.form,
       // this.siteAddressPageFormState.form,
       // this.hoursOperationPageFormState.form,
       // this.remoteUsersPageFormState.form,
@@ -92,6 +94,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   protected buildForms(): void {
     this.vendorPageFormState = new VendorPageFormState(this.fb);
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
+    this.siteInfoPageFormState = new SiteInfoPageFormState(this.fb);
   }
 
   protected patchForm(site: Site): void {
@@ -99,11 +102,14 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       return;
     }
 
-    const { siteVendors, careSettingCode, pec, businessLicenceGuid, deferredLicenceReason, doingBusinessAs } = site;
+    const { siteVendors,
+            careSettingCode,
+            doingBusinessAs,
+            pec, } = site;
 
     this.vendorPageFormState.patchValue({ siteVendors });
     this.careSettingPageFormState.patchValue({ careSettingCode });
-    // this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs, pec });
+    this.siteInfoPageFormState.patchValue({ doingBusinessAs, pec });
     // this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     // this.hoursOperationPageFormState.patchValue(site?.businessHours);
     // this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

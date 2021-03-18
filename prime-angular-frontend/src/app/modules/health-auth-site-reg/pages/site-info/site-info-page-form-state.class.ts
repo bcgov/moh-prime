@@ -2,9 +2,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 
-interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode'> { }
+interface SiteInfoPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
 
-export class CareSettingPageFormState extends AbstractFormState<CareSettingPageDataModel> {
+export class SiteInfoPageFormState extends AbstractFormState<SiteInfoPageDataModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -21,7 +21,7 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: CareSettingPageDataModel): void {
+  public patchValue(data: SiteInfoPageDataModel): void {
     if (!this.formInstance) {
       return;
     }
@@ -31,7 +31,11 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      careSettingCode: [
+      doingBusinessAs: [
+        '',
+        [Validators.required]
+      ],
+      pec: [
         null,
         [Validators.required]
       ]
