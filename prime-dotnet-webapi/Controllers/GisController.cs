@@ -146,18 +146,17 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(gisEnrolment));
         }
 
-        // POST: api/gis/ldap/login
+        // POST: api/Gis/5/ldap/login
         /// <summary>
         /// Login to ldap using username and password
         /// </summary>
         /// <param name="gisId"></param>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        [HttpPost("ldap/login", Name = nameof(LdapLogin))]
+        /// <param name="payload"></param>
+        [HttpPost("{gisId}/ldap/login", Name = nameof(LdapLogin))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> LdapLogin(int gisId, string username, string password)
+        public async Task<ActionResult> LdapLogin(int gisId, LdapLoginPayload payload)
         {
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
@@ -169,7 +168,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var result = await _gisService.LdapLogin(username, password, User);
+            var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
             if (result == true)
             {

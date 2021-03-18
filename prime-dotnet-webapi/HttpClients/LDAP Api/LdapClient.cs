@@ -47,12 +47,19 @@ namespace Prime.HttpClients
                 await LogError(response);
             }
 
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
+            try
+            {
+                JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
-            _logger.LogInformation("GIS_USER_ROLE: {gisuserrole}", (string)body.SelectToken("gisuserrole"));
-            _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
+                _logger.LogInformation("GIS_USER_ROLE: {gisuserrole}", (string)body.SelectToken("gisuserrole"));
+                _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
 
-            return body;
+                return body;
+            }
+            catch (Exception ex)
+            {
+                return new JObject { "error", ex.Message };
+            }
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
