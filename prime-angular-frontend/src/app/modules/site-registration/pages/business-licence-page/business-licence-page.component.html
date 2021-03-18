@@ -46,8 +46,7 @@
     </section>
 
     <app-site-name [form]="form"
-                   [organizationId]="site.organizationId">
-    </app-site-name>
+                   [organizationId]="site.organizationId"></app-site-name>
 
     <ng-container *ngIf="isCommPharm()">
 
@@ -63,10 +62,10 @@
         <app-page-subheader2>
           <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
           <ng-container appPageSubheader2Summary>
-            If this Community Pharmacy does not have a business licence, explain below.
-            You may continue with the registration without a business licence, but you
-            are advised the Ministry of Health will not finalize your registration until
-            your business licence has been uploaded.
+            If your business does not yet have a business license, or if you are located in a municipality or region
+            that does not issue business licenses, provide a description below detailing the reason your business does
+            not have a license. PRIME Support staff will contact you and assist you with determining the correct
+            documents to upload. You may continue with your enrolment for now.
           </ng-container>
         </app-page-subheader2>
 
