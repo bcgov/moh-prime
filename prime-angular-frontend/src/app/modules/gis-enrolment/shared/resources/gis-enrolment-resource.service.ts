@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -9,10 +9,10 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +42,12 @@ export class GisEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
-          this.toastService.openErrorToast('');
+          if (error.status === 404) {
+            // Allow for creation off of an empty enrolment
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Enrolment could not be found');
           this.logger.error('[GisModule] GisResource::getEnrolment error has occurred: ', error);
           throw error;
         })
