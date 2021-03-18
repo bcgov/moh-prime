@@ -65,7 +65,7 @@ COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-
+USER 0
 RUN chmod 766 ./environments/environment.prod.template.ts && \
     envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # RUN chmod +x /entrypoint.sh
