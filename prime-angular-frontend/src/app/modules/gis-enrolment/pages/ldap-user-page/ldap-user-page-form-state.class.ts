@@ -1,7 +1,6 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 interface LdapUserPageDataModel {
   ldapLoginSuccessDate: string;
@@ -40,7 +39,7 @@ export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataMod
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      ldapUser: [null, [FormControlValidators.requiredTruthful]]
+      ldapUser: [null, [Validators.required]]
     });
   }
 }

@@ -25,7 +25,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <app-alert *ngIf="hasAttemptedSubmission && ldapUser.hasError('boolean')"
+      <app-alert *ngIf="hasAttemptedSubmission && ldapUser.hasError('required')"
                  type="danger"
                  icon="warning">
         <ng-container #alertContent

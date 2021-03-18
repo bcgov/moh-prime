@@ -3,6 +3,8 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { exhaustMap } from 'rxjs/operators';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -12,7 +14,6 @@ import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service'
 import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { EnrolleeInformationPageFormState } from './enrollee-information-page-form-state.class';
-import { exhaustMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-enrollee-information-page',

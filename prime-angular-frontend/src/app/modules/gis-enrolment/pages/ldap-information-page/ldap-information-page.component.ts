@@ -70,10 +70,12 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   protected initForm(): void { } // NOOP
 
   protected performSubmission(): NoContent {
-    return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.formState.credentials)
-      .pipe(
-        exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
-      );
+    // TODO uncomment LDAP authentication is fixed on PHSA-side
+    // return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.formState.credentials)
+    //   .pipe(
+    //     exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
+    //   );
+    return this.gisEnrolmentResource.updateEnrolment(this.formStateService.json);
   }
 
   protected afterSubmitIsSuccessful(): void {
