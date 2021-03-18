@@ -7,7 +7,7 @@ import { EnrolleeGuard } from './enrollee.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { MockPermissionService } from 'test/mocks/mock-permission-service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 describe('EnrolleeGuard', () => {
   beforeEach(() => {

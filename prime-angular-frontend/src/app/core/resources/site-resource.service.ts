@@ -36,10 +36,10 @@ export class SiteResource {
   ) { }
 
   public getSites(organizationId: number): Observable<SiteListViewModel[]>;
-  public getSites(organizationId: number, queryParams: { verbose: boolean }): Observable<SiteListViewModel[] | Site[]>;
-  public getSites(organizationId: number, queryParams: { verbose: boolean } = null): Observable<SiteListViewModel[] | Site[]> {
+  public getSites(organizationId: number, queryParams: { verbose: boolean; }): Observable<SiteListViewModel[] | Site[]>;
+  public getSites(organizationId: number, queryParams: { verbose: boolean; } = null): Observable<SiteListViewModel[] | Site[]> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParams);
-    return this.apiResource.get<SiteListViewModel[] | Site[]>(`organizations/${organizationId}/sites`, params)
+    return this.apiResource.get<SiteListViewModel[] | Site[]>(`organizations/${ organizationId }/sites`, params)
       .pipe(
         map((response: ApiHttpResponse<SiteListViewModel[] | Site[]>) => response.result),
         tap((sites: SiteListViewModel[] | Site[]) => this.logger.info('SITES', sites)),
@@ -53,7 +53,7 @@ export class SiteResource {
 
   public getSiteById(siteId: number, statusCode?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<Site>(`sites/${siteId}`, params)
+    return this.apiResource.get<Site>(`sites/${ siteId }`, params)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => {
@@ -75,7 +75,7 @@ export class SiteResource {
   }
 
   public createSite(organizationId: number): Observable<Site> {
-    return this.apiResource.post<Site>(`organizations/${organizationId}/sites`)
+    return this.apiResource.post<Site>(`organizations/${ organizationId }/sites`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((newSite: Site) => {
@@ -101,7 +101,7 @@ export class SiteResource {
     } else {
       site.businessHours = null;
     }
-    return this.apiResource.put<NoContent>(`sites/${site.id}`, site)
+    return this.apiResource.put<NoContent>(`sites/${ site.id }`, site)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Site has been updated')),
@@ -114,7 +114,7 @@ export class SiteResource {
   }
 
   public updateCompleted(siteId: number): NoContent {
-    return this.apiResource.put<NoContent>(`sites/${siteId}/completed`)
+    return this.apiResource.put<NoContent>(`sites/${ siteId }/completed`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -125,7 +125,7 @@ export class SiteResource {
   }
 
   public sendRemoteUsersEmailAdmin(siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-admin`)
+    return this.apiResource.post<NoContent>(`sites/${ siteId }/remote-users-email-admin`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -137,7 +137,7 @@ export class SiteResource {
   }
 
   public sendRemoteUsersEmailUser(siteId: number, newRemoteUsers: RemoteUser[]): NoContent {
-    return this.apiResource.post<NoContent>(`sites/${siteId}/remote-users-email-user`, newRemoteUsers)
+    return this.apiResource.post<NoContent>(`sites/${ siteId }/remote-users-email-user`, newRemoteUsers)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -150,7 +150,7 @@ export class SiteResource {
 
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
-    return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
+    return this.apiResource.put<Site>(`sites/${ siteId }/pec`, payload)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((site: Site) => {
@@ -167,7 +167,7 @@ export class SiteResource {
 
   public setSiteAdjudicator(siteId: number, adjudicatorId?: number): Observable<Site> {
     const params = this.apiResourceUtilsService.makeHttpParams({ adjudicatorId });
-    return this.apiResource.put<Site>(`sites/${siteId}/adjudicator`, null, params)
+    return this.apiResource.put<Site>(`sites/${ siteId }/adjudicator`, null, params)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => site),
@@ -181,7 +181,7 @@ export class SiteResource {
   }
 
   public removeSiteAdjudicator(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}/adjudicator`)
+    return this.apiResource.delete<Site>(`sites/${ siteId }/adjudicator`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         map((site: Site) => site),
@@ -195,7 +195,7 @@ export class SiteResource {
   }
 
   public deleteSite(siteId: number): Observable<Site> {
-    return this.apiResource.delete<Site>(`sites/${siteId}`)
+    return this.apiResource.delete<Site>(`sites/${ siteId }`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap((site: Site) => {
@@ -211,7 +211,7 @@ export class SiteResource {
   }
 
   public submitSite(site: Site): Observable<string> {
-    return this.apiResource.post<string>(`sites/${site.id}/submission`)
+    return this.apiResource.post<string>(`sites/${ site.id }/submission`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
@@ -225,7 +225,7 @@ export class SiteResource {
 
   public createBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
     const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
-    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
+    return this.apiResource.post<BusinessLicence>(`sites/${ siteId }/business-licence`, businessLicence, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -236,7 +236,7 @@ export class SiteResource {
   }
 
   public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence): Observable<BusinessLicence> {
-    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence)
+    return this.apiResource.put<BusinessLicence>(`sites/${ siteId }/business-licence`, businessLicence)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -248,7 +248,7 @@ export class SiteResource {
 
   public createBusinessLicenceDocument(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, null, params)
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${ siteId }/business-licence/document`, null, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
         catchError((error: any) => {
@@ -258,10 +258,10 @@ export class SiteResource {
       );
   }
 
-  public removeBusinessLicenceDocument(siteId: number): Observable<ApiHttpResponse<any>> {
-    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`)
+  public removeBusinessLicenceDocument(siteId: number): Observable<ApiHttpResponse<NoContent>> {
+    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${ siteId }/business-licence/document`)
       .pipe(
-        map((response: ApiHttpResponse<any>) => response.result),
+        NoContentResponse,
         catchError((error: any) => {
           this.logger.error('[SiteRegistration] SiteRegistrationResource::removeBusinessLicenceDocument error has occurred: ', error);
           throw error;
@@ -270,7 +270,7 @@ export class SiteResource {
   }
 
   public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
-    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licence`)
+    return this.apiResource.get<BusinessLicence>(`sites/${ siteId }/business-licence`)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -282,7 +282,7 @@ export class SiteResource {
   }
 
   public getBusinessLicenceDocumentToken(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document/token`)
+    return this.apiResource.get<string>(`sites/${ siteId }/business-licence/document/token`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -295,7 +295,7 @@ export class SiteResource {
 
   public createSiteAdjudicationDocument(siteId: number, documentGuid: string): Observable<SiteAdjudicationDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<SiteAdjudicationDocument>(`sites/${siteId}/adjudication-documents`, { siteId }, params)
+    return this.apiResource.post<SiteAdjudicationDocument>(`sites/${ siteId }/adjudication-documents`, { siteId }, params)
       .pipe(
         map((response: ApiHttpResponse<SiteAdjudicationDocument>) => response.result),
         catchError((error: any) => {
@@ -306,7 +306,7 @@ export class SiteResource {
   }
 
   public getSiteAdjudicationDocuments(siteId: number): Observable<SiteAdjudicationDocument[]> {
-    return this.apiResource.get<SiteAdjudicationDocument[]>(`sites/${siteId}/adjudication-documents`)
+    return this.apiResource.get<SiteAdjudicationDocument[]>(`sites/${ siteId }/adjudication-documents`)
       .pipe(
         map((response: ApiHttpResponse<SiteAdjudicationDocument[]>) => response.result),
         catchError((error: any) => {
@@ -319,7 +319,7 @@ export class SiteResource {
 
   public deleteSiteAdjudicationDocument(siteId: number, documentId: number) {
     return this.apiResource.delete<SiteAdjudicationDocument>(
-      `sites/${siteId}/adjudication-documents/${documentId}`)
+      `sites/${ siteId }/adjudication-documents/${ documentId }`)
       .pipe(
         map((response: ApiHttpResponse<SiteAdjudicationDocument>) => response.result),
         map((document: SiteAdjudicationDocument) => document),
@@ -336,7 +336,7 @@ export class SiteResource {
   }
 
   public getSiteAdjudicationDocumentDownloadToken(siteId: number, documentId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/adjudication-documents/${documentId}`)
+    return this.apiResource.get<string>(`sites/${ siteId }/adjudication-documents/${ documentId }`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -349,7 +349,7 @@ export class SiteResource {
   }
 
   public approveSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/approve`)
+    return this.apiResource.put<Site>(`sites/${ siteId }/approve`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been approved')),
@@ -362,7 +362,7 @@ export class SiteResource {
   }
 
   public declineSite(siteId: number): Observable<Site> {
-    return this.apiResource.put<Site>(`sites/${siteId}/decline`)
+    return this.apiResource.put<Site>(`sites/${ siteId }/decline`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been declined')),
@@ -376,7 +376,7 @@ export class SiteResource {
 
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
     const payload = { data: note };
-    return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)
+    return this.apiResource.post(`sites/${ siteId }/site-registration-notes`, payload)
       .pipe(
         map((response: ApiHttpResponse<SiteRegistrationNote>) => response.result),
         tap((adjudicatorNote: SiteRegistrationNote) => {
@@ -392,7 +392,7 @@ export class SiteResource {
   }
 
   public getSiteRegistrationNotes(siteId: number): Observable<SiteRegistrationNote[]> {
-    return this.apiResource.get(`sites/${siteId}/site-registration-notes`)
+    return this.apiResource.get(`sites/${ siteId }/site-registration-notes`)
       .pipe(
         map((response: ApiHttpResponse<SiteRegistrationNote[]>) => response.result),
         tap((siteRegistrationNotes: SiteRegistrationNote[]) => this.logger.info('SITE_REGISTRATION_NOTES', siteRegistrationNotes)),
@@ -419,7 +419,7 @@ export class SiteResource {
 
   public getSiteBusinessEvents(siteId: number, businessEventTypeCodes: BusinessEventTypeEnum[]): Observable<BusinessEvent[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ businessEventTypeCodes });
-    return this.apiResource.get<BusinessEvent[]>(`sites/${siteId}/events`, params)
+    return this.apiResource.get<BusinessEvent[]>(`sites/${ siteId }/events`, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessEvent[]>) => response.result),
         tap((businessEvents: BusinessEvent[]) =>

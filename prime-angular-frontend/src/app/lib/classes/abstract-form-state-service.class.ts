@@ -1,4 +1,4 @@
-import { AbstractControl, FormBuilder, Validators, FormGroup, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder } from '@angular/forms';
 import { RouterEvent } from '@angular/router';
 
 import { map, tap } from 'rxjs/operators';
@@ -6,12 +6,13 @@ import { map, tap } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
-import { Province } from '@shared/enums/province.enum';
-import { Country } from '@shared/enums/country.enum';
-import { AddressLine } from '@shared/models/address.model';
 
-import { Person } from '@registration/shared/models/person.model';
-
+/**
+ * @description
+ * Class is used to manage the state of a form that spans multiple pages, and
+ * when implemented should use page component form state to encapsulate the
+ * individual functionality of each page's form.
+ */
 export abstract class AbstractFormStateService<T> {
   protected patched: boolean;
 
@@ -145,137 +146,6 @@ export abstract class AbstractFormStateService<T> {
           this.reset();
         }
       });
-  }
-
-  /**
-   * @description
-   * Provide an address form group.
-   *
-   * @param options available for manipulating the form group
-   *  areRequired control names that are required
-   *  areDisabled control names that are disabled
-   *  useDefaults for province and country, otherwise empty
-   *  exclude control names that are not needed
-   *
-   * @deprecated moved into FormUtilsService
-   */
-  protected buildAddressForm(options: {
-    areRequired?: AddressLine[],
-    areDisabled?: AddressLine[],
-    useDefaults?: Extract<AddressLine, 'provinceCode' | 'countryCode'>[],
-    exclude?: AddressLine[]
-  } = null): FormGroup {
-    const controlsConfig = {
-      id: [
-        0,
-        []
-      ],
-      street: [
-        { value: null, disabled: false },
-        []
-      ],
-      street2: [
-        { value: null, disabled: false },
-        []
-      ],
-      city: [
-        { value: null, disabled: false },
-        []
-      ],
-      provinceCode: [
-        { value: null, disabled: false },
-        []
-      ],
-      countryCode: [
-        { value: null, disabled: false },
-        []
-      ],
-      postal: [
-        { value: null, disabled: false },
-        []
-      ]
-    };
-
-    Object.keys(controlsConfig)
-      .filter((key: AddressLine) => !options?.exclude?.includes(key))
-      .forEach((key: AddressLine, index: number) => {
-        const control = controlsConfig[key];
-        const controlProps = control[0] as { value: any, disabled: boolean };
-        const controlValidators = control[1] as Array<ValidatorFn>;
-
-        if (options?.areDisabled?.includes(key)) {
-          controlProps.disabled = true;
-        }
-
-        const useDefaults = options?.useDefaults;
-        if (useDefaults) {
-          if (key === 'provinceCode') {
-            controlProps.value = Province.BRITISH_COLUMBIA;
-          } else if (key === 'countryCode') {
-            controlProps.value = Country.CANADA;
-          }
-        }
-
-        if (options?.areRequired?.includes(key)) {
-          controlValidators.push(Validators.required);
-        }
-      });
-
-    return this.fb.group(controlsConfig);
-  }
-
-  /**
-   * @description
-   * Convert party JSON to form model for reactive forms.
-   *
-   * @deprecated moved into FormUtilsService
-   */
-  protected toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
-    if (data) {
-      const { physicalAddress, mailingAddress, ...person } = data;
-
-      formGroup.patchValue(person);
-
-      if (physicalAddress) {
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset({ id: 0 });
-      }
-
-      // Parties don't always have a mailing address section in the form
-      if (formGroup.get('mailingAddress') && mailingAddress) {
-        const mailingAddressFormGroup = formGroup.get('mailingAddress');
-        (mailingAddress)
-          ? mailingAddressFormGroup.patchValue(mailingAddress)
-          : mailingAddressFormGroup.reset({ id: 0 });
-      }
-    }
-  }
-
-  /**
-   * @description
-   * Convert the party form model into JSON.
-   *
-   * @deprecated moved into FormUtilsService
-   */
-  protected toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
-    if (!person.firstName) {
-      person = null;
-    } else if (person[addressKey] && !person[addressKey].street) {
-      person[addressKey] = null;
-    } else if (person[addressKey].street && !person[addressKey].id) {
-      person[addressKey].id = 0;
-    }
-
-    if (person) {
-      // Add the address reference ID to the party
-      person[`${addressKey}Id`] = (!!person[addressKey]?.id)
-        ? person[addressKey].id
-        : 0;
-    }
-
-    return person;
   }
 
   /**

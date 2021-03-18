@@ -58,14 +58,6 @@
         "attributes": {}
       },
       {
-        "id": "6491e5ea-4980-4078-855c-b74834768f20",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "a53ce329-b78b-4f72-998b-155174c1ce72",
         "name": "enrollee_view",
         "composite": false,
@@ -90,6 +82,15 @@
         "attributes": {}
       },
       {
+        "id": "8344f55e-4a94-41f7-96f2-769b0dc52075",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "fd0f3306-1c87-45a6-9d45-08c7981e9afa",
         "name": "enrollee_triage",
         "composite": false,
@@ -102,20 +103,6 @@
         "name": "offline_access",
         "description": "${role_offline-access}",
         "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "9bef3a33-bdaa-4284-baee-33d07ef1c66d",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -149,12 +136,7 @@
       {
         "id": "a6623ca5-3983-4b07-ae46-4c2617301c63",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -577,7 +559,6 @@
       "path": "/Manager",
       "attributes": {},
       "realmRoles": [
-        "prime_admin",
         "site_edit",
         "enrollee_view",
         "site_view",
