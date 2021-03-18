@@ -1,4 +1,4 @@
 export interface LdapCredential {
-  username: string;
-  password: string;
+  ldapUsername: string;
+  ldapPassword: string;
 }

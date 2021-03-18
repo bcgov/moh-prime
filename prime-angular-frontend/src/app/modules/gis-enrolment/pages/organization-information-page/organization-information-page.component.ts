@@ -8,6 +8,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
 import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { OrganizationInformationPageFormState } from './organization-information-page-form-state.class';
@@ -27,6 +28,7 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
+    private gisEnrolmentService: GisEnrolmentService,
     private gisEnrolmentResource: GisEnrolmentResource,
     route: ActivatedRoute,
     router: Router
@@ -51,6 +53,7 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
@@ -59,12 +62,10 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   protected patchForm(): void {
-    throw new Error('Method not implemented.');
+    this.formStateService.setForm(this.gisEnrolmentService.enrolment);
   }
 
-  protected initForm(): void {
-    throw new Error('Method not implemented.');
-  }
+  protected initForm(): void { } // NOOP
 
   protected performSubmission(): NoContent {
     return this.gisEnrolmentResource.updateEnrolment(this.formStateService.json);

@@ -1,11 +1,13 @@
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { LdapCredential } from '@gis/shared/models/ldap-credential.model';
 
-export interface LdapInformationPageDataModel {
+interface LdapInformationPageDataModel {
   ldapUsername: string;
-  ldapPassword: string;
 }
+
+interface LdapInformationPageFormModel extends LdapCredential { }
 
 export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageDataModel> {
   public constructor(
@@ -16,12 +18,36 @@ export class LdapInformationPageFormState extends AbstractFormState<LdapInformat
     this.buildForm();
   }
 
-  public get json(): LdapInformationPageDataModel {
+  /**
+   * @description
+   * Direct access provided to the form model for a
+   * set of credentials for authentication.
+   */
+  public get credentials(): LdapInformationPageFormModel {
     if (!this.formInstance) {
       return;
     }
 
     return this.formInstance.getRawValue();
+  }
+
+  /**
+   * @description
+   * Access to the username, but prevents transmission of the
+   * password out of the the form state.
+   */
+  public get json(): LdapInformationPageDataModel {
+    if (!this.formInstance) {
+      return;
+    }
+
+    const { ldapUsername } = this.formInstance.getRawValue();
+
+    return { ldapUsername };
+  }
+
+  public clearPassword() {
+    this.form.get('ldapPassword').reset();
   }
 
   public patchValue(model: LdapInformationPageDataModel): void {

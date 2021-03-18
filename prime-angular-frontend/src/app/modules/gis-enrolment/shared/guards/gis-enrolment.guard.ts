@@ -82,6 +82,14 @@ export class GisEnrolmentGuard extends BaseGuard {
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: GisEnrolment): boolean {
     // TODO do a bunch of routePath checks to determine destination
+    // const currentRoutePath = this.route(routePath);
+    // if (currentRoutePath === GisEnrolmentRoutes.LDAP_USER_PAGE) { }
+
+    // const destinationPath = (enrolment.organization && enrolment.role)
+    //   ? GisEnrolmentRoutes.ENROLLEE_INFO_PAGE
+    //   : (enrolment.ldapLoginSuccessDate)
+    //     ? GisEnrolmentRoutes.ORG_INFO_PAGE
+    //     : GisEnrolmentRoutes.LDAP_USER_PAGE;
 
     // Otherwise, allow access to the route
     return true;

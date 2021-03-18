@@ -9,7 +9,6 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
-import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
@@ -26,6 +25,8 @@ export class GisEnrolmentResource {
   ) { }
 
   public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
+    // const payload = { gisId: enrolmentId, ...credentials };
+    // return this.apiResource.post<NoContent>('gis/ldap/login', payload)
     const params = this.apiResourceUtilsService.makeHttpParams({ gisId: enrolmentId, ...credentials });
     return this.apiResource.post<NoContent>('gis/ldap/login', null, params)
       .pipe(
@@ -48,19 +49,19 @@ export class GisEnrolmentResource {
             return of(null);
           }
 
-          this.toastService.openErrorToast('Enrolment could not be found');
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[GisModule] GisResource::getEnrolment error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public getEnrolmentById(gisId: number): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`gis/${ gisId }`)
+  public getEnrolmentById(enrolmentId: number): Observable<GisEnrolment> {
+    return this.apiResource.get<GisEnrolment>(`gis/${ enrolmentId }`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
-          this.toastService.openErrorToast('');
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[GisModule] GisResource::getEnrolmentById error has occurred: ', error);
           throw error;
         })
@@ -91,6 +92,19 @@ export class GisEnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be updated.');
           this.logger.error('[GisModule] GisResource::updateEnrolment error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public submission(enrolmentId: number): NoContent {
+    return this.apiResource.post<NoContent>(`gis/${ enrolmentId }/submission`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Enrolment has been submitted')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be submitted.');
+          this.logger.error('[GisModule] GisResource::submission error has occurred: ', error);
           throw error;
         })
       );

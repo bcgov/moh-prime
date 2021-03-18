@@ -4,7 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 interface LdapUserPageDataModel {
-  ldapUser: boolean;
+  ldapLoginSuccessDate: string;
 }
 
 export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataModel> {
@@ -16,12 +16,14 @@ export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataMod
     this.buildForm();
   }
 
-  public get json(): LdapUserPageDataModel {
-    if (!this.formInstance) {
-      return;
-    }
-
-    return this.formInstance.getRawValue();
+  /**
+   * @description
+   * Does not provide any results.
+   *
+   * @throws immediately to prevent use.
+   */
+  public get json(): never {
+    throw new Error('Method does not produce a value');
   }
 
   public patchValue(model: LdapUserPageDataModel): void {
@@ -29,12 +31,16 @@ export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataMod
       return;
     }
 
-    this.formInstance.patchValue(model);
+    // Confirmed LDAP users automatically checked, otherwise
+    // specifically used `null` to force user interaction
+    const ldapUser = (!!model.ldapLoginSuccessDate) ? true : null;
+
+    this.formInstance.patchValue({ ldapUser });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      ldapUser: [null, [FormControlValidators.requiredBoolean]]
+      ldapUser: [null, [FormControlValidators.requiredTruthful]]
     });
   }
 }

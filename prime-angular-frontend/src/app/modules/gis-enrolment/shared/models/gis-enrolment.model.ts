@@ -44,4 +44,9 @@ export class GisEnrolment implements Omit<BcscUser, 'verifiedAddress'> {
       bcscUser.lastName
     );
   }
+
+  public static toBcscUser(enrolment: GisEnrolment): Omit<BcscUser, 'verifiedAddress'> {
+    const { hpdid, userId, givenNames, dateOfBirth, email, firstName, lastName } = enrolment;
+    return { hpdid, userId, givenNames, dateOfBirth, email, firstName, lastName };
+  }
 }

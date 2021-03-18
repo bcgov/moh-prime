@@ -9,6 +9,8 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
+import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapUserPageFormState } from './ldap-user-page-form-state.class';
 
@@ -27,6 +29,7 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
+    private gisEnrolmentService: GisEnrolmentService,
     route: ActivatedRoute,
     router: Router,
   ) {
@@ -42,6 +45,7 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
@@ -50,12 +54,10 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected patchForm(): void {
-    throw new Error('Method not implemented.');
+    this.formStateService.setForm(this.gisEnrolmentService.enrolment);
   }
 
-  protected initForm(): void {
-    throw new Error('Method not implemented.');
-  }
+  protected initForm(): void { } // NOOP
 
   protected performSubmission(): Observable<null> {
     return of(null);

@@ -55,6 +55,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
@@ -63,21 +64,20 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected patchForm(): void {
-    throw new Error('Method not implemented.');
+    this.formStateService.setForm(this.gisEnrolmentService.enrolment);
   }
 
-  protected initForm(): void {
-    throw new Error('Method not implemented.');
-  }
+  protected initForm(): void { } // NOOP
 
   protected performSubmission(): NoContent {
-    return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.form.value)
+    return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.formState.credentials)
       .pipe(
         exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
       );
   }
 
   protected afterSubmitIsSuccessful(): void {
+    this.formState.clearPassword();
     this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
 }
