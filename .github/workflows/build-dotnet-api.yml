@@ -50,6 +50,7 @@ jobs:
           echo ::set-output name=keycloak_url::$(oc describe configmap keycloak | grep 'keycloak_url' -A 2 | grep 'https')
           echo ::set-output name=keycloak_realm::$(oc describe configmap keycloak | grep 'keycloak_realm' -A 2 | grep '[^keycloak_realm][a-z]*[0-9]*\w')
           echo ::set-output name=keycloak_client_id::$(oc describe configmap keycloak | grep 'keycloak_client_id' -A 2 | grep '[^keycloak_client_id][a-z]*[0-9]*\w')
+        shell: bash
 
       - name: "Build .NET web API image"
         id: build-image
@@ -60,9 +61,9 @@ jobs:
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg ASPNETCORE_ENVIRONMENT=${{ secrets.API_ASPNETCORE_ENVIRONMENT }} \
-          --build-arg KEYCLOAK_URL=${{ steps.oc-env-vars-keycloak.output.keycloak_url}} \
-          --build-arg KEYCLOAK_REALM=${{ steps.oc-env-vars-keycloak.output.keycloak_realm }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${{ steps.oc-env-vars-keycloak.output.keycloak_client_id}} \
+          --build-arg KEYCLOAK_URL=${{ steps.oc-env-vars-keycloak.outputs.keycloak_url}} \
+          --build-arg KEYCLOAK_REALM=${{ steps.oc-env-vars-keycloak.outputs.keycloak_realm }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ steps.oc-env-vars-keycloak.outputs.keycloak_client_id}} \
           $SERVICE_NAME
       
       - name: "Tag .NET web API image"
