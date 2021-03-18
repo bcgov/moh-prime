@@ -69,7 +69,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason, pec } = this.businessLicencePageFormState.json;
+    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -87,8 +87,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // provisioner (N/A)
       careSettingCode,
       siteVendors,
-      businessLicenceGuid,
-      deferredLicenceReason,
       doingBusinessAs,
       physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       physicalAddress,
@@ -150,12 +148,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, pec, businessLicenceGuid, doingBusinessAs } = site;
-    // TODO fixes the immediate issue with deferredLicenceReason, but shouldn't be on site
-    const deferredLicenceReason = site.businessLicence?.deferredLicenceReason;
+    const { careSettingCode, siteVendors, doingBusinessAs, pec } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs, pec });
+    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec });
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

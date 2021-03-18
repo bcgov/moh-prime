@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -64,30 +64,18 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
   }
 
-  public get businessLicenceGuid(): FormControl {
-    return this.form.get('businessLicenceGuid') as FormControl;
-  }
-
-  public get deferredLicenceReason(): FormControl {
-    return this.form.get('deferredLicenceReason') as FormControl;
-  }
-
-  public get doingBusinessAs(): FormControl {
-    return this.form.get('doingBusinessAs') as FormControl;
-  }
-
   public isCommPharm() {
     return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public onUpload(document: BaseDocument) {
-    this.businessLicenceGuid.patchValue(document.documentGuid);
+    this.formState.businessLicenceGuid.value.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
   }
 
   public onRemoveDocument(documentGuid: string) {
-    this.businessLicenceGuid.patchValue(null);
+    this.formState.businessLicenceGuid.value.patchValue(null);
     this.uploadedFile = false;
   }
 
@@ -105,18 +93,18 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   public onDeferredLicenceChange($event: MatSlideToggleChange) {
     if ($event.checked) {
-      this.deferredLicenceReason.setValidators([Validators.required]);
-      this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
+      this.formState.deferredLicenceReason.setValidators([Validators.required]);
+      this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
       this.hasNoBusinessLicenceError = false;
-      this.doingBusinessAs.disable();
+      this.formState.doingBusinessAs.disable();
       this.documentUpload.disable();
     } else {
-      this.formUtilsService.resetAndClearValidators(this.deferredLicenceReason);
-      this.doingBusinessAs.setValidators([Validators.required]);
-      this.doingBusinessAs.enable();
+      this.formUtilsService.resetAndClearValidators(this.formState.deferredLicenceReason);
+      this.formState.doingBusinessAs.setValidators([Validators.required]);
+      this.formState.doingBusinessAs.enable();
       this.documentUpload.enable();
     }
-    this.form.markAsUntouched();
+    this.formState.form.markAsUntouched();
   }
 
   public ngOnInit() {
@@ -134,7 +122,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm(): void {
@@ -162,8 +150,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     let request$: Observable<BusinessLicence | BusinessLicenceDocument> | NoContent;
 
     if (this.deferredLicenceToggle?.checked) {
-      // TODO attempt to move this complexity into the form state
-      this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
+      this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
 
       if (this.businessLicence.id) {
         // Update the business licence, and if a document already exists remove it
@@ -183,13 +170,13 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
       if (this.businessLicence.id) {
         // Update the site, and if a document has been uploaded create a new business licence
         request$ = (this.uploadedFile)
-          ? updateSite$.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, payload.businessLicenceGuid)))
+          ? updateSite$.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, this.formState.businessLicenceGuid.value)))
           : updateSite$;
       }
       else {
         // Initial time through and no business licence exists
         request$ = updateSite$.pipe(exhaustMap(() =>
-          this.siteResource.createBusinessLicence(siteId, this.businessLicence, payload.businessLicenceGuid)));
+          this.siteResource.createBusinessLicence(siteId, this.businessLicence, this.formState.businessLicenceGuid.value)));
       }
     }
 
@@ -199,8 +186,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   protected afterSubmitIsSuccessful(): void {
     // Remove the business licence GUID to prevent 404 already
     // submitted if resubmited in same session
-    this.businessLicenceGuid.patchValue(null);
-    this.form.markAsPristine();
+    this.formState.businessLicenceGuid.patchValue(null);
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
@@ -215,10 +202,10 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
         this.businessLicence = businessLicense ?? this.businessLicence;
         if (businessLicense && !businessLicense.completed) {
           this.deferredLicenceToggle.checked = true;
-          this.deferredLicenceReason.setValidators([Validators.required]);
-          this.formUtilsService.resetAndClearValidators(this.doingBusinessAs);
+          this.formState.deferredLicenceReason.setValidators([Validators.required]);
+          this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
           this.hasNoBusinessLicenceError = false;
-          this.doingBusinessAs.disable();
+          this.formState.doingBusinessAs.disable();
           this.documentUpload.disable();
         }
       });

@@ -3,7 +3,7 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-4">
@@ -45,9 +45,8 @@
       </ng-container>
     </section>
 
-    <app-site-name [form]="form"
-                   [organizationId]="site.organizationId">
-    </app-site-name>
+    <app-site-name [form]="formState.form"
+                   [organizationId]="site.organizationId"></app-site-name>
 
     <ng-container *ngIf="isCommPharm()">
 
@@ -74,8 +73,8 @@
           <div class="col">
             <mat-form-field class="w-100">
               <textarea matInput
-                        placeholder="Write here"
                         rows="5"
+                        placeholder="Write here"
                         formControlName="deferredLicenceReason"></textarea>
               <mat-error>Required</mat-error>
             </mat-form-field>

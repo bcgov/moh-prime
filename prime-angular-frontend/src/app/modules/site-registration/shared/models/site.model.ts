@@ -7,7 +7,6 @@ import { Vendor } from './vendor.model';
 import { RemoteUser } from './remote-user.model';
 import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
-import { BusinessLicenceDocument } from './business-licence-document.model';
 import { SiteStatusType } from '../enum/site-status.enum';
 
 export interface Site {
@@ -20,11 +19,6 @@ export interface Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicence: BusinessLicence;
-  businessLicenceDocuments: BusinessLicenceDocument[];
-  businessLicenceGuid: string;
-  // TODO drop the usage of this key as it is not part of Site, and would
-  // only be filled at a singular point, otherwise in businesLicence
-  deferredLicenceReason: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;
