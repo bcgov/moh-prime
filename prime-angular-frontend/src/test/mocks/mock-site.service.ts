@@ -16,7 +16,7 @@ export class MockSiteService implements ISiteService {
     const address = new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode());
     const user = {
       id: faker.random.number(),
-      userId: `${faker.random.uuid()}`,
+      userId: `${ faker.random.uuid() }`,
       verifiedAddressId: faker.random.number(),
       verifiedAddress: address,
       mailingAddressId: faker.random.number(),

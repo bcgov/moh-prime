@@ -162,6 +162,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     let request$: Observable<BusinessLicence | BusinessLicenceDocument> | NoContent;
 
     if (this.deferredLicenceToggle?.checked) {
+      // TODO attempt to move this complexity into the form state
       this.businessLicence.deferredLicenceReason = payload.deferredLicenceReason;
 
       if (this.businessLicence.id) {

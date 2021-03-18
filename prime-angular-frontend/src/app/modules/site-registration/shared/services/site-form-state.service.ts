@@ -150,7 +150,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, pec, businessLicenceGuid, deferredLicenceReason, doingBusinessAs } = site;
+    const { careSettingCode, siteVendors, pec, businessLicenceGuid, doingBusinessAs } = site;
+    // TODO fixes the immediate issue with deferredLicenceReason, but shouldn't be on site
+    const deferredLicenceReason = site.businessLicence?.deferredLicenceReason;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
     this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs, pec });

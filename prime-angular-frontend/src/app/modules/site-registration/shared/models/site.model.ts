@@ -22,6 +22,8 @@ export interface Site {
   businessLicence: BusinessLicence;
   businessLicenceDocuments: BusinessLicenceDocument[];
   businessLicenceGuid: string;
+  // TODO drop the usage of this key as it is not part of Site, and would
+  // only be filled at a singular point, otherwise in businesLicence
   deferredLicenceReason: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
