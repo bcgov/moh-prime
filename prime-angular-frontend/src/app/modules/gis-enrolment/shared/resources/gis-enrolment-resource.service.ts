@@ -25,8 +25,7 @@ export class GisEnrolmentResource {
   ) { }
 
   public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
-    const payload = { gisId: enrolmentId, ...credentials };
-    return this.apiResource.post<NoContent>('gis/ldap/login', payload)
+    return this.apiResource.post<NoContent>(`gis/${ enrolmentId }/ldap/login`, credentials)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -42,8 +41,8 @@ export class GisEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
+          // Allow for creation off of a new enrolment
           if (error.status === 404) {
-            // Allow for creation off of an empty enrolment
             return of(null);
           }
 
