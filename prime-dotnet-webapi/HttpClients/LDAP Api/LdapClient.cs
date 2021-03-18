@@ -47,12 +47,13 @@ namespace Prime.HttpClients
                 await LogError(response);
             }
 
+            _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
+
             try
             {
                 JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
 
                 _logger.LogInformation("GIS_USER_ROLE: {gisuserrole}", (string)body.SelectToken("gisuserrole"));
-                _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
 
                 return body;
             }
