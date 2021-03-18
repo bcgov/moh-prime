@@ -1,39 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { FormUtilsService } from '@core/services/form-utils.service';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { VendorConfig } from '@config/config.model';
-import { SiteService } from '@registration/shared/services/site.service';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { VendorPageFormState } from './vendor-page-form-state.class';
 import { NoContent } from '@core/resources/abstract-resource';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-
-import { HealthAuthSiteRegFormStateService } from './../../shared/services/health-auth-site-reg-form-state.service';
+import { SiteService } from '@registration/shared/services/site.service';
 import { HealthAuthSiteRegRoutes } from '../../health-auth-site-reg.routes';
-
+import { HealthAuthSiteRegFormStateService } from '../../shared/services/health-auth-site-reg-form-state.service';
+import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 
 @Component({
-  selector: 'app-vendor',
-  templateUrl: './vendor.component.html',
-  styleUrls: ['./vendor.component.scss']
+  selector: 'app-care-setting',
+  templateUrl: './care-setting.component.html',
+  styleUrls: ['./care-setting.component.scss']
 })
-export class VendorComponent extends AbstractEnrolmentPage implements OnInit {
+export class CareSettingComponent extends AbstractEnrolmentPage implements OnInit {
   public isCompleted: boolean;
   public routeUtils: RouteUtils;
-  public formState: VendorPageFormState;
-  public vendorConfig: VendorConfig[];
-  public hasNoVendorError: boolean;
+  public careSettingConfig: Config<number>[];
+  public formState: CareSettingPageFormState;
   public title: string;
-
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
-  }
 
   constructor(
     protected dialog: MatDialog,
@@ -48,13 +39,17 @@ export class VendorComponent extends AbstractEnrolmentPage implements OnInit {
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
+    // TODO: replace the placeholder with the real careSetting for HA from lookup
+    this.careSettingConfig = [{ code: 1, name: 'Acute Care' }, { code: 2, name: 'Other' }];
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.vendorConfig = this.configService.vendors.filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
-    this.hasNoVendorError = false;
+  }
+
+  public get careSettingCode(): FormControl {
+    return this.form.get('careSettingCode') as FormControl;
   }
 
   public onBack() {
-    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.VENDOR]);
   }
 
   public ngOnInit(): void {
@@ -62,18 +57,8 @@ export class VendorComponent extends AbstractEnrolmentPage implements OnInit {
     this.initForm();
   }
 
-  protected onSubmitFormIsValid(): void {
-    this.hasNoVendorError = false;
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    if (!this.vendorCode.value) {
-      this.hasNoVendorError = true;
-    }
-  }
-
-  protected createFormInstance(): void {
-    this.formState = this.haSiteRegFormStateService.vendorPageFormState;
+  protected createFormInstance() {
+    this.formState = this.haSiteRegFormStateService.careSettingPageFormState;
     this.form = this.formState.form;
   }
 
@@ -94,8 +79,9 @@ export class VendorComponent extends AbstractEnrolmentPage implements OnInit {
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_REVIEW
-      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING;
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(routePath);
   }
+
 }

@@ -6,6 +6,7 @@ import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
 import { AuthorizedUserComponent } from './pages/authorized-user/authorized-user.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 
 const routes: Routes = [
   {
@@ -34,11 +35,11 @@ const routes: Routes = [
         component: VendorComponent,
         data: { title: 'Vendor' }
       },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
+      {
+        path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
+        component: CareSettingComponent,
+        data: { title: 'Health Authority Care Setting' }
+      },
       //     {
       //       path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
       //       component: AuthorizedUserComponent,
