@@ -15,8 +15,23 @@ export class GisEnrolment implements Omit<BcscUser, 'verifiedAddress'> {
     public organization: string = null,
     public role: string = null,
     public submittedDate: string = null,
-    public id?: number
-  ) { }
+    public id: number = 0
+  ) {
+    this.hpdid = hpdid;
+    this.userId = userId;
+    this.givenNames = givenNames;
+    this.dateOfBirth = dateOfBirth;
+    this.email = email;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.ldapUsername = ldapUsername;
+    this.ldapLoginSuccessDate = ldapLoginSuccessDate;
+    this.phone = phone;
+    this.organization = organization;
+    this.role = role;
+    this.submittedDate = submittedDate;
+    this.id = id;
+  }
 
   public static fromBcscUser(bcscUser: BcscUser): GisEnrolment {
     return new GisEnrolment(
