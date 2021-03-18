@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { GisEnrolmentRoutes } from './gis-enrolment.routes';
 import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-dashboard.component';
 import { GisEnrolmentGuard } from './shared/guards/gis-enrolment.guard';
@@ -8,12 +9,15 @@ const routes: Routes = [
   {
     path: '',
     component: GisDashboardComponent,
-    canLoad: [],
+    canLoad: [
+      GisEnrolmentGuard
+    ],
     canActivate: [],
     canActivateChild: [
       GisEnrolmentGuard
     ],
     children: [
+      // TODO lazy loading every page on small enrolment looking for gotchas
       {
         path: GisEnrolmentRoutes.LDAP_USER_PAGE,
         loadChildren: () => import('./pages/ldap-user-page/ldap-user-page.module').then(m => m.LdapUserPageModule)

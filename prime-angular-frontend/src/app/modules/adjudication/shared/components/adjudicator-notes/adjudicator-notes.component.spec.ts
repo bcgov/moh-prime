@@ -13,7 +13,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
-import { MockPermissionService } from 'test/mocks/mock-permission-service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 import { AdjudicatorNotesComponent } from './adjudicator-notes.component';
 

@@ -15,7 +15,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
-import { MockPermissionService } from 'test/mocks/mock-permission-service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardV1Component;

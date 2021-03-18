@@ -55,7 +55,7 @@ describe('ContactProfileFormComponent', () => {
       component = fixture.componentInstance;
       siteFormStateService.setForm(siteService.site);
       // Add the bound FormGroup to the component
-      component.form = siteFormStateService.administratorPharmaNetForm as FormGroup;
+      component.form = siteFormStateService.administratorPharmaNetFormState.form;
       fixture.detectChanges();
     })
   );
