@@ -26,7 +26,6 @@ const routes: Routes = [
       GisEnrolmentGuard
     ],
     children: [
-      // TODO lazy loading every page on small enrolment looking for gotchas
       {
         path: GisEnrolmentRoutes.COLLECTION_NOTICE,
         component: CollectionNoticePageComponent,

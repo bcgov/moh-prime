@@ -31,6 +31,7 @@
 
           <mat-form-field class="w-100">
             <input matInput
+                   type="password"
                    placeholder="LDAP Password"
                    formControlName="ldapPassword">
             <mat-error *ngIf="ldapPassword.hasError('required')">Required</mat-error>

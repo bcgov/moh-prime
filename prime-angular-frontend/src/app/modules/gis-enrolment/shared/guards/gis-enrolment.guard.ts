@@ -77,13 +77,14 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   private manageIncompleteEnrolmentRouting(routePath: string, enrolment: GisEnrolment): boolean {
-    const destinationPath = (enrolment.organization && enrolment.role)
-      ? GisEnrolmentRoutes.ENROLLEE_INFO_PAGE
-      : (enrolment.ldapLoginSuccessDate)
-        ? GisEnrolmentRoutes.ORG_INFO_PAGE
-        : GisEnrolmentRoutes.LDAP_USER_PAGE;
+    return this.manageRouting(routePath, GisEnrolmentRoutes.LDAP_USER_PAGE, enrolment);
+  }
 
-    return this.navigate(routePath, destinationPath);
+  private manageRouting(routePath: string, defaultRoute: string, enrolment: GisEnrolment): boolean {
+    // TODO do a bunch of routePath checks to determine destination
+
+    // Otherwise, allow access to the route
+    return true;
   }
 
   /**

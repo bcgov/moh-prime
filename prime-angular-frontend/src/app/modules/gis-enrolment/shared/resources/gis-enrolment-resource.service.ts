@@ -25,8 +25,9 @@ export class GisEnrolmentResource {
     private logger: LoggerService
   ) { }
 
-  public ldapLogin(credentials: LdapCredential): Observable<NoContent> {
-    return this.apiResource.post<NoContent>('gis/ldap/login', credentials)
+  public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ gisId: enrolmentId, ...credentials });
+    return this.apiResource.post<NoContent>('gis/ldap/login', null, params)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

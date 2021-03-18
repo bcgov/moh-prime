@@ -11,6 +11,7 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
+import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
@@ -29,6 +30,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private formStateService: GisEnrolmentFormStateService,
+    private gisEnrolmentService: GisEnrolmentService,
     private gisEnrolmentResource: GisEnrolmentResource,
     route: ActivatedRoute,
     router: Router,
@@ -69,7 +71,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected performSubmission(): NoContent {
-    return this.gisEnrolmentResource.ldapLogin(this.form.value)
+    return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.form.value)
       .pipe(
         exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
       );
