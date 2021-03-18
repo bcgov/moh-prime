@@ -61,9 +61,9 @@ jobs:
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg REDIRECT_URL=$REDIRECT_URL \
-          --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
-          --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
+          --build-arg KEYCLOAK_URL=${{ steps.oc-env-vars-keycloak.output.keycloak_url }} \
+          --build-arg KEYCLOAK_REALM=${{ steps.oc-env-vars-keycloak.output.keycloak_realm }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ steps.oc-env-vars-keycloak.output.keycloak_client_id }} \
           $SERVICE_NAME
       
       - name: "Tag Angular frontend to OpenShift image"
