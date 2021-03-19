@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
@@ -14,6 +14,14 @@ export class OrganizationInformationPageFormState extends AbstractFormState<Orga
     super();
 
     this.buildForm();
+  }
+
+  public get organization(): FormControl {
+    return this.formInstance.get('organization') as FormControl;
+  }
+
+  public get role(): FormControl {
+    return this.formInstance.get('role') as FormControl;
   }
 
   public get json(): OrganizationInformationPageDataModel {

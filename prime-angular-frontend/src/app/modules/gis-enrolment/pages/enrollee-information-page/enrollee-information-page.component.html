@@ -16,7 +16,8 @@
 
     <form [formGroup]="form"
           (ngOnSubmit)="onSubmit()"
-          novalidate>
+          novalidate
+          autocomplete="off">
       <div class="row">
         <div class="col-12">
 
@@ -27,8 +28,8 @@
                    formControlName="phone"
                    mask="(000) 000-0000"
                    [showMaskTyped]="false">
-            <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
+            <mat-error *ngIf="formState.phone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.phone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
         </div>
@@ -38,8 +39,8 @@
             <input matInput
                    placeholder="Email"
                    formControlName="email">
-            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+            <mat-error *ngIf="formState.email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.email.hasError('email')">Must be a valid email address</mat-error>
           </mat-form-field>
 
         </div>

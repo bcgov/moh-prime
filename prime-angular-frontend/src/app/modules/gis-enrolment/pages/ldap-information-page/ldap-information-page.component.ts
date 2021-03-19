@@ -41,14 +41,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
-  public get ldapUsername(): FormControl {
-    return this.form.get('ldapUsername') as FormControl;
-  }
-
-  public get ldapPassword(): FormControl {
-    return this.form.get('ldapPassword') as FormControl;
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
   }
@@ -60,7 +52,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
 
   protected createFormInstance(): void {
     this.formState = this.formStateService.ldapInformationPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

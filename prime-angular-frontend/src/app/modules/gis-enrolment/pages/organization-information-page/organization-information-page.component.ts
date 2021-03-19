@@ -39,14 +39,6 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
-  public get organization(): FormControl {
-    return this.form.get('organization') as FormControl;
-  }
-
-  public get role(): FormControl {
-    return this.form.get('role') as FormControl;
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
   }
@@ -58,7 +50,6 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
 
   protected createFormInstance(): void {
     this.formState = this.formStateService.organizationInformationPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

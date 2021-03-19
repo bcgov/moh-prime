@@ -10,7 +10,6 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
-import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapUserPageFormState } from './ldap-user-page-form-state.class';
 
@@ -39,10 +38,6 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
-  public get ldapUser(): FormControl {
-    return this.form.get('ldapUser') as FormControl;
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
@@ -50,7 +45,6 @@ export class LdapUserPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected createFormInstance(): void {
     this.formState = this.formStateService.ldapUserPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

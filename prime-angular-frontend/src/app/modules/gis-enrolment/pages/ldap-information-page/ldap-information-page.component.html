@@ -13,9 +13,10 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form [formGroup]="form"
+    <form [formGroup]="formState.form"
           (ngOnSubmit)="onSubmit()"
-          novalidate>
+          novalidate
+          autocomplete="off">
       <div class="row">
         <div class="col-12">
 
@@ -23,7 +24,7 @@
             <input matInput
                    placeholder="LDAP User Name"
                    formControlName="ldapUsername">
-            <mat-error *ngIf="ldapUsername.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.ldapUsername.hasError('required')">Required</mat-error>
           </mat-form-field>
 
         </div>
@@ -34,7 +35,7 @@
                    type="password"
                    placeholder="LDAP Password"
                    formControlName="ldapPassword">
-            <mat-error *ngIf="ldapPassword.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.ldapPassword.hasError('required')">Required</mat-error>
           </mat-form-field>
 
         </div>

@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
@@ -13,6 +13,10 @@ export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataMod
     super();
 
     this.buildForm();
+  }
+
+  public get ldapUser(): FormControl {
+    return this.formInstance.get('ldapUser') as FormControl;
   }
 
   /**

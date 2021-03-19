@@ -41,14 +41,6 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
-  public get phone(): FormControl {
-    return this.form.get('phone') as FormControl;
-  }
-
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
@@ -59,7 +51,6 @@ export class EnrolleeInformationPageComponent extends AbstractEnrolmentPage impl
 
   protected createFormInstance(): void {
     this.formState = this.formStateService.enrolleeInformationPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
