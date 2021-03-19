@@ -69,7 +69,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason, pec } = this.businessLicencePageFormState.json;
+    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -87,8 +87,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // provisioner (N/A)
       careSettingCode,
       siteVendors,
-      businessLicenceGuid,
-      deferredLicenceReason,
       doingBusinessAs,
       physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       physicalAddress,
@@ -150,10 +148,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, pec, businessLicenceGuid, deferredLicenceReason, doingBusinessAs } = site;
+    const { careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicencePageFormState.patchValue({ businessLicenceGuid, deferredLicenceReason, doingBusinessAs, pec });
+    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec, businessLicence });
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
