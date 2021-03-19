@@ -2,6 +2,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
 
@@ -43,12 +44,14 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: BusinessLicencePageDataModel): void {
+  public patchValue(model: BusinessLicencePageDataModel & { businessLicence: BusinessLicence; }): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    const { doingBusinessAs, pec, businessLicence } = model;
+
+    this.formInstance.patchValue({ doingBusinessAs, pec, deferredLicenceReason: businessLicence?.deferredLicenceReason });
   }
 
   public buildForm(): void {
