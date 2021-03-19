@@ -24,12 +24,12 @@ const routes: Routes = [
       {
         path: HealthAuthSiteRegRoutes.AUTHORIZED_USER,
         component: AuthorizedUserComponent,
-        data: { title: '' }
+        data: { title: 'Authorized User' }
       },
       {
         path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
         component: AuthorizedUserComponent,
-        data: { title: '' }
+        data: { title: 'Site Management' }
       },
       {
         path: HealthAuthSiteRegRoutes.VENDOR,
