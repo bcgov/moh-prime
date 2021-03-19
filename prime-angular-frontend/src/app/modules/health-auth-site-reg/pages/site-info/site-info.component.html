@@ -3,10 +3,11 @@
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form">
+        [formGroup]="form"
+        novalidate
+        autocomplete="off">
 
-    <app-site-name [form]="form">
-    </app-site-name>
+    <app-site-name [form]="formState.form"></app-site-name>
 
   </form>
 

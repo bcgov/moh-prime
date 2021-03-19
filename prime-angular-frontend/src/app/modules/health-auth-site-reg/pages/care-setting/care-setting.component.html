@@ -3,7 +3,9 @@
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form">
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
 
     <section class="mb-3">
       <app-page-subheader2>
@@ -24,7 +26,7 @@
                 {{ careSetting.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="careSettingCode.hasError('required')">
+            <mat-error *ngIf="formState.careSettingCode.hasError('required')">
               Required
             </mat-error>
           </mat-form-field>
@@ -32,7 +34,6 @@
         </div>
       </div>
     </section>
-
 
   </form>
 

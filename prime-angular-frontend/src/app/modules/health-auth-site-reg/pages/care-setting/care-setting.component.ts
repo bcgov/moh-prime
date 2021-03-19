@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteService } from '@registration/shared/services/site.service';
+
 import { HealthAuthSiteRegRoutes } from '../../health-auth-site-reg.routes';
 import { HealthAuthSiteRegFormStateService } from '../../shared/services/health-auth-site-reg-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
@@ -20,11 +21,11 @@ import { CareSettingPageFormState } from './care-setting-page-form-state.class';
   styleUrls: ['./care-setting.component.scss']
 })
 export class CareSettingComponent extends AbstractEnrolmentPage implements OnInit {
-  public isCompleted: boolean;
-  public routeUtils: RouteUtils;
-  public careSettingConfig: Config<number>[];
   public formState: CareSettingPageFormState;
   public title: string;
+  public routeUtils: RouteUtils;
+  public careSettingConfig: Config<number>[];
+  public isCompleted: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -44,29 +45,24 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public get careSettingCode(): FormControl {
-    return this.form.get('careSettingCode') as FormControl;
-  }
-
   public onBack() {
     this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.VENDOR]);
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
+    this.patchForm();
   }
 
   protected createFormInstance() {
     this.formState = this.haSiteRegFormStateService.careSettingPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.haSiteRegFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): NoContent {
@@ -75,7 +71,7 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_REVIEW
@@ -83,5 +79,4 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
 
     this.routeUtils.routeRelativeTo(routePath);
   }
-
 }

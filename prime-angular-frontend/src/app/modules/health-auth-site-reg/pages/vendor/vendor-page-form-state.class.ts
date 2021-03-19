@@ -1,4 +1,5 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
+
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Site } from '@registration/shared/models/site.model';
@@ -16,13 +17,17 @@ export class VendorPageFormState extends AbstractFormState<VendorPageDataModel> 
     this.buildForm();
   }
 
+  public get vendorCode(): FormControl {
+    return this.formInstance.get('vendorCode') as FormControl;
+  }
+
   public get json(): VendorPageDataModel {
     if (!this.formInstance) {
       return;
     }
 
     const { vendorCode } = this.formInstance.getRawValue();
-    // TODO only use a single vendor, should look at dropping vendors for vendor
+    // TODO only use a single vendor in backend view model, and drop array since you can only have one
     const siteVendors = [{
       siteId: this.siteId,
       vendorCode
