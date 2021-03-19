@@ -81,7 +81,18 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: GisEnrolment): boolean {
-    // TODO should authenticating with LDAP multiple times be allowed prior to submission?
+    // TODO can skip over the LDAP route if this is a feature that is wanted
+    // Prevent re-authentication with LDAP when already
+    // performed by skipping over the route
+    // if (
+    //   enrolment.ldapLoginSuccessDate &&
+    //   [
+    //     routePath.includes(GisEnrolmentRoutes.LDAP_USER_PAGE),
+    //     routePath.includes(GisEnrolmentRoutes.LDAP_INFO_PAGE)
+    //   ].some(Boolean)
+    // ) {
+    //   return this.navigate(routePath, GisEnrolmentRoutes.LDAP_USER_PAGE);
+    // }
 
     // Otherwise, allow access to the route
     return true;
