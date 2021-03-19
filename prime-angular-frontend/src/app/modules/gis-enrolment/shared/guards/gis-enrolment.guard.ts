@@ -31,9 +31,6 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    // TODO added to prevent usage until ready for production
-    return of(false);
-
     const user$ = this.authService.getUser$();
     const createEnrolment$ = user$
       .pipe(
