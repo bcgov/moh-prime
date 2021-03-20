@@ -61,9 +61,10 @@ jobs:
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg ASPNETCORE_ENVIRONMENT=${{ secrets.API_ASPNETCORE_ENVIRONMENT }} \
-          --build-arg KEYCLOAK_URL=${{ steps.oc-env-vars-keycloak.outputs.keycloak_url}} \
-          --build-arg KEYCLOAK_REALM=${{ steps.oc-env-vars-keycloak.outputs.keycloak_realm }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${{ steps.oc-env-vars-keycloak.outputs.keycloak_client_id}} \
+          --build-arg JWT_WELL_KNOWN_CONFIG=${{ env.jwt_well_known_config }}
+          --build-arg KEYCLOAK_URL=${{ env.keycloak_url }} \
+          --build-arg KEYCLOAK_REALM=${{ env.keycloak_realm }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ env.keycloak_client_id }} \
           $SERVICE_NAME
       
       - name: "Tag .NET web API image"
