@@ -1,42 +1,49 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
-export interface LdapUserPageFormModel {
-  ldapUser: boolean;
+interface LdapUserPageDataModel {
+  ldapLoginSuccessDate: string;
 }
 
-export class LdapUserPageFormState extends AbstractFormState<LdapUserPageFormModel> {
+export class LdapUserPageFormState extends AbstractFormState<LdapUserPageDataModel> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private fb: FormBuilder
   ) {
     super();
 
     this.buildForm();
   }
 
-  public get json(): LdapUserPageFormModel {
-    if (!this.formInstance) {
-      return;
-    }
-
-    return this.formInstance.getRawValue();
+  public get ldapUser(): FormControl {
+    return this.formInstance.get('ldapUser') as FormControl;
   }
 
-  public patchValue(model: LdapUserPageFormModel): void {
+  /**
+   * @description
+   * Does not provide any results.
+   *
+   * @throws immediately to prevent use.
+   */
+  public get json(): never {
+    throw new Error('Method does not produce a value');
+  }
+
+  public patchValue(model: LdapUserPageDataModel): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    // Confirmed LDAP users automatically checked, otherwise
+    // specifically used `null` to force user interaction
+    const ldapUser = (!!model.ldapLoginSuccessDate) ? true : null;
+
+    this.formInstance.patchValue({ ldapUser });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      ldapUser: [null, [FormControlValidators.requiredBoolean]]
+      ldapUser: [null, [Validators.required]]
     });
   }
 }

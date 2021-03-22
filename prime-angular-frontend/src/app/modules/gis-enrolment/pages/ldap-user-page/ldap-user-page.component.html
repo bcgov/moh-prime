@@ -1,7 +1,7 @@
 <app-page>
   <app-page-header>{{ title }}</app-page-header>
 
-  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+  <app-gis-enrolment-progress-indicator [inProgress]="true"></app-gis-enrolment-progress-indicator>
 
   <app-page-section>
     <app-page-subheader2 [showUnderline]="false">
@@ -13,9 +13,10 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form [formGroup]="form"
+    <form [formGroup]="formState.form"
           (ngOnSubmit)="onSubmit()"
-          novalidate>
+          novalidate
+          autocomplete="off">
       <mat-radio-group aria-label="Are you an existing LDAP user?"
                        formControlName="ldapUser">
         <mat-radio-button *ngFor="let option of [true, false]"
@@ -25,7 +26,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <app-alert *ngIf="hasAttemptedSubmission && ldapUser.hasError('boolean')"
+      <app-alert *ngIf="hasAttemptedSubmission && formState.ldapUser.hasError('required')"
                  type="danger"
                  icon="warning">
         <ng-container #alertContent
@@ -33,10 +34,24 @@
           Must indicate whether you are an existing LDAP user or not
         </ng-container>
       </app-alert>
+
+      <app-alert *ngIf="hasAttemptedSubmission && formState.ldapUser.value === false"
+                 type="danger">
+        <ng-container #alertTitle
+                      class="alert-title">
+          No Access Available
+        </ng-container>
+
+        <ng-container #alertContent
+                      class="alert-content">
+          In order to enrol with GIS you must be an active LDAP user.
+        </ng-container>
+      </app-alert>
     </form>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="false"
+                   [disableSave]="hasAttemptedSubmission && formState.ldapUser.value === false"
                    (save)="onSubmit()"></app-page-footer>
 </app-page>
