@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels.Parties;
+using System;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/parties/[controller]")]
     [ApiController]
     public class GisController : ControllerBase
     {
@@ -27,7 +28,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateGisParty(GisChangeModel changeModel)
         {
             if (changeModel == null)
@@ -60,7 +61,6 @@ namespace Prime.Controllers
         /// <param name="gisId"></param>
         /// <param name="changeModel"></param>
         [HttpPut("{gisId}", Name = nameof(UpdateGisEnrollee))]
-        // [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -106,7 +106,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<GisViewModel>> GetGisEnrolmentById(int gisId)
+        public async Task<ActionResult> GetGisEnrolmentById(int gisId)
         {
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
@@ -121,19 +121,25 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(gisEnrolment));
         }
 
-        // GET: api/Gis/5
+        // GET: api/Gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
         /// <summary>
-        /// Gets a specific Gis Enrolment using the logged in User.
+        /// Gets a specific Gis Enrolment by userId
         /// </summary>
-        [HttpGet("", Name = nameof(GetGisEnrolmentByUserId))]
+        /// /// <param name="userId"></param>
+        [HttpGet("{userId:guid}", Name = nameof(GetGisEnrolmentByUserId))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<GisViewModel>> GetGisEnrolmentByUserId()
+        public async Task<ActionResult> GetGisEnrolmentByUserId(Guid userId)
         {
-            var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(User.GetPrimeUserId());
+            if (userId != User.GetPrimeUserId())
+            {
+                return Forbid();
+            }
+
+            var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(userId);
             if (gisEnrolment == null)
             {
                 return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
@@ -183,13 +189,12 @@ namespace Prime.Controllers
         /// Submits the given Gis enrolment.
         /// </summary>
         [HttpPost("{gisId}/submission", Name = nameof(SubmitGis))]
-        // [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<GisViewModel>> SubmitGis(int gisId)
+        public async Task<ActionResult> SubmitGis(int gisId)
         {
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
