@@ -25,7 +25,7 @@ export class GisEnrolmentResource {
   ) { }
 
   public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
-    return this.apiResource.post<NoContent>(`gis/${ enrolmentId }/ldap/login`, credentials)
+    return this.apiResource.post<NoContent>(`parties/gis/${ enrolmentId }/ldap/login`, credentials)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -37,7 +37,7 @@ export class GisEnrolmentResource {
   }
 
   public getEnrolmentByUserId(userId: string): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`gis/${ userId }`)
+    return this.apiResource.get<GisEnrolment>(`parties/gis/${ userId }`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
@@ -54,7 +54,7 @@ export class GisEnrolmentResource {
   }
 
   public getEnrolmentById(enrolmentId: number): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`gis/${ enrolmentId }`)
+    return this.apiResource.get<GisEnrolment>(`parties/gis/${ enrolmentId }`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
@@ -66,7 +66,7 @@ export class GisEnrolmentResource {
   }
 
   public createEnrolment(enrolment: GisEnrolment): Observable<GisEnrolment> {
-    return this.apiResource.post<GisEnrolment>('gis', enrolment)
+    return this.apiResource.post<GisEnrolment>('parties/gis', enrolment)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         tap((newEnrolment: GisEnrolment) => {
@@ -82,7 +82,7 @@ export class GisEnrolmentResource {
   }
 
   public updateEnrolment(enrolment: GisEnrolment): NoContent {
-    return this.apiResource.put<NoContent>(`gis/${ enrolment.id }`, enrolment)
+    return this.apiResource.put<NoContent>(`parties/gis/${ enrolment.id }`, enrolment)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Enrolment has been updated')),
@@ -95,7 +95,7 @@ export class GisEnrolmentResource {
   }
 
   public submission(enrolmentId: number): NoContent {
-    return this.apiResource.post<NoContent>(`gis/${ enrolmentId }/submission`)
+    return this.apiResource.post<NoContent>(`parties/gis/${ enrolmentId }/submission`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Enrolment has been submitted')),
