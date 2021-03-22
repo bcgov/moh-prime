@@ -7,9 +7,9 @@ import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { PhsaEnrollee } from '@phsa/shared/models/phsa-enrollee.model';
-import { AccessCodeFormState } from '@phsa/pages/access-code/access-code-form-state';
-import { BcscDemographicFormState } from '@phsa/pages/bcsc-demographic/bcsc-demographic-form-state';
-import { AvailableAccessFormState } from '@phsa/pages/available-access/available-access-form-state';
+import { AccessCodeFormState } from '@phsa/pages/access-code/access-code-form-state.class';
+import { BcscDemographicFormState } from '@phsa/pages/bcsc-demographic/bcsc-demographic-form-state.class';
+import { AvailableAccessFormState } from '@phsa/pages/available-access/available-access-form-state.class';
 
 @Injectable({
   providedIn: 'root'

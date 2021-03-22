@@ -8,6 +8,9 @@ import { ConfigService } from './config.service';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('ConfigCodePipe', () => {
+  let pipe: ConfigCodePipe;
+  let configService: ConfigService;
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -24,16 +27,22 @@ describe('ConfigCodePipe', () => {
         }
       ]
     });
+
+    configService = TestBed.inject(ConfigService);
+    pipe = new ConfigCodePipe(configService);
   }));
 
-  it('create an instance of Config Code Pipe', inject([ConfigService], (configService: ConfigService) => {
-    const pipe = new ConfigCodePipe(configService);
-    expect(pipe).toBeTruthy();
-  }));
+  it('create an instance', () => expect(pipe).toBeTruthy());
 
-  it('should get college name from a config code', inject([ConfigService], (configService: ConfigService) => {
-    const pipe = new ConfigCodePipe(configService);
-    const code = pipe.transform(configService.colleges[0].code, 'colleges');
-    expect(code).toBe(configService.colleges[0].name);
-  }));
+  it('should get a config name from a config code', () => {
+    const country = configService.countries[0];
+    const result = pipe.transform(country.code, 'countries');
+    expect(result).toBe(country.name);
+  });
+
+  it('should not fail when passed a null', () => {
+    const country = configService.countries[0];
+    const result = pipe.transform(null, 'countries');
+    expect(result).toBe('');
+  });
 });

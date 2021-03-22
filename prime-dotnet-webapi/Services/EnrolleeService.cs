@@ -688,7 +688,7 @@ namespace Prime.Services
             return reference;
         }
 
-        public async Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, IBaseEnrolleeNote newNote)
+        public async Task<IBaseEnrolleeNote> UpdateEnrolleeNoteAsync(int enrolleeId, int adminId, IBaseEnrolleeNote newNote)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.AccessAgreementNote)
@@ -722,6 +722,9 @@ namespace Prime.Services
             else if (newNote != null)
             {
                 newNote.EnrolleeId = enrolleeId;
+                // Know instance of AccessAgreementNote
+                ((AccessAgreementNote)newNote).AdjudicatorId = adminId;
+                newNote.NoteDate = DateTimeOffset.Now;
                 _context.Add(newNote);
             }
 
@@ -744,16 +747,14 @@ namespace Prime.Services
                 .CountAsync();
         }
 
-        public async Task<EnrolleeViewModel> UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
+        public async Task UpdateEnrolleeAdjudicator(int enrolleeId, int? adminId = null)
         {
             var enrollee = await _context.Enrollees
                 .Where(e => e.Id == enrolleeId)
-                .SingleOrDefaultAsync();
+                .SingleAsync();
 
             enrollee.AdjudicatorId = adminId;
             await _context.SaveChangesAsync();
-
-            return _mapper.Map<EnrolleeViewModel>(enrollee);
         }
 
         public async Task<IEnumerable<BusinessEvent>> GetEnrolleeBusinessEventsAsync(int enrolleeId, IEnumerable<int> businessEventTypeCodes)

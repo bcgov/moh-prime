@@ -11,11 +11,14 @@ import { ViewportService } from '@core/services/viewport.service';
 import { LoggerService } from '@core/services/logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { AuthRoutes } from '@auth/auth.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+
 
 interface DashboardNavSectionV1 {
   items: DashboardNavSectionItemV1[];
@@ -44,7 +47,7 @@ export class DashboardV1Component implements OnInit {
     mode: string,
     opened: boolean,
     fixedInViewport: boolean,
-    showText: boolean
+    showText: boolean;
   };
   public username: string;
 
@@ -54,6 +57,7 @@ export class DashboardV1Component implements OnInit {
     private router: Router,
     private routeStateService: RouteStateService,
     private authService: AuthService,
+    private permissionService: PermissionService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
     private logger: LoggerService
@@ -85,10 +89,10 @@ export class DashboardV1Component implements OnInit {
     // Dashboard is only used for Enrolments now, and will eventually
     // be replaced, but logout needs to force auth route now with
     // the existence of PHSA
-    let routePath = AuthRoutes.routePath(AuthRoutes.INFO);
+    let routePath = EnrolmentRoutes.BCSC_LOGIN;
 
-    if (this.authService.hasAdminView()) {
-      routePath = `${routePath}/${AuthRoutes.ADMIN}`;
+    if (this.permissionService.hasRoles(Role.ADMIN)) {
+      routePath = `${ routePath }/${ AdjudicationRoutes.LOGIN_PAGE }`;
     }
 
     this.authService.logout(routePath);
@@ -101,7 +105,7 @@ export class DashboardV1Component implements OnInit {
     // Initialize the side navigation based on the type of user
     this.dashboardNavSections = this.getSideNavSections();
 
-    if (this.authService.isEnrollee()) {
+    if (this.permissionService.hasRoles(Role.ENROLLEE)) {
       // Listen for changes to the current enrolment status to update
       // the side navigation based on enrollee progression
       merge(
@@ -128,7 +132,7 @@ export class DashboardV1Component implements OnInit {
 
     const user = await this.authService.getUser();
     // Identity providers don't all provide last name
-    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
+    this.username = `${ user?.firstName } ${ user.lastName ?? '' }`;
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {

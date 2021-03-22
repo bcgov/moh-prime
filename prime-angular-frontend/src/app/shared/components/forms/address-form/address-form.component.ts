@@ -6,10 +6,9 @@ import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
 import { Config, ProvinceConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 
-import { AddressLine } from '@lib/types/address-line.type';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Country } from '@shared/enums/country.enum';
-import { Address } from '@shared/models/address.model';
+import { Address, AddressLine } from '@shared/models/address.model';
 
 @Component({
   selector: 'app-address-form',
@@ -36,7 +35,7 @@ export class AddressFormComponent implements OnInit {
    * Whether BC addresses can only be selected using
    * autocomplete.
    */
-  @Input() public onlyBc: boolean;
+  @Input() public inBc: boolean;
   /**
    * @description
    * Whether to show the manual address.

@@ -15,29 +15,19 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
     public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
-        private readonly IAdminService _adminService;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IBusinessEventService _businessEventService;
 
         public SubmissionsController(
             ISubmissionService submissionService,
-            IAdminService adminService,
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
             IBusinessEventService businessEventService)
         {
             _submissionService = submissionService;
-            _adminService = adminService;
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
             _businessEventService = businessEventService;
         }
 
@@ -46,6 +36,7 @@ namespace Prime.Controllers
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
         [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -64,7 +55,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -89,32 +80,140 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee));
         }
 
-        // POST: api/enrollees/5/submission/accept-toa
+        // POST: api/enrollees/5/submission/approve
         /// <summary>
-        /// Performs a submission-related action on an Enrolle, such as an adjudicator approving an application.
+        /// Approves the current submission for an Enrolle.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        /// <param name="submissionAction"></param>
-        /// <param name="documentGuid"></param>
-        [HttpPost("{enrolleeId}/submission/{submissionAction:submissionAction}", Name = nameof(SubmissionAction))]
+        [HttpPost("{enrolleeId}/submission/approve", Name = nameof(ApproveSubmission))]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> SubmissionAction(int enrolleeId, SubmissionAction submissionAction, [FromQuery] Guid? documentGuid = null)
+        public async Task<ActionResult> ApproveSubmission(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.Approve);
+        }
+
+        // POST: api/enrollees/5/submission/accept-toa?documentGuid=12345-54321
+        /// <summary>
+        /// Accepts the current TOA for an Enrolle.
+        /// Document GUID of a collaborating ID document is required for users with Identity Assurance less than three.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="documentGuid"></param>
+        [HttpPost("{enrolleeId}/submission/accept-toa", Name = nameof(AcceptToa))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> AcceptToa(int enrolleeId, [FromQuery] Guid? documentGuid = null)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.AcceptToa, documentGuid);
+        }
+
+        // POST: api/enrollees/5/submission/decline-toa
+        /// <summary>
+        /// Declines the current TOA for an Enrolle.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/decline-toa", Name = nameof(DeclineToa))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeclineToa(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineToa);
+        }
+
+        // POST: api/enrollees/5/submission/enable-editing
+        /// <summary>
+        /// Puts the Enrolle back into an editable state.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/enable-editing", Name = nameof(EnableEditing))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> EnableEditing(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.EnableEditing);
+        }
+
+        // POST: api/enrollees/5/submission/lock-profile
+        /// <summary>
+        /// Locks the Enrolle's profile.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/lock-profile", Name = nameof(LockProfile))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> LockProfile(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.LockProfile);
+        }
+
+        // POST: api/enrollees/5/submission/decline-profile
+        /// <summary>
+        /// Declines the Enrolle's profile, expiring their credentials and Terms of Access.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/decline-profile", Name = nameof(DeclineProfile))]
+        [Authorize(Roles = Roles.ManageEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeclineProfile(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineProfile);
+        }
+
+        // POST: api/enrollees/5/submission/rerun-rules
+        /// <summary>
+        /// Re-runs the automatic adjudication rules for an Enrollee under review.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/rerun-rules", Name = nameof(RerunRules))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunRules(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.RerunRules);
+        }
+
+        private async Task<ActionResult> SubmissionActionInternal(int enrolleeId, SubmissionAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
 
-            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, submissionAction, User.IsAdmin(), documentGuid);
+            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, action, additionalParameters);
             if (!success)
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
@@ -132,7 +231,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="agreementType"></param>
         [HttpPut("{enrolleeId}/submissions/latest/type", Name = nameof(AssignToaAgreementType))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -177,7 +276,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/always-manual", Name = nameof(SetEnrolleeManualFlag))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -193,7 +292,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/always-manual", Name = nameof(RemoveEnrolleeManualFlag))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

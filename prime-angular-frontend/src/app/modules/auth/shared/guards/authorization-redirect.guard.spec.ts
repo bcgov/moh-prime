@@ -6,6 +6,8 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AuthorizationRedirectGuard } from './authorization-redirect.guard';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '../services/auth.service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
+import { PermissionService } from '../services/permission.service';
 
 describe('AuthorizationRedirectGuard', () => {
   beforeEach(() => {
@@ -22,6 +24,10 @@ describe('AuthorizationRedirectGuard', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         }
       ]
     });

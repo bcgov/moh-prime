@@ -17,37 +17,27 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    // User needs at least the READONLY ADMIN or ENROLLEE role to use this controller
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
     public class EnrolleesController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IAdminService _adminService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
-        private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleesController(
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
             IAdminService adminService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
-            IDocumentService documentService,
-            IRazorConverterService razorConverterService)
+            IDocumentService documentService)
         {
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
             _adminService = adminService;
             _businessEventService = businessEventService;
             _emailService = emailService;
             _documentService = documentService;
-            _razorConverterService = razorConverterService;
         }
 
         // GET: api/Enrollees
@@ -61,7 +51,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            if (User.HasAdminView())
+            if (User.IsAdministrant())
             {
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
@@ -88,17 +78,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<EnrolleeViewModel>> GetEnrolleeById(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.HasAdminView());
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdministrant());
             if (enrollee == null)
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!enrollee.PermissionsRecord().ViewableBy(User))
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            if (User.IsAdmin())
+            if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
             }
@@ -180,6 +170,7 @@ namespace Prime.Controllers
         /// <param name="enrollee"></param>
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -198,7 +189,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -229,7 +220,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}", Name = nameof(DeleteEnrollee))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -266,7 +257,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -282,7 +273,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudicator-notes", Name = nameof(GetAdjudicatorNotes))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -308,7 +299,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         /// <param name="link"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes", Name = nameof(CreateAdjudicatorNote))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -348,7 +339,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-reference", Name = nameof(CreateEnrolmentReference))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -379,7 +370,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -406,45 +397,41 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, accessAgreementNote);
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+            var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, admin.Id, accessAgreementNote);
 
             return Ok(ApiResponse.Result(updatedNote));
         }
 
-        // PUT: api/Enrollees/5/adjudicator
+        // PUT: api/Enrollees/5/adjudicator?adjudicatorId=1
         /// <summary>
-        /// Add an enrollee's assigned adjudicator.
+        /// Set an enrollee's assigned adjudicator.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorId"></param>
         [HttpPut("{enrolleeId}/adjudicator", Name = nameof(SetEnrolleeAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int? adjudicatorId)
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetEnrolleeAdjudicator(int enrolleeId, [FromQuery] int adjudicatorId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            Admin admin = (adjudicatorId.HasValue)
-                ? await _adminService.GetAdminAsync(adjudicatorId.Value)
-                : await _adminService.GetAdminAsync(User.GetPrimeUserId());
-
-            if (admin == null)
+            var idir = await _adminService.GetAdminIdirAsync(adjudicatorId);
+            if (idir == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
             }
 
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id, admin.Id);
+            await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
-            return Ok(ApiResponse.Result(updatedEnrollee));
+            return Ok(ApiResponse.Result(idir));
         }
 
         // DELETE: api/Enrollees/5/adjudicator
@@ -453,24 +440,22 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/adjudicator", Name = nameof(RemoveEnrolleeAdjudicator))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> RemoveEnrolleeAdjudicator(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> RemoveEnrolleeAdjudicator(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
-            var updatedEnrollee = await _enrolleeService.UpdateEnrolleeAdjudicator(enrollee.Id);
+            await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin disclaimed enrollee");
 
-            return Ok(ApiResponse.Result(updatedEnrollee));
+            return NoContent();
         }
 
         // GET: api/Enrollees/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
@@ -480,7 +465,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeBusinessEvents))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -506,7 +491,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/reminder", Name = nameof(SendEnrolleeReminderEmail))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -535,7 +520,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/events/email-initiated", Name = nameof(CreateInitiatedEnrolleeEmailEvent))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -562,6 +547,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocument"></param>
         [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(CreateSelfDeclarationDocument))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -574,7 +560,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.EditableBy(User))
+            if (!record.MatchesUserIdOf(User))
             {
                 return Forbid();
             }
@@ -603,7 +589,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -620,7 +606,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="identificationDocumentId"></param>
         [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -633,7 +619,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
-            if (!record.ViewableBy(User))
+            if (!record.AccessableBy(User))
             {
                 return Forbid();
             }
@@ -650,7 +636,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -679,7 +665,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -703,7 +689,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="documentId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -727,7 +713,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="documentId"></param>
         [HttpDelete("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(DeleteEnrolleeAdjudicationDocument))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -751,7 +737,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/current-status", Name = nameof(GetEnrolleeCurrentStatus))]
-        [Authorize(Policy = Policies.ReadonlyAdmin)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -777,7 +763,7 @@ namespace Prime.Controllers
         /// <param name="adjudicatorNoteId"></param>
         /// <param name="assigneeId"></param>
         [HttpPost("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(CreateEnrolleeNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -807,7 +793,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="adjudicatorNoteId"></param>
         [HttpDelete("{enrolleeId}/adjudicator-notes/{adjudicatorNoteId}/notification", Name = nameof(DeleteEnrolleeNotification))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -831,11 +817,11 @@ namespace Prime.Controllers
 
         // Get: api/Enrollees/5/notifications
         /// <summary>
-        /// Get the enrollee note on an enrollee that has a notification  for current admin user.
+        /// Get the enrollee note on an enrollee that has a notification for current admin user.
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/notifications", Name = nameof(GetNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -860,7 +846,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpDelete("{enrolleeId}/notifications", Name = nameof(DeleteEnrolleeNotifications))]
-        [Authorize(Policy = Policies.Admin)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

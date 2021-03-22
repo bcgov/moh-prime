@@ -56,6 +56,7 @@ export interface HttpEnrollee extends Enrollee {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
+  gpid: string;
 }
 
 /**

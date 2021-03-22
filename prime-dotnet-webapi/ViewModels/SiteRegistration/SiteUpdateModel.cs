@@ -25,6 +25,8 @@ namespace Prime.ViewModels
 
         public int? CareSettingCode { get; set; }
 
+        public string PEC { get; set; }
+
         public string DoingBusinessAs { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }

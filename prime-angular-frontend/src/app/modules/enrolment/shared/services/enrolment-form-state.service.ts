@@ -4,13 +4,11 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormCon
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -304,6 +302,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       remoteAccessSites.clear();
       enrolment.remoteAccessSites.forEach((ras: RemoteAccessSite) => {
         const remoteAccessSite = this.remoteAccessSiteFormGroup();
+        // Add the vendors, and then patch the remaining fields
+        const siteVendors = remoteAccessSite.get('siteVendors') as FormArray;
+        ras.site.siteVendors
+          .forEach(v => siteVendors.push(this.fb.group({ vendorCode: v.vendorCode })));
+
         remoteAccessSite.patchValue({
           enrolleeId: ras.enrolleeId,
           siteId: ras.siteId,
@@ -506,8 +509,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       enrolleeId: [null, []],
       siteId: [null, []],
       doingBusinessAs: [null, []],
-      physicalAddress: [null, []],
-      siteVendors: [null, []]
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        exclude: ['street2']
+      }),
+      siteVendors: this.fb.array([])
     });
   }
 

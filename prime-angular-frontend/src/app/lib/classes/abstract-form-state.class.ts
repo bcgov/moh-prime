@@ -1,10 +1,12 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
-import { IForm } from '@lib/interfaces/form.interface';
-
-export abstract class AbstractFormState<T> implements IForm {
+/**
+ * @description
+ * Class is used to encapsulate page component form functionality, and
+ * adaptation between the business model and form model.
+ */
+export abstract class AbstractFormState<T> {
   protected formInstance: FormGroup;
-
   /**
    * @description
    * Get the reactive form instance.
@@ -23,7 +25,7 @@ export abstract class AbstractFormState<T> implements IForm {
    * @description
    * Patch the reactive form with data.
    */
-  public abstract patchValue(data: T): void;
+  public abstract patchValue(data: T & unknown): void;
 
   /**
    * @description

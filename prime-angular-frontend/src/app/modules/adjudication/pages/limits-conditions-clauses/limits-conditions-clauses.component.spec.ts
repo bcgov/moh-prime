@@ -15,6 +15,8 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EditorModule } from '@tinymce/tinymce-angular';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('LimitsConditionsClausesComponent', () => {
@@ -45,6 +47,10 @@ describe('LimitsConditionsClausesComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         }
       ]
     })

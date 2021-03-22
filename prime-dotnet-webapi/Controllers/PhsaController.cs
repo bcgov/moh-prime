@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
@@ -17,7 +16,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/parties/[controller]")]
     [ApiController]
-    [Authorize(Policy = Policies.User)]
+    [Authorize(Roles = Roles.PrimeEnrollee)]
     public class PhsaController : ControllerBase
     {
         private readonly IPartyService _partyService;

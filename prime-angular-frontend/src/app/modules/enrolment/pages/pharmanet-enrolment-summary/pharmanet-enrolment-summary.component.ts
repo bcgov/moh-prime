@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -41,7 +42,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     settingPlural: string,
     settingCode: number,
     formControl: FormControl,
-    subheaderContent: string
+    subheaderContent: string;
   }[];
 
   constructor(
@@ -94,6 +95,14 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     return this.form.get('healthAuthorityEmails') as FormControl;
   }
 
+  public get GPID(): string {
+    return this.enrollee.gpid;
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
   public setShowEmail(careSettingCode: number, show: boolean, formControl: FormControl = null) {
     if (formControl) {
       formControl.reset();
@@ -132,7 +141,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
+    return `${ this.config.loginRedirectUrl }/provisioner-access/${ tokenId }`;
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -195,8 +204,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
-            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
-              manager).`
+            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office manager).`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -214,8 +222,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
-            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
-              unsure who this is).`
+            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are unsure who this is). If you work in more than one facility or site you can include the email addresses for all the PharmaNet administrators separated by a comma.`
           };
         }
       }

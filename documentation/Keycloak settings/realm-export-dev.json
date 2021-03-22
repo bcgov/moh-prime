@@ -52,12 +52,7 @@
       {
         "id": "1d6a0282-481f-4423-a924-de008ffc1b3a",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -90,15 +85,6 @@
       {
         "id": "65e88a6c-22f5-4990-8ca6-9bc3288d213e",
         "name": "site_edit",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "648cf4c5-ad27-45e7-9f0f-47ef1b18d0e3",
-        "name": "prime_readonly_admin",
-        "description": "*deprecated*",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -142,20 +128,6 @@
         "id": "90ad35b2-e794-4e2f-a8a5-67d5917a0d57",
         "name": "prime_api_service_account",
         "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "57efb107-0882-49d1-bae8-199ff82344f3",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role\n*deprecated*",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -207,6 +179,15 @@
         "id": "301349dc-e58b-4666-90c0-f6d9782af655",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "7144c2a6-44a2-4d2e-b6c4-2b058252426b",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -539,10 +520,9 @@
       "path": "/Analyst",
       "attributes": {},
       "realmRoles": [
-        "prime_admin",
         "enrollee_view",
-        "site_view",
         "site_edit",
+        "site_view",
         "prime_administrant",
         "enrollee_approve",
         "enrollee_triage"
@@ -556,7 +536,6 @@
       "path": "/Clerk",
       "attributes": {},
       "realmRoles": [
-        "prime_admin",
         "enrollee_view",
         "site_edit",
         "site_view",
@@ -574,7 +553,6 @@
       "realmRoles": [
         "enrollee_view",
         "site_view",
-        "prime_readonly_admin",
         "prime_administrant"
       ],
       "clientRoles": {},
@@ -586,7 +564,6 @@
       "path": "/Manager",
       "attributes": {},
       "realmRoles": [
-        "prime_admin",
         "enrollee_view",
         "site_edit",
         "site_view",

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.HttpClients;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.Services.Rules
 {
@@ -65,10 +66,14 @@ namespace Prime.Services.Rules
     public class PharmanetValidationRule : AutomaticAdjudicationRule
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IBusinessEventService _businessEventService;
 
-        public PharmanetValidationRule(ICollegeLicenceClient collegeLicenceClient)
+        public PharmanetValidationRule(
+            ICollegeLicenceClient collegeLicenceClient,
+            IBusinessEventService businessEventService)
         {
             _collegeLicenceClient = collegeLicenceClient;
+            _businessEventService = businessEventService;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -102,15 +107,18 @@ namespace Prime.Services.Rules
                 catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "An error occurred calling the Pharmanet API.");
                     passed = false;
                     continue;
                 }
                 if (record == null)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Record not found in Pharmanet.");
                     passed = false;
                     continue;
                 }
+                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "A record was found in Pharmanet.");
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {

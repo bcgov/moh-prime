@@ -42,8 +42,8 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
     this.getEnrollee(this.route.snapshot.params.id);
   }
 
-  private getEnrollee(enrolleeId: number, statusCode?: number) {
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId, statusCode)
+  private getEnrollee(enrolleeId: number) {
+    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee))
       )

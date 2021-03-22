@@ -1,53 +1,52 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthComponent } from './shared/components/auth/auth.component';
 import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
 
 import { AuthRoutes } from './auth.routes';
-
-import { InfoComponent } from './pages/info/info.component';
-import { BceidComponent } from './pages/bceid/bceid.component';
-import { AdminComponent } from './pages/admin/admin.component';
-import { SiteComponent } from './pages/site/site.component';
-import { PhsaComponent } from './pages/phsa/phsa.component';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { SiteRoutes } from '@registration/site-registration.routes';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
-    component: AuthComponent,
-    canActivate: [
-      AuthorizationRedirectGuard
-    ],
     children: [
       {
-        path: AuthRoutes.INFO,
-        component: InfoComponent,
-        data: { title: 'Welcome to PRIME' }
+        path: EnrolmentRoutes.BCSC_LOGIN,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module').then(m => m.BcscEnrolmentLoginPageModule)
       },
       {
-        path: AuthRoutes.BCEID,
-        component: BceidComponent,
-        data: { title: 'Welcome to PRIME' }
+        path: EnrolmentRoutes.BCEID_LOGIN,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@enrolment/shared/modules/bceid-enrolment-login-page/bceid-enrolment-login-page.module').then(m => m.BceidEnrolmentLoginPageModule)
       },
       {
-        path: AuthRoutes.ADMIN,
-        component: AdminComponent,
-        data: { title: 'Welcome to PRIME' }
+        path: SiteRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module').then(m => m.SiteRegistrationLoginPageModule)
       },
       {
-        path: AuthRoutes.SITE,
-        component: SiteComponent,
-        data: { title: 'Welcome to PRIME' }
+        path: AdjudicationRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module').then(m => m.AdminLoginPageModule)
       },
       {
-        path: AuthRoutes.PHSA,
-        component: PhsaComponent,
-        data: { title: 'Enrol for access to PHSA eForms' }
+        path: PhsaEformsRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module').then(m => m.PhsaEformsLoginPageModule)
+      },
+      {
+        path: GisEnrolmentRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
-        redirectTo: AuthRoutes.INFO,
+        redirectTo: EnrolmentRoutes.BCSC_LOGIN,
         pathMatch: 'full'
       }
     ]

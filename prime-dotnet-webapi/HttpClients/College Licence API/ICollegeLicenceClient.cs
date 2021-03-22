@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using Prime.Models;
+
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.HttpClients
 {
