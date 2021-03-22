@@ -8,12 +8,17 @@ import { PageNotFoundComponent } from '@lib/modules/root-routes/components/page-
 import { HelpComponent } from '@lib/modules/root-routes/components/help/help.component';
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
+import { AuthRoutes } from '@auth/auth.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 const routes: Routes = [
+  {
+    path: AuthRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
+  },
   {
     path: ProvisionerAccessRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/provisioner-access/provisioner-access.module').then(m => m.ProvisionerAccessModule)
