@@ -89,7 +89,10 @@ import { SiteRegAccessComponent } from '@shared/components/auth/site-reg-access/
 import { PillComponent } from '@shared/components/auth/pill/pill.component';
 import { SimpleAccessComponent } from '@shared/components/auth/simple-access/simple-access.component';
 import { PrimeEnrolmentAccessComponent } from '@shared/components/auth/prime-enrolment-access/prime-enrolment-access.component';
-import { VendorFormComponent } from './components/forms/vendor-form/vendor-form.component';
+import { VendorFormComponent } from '@shared/components/forms/vendor-form/vendor-form.component';
+import { ContactProfileFormComponent } from '@shared/components/site/contact-profile-form/contact-profile-form.component';
+import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
+import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
 
 @NgModule({
   declarations: [
@@ -167,7 +170,10 @@ import { VendorFormComponent } from './components/forms/vendor-form/vendor-form.
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    VendorFormComponent
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent
   ],
   imports: [
     CommonModule,
@@ -252,7 +258,10 @@ import { VendorFormComponent } from './components/forms/vendor-form/vendor-form.
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    VendorFormComponent
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent
   ],
   providers: [
     FullnamePipe,

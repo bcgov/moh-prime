@@ -45,9 +45,6 @@
       </ng-container>
     </section>
 
-    <app-site-information-form [form]="formState.form"
-                               [organizationId]="site.organizationId"></app-site-information-form>
-
     <ng-container *ngIf="isCommPharm()">
 
       <mat-slide-toggle #deferredLicence
@@ -82,6 +79,9 @@
         </div>
       </section>
     </ng-container>
+
+    <app-site-information-form [form]="formState.form"
+                               [organizationId]="site.organizationId"></app-site-information-form>
 
   </form>
 
