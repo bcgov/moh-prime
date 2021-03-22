@@ -48,6 +48,20 @@ export class FormGroupValidators {
 
   /**
    * @description
+   * Checks that the start key date is before than end key value.
+   */
+  public static isBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isBefore(end)) ? null : { isBefore: true };
+    };
+  }
+
+
+  /**
+   * @description
    * Checks that the start key value is less than end key value.
    */
   public static lessThanDateTime(startGroupKey: string, endGroupKey: string): ValidatorFn {

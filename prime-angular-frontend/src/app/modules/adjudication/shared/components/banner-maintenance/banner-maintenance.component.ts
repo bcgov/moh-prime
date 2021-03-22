@@ -1,15 +1,27 @@
 import { ContentObserver } from '@angular/cdk/observers';
 import { ThrowStmt } from '@angular/compiler';
 import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { Role } from '@auth/shared/enum/role.enum';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
-import { BusinessDayHoursErrorStateMatcher } from '@registration/pages/hours-operation-page/hours-operation-page.component';
+import { LessThanErrorStateMatcher } from '@registration/pages/hours-operation-page/hours-operation-page.component';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner } from '@shared/models/banner.model';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
+import { Moment } from 'moment';
 import { Subscription } from 'rxjs';
+
+export class IsBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+  public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
+    const invalidCtrl = super.isErrorState(control, form);
+    // Apply custom validation from parent form group
+    const dirtyOrSubmitted = (control?.dirty || form?.submitted);
+    const invalidParent = !!(control?.parent && control?.parent.hasError('isBefore') && dirtyOrSubmitted);
+    return (invalidCtrl || invalidParent);
+  }
+}
 
 @Component({
   selector: 'app-banner-maintenance',
@@ -22,6 +34,7 @@ export class BannerMaintenanceComponent implements OnInit {
   public banner: Banner;
   public busy: Subscription;
   public form: FormGroup;
+  public isBeforeErrorStateMatcher: IsBeforeErrorStateMatcher;
 
   public hasActions: boolean;
   public editorConfig: Record<string, string>;
@@ -30,7 +43,6 @@ export class BannerMaintenanceComponent implements OnInit {
   public BannerType = BannerType;
   public BannerLocationCode = BannerLocationCode;
 
-  public hoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
   public readonly hoursTimePattern = {
     A: { pattern: /[0-2]/ },
     B: { pattern: /[0-9]/ },
@@ -68,16 +80,16 @@ export class BannerMaintenanceComponent implements OnInit {
     return this.form.get('bannerLocationCode') as FormControl;
   }
 
+  public get dateRange(): FormGroup {
+    return this.form.get('dateRange') as FormGroup;
+  }
+
   public get startDate(): FormControl {
-    return this.form.get('startDate') as FormControl;
+    return this.dateRange.controls['startDate'] as FormControl;
   }
 
   public get endDate(): FormControl {
-    return this.form.get('endDate') as FormControl;
-  }
-
-  public get timeRange(): FormGroup {
-    return this.form.get('timeRange') as FormGroup;
+    return this.dateRange.controls['endDate'] as FormControl;
   }
 
   public onSubmit() {
@@ -111,6 +123,8 @@ export class BannerMaintenanceComponent implements OnInit {
         this.banner = banner;
         if (banner) {
           this.form.patchValue(banner);
+          this.startDate.setValue(banner.startDate);
+          this.endDate.setValue(banner.endDate);
         }
       })
   }
@@ -120,16 +134,13 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   private get json(): Banner {
-    console.log(this.timeRange);
+    const banner = this.form.getRawValue();
     return {
+      ...banner,
       id: this.banner?.id,
       adminId: this.banner?.adminId,
-      bannerType: this.bannerType.value,
-      bannerLocationCode: this.bannerLocationCode.value,
-      title: this.title.value,
-      content: this.content.value,
-      startDate: null,
-      endDate: null,
+      startDate: banner.dateRange.startDate,
+      endDate: banner.dateRange.endDate
     }
   }
 
@@ -163,26 +174,14 @@ export class BannerMaintenanceComponent implements OnInit {
         },
         [Validators.required]
       ],
-      timeRange: this.fb.group(
+      dateRange: this.fb.group(
         {
-          start: this.fb.group(
-            {
-              date: [null, [Validators.required]],
-              time: [null, [Validators.required]],
-            },
-            [Validators.required]
-          ),
-          end: this.fb.group(
-            {
-              date: [null, [Validators.required]],
-              time: [null, [Validators.required]],
-            },
-            [Validators.required]
-          ),
+          startDate: ['', [Validators.required]],
+          endDate: ['', [Validators.required]],
         },
-        { validator: FormGroupValidators.lessThanDateTime('start', 'end') })
+        { validator: FormGroupValidators.isBefore('startDate', 'endDate') })
     });
-    this.hoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
+    this.isBeforeErrorStateMatcher = new IsBeforeErrorStateMatcher();
   }
 
 }

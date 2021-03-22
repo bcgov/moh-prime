@@ -43,63 +43,36 @@
         </mat-form-field>
       </div>
 
-      <div [formGroup]="timeRange">
-        <ng-container formGroupName="start">
-          <mat-form-field class="mr-2">
-            <mat-label>Start Date</mat-label>
-            <input matInput
-                   [matDatepicker]="startDatePicker"
-                   formControlName="date">
-            <mat-datepicker-toggle matSuffix
-                                   [for]="startDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #startDatePicker></mat-datepicker>
-            <mat-error>Required</mat-error>
-          </mat-form-field>
+      <ng-container [formGroup]="dateRange">
 
-          <mat-form-field>
-            <mat-label>Start Time</mat-label>
-            <input matInput
-                   mask="AB:CB"
-                   [patterns]="hoursTimePattern"
-                   formControlName="time"
-                   placeholder="00:00"
-                   [errorStateMatcher]="hoursErrStateMatcher">
-            <mat-error>
-              Required
-            </mat-error>
-          </mat-form-field>
-        </ng-container>
+        <mat-form-field class="mr-2">
+          <mat-label>Start Date</mat-label>
+          <input matInput
+                 [matDatepicker]="startDatePicker"
+                 formControlName="startDate">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="startDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #startDatePicker></mat-datepicker>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
 
-        <div formGroupName="end">
-          <mat-form-field class="mr-2">
-            <mat-label>End Date</mat-label>
-            <input matInput
-                   [matDatepicker]="endDatePicker"
-                   formControlName="date">
-            <mat-datepicker-toggle matSuffix
-                                   [for]="endDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #endDatePicker></mat-datepicker>
-            <mat-error *ngIf="timeRange.hasError('lessthan')">
-              Invalid
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>End Time</mat-label>
-            <input matInput
-                   mask="AB:CB"
-                   [patterns]="hoursTimePattern"
-                   formControlName="time"
-                   placeholder="00:00"
-                   [errorStateMatcher]="hoursErrStateMatcher">
-            <mat-error>
-              Required
-            </mat-error>
-          </mat-form-field>
-          <mat-error *ngIf="timeRange.hasError('lessthan')">
-            Invalid
+        <mat-form-field class="mr-2">
+          <mat-label>End Date</mat-label>
+          <input matInput
+                 [matDatepicker]="endDatePicker"
+                 formControlName="endDate"
+                 [errorStateMatcher]="isBeforeErrorStateMatcher">
+          <mat-datepicker-toggle matSuffix
+                                 [for]="endDatePicker"></mat-datepicker-toggle>
+          <mat-datepicker #endDatePicker></mat-datepicker>
+          <mat-error *ngIf="dateRange.get('endDate').hasError('required')">
+            Required
           </mat-error>
-        </div>
-      </div>
+          <mat-error *ngIf="dateRange.hasError('isBefore')">
+            End Date must be greater than start date.
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
 
     </div>
     <div class="col-sm-12 col-lg-9 col-xl-7">
