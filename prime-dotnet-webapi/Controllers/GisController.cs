@@ -66,7 +66,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateGisEnrollee(int gisId, GisChangeModel changeModel)
+        public async Task<ActionResult> UpdateGisEnrollee(int gisId, GisChangeModel changeModel)
         {
             if (changeModel == null)
             {
