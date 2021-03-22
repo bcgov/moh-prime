@@ -16,7 +16,7 @@ export class MockSiteService implements ISiteService {
     const address = new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode());
     const user = {
       id: faker.random.number(),
-      userId: `${faker.random.uuid()}`,
+      userId: `${ faker.random.uuid() }`,
       verifiedAddressId: faker.random.number(),
       verifiedAddress: address,
       mailingAddressId: faker.random.number(),
@@ -45,9 +45,6 @@ export class MockSiteService implements ISiteService {
       careSettingCode: faker.random.number(),
       siteVendors: [],
       businessLicence: null,
-      businessLicenceDocuments: [],
-      businessLicenceGuid: faker.random.uuid(),
-      deferredLicenceReason: faker.random.words(),
       doingBusinessAs: faker.company.companyName(),
       physicalAddressId: faker.random.number(),
       physicalAddress: address,
