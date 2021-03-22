@@ -31,26 +31,23 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const user$ = this.authService.getUser$();
-    const createEnrolment$ = user$
+    return this.authService.getUser$()
       .pipe(
-        map((user: BcscUser) => GisEnrolment.fromBcscUser(user)),
-        exhaustMap((enrolment: GisEnrolment) => this.gisEnrolmentResource.createEnrolment(enrolment))
-      );
-
-    return this.gisEnrolmentResource.getEnrolment()
-      .pipe(
-        exhaustMap((enrolment: GisEnrolment) =>
-          (enrolment)
-            ? of(enrolment)
-            : createEnrolment$
-        ),
-        map((enrolment: GisEnrolment) => {
-          // Store the enrolment for access throughout registration, which
-          // will allows be the most up-to-date version
-          this.gisEnrolmentService.enrolment = enrolment;
-          return this.routeDestination(routePath, enrolment);
-        })
+        exhaustMap((user: BcscUser) =>
+          this.gisEnrolmentResource.getEnrolmentByUserId(user.userId)
+            .pipe(
+              exhaustMap((enrolment: GisEnrolment) =>
+                (enrolment)
+                  ? of(enrolment)
+                  : this.gisEnrolmentResource.createEnrolment(GisEnrolment.fromBcscUser(user))
+              ),
+              map((enrolment: GisEnrolment) => {
+                // Store the enrolment for access throughout registration, which
+                // will allows be the most up-to-date version
+                this.gisEnrolmentService.enrolment = enrolment;
+                return this.routeDestination(routePath, enrolment);
+              })
+            ))
       );
   }
 
@@ -103,7 +100,7 @@ export class GisEnrolmentGuard extends BaseGuard {
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  protected navigate(routePath: string, destinationPath: string): boolean {
+  private navigate(routePath: string, destinationPath: string): boolean {
     if (routePath === `/${ GisEnrolmentRoutes.MODULE_PATH }/${ destinationPath }`) {
       return true;
     } else {

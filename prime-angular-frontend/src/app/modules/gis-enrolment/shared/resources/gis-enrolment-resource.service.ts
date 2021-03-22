@@ -36,8 +36,8 @@ export class GisEnrolmentResource {
       );
   }
 
-  public getEnrolment(): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`gis`)
+  public getEnrolmentByUserId(userId: string): Observable<GisEnrolment> {
+    return this.apiResource.get<GisEnrolment>(`gis/${ userId }`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
