@@ -16,13 +16,6 @@ export interface IEnrolmentPage {
   formState: AbstractFormState<unknown>;
   /**
    * @description
-   * Instance of the form loaded from the form state.
-   * @deprecated
-   * Use the formState to access the form
-   */
-  form: AbstractControl;
-  /**
-   * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
@@ -117,7 +110,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.form.dirty && !this.checkDeactivationIsAllowed())
+    return (this.formState.form.dirty && !this.checkDeactivationIsAllowed())
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
@@ -158,7 +151,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * additional validation.
    */
   protected checkValidity(): boolean {
-    return this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue());
+    return this.formUtilsService.checkValidity(this.formState.form) && this.additionalValidityChecks(this.formState.form.getRawValue());
   }
 
   /**
@@ -207,9 +200,9 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   private checkDeactivationIsAllowed(): boolean {
     if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
-      return Object.keys(this.form.controls)
+      return Object.keys(this.formState.form.controls)
         .filter(key => !this.canDeactivateWhitelist.includes(key))
-        .every(key => !this.form.controls[key].dirty);
+        .every(key => !this.formState.form.controls[key].dirty);
     }
 
     return this.allowRoutingWhenDirty;

@@ -6,6 +6,7 @@ import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 import { GisEnrolmentRoutes } from './gis-enrolment.routes';
 import { GisEnrolmentGuard } from './shared/guards/gis-enrolment.guard';
 import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-dashboard.component';
+
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { LdapUserPageComponent } from './pages/ldap-user-page/ldap-user-page.component';
 import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap-information-page.component';
@@ -20,7 +21,9 @@ const routes: Routes = [
     canLoad: [
       AuthenticationGuard
     ],
-    canActivate: [],
+    canActivate: [
+      AuthenticationGuard
+    ],
     canActivateChild: [
       AuthenticationGuard,
       GisEnrolmentGuard
