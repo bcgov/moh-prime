@@ -2,12 +2,25 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { DashboardComponent } from '@lib/modules/dashboard/components/dashboard/dashboard.component';
+import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
-import { AuthorizedUserComponent } from './pages/authorized-user/authorized-user.component';
-import { VendorComponent } from './pages/vendor/vendor.component';
-import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { SiteInformationComponent } from './pages/site-information/site-information.component';
+
+import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
+import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
+import { AuthorizedUserPageComponent } from './pages/authorized-user-page/authorized-user-page.component';
+import { VendorPageComponent } from './pages/vendor-page/vendor-page.component';
+import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
+import { SiteInformationPageComponent } from './pages/site-information-page/site-information-page.component';
+import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
+import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
+import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
+import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
+import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
+import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 const routes: Routes = [
   {
@@ -22,85 +35,98 @@ const routes: Routes = [
     ],
     children: [
       {
+        path: HealthAuthSiteRegRoutes.COLLECTION_NOTICE,
+        component: CollectionNoticePageComponent,
+        data: { title: 'Authorized User' }
+      },
+      {
         path: HealthAuthSiteRegRoutes.AUTHORIZED_USER,
-        component: AuthorizedUserComponent,
+        component: AuthorizedUserPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Authorized User' }
       },
       {
         path: HealthAuthSiteRegRoutes.SITE_MANAGEMENT,
-        component: AuthorizedUserComponent,
+        component: SiteManagementPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Site Management' }
       },
       {
         path: HealthAuthSiteRegRoutes.VENDOR,
-        component: VendorComponent,
+        component: VendorPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Vendor' }
       },
       {
         path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
-        component: CareSettingComponent,
+        component: CareSettingPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Health Authority Care Setting' }
       },
       {
         path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
-        component: SiteInformationComponent,
+        component: SiteInformationPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Site Information' }
       },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.HOURS_OPERATION,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.REMOTE_USERS,
-      //       children: [
-      //         // {
-      //         //   path: '',
-      //         //   component: RemoteUsersPageComponent,
-      //         //   // canActivate: [SiteGuard],
-      //         //   // canDeactivate: [CanDeactivateFormGuard],
-      //         //   data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
-      //         // },
-      //         // {
-      //         //   path: ':index',
-      //         //   component: RemoteUserPageComponent,
-      //         //   // canActivate: [SiteGuard],
-      //         //   // canDeactivate: [CanDeactivateFormGuard],
-      //         //   data: { title: 'Remote User' }
-      //         // }
-      //       ]
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.PRIVACY_OFFICER,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.SITE_REVIEW,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     },
-      //     {
-      //       path: HealthAuthSiteRegRoutes.NEXT_STEPS,
-      //       component: AuthorizedUserComponent,
-      //       data: { title: '' }
-      //     }
-      //   ]
+      {
+        path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
+        component: SiteAddressPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: '' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.HOURS_OPERATION,
+        component: HoursOperationPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: '' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.REMOTE_USERS,
+        children: [
+          {
+            path: '',
+            component: RemoteUsersPageComponent,
+            // canActivate: [SiteGuard],
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
+          },
+          {
+            path: ':index',
+            component: RemoteUserPageComponent,
+            // canActivate: [SiteGuard],
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Remote User' }
+          }
+        ]
+      },
+      {
+        path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
+        component: AdministratorPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: '' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.PRIVACY_OFFICER,
+        component: PrivacyOfficerPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: '' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
+        component: TechnicalSupportPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: '' }
+      },
+      {
+        path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
+        component: OverviewPageComponent,
+        data: { title: '' }
+      },
+      // {
+      //   path: HealthAuthSiteRegRoutes.NEXT_STEPS,
+      //   component: AuthorizedUserComponent,
+      //   data: { title: '' }
       // },
       {
         path: '', // Equivalent to `/` and alias for default view

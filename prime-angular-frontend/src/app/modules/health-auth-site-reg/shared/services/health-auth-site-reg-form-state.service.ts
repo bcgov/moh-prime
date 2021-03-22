@@ -1,4 +1,4 @@
-import { SiteInfoPageFormState } from '../../pages/site-information/site-info-page-form-state.class';
+import { SiteInformationPageFormState } from '../../pages/site-information-page/site-information-page-form-state.class';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -9,8 +9,8 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { Site } from '@registration/shared/models/site.model';
 
 import { HealthAuthSiteRegRoutes } from '../../health-auth-site-reg.routes';
-import { CareSettingPageFormState } from '../../pages/care-setting/care-setting-page-form-state.class';
-import { VendorPageFormState } from '../../pages/vendor/vendor-page-form-state.class';
+import { CareSettingPageFormState } from '../../pages/care-setting-page/care-setting-page-form-state.class';
+import { VendorPageFormState } from '../../pages/vendor-page/vendor-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ import { VendorPageFormState } from '../../pages/vendor/vendor-page-form-state.c
 export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<Site> {
   public vendorPageFormState: VendorPageFormState;
   public careSettingPageFormState: CareSettingPageFormState;
-  public siteInfoPageFormState: SiteInfoPageFormState;
+  public siteInfoPageFormState: SiteInformationPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -94,7 +94,7 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   protected buildForms(): void {
     this.vendorPageFormState = new VendorPageFormState(this.fb);
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.siteInfoPageFormState = new SiteInfoPageFormState(this.fb);
+    this.siteInfoPageFormState = new SiteInformationPageFormState(this.fb);
   }
 
   protected patchForm(site: Site): void {

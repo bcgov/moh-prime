@@ -16,7 +16,7 @@ export class HealthAuthSiteRegRoutes {
   public static ADMINISTRATOR = 'site-administrator';
   public static PRIVACY_OFFICER = 'privacy-officer';
   public static TECHNICAL_SUPPORT = 'technical-support';
-  public static SITE_REVIEW = 'site-review';
+  public static SITE_OVERVIEW = 'site-overview';
   public static NEXT_STEPS = 'next-steps';
 
   public static routePath(route: string): string {

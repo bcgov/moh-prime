@@ -37,20 +37,20 @@
 
     <ng-container *ngIf="filteredVendorConfig.length">
 
-      <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Vendor</ng-container>
-        <ng-container appPageSubheader2Summary>
-          What PharmaNet software vendor does this site use?
-
-          <app-contextual-help>
-            <ng-container appContextualContent>
-              If you use more than one vendor, you will need to register a site for each one.
-            </ng-container>
-          </app-contextual-help>
-        </ng-container>
-      </app-page-subheader2>
-
       <section class="mb-4">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Vendor</ng-container>
+          <ng-container appPageSubheader2Summary>
+            What PharmaNet software vendor does this site use?
+
+            <app-contextual-help>
+              <ng-container appContextualContent>
+                If you use more than one vendor, you will need to register a site for each one.
+              </ng-container>
+            </app-contextual-help>
+          </ng-container>
+        </app-page-subheader2>
+
         <mat-radio-group class="radio-group"
                          formControlName="vendorCode"
                          (change)="onVendorChange($event)">
