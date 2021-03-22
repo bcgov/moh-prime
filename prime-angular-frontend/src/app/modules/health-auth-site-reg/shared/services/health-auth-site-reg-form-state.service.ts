@@ -1,4 +1,4 @@
-import { SiteInfoPageFormState } from './../../pages/site-info/site-info-page-form-state.class';
+import { SiteInfoPageFormState } from '../../pages/site-information/site-info-page-form-state.class';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -103,9 +103,9 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     }
 
     const { siteVendors,
-            careSettingCode,
-            doingBusinessAs,
-            pec, } = site;
+      careSettingCode,
+      doingBusinessAs,
+      pec, } = site;
 
     this.vendorPageFormState.patchValue({ siteVendors });
     this.careSettingPageFormState.patchValue({ careSettingCode });

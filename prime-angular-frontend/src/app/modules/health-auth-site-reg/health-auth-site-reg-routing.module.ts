@@ -1,4 +1,3 @@
-import { SiteInfoComponent } from './pages/site-info/site-info.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -8,6 +7,7 @@ import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.gua
 import { AuthorizedUserComponent } from './pages/authorized-user/authorized-user.component';
 import { VendorComponent } from './pages/vendor/vendor.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
+import { SiteInformationComponent } from './pages/site-information/site-information.component';
 
 const routes: Routes = [
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
       },
       {
         path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
-        component: SiteInfoComponent,
+        component: SiteInformationComponent,
         data: { title: 'Site Information' }
       },
       //     {

@@ -4,25 +4,28 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { PermissionService } from '@auth/shared/services/permission.service';
-import { ConfigService } from '@config/config.service';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+
 import { KeycloakService } from 'keycloak-angular';
+
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
-import { SiteInfoComponent } from './site-info.component';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
-describe('SiteInfoComponent', () => {
-  let component: SiteInfoComponent;
-  let fixture: ComponentFixture<SiteInfoComponent>;
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { SiteInformationComponent } from './site-information.component';
+
+describe('SiteInformationComponent', () => {
+  let component: SiteInformationComponent;
+  let fixture: ComponentFixture<SiteInformationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SiteInfoComponent],
+      declarations: [SiteInformationComponent],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
@@ -55,7 +58,7 @@ describe('SiteInfoComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteInfoComponent);
+    fixture = TestBed.createComponent(SiteInformationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

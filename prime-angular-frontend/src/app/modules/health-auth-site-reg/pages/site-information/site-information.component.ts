@@ -16,11 +16,11 @@ import { HealthAuthSiteRegFormStateService } from '../../shared/services/health-
 import { SiteInfoPageFormState } from './site-info-page-form-state.class';
 
 @Component({
-  selector: 'app-site-info',
-  templateUrl: './site-info.component.html',
-  styleUrls: ['./site-info.component.scss']
+  selector: 'app-site-information',
+  templateUrl: './site-information.component.html',
+  styleUrls: ['./site-information.component.scss']
 })
-export class SiteInfoComponent extends AbstractEnrolmentPage implements OnInit {
+export class SiteInformationComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: SiteInfoPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
