@@ -44,19 +44,34 @@ jobs:
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
       # Use OpenShift CLI to retrieve necessary environment variables stored in OpenShift to build the frontend
-      - name: "Retrieve OpenShift Keycloak environment variables"
-        id: oc-env-vars-keycloak
-        run: |
-          JWT_WELL_KNOWN_CONFIG=$(oc describe configmap keycloak | grep 'jwt_well_known_config' -A 2 | grep 'https')"
-          KEYCLOAK_URL=$(oc describe configmap keycloak | grep 'keycloak_url' -A 2 | grep 'https')"
-          KEYCLOAK_REALM=$(oc describe configmap keycloak | grep 'keycloak_realm' -A 2 | grep '[^keycloak_realm][a-z]*[0-9]*\w')"
-          KEYCLOAK_CLIENT_ID=$(oc describe configmap keycloak | grep 'keycloak_client_id' -A 2 | grep '[^keycloak_client_id][a-z]*[0-9]*\w')"
+      # - name: "Retrieve OpenShift Keycloak environment variables"
+      #   id: oc-env-vars-keycloak
+      #   run: |
+      #     JWT_WELL_KNOWN_CONFIG=$(oc describe configmap keycloak | grep -i 'jwt_well_known_config' -A 2 | grep 'https')"
+      #     KEYCLOAK_URL=$(oc describe configmap keycloak | grep -i 'keycloak_url' -A 2 | grep 'https')"
+      #     KEYCLOAK_REALM=$(oc describe configmap keycloak | grep -i 'keycloak_realm' -A 2 | grep '[^keycloak_realm][a-z]*[0-9]*\w')"
+      #     KEYCLOAK_CLIENT_ID=$(oc describe configmap keycloak | grep -i 'keycloak_client_id' -A 2 | grep '[^keycloak_client_id][a-z]*[0-9]*\w')"
 
-          echo "JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG" >> $GITHUB_ENV
-          echo "KEYCLOAK_URL=$KEYCLOAK_URL" >> $GITHUB_ENV
-          echo "KEYCLOAK_REALM=$KEYCLOAK_REALM" >> $GITHUB_ENV
-          echo "KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID" >> $GITHUB_ENV
-        shell: bash
+      #     echo "JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG" >> $GITHUB_ENV
+      #     echo "KEYCLOAK_URL=$KEYCLOAK_URL" >> $GITHUB_ENV
+      #     echo "KEYCLOAK_REALM=$KEYCLOAK_REALM" >> $GITHUB_ENV
+      #     echo "KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID" >> $GITHUB_ENV
+      #   shell: bash
+
+      # - name: "Build Angular frontend image"
+      #   id: build-image
+      #   env:
+      #     COMPOSE_DOCKER_CLI_BUILD: 1
+      #     DOCKER_BUILDKIT: 1
+      #   run: |          
+      #     docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
+      #     docker-compose -f openshift-compose.yml build --force-rm --no-cache \
+      #     --build-arg REDIRECT_URL=$REDIRECT_URL \
+      #     --build-arg JWT_WELL_KNOWN_CONFIG=${{ env.jwt_well_known_config }} \
+      #     --build-arg KEYCLOAK_URL=${{ env.keycloak_url }} \
+      #     --build-arg KEYCLOAK_REALM=${{ env.keycloak_realm }} \
+      #     --build-arg KEYCLOAK_CLIENT_ID=${{ env.keycloak_client_id }} \
+      #     $SERVICE_NAME
 
       - name: "Build Angular frontend image"
         id: build-image
@@ -67,12 +82,12 @@ jobs:
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg REDIRECT_URL=$REDIRECT_URL \
-          --build-arg JWT_WELL_KNOWN_CONFIG=${{ env.jwt_well_known_config }} \
-          --build-arg KEYCLOAK_URL=${{ env.keycloak_url }} \
-          --build-arg KEYCLOAK_REALM=${{ env.keycloak_realm }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${{ env.keycloak_client_id }} \
+          --build-arg JWT_WELL_KNOWN_CONFIG=${{ secrets.JWT_WELL_KNOWN_CONFIG }} \
+          --build-arg KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL }} \
+          --build-arg KEYCLOAK_REALM=${{ secrets.KEYCLOAK_REALM }} \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
           $SERVICE_NAME
-      
+
       - name: "Tag Angular frontend to OpenShift image"
         id: tag-image
         env:
