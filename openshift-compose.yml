@@ -80,6 +80,7 @@ services:
         KEYCLOAK_REALM: ${KEYCLOAK_REALM}
         KEYCLOAK_URL: ${KEYCLOAK_URL}
         REDIRECT_URL: ${REDIRECT_URL}
+        JWT_WELL_KNOWN_CONFIG: ${JWT_WELL_KNOWN_CONFIG}
     # command: "nginx -g 'daemon off;'"
     restart: always
     ports:
