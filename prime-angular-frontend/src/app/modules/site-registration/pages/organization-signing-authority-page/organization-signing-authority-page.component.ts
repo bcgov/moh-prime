@@ -107,7 +107,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   protected createFormInstance(): void {
     this.formState = this.organizationFormStateService.organizationSigningAuthorityPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

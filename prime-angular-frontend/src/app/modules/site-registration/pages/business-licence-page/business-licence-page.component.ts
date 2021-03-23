@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -119,7 +119,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.businessLicencePageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

@@ -95,7 +95,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.remoteUsersPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
