@@ -75,6 +75,11 @@ services:
     build:
       context: prime-angular-frontend/
       dockerfile: openshift.dockerfile
+      args:
+        KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+        KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+        KEYCLOAK_URL: ${KEYCLOAK_URL}
+        REDIRECT_URL: ${REDIRECT_URL}
     # command: "nginx -g 'daemon off;'"
     restart: always
     ports:
