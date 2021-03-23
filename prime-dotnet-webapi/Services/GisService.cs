@@ -85,10 +85,7 @@ namespace Prime.Services
 
         public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
-            var result = await _ldapClient.GetUserAsync(username, password);
-
-            var gisUserRole = (string)result.SelectToken("gisuserrole");
-
+            var gisUserRole = await _ldapClient.GetUserAsync(username, password);
             var success = gisUserRole == "GISUSER";
 
             if (success)
@@ -108,7 +105,6 @@ namespace Prime.Services
         public async Task<int> SubmitApplicationAsync(int gisId)
         {
             var gisEnrolment = await _context.GisEnrolments
-                .Include(g => g.Party)
                 .SingleOrDefaultAsync(g => g.Id == gisId);
 
             gisEnrolment.SubmittedDate = DateTime.Now;

@@ -31,8 +31,7 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const user$ = this.authService.getUser$();
-    const createEnrolment$ = user$
+    return this.authService.getUser$()
       .pipe(
         exhaustMap((user: BcscUser) =>
           this.gisEnrolmentResource.getEnrolmentByUserId(user.userId)
@@ -102,7 +101,7 @@ export class GisEnrolmentGuard extends BaseGuard {
    * when the current route path is not the destination path.
    */
   private navigate(routePath: string, destinationPath: string): boolean {
-    if (routePath === `/${ GisEnrolmentRoutes.MODULE_PATH }/${ destinationPath }`) {
+    if (routePath === `/${GisEnrolmentRoutes.MODULE_PATH}/${destinationPath}`) {
       return true;
     } else {
       this.router.navigate([GisEnrolmentRoutes.MODULE_PATH, destinationPath]);
