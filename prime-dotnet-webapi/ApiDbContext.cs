@@ -106,6 +106,9 @@ namespace Prime
         public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
         public DbSet<SiteNotification> SiteNotifications { get; set; }
 
+        // GIS
+        public DbSet<GisEnrolment> GisEnrolments { get; set; }
+
         public override int SaveChanges()
         {
             ApplyAudits();

@@ -16,13 +16,6 @@ export interface IEnrolmentPage {
   formState: AbstractFormState<unknown>;
   /**
    * @description
-   * Instance of the form loaded from the form state.
-   * @deprecated
-   * Use the formState to access the form
-   */
-  form: AbstractControl;
-  /**
-   * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
