@@ -159,15 +159,15 @@ namespace Prime.Controllers
 
         // PUT: api/Sites/5/completed
         /// <summary>
-        /// Updates a sites state
+        /// Set a sites completed state.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPut("{siteId}/completed", Name = nameof(UpdateSiteCompleted))]
+        [HttpPut("{siteId}/completed", Name = nameof(SetSiteCompleted))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSiteCompleted(int siteId)
+        public async Task<ActionResult> SetSiteCompleted(int siteId)
         {
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
@@ -180,7 +180,35 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _siteService.UpdateCompletedAsync(siteId);
+            await _siteService.UpdateCompletedAsync(siteId, true);
+
+            return NoContent();
+        }
+
+        // DELETE: api/Sites/5/completed
+        /// <summary>
+        /// Remove a sites completed state.
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/completed", Name = nameof(RemoveSiteCompleted))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> RemoveSiteCompleted(int siteId)
+        {
+            var site = await _siteService.GetSiteNoTrackingAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _siteService.UpdateCompletedAsync(siteId, false);
 
             return NoContent();
         }
