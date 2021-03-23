@@ -62,7 +62,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
     if (!this.hasPreferredName) {
-      this.form.get('preferredMiddleName').reset();
+      this.formState.form.get('preferredMiddleName').reset();
     }
 
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
@@ -99,7 +99,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         map((bcscUser: BcscUser) => {
           const { firstName, lastName, givenNames } = bcscUser;
           const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
-          this.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
+          this.formState.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
         })
       )
       .subscribe(() => this.initForm());
@@ -142,7 +142,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];

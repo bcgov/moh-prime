@@ -13,7 +13,7 @@
   </app-page-subheader2>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <mat-slide-toggle class="mb-3"
@@ -23,7 +23,7 @@
   </form>
 
   <section>
-    <ng-container *ngFor="let remoteUser of remoteUsers.controls; let i = index; let last = last">
+    <ng-container *ngFor="let remoteUser of formState.remoteUsers.controls; let i = index; let last = last">
 
       <app-summary-card icon="account_circle"
                         [title]="remoteUser.value | fullname"
@@ -67,7 +67,7 @@
   </app-alert>
 
   <button mat-button
-          *ngIf="hasRemoteUsers.value"
+          *ngIf="formState.hasRemoteUsers.value"
           type="button"
           color="primary"
           class="mb-3"

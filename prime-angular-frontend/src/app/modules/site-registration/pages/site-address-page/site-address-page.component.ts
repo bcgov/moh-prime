@@ -70,7 +70,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     this.isCompleted = site?.completed;
     // Force the site to be patched each time
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm() {
@@ -84,11 +84,11 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.form.markAsPristine()));
+      .pipe(tap(() => this.formState.form.markAsPristine()));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW

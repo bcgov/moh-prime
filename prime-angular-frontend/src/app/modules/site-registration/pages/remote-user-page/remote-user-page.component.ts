@@ -165,7 +165,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       }
 
       // Replace the updated remote user in the parent form for submission
-      remoteUserFormGroup.reset(this.form.getRawValue());
+      remoteUserFormGroup.reset(this.formState.form.getRawValue());
     } else {
       // Store the new remote user in the parent form for submission
       remoteUsersFormArray.push(this.form);
@@ -175,7 +175,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });

@@ -70,7 +70,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
       .pipe(
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
-        tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
+        tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
         this.getDoingBusinessAs()
       )
       .subscribe();
@@ -78,7 +78,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   public onInput() {
     this.usedOrgBook = false;
-    this.registrationId.reset();
+    this.formState.registrationId.reset();
   }
 
   public onBack() {
@@ -111,7 +111,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected initForm() {
-    this.name.valueChanges
+    this.formState.name.valueChanges
       .pipe(
         untilDestroyed(this),
         debounceTime(400),
