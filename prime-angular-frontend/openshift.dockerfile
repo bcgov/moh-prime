@@ -2,6 +2,11 @@
 ### Stage 1 - Build environment ###
 ###################################
 FROM public.ecr.aws/bitnami/node:14.15.5-prod AS build-deps
+ARG KEYCLOAK_CLIENT_ID
+ARG KEYCLOAK_REALM
+ARG KEYCLOAK_URL
+ARG REDIRECT_URL
+ARG JWT_WELL_KNOWN_CONFIG
 
 # Set working directory
 ENV NODE_ROOT /usr/src/app
