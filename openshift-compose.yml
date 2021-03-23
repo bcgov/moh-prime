@@ -45,7 +45,7 @@ services:
 
 ####################### API Backend Definition #######################
   dotnet-webapi:
-    container_name: primeapi
+    container_name: prime-webapi-backend
     restart: always
     build:
       context: prime-dotnet-webapi/
@@ -71,7 +71,7 @@ services:
 
 ####################### Web Frontend Definition #######################
   nginx-angular:
-    container_name: primeweb
+    container_name: prime-frontend
     build:
       context: prime-angular-frontend/
       dockerfile: openshift.dockerfile
