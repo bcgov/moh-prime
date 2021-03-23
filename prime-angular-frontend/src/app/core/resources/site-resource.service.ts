@@ -113,12 +113,23 @@ export class SiteResource {
       );
   }
 
-  public updateCompleted(siteId: number): NoContent {
+  public setCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${ siteId }/completed`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.logger.error('[SiteRegistration] SiteResource::updateSiteCompleted error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::setCompleted error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeCompleted(siteId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`sites/${ siteId }/completed`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::removeCompleted error has occurred: ', error);
           throw error;
         })
       );
