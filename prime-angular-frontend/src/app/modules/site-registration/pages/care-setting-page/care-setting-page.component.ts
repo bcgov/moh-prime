@@ -4,8 +4,8 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { EMPTY } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { EMPTY, of } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -69,14 +69,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.filteredVendorConfig = [];
   }
 
-  public get careSettingCode(): FormControl {
-    return this.form.get('careSettingCode') as FormControl;
-  }
-
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
-  }
-
   public onVendorChange(change: MatRadioChange) {
     this.hasNoVendorError = false;
 
@@ -113,20 +105,35 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.careSettingPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm() {
-    this.careSettingCode.valueChanges
+    this.formState.careSettingCode.valueChanges
       .pipe(
-        map((careSettingCode: number) =>
+        exhaustMap((careSettingCode: number) => {
+          if (careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+            return of(careSettingCode);
+          }
+
+          // Reset the deferred licence reason when not Community Pharmacist
+          // as no other care setting allows for deferment
+          const { id, businessLicence } = this.siteService.site;
+          businessLicence.deferredLicenceReason = null;
+          return this.siteResource.updateBusinessLicence(id, businessLicence)
+            .pipe(
+              // When not reset prevents specific controls on business licence
+              tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
+              map(() => careSettingCode)
+            );
+        }),
+        map((careSettingCode: CareSettingEnum) =>
           this.vendorConfig.filter(
             (vendorConfig: VendorConfig) =>
               vendorConfig.careSettingCode === careSettingCode
@@ -134,7 +141,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         )
       ).subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;
-        this.vendorCode.patchValue(null);
+        this.formState.vendorCode.patchValue(null);
       });
 
     this.patchForm();
@@ -145,7 +152,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.vendorCode.value) {
+    if (!this.formState.vendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -175,7 +182,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
@@ -184,3 +191,4 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo(routePath);
   }
 }
+

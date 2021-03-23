@@ -19,8 +19,7 @@
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)"
-                           (remove)="onRemoveDocument($event)">
-      </app-document-upload>
+                           (remove)="onRemoveDocument($event)"></app-document-upload>
 
       <app-alert *ngIf="hasNoBusinessLicenceError"
                  type="danger"
@@ -44,9 +43,6 @@
 
       </ng-container>
     </section>
-
-    <app-site-name [form]="formState.form"
-                   [organizationId]="site.organizationId"></app-site-name>
 
     <ng-container *ngIf="isCommPharm()">
 
@@ -82,6 +78,9 @@
         </div>
       </section>
     </ng-container>
+
+    <app-site-name [form]="formState.form"
+                   [organizationId]="site.organizationId"></app-site-name>
 
   </form>
 
