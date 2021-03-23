@@ -5,6 +5,6 @@ namespace Prime.HttpClients
 {
     public interface ILdapClient
     {
-        Task<JObject> GetUserAsync(string userId, string password);
+        Task<string> GetUserAsync(string userId, string password);
     }
 }

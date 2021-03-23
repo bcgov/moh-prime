@@ -1,9 +1,8 @@
 using System;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Prime.HttpClients
 {
@@ -22,12 +21,12 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        public async Task<JObject> GetUserAsync(string username, string password)
+        public async Task<string> GetUserAsync(string username, string password)
         {
-            JObject messageObject = new JObject
+            var messageObject = new
             {
-                { "userName", username },
-                { "password", password }
+                userName = username,
+                password
             };
 
             var httpContent = CreateStringContent(messageObject);
@@ -36,31 +35,34 @@ namespace Prime.HttpClients
             try
             {
                 response = await _client.PostAsync($"users", httpContent);
+
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                _logger.LogInformation("CONTENT RESPONSE: {body}", responseJsonString);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var successResponse = JsonConvert.DeserializeObject<GisUser>(responseJsonString);
+                    return successResponse.Gisuserrole;
+                }
+                else
+                {
+                    await LogError(response);
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 await LogError(response, ex);
+                return null;
             }
+        }
 
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogError(response);
-            }
-
-            _logger.LogInformation("CONTENT RESPONSE: {body}", await response.Content.ReadAsStringAsync());
-
-            try
-            {
-                JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-                _logger.LogInformation("GIS_USER_ROLE: {gisuserrole}", (string)body.SelectToken("gisuserrole"));
-
-                return body;
-            }
-            catch (Exception ex)
-            {
-                return new JObject { "error", ex.Message };
-            }
+        public class GisUser
+        {
+            public string Gisuserrole { get; set; }
+            public string Authenticated { get; set; }
+            public string Unlocked { get; set; }
+            public string Username { get; set; }
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
