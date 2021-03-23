@@ -95,6 +95,10 @@ export class EnrolleeTableComponent implements OnInit {
     this.reload.emit(enrolleeId);
   }
 
+  public onSendEmail(): void {
+
+  }
+
   public sortData(sort: Sort) {
     if (!sort.active || !sort.direction) {
       return;
