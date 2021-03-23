@@ -46,7 +46,14 @@ USER 0
 ### Stage 2 - Production environment ###
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
+ARG KEYCLOAK_CLIENT_ID
+ARG KEYCLOAK_REALM
+ARG KEYCLOAK_URL
+ARG REDIRECT_URL
+ARG JWT_WELL_KNOWN_CONFIG
+
 USER 0
+
 ENV REDIRECT_URL $REDIRECT_URL
 ENV VANITY_URL $VANITY_URL
 ENV OC_APP $OC_APP
