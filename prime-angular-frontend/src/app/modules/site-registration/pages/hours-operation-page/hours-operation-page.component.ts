@@ -45,7 +45,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   public isCompleted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
-  public LessThanErrorStateMatcher: LessThanErrorStateMatcher;
+  public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
   public WeekDay = WeekDay;
   public SiteRoutes = SiteRoutes;
 
@@ -131,7 +131,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   protected createFormInstance() {
     this.formState = this.siteFormStateService.hoursOperationPageFormState;
     this.form = this.formState.form;
-    this.LessThanErrorStateMatcher = new LessThanErrorStateMatcher();
+    this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
   protected patchForm(): void {

@@ -48,7 +48,7 @@
                        [patterns]="businessHoursTimePattern"
                        formControlName="startTime"
                        placeholder="00:00"
-                       [errorStateMatcher]="LessThanErrorStateMatcher">
+                       [errorStateMatcher]="lessThanErrorStateMatcher">
                 <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('startTime').hasError('length')">
                   Invalid
                 </mat-error>
@@ -64,7 +64,7 @@
                        [patterns]="businessHoursTimePattern"
                        formControlName="endTime"
                        placeholder="00:00"
-                       [errorStateMatcher]="LessThanErrorStateMatcher">
+                       [errorStateMatcher]="lessThanErrorStateMatcher">
                 <mat-error *ngIf="businessDay.hasError('lessthan') || businessDay.get('endTime').hasError('length')">
                   Invalid
                 </mat-error>
