@@ -35,8 +35,12 @@ namespace Prime.Services
             return await _context.Banners.SingleOrDefaultAsync(b => b.Id == bannerId);
         }
 
-        public async Task<IEnumerable<Banner>> GetBannersAsync()
+        public async Task<IEnumerable<Banner>> GetBannersAsync(BannerLocationCode? locationCode)
         {
+            if (locationCode != null)
+            {
+                return await _context.Banners.Where(b => b.BannerLocationCode == locationCode).ToListAsync();
+            }
             return await _context.Banners.ToListAsync();
         }
 

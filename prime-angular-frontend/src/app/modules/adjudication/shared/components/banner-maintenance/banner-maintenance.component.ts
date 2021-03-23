@@ -118,13 +118,16 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   private getBanner(): void {
-    this.busy = this.bannerResource.getActiveBannerByLocationCode(this.locationCode)
-      .subscribe((banner: Banner) => {
-        this.banner = banner;
-        if (banner) {
-          this.form.patchValue(banner);
-          this.startDate.setValue(banner.startDate);
-          this.endDate.setValue(banner.endDate);
+    this.busy = this.bannerResource.getBanners(this.locationCode)
+      .subscribe((banners: Banner[]) => {
+        if (banners.length > 0) {
+          // Temp fix till we have management screen of multiple banners.
+          this.banner = banners[0];
+          this.form.patchValue(banners[0]);
+          this.startDate.setValue(banners[0].startDate);
+          this.endDate.setValue(banners[0].endDate);
+        } else {
+          this.banner = null;
         }
       })
   }

@@ -62,8 +62,9 @@ export class BannerResourceService {
       );
   }
 
-  public getBanners(): Observable<Banner[]> {
-    return this.apiResource.get<Banner[]>(`banners`)
+  public getBanners(locationCode: BannerLocationCode): Observable<Banner[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ locationCode });
+    return this.apiResource.get<Banner[]>(`banners`, params)
       .pipe(
         map((response: ApiHttpResponse<Banner[]>) => response.result),
         tap((banners: Banner[]) => this.logger.info('BANNERS', banners)),
