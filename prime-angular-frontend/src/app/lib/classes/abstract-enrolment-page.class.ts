@@ -17,6 +17,8 @@ export interface IEnrolmentPage {
   /**
    * @description
    * Instance of the form loaded from the form state.
+   * @deprecated
+   * Use the formState to access the form
    */
   form: AbstractControl;
   /**
@@ -50,6 +52,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
    * Form instance of the component.
+   * @deprecated
+   * Use the formState to access the form
    */
   public form: FormGroup;
   /**

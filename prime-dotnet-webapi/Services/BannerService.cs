@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -34,15 +35,21 @@ namespace Prime.Services
             return await _context.Banners.SingleOrDefaultAsync(b => b.Id == bannerId);
         }
 
-        public async Task<IEnumerable<Banner>> GetBannersAsync()
+        public async Task<IEnumerable<Banner>> GetBannersAsync(BannerLocationCode? locationCode)
         {
+            if (locationCode != null)
+            {
+                return await _context.Banners.Where(b => b.BannerLocationCode == locationCode).ToListAsync();
+            }
             return await _context.Banners.ToListAsync();
         }
 
         public async Task<Banner> GetActiveBannerByLocationAsync(BannerLocationCode locationCode)
         {
-            // TODO: Add time based functionality to determine if active :-)
-            return await _context.Banners.SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
+            var currentDate = DateTime.Today;
+            return await _context.Banners
+                .Where(b => currentDate >= b.StartDate && currentDate <= b.EndDate)
+                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
         }
 
         public async Task RemoveBannerAsync(int bannerId)

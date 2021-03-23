@@ -106,7 +106,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(banner));
         }
 
-        // GET: api/Banners
+        // GET: api/Banners?locationCode=3
         /// <summary>
         /// Gets all the banners.
         /// </summary>
@@ -114,9 +114,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerAdminViewModel>), StatusCodes.Status200OK)]
         [Authorize(Roles = Roles.PrimeAdministrant)]
-        public async Task<ActionResult<IEnumerable<BannerAdminViewModel>>> GetBanners()
+        public async Task<ActionResult<IEnumerable<BannerAdminViewModel>>> GetBanners([FromQuery] BannerLocationCode? locationCode)
         {
-            var banners = await _bannerService.GetBannersAsync();
+            var banners = await _bannerService.GetBannersAsync(locationCode);
             return Ok(ApiResponse.Result(banners));
         }
 
