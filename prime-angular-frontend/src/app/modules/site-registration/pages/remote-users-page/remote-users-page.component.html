@@ -14,7 +14,8 @@
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
-        novalidate>
+        novalidate
+        autocomplete="off">
 
     <mat-slide-toggle class="mb-3"
                       color="primary"
