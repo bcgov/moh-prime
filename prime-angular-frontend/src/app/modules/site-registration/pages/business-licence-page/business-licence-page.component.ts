@@ -29,7 +29,7 @@ import { BusinessLicencePageFormState } from './business-licence-page-form-state
   templateUrl: './business-licence-page.component.html',
   styleUrls: ['./business-licence-page.component.scss']
 })
-export class BusinessLicencePageComponent extends AbstractEnrolmentPage implements OnInit {
+export class BusinessLicencePageComponent extends AbstractEnrolmentPage implements OnInit, AfterViewInit {
   public formState: BusinessLicencePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -38,8 +38,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   public uploadedFile: boolean;
   public hasNoBusinessLicenceError: boolean;
   public isCompleted: boolean;
-  public SiteRoutes = SiteRoutes;
   public site: Site;
+  public SiteRoutes = SiteRoutes;
 
   @ViewChild('deferredLicence') public deferredLicenceToggle: MatSlideToggle;
   @ViewChild('documentUpload') public documentUpload: DocumentUploadComponent;
@@ -107,10 +107,14 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.formState.form.markAsUntouched();
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
+  }
+
+  public ngAfterViewInit(): void {
+    this.getBusinessLicence(this.site);
   }
 
   protected createFormInstance() {
@@ -127,7 +131,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   protected initForm(): void {
     this.site = this.siteService.site;
-    this.getBusinessLicence(this.site);
   }
 
   protected additionalValidityChecks(): boolean {
@@ -201,7 +204,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
         if (businessLicense && !businessLicense.completed) {
-          this.deferredLicenceToggle.checked = true;
+          this.deferredLicenceToggle.checked = !!businessLicense?.deferredLicenceReason;
           this.formState.deferredLicenceReason.setValidators([Validators.required]);
           this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
           this.hasNoBusinessLicenceError = false;
