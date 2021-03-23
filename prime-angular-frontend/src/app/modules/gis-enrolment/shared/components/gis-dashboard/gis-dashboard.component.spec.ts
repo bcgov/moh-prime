@@ -16,8 +16,7 @@ describe('GisDashboardComponent', () => {
           useValue: APP_DI_CONFIG
         }
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

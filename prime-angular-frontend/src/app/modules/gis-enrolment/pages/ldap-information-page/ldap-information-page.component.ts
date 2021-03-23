@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
-import { ConfigService } from '@config/config.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resource.service';
+import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
 
@@ -19,20 +21,19 @@ import { LdapInformationPageFormState } from './ldap-information-page-form-state
   styleUrls: ['./ldap-information-page.component.scss']
 })
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public busy: Subscription;
   public title: string;
   public formState: LdapInformationPageFormState;
-  public form: FormGroup;
 
   private routeUtils: RouteUtils;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private formStateService: GisEnrolmentFormStateService,
-    private configService: ConfigService
+    private gisEnrolmentService: GisEnrolmentService,
+    private gisEnrolmentResource: GisEnrolmentResource,
+    route: ActivatedRoute,
+    router: Router,
   ) {
     super(dialog, formUtilsService);
 
@@ -40,40 +41,35 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
   }
 
-  public get ldapUsername(): FormControl {
-    return this.form.get('ldapUsername') as FormControl;
-  }
-
-  public get ldapPassword(): FormControl {
-    return this.form.get('ldapPassword') as FormControl;
-  }
-
   public onBack() {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_USER_PAGE }`]);
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
     this.formState = this.formStateService.ldapInformationPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
-    throw new Error('Method not implemented.');
+    this.formStateService.setForm(this.gisEnrolmentService.enrolment);
   }
 
-  protected initForm(): void {
-    throw new Error('Method not implemented.');
-  }
+  protected initForm(): void { } // NOOP
 
-  protected performSubmission(): Observable<null> {
-    return of(null);
+  protected performSubmission(): NoContent {
+    return this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.formState.credentials)
+      .pipe(
+        exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json))
+      );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`../${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
+    // Don't want the password around any longer than needed
+    this.formState.clearPassword();
+    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ORG_INFO_PAGE }`]);
   }
 }

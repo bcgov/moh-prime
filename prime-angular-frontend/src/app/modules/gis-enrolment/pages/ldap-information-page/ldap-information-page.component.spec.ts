@@ -1,13 +1,14 @@
-import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { MatDialogModule } from '@angular/material/dialog';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { LdapInformationPageComponent } from './ldap-information-page.component';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { ConfigService } from '@config/config.service';
-import { MockConfigService } from 'test/mocks/mock-config.service';
+import { LdapInformationPageComponent } from './ldap-information-page.component';
 
 describe('LdapInformationPageComponent', () => {
   let component: LdapInformationPageComponent;
@@ -22,20 +23,17 @@ describe('LdapInformationPageComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         HttpClientTestingModule,
-        MatDialogModule,
+        BrowserAnimationsModule,
+        NgxMaterialModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
-        {
-          provide: ConfigService,
-          useClass: MockConfigService
         }
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
