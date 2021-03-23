@@ -66,10 +66,10 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
         const result = await this.canAccess(this.authenticated, routePath);
         resolve(result);
       } catch (error) {
-        const destination = (routePath) ? ` to ${routePath} ` : ' ';
-        const message = `Route access${destination}has been denied`;
+        const destination = (routePath) ? ` to ${ routePath } ` : ' ';
+        const message = `Route access${ destination }has been denied`;
         this.logger.error(message);
-        reject(`${message}: ${error}`);
+        reject(`${ message }: ${ error }`);
       }
     });
   }
@@ -93,7 +93,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
   // TODO needs updating to account for query params using router.parseUrl(...)
   private getUrl(routeParam: UrlSegment[] | RouterStateSnapshot): string {
     return (Array.isArray(routeParam))
-      ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')
+      ? routeParam.reduce((path, segment) => `${ path }/${ segment.path }`, '')
       : routeParam.url;
   }
 }
