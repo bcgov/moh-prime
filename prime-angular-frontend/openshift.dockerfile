@@ -72,8 +72,7 @@ COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
-RUN chmod -R 766 ./environments && \
-    envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
+RUN envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
 # RUN echo "Build completed."
