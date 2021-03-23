@@ -46,6 +46,7 @@ USER 0
 ### Stage 2 - Production environment ###
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
+USER 0
 ENV REDIRECT_URL $REDIRECT_URL
 ENV VANITY_URL $VANITY_URL
 ENV OC_APP $OC_APP
@@ -70,8 +71,8 @@ COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
 COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
-USER 0
-RUN chmod 766 ./environments/environment.prod.template.ts && \
+
+RUN chmod -R 766 ./environments && \
     envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
