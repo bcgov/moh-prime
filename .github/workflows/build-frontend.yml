@@ -26,7 +26,7 @@ jobs:
     env:
       VERSION: v1
       SERVICE_NAME: nginx-angular
-      CONTAINER_NAME: primeweb
+      CONTAINER_NAME: prime-frontend
       IMAGE_TAGS: latest
       REDIRECT_URL: "https://pharmanetenrolment.gov.bc.ca"
       
