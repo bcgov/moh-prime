@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { EMPTY, noop, of } from 'rxjs';
 import { exhaustMap, map, pairwise, tap } from 'rxjs/operators';
 
@@ -25,6 +27,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-care-setting-page',
   templateUrl: './care-setting-page.component.html',
@@ -116,6 +119,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected initForm() {
     this.formState.careSettingCode.valueChanges
       .pipe(
+        untilDestroyed(this),
         pairwise(),
         exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
           const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
@@ -152,10 +156,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
             );
         }),
         map((careSettingCode: CareSettingEnum) =>
-          this.vendorConfig.filter(
-            (vendorConfig: VendorConfig) =>
-              vendorConfig.careSettingCode === careSettingCode
-          )
+          this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
         )
       ).subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;

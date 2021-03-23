@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { Observable, of, pipe } from 'rxjs';
 import { debounceTime, switchMap, tap, exhaustMap, take, map } from 'rxjs/operators';
 
@@ -21,6 +23,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-organization-name-page',
   templateUrl: './organization-name-page.component.html',
@@ -52,18 +55,6 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-  }
-
-  public get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
-  public get registrationId(): FormControl {
-    return this.form.get('registrationId') as FormControl;
-  }
-
-  public get doingBusinessAs(): FormControl {
-    return this.form.get('doingBusinessAs') as FormControl;
   }
 
   public getOrgBookLink(orgId: string, display: boolean = false) {
@@ -102,14 +93,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   protected createFormInstance() {
     this.formState = this.organizationFormStateService.organizationNamePageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     this.usedOrgBook = !!organization?.registrationId;
 
@@ -123,6 +113,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   protected initForm() {
     this.name.valueChanges
       .pipe(
+        untilDestroyed(this),
         debounceTime(400),
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
@@ -154,7 +145,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(siteId?: number): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -12,7 +10,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { AddressLine } from '@shared/models/address.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -55,14 +52,6 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     ];
   }
 
-  public get name(): FormGroup {
-    return this.form.get('name') as FormGroup;
-  }
-
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
-  }
-
   public onBack() {
     this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
   }
@@ -74,7 +63,6 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.siteAddressPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {

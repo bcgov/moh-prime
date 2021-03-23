@@ -31,6 +31,32 @@ export interface IEnrolmentPage {
  * @description
  * Class is used to provide a set of submission hooks and
  * functionality to pages used in enrolments.
+ *
+ * For example, outside of the boilerplate add getters for
+ * quickly accessing AbstractControls in controllers to
+ * reduce methods required in each controller.
+ *
+ * WARNING: Always use UntilDestroy in the controller to
+ * unsubscribe from valueChanges on getters when the component
+ * is destroyed. Not doing this will result in memory leaks, as
+ * well as, create issues that are difficult to trace.
+ *
+ * @example
+ * @UntilDestroy()
+ * @Component({
+ *   selector: 'app-example-page',
+ *   templateUrl: './example-page.component.html',
+ *   styleUrls: ['./example-page.component.scss']
+ * })
+ * export class ExamplePageComponent {
+ *   public initForm(): void {
+ *     this.formState.controlName.valueChanges
+ *       .pipe(
+ *         untilDestroyed(this),
+ *         ...
+ *       ).subscribe();
+ *   }
+ * }
  */
 // TODO make AbstractFormState generic on AbstractEnrolmentPage
 // export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {

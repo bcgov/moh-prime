@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { noop, of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
@@ -19,6 +21,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-remote-users-page',
   templateUrl: './remote-users-page.component.html',
@@ -117,6 +120,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
 
   protected initForm() {
     this.remoteUsers.valueChanges
+      .pipe(untilDestroyed(this))
       .subscribe((remoteUsers: RemoteUser[]) => {
         (remoteUsers.length)
           ? this.hasRemoteUsers.disable({ emitEvent: false })
@@ -124,6 +128,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
       });
 
     this.hasRemoteUsers.valueChanges
+      .pipe(untilDestroyed(this))
       .subscribe((hasRemoteUsers: boolean) => {
         (hasRemoteUsers)
           ? this.remoteUsers.setValidators(FormArrayValidators.atLeast(1))

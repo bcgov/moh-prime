@@ -15,6 +15,10 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     this.buildForm();
   }
 
+  public get remoteUserCertifications(): FormArray {
+    return this.form.get('remoteUserCertifications') as FormArray;
+  }
+
   public get json(): RemoteUser[] {
     if (!this.formInstance) {
       return;

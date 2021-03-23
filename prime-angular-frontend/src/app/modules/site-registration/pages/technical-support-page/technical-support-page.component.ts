@@ -54,7 +54,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
     }
-    this.form.patchValue(contact);
+    this.formState.form.patchValue(contact);
   }
 
   public onBack() {
@@ -68,14 +68,13 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.technicalSupportFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): Observable<boolean> {
@@ -103,7 +102,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (needsOrgAgreement)
       ? SiteRoutes.ORGANIZATION_AGREEMENT

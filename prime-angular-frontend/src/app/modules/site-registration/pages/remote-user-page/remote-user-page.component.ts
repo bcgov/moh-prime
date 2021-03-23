@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray } from '@angular/forms';
 
-import { noop, Observable, of, Subscription } from 'rxjs';
+import { noop, of } from 'rxjs';
 
 import { CollegeConfig, LicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -71,18 +71,14 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.remoteUserIndex = route.snapshot.params.index;
   }
 
-  public get remoteUserCertifications(): FormArray {
-    return this.form.get('remoteUserCertifications') as FormArray;
-  }
-
   public get selectedCollegeCodes(): number[] {
-    return this.remoteUserCertifications.value
+    return this.formState.remoteUserCertifications.value
       .map((certification: RemoteUserCertification) => +certification.collegeCode);
   }
 
   public addCertification() {
     const newRemoteUserCertification = this.formState.remoteUserCertificationFormGroup();
-    this.remoteUserCertifications.push(newRemoteUserCertification);
+    this.formState.remoteUserCertifications.push(newRemoteUserCertification);
   }
 
   /**
@@ -94,7 +90,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * @param index to be removed
    */
   public removeCertification(index: number) {
-    this.remoteUserCertifications.removeAt(index);
+    this.formState.remoteUserCertifications.removeAt(index);
   }
 
   public onBack() {
@@ -142,7 +138,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     // Create a local form group for creating or updating remote users
     this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
 
-    if (!this.remoteUserCertifications.length) {
+    if (!this.formState.remoteUserCertifications.length) {
       this.addCertification();
     }
   }
@@ -160,10 +156,10 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
       // Changes in the amount of certificates requires adjusting the number of
       // certificates in the parent, which is not handled automatically
-      if (this.remoteUserCertifications.length !== certificationFormArray.length) {
+      if (this.formState.remoteUserCertifications.length !== certificationFormArray.length) {
         certificationFormArray.clear();
 
-        Object.keys(this.remoteUserCertifications.controls)
+        Object.keys(this.formState.remoteUserCertifications.controls)
           .map(() => this.formState.remoteUserCertificationFormGroup())
           .forEach((group: FormGroup) => certificationFormArray.push(group));
       }
@@ -191,7 +187,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * for submission, and allows for an empty list of certifications.
    */
   private removeIncompleteCertifications(noEmptyCert: boolean = false) {
-    this.remoteUserCertifications.controls
+    this.formState.remoteUserCertifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
@@ -201,7 +197,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Always have a single certification available, and it prevents
     // the page from jumping too much when routing
-    if (!noEmptyCert && !this.remoteUserCertifications.controls.length) {
+    if (!noEmptyCert && !this.formState.remoteUserCertifications.controls.length) {
       this.addCertification();
     }
   }

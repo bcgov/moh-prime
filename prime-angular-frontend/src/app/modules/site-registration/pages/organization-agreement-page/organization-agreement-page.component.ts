@@ -60,10 +60,6 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get organizationAgreementGuid(): FormControl {
-    return this.form.get('organizationAgreementGuid') as FormControl;
-  }
-
   public onDownload() {
     this.organizationResource
       .getOrganizationAgreement(this.route.snapshot.params.oid, this.agreementId, true)
@@ -75,13 +71,13 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   }
 
   public onUpload(document: BaseDocument) {
-    this.organizationAgreementGuid.patchValue(document.documentGuid);
+    this.formState.organizationAgreementGuid.patchValue(document.documentGuid);
     this.hasUploadedFile = true;
     this.hasNoUploadError = false;
   }
 
   public onRemoveDocument(documentGuid: string) {
-    this.organizationAgreementGuid.patchValue(null);
+    this.formState.organizationAgreementGuid.patchValue(null);
   }
 
   public showDefaultAgreement() {
@@ -100,7 +96,6 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
 
   protected createFormInstance() {
     this.formState = this.organizationFormStateService.organizationAgreementPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
@@ -148,9 +143,9 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
             : EMPTY
         ),
         exhaustMap(() =>
-          (this.organizationAgreementGuid.value)
+          (this.formState.organizationAgreementGuid.value)
             ? this.organizationResource
-              .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
+              .acceptOrganizationAgreement(organizationId, this.agreementId, this.formState.organizationAgreementGuid.value)
             : this.organizationResource
               .acceptOrganizationAgreement(organizationId, this.agreementId)
         ),
@@ -161,8 +156,8 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   protected afterSubmitIsSuccessful(): void {
     // Remove the org agreement GUID to prevent 404 already
     // submitted if resubmited in the same session
-    this.organizationAgreementGuid.patchValue(null);
-    this.form.markAsPristine();
+    this.formState.organizationAgreementGuid.patchValue(null);
+    this.formState.form.markAsPristine();
 
     this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
