@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { EMPTY, of } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { EMPTY, noop, of } from 'rxjs';
+import { exhaustMap, map, pairwise, tap } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -117,20 +116,39 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected initForm() {
     this.formState.careSettingCode.valueChanges
       .pipe(
-        exhaustMap((careSettingCode: number) => {
-          if (careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
-            return of(careSettingCode);
+        pairwise(),
+        exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
+          const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
+
+          // Reset the deferred licence reason when changeing from Community Pharmacist as
+          // no other care setting allows for deferment of the business licence upload
+          if (prevCareSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST || !deferredLicenceReason.value) {
+            return of(nextCareSettingCode); // No reset required
           }
 
-          // Reset the deferred licence reason when not Community Pharmacist
-          // as no other care setting allows for deferment
-          const { id, businessLicence } = this.siteService.site;
+          // TODO check if business licence is uploaded, which might indicate this can be skipped...
+          // seems edge case that an unsubmitted site would be deferred and have a business licence
+          // but easy to add in a business licence uploaded check
+
+          const { id, businessLicence, completed } = this.siteService.site;
           businessLicence.deferredLicenceReason = null;
           return this.siteResource.updateBusinessLicence(id, businessLicence)
             .pipe(
-              // When not reset prevents specific controls on business licence
+              // When not reset prevents interaction with specific controls on business licence
               tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
-              map(() => careSettingCode)
+              exhaustMap(() => {
+                // Do nothing if not completed, but when site is marked as completed reset it
+                // to force user through the wizard to ensure a business licence is uploaded
+                if (!completed) {
+                  return of(noop());
+                }
+
+                return this.siteResource.removeCompleted(id)
+                  // Will ensure that the user is routed to the next page, and not
+                  // overview if previously completed
+                  .pipe(tap(() => this.isCompleted = false));
+              }),
+              map(() => nextCareSettingCode)
             );
         }),
         map((careSettingCode: CareSettingEnum) =>
