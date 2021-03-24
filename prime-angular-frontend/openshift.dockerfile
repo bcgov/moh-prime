@@ -29,6 +29,7 @@ COPY . .
 
 # Fill template with environment variables
 #RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+RUN envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # Install Angular CLI
 RUN npm install -g @angular/cli
 # Install dependencies
@@ -52,7 +53,7 @@ ARG KEYCLOAK_URL
 ARG REDIRECT_URL
 ARG JWT_WELL_KNOWN_CONFIG
 
-USER 0
+# USER 0
 
 ENV REDIRECT_URL $REDIRECT_URL
 ENV VANITY_URL $VANITY_URL
@@ -77,10 +78,10 @@ ENV DOCUMENT_MANAGER_URL $DOCUMENT_MANAGER_URL
 COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
-COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
+# COPY --from=build-deps /usr/src/app/nginx.template.conf /etc/nginx/nginx.template.conf
 
-RUN chmod -R 777 . && \
-    envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
+# RUN chmod -R 777 . && \
+#     envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
 # RUN chmod +x /entrypoint.sh
 # RUN chmod 777 /entrypoint.sh
 # RUN echo "Build completed."
