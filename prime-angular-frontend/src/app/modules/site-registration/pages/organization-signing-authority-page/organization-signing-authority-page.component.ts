@@ -56,60 +56,24 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   ) {
     super(dialog, formUtilsService);
 
-    this.title = this.route.snapshot.data.title;
+    this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-  }
-
-  public get preferredFirstName(): FormControl {
-    return this.form.get('preferredFirstName') as FormControl;
-  }
-
-  public get preferredLastName(): FormControl {
-    return this.form.get('preferredLastName') as FormControl;
-  }
-
-  public get verifiedAddress(): FormGroup {
-    return this.form.get('verifiedAddress') as FormGroup;
-  }
-
-  public get mailingAddress(): FormGroup {
-    return this.form.get('mailingAddress') as FormGroup;
-  }
-
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
-  }
-
-  public get phone(): FormControl {
-    return this.form.get('phone') as FormControl;
-  }
-
-  public get fax(): FormControl {
-    return this.form.get('fax') as FormControl;
-  }
-
-  public get smsPhone(): FormControl {
-    return this.form.get('smsPhone') as FormControl;
-  }
-
-  public get email(): FormControl {
-    return this.form.get('email') as FormControl;
   }
 
   public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
     if (!this.hasPreferredName) {
-      this.form.get('preferredMiddleName').reset();
+      this.formState.form.get('preferredMiddleName').reset();
     }
 
-    this.togglePreferredNameValidators(checked, this.preferredFirstName, this.preferredLastName);
+    this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
-    this.toggleAddressLineValidators(checked, this.physicalAddress);
+    this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
   public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
-    this.toggleAddressLineValidators(checked, this.mailingAddress, this.hasVerifiedAddress);
+    this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
   public onBack(): void {
@@ -135,7 +99,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         map((bcscUser: BcscUser) => {
           const { firstName, lastName, givenNames } = bcscUser;
           const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
-          this.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
+          this.formState.form.patchValue({ firstName, lastName, givenNames, verifiedAddress });
         })
       )
       .subscribe(() => this.initForm());
@@ -143,7 +107,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   protected createFormInstance(): void {
     this.formState = this.organizationFormStateService.organizationSigningAuthorityPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
@@ -156,20 +119,20 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected initForm(): void {
-    this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
-    this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
+    this.hasPreferredName = !!(this.formState.preferredFirstName.value || this.formState.preferredLastName.value);
+    this.togglePreferredNameValidators(this.hasPreferredName, this.formState.preferredFirstName, this.formState.preferredLastName);
 
     this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress);
     if (!this.hasVerifiedAddress) {
-      this.clearAddressValidator(this.verifiedAddress);
-      this.setAddressValidator(this.physicalAddress);
+      this.clearAddressValidator(this.formState.verifiedAddress);
+      this.setAddressValidator(this.formState.physicalAddress);
     } else {
-      this.hasPhysicalAddress = Address.isNotEmpty(this.physicalAddress.value);
-      this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
+      this.hasPhysicalAddress = Address.isNotEmpty(this.formState.physicalAddress.value);
+      this.toggleAddressLineValidators(this.hasPhysicalAddress, this.formState.physicalAddress);
     }
 
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value);
-    this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
+    this.hasMailingAddress = Address.isNotEmpty(this.formState.mailingAddress.value);
+    this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
   protected performSubmission(): NoContent {
@@ -178,7 +141,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
