@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -18,6 +18,10 @@ export class HoursOperationPageFormState extends AbstractFormState<BusinessDay[]
     super();
 
     this.buildForm();
+  }
+
+  public get businessDays(): FormArray {
+    return this.formInstance.get('businessDays') as FormArray;
   }
 
   public get json(): BusinessDay[] {

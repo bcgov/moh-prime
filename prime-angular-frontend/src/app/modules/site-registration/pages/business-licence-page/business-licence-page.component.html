@@ -4,7 +4,8 @@
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
-        novalidate>
+        novalidate
+        autocomplete="off">
 
     <section class="mb-4">
       <app-page-subheader2>
@@ -19,8 +20,7 @@
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)"
-                           (remove)="onRemoveDocument($event)">
-      </app-document-upload>
+                           (remove)="onRemoveDocument($event)"></app-document-upload>
 
       <app-alert *ngIf="hasNoBusinessLicenceError"
                  type="danger"
