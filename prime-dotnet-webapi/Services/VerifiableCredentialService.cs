@@ -19,6 +19,7 @@ namespace Prime.Services
         public const string Connections = "connections";
         public const string IssueCredential = "issue_credential";
         public const string RevocationRegistry = "revocation_registry";
+        public const string BasicMessage = "basicmessages";
     }
 
     public class ConnectionState
@@ -54,49 +55,6 @@ namespace Prime.Services
             _logger = logger;
         }
 
-        // Create an invitation to establish a connection between the agents.
-        public async Task<JObject> CreateConnectionAsync(Enrollee enrollee)
-        {
-            var alias = enrollee.Id.ToString();
-            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
-            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(alias);
-            var invitationUrl = invitation.Value<string>("invitation_url");
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-
-            QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
-            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
-
-            var credential = new Credential
-            {
-                SchemaId = schemaId,
-                CredentialDefinitionId = credentialDefinitionId,
-                Alias = alias,
-                Base64QRCode = qrCodeImageAsBase64
-            };
-            _context.Credentials.Add(credential);
-            await _context.SaveChangesAsync();
-
-            var enrolleeCredential = new EnrolleeCredential
-            {
-                EnrolleeId = enrollee.Id,
-                CredentialId = credential.Id
-            };
-
-            _context.EnrolleeCredentials.Add(enrolleeCredential);
-
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not store connection invitation.");
-            }
-
-            // TODO after testing don't need to pass back the invitation
-            return invitation;
-        }
-
         // Handle webhook events pushed by the issuing agent.
         public async Task<bool> WebhookAsync(JObject data, string topic)
         {
@@ -111,10 +69,46 @@ namespace Prime.Services
                 case WebhookTopic.RevocationRegistry:
                     _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
                     return true;
+                case WebhookTopic.BasicMessage:
+                    _logger.LogInformation("Basic Message data: for {@JObject}", JsonConvert.SerializeObject(data));
+                    return false;
                 default:
                     _logger.LogError("Webhook {topic} is not supported", topic);
                     return false;
             }
+        }
+
+        // Create an invitation to establish a connection between the agents.
+        public async Task<bool> CreateConnectionAsync(Enrollee enrollee)
+        {
+            var alias = enrollee.Id.ToString();
+            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
+
+            var enrolleeCredential = new EnrolleeCredential
+            {
+                EnrolleeId = enrollee.Id,
+                Credential = new Credential
+                {
+                    SchemaId = schemaId,
+                    CredentialDefinitionId = credentialDefinitionId,
+                    Alias = alias
+                }
+            };
+
+            _context.EnrolleeCredentials.Add(enrolleeCredential);
+
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
+            {
+                throw new InvalidOperationException("Could not store credential.");
+            }
+
+            await CreateInvitation(enrolleeCredential.Credential);
+
+            return true;
         }
 
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
@@ -129,14 +123,33 @@ namespace Prime.Services
 
             foreach (var credential in enrolleeCredentials)
             {
-                if (await _verifiableCredentialClient.RevokeCredentialAsync(credential))
+                var success = credential.AcceptedCredentialDate == null
+                    ? await _verifiableCredentialClient.DeleteCredentialAsync(credential)
+                    : await _verifiableCredentialClient.RevokeCredentialAsync(credential);
+
+                if (success)
                 {
                     credential.RevokedCredentialDate = DateTimeOffset.Now;
+                    await _verifiableCredentialClient.SendMessageAsync(credential.ConnectionId, "This credential has been revoked.");
                 }
             }
 
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private async Task<int> CreateInvitation(Credential credential)
+        {
+            var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
+            var invitationUrl = invitation.Value<string>("invitation_url");
+
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            Base64QRCode qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
+
+            credential.Base64QRCode = qrCodeImageAsBase64;
+            return await _context.SaveChangesAsync();
         }
 
         // Handle webhook events for connection states.
@@ -150,11 +163,11 @@ namespace Prime.Services
             switch (state)
             {
                 case ConnectionState.Invitation:
+                    // Enrollee Id stored as alias on invitation
+                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
                     return true;
 
                 case ConnectionState.Request:
-                    // Enrollee Id stored as alias on invitation
-                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
                     return true;
 
                 case ConnectionState.Response:
@@ -252,6 +265,7 @@ namespace Prime.Services
 
             if (credential == null || credential.AcceptedCredentialDate != null)
             {
+                _logger.LogInformation("Cannot issue credential, credential with this connectionId:{connectionId} from database is null, or a credential has already been accepted.", connectionId);
                 return null;
             }
 

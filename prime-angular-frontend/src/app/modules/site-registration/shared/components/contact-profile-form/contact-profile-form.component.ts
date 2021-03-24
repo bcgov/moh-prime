@@ -5,7 +5,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { PageSubheader2MoreInfoDirective } from '@shared/components/page-subheader2/page-subheader2-more-info.directive';
+import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
 
 @Component({
   selector: 'app-contact-profile-form',

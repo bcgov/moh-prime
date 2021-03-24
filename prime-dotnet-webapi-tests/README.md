@@ -4,6 +4,8 @@ To run automated tests:  `dotnet test`
 
 To show which tests ran and with what data:  `dotnet test -v n`
 
+To run a subset of tests, e.g. avoiding integration tests:  `dotnet test --filter FullyQualifiedName\!~Integration` (see https://docs.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=xunit)
+
 
 # To test CHES Client
 

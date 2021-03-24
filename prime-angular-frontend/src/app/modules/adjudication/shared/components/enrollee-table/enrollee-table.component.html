@@ -150,7 +150,15 @@
         <ng-container matColumnDef="assignedTo">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Assigned To </th>
+              scope="col">
+            Assigned To
+            <button mat-icon-button
+                    [color]="hasAssignedToFilter$.value ? 'primary' : ''"
+                    matTooltip="Filter assigned to me"
+                    (click)="toggleFilterAssigned()">
+              <mat-icon>assignment_ind icon</mat-icon>
+            </button>
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
         </ng-container>
@@ -233,14 +241,14 @@
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!canEdit"
+                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
                 (click)="onAssign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Assign Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
-                [disabled]="!canEdit"
+                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
                 (click)="onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Reassign Enrolment</span>

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.HttpClients;
+using Prime.HttpClients.PharmanetCollegeApiDefinitions;
 
 namespace Prime.Services.Rules
 {
@@ -33,10 +34,27 @@ namespace Prime.Services.Rules
     {
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            if (!enrollee.PhysicalAddress.IsInBC
-                || enrollee.MailingAddress?.IsInBC == false)
+            var addresses = new Address[] { enrollee.PhysicalAddress, enrollee.MailingAddress, enrollee.VerifiedAddress }
+                .Where(a => a != null);
+
+            if (addresses.Any(a => !a.IsInBC))
             {
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.Address);
+                return Task.FromResult(false);
+            }
+
+            return Task.FromResult(true);
+        }
+    }
+
+    // Enrollees without a verified addresses from BCSC go to manual
+    public class VerifiedAddressRule : AutomaticAdjudicationRule
+    {
+        public override Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            if (enrollee.VerifiedAddress == null)
+            {
+                enrollee.AddReasonToCurrentStatus(StatusReasonType.NoVerifiedAddress);
                 return Task.FromResult(false);
             }
 
@@ -48,10 +66,14 @@ namespace Prime.Services.Rules
     public class PharmanetValidationRule : AutomaticAdjudicationRule
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
+        private readonly IBusinessEventService _businessEventService;
 
-        public PharmanetValidationRule(ICollegeLicenceClient collegeLicenceClient)
+        public PharmanetValidationRule(
+            ICollegeLicenceClient collegeLicenceClient,
+            IBusinessEventService businessEventService)
         {
             _collegeLicenceClient = collegeLicenceClient;
+            _businessEventService = businessEventService;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -85,15 +107,18 @@ namespace Prime.Services.Rules
                 catch (PharmanetCollegeApiException)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PharmanetError, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "An error occurred calling the Pharmanet API.");
                     passed = false;
                     continue;
                 }
                 if (record == null)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.NotInPharmanet, licenceText);
+                    await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "Record not found in Pharmanet.");
                     passed = false;
                     continue;
                 }
+                await _businessEventService.CreatePharmanetApiCallEventAsync(enrollee.Id, cert.License.Prefix, licenceNumber, "A record was found in Pharmanet.");
 
                 if (!record.MatchesEnrolleeByName(enrollee))
                 {

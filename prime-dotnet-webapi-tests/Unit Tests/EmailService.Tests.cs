@@ -13,6 +13,7 @@ using PrimeTests.Utils;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
+using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
@@ -103,6 +104,18 @@ namespace PrimeTests.UnitTests
                     yield return new object[] { day, ExpectedEmail.None };
                 }
             }
+        }
+
+        [Fact]
+        public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
+        {
+            var service = CreateService();
+            var site = new SiteFactory().Generate();
+            var remoteUsers = Enumerable.Empty<RemoteUser>();
+
+            var exceptions = await Record.ExceptionAsync(() => service.SendRemoteUserNotificationsAsync(site, remoteUsers));
+
+            Assert.Null(exceptions);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 using Prime.Auth;
 using Prime.Models.Api;
 using Prime.Services;
@@ -58,7 +59,7 @@ namespace Prime.Controllers
         /// Delete a Document Access Token.
         /// </summary>
         [HttpDelete("{accessTokenId}", Name = nameof(DeleteDocumentAccessToken))]
-        [Authorize(Policy = Policies.SuperAdmin)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

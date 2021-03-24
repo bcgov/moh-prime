@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder, Validators } from '@angular/forms';
 
-import { AddressLine } from '@lib/types/address-line.type';
 import { LoggerService } from '@core/services/logger.service';
 import { Country } from '@shared/enums/country.enum'; // TODO move into @lib
 import { Province } from '@shared/enums/province.enum'; // TODO move into @lib
-import { Person } from '@registration/shared/models/person.model'; // TODO move into @lib
+import { AddressLine } from '@shared/models/address.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +23,7 @@ export class FormUtilsService {
     if (form.valid) {
       return true;
     } else {
-      this.logger.info('FORM_INVALID', this.getFormErrors(form));
+      this.logFormErrors(form);
 
       form.markAllAsTouched();
       return false;
@@ -137,6 +136,16 @@ export class FormUtilsService {
     return (hasError) ? result : null;
   }
 
+  /**
+   * @description
+   * Helper for quickly logging form errors.
+   */
+  public logFormErrors(form: FormGroup | FormArray) {
+    const formErrors = this.getFormErrors(form);
+    if (formErrors) {
+      this.logger.error('FORM_INVALID', formErrors);
+    }
+  }
 
   /**
    * @description
@@ -211,55 +220,5 @@ export class FormUtilsService {
       });
 
     return this.fb.group(controlsConfig);
-  }
-
-  /**
-   * @description
-   * Convert party JSON to form model for reactive forms.
-   */
-  public toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
-    if (data) {
-      const { physicalAddress, mailingAddress, ...person } = data;
-
-      formGroup.patchValue(person);
-
-      if (physicalAddress) {
-        const physicalAddressFormGroup = formGroup.get('physicalAddress');
-        (physicalAddress)
-          ? physicalAddressFormGroup.patchValue(physicalAddress)
-          : physicalAddressFormGroup.reset({ id: 0 });
-      }
-
-      // Parties don't always have a mailing address section in the form
-      if (formGroup.get('mailingAddress') && mailingAddress) {
-        const mailingAddressFormGroup = formGroup.get('mailingAddress');
-        (mailingAddress)
-          ? mailingAddressFormGroup.patchValue(mailingAddress)
-          : mailingAddressFormGroup.reset({ id: 0 });
-      }
-    }
-  }
-
-  /**
-   * @description
-   * Convert the party form model into JSON.
-   */
-  public toPersonJson<P extends Person>(person: P, addressKey: 'physicalAddress' | 'mailingAddress' = 'physicalAddress'): P {
-    if (!person.firstName) {
-      person = null;
-    } else if (person[addressKey] && !person[addressKey].street) {
-      person[addressKey] = null;
-    } else if (person[addressKey].street && !person[addressKey].id) {
-      person[addressKey].id = 0;
-    }
-
-    if (person) {
-      // Add the address reference ID to the party
-      person[`${addressKey}Id`] = (!!person[addressKey]?.id)
-        ? person[addressKey].id
-        : 0;
-    }
-
-    return person;
   }
 }

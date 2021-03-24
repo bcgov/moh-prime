@@ -6,10 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AddressLine } from '@lib/types/address-line.type';
 import { IFormPage } from '@lib/classes/abstract-form-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { AddressLine } from '@shared/models/address.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
 
@@ -80,7 +81,8 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
   imports: [
     SharedModule,
     EnrolmentRoutingModule,
-    NgxProgressModule
+    NgxProgressModule,
+    ClipboardModule
   ]
 })
 export class EnrolmentModule { }

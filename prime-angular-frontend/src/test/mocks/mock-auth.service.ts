@@ -55,14 +55,13 @@ export class MockAuthService implements IAuthService {
 
   public getUser(forceReload?: boolean): Promise<BcscUser> {
     return new Promise((resolve, reject) => resolve({
-      username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       hpdid: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
       givenNames: faker.name.firstName(),
       dateOfBirth: faker.date.past().toISOString(),
-      physicalAddress: {
+      verifiedAddress: {
         countryCode: faker.address.countryCode(),
         provinceCode: faker.address.stateAbbr(),
         street: faker.address.streetAddress(),
@@ -79,7 +78,8 @@ export class MockAuthService implements IAuthService {
 
   public getAdmin(forceReload?: boolean): Promise<Admin> {
     return new Promise((resolve, reject) => resolve({
-      username: `${faker.internet.userName()}`,
+      // TODO drop use of idir through mapping
+      // username: `${faker.internet.userName()}`,
       userId: `${faker.random.uuid()}`,
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
@@ -90,29 +90,5 @@ export class MockAuthService implements IAuthService {
 
   public getAdmin$(forceReload?: boolean): Observable<Admin> {
     return from(this.getAdmin());
-  }
-
-  public isEnrollee(): boolean {
-    return this._role === Role.ENROLLEE;
-  }
-
-  public isAdmin(): boolean {
-    return this._role === Role.ADMIN;
-  }
-
-  public isSuperAdmin(): boolean {
-    return this._role === Role.SUPER_ADMIN;
-  }
-
-  public hasAdminView(): boolean {
-    return this._role === Role.READONLY_ADMIN;
-  }
-
-  public hasVCIssuance(): boolean {
-    return this._role === Role.FEATURE_VC_ISSUANCE;
-  }
-
-  public hasSitePharmacist(): boolean {
-    return this._role === Role.FEATURE_SITE_PHARMACIST;
   }
 }

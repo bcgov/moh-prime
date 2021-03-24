@@ -1,3 +1,4 @@
+import { MockPermissionService } from './../../../../../test/mocks/mock-permission-service';
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -13,6 +14,7 @@ import { ConfigService } from '@config/config.service';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('CareSettingComponent', () => {
@@ -43,6 +45,10 @@ describe('CareSettingComponent', () => {
         {
           provide: AuthService,
           useClass: MockAuthService
+        },
+        {
+          provide: PermissionService,
+          useClass: MockPermissionService
         },
         KeycloakService
       ],

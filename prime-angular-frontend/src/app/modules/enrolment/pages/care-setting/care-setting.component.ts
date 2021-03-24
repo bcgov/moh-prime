@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -13,17 +13,18 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { Job } from '@enrolment/shared/models/job.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Job } from '@enrolment/shared/models/job.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-care-setting',
@@ -34,6 +35,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
+  public healthAuthorities: Config<number>[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -47,7 +49,8 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private authService: AuthService
+    protected authService: AuthService,
+    private fb: FormBuilder
   ) {
     super(
       route,
@@ -59,14 +62,24 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       toastService,
       logger,
       utilService,
-      formUtilsService
+      formUtilsService,
+      authService
     );
 
     this.careSettingTypes = this.configService.careSettings;
+    this.healthAuthorities = this.configService.healthAuthorities;
   }
 
   public get careSettings(): FormArray {
     return this.form.get('careSettings') as FormArray;
+  }
+
+  /**
+   * @description
+   *  Representing possible health authorities to select from and whether a given one was selected
+   */
+  public get enrolleeHealthAuthorities(): FormArray {
+    return this.form.get('enrolleeHealthAuthorities') as FormArray;
   }
 
   public onSubmit() {
@@ -81,7 +94,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     // Remove health authorities if health authority care setting not chosen
     if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.enrolmentFormStateService.healthAuthoritiesFormState.removeHealthAuthorities();
+      this.enrolmentFormStateService.removeHealthAuthorities();
     }
 
     super.onSubmit();
@@ -130,6 +143,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return this.careSettingTypes;
   }
 
+
+  public hasSelectedHACareSetting(): boolean {
+    return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  }
+
+
   public routeBackTo() {
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
@@ -151,8 +170,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public ngOnInit() {
     this.createFormInstance();
-    this.patchForm();
-    this.initForm();
+    this.patchForm().subscribe(() => this.initForm());
   }
 
   public ngOnDestroy() {

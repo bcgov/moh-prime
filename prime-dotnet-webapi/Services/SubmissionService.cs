@@ -53,8 +53,8 @@ namespace Prime.Services
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             var enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
                 .Include(e => e.Jobs)
@@ -105,11 +105,11 @@ namespace Prime.Services
         /// Performs a submission action on an Enrollee.
         /// Returns true if the Action was successfully performed.
         /// </summary>
-        public async Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, bool isAdmin, object additionalParameters = null)
+        public async Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, object additionalParameters = null)
         {
             var enrollee = await _context.Enrollees
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.Status)
                 .Include(e => e.EnrolmentStatuses)
@@ -121,7 +121,7 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (!SubmissionStateEngine.AllowableAction(action, enrollee, isAdmin))
+            if (!SubmissionStateEngine.AllowableAction(action, enrollee.CurrentStatus))
             {
                 return false;
             }
@@ -314,8 +314,8 @@ namespace Prime.Services
             // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
             var enrollee = await _context.Enrollees
                 .Include(e => e.Submissions)
-                .Include(e => e.PhysicalAddress)
-                .Include(e => e.MailingAddress)
+                .Include(e => e.Addresses)
+                    .ThenInclude(ea => ea.Address)
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
