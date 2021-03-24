@@ -4,6 +4,15 @@
 # FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
 FROM registry.redhat.io/rhel8/dotnet-31 AS build
 WORKDIR /opt/app-root/app
+ARG API_PORT 
+ARG ASPNETCORE_ENVIRONMENT
+ARG POSTGRESQL_PASSWORD
+ARG POSTGRESQL_DATABASE
+ARG POSTGRESQL_ADMIN_PASSWORD
+ARG POSTGRESQL_USER
+ARG SUFFIX
+ARG DB_HOST
+
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/app/.dotnet/tools:/root/.dotnet/tools:/opt/app-root/.dotnet/tools"
 
 ENV API_PORT 8080
