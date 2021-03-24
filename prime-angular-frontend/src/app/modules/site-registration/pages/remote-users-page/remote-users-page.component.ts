@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormControl } from '@angular/forms';
+import { FormGroup, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, of } from 'rxjs';
@@ -52,14 +52,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.submitButtonText = 'Save and Continue';
   }
 
-  public get remoteUsers(): FormArray {
-    return this.form.get('remoteUsers') as FormArray;
-  }
-
-  public get hasRemoteUsers(): FormControl {
-    return this.form.get('hasRemoteUsers') as FormControl;
-  }
-
   public getRemoteUserProperties(remoteUser: FormGroup) {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
@@ -78,7 +70,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onRemove(index: number) {
-    this.remoteUsers.removeAt(index);
+    this.formState.remoteUsers.removeAt(index);
   }
 
   public onEdit(index: number) {
@@ -100,7 +92,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.remoteUsersPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
@@ -112,25 +103,25 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     // Remove query param from URL without refreshing
     this.router.navigate([], { queryParams: { fromRemoteUser: null } });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm() {
-    this.remoteUsers.valueChanges
+    this.formState.remoteUsers.valueChanges
       .subscribe((remoteUsers: RemoteUser[]) => {
         (remoteUsers.length)
-          ? this.hasRemoteUsers.disable({ emitEvent: false })
-          : this.hasRemoteUsers.enable({ emitEvent: false });
+          ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
+          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
       });
 
-    this.hasRemoteUsers.valueChanges
+    this.formState.hasRemoteUsers.valueChanges
       .subscribe((hasRemoteUsers: boolean) => {
         (hasRemoteUsers)
-          ? this.remoteUsers.setValidators(FormArrayValidators.atLeast(1))
-          : this.remoteUsers.clearValidators();
+          ? this.formState.remoteUsers.setValidators(FormArrayValidators.atLeast(1))
+          : this.formState.remoteUsers.clearValidators();
 
         this.hasNoRemoteUserError = false;
-        this.remoteUsers.updateValueAndValidity({ emitEvent: false });
+        this.formState.remoteUsers.updateValueAndValidity({ emitEvent: false });
       });
 
     this.patchForm();
@@ -175,7 +166,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW

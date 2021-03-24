@@ -115,7 +115,6 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.businessLicencePageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
