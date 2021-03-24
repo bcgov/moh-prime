@@ -126,60 +126,24 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
     const site = this.enrolmentFormStateService.buildOboSiteForm();
     site.get('careSettingCode').patchValue(careSettingCode);
+    site.get('healthAuthorityCode').patchValue(healthAuthorityCode);
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        const siteName = site.get('siteName') as FormControl;
-        this.formUtilsService.setValidators(siteName, [Validators.required]);
-        this.communityHealthSites.push(site);
+        this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        const siteName = site.get('siteName') as FormControl;
-        this.formUtilsService.setValidators(siteName, [Validators.required]);
-        this.communityPharmacySites.push(site);
+        this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const facilityName = site.get('facilityName') as FormControl;
-        this.formUtilsService.setValidators(facilityName, [Validators.required]);
-        let sitesOfHealthAuthority = this.healthAuthoritySites.at(this.getHASitesIndex(healthAuthorityCode)) as FormArray;
-        if (!sitesOfHealthAuthority) {
-          sitesOfHealthAuthority = this.fb.array([]);
-          sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
-          this.healthAuthoritySites.push(sitesOfHealthAuthority);
-        }
-        sitesOfHealthAuthority.push(site);
-
-        this.logger.trace(`healthAuthoritySites = ${this.healthAuthoritySites.length}`);
-        this.logger.trace(`sitesOfHealthAuthority of ${healthAuthorityCode} = ${sitesOfHealthAuthority.length}`);
-
+        this.enrolmentFormStateService.addHealthAuthorityOboSite(site, this.healthAuthoritySites,
+          this.enrolmentFormStateService.determineHASitesIndex(healthAuthorityCode, this.enrolment.enrolleeHealthAuthorities));
         break;
       }
     }
   }
-
-  public getHASitesIndex(healthAuthorityCode: number): number {
-    // TODO: alternative?
-    for (var i = 0; i < this.enrolment.enrolleeHealthAuthorities.length; i++) {
-      if (healthAuthorityCode === this.enrolment.enrolleeHealthAuthorities[i].healthAuthorityCode) {
-        return i;
-      }
-    }
-    return -1;
-  }
-
-
-  public getSitesOfHA(healthAuthorityCode: number): FormArray {
-    // TODO: discard?
-    let haSiteIndex = this.getHASitesIndex(healthAuthorityCode);
-    this.logger.trace(`haSiteIndex = ${haSiteIndex}`);
-    let sitesOfHa = this.healthAuthoritySites.at(haSiteIndex);
-    this.logger.trace(`healthAuthoritySites = ${this.healthAuthoritySites.length}`);
-    // this.logger.trace(`sitesOfHa = ${sitesOfHa}`);
-    return sitesOfHa as FormArray;
-  }
-
 
   public removeOboSite(index: number, careSettingCode: number, healthAuthorityCode?: number) {
     switch (careSettingCode) {
@@ -192,7 +156,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        let sitesOfHealthAuthority = this.healthAuthoritySites.at(this.getHASitesIndex(healthAuthorityCode)) as FormArray;
+        let sitesOfHealthAuthority = this.healthAuthoritySites.at(
+          this.enrolmentFormStateService.determineHASitesIndex(healthAuthorityCode, this.enrolment.enrolleeHealthAuthorities)) as FormArray;
         sitesOfHealthAuthority.removeAt(index);
         break;
       }
@@ -251,7 +216,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
             this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
-              let sitesOfHealthAuthority = this.healthAuthoritySites.at(this.getHASitesIndex(ha.healthAuthorityCode)) as FormArray;
+              let sitesOfHealthAuthority = this.healthAuthoritySites.at(
+                this.enrolmentFormStateService.determineHASitesIndex(ha.healthAuthorityCode, this.enrolment.enrolleeHealthAuthorities)) as FormArray;
               if (!sitesOfHealthAuthority) {
                 this.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
               }
@@ -277,8 +243,9 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
-    // TODO:
-    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
+    this.healthAuthoritySites.controls.forEach((sitesOfHealthAuthority) =>
+      (sitesOfHealthAuthority as FormArray).controls.forEach((site) =>
+        this.oboSites.push(site)));
 
     this.removeCareSettingSites();
   }
@@ -365,8 +332,9 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityHealthSites.updateValueAndValidity();
     this.communityPharmacySites.clearValidators();
     this.communityPharmacySites.updateValueAndValidity();
-    // TODO:
-    // this.healthAuthoritySites.clearValidators();
-    // this.healthAuthoritySites.updateValueAndValidity();
+    this.healthAuthoritySites.controls.forEach((sitesOfHealthAuthority) => {
+      (sitesOfHealthAuthority as FormArray).clearValidators();
+      (sitesOfHealthAuthority as FormArray).updateValueAndValidity();
+    });
   }
 }

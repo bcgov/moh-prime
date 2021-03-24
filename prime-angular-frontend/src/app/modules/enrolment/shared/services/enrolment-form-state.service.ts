@@ -3,12 +3,14 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormCon
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -266,27 +268,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
         switch (s.careSettingCode) {
           case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            const siteName = site.get('siteName') as FormControl;
-            this.formUtilsService.setValidators(siteName, [Validators.required]);
-            communityHealthSites.push(site);
+            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
             break;
           }
           case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            const siteName = site.get('siteName') as FormControl;
-            this.formUtilsService.setValidators(siteName, [Validators.required]);
-            communityPharmacySites.push(site);
+            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            const facilityName = site.get('facilityName') as FormControl;
-            this.formUtilsService.setValidators(facilityName, [Validators.required]);
-            // TODO: Don't duplicate code, keep in this class
-            let sitesOfHealthAuthority = healthAuthoritySites.at(s.healthAuthorityCode) as FormArray;
-            if (!sitesOfHealthAuthority) {
-              sitesOfHealthAuthority = this.fb.array([]);
-              healthAuthoritySites.setControl(s.healthAuthorityCode, sitesOfHealthAuthority);
-            }
-            sitesOfHealthAuthority.push(site);
+            this.addHealthAuthorityOboSite(site, healthAuthoritySites,
+              this.determineHASitesIndex(s.healthAuthorityCode, enrolment.enrolleeHealthAuthorities));
             break;
           }
         }
@@ -591,6 +582,47 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         []
       ]
     });
+  }
+
+  public addNonHealthAuthorityOboSite(siteForm: FormGroup, siteFormList: FormArray) {
+    const siteName = siteForm.get('siteName') as FormControl;
+    this.formUtilsService.setValidators(siteName, [Validators.required]);
+    siteFormList.push(siteForm);
+  }
+
+  /**
+   * @param haSiteForm - aka Health Authority Facility Form
+   * @param healthAuthoritySites - a FormArray where each element, representing a Health Authority where the enrollee works, contains a FormArray.
+   *  This nested FormArray contains a FormGroup for each facility that the enrollee works at, in that Health Authority
+   * @param healthAuthoritySitesIndex - value from calling `determineHASitesIndex` method
+   */
+  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormArray, healthAuthoritySitesIndex: number) {
+    const facilityName = haSiteForm.get('facilityName') as FormControl;
+    this.formUtilsService.setValidators(facilityName, [Validators.required]);
+    let sitesOfHealthAuthority = healthAuthoritySites.at(healthAuthoritySitesIndex) as FormArray;
+    if (!sitesOfHealthAuthority) {
+      sitesOfHealthAuthority = this.fb.array([]);
+      sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
+      healthAuthoritySites.push(sitesOfHealthAuthority);
+    }
+    sitesOfHealthAuthority.push(haSiteForm);
+  }
+
+  /**
+   * Uses the index of one array (`enrolleeHealthAuthorities`) as the index into another array (`healthAuthoritySites`).
+   *
+   * @param healthAuthorityCode
+   * @param enrolleeHealthAuthorities The health authorities that an enrollee works at
+   * @returns An index into the `healthAuthoritySites` FormArray that is part of the `JobsForm`, or -1
+   *  if `healthAuthorityCode` cannot be found in `enrolleeHealthAuthorities`
+   */
+  public determineHASitesIndex(healthAuthorityCode: number, enrolleeHealthAuthorities: HealthAuthority[]): number {
+    for (var i = 0; i < enrolleeHealthAuthorities.length; i++) {
+      if (healthAuthorityCode === enrolleeHealthAuthorities[i].healthAuthorityCode) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**
