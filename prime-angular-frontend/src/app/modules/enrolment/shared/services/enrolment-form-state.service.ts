@@ -280,7 +280,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
           case CareSettingEnum.HEALTH_AUTHORITY: {
             const facilityName = site.get('facilityName') as FormControl;
             this.formUtilsService.setValidators(facilityName, [Validators.required]);
-            healthAuthoritySites.push(site);
+            // TODO: Don't duplicate code, keep in this class
+            let sitesOfHealthAuthority = healthAuthoritySites.at(s.healthAuthorityCode) as FormArray;
+            if (!sitesOfHealthAuthority) {
+              sitesOfHealthAuthority = this.fb.array([]);
+              healthAuthoritySites.setControl(s.healthAuthorityCode, sitesOfHealthAuthority);
+            }
+            sitesOfHealthAuthority.push(site);
             break;
           }
         }
@@ -468,6 +474,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public buildOboSiteForm(): FormGroup {
     return this.fb.group({
       careSettingCode: [null, []],
+      healthAuthorityCode: [null, []],
       siteName: [null, []],
       facilityName: [null, []],
       physicalAddress: this.formUtilsService.buildAddressForm({

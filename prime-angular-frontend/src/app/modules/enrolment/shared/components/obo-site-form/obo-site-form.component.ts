@@ -14,6 +14,7 @@ export class OboSiteFormComponent implements OnInit {
   @Input() public total: number;
   @Input() public last: boolean;
   @Input() public careSettingCode: number;
+  @Input() public healthAuthorityName?: string;
   @Output() public remove: EventEmitter<number>;
 
   public formControlNames: string[];
