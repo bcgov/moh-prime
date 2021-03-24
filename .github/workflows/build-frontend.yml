@@ -28,7 +28,7 @@ jobs:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
       IMAGE_TAGS: latest
-      REDIRECT_URL: "https://pharmanetenrolment.gov.bc.ca"
+      REDIRECT_URL: "https://prime-frontend-9c33a9-dev.apps.silver.devops.gov.bc.ca"
       
     steps:
       - name: "Checkout the repo"
