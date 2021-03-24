@@ -17,8 +17,5 @@ namespace Prime.Models
         public string Content { get; set; }
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
-        [Required]
-        public int AdminId { get; set; }
-        public Admin Admin { get; set; }
     }
 }

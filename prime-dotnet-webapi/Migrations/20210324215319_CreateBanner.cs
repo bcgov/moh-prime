@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class CreateBannerTable : Migration
+    public partial class CreateBanner : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,24 +23,12 @@ namespace Prime.Migrations
                     Title = table.Column<string>(nullable: true),
                     Content = table.Column<string>(nullable: true),
                     StartDate = table.Column<DateTimeOffset>(nullable: false),
-                    EndDate = table.Column<DateTimeOffset>(nullable: false),
-                    AdminId = table.Column<int>(nullable: false)
+                    EndDate = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Banner", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Banner_Admin_AdminId",
-                        column: x => x.AdminId,
-                        principalTable: "Admin",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Banner_AdminId",
-                table: "Banner",
-                column: "AdminId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
