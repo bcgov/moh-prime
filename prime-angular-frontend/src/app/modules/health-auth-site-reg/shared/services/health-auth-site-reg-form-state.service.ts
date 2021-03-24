@@ -1,4 +1,3 @@
-import { SiteInformationPageFormState } from '../../pages/site-information-page/site-information-page-form-state.class';
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormBuilder } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -9,16 +8,17 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { Site } from '@registration/shared/models/site.model';
 
 import { HealthAuthSiteRegRoutes } from '../../health-auth-site-reg.routes';
-import { CareSettingPageFormState } from '../../pages/care-setting-page/care-setting-page-form-state.class';
-import { VendorPageFormState } from '../../pages/vendor-page/vendor-page-form-state.class';
+// import { SiteInformationPageFormState } from '../../pages/site-information-page/site-information-page-form-state.class';
+// import { CareSettingPageFormState } from '../../pages/care-setting-page/care-setting-page-form-state.class';
+// import { VendorPageFormState } from '../../pages/vendor-page/vendor-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<Site> {
-  public vendorPageFormState: VendorPageFormState;
-  public careSettingPageFormState: CareSettingPageFormState;
-  public siteInfoPageFormState: SiteInformationPageFormState;
+  // public vendorPageFormState: VendorPageFormState;
+  // public careSettingPageFormState: CareSettingPageFormState;
+  // public siteInfoPageFormState: SiteInformationPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -36,9 +36,9 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   }
 
   public get json(): Site {
-    const { siteVendors } = this.vendorPageFormState.json;
-    const { careSettingCode } = this.careSettingPageFormState.json;
-    const { doingBusinessAs, pec } = this.siteInfoPageFormState.json;
+    // const { siteVendors } = this.vendorPageFormState.json;
+    // const { careSettingCode } = this.careSettingPageFormState.json;
+    // const { doingBusinessAs, pec } = this.siteInfoPageFormState.json;
     // const physicalAddress = this.siteAddressPageFormState.json;
     // const businessHours = this.hoursOperationPageFormState.json;
     // const remoteUsers = this.remoteUsersPageFormState.json;
@@ -49,16 +49,16 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
     return {
-      id: this.siteId,
-      organizationId: this.organizationId,
+      // id: this.siteId,
+      // organizationId: this.organizationId,
       // organization (N/A)
-      provisionerId: this.provisionerId,
+      // provisionerId: this.provisionerId,
       // provisioner (N/A)
-      careSettingCode,
-      siteVendors,
+      // careSettingCode,
+      // siteVendors,
       // businessLicenceGuid,
       // deferredLicenceReason,
-      doingBusinessAs,
+      // doingBusinessAs,
       // physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       // physicalAddress,
       // businessHours,
@@ -72,16 +72,16 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
-      pec
+      // pec
       // TODO output should be a Site-like model instead due to missing properties
     } as Site; // Enforced type due to N/A properties
   }
 
   public get forms(): AbstractControl[] {
     return [
-      this.vendorPageFormState.form,
-      this.careSettingPageFormState.form,
-      this.siteInfoPageFormState.form,
+      // this.vendorPageFormState.form,
+      // this.careSettingPageFormState.form,
+      // this.siteInfoPageFormState.form,
       // this.siteAddressPageFormState.form,
       // this.hoursOperationPageFormState.form,
       // this.remoteUsersPageFormState.form,
@@ -92,9 +92,9 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   }
 
   protected buildForms(): void {
-    this.vendorPageFormState = new VendorPageFormState(this.fb);
-    this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.siteInfoPageFormState = new SiteInformationPageFormState(this.fb);
+    // this.vendorPageFormState = new VendorPageFormState(this.fb);
+    // this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
+    // this.siteInfoPageFormState = new SiteInformationPageFormState(this.fb);
   }
 
   protected patchForm(site: Site): void {
@@ -102,14 +102,11 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       return;
     }
 
-    const { siteVendors,
-      careSettingCode,
-      doingBusinessAs,
-      pec, } = site;
+    const { siteVendors, careSettingCode, doingBusinessAs, pec, } = site;
 
-    this.vendorPageFormState.patchValue({ siteVendors });
-    this.careSettingPageFormState.patchValue({ careSettingCode });
-    this.siteInfoPageFormState.patchValue({ doingBusinessAs, pec });
+    // this.vendorPageFormState.patchValue({ siteVendors });
+    // this.careSettingPageFormState.patchValue({ careSettingCode });
+    // this.siteInfoPageFormState.patchValue({ doingBusinessAs, pec });
     // this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     // this.hoursOperationPageFormState.patchValue(site?.businessHours);
     // this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

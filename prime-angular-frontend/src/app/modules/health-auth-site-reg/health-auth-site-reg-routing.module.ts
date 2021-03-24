@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DashboardComponent } from '@lib/modules/dashboard/components/dashboard/dashboard.component';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
+import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
 
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
@@ -13,7 +13,7 @@ import { SiteManagementPageComponent } from './pages/site-management-page/site-m
 const routes: Routes = [
   {
     path: '',
-    component: DashboardComponent,
+    component: HealthAuthSiteRegDashboardComponent,
     canLoad: [
       HealthAuthSiteRegGuard
     ],
