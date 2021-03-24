@@ -149,7 +149,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
             : this.organizationResource
               .acceptOrganizationAgreement(organizationId, this.agreementId)
         ),
-        exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
+        exhaustMap(() => this.siteResource.setCompleted((this.route.snapshot.params.sid)))
       );
   }
 
