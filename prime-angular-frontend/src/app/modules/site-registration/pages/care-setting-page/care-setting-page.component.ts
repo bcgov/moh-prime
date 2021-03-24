@@ -149,7 +149,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
                   return of(noop());
                 }
 
-                return this.siteResource.removeCompleted(id)
+                return this.siteResource.removeSiteCompleted(id)
                   // Will ensure that the user is routed to the next page, and not
                   // overview if previously completed
                   .pipe(tap(() => this.isCompleted = false));

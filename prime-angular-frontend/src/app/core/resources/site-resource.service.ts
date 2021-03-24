@@ -113,7 +113,7 @@ export class SiteResource {
       );
   }
 
-  public setCompleted(siteId: number): NoContent {
+  public setSiteCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${ siteId }/completed`)
       .pipe(
         NoContentResponse,
@@ -124,7 +124,7 @@ export class SiteResource {
       );
   }
 
-  public removeCompleted(siteId: number): NoContent {
+  public removeSiteCompleted(siteId: number): NoContent {
     return this.apiResource.delete<NoContent>(`sites/${ siteId }/completed`)
       .pipe(
         NoContentResponse,

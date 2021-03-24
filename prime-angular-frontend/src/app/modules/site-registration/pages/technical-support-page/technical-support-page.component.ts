@@ -94,7 +94,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
           // Mark the site as completed if an organization
           // agreement does not need to be signed
           (!needsOrgAgreement)
-            ? this.siteResource.setCompleted(site.id)
+            ? this.siteResource.setSiteCompleted(site.id)
               .pipe(map(() => needsOrgAgreement))
             : of(needsOrgAgreement)
         )
