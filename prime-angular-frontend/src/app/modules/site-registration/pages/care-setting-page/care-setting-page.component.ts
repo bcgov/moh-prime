@@ -117,15 +117,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected initForm() {
     this.formState.careSettingCode.valueChanges
       .pipe(
-        map((careSettingCode: number) =>
-          this.vendorConfig.filter(
-            (vendorConfig: VendorConfig) =>
-              vendorConfig.careSettingCode === careSettingCode
-          )
         map((careSettingCode: CareSettingEnum) =>
           this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
         )
-      ).subscribe((vendors: VendorConfig[]) => {
+      )
+      .subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;
         this.formState.vendorCode.patchValue(null);
       });
