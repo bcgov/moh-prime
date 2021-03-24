@@ -190,7 +190,7 @@ namespace Prime.Controllers
         /// Remove a sites completed state.
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPut("{siteId}/completed", Name = nameof(RemoveSiteCompleted))]
+        [HttpDelete("{siteId}/completed", Name = nameof(RemoveSiteCompleted))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
