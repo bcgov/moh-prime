@@ -30,6 +30,7 @@ export class EnrolleeTableComponent implements OnInit {
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public reload: EventEmitter<number>;
+  @Output() public sendBulkEmail: EventEmitter<void>;
 
   public busy: Subscription;
   public form: FormGroup;
@@ -51,6 +52,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.reassign = new EventEmitter<number>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
+    this.sendBulkEmail = new EventEmitter<void>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -95,8 +97,8 @@ export class EnrolleeTableComponent implements OnInit {
     this.reload.emit(enrolleeId);
   }
 
-  public onSendEmail(): void {
-
+  public onSendBulkEmail(): void {
+    this.sendBulkEmail.emit();
   }
 
   public sortData(sort: Sort) {

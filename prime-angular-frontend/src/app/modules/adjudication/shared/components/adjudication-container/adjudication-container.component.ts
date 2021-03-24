@@ -28,6 +28,7 @@ import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -364,6 +365,20 @@ export class AdjudicationContainerComponent implements OnInit {
   public onAssignToa({ enrolleeId, agreementType }: { enrolleeId: number, agreementType: AgreementType }) {
     this.busy = this.adjudicationResource.assignToaAgreementType(enrolleeId, agreementType)
       .subscribe((updatedEnrollee: HttpEnrollee) => this.updateEnrollee(updatedEnrollee));
+  }
+
+  public onSendBulkEmail() {
+    const data: DialogOptions = {
+      title: 'Send Email - Bulk Actions',
+      component: SendBulkEmailComponent,
+      data: {
+
+      }
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    .afterClosed()
+    .subscribe();
+
   }
 
   public ngOnInit() {

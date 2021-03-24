@@ -91,6 +91,7 @@ import { PillComponent } from './components/auth/pill/pill.component';
 import { SimpleAccessComponent } from './components/auth/simple-access/simple-access.component';
 import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment-access/prime-enrolment-access.component';
 import { BannerWrapperComponent } from './components/banner-wrapper/banner-wrapper.component';
+import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @NgModule({
   declarations: [
@@ -169,7 +170,8 @@ import { BannerWrapperComponent } from './components/banner-wrapper/banner-wrapp
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
     BannerComponent,
-    BannerWrapperComponent
+    BannerWrapperComponent,
+    SendBulkEmailComponent
   ],
   imports: [
     CommonModule,
