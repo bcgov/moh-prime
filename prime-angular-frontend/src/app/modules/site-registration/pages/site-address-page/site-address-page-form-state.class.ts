@@ -1,4 +1,4 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -12,6 +12,14 @@ export class SiteAddressPageFormState extends AbstractFormState<Address> {
     super();
 
     this.buildForm();
+  }
+
+  public get name(): FormGroup {
+    return this.formInstance.get('name') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
   }
 
   public get json(): Address {
