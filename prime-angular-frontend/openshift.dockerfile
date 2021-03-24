@@ -28,8 +28,10 @@ COPY package.json package-lock.json ./
 COPY . .
 
 # Fill template with environment variables
-#RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
-RUN envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+# RUN envsubst < ./environments/environment.prod.template.ts > ./environments/environment.ts
+
+
 # Install Angular CLI
 RUN npm install -g @angular/cli
 # Install dependencies
