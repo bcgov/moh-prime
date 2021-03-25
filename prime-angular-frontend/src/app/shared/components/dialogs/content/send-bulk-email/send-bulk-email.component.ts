@@ -6,10 +6,24 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./send-bulk-email.component.scss']
 })
 export class SendBulkEmailComponent implements OnInit {
+  public title: string;
+  
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
+    private dialogRef: MatDialogRef<ConfirmDialogComponent>
+  ) { 
+    this.title = data.title;
+  }
+  
+  public onCancel(): void {
+    this.dialogRef.close();
+  }
 
-  constructor() { }
+  public onSelect(email: string): void {
+    this.dialogRef.close(email);
+  }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
 }
