@@ -4,15 +4,13 @@ import { Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { Observable, concat } from 'rxjs';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
@@ -64,35 +62,33 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
   }
 
-  public isCommPharm() {
+  public isCommPharm(): boolean {
     return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
-  public onUpload(document: BaseDocument) {
-    this.formState.businessLicenceGuid.value.patchValue(document.documentGuid);
+  public onUpload(document: BaseDocument): void {
+    this.formState.businessLicenceGuid.patchValue(document.documentGuid);
     this.uploadedFile = true;
     this.hasNoBusinessLicenceError = false;
   }
 
-  public onRemoveDocument(documentGuid: string) {
-    this.formState.businessLicenceGuid.value.patchValue(null);
+  public onRemoveDocument(documentGuid: string): void {
+    this.formState.businessLicenceGuid.patchValue(null);
     this.uploadedFile = false;
   }
 
-  public onBack() {
+  public onBack(): void {
     this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
   }
 
-  public downloadBusinessLicence(event: Event) {
+  public downloadBusinessLicence(event: Event): void {
     event.preventDefault();
     this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id)
-      .subscribe((token: string) =>
-        this.utilsService.downloadToken(token)
-      );
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  public onDeferredLicenceChange($event: MatSlideToggleChange) {
-    if ($event.checked) {
+  public onDeferredLicenceChange(event: MatSlideToggleChange): void {
+    if (event.checked) {
       this.formState.deferredLicenceReason.setValidators([Validators.required]);
       this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
       this.hasNoBusinessLicenceError = false;
@@ -107,13 +103,13 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.formState.form.markAsUntouched();
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = this.siteFormStateService.businessLicencePageFormState;
   }
 
@@ -143,48 +139,46 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     }
   }
 
-  protected performSubmission(): Observable<BusinessLicence | BusinessLicenceDocument> | NoContent {
+  protected performSubmission(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
+    // Collect a list of requests that will be executed in order, which
+    // will always update the site initially
+    const requests$: Observable<BusinessLicence | BusinessLicenceDocument | void>[] = [
+      this.siteResource.updateSite(this.siteFormStateService.json)
+    ];
     const siteId = this.route.snapshot.params.sid;
-    const payload = this.siteFormStateService.json;
-    let request$: Observable<BusinessLicence | BusinessLicenceDocument> | NoContent;
+    const hasBusinessLicence = !!this.businessLicence.id;
 
-    if (this.deferredLicenceToggle?.checked) {
+    // Create or update the business licence with an uploaded document, otherwise
+    // with a deferred licence reason
+    if (this.deferredLicenceToggle.checked) {
       this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
 
-      if (this.businessLicence.id) {
-        // Update the business licence, and if a document already exists remove it
-        const updateBusinessLicence$ = this.siteResource.updateBusinessLicence(siteId, this.businessLicence);
-        request$ = (this.businessLicence.businessLicenceDocument)
-          ? this.siteResource.removeBusinessLicenceDocument(siteId).pipe(exhaustMap(() => updateBusinessLicence$))
-          : updateBusinessLicence$;
+      if (!hasBusinessLicence) {
+        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, null));
+      } else {
+        // Perform an update by removing an existing business licence document
+        // and/or update the deferred reason
+        if (this.businessLicence.businessLicenceDocument) {
+          requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId));
+        }
+        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
       }
-      else {
-        // Initial time through, and no business licence exists
-        request$ = this.siteResource.createBusinessLicence(siteId, this.businessLicence, null);
-      }
-    }
-    else {
-      const updateSite$ = this.siteResource.updateSite(payload);
+    } else {
+      const businessLicenceGuid = this.formState.businessLicenceGuid.value;
 
-      if (this.businessLicence.id) {
-        // Update the site, and if a document has been uploaded create a new business licence
-        request$ = (this.uploadedFile)
-          ? updateSite$.pipe(exhaustMap(() => this.siteResource.createBusinessLicenceDocument(siteId, this.formState.businessLicenceGuid.value)))
-          : updateSite$;
-      }
-      else {
-        // Initial time through and no business licence exists
-        request$ = updateSite$.pipe(exhaustMap(() =>
-          this.siteResource.createBusinessLicence(siteId, this.businessLicence, this.formState.businessLicenceGuid.value)));
+      if (!hasBusinessLicence) {
+        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
+      } else if (this.uploadedFile) {
+        requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, businessLicenceGuid));
       }
     }
 
-    return request$;
+    return concat(...requests$);
   }
 
   protected afterSubmitIsSuccessful(): void {
     // Remove the business licence GUID to prevent 404 already
-    // submitted if resubmited in same session
+    // submitted if re-submitted in same session
     this.formState.businessLicenceGuid.patchValue(null);
     this.formState.form.markAsPristine();
 
@@ -195,12 +189,17 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  private getBusinessLicence(site: Site) {
-    this.busy = this.siteResource.getBusinessLicence(site.id)
+  private getBusinessLicence(site: Site): void {
+    this.siteResource.getBusinessLicence(site.id)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
+
         if (businessLicense && !businessLicense.completed) {
-          this.deferredLicenceToggle.checked = true;
+          // Business licence may exist, but the deferred licence toggle may be
+          // hidden based on care setting leaving the toggle undefined
+          if (this.isCommPharm()) {
+            this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
+          }
           this.formState.deferredLicenceReason.setValidators([Validators.required]);
           this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
           this.hasNoBusinessLicenceError = false;
