@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -15,6 +15,14 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
     super();
 
     this.buildForm();
+  }
+
+  public get careSettingCode(): FormControl {
+    return this.formInstance.get('careSettingCode') as FormControl;
+  }
+
+  public get vendorCode(): FormControl {
+    return this.formInstance.get('vendorCode') as FormControl;
   }
 
   public get json(): CareSettingPageDataModel {
