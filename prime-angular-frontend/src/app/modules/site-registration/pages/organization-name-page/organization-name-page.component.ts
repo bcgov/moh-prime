@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { Observable, of, pipe } from 'rxjs';
 import { debounceTime, switchMap, tap, exhaustMap, take, map } from 'rxjs/operators';
 
@@ -21,6 +23,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-organization-name-page',
   templateUrl: './organization-name-page.component.html',
@@ -110,6 +113,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   protected initForm() {
     this.formState.name.valueChanges
       .pipe(
+        untilDestroyed(this),
         debounceTime(400),
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
