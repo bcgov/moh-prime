@@ -67,7 +67,7 @@ export class BannerMaintenanceComponent implements OnInit {
   ) {
     this.hasActions = false;
     this.editorConfig = {
-      height: '25rem',
+      height: '18rem',
       base_url: '/tinymce',
       suffix: '.min',
       plugins: 'lists advlist',

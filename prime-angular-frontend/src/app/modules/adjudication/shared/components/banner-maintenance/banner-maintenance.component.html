@@ -5,7 +5,7 @@
       novalidate>
 
   <div class="row mb-4">
-    <div class="col-sm-12 col-lg-9 col-xl-5 pb-4">
+    <div class="col-sm-12 col-lg-6 col-xl-5 pb-4">
 
       <mat-form-field class="w-100">
         <input matInput
@@ -13,39 +13,34 @@
                formControlName="title">
         <mat-error>Required</mat-error>
       </mat-form-field>
-      <div>
-        <mat-form-field class="w-90">
-          <mat-label>Location</mat-label>
-          <mat-select [formControl]="bannerLocationCode">
-            <mat-option [value]="locationCode">
-              {{ BannerLocationCode[locationCode] | replace: '_':' ' | capitalize }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
+      <mat-form-field class="w-100">
+        <mat-label>Location</mat-label>
+        <mat-select [formControl]="bannerLocationCode">
+          <mat-option [value]="locationCode">
+            {{ BannerLocationCode[locationCode] | replace: '_':' ' | capitalize }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
 
-        <app-contextual-help>
-          Select which page the banner will be displayed on.
-        </app-contextual-help>
-      </div>
-      <div>
-        <mat-form-field class="w-90">
-          <mat-label>Type</mat-label>
-          <mat-select [formControl]="bannerType">
-            <mat-option [value]="BannerType.INFO">
-              {{ BannerType[BannerType.INFO] | capitalize }}
-            </mat-option>
-            <mat-option [value]="BannerType.DANGER">
-              {{ BannerType[BannerType.DANGER] | capitalize }}
-            </mat-option>
-          </mat-select>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
-      </div>
+      <mat-form-field class="w-100">
+        <mat-label>Type</mat-label>
+        <mat-select [formControl]="bannerType">
+          <mat-option [value]="BannerType.INFO">
+            {{ BannerType[BannerType.INFO] | capitalize }}
+          </mat-option>
+          <mat-option [value]="BannerType.DANGER">
+            {{ BannerType[BannerType.DANGER] | capitalize }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
 
-      <ng-container [formGroup]="dateRange">
 
-        <mat-form-field class="mr-2">
+      <div [formGroup]="dateRange"
+           class="row">
+
+        <mat-form-field class="col-sm-12 col-md-6">
           <mat-label>Start Date</mat-label>
           <input matInput
                  [matDatepicker]="startDatePicker"
@@ -56,7 +51,7 @@
           <mat-error>Required</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="mr-2">
+        <mat-form-field class="col-sm-12 col-md-6">
           <mat-label>End Date</mat-label>
           <input matInput
                  [matDatepicker]="endDatePicker"
@@ -70,10 +65,10 @@
             End Date must be greater than start date.
           </mat-error>
         </mat-form-field>
-      </ng-container>
+      </div>
 
     </div>
-    <div class="col-sm-12 col-lg-9 col-xl-7">
+    <div class="col-sm-12 col-lg-6 col-xl-7">
 
       <editor class="mb-4"
               [init]="editorConfig"
