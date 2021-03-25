@@ -368,14 +368,14 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSendBulkEmail() {
+    console.log('here adj cont');
     const data: DialogOptions = {
       title: 'Send Email - Bulk Actions',
-      component: SendBulkEmailComponent,
       data: {
 
       }
     };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    this.busy = this.dialog.open(SendBulkEmailComponent, { data })
     .afterClosed()
     .subscribe();
 

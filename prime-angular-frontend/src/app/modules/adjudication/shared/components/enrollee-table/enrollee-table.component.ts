@@ -98,6 +98,7 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   public onSendBulkEmail(): void {
+    console.log('here');
     this.sendBulkEmail.emit();
   }
 
