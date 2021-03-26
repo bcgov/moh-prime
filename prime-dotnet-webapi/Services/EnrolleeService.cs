@@ -416,6 +416,7 @@ namespace Prime.Services
                     {
                         Enrollee = dbEnrollee,
                         CareSettingCode = site.CareSettingCode,
+                        HealthAuthorityCode = site.HealthAuthorityCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,

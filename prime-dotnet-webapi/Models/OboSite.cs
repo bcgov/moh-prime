@@ -20,6 +20,11 @@ namespace Prime.Models
         [JsonIgnore]
         public CareSetting CareSetting { get; set; }
 
+        public HealthAuthorityCode? HealthAuthorityCode { get; set; }
+
+        [JsonIgnore]
+        public HealthAuthority HealthAuthority { get; set; }
+
         public string SiteName { get; set; }
 
         public string PEC { get; set; }
