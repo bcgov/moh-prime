@@ -489,7 +489,7 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual,
-      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
+      remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
     };
