@@ -31,7 +31,7 @@ export class SiteBannerPageComponent implements OnInit {
     this.busy = this.bannerResource.deleteSiteLandingBanner().subscribe(() => this.banner = null);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getBanner();
   }
 
