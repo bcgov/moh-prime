@@ -8,12 +8,15 @@ namespace Prime.Services
 {
     public interface IBannerService
     {
-        Task<Banner> GetBannerAsync(int bannerId);
-        Task<IEnumerable<Banner>> GetBannersAsync(BannerLocationCode? locationCode);
-        Task<Banner> GetActiveBannerByLocationAsync(BannerLocationCode locationCode);
-        Task<Banner> CreateBannerAsync(Banner banner);
+        Task<BannerViewModel> GetBannerAsync(int bannerId);
+        Task<IEnumerable<BannerViewModel>> GetBannersAsync();
+        Task<BannerViewModel> GetBannerByLocationAsync(BannerLocationCode locationCode);
+        Task<BannerDisplayViewModel> GetActiveBannerByLocationAsync(BannerLocationCode locationCode);
+        Task<BannerViewModel> CreateBannerAsync(Banner banner);
         Task RemoveBannerAsync(int bannerId);
-        Task<Banner> UpdateBannerAsync(int bannerId, BannerUpdateViewModel updateModel);
+        Task<BannerViewModel> UpdateBannerAsync(int bannerId, BannerViewModel updateModel);
+        Task<BannerViewModel> CreateOrUpdateBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel);
+        Task RemoveBannerByLocationAsync(BannerLocationCode locationCode);
 
     }
 }

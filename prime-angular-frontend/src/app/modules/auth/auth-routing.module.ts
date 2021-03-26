@@ -41,7 +41,8 @@ const routes: Routes = [
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
+        // TODO uncomment when redirection is possible based on the token
+        // canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
       },
       {

@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
@@ -16,13 +16,6 @@ export interface IEnrolmentPage {
   formState: AbstractFormState<unknown>;
   /**
    * @description
-   * Instance of the form loaded from the form state.
-   * @deprecated
-   * Use the formState to access the form
-   */
-  form: AbstractControl;
-  /**
-   * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
@@ -38,6 +31,32 @@ export interface IEnrolmentPage {
  * @description
  * Class is used to provide a set of submission hooks and
  * functionality to pages used in enrolments.
+ *
+ * For example, outside of the boilerplate add getters for
+ * quickly accessing AbstractControls in controllers to
+ * reduce methods required in each controller.
+ *
+ * WARNING: Always use UntilDestroy in the controller to
+ * unsubscribe from valueChanges on getters when the component
+ * is destroyed. Not doing this will result in memory leaks, as
+ * well as, create issues that are difficult to trace.
+ *
+ * @example
+ * @UntilDestroy()
+ * @Component({
+ *   selector: 'app-example-page',
+ *   templateUrl: './example-page.component.html',
+ *   styleUrls: ['./example-page.component.scss']
+ * })
+ * export class ExamplePageComponent {
+ *   public initForm(): void {
+ *     this.formState.controlName.valueChanges
+ *       .pipe(
+ *         untilDestroyed(this),
+ *         ...
+ *       ).subscribe();
+ *   }
+ * }
  */
 // TODO make AbstractFormState generic on AbstractEnrolmentPage
 // export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
@@ -117,7 +136,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.form.dirty && !this.checkDeactivationIsAllowed())
+    return (this.formState.form.dirty && !this.checkDeactivationIsAllowed())
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
@@ -158,7 +177,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * additional validation.
    */
   protected checkValidity(): boolean {
-    return this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue());
+    return this.formUtilsService.checkValidity(this.formState.form) && this.additionalValidityChecks(this.formState.form.getRawValue());
   }
 
   /**
@@ -207,9 +226,9 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   private checkDeactivationIsAllowed(): boolean {
     if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
-      return Object.keys(this.form.controls)
+      return Object.keys(this.formState.form.controls)
         .filter(key => !this.canDeactivateWhitelist.includes(key))
-        .every(key => !this.form.controls[key].dirty);
+        .every(key => !this.formState.form.controls[key].dirty);
     }
 
     return this.allowRoutingWhenDirty;

@@ -1,6 +1,6 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RootRoutesModule } from '@lib/modules/root-routes/root-routes.module';
 
 import { SubmissionConfirmationPageComponent } from './submission-confirmation-page.component';
 
@@ -11,10 +11,10 @@ describe('SubmissionConfirmationPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RootRoutesModule,
         RouterTestingModule
       ],
-      declarations: [SubmissionConfirmationPageComponent]
+      declarations: [SubmissionConfirmationPageComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   });

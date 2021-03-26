@@ -1,25 +1,25 @@
-import { ContentObserver } from '@angular/cdk/observers';
-import { ThrowStmt } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import { Role } from '@auth/shared/enum/role.enum';
+
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
-import { LessThanErrorStateMatcher } from '@registration/pages/hours-operation-page/hours-operation-page.component';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
+
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner } from '@shared/models/banner.model';
-import { BannerResourceService } from '@shared/services/banner-resource.service';
-import { Moment } from 'moment';
-import { Subscription } from 'rxjs';
 
-export class IsBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+import { Role } from '@auth/shared/enum/role.enum';
+
+export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
-    const dirtyOrSubmitted = (control?.dirty || form?.submitted);
-    const invalidParent = !!(control?.parent && control?.parent.hasError('isBefore') && dirtyOrSubmitted);
-    return (invalidCtrl || invalidParent);
+    const dirtyOrSubmitted = (control?.dirty || form?.submitted || control?.touched);
+    const requiredControl = (!!(control?.hasError('required')) && dirtyOrSubmitted);
+    const invalidParent = !!(control?.parent && control?.parent.hasError('isSameOrBefore') && dirtyOrSubmitted);
+    return (invalidCtrl || invalidParent || requiredControl);
   }
 }
 
@@ -30,11 +30,23 @@ export class IsBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
 })
 export class BannerMaintenanceComponent implements OnInit {
   @Input() public locationCode: BannerLocationCode;
+  @Output() public save: EventEmitter<Banner>;
+  @Output() public delete: EventEmitter<null>;
 
-  public banner: Banner;
-  public busy: Subscription;
+  public internalBanner: Banner;
+
+  @Input() set banner(banner: Banner) {
+    this.internalBanner = banner;
+    if (banner) {
+      this.patchForm(banner);
+    } else if (this.form) {
+      this.form.reset();
+      this.bannerLocationCode.setValue(this.locationCode);
+    }
+  }
+
   public form: FormGroup;
-  public isBeforeErrorStateMatcher: IsBeforeErrorStateMatcher;
+  public isSameOrBeforeErrorStateMatcher: IsSameOrBeforeErrorStateMatcher;
 
   public hasActions: boolean;
   public editorConfig: Record<string, string>;
@@ -51,17 +63,19 @@ export class BannerMaintenanceComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private bannerResource: BannerResourceService,
+    private formUtils: FormUtilsService,
   ) {
     this.hasActions = false;
     this.editorConfig = {
-      height: '25rem',
+      height: '18rem',
       base_url: '/tinymce',
       suffix: '.min',
       plugins: 'lists advlist',
       toolbar: 'undo redo | bold italic underline | bullist numlist outdent indent | removeformat',
       menubar: 'false'
     };
+    this.save = new EventEmitter<Banner>();
+    this.delete = new EventEmitter();
   }
 
   public get content(): FormControl {
@@ -93,55 +107,40 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   public onSubmit() {
-    if (this.form.valid) {
-      this.banner = this.json;
-      if (this.banner?.id) {
-        this.busy = this.bannerResource.updateBanner(this.banner.id, this.banner)
-          .subscribe();
-      } else {
-        this.busy = this.bannerResource.createBanner(this.banner)
-          .subscribe();
-      }
+    if (this.formUtils.checkValidity(this.form)) {
+      this.internalBanner = this.json;
+      this.save.emit(this.internalBanner);
     }
-    this.form.markAllAsTouched();
+  }
+
+  public onDelete() {
+    this.delete.emit();
   }
 
   public onUpdate(event: { editor: any }) {
     if (!event.editor) { return; }
-    this.banner = this.json;
+    this.internalBanner = this.json;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.createFormInstance();
-    this.getBanner();
     this.initForm();
   }
 
-  private getBanner(): void {
-    this.busy = this.bannerResource.getBanners(this.locationCode)
-      .subscribe((banners: Banner[]) => {
-        if (banners.length > 0) {
-          // Temp fix till we have management screen of multiple banners.
-          this.banner = banners[0];
-          this.form.patchValue(banners[0]);
-          this.startDate.setValue(banners[0].startDate);
-          this.endDate.setValue(banners[0].endDate);
-        } else {
-          this.banner = null;
-        }
-      })
+  private initForm(): void {
+    this.form.valueChanges.subscribe(() => this.internalBanner = this.json);
   }
 
-  private initForm(): void {
-    this.form.valueChanges.subscribe(() => this.banner = this.json);
+  private patchForm(banner: Banner): void {
+    this.form.patchValue(banner);
+    this.startDate.setValue(banner.startDate);
+    this.endDate.setValue(banner.endDate);
   }
 
   private get json(): Banner {
     const banner = this.form.getRawValue();
     return {
       ...banner,
-      id: this.banner?.id,
-      adminId: this.banner?.adminId,
       startDate: banner.dateRange.startDate,
       endDate: banner.dateRange.endDate
     }
@@ -182,9 +181,8 @@ export class BannerMaintenanceComponent implements OnInit {
           startDate: ['', [Validators.required]],
           endDate: ['', [Validators.required]],
         },
-        { validator: FormGroupValidators.isBefore('startDate', 'endDate') })
+        { validator: FormGroupValidators.isSameOrBefore('startDate', 'endDate') })
     });
-    this.isBeforeErrorStateMatcher = new IsBeforeErrorStateMatcher();
+    this.isSameOrBeforeErrorStateMatcher = new IsSameOrBeforeErrorStateMatcher();
   }
-
 }

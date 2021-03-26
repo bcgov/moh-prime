@@ -13,10 +13,10 @@ export class BannerComponent implements OnInit {
   constructor() { }
 
   public getType() {
-    return (this.banner) ? BannerType[this.banner.bannerType]?.toLowerCase() : null;
+    return (this.banner) 
+      ? BannerType[this.banner.bannerType]?.toLowerCase() 
+      : null;
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }

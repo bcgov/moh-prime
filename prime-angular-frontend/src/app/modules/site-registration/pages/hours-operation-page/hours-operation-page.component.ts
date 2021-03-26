@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -45,7 +45,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   public isCompleted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
-  public LessThanErrorStateMatcher: LessThanErrorStateMatcher;
+  public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
   public WeekDay = WeekDay;
   public SiteRoutes = SiteRoutes;
 
@@ -78,10 +78,6 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
-  }
-
-  public get businessDays(): FormArray {
-    return this.form.get('businessDays') as FormArray;
   }
 
   public hasDay(group: FormGroup): boolean {
@@ -130,8 +126,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.hoursOperationPageFormState;
-    this.form = this.formState.form;
-    this.LessThanErrorStateMatcher = new LessThanErrorStateMatcher();
+    this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
   protected patchForm(): void {
@@ -139,9 +134,9 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     this.isCompleted = site?.completed;
     // Force the site to be patched each time
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
-    this.businessDays.controls.forEach((group: FormGroup) => {
+    this.formState.businessDays.controls.forEach((group: FormGroup) => {
       if (this.is24Hours(group)) {
         this.allowEditingHours(group, false);
       }
@@ -163,11 +158,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.form.markAsPristine()));
+      .pipe(tap(() => this.formState.form.markAsPristine()));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;

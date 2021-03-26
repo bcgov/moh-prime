@@ -13,7 +13,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 export class BcscEnrolmentLoginPageComponent implements OnInit {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
+    private authService: AuthService
   ) { }
 
   public onLogin() {

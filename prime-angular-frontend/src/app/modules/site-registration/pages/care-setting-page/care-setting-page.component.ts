@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { EMPTY } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { EMPTY, noop, of } from 'rxjs';
+import { exhaustMap, map, pairwise, tap } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -26,6 +27,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-care-setting-page',
   templateUrl: './care-setting-page.component.html',
@@ -69,14 +71,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.filteredVendorConfig = [];
   }
 
-  public get careSettingCode(): FormControl {
-    return this.form.get('careSettingCode') as FormControl;
-  }
-
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
-  }
-
   public onVendorChange(change: MatRadioChange) {
     this.hasNoVendorError = false;
 
@@ -113,28 +107,26 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.careSettingPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm() {
-    this.careSettingCode.valueChanges
+    this.formState.careSettingCode.valueChanges
       .pipe(
-        map((careSettingCode: number) =>
-          this.vendorConfig.filter(
-            (vendorConfig: VendorConfig) =>
-              vendorConfig.careSettingCode === careSettingCode
-          )
+        untilDestroyed(this),
+        map((careSettingCode: CareSettingEnum) =>
+          this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
         )
-      ).subscribe((vendors: VendorConfig[]) => {
+      )
+      .subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;
-        this.vendorCode.patchValue(null);
+        this.formState.vendorCode.patchValue(null);
       });
 
     this.patchForm();
@@ -145,7 +137,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.vendorCode.value) {
+    if (!this.formState.vendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
@@ -175,7 +167,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
