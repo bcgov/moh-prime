@@ -62,11 +62,15 @@ namespace Prime.Services
         public async Task<BannerDisplayViewModel> GetActiveBannerByLocationAsync(BannerLocationCode locationCode)
         {
             var currentDate = DateTime.Today;
-            return await _context.Banners
-                .Where(b => currentDate >= b.StartDate && currentDate <= b.EndDate)
+            var banner = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+            if (banner != null && currentDate.Date >= banner.StartDate.Date && currentDate.Date <= banner.EndDate.Date)
+            {
+                return banner;
+            }
+            return null;
         }
 
         public async Task RemoveBannerAsync(int bannerId)

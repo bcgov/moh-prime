@@ -57,13 +57,13 @@
           <input matInput
                  [matDatepicker]="endDatePicker"
                  formControlName="endDate"
-                 [errorStateMatcher]="isBeforeErrorStateMatcher">
+                 [errorStateMatcher]="isSameOrBeforeErrorStateMatcher">
           <mat-datepicker-toggle matSuffix
                                  [for]="endDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #endDatePicker></mat-datepicker>
           <mat-error>Required</mat-error>
-          <mat-error *ngIf="dateRange.hasError('isBefore')">
-            End Date must be greater than start date.
+          <mat-error *ngIf="dateRange.hasError('isSameOrBefore')">
+            End Date must be equal or greater than Start Date.
           </mat-error>
         </mat-form-field>
       </div>

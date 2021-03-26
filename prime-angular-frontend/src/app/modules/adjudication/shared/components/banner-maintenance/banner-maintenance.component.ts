@@ -12,13 +12,13 @@ import { Banner } from '@shared/models/banner.model';
 
 import { Role } from '@auth/shared/enum/role.enum';
 
-export class IsBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
     const dirtyOrSubmitted = (control?.dirty || form?.submitted || control?.touched);
     const requiredControl = (!!(control?.hasError('required')) && dirtyOrSubmitted);
-    const invalidParent = !!(control?.parent && control?.parent.hasError('isBefore') && dirtyOrSubmitted);
+    const invalidParent = !!(control?.parent && control?.parent.hasError('isSameOrBefore') && dirtyOrSubmitted);
     return (invalidCtrl || invalidParent || requiredControl);
   }
 }
@@ -46,7 +46,7 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   public form: FormGroup;
-  public isBeforeErrorStateMatcher: IsBeforeErrorStateMatcher;
+  public isSameOrBeforeErrorStateMatcher: IsSameOrBeforeErrorStateMatcher;
 
   public hasActions: boolean;
   public editorConfig: Record<string, string>;
@@ -181,8 +181,8 @@ export class BannerMaintenanceComponent implements OnInit {
           startDate: ['', [Validators.required]],
           endDate: ['', [Validators.required]],
         },
-        { validator: FormGroupValidators.isBefore('startDate', 'endDate') })
+        { validator: FormGroupValidators.isSameOrBefore('startDate', 'endDate') })
     });
-    this.isBeforeErrorStateMatcher = new IsBeforeErrorStateMatcher();
+    this.isSameOrBeforeErrorStateMatcher = new IsSameOrBeforeErrorStateMatcher();
   }
 }

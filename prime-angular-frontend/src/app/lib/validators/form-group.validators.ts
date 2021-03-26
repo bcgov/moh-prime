@@ -59,6 +59,19 @@ export class FormGroupValidators {
     };
   }
 
+  /**
+   * @description
+   * Checks that the start key date is same or before than end key value.
+   */
+  public static isSameOrBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isSameOrBefore(end)) ? null : { isSameOrBefore: true };
+    };
+  }
+
 
   /**
    * @description
