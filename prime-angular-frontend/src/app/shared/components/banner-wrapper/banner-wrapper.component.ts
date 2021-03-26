@@ -24,5 +24,4 @@ export class BannerWrapperComponent implements OnInit {
     this.bannerResource.getActiveBannerByLocationCode(this.locationCode)
       .subscribe((banner: Banner) => this.banner = banner);
   }
-
 }
