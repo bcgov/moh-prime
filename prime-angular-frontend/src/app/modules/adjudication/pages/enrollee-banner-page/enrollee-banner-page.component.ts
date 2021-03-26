@@ -31,12 +31,11 @@ export class EnrolleeBannerPageComponent implements OnInit {
     this.busy = this.bannerResource.deleteEnrolmentLandingBanner().subscribe(() => this.banner = null);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getBanner();
   }
 
   private getBanner(): void {
     this.busy = this.bannerResource.getEnrolmentLandingBanner().subscribe((banner: Banner) => this.banner = banner);
   }
-
 }

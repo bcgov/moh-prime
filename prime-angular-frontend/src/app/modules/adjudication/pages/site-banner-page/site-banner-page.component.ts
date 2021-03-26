@@ -24,18 +24,21 @@ export class SiteBannerPageComponent implements OnInit {
   }
 
   public onSave(banner: Banner): void {
-    this.busy = this.bannerResource.createOrUpdateSiteLandingBanner(banner).subscribe((banner: Banner) => this.banner = banner);
+    this.busy = this.bannerResource.createOrUpdateSiteLandingBanner(banner)
+      .subscribe((banner: Banner) => this.banner = banner);
   }
 
   public onDelete(): void {
-    this.busy = this.bannerResource.deleteSiteLandingBanner().subscribe(() => this.banner = null);
+    this.busy = this.bannerResource.deleteSiteLandingBanner()
+      .subscribe(() => this.banner = null);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getBanner();
   }
 
   private getBanner(): void {
-    this.busy = this.bannerResource.getSiteLandingBanner().subscribe((banner: Banner) => this.banner = banner);
+    this.busy = this.bannerResource.getSiteLandingBanner()
+      .subscribe((banner: Banner) => this.banner = banner);
   }
 }
