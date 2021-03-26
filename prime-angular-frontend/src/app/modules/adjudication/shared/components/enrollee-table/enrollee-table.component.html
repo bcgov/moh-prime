@@ -258,14 +258,14 @@
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onAssign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Assign Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Reassign Enrolment</span>
