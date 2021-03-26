@@ -1,6 +1,7 @@
 export class AdjudicationRoutes {
-  public static ADJUDICATION = 'adjudication';
-  public static METABASE_REPORTS = 'metabase-reports';
+  public static LOGIN_PAGE = 'admin';
+
+  public static MODULE_PATH = 'adjudication';
 
   public static ENROLLEES = 'enrollees';
   public static ENROLLEE_ENROLMENTS = 'enrolments';
@@ -23,9 +24,9 @@ export class AdjudicationRoutes {
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
 
-  public static MODULE_PATH = AdjudicationRoutes.ADJUDICATION;
+  public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
+    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
   }
 }

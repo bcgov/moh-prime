@@ -111,6 +111,8 @@ namespace Prime
         public DbSet<PlrProvider> PlrProviders { get; set; }
 
 
+        // GIS
+        public DbSet<GisEnrolment> GisEnrolments { get; set; }
 
         public override int SaveChanges()
         {

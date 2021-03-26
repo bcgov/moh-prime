@@ -30,7 +30,7 @@ export class OrgBookResource {
 
   public autocomplete(orgName: string, inactive: boolean = false): Observable<OrgBookAutocompleteHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ q: orgName, inactive });
-    return this.http.get<OrgBookAutocompleteHttpResponse>(`${this.ORGBOOK_API_URL}/search/autocomplete`, { params })
+    return this.http.get<OrgBookAutocompleteHttpResponse>(`${ this.ORGBOOK_API_URL }/search/autocomplete`, { params })
       .pipe(
         map((response: OrgBookAutocompleteHttpResponse) => response),
         tap((response: OrgBookAutocompleteHttpResponse) => this.logger.info('ORGBOOK_AUTOCOMPLETE', response)),
@@ -51,7 +51,7 @@ export class OrgBookResource {
    */
   public getOrganizationFacet(orgName: string): Observable<OrgBookFacetHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ name: orgName });
-    return this.http.get<OrgBookFacetHttpResponse>(`${this.ORGBOOK_API_URL}/search/credential/topic/facets`, { params })
+    return this.http.get<OrgBookFacetHttpResponse>(`${ this.ORGBOOK_API_URL }/search/credential/topic/facets`, { params })
       .pipe(
         map((response: OrgBookFacetHttpResponse) => response),
         tap((response: OrgBookFacetHttpResponse) => this.logger.info('ORGBOOK_FACET', response)),
@@ -63,7 +63,7 @@ export class OrgBookResource {
   }
 
   public getOrganizationDetail(sourceId: string): Observable<OrgBookDetailHttpResponse> {
-    return this.http.get<OrgBookDetailHttpResponse>(`${this.ORGBOOK_API_URL}/topic/ident/registration.registries.ca/${sourceId}/formatted`)
+    return this.http.get<OrgBookDetailHttpResponse>(`${ this.ORGBOOK_API_URL }/topic/ident/registration.registries.ca/${ sourceId }/formatted`)
       .pipe(
         map((response: OrgBookDetailHttpResponse) => response),
         tap((response: OrgBookDetailHttpResponse) => this.logger.info('ORGBOOK_DETAIL', response)),
@@ -75,7 +75,7 @@ export class OrgBookResource {
   }
 
   public getOrganizationRelatedTo(topicId: number): Observable<OrgBookRelatedHttpResponse[]> {
-    return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${topicId}/related_to_relations`)
+    return this.http.get<OrgBookRelatedHttpResponse[]>(`${ this.ORGBOOK_API_URL }/topic_relationship/${ topicId }/related_to_relations`)
       .pipe(
         map((response: OrgBookRelatedHttpResponse[]) => response),
         tap((response: OrgBookRelatedHttpResponse[]) => this.logger.info('ORGBOOK_RELATED_TO', response)),
@@ -110,13 +110,15 @@ export class OrgBookResource {
       map((response: OrgBookDetailHttpResponse) => response.id),
       switchMap((topicId: number) => this.getOrganizationRelatedTo(topicId)),
       map((response: OrgBookRelatedHttpResponse[]) => {
-        const doingBusinessAs = response
-          .map((relation: OrgBookRelatedHttpResponse) => {
-            // Assumed only a single name per organization is relavent
+        const doingBusinessAs = response.reduce((businessNames: string[], relation: OrgBookRelatedHttpResponse) => {
+          const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
+          if (isDoingBusinessAs) {
+            // Assumed only a single name per organization is relevant
             const businessName = relation.related_topic.names[0].text;
-            const isDoingBusinessAs = relation.attributes.some(a => a.value === 'Does Business As');
-            return (isDoingBusinessAs) ? businessName : null;
-          });
+            businessNames.push(businessName);
+          }
+          return businessNames;
+        }, []);
 
         // Remove duplicates since only names are persisted
         return [...new Set(doingBusinessAs)]

@@ -1,0 +1,55 @@
+<ng-container [formGroup]="form">
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Site Name</ng-container>
+      <ng-container appPageSubheader2Summary>
+        This site name must match the name on the site's business licence if applicable.
+      </ng-container>
+    </app-page-subheader2>
+
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field class="w-100">
+          <input matInput
+                 placeholder="Site Name (Doing Business As)"
+                 formControlName="doingBusinessAs"
+                 [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                        [value]="doingBusinessAsName">
+              {{ doingBusinessAsName }}
+            </mat-option>
+          </mat-autocomplete>
+          <mat-error>Required</mat-error>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Site ID</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Provide the sites ID or PEC Code.<br>
+        If this is a new site you will receive your Site ID upon approval.
+      </ng-container>
+    </app-page-subheader2>
+    <ng-container>
+      <mat-form-field>
+        <mat-label>Site ID</mat-label>
+        <input matInput
+               formControlName="pec" />
+        <mat-error *ngIf="pec.hasError('required')">
+          Required
+        </mat-error>
+      </mat-form-field>
+      <div>
+        <mat-checkbox [formControl]="isNewSite">
+          This is a new site
+        </mat-checkbox>
+      </div>
+    </ng-container>
+  </section>
+</ng-container>

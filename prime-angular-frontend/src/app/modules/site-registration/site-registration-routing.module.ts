@@ -12,24 +12,22 @@ import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
 
-import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
-import { SiteManagementComponent } from './pages/site-management/site-management.component';
-
-import { OrganizationSigningAuthorityComponent } from './pages/organization-signing-authority/organization-signing-authority.component';
-import { OrganizationNameComponent } from './pages/organization-name/organization-name.component';
-import { OrganizationAgreementComponent } from './pages/organization-agreement/organization-agreement.component';
-
-import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { BusinessLicenceComponent } from './pages/business-licence/business-licence.component';
-import { SiteAddressComponent } from './pages/site-address/site-address.component';
-import { HoursOperationComponent } from './pages/hours-operation/hours-operation.component';
-import { AdministratorComponent } from './pages/administrator/administrator.component';
-import { PrivacyOfficerComponent } from './pages/privacy-officer/privacy-officer.component';
-import { TechnicalSupportComponent } from './pages/technical-support/technical-support.component';
-import { RemoteUsersComponent } from './pages/remote-users/remote-users.component';
-import { RemoteUserComponent } from './pages/remote-user/remote-user.component';
-import { OverviewComponent } from './pages/overview/overview.component';
-import { NextStepsComponent } from './pages/next-steps/next-steps.component';
+import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
+import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
+import { OrganizationSigningAuthorityPageComponent } from './pages/organization-signing-authority-page/organization-signing-authority-page.component';
+import { OrganizationNamePageComponent } from './pages/organization-name-page/organization-name-page.component';
+import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
+import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
+import { BusinessLicencePageComponent } from './pages/business-licence-page/business-licence-page.component';
+import { SiteAddressPageComponent } from './pages/site-address-page/site-address-page.component';
+import { HoursOperationPageComponent } from './pages/hours-operation-page/hours-operation-page.component';
+import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
+import { PrivacyOfficerPageComponent } from './pages/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
+import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users-page.component';
+import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
+import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 
 const routes: Routes = [
   {
@@ -47,7 +45,7 @@ const routes: Routes = [
     children: [
       {
         path: SiteRoutes.COLLECTION_NOTICE,
-        component: CollectionNoticeComponent,
+        component: CollectionNoticePageComponent,
         data: { title: 'Collection Notice' }
       },
       {
@@ -55,7 +53,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: SiteManagementComponent,
+            component: SiteManagementPageComponent,
             data: { title: 'Site Management' },
           },
           {
@@ -63,21 +61,21 @@ const routes: Routes = [
             children: [
               {
                 path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
-                component: OrganizationSigningAuthorityComponent,
+                component: OrganizationSigningAuthorityPageComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
-                component: OrganizationNameComponent,
+                component: OrganizationNamePageComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Information' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
-                component: OverviewComponent,
+                component: OverviewPageComponent,
                 canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
@@ -88,32 +86,32 @@ const routes: Routes = [
                 pathMatch: 'full'
               },
               {
-                path: `${SiteRoutes.SITES}/:sid`,
+                path: `${ SiteRoutes.SITES }/:sid`,
                 children: [
                   {
                     path: SiteRoutes.CARE_SETTING,
-                    component: CareSettingComponent,
+                    component: CareSettingPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Care Setting' }
                   },
                   {
                     path: SiteRoutes.BUSINESS_LICENCE,
-                    component: BusinessLicenceComponent,
+                    component: BusinessLicencePageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Business Licence' }
                   },
                   {
                     path: SiteRoutes.SITE_ADDRESS,
-                    component: SiteAddressComponent,
+                    component: SiteAddressPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Address' }
                   },
                   {
                     path: SiteRoutes.HOURS_OPERATION,
-                    component: HoursOperationComponent,
+                    component: HoursOperationPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Hours of Operation' }
@@ -123,14 +121,14 @@ const routes: Routes = [
                     children: [
                       {
                         path: '',
-                        component: RemoteUsersComponent,
+                        component: RemoteUsersPageComponent,
                         canActivate: [SiteGuard],
                         canDeactivate: [CanDeactivateFormGuard],
                         data: { title: 'Practitioners Requiring Remote PharmaNet Access' },
                       },
                       {
                         path: ':index',
-                        component: RemoteUserComponent,
+                        component: RemoteUserPageComponent,
                         canActivate: [SiteGuard],
                         canDeactivate: [CanDeactivateFormGuard],
                         data: { title: 'Remote User' }
@@ -139,28 +137,28 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.ADMINISTRATOR,
-                    component: AdministratorComponent,
+                    component: AdministratorPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'PharmaNet Administrator' }
                   },
                   {
                     path: SiteRoutes.PRIVACY_OFFICER,
-                    component: PrivacyOfficerComponent,
+                    component: PrivacyOfficerPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Privacy Officer' }
                   },
                   {
                     path: SiteRoutes.TECHNICAL_SUPPORT,
-                    component: TechnicalSupportComponent,
+                    component: TechnicalSupportPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Technical Support Contact' }
                   },
                   {
                     path: SiteRoutes.ORGANIZATION_AGREEMENT,
-                    component: OrganizationAgreementComponent,
+                    component: OrganizationAgreementPageComponent,
                     canActivate: [SiteGuard, OrganizationGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Organization Agreement' }
@@ -168,13 +166,13 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.SITE_REVIEW,
                     canActivate: [SiteGuard, OrganizationGuard],
-                    component: OverviewComponent,
+                    component: OverviewPageComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {
                     path: SiteRoutes.NEXT_STEPS,
                     canActivate: [SiteGuard, OrganizationGuard],
-                    component: NextStepsComponent,
+                    component: NextStepsPageComponent,
                     data: { title: 'Next Steps' }
                   },
                   {

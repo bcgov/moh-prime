@@ -6,7 +6,6 @@ import { DashboardMenuItem, DashboardRouteMenuItem } from '@lib/modules/dashboar
 import { IDashboard } from '@lib/modules/dashboard/interfaces/dashboard.interface';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { AuthRoutes } from '@auth/auth.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 @Component({
@@ -22,7 +21,7 @@ export class PhsaEformsDashboardComponent implements OnInit, IDashboard {
   constructor(
     @Inject(APP_CONFIG) protected config: AppConfig
   ) {
-    this.logoutRedirectUrl = `${this.config.loginRedirectUrl}/${AuthRoutes.routePath(AuthRoutes.PHSA)}`;
+    this.logoutRedirectUrl = `${ this.config.loginRedirectUrl }/${ PhsaEformsRoutes.LOGIN_PAGE }`;
     this.showBrand = false;
   }
 
@@ -32,7 +31,7 @@ export class PhsaEformsDashboardComponent implements OnInit, IDashboard {
 
   private getDashboardMenuItems(): Observable<DashboardMenuItem[]> {
     return of([
-      new DashboardRouteMenuItem('PHSA Registration', PhsaEformsRoutes.PHSA_EFORMS, 'people', false, {
+      new DashboardRouteMenuItem('PHSA Registration', PhsaEformsRoutes.MODULE_PATH, 'people', false, {
         active: true,
         disabled: true
       })
