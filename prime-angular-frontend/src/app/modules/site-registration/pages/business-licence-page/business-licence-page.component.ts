@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
@@ -54,7 +54,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   ) {
     super(dialog, formUtilsService);
 
-    this.title = this.route.snapshot.data.title;
+    this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.uploadedFile = false;
 
@@ -72,7 +72,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.hasNoBusinessLicenceError = false;
   }
 
-  public onRemoveDocument(documentGuid: string): void {
+  public onRemoveDocument(_: string): void {
     this.formState.businessLicenceGuid.patchValue(null);
     this.uploadedFile = false;
   }
@@ -88,18 +88,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onDeferredLicenceChange(event: MatSlideToggleChange): void {
-    if (event.checked) {
-      this.formState.deferredLicenceReason.setValidators([Validators.required]);
-      this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
-      this.hasNoBusinessLicenceError = false;
-      this.formState.doingBusinessAs.disable();
-      this.documentUpload.disable();
-    } else {
-      this.formUtilsService.resetAndClearValidators(this.formState.deferredLicenceReason);
-      this.formState.doingBusinessAs.setValidators([Validators.required]);
-      this.formState.doingBusinessAs.enable();
-      this.documentUpload.enable();
-    }
+    this.updateBusLicAccess(event.checked);
     this.formState.form.markAsUntouched();
   }
 
@@ -200,12 +189,30 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
           if (this.isCommPharm()) {
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
-          this.formState.deferredLicenceReason.setValidators([Validators.required]);
-          this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
-          this.hasNoBusinessLicenceError = false;
-          this.formState.doingBusinessAs.disable();
-          this.documentUpload.disable();
+
+          this.updateBusLicAccess(this.isCommPharm());
         }
       });
+  }
+
+  private updateBusLicAccess(check: boolean): void {
+    let enableOrDisable: 'enable' | 'disable';
+
+    if (check) {
+      enableOrDisable = 'disable';
+      this.updateBusLicValidators(this.formState.deferredLicenceReason, this.formState.doingBusinessAs);
+      this.hasNoBusinessLicenceError = false;
+    } else {
+      enableOrDisable = 'enable';
+      this.updateBusLicValidators(this.formState.doingBusinessAs, this.formState.deferredLicenceReason);
+    }
+
+    this.formState.doingBusinessAs[enableOrDisable]();
+    this.documentUpload[enableOrDisable]();
+  }
+
+  private updateBusLicValidators(requiredControl: FormControl, notRequiredControl: FormControl): void {
+    requiredControl.setValidators([Validators.required]);
+    this.formUtilsService.resetAndClearValidators(notRequiredControl);
   }
 }
