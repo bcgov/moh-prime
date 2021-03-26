@@ -122,7 +122,7 @@ export class BannerMaintenanceComponent implements OnInit {
     this.internalBanner = this.json;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
   }
