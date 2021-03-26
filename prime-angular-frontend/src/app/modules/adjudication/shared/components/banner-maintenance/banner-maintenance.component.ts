@@ -185,5 +185,4 @@ export class BannerMaintenanceComponent implements OnInit {
     });
     this.isBeforeErrorStateMatcher = new IsBeforeErrorStateMatcher();
   }
-
 }
