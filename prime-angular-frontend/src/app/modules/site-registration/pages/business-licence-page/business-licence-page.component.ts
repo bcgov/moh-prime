@@ -195,23 +195,25 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
       });
   }
 
-  private updateBusLicAccess(check: boolean): void {
+  private updateBusLicAccess(toggleAccess: boolean): void {
     let enableOrDisable: 'enable' | 'disable';
 
-    if (check) {
+    if (toggleAccess) {
       enableOrDisable = 'disable';
-      this.updateBusLicValidators(this.formState.deferredLicenceReason, this.formState.doingBusinessAs);
-      this.hasNoBusinessLicenceError = false;
+      this.updateBusLicValidations(this.formState.deferredLicenceReason, this.formState.doingBusinessAs);
     } else {
       enableOrDisable = 'enable';
-      this.updateBusLicValidators(this.formState.doingBusinessAs, this.formState.deferredLicenceReason);
+      this.updateBusLicValidations(this.formState.doingBusinessAs, this.formState.deferredLicenceReason);
     }
 
     this.formState.doingBusinessAs[enableOrDisable]();
-    this.documentUpload[enableOrDisable]();
+    (!this.businessLicence.deferredLicenceReason)
+      ? this.documentUpload.enable()
+      : this.documentUpload[enableOrDisable]();
   }
 
-  private updateBusLicValidators(requiredControl: FormControl, notRequiredControl: FormControl): void {
+  private updateBusLicValidations(requiredControl: FormControl, notRequiredControl: FormControl): void {
+    this.hasNoBusinessLicenceError = false;
     requiredControl.setValidators([Validators.required]);
     this.formUtilsService.resetAndClearValidators(notRequiredControl);
   }

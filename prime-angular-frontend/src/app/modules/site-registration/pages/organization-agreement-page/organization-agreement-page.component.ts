@@ -155,7 +155,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
 
   protected afterSubmitIsSuccessful(): void {
     // Remove the org agreement GUID to prevent 404 already
-    // submitted if resubmited in the same session
+    // submitted if resubmitted in the same session
     this.formState.organizationAgreementGuid.patchValue(null);
     this.formState.form.markAsPristine();
 
