@@ -14,6 +14,7 @@ using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
 using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace Prime.Services
 {
@@ -902,6 +903,32 @@ namespace Prime.Services
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)
+        {
+            Expression<Func<Enrollee, bool>> predicate = bulkEmailType switch
+            {
+                BulkEmailType.CommunityPractice => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPractice),
+                BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
+                BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
+                BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
+                BulkEmailType.RUTOA => e => e.AssignedTOAType.Value == AgreementType.RegulatedUserTOA,
+                BulkEmailType.OBOTOA => e => e.AssignedTOAType.Value == AgreementType.OboTOA,
+                BulkEmailType.PharmRUTOA => e => e.AssignedTOAType.Value == AgreementType.CommunityPharmacistTOA,
+                BulkEmailType.PharmOBOTOA => e => e.AssignedTOAType.Value == AgreementType.PharmacyOboTOA,
+                _ => null,
+            };
+
+            var result = await _context.Enrollees
+                .Include(e => e.EnrolleeCareSettings)
+                .AsNoTracking()
+                .Where(predicate)
+                .Select(e => e.Email)
+                .DecompileAsync()
+                .ToListAsync();
+
+            return result;
         }
     }
 }

@@ -1,34 +1,40 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter, Inject } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import {Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatTableDataSource} from '@angular/material/table';
 
-import { Observable, Subscription, EMPTY, of, noop, concat, pipe, OperatorFunction } from 'rxjs';
-import { map, exhaustMap, tap } from 'rxjs/operators';
+import {EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription} from 'rxjs';
+import {exhaustMap, map, tap} from 'rxjs/operators';
 
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+import {RouteUtils} from '@lib/utils/route-utils.class';
+import {MatTableDataSourceUtils} from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 
-import { UtilsService } from '@core/services/utils.service';
-import { ToastService } from '@core/services/toast.service';
-import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
-import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { AssignAction, ClaimNoteComponent, ClaimType, AssignActionEnum } from '@shared/components/dialogs/content/claim-note/claim-note.component';
-import { Role } from '@auth/shared/enum/role.enum';
-import { PermissionService } from '@auth/shared/services/permission.service';
-import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
+import {UtilsService} from '@core/services/utils.service';
+import {ToastService} from '@core/services/toast.service';
+import {AgreementType} from '@shared/enums/agreement-type.enum';
+import {EnrolmentStatus} from '@shared/enums/enrolment-status.enum';
+import {SubmissionAction} from '@shared/enums/submission-action.enum';
+import {EnrolleeListViewModel, HttpEnrollee} from '@shared/models/enrolment.model';
+import {DialogOptions} from '@shared/components/dialogs/dialog-options.model';
+import {ConfirmDialogComponent} from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import {NoteComponent} from '@shared/components/dialogs/content/note/note.component';
+import {ManualFlagNoteComponent} from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import {DIALOG_DEFAULT_OPTION} from '@shared/components/dialogs/dialogs-properties.provider';
+import {DialogDefaultOptions} from '@shared/components/dialogs/dialog-default-options.model';
+import {
+  AssignAction,
+  AssignActionEnum,
+  ClaimNoteComponent,
+  ClaimType
+} from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import {Role} from '@auth/shared/enum/role.enum';
+import {PermissionService} from '@auth/shared/services/permission.service';
+import {EnrolleeNote} from '@enrolment/shared/models/enrollee-note.model';
 
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import {AdjudicationResource} from '@adjudication/shared/services/adjudication-resource.service';
+import {AdjudicationRoutes} from '@adjudication/adjudication.routes';
+import {SendBulkEmailComponent} from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import {BulkEmailType} from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -112,12 +118,10 @@ export class AdjudicationContainerComponent implements OnInit {
     const assignPipe = pipe(
       exhaustMap((action: AssignAction) => {
         const response = { assigneeId: action.adjudicatorId };
-        const request$ = (action.note)
+        return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
-          : of(response)
-
-        return request$;
+            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
+          : of(response);
       }),
       exhaustMap((response: { note: EnrolleeNote, assigneeId: number }) => {
         const request$ = (response.note)
@@ -144,19 +148,17 @@ export class AdjudicationContainerComponent implements OnInit {
     const reassignPipe = pipe(
       exhaustMap((action: AssignAction) => {
         const response = { action };
-        const request$ = (action.note)
+        return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
+            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
           : of(response);
-
-        return request$;
       }),
       exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
         const request$ = (response.note)
           ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.action.adjudicatorId)
-          : of(null)
+          : of(null);
 
-        return request$.pipe(map((_) => response.action))
+        return request$.pipe(map((_) => response.action));
       }),
       exhaustMap((action: AssignAction) =>
         (action.action === AssignActionEnum.Disclaim)
@@ -368,17 +370,21 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onSendBulkEmail() {
-    console.log('here adj cont');
     const data: DialogOptions = {
       title: 'Send Email - Bulk Actions',
-      data: {
-
-      }
+      data: {}
     };
     this.busy = this.dialog.open(SendBulkEmailComponent, { data })
     .afterClosed()
-    .subscribe();
-
+      .pipe(
+        exhaustMap((bulkEmailType: BulkEmailType) =>
+          this.adjudicationResource.getEnrolleeEmails(bulkEmailType)
+        )
+      )
+    .subscribe((emails: string[]) => {
+      console.log('emails: ', emails);
+      this.utilsService.mailTo(emails.join(','));
+    });
   }
 
   public ngOnInit() {
@@ -418,12 +424,6 @@ export class AdjudicationContainerComponent implements OnInit {
     this.dataSource.data = MatTableDataSourceUtils
       .update<EnrolleeListViewModel>(this.dataSource, 'id', this.toEnrolleeListViewModel(enrollee));
   }
-
-  private removeEnrollee(enrollee: EnrolleeListViewModel) {
-    this.dataSource.data = MatTableDataSourceUtils
-      .delete<EnrolleeListViewModel>(this.dataSource, 'id', enrollee.id);
-  }
-
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
     return pipe(
       exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
@@ -462,7 +462,7 @@ export class AdjudicationContainerComponent implements OnInit {
           return row;
         }),
         map((enrollee: EnrolleeListViewModel) => {
-          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee)
+          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee);
         })
       );
   }
@@ -504,7 +504,7 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNewestAgreement,
       adjudicatorIdir: adjudicator?.idir,
       alwaysManual,
-      remoteAccess: (enrolleeRemoteUsers?.length) ? true : false,
+      remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
     };

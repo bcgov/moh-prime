@@ -15,37 +15,37 @@
 
     <mat-menu #menu>
       <button mat-menu-item
-              (click)="onSelect('Requires TOA')">
+              (click)="onSelect(BulkEmailType.REQUIRES_TOA)">
         <span>Requires TOA</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item
-              (click)="onSelect('Private Community Health Practice')">
+              (click)="onSelect(BulkEmailType.COMMUNITY_PRACTICE)">
         <span>Private Community Health Practice</span>
       </button>
       <button mat-menu-item
-              (click)="onSelect('Community Pharmacy')">
+              (click)="onSelect(BulkEmailType.COMMUNITY_PHARMACY)">
         <span>Community Pharmacy</span>
       </button>
       <button mat-menu-item
-              (click)="onSelect('Health Authority')">
+              (click)="onSelect(BulkEmailType.HEALTH_AUTHORITY)">
         <span>Health Authority</span>
       </button>
       <mat-divider></mat-divider>
       <button mat-menu-item
-              (click)="onSelect('RU TOA')">
+              (click)="onSelect(BulkEmailType.RU_TOA)">
         <span>RU TOA</span>
       </button>
       <button mat-menu-item
-              (click)="onSelect('OBO TOA')">
+              (click)="onSelect(BulkEmailType.OBO_TOA)">
         <span>OBO TOA</span>
       </button>
       <button mat-menu-item
-              (click)="onSelect('PharmRU TOA')">
+              (click)="onSelect(BulkEmailType.PHARM_RU_TOA)">
         <span>PharmRU TOA</span>
       </button>
       <button mat-menu-item
-              (click)="onSelect('PharmOBO TOA')">
+              (click)="onSelect(BulkEmailType.PHARM_OBO_TOA)">
         <span>PharmOBO TOA</span>
       </button>
     </mat-menu>

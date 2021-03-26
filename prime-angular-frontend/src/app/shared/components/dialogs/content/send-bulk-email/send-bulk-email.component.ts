@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+
+import {DialogOptions} from '@shared/components/dialogs/dialog-options.model';
+import {ConfirmDialogComponent} from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import {BulkEmailType} from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-send-bulk-email',
@@ -7,20 +12,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SendBulkEmailComponent implements OnInit {
   public title: string;
-  
+
+  public BulkEmailType = BulkEmailType;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>
-  ) { 
+  ) {
     this.title = data.title;
   }
-  
+
   public onCancel(): void {
     this.dialogRef.close();
   }
 
-  public onSelect(email: string): void {
-    this.dialogRef.close(email);
+  public onSelect(bulkEmailType: BulkEmailType): void {
+    this.dialogRef.close(bulkEmailType);
   }
 
   public ngOnInit(): void {

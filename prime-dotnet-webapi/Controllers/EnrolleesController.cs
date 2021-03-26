@@ -862,5 +862,24 @@ namespace Prime.Controllers
 
             return Ok();
         }
+
+        // GET: api/Enrollees/emails
+        /// <summary>
+        /// Gets all of the enrollee emails that match the type
+        /// </summary>
+        /// <param name="bulkEmailType"></param>
+        [HttpGet("emails", Name = nameof(GetEnrolleeEmails))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeEmails([FromQuery] BulkEmailType bulkEmailType)
+        {
+            if (!User.IsAdministrant())
+            {
+                return Forbid();
+            }
+            var emails = await _enrolleeService.GetEnrolleeEmails(bulkEmailType);
+            return Ok(ApiResponse.Result(emails));
+        }
     }
 }
