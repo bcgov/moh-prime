@@ -48,7 +48,7 @@ export class FormGroupValidators {
 
   /**
    * @description
-   * Checks that the start key dateTime is before than end key value.
+   * Checks that the start key dateTime is before the end key value.
    */
   public static isDateTimeBefore(startKey: string, endKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
@@ -61,7 +61,7 @@ export class FormGroupValidators {
 
   /**
    * @description
-   * Checks that the start key dateTime is same or before than end key value.
+   * Checks that the start key dateTime is same or before the end key value.
    */
   public static isDateTimeSameOrBefore(startKey: string, endKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
