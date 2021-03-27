@@ -18,7 +18,7 @@
         <mat-label>Location</mat-label>
         <mat-select [formControl]="bannerLocationCode">
           <mat-option [value]="locationCode">
-            {{ BannerLocationCode[locationCode] | replace: '_':' ' | capitalize }}
+            {{ BannerLocationCode[locationCode] | replace: '_' : ' ' | capitalize }}
           </mat-option>
         </mat-select>
         <mat-error>Required</mat-error>
