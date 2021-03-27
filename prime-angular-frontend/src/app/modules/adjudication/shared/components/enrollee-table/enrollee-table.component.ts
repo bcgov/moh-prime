@@ -1,12 +1,13 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { MatPaginator } from '@angular/material/paginator';
 
 import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 
 import moment from 'moment';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
@@ -25,18 +26,22 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   styleUrls: ['./enrollee-table.component.scss']
 })
 export class EnrolleeTableComponent implements OnInit {
-  @Input() public dataSource: MatTableDataSource<EnrolleeListViewModel>;
+  @Input() public enrollees: EnrolleeListViewModel[];
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-  @Output() public reload: EventEmitter<number>;
+  @Output() public refresh: EventEmitter<number>;
+
+  @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
   public busy: Subscription;
+  public dataSource: MatTableDataSource<EnrolleeListViewModel>;
+  public hidePaginator: boolean;
   public form: FormGroup;
   public columns: string[];
-  public hasAppliedDateRange = false;
-  public hasRenewalDateRange = false;
+  public hasAppliedDateRange: boolean;
+  public hasRenewalDateRange: boolean;
   public hasAssignedToFilter$: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
   public EnrolmentStatus = EnrolmentStatus;
@@ -50,7 +55,7 @@ export class EnrolleeTableComponent implements OnInit {
     this.notify = new EventEmitter<number>();
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
-    this.reload = new EventEmitter<number>();
+    this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.columns = [
       'prefixes',
@@ -66,6 +71,7 @@ export class EnrolleeTableComponent implements OnInit {
       'careSetting',
       'actions'
     ];
+    this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
     this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
   }
 
@@ -92,8 +98,8 @@ export class EnrolleeTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public onReload(enrolleeId: number): void {
-    this.reload.emit(enrolleeId);
+  public onReload(): void {
+    this.refresh.emit();
   }
 
   public sortData(sort: Sort) {
@@ -103,10 +109,14 @@ export class EnrolleeTableComponent implements OnInit {
 
     this.dataSource.data = [...this.dataSource.data].sort((a, b) => {
       switch (sort.active) {
-        case 'displayId': return this.utilsService.sortByDirection(a.id, b.id, sort.direction);
-        case 'appliedDate': return this.utilsService.sortByDirection(a.appliedDate, b.appliedDate, sort.direction);
-        case 'renewalDate': return this.utilsService.sortByDirection(a.expiryDate, b.expiryDate, sort.direction);
-        default: return 0;
+        case 'displayId':
+          return this.utilsService.sortByDirection(a.id, b.id, sort.direction);
+        case 'appliedDate':
+          return this.utilsService.sortByDirection(a.appliedDate, b.appliedDate, sort.direction);
+        case 'renewalDate':
+          return this.utilsService.sortByDirection(a.expiryDate, b.expiryDate, sort.direction);
+        default:
+          return 0;
       }
     });
   }
@@ -130,6 +140,12 @@ export class EnrolleeTableComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+    this.dataSource.paginator = this.paginator;
+    // Paginator must exist within the DOM, but does not
+    // have to be visible based on the size of the dataset
+    this.hidePaginator = this.paginator.pageSize > this.enrollees.length;
+    this.dataSource.data = this.enrollees;
   }
 
   private createFormInstance() {
@@ -143,8 +159,9 @@ export class EnrolleeTableComponent implements OnInit {
   }
 
   private initForm() {
-    this.dataSource.filterPredicate = this.getFilterPredicate();
-    this.form.valueChanges.subscribe(value => this.dataSource.filter = value);
+    this.form.valueChanges
+      .pipe(untilDestroyed(this))
+      .subscribe(value => this.dataSource.filter = value);
 
     combineLatest([
       this.authService.getAdmin$(),
@@ -157,11 +174,13 @@ export class EnrolleeTableComponent implements OnInit {
 
     ['appliedDateRangeStart', 'appliedDateRangeEnd'].forEach(controlName =>
       this.form.get(controlName).valueChanges
+        .pipe(untilDestroyed(this))
         .subscribe(value => this.hasAppliedDateRange = value ?? this.hasAppliedDateRange)
     );
 
     ['renewalDateRangeStart', 'renewalDateRangeEnd'].forEach(controlName =>
       this.form.get(controlName).valueChanges
+        .pipe(untilDestroyed(this))
         .subscribe(value => this.hasRenewalDateRange = value ?? this.hasRenewalDateRange)
     );
   }
