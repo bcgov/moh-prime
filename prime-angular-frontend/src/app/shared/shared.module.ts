@@ -90,7 +90,6 @@ import { SiteRegAccessComponent } from './components/auth/site-reg-access/site-r
 import { PillComponent } from './components/auth/pill/pill.component';
 import { SimpleAccessComponent } from './components/auth/simple-access/simple-access.component';
 import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment-access/prime-enrolment-access.component';
-import { BannerWrapperComponent } from './components/banner-wrapper/banner-wrapper.component';
 
 @NgModule({
   declarations: [
@@ -168,8 +167,7 @@ import { BannerWrapperComponent } from './components/banner-wrapper/banner-wrapp
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    BannerComponent,
-    BannerWrapperComponent
+    BannerComponent
   ],
   imports: [
     CommonModule,
@@ -254,8 +252,7 @@ import { BannerWrapperComponent } from './components/banner-wrapper/banner-wrapp
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    BannerComponent,
-    BannerWrapperComponent
+    BannerComponent
   ],
   providers: [
     FullnamePipe,

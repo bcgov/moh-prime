@@ -1,10 +1,15 @@
-<app-alert [type]="getType()">
-  <ng-container #alertTitle
-                class="alert-title">
-    {{ banner?.title }}
-  </ng-container>
-  <ng-container #alertContent
-                class="alert-content">
-    <div [innerHTML]="banner?.content"></div>
-  </ng-container>
-</app-alert>
+<div *ngIf="banner"
+     class="row">
+  <div class="col-sm-12 col-md-9 col-xl-7">
+    <app-alert [type]="type">
+      <ng-container #alertTitle
+                    class="alert-title">
+        {{ banner?.title }}
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        <div [innerHTML]="banner?.content"></div>
+      </ng-container>
+    </app-alert>
+  </div>
+</div>

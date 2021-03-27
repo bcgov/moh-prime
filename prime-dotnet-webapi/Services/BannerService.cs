@@ -66,6 +66,7 @@ namespace Prime.Services
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+            // Comparing of only the Date portion.
             if (banner != null && currentDate.Date >= banner.StartDate.Date && currentDate.Date <= banner.EndDate.Date)
             {
                 return banner;
