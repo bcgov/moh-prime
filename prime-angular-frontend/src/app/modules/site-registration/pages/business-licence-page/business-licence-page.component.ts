@@ -193,8 +193,13 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.siteResource.getBusinessLicence(site.id)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
+
         if (businessLicense && !businessLicense.completed) {
-          this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
+          // Business licence may exist, but the deferred licence toggle may be
+          // hidden based on care setting leaving the toggle undefined
+          if (this.isCommPharm()) {
+            this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
+          }
           this.formState.deferredLicenceReason.setValidators([Validators.required]);
           this.formUtilsService.resetAndClearValidators(this.formState.doingBusinessAs);
           this.hasNoBusinessLicenceError = false;
