@@ -30,18 +30,20 @@ namespace PlrIntakeUtility.Tests
         [Fact]
         public void TestReadRow()
         {
-            using (var stream = File.Open("PRIME_Test_Data_PLR_IAT20210212.xls", FileMode.Open, FileAccess.Read))
+            using (var stream = File.Open("PRIME_Test_Data_PLR_IAT2021318.xls", FileMode.Open, FileAccess.Read))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     // Header row
                     reader.Read();
-                    Assert.Equal("COLLEGE_ID", reader.GetString(0));
+                    Assert.Equal("IPC", reader.GetString(0));
 
                     reader.Read();
                     PlrProvider provider = _tested.ReadRow(reader);
+                    Assert.Equal("IPC.00166847.BC.PRS", provider.Ipc);
+                    Assert.Equal("CPSID", provider.IdentifierType);
                     Assert.Equal("20101", provider.CollegeId);
-                    Assert.Equal("MD", provider.ProviderType);
+                    Assert.Equal("MD", provider.ProviderRoleType);
                     Assert.Equal("PRIMET", provider.FirstName);
                     Assert.Equal("Norval", provider.SecondName);
                     Assert.Equal("TEN", provider.LastName);
@@ -58,6 +60,8 @@ namespace PlrIntakeUtility.Tests
                     Assert.Equal(new DateTime(1995, 1, 15), provider.Address1StartDate);
                     Assert.Equal("218", provider.TelephoneAreaCode);
                     Assert.Equal("310-6997", provider.TelephoneNumber);
+                    Assert.Equal("PRIMETTEN@test.ca", provider.Email);
+                    Assert.Equal("ADMIN", provider.ConditionCode);
                     Assert.Null(provider.City2);
                 }
             }

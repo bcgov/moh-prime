@@ -15,48 +15,52 @@ namespace PlrIntakeUtility
         public PlrProvider ReadRow(IExcelDataReader reader)
         {
             PlrProvider provider = new PlrProvider();
-            provider.CollegeId = reader.GetString(GetIndex("A"));
-            provider.ProviderType = reader.GetString(GetIndex("B"));
-            provider.MspId = reader.GetString(GetIndex("C"));
-            provider.NamePrefix = reader.GetString(GetIndex("D"));
-            provider.FirstName = reader.GetString(GetIndex("E"));
-            provider.SecondName = reader.GetString(GetIndex("F"));
-            provider.ThirdName = reader.GetString(GetIndex("G"));
-            provider.LastName = reader.GetString(GetIndex("H"));
-            provider.Suffix = reader.GetString(GetIndex("I"));
-            provider.Gender = reader.GetString(GetIndex("J"));
-            provider.DateOfBirth = TryGetDateTime(reader, "K");
-            provider.StatusCode = reader.GetString(GetIndex("L"));
-            provider.StatusReasonCode = reader.GetString(GetIndex("M"));
-            provider.StatusStartDate = TryGetDateTime(reader, "N");
-            provider.StatusExpiryDate = TryGetDateTime(reader, "O");
-            provider.Expertise = reader.GetString(GetIndex("P"));
-            provider.Languages = reader.GetString(GetIndex("Q"));
+            provider.Ipc = reader.GetString(GetIndex("A"));
+            provider.IdentifierType = reader.GetString(GetIndex("B"));
+            provider.CollegeId = reader.GetString(GetIndex("C"));
+            provider.ProviderRoleType = reader.GetString(GetIndex("D"));
+            provider.MspId = reader.GetString(GetIndex("E"));
+            provider.NamePrefix = reader.GetString(GetIndex("F"));
+            provider.FirstName = reader.GetString(GetIndex("G"));
+            provider.SecondName = reader.GetString(GetIndex("H"));
+            provider.ThirdName = reader.GetString(GetIndex("I"));
+            provider.LastName = reader.GetString(GetIndex("J"));
+            provider.Suffix = reader.GetString(GetIndex("K"));
+            provider.Gender = reader.GetString(GetIndex("L"));
+            provider.DateOfBirth = TryGetDateTime(reader, "M");
+            provider.StatusCode = reader.GetString(GetIndex("N"));
+            provider.StatusReasonCode = reader.GetString(GetIndex("O"));
+            provider.StatusStartDate = TryGetDateTime(reader, "P");
+            provider.StatusExpiryDate = TryGetDateTime(reader, "Q");
+            provider.Expertise = reader.GetString(GetIndex("R"));
+            provider.Languages = reader.GetString(GetIndex("S"));
 
-            provider.Address1Line1 = reader.GetString(GetIndex("R"));
-            provider.Address1Line2 = reader.GetString(GetIndex("S"));
-            provider.Address1Line3 = reader.GetString(GetIndex("T"));
-            provider.City1 = reader.GetString(GetIndex("U"));
-            provider.Province1 = reader.GetString(GetIndex("V"));
-            provider.Country1 = reader.GetString(GetIndex("W"));
-            provider.PostalCode1 = reader.GetString(GetIndex("X"));
-            provider.Address1StartDate = TryGetDateTime(reader, "Y");
+            provider.Address1Line1 = reader.GetString(GetIndex("T"));
+            provider.Address1Line2 = reader.GetString(GetIndex("U"));
+            provider.Address1Line3 = reader.GetString(GetIndex("V"));
+            provider.City1 = reader.GetString(GetIndex("W"));
+            provider.Province1 = reader.GetString(GetIndex("X"));
+            provider.Country1 = reader.GetString(GetIndex("Y"));
+            provider.PostalCode1 = reader.GetString(GetIndex("Z"));
+            provider.Address1StartDate = TryGetDateTime(reader, "AA");
 
-            provider.Address2Line1 = reader.GetString(GetIndex("Z"));
-            provider.Address2Line2 = reader.GetString(GetIndex("AA"));
-            provider.Address2Line3 = reader.GetString(GetIndex("AB"));
-            provider.City2 = reader.GetString(GetIndex("AC"));
-            provider.Province2 = reader.GetString(GetIndex("AD"));
-            provider.Country2 = reader.GetString(GetIndex("AE"));
-            provider.PostalCode2 = reader.GetString(GetIndex("AF"));
-            provider.Address2StartDate = TryGetDateTime(reader, "AG");
+            provider.Address2Line1 = reader.GetString(GetIndex("AB"));
+            provider.Address2Line2 = reader.GetString(GetIndex("AC"));
+            provider.Address2Line3 = reader.GetString(GetIndex("AD"));
+            provider.City2 = reader.GetString(GetIndex("AE"));
+            provider.Province2 = reader.GetString(GetIndex("AF"));
+            provider.Country2 = reader.GetString(GetIndex("AG"));
+            provider.PostalCode2 = reader.GetString(GetIndex("AH"));
+            provider.Address2StartDate = TryGetDateTime(reader, "AI");
 
-            provider.Credentials = reader.GetString(GetIndex("AH"));
+            provider.Credentials = reader.GetString(GetIndex("AJ"));
 
-            provider.TelephoneAreaCode = reader.GetString(GetIndex("AI"));
-            provider.TelephoneNumber = reader.GetString(GetIndex("AJ"));
-            provider.FaxAreaCode = reader.GetString(GetIndex("AK"));
-            provider.FaxNumber = reader.GetString(GetIndex("AL"));
+            provider.TelephoneAreaCode = reader.GetString(GetIndex("AK"));
+            provider.TelephoneNumber = reader.GetString(GetIndex("AL"));
+            provider.FaxAreaCode = reader.GetString(GetIndex("AM"));
+            provider.FaxNumber = reader.GetString(GetIndex("AN"));
+            provider.Email = reader.GetString(GetIndex("AO"));
+            provider.ConditionCode = reader.GetString(GetIndex("AP"));
 
             return provider;
         }
@@ -75,8 +79,10 @@ namespace PlrIntakeUtility
         /// </summary>
         public void CheckData(PlrProvider provider, int rowNum)
         {
+            CheckRequiredField(provider.Ipc, nameof(provider.Ipc), rowNum);
+            CheckRequiredField(provider.IdentifierType, nameof(provider.IdentifierType), rowNum);
             CheckRequiredField(provider.CollegeId, nameof(provider.CollegeId), rowNum);
-            CheckRequiredField(provider.ProviderType, nameof(provider.ProviderType), rowNum);
+            CheckRequiredField(provider.ProviderRoleType, nameof(provider.ProviderRoleType), rowNum);
             CheckRequiredField(provider.FirstName, nameof(provider.FirstName), rowNum);
             CheckRequiredField(provider.LastName, nameof(provider.LastName), rowNum);
             CheckRequiredField(provider.Gender, nameof(provider.Gender), rowNum);
@@ -92,6 +98,7 @@ namespace PlrIntakeUtility
             CheckRequiredField(provider.Address1StartDate, nameof(provider.Address1StartDate), rowNum);
             CheckRequiredField(provider.TelephoneAreaCode, nameof(provider.TelephoneAreaCode), rowNum);
             CheckRequiredField(provider.TelephoneNumber, nameof(provider.TelephoneNumber), rowNum);
+            CheckRequiredField(provider.Email, nameof(provider.Email), rowNum);
         }
 
         private bool CheckRequiredField(object fieldValue, string fieldName, int rowNum)
