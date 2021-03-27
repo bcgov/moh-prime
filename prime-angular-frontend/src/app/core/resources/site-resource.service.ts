@@ -258,7 +258,7 @@ export class SiteResource {
       );
   }
 
-  public removeBusinessLicenceDocument(siteId: number): Observable<ApiHttpResponse<NoContent>> {
+  public removeBusinessLicenceDocument(siteId: number): NoContent {
     return this.apiResource.delete<BusinessLicenceDocument>(`sites/${ siteId }/business-licence/document`)
       .pipe(
         NoContentResponse,

@@ -19,27 +19,27 @@ export abstract class AbstractResource {
   public abstract get(
     path: string,
     params: HttpParams,
-    options: { [key: string]: any }
+    options: { [key: string]: any; }
   ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
 
   public abstract post(
     path: string,
-    body: { [key: string]: any },
+    body: { [key: string]: any; },
     params: HttpParams,
-    options: { [key: string]: any }
+    options: { [key: string]: any; }
   ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
 
   public abstract put(
     path: string,
-    body: { [key: string]: any },
+    body: { [key: string]: any; },
     params: HttpParams,
-    options: { [key: string]: any }
+    options: { [key: string]: any; }
   ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
 
   public abstract delete(
     path: string,
     params: HttpParams,
-    options: { [key: string]: any }
+    options: { [key: string]: any; }
   ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
 
   /**
@@ -68,7 +68,7 @@ export abstract class AbstractResource {
    */
   protected handleSuccess<T>(): (response: HttpResponse<ApiHttpResponse<T>>) => ApiHttpResponse<T> {
     return ({ headers, status, body }: HttpResponse<ApiHttpResponse<T>>): ApiHttpResponse<T> => {
-      this.logger.info(`RESPONSE: ${status}`, body);
+      this.logger.info(`RESPONSE: ${ status }`, body);
 
       return { headers, status, ...body };
     };
@@ -78,16 +78,16 @@ export abstract class AbstractResource {
    * @description
    * Handle a erroneous HTTP response.
    */
-  protected handleError({ error, status }: HttpErrorResponse): Observable<ApiHttpErrorResponse> {
+  protected handleError({ status, error, message }: HttpErrorResponse): Observable<ApiHttpErrorResponse> {
     if (error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      this.logger.error('An error occurred:', error.error.message);
+      console.error('An error occurred:', error.error.message);
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      this.logger.error(`Backend returned code ${error.status}, body was:`, error.error);
+      console.error(`Backend returned code ${ status }, body was:`, error);
     }
 
-    return throwError(new ApiHttpErrorResponse(error, status));
+    return throwError(new ApiHttpErrorResponse(status, error, message));
   }
 }

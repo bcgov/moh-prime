@@ -3,8 +3,9 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
 
     <section class="mb-3">
 
@@ -25,7 +26,7 @@
       </app-alert>
 
       <ng-container formArrayName="businessDays"
-                    *ngFor="let businessDay of businessDays.controls; let i = index;">
+                    *ngFor="let businessDay of formState.businessDays.controls; let i = index;">
         <div class="row weekdays">
           <div class="col-sm-12 col-lg-auto day">
 

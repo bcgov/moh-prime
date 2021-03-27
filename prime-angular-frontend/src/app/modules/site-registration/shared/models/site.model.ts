@@ -7,7 +7,6 @@ import { Vendor } from './vendor.model';
 import { RemoteUser } from './remote-user.model';
 import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
-import { BusinessLicenceDocument } from './business-licence-document.model';
 import { SiteStatusType } from '../enum/site-status.enum';
 
 export interface Site {
@@ -20,9 +19,6 @@ export interface Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicence: BusinessLicence;
-  businessLicenceDocuments: BusinessLicenceDocument[];
-  businessLicenceGuid: string;
-  deferredLicenceReason: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;

@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -14,6 +14,42 @@ export class OrganizationSigningAuthorityPageFormState extends AbstractFormState
     super();
 
     this.buildForm();
+  }
+
+  public get preferredFirstName(): FormControl {
+    return this.formInstance.get('preferredFirstName') as FormControl;
+  }
+
+  public get preferredLastName(): FormControl {
+    return this.formInstance.get('preferredLastName') as FormControl;
+  }
+
+  public get verifiedAddress(): FormGroup {
+    return this.formInstance.get('verifiedAddress') as FormGroup;
+  }
+
+  public get mailingAddress(): FormGroup {
+    return this.formInstance.get('mailingAddress') as FormGroup;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.formInstance.get('physicalAddress') as FormGroup;
+  }
+
+  public get phone(): FormControl {
+    return this.formInstance.get('phone') as FormControl;
+  }
+
+  public get fax(): FormControl {
+    return this.formInstance.get('fax') as FormControl;
+  }
+
+  public get smsPhone(): FormControl {
+    return this.formInstance.get('smsPhone') as FormControl;
+  }
+
+  public get email(): FormControl {
+    return this.formInstance.get('email') as FormControl;
   }
 
   public get json(): Party {
