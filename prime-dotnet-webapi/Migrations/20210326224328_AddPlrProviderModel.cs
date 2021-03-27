@@ -18,8 +18,10 @@ namespace Prime.Migrations
                     CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    Ipc = table.Column<string>(nullable: true),
+                    IdentifierType = table.Column<string>(nullable: true),
                     CollegeId = table.Column<string>(nullable: true),
-                    ProviderType = table.Column<string>(nullable: true),
+                    ProviderRoleType = table.Column<string>(nullable: true),
                     MspId = table.Column<string>(nullable: true),
                     NamePrefix = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
@@ -55,7 +57,9 @@ namespace Prime.Migrations
                     TelephoneAreaCode = table.Column<string>(nullable: true),
                     TelephoneNumber = table.Column<string>(nullable: true),
                     FaxAreaCode = table.Column<string>(nullable: true),
-                    FaxNumber = table.Column<string>(nullable: true)
+                    FaxNumber = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    ConditionCode = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

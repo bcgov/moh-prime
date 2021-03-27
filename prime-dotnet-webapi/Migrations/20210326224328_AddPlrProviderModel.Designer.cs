@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210317153912_AddPlrProviderModel")]
+    [Migration("20210326224328_AddPlrProviderModel")]
     partial class AddPlrProviderModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -14082,6 +14082,50 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.GisEnrolment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTimeOffset?>("LdapLoginSuccessDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("LdapUsername")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Organization")
+                        .HasColumnType("text");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("GisEnrolment");
+                });
+
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
                 {
                     b.Property<int>("Code")
@@ -15695,6 +15739,9 @@ namespace Prime.Migrations
                     b.Property<string>("CollegeId")
                         .HasColumnType("text");
 
+                    b.Property<string>("ConditionCode")
+                        .HasColumnType("text");
+
                     b.Property<string>("Country1")
                         .HasColumnType("text");
 
@@ -15713,6 +15760,9 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
                     b.Property<string>("Expertise")
                         .HasColumnType("text");
 
@@ -15726,6 +15776,12 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdentifierType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Ipc")
                         .HasColumnType("text");
 
                     b.Property<string>("Languages")
@@ -15746,7 +15802,7 @@ namespace Prime.Migrations
                     b.Property<string>("PostalCode2")
                         .HasColumnType("text");
 
-                    b.Property<string>("ProviderType")
+                    b.Property<string>("ProviderRoleType")
                         .HasColumnType("text");
 
                     b.Property<string>("Province1")
@@ -18491,6 +18547,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.EnrolmentStatus", "EnrolmentStatus")
                         .WithOne("EnrolmentStatusReference")
                         .HasForeignKey("Prime.Models.EnrolmentStatusReference", "EnrolmentStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.GisEnrolment", b =>
+                {
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -4,17 +4,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
-    /// We rely on PLR's database integrity checks rather than enforcing any in our system.
+    /// <summary>We rely on PLR's database integrity checks rather than enforcing any in our system.</summary>
     [Table("PlrProvider")]
     public class PlrProvider : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
 
+        /// <summary>PLR's internal identifier, Internal Party Code.</summary>
+        public string Ipc { get; set; }
+
+        /// <summary>The type of identifier that <c>CollegeId</c> represents.</summary>
+        public string IdentifierType { get; set; }
+
         public string CollegeId { get; set; }
 
-        public string ProviderType { get; set; }
+        public string ProviderRoleType { get; set; }
 
+        /// <summary>HIBC's Ministry Practitioner ID.</summary>
         public string MspId { get; set; }
 
         public string NamePrefix { get; set; }
@@ -86,5 +93,9 @@ namespace Prime.Models
         public string FaxAreaCode { get; set; }
 
         public string FaxNumber { get; set; }
+
+        public string Email { get; set; }
+
+        public string ConditionCode { get; set; }
     }
 }

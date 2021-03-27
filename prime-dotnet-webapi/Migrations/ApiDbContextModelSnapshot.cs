@@ -15737,6 +15737,9 @@ namespace Prime.Migrations
                     b.Property<string>("CollegeId")
                         .HasColumnType("text");
 
+                    b.Property<string>("ConditionCode")
+                        .HasColumnType("text");
+
                     b.Property<string>("Country1")
                         .HasColumnType("text");
 
@@ -15755,6 +15758,9 @@ namespace Prime.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
                     b.Property<string>("Expertise")
                         .HasColumnType("text");
 
@@ -15768,6 +15774,12 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Gender")
+                        .HasColumnType("text");
+
+                    b.Property<string>("IdentifierType")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Ipc")
                         .HasColumnType("text");
 
                     b.Property<string>("Languages")
@@ -15788,7 +15800,7 @@ namespace Prime.Migrations
                     b.Property<string>("PostalCode2")
                         .HasColumnType("text");
 
-                    b.Property<string>("ProviderType")
+                    b.Property<string>("ProviderRoleType")
                         .HasColumnType("text");
 
                     b.Property<string>("Province1")
