@@ -10,10 +10,10 @@ export enum Role {
   FEATURE_VC_ISSUANCE = 'feature_vc_issuance',
   FEATURE_SITE_PHARMACIST = 'feature_site_pharmacist',
 
-  VIEW_ENROLLEE = "enrollee_view",
-  TRIAGE_ENROLLEE = "enrollee_triage",
-  APPROVE_ENROLLEE = "enrollee_approve",
-  MANAGE_ENROLLEE = "enrollee_elevated_management",
-  VIEW_SITE = "site_view",
-  EDIT_SITE = "site_edit",
+  VIEW_ENROLLEE = 'enrollee_view',
+  TRIAGE_ENROLLEE = 'enrollee_triage',
+  APPROVE_ENROLLEE = 'enrollee_approve',
+  MANAGE_ENROLLEE = 'enrollee_elevated_management',
+  VIEW_SITE = 'site_view',
+  EDIT_SITE = 'site_edit',
 }

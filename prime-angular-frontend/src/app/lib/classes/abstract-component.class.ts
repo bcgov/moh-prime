@@ -5,7 +5,13 @@ import { Subject } from 'rxjs';
 // tslint:disable-next-line: no-empty-interface
 export interface IAbstractComponent { }
 
+/**
+ * @deprecated
+ * Don't use this component for inheritance it is slowly being
+ * refactored out and replaced with UntilDestroy decorator.
+ */
 @Directive()
+// tslint:disable-next-line:directive-class-suffix
 export abstract class AbstractComponent implements IAbstractComponent, OnDestroy {
   /**
    * @description

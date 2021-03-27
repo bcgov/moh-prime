@@ -21,7 +21,12 @@ import { NoteComponent } from '@shared/components/dialogs/content/note/note.comp
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
-import { AssignAction, ClaimNoteComponent, ClaimType, AssignActionEnum } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import {
+  AssignAction,
+  ClaimNoteComponent,
+  ClaimType,
+  AssignActionEnum
+} from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
@@ -114,7 +119,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const request$ = (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
             .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
-          : of(response)
+          : of(response);
 
         return request$;
       }),
@@ -153,9 +158,9 @@ export class AdjudicationContainerComponent implements OnInit {
       exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
         const request$ = (response.note)
           ? this.adjudicationResource.createEnrolleeNotification(enrolleeId, response.note.id, response.action.adjudicatorId)
-          : of(null)
+          : of(null);
 
-        return request$.pipe(map((_) => response.action))
+        return request$.pipe(map((_) => response.action));
       }),
       exhaustMap((action: AssignAction) =>
         (action.action === AssignActionEnum.Disclaim)
@@ -447,7 +452,7 @@ export class AdjudicationContainerComponent implements OnInit {
           return row;
         }),
         map((enrollee: EnrolleeListViewModel) => {
-          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee)
+          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee);
         })
       );
   }

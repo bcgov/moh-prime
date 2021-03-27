@@ -33,7 +33,7 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
     super(fb, routeStateService, logger);
 
     this.initialize();
-  };
+  }
 
   /**
    * @description
@@ -98,7 +98,7 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
     this.ldapInformationPageFormState = new LdapInformationPageFormState(this.fb);
     this.organizationInformationPageFormState = new OrganizationInformationPageFormState(this.fb);
     this.enrolleeInformationPageFormState = new EnrolleeInformationPageFormState(this.fb);
-  };
+  }
 
   /**
    * @description
