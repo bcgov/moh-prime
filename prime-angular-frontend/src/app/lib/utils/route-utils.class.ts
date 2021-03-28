@@ -34,7 +34,7 @@ export class RouteUtils {
    * Determine the current route path of a URL by removing query and
    * URI params that can't be mapped to existing module routes.
    */
-  public static currentRoutePath(url: string) {
+  public static currentRoutePath(url: string): string {
     // Truncate query parameters
     return url.split('?')
       .shift()
