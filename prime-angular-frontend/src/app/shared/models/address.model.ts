@@ -24,7 +24,8 @@ export class Address {
     street: string = null,
     street2: string = null,
     city: string = null,
-    postal: string = null
+    postal: string = null,
+    id: number = 0
   ) {
     this.street = street;
     this.street2 = street2;
@@ -36,11 +37,24 @@ export class Address {
 
   /**
    * @description
+   * Create an new instance of an Address.
+   *
+   * NOTE: Useful for converting object literals into an instance, as well as,
+   * creating an empty Address.
+   */
+  public static instanceOf(address: Address) {
+    const { id = 0, street, street2 = null, city, provinceCode, countryCode, postal } = address;
+    return new Address(countryCode, provinceCode, street, street2, city, postal, id);
+  }
+
+  /**
+   * @description
    * Check for an empty address.
    *
-   * NOTE: Most usecases don't require `street2`, and therefore it has
+   * NOTE: Most use cases don't require `street2`, and therefore it has
    * been excluded by default as optional.
    */
+  // TODO move to AddressUtils
   public static isEmpty(address: Address, blacklist: (keyof Address)[] = optionalAddressLineItems): boolean {
     if (!address) {
       return true;
@@ -55,6 +69,7 @@ export class Address {
    * @description
    * Checks for a partial address.
    */
+  // TODO move to AddressUtils
   public static isNotEmpty(address: Address, blacklist?: (keyof Address)[]): boolean {
     if (!address) {
       return false;
