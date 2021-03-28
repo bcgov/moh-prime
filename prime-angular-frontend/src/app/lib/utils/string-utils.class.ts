@@ -9,6 +9,7 @@ export class StringUtils {
     if (!text) {
       return text;
     }
+    // When negative starts at the end of the string
     const calculatedPosition = (insertPosition < 0)
       ? text.length + insertPosition
       : insertPosition;
