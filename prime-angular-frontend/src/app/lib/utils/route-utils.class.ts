@@ -3,7 +3,7 @@ import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 export class RouteUtils {
   private route: ActivatedRoute;
   private router: Router;
-  private baseRoutePath: string;
+  private readonly baseRoutePath: string;
 
   constructor(
     route: ActivatedRoute,
