@@ -34,7 +34,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="viewModel"></param>
         [HttpPut("enrolment-landing", Name = nameof(CreateOrUpdateEnrolleeLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -51,7 +51,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="viewModel"></param>
         [HttpPut("site-landing", Name = nameof(CreateOrUpdateSiteLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -67,7 +67,7 @@ namespace Prime.Controllers
         /// Get enrollee landing banner
         /// </summary>
         [HttpGet("enrolment-landing", Name = nameof(GetEnrolleeLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -83,7 +83,7 @@ namespace Prime.Controllers
         /// Get site landing banner
         /// </summary>
         [HttpGet("site-landing", Name = nameof(GetSiteLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -99,7 +99,7 @@ namespace Prime.Controllers
         /// Delete enrollee landing banner
         /// </summary>
         [HttpDelete("enrolment-landing", Name = nameof(DeleteEnrolleeLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -115,7 +115,7 @@ namespace Prime.Controllers
         /// Delete site landing banner
         /// </summary>
         [HttpDelete("site-landing", Name = nameof(DeleteSiteLandingBanner))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
