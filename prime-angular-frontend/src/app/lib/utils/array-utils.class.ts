@@ -8,7 +8,8 @@ export class ArrayUtils {
    * const example = [1, 2, 3, ...ArrayUtils.insertIf(true, 4)] // [1, 2, 3, 4]
    * const example = [1, 2, 3, ...ArrayUtils.insertIf(false, 4)] // [1, 2, 3]
    */
-  public static insertIf(condition: any, ...elements: any[]) {
+  // TODO make response generic to provide stronger type safety
+  public static insertIf(condition: any, ...elements: any[]): any[] {
     return (condition) ? [].concat(...elements) : [];
   }
 }
