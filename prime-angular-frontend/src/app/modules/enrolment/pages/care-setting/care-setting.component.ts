@@ -190,12 +190,12 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
+    const oboSites = this.enrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (jobs?.length) {
+    } else if (oboSites?.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 

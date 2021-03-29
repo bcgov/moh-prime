@@ -5,6 +5,7 @@ export interface OboSite {
   healthAuthorityCode?: number;
   siteName: string;
   facilityName: string;
+  jobTitle: string;
   physicalAddress: Address;
   pec: string;
 }

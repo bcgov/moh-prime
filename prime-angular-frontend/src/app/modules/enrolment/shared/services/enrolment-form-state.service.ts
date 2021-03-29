@@ -240,17 +240,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
 
-    if (enrolment.jobs.length) {
-      const jobs = this.jobsForm.get('jobs') as FormArray;
-      jobs.clear();
-      enrolment.jobs.forEach((j: Job) => {
-        const job = this.buildJobForm();
-        job.patchValue(j);
-        jobs.push(job);
-      });
-    }
-
-    if (enrolment.oboSites.length && enrolment.jobs.length) {
+    if (enrolment.oboSites.length) {
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
       const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
       const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
@@ -448,17 +438,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public buildJobsForm(): FormGroup {
     return this.fb.group({
-      jobs: this.fb.array([]),
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
       healthAuthoritySites: this.fb.array([])
-    });
-  }
-
-  public buildJobForm(value: string = null): FormGroup {
-    return this.fb.group({
-      title: [value, [Validators.required]]
     });
   }
 
@@ -468,6 +451,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       healthAuthorityCode: [null, []],
       siteName: [null, []],
       facilityName: [null, []],
+      jobTitle: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],

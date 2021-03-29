@@ -19,6 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -30,7 +31,6 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 })
 export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
-  public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
 
@@ -66,7 +66,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     );
 
     this.jobNames = this.configService.jobNames;
-    this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
   }
@@ -109,18 +108,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       });
     }
     return sites as FormArray;
-  }
-
-  public addJob(value: string = '') {
-    const defaultValue = (value)
-      ? value : (this.allowDefaultOption)
-        ? this.defaultOptionLabel : '';
-    const job = this.enrolmentFormStateService.buildJobForm(defaultValue);
-    this.jobs.push(job);
-  }
-
-  public removeJob(index: number) {
-    this.jobs.removeAt(index);
   }
 
   public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
@@ -168,21 +155,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.routeTo(EnrolmentRoutes.REGULATORY);
   }
 
-  public canDeactivate(): Observable<boolean> | boolean {
-    const canDeactivate = super.canDeactivate();
-
-    return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap((result: boolean) => this.removeIncompleteJobs(result)))
-      : canDeactivate;
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteJobs(true);
     this.removeIncompleteOboSites(true);
     this.removeCareSettingSites();
   }
@@ -193,9 +171,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching
-    this.form.valueChanges
-      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
-
     this.patchForm().subscribe(() => {
       // Add at least one site for each careSetting selected by enrollee
       this.careSettings?.forEach((careSetting) => {
@@ -226,12 +201,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
           }
         }
       });
-
-      // Always have at least one job ready for
-      // the enrollee to fill out
-      if (!this.jobs.length) {
-        this.addJob();
-      }
     });
   }
 
@@ -257,39 +226,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
-  }
-
-  private filterJobNames(jobs: Job[]) {
-    // All the currently chosen jobs
-    const selectedJobNames = jobs.map((j: Job) => j.title);
-    // Filter the list of possible jobs using the selected jobs
-    const filteredJobNames = this.jobNames
-      .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
-
-    this.filteredJobNames.next(filteredJobNames);
-  }
-
-  /**
-   * @description
-   * Removes incomplete jobs from the list in preparation
-   * for submission, and allows for an empty list of jobs.
-   */
-  private removeIncompleteJobs(noEmptyJob: boolean = false) {
-    this.jobs.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('title').value;
-
-        // Remove when empty, default option, or group is invalid
-        if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeJob(index);
-        }
-      });
-
-    // Always have a single job available, and it prevents
-    // the page from jumping too much when routing
-    if (!noEmptyJob && !this.jobs.controls.length) {
-      this.addJob();
-    }
   }
 
   /**

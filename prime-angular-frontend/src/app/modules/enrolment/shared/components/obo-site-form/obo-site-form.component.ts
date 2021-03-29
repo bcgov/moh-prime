@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { Config } from '@config/config.model';
 
 @Component({
   selector: 'app-obo-site-form',
@@ -15,11 +16,17 @@ export class OboSiteFormComponent implements OnInit {
   @Input() public last: boolean;
   @Input() public careSettingCode: number;
   @Input() public healthAuthorityName?: string;
+  @Input() public jobNames: Config<number>[];
+  @Input() public allowDefaultOption: boolean;
+  @Input() public defaultOptionLabel: string;
   @Output() public remove: EventEmitter<number>;
 
   public formControlNames: string[];
 
   public CareSettingEnum = CareSettingEnum;
+
+  public allowRemoveNone: boolean;
+
 
   constructor() {
     this.remove = new EventEmitter<number>();
@@ -29,6 +36,7 @@ export class OboSiteFormComponent implements OnInit {
       'provinceCode',
       'postal'
     ];
+    this.allowRemoveNone = true;
   }
 
   public removeOboSite(index: number) {
@@ -36,4 +44,11 @@ export class OboSiteFormComponent implements OnInit {
   }
 
   public ngOnInit(): void { }
+
+  public removeNone(input: HTMLFormElement) {
+    if (this.allowRemoveNone && input.value === this.defaultOptionLabel) {
+      input.value = '';
+      this.allowRemoveNone = false;
+    }
+  }
 }
