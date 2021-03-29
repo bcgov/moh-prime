@@ -139,7 +139,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
     // Create or update the business licence with an uploaded document, otherwise
     // with a deferred licence reason
-    if (this.deferredLicenceToggle.checked) {
+    if (this.deferredLicenceToggle?.checked) {
       this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
 
       if (!hasBusinessLicence) {
