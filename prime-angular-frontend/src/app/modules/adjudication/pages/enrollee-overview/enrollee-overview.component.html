@@ -3,8 +3,8 @@
 
   <app-page-header>Overview</app-page-header>
 
-  <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
-                      [dataSource]="dataSource"
+  <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
+                      [enrollees]="enrollees"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
@@ -39,9 +39,9 @@
         </mat-card-content>
       </mat-card>
 
-      <app-adjudicator-actions *ngIf="dataSource?.data[0]"
+      <app-adjudicator-actions *ngIf="enrollees?.length"
                                class="float-right"
-                               [enrollee]="dataSource?.data[0]"
+                               [enrollee]="enrollees[0]"
                                (approve)="onApprove($event)"
                                (decline)="onDecline($event)"
                                (lock)="onLock($event)"
