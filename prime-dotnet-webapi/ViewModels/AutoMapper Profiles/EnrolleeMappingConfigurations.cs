@@ -43,6 +43,14 @@ namespace Prime.Infrastructure.AutoMapperProfiles
 
             CreateMap<OboSite, OboSiteViewModel>();
 
+            CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>()
+                .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => src.Site.OrganizationId))
+                .ForMember(dest => dest.DoingBusinessAs, opt => opt.MapFrom(src => src.Site.DoingBusinessAs))
+                .ForMember(dest => dest.VendorCode, opt => opt.MapFrom(src => src.Site.SiteVendors.FirstOrDefault().VendorCode))
+                .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Site.PhysicalAddress));
+
+            CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
+
             CreateMap<SelfDeclaration, SelfDeclarationViewModel>();
         }
     }

@@ -23,6 +23,8 @@ namespace Prime.ViewModels
         public IEnumerable<CertificationViewModel> Certifications { get; set; }
         public IEnumerable<string> Jobs { get; set; }
         public IEnumerable<OboSiteViewModel> OboSites { get; set; }
+        public IEnumerable<RemoteAccessSiteViewModel> RemoteAccessSites { get; set; }
+        public IEnumerable<RemoteAccessLocationViewModel> RemoteAccessLocations { get; set; }
         public IEnumerable<SelfDeclarationViewModel> SelfDeclarations { get; set; }
     }
 }
