@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { Sort } from '@angular/material/sort';
@@ -25,7 +25,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
   templateUrl: './enrollee-table.component.html',
   styleUrls: ['./enrollee-table.component.scss']
 })
-export class EnrolleeTableComponent implements OnInit {
+export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
@@ -135,6 +135,13 @@ export class EnrolleeTableComponent implements OnInit {
 
   public toggleFilterAssigned() {
     this.hasAssignedToFilter$.next(!this.hasAssignedToFilter$.value);
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    console.log('CHANGES', changes.enrollees.currentValue);
+    if (!changes.enrollees.firstChange) {
+      this.dataSource.data = changes.enrollees.currentValue;
+    }
   }
 
   public ngOnInit(): void {

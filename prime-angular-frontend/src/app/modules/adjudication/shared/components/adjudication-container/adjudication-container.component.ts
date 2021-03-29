@@ -401,6 +401,7 @@ export class AdjudicationContainerComponent implements OnInit {
   private updateEnrollee(enrollee: HttpEnrollee) {
     const index = this.enrollees.findIndex(e => e.id === enrollee.id);
     this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
+    this.enrollees = [...this.enrollees];
   }
 
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
