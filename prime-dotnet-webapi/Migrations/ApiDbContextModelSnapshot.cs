@@ -15488,6 +15488,10 @@ namespace Prime.Migrations
                     b.Property<int?>("HealthAuthorityCode")
                         .HasColumnType("integer");
 
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 

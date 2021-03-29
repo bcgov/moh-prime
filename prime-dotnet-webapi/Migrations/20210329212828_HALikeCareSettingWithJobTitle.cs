@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Prime.Migrations
 {
-    public partial class HALikeCareSetting : Migration
+    public partial class HALikeCareSettingWithJobTitle : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,6 +10,12 @@ namespace Prime.Migrations
                 name: "HealthAuthorityCode",
                 table: "OboSite",
                 nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "JobTitle",
+                table: "OboSite",
+                nullable: false,
+                defaultValue: "");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OboSite_HealthAuthorityCode",
@@ -38,6 +43,10 @@ namespace Prime.Migrations
 
             migrationBuilder.DropColumn(
                 name: "HealthAuthorityCode",
+                table: "OboSite");
+
+            migrationBuilder.DropColumn(
+                name: "JobTitle",
                 table: "OboSite");
         }
     }

@@ -32,6 +32,9 @@ namespace Prime.Models
         public string FacilityName { get; set; }
 
         [Required]
+        public string JobTitle { get; set; }
+
+        [Required]
         public PhysicalAddress PhysicalAddress { get; set; }
     }
 

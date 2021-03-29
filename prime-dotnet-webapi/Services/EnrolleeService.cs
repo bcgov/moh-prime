@@ -420,7 +420,8 @@ namespace Prime.Services
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,
-                        FacilityName = site.FacilityName
+                        FacilityName = site.FacilityName,
+                        JobTitle = site.JobTitle
                     };
                     _context.Entry(newAddress).State = EntityState.Added;
                     _context.Entry(newSite).State = EntityState.Added;
