@@ -4,7 +4,8 @@
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
-        novalidate>
+        novalidate
+        autocomplete="off">
 
     <section class="mb-4">
       <app-page-subheader2>
@@ -19,8 +20,7 @@
                            labelMessage="Drag and drop your business licence or browse"
                            [multiple]="false"
                            (completed)="onUpload($event)"
-                           (remove)="onRemoveDocument($event)">
-      </app-document-upload>
+                           (remove)="onRemoveDocument($event)"></app-document-upload>
 
       <app-alert *ngIf="hasNoBusinessLicenceError"
                  type="danger"
@@ -43,45 +43,45 @@
         </app-enrollee-property>
 
       </ng-container>
-    </section>
 
-    <ng-container *ngIf="isCommPharm()">
+      <ng-container *ngIf="isCommPharm()">
 
-      <mat-slide-toggle #deferredLicence
-                        class="mb-3"
-                        color="primary"
-                        (change)="onDeferredLicenceChange($event)">
-        This Community Pharmacy does not have a business licence
-      </mat-slide-toggle>
+        <mat-slide-toggle #deferredLicence
+                          class="my-2 mb-3"
+                          color="primary"
+                          (change)="onDeferredLicenceChange($event)">
+          This Community Pharmacy does not have a business licence
+        </mat-slide-toggle>
 
-      <section class="mb-3"
-               *ngIf="deferredLicence?.checked">
-        <app-page-subheader2>
-          <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
-          <ng-container appPageSubheader2Summary>
-            If your business does not yet have a business license, or if you are located in a municipality or region
-            that does not issue business licenses, provide a description below detailing the reason your business does
-            not have a license. PRIME Support staff will contact you and assist you with determining the correct
-            documents to upload. You may continue with your enrolment for now.
-          </ng-container>
-        </app-page-subheader2>
+        <section class="mb-3"
+                 *ngIf="deferredLicence?.checked">
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
+            <ng-container appPageSubheader2Summary>
+              If your business does not yet have a business license, or if you are located in a municipality or region
+              that does not issue business licenses, provide a description below detailing the reason your business does
+              not have a license. PRIME Support staff will contact you and assist you with determining the correct
+              documents to upload. You may continue with your enrolment for now.
+            </ng-container>
+          </app-page-subheader2>
 
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="w-100">
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="w-100">
               <textarea matInput
                         rows="5"
                         placeholder="Write here"
                         formControlName="deferredLicenceReason"></textarea>
-              <mat-error>Required</mat-error>
-            </mat-form-field>
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+            </div>
           </div>
-        </div>
-      </section>
-    </ng-container>
+        </section>
+      </ng-container>
+    </section>
 
-    <app-site-information-form [form]="formState.form"
-                               [organizationId]="site.organizationId"></app-site-information-form>
+    <app-site-name [form]="formState.form"
+                   [organizationId]="site.organizationId"></app-site-name>
 
   </form>
 

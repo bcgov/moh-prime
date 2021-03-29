@@ -3,9 +3,9 @@
     <form [formGroup]="form">
       <table mat-table
              matSort
-             (matSortChange)="sortData($event)"
+             class="w-100"
              [dataSource]="dataSource"
-             class="w-100">
+             (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
@@ -18,11 +18,12 @@
                           class="align-self-start"
                           [enrolleeId]="row.id"
                           [assigned]="(row.adjudicatorIdir)"
-                          (reload)="onReload($event)"></app-triage>
+                          (reload)="onReload()"></app-triage>
+
               <app-contextual-enrollee-notification *ngIf="row.hasNotification"
                                                     class="align-self-end"
                                                     [enrolleeId]="row.id"
-                                                    (removed)="onReload($event)"></app-contextual-enrollee-notification>
+                                                    (removed)="onReload()"></app-contextual-enrollee-notification>
             </div>
           </td>
         </ng-container>
@@ -153,8 +154,8 @@
               scope="col">
             Assigned To
             <button mat-icon-button
-                    [color]="hasAssignedToFilter$.value ? 'primary' : ''"
                     matTooltip="Filter assigned to me"
+                    [color]="(hasAssignedToFilter$.value) ? 'primary' : null"
                     (click)="toggleFilterAssigned()">
               <mat-icon>assignment_ind icon</mat-icon>
             </button>
@@ -190,6 +191,10 @@
         <tr mat-row
             *matRowDef="let row; columns: columns;"></tr>
       </table>
+
+      <div [hidden]="hidePaginator">
+        <mat-paginator></mat-paginator>
+      </div>
     </form>
 
     <p *ngIf="!dataSource?.data.length"
@@ -241,14 +246,14 @@
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onAssign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Assign Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Reassign Enrolment</span>

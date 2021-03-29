@@ -113,12 +113,23 @@ export class SiteResource {
       );
   }
 
-  public updateCompleted(siteId: number): NoContent {
+  public setSiteCompleted(siteId: number): NoContent {
     return this.apiResource.put<NoContent>(`sites/${ siteId }/completed`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.logger.error('[SiteRegistration] SiteResource::updateSiteCompleted error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::setCompleted error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public removeSiteCompleted(siteId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`sites/${ siteId }/completed`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.logger.error('[SiteRegistration] SiteResource::removeCompleted error has occurred: ', error);
           throw error;
         })
       );
@@ -258,7 +269,7 @@ export class SiteResource {
       );
   }
 
-  public removeBusinessLicenceDocument(siteId: number): Observable<ApiHttpResponse<NoContent>> {
+  public removeBusinessLicenceDocument(siteId: number): NoContent {
     return this.apiResource.delete<BusinessLicenceDocument>(`sites/${ siteId }/business-licence/document`)
       .pipe(
         NoContentResponse,
