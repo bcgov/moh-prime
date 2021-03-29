@@ -31,9 +31,11 @@ export interface Site {
   technicalSupportId?: number;
   technicalSupport: Contact;
   // States -----
+  // Indicates that a user has progressed through the entire enrolment, and
+  // reached the overview page switching them from wizard to spoking navigation
   completed: boolean;
-  approvedDate: string;
   submittedDate: string;
+  approvedDate: string;
   // Admin -----
   adjudicatorId: number;
   adjudicator: Admin;

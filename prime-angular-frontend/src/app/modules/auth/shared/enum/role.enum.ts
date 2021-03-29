@@ -15,5 +15,5 @@ export enum Role {
   APPROVE_ENROLLEE = 'enrollee_approve',
   MANAGE_ENROLLEE = 'enrollee_elevated_management',
   VIEW_SITE = 'site_view',
-  EDIT_SITE = 'site_edit',
+  EDIT_SITE = 'site_edit'
 }
