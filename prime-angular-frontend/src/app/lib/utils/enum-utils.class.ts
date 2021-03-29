@@ -7,6 +7,10 @@ export class EnumUtils {
    */
   // TODO values<T extends enum>(enumeration: T), not possible yet!
   public static values<T>(enumeration: T): number[] {
+    if (!enumeration) {
+      return [];
+    }
+
     return Object.keys(enumeration)
       .filter(k => typeof enumeration[k as any] === 'number')
       .map(k => enumeration[k as any]);
@@ -33,6 +37,10 @@ export class EnumUtils {
    */
   // TODO asObjects<T extends enum>(enumeration: T, ...), not possible yet!
   public static asObjects<T>(enumeration: T): { key: number, value: string }[] {
+    if (!enumeration) {
+      return [];
+    }
+
     return EnumUtils.values<T>(enumeration)
       .map(k => ({ key: k, value: enumeration[k] }));
   }
