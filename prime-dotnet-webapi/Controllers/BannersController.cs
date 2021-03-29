@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +17,10 @@ namespace Prime.Controllers
     public class BannersController : ControllerBase
     {
         private readonly IBannerService _bannerService;
-        private readonly IMetabaseService _metabaseService;
-        private readonly IAdminService _adminService;
 
-        public BannersController(IBannerService bannerService, IMetabaseService metabaseService, IAdminService adminService)
+        public BannersController(IBannerService bannerService)
         {
             _bannerService = bannerService;
-            _metabaseService = metabaseService;
-            _adminService = adminService;
         }
 
         // PUT: api/Banners/enrolment-landing
