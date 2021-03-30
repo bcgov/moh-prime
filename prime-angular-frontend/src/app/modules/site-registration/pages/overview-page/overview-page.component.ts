@@ -7,7 +7,6 @@ import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { LoggerService } from '@core/services/logger.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -36,8 +35,7 @@ export class OverviewPageComponent implements OnInit {
     private siteResource: SiteResource,
     private dialog: MatDialog,
     private siteService: SiteService,
-    private organizationService: OrganizationService,
-    private logger: LoggerService
+    private organizationService: OrganizationService
   ) {
     this.routeUtils = (this.isOrganizationReview)
       ? new RouteUtils(route, router, SiteRoutes.routePath(SiteRoutes.ORGANIZATION_REVIEW))

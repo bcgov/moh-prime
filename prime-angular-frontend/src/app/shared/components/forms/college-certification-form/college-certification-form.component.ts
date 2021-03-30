@@ -175,16 +175,17 @@ export class CollegeCertificationFormComponent implements OnInit {
               // to optional will show the input
               isPrescribing = this.practitionerId.value;
               break;
-            case PrescriberIdTypeEnum.Mandatory: break; // NOOP
+            case PrescriberIdTypeEnum.Mandatory:
+              break; // NOOP
           }
 
           this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
         });
+    } else {
+      const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+      const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
+      this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
     }
-
-    const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-    const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
-    this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
   }
 
   private setCollegeCertification(collegeCode: number): void {
