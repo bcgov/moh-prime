@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 
@@ -9,6 +10,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner } from '@shared/models/banner.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { Role } from '@auth/shared/enum/role.enum';
 
@@ -35,16 +38,6 @@ export class BannerMaintenanceComponent implements OnInit {
 
   public internalBanner: Banner;
 
-  @Input() set banner(banner: Banner) {
-    this.internalBanner = banner;
-    if (banner) {
-      this.patchForm(banner);
-    } else if (this.form) {
-      this.form.reset();
-      this.bannerLocationCode.setValue(this.locationCode);
-    }
-  }
-
   public form: FormGroup;
   public isSameOrBeforeErrorStateMatcher: IsSameOrBeforeErrorStateMatcher;
 
@@ -64,6 +57,7 @@ export class BannerMaintenanceComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private formUtils: FormUtilsService,
+    private dialog: MatDialog,
   ) {
     this.hasActions = false;
     this.editorConfig = {
@@ -76,6 +70,15 @@ export class BannerMaintenanceComponent implements OnInit {
     };
     this.save = new EventEmitter<Banner>();
     this.delete = new EventEmitter();
+  }
+
+  @Input() set banner(banner: Banner) {
+    this.internalBanner = banner;
+    if (banner) {
+      this.patchForm(banner);
+    } else if (this.form) {
+      this.bannerLocationCode.setValue(this.locationCode);
+    }
   }
 
   public get content(): FormControl {
@@ -114,7 +117,21 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   public onDelete() {
-    this.delete.emit();
+    const data: DialogOptions = {
+      title: 'Delete Banner',
+      message: `Are you sure you want to delete this banner?`,
+      actionText: 'Delete Banner'
+    };
+
+    this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((result: boolean) => {
+        if (result) {
+          this.delete.emit();
+          this.form.reset();
+          this.bannerLocationCode.setValue(this.locationCode);
+        }
+      });
   }
 
   public onUpdate(event: { editor: any }) {
@@ -157,7 +174,7 @@ export class BannerMaintenanceComponent implements OnInit {
       ],
       bannerType: [
         {
-          value: BannerType.INFO,
+          value: '',
           disabled: false
         },
         [Validators.required]
@@ -181,7 +198,7 @@ export class BannerMaintenanceComponent implements OnInit {
           startDate: ['', [Validators.required]],
           endDate: ['', [Validators.required]],
         },
-        { validator: FormGroupValidators.isSameOrBefore('startDate', 'endDate') })
+        { validator: FormGroupValidators.isDateTimeSameOrBefore('startDate', 'endDate') })
     });
     this.isSameOrBeforeErrorStateMatcher = new IsSameOrBeforeErrorStateMatcher();
   }

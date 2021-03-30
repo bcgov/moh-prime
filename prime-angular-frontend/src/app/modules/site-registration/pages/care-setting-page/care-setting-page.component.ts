@@ -6,7 +6,7 @@ import { MatRadioChange } from '@angular/material/radio';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { EMPTY, noop, of } from 'rxjs';
-import { exhaustMap, map, pairwise, tap } from 'rxjs/operators';
+import {exhaustMap, map, pairwise, startWith, tap} from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -120,6 +120,43 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.formState.careSettingCode.valueChanges
       .pipe(
         untilDestroyed(this),
+        startWith([null]),
+        pairwise(),
+        exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
+          const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
+
+          // Reset the deferred licence reason when changing from Community Pharmacist as
+          // no other care setting allows for deferment of the business licence upload
+          if (
+            prevCareSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST ||
+            !deferredLicenceReason.value ||
+            // When a document has been uploaded the business licence can no longer be updated
+            this.siteService.site?.businessLicence?.completed
+          ) {
+            return of(nextCareSettingCode); // No reset required
+          }
+
+          const { id, businessLicence, completed } = this.siteService.site;
+          businessLicence.deferredLicenceReason = null;
+          return this.siteResource.updateBusinessLicence(id, businessLicence)
+            .pipe(
+              // When not reset prevents interaction with specific controls on business licence
+              tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
+              exhaustMap(() => {
+                // Do nothing if not completed, but when site is marked as completed reset it
+                // to force user through the wizard to ensure a business licence is uploaded
+                if (!completed) {
+                  return of(noop());
+                }
+
+                return this.siteResource.removeSiteCompleted(id)
+                  // Will ensure that the user is routed to the next page, and not
+                  // overview if previously completed
+                  .pipe(tap(() => this.isCompleted = false));
+              }),
+              map(() => nextCareSettingCode)
+            );
+        }),
         map((careSettingCode: CareSettingEnum) =>
           this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
         )

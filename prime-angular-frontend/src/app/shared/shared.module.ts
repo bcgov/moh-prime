@@ -170,7 +170,6 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
     BannerComponent,
-    BannerWrapperComponent,
     SendBulkEmailComponent
   ],
   imports: [
@@ -256,8 +255,7 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    BannerComponent,
-    BannerWrapperComponent
+    BannerComponent
   ],
   providers: [
     FullnamePipe,

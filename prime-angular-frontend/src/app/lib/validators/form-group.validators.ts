@@ -48,9 +48,9 @@ export class FormGroupValidators {
 
   /**
    * @description
-   * Checks that the start key date is before than end key value.
+   * Checks that the start key dateTime is before the end key value.
    */
-  public static isBefore(startKey: string, endKey: string): ValidatorFn {
+  public static isDateTimeBefore(startKey: string, endKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const start = moment(group.controls[startKey].value);
       const end = moment(group.controls[endKey].value);
@@ -61,43 +61,14 @@ export class FormGroupValidators {
 
   /**
    * @description
-   * Checks that the start key date is same or before than end key value.
+   * Checks that the start key dateTime is same or before the end key value.
    */
-  public static isSameOrBefore(startKey: string, endKey: string): ValidatorFn {
+  public static isDateTimeSameOrBefore(startKey: string, endKey: string): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const start = moment(group.controls[startKey].value);
       const end = moment(group.controls[endKey].value);
       if (!start || !end) { return null; }
       return (start.isSameOrBefore(end)) ? null : { isSameOrBefore: true };
-    };
-  }
-
-
-  /**
-   * @description
-   * Checks that the start key value is less than end key value.
-   */
-  public static lessThanDateTime(startGroupKey: string, endGroupKey: string): ValidatorFn {
-    return (group: FormGroup): ValidationErrors | null => {
-      const startGroup = group.controls[startGroupKey] as FormGroup;
-      const endGroup = group.controls[endGroupKey] as FormGroup;
-
-      const startDate = moment(startGroup.controls['date'].value);
-      const endDate = moment(endGroup.controls['date'].value);
-
-      if (startDate.isBefore(endDate)) {
-        return null;
-      }
-      if (startDate.isAfter(endDate)) {
-        return { lessthan: true }
-      }
-
-      const startTime = startGroup.controls['time'].value;
-      const endTime = endGroup.controls['time'].value;
-
-      if (!startTime || !endTime) { return null; }
-      const valid = (startTime < endTime);
-      return (valid) ? null : { lessthan: true };
     };
   }
 

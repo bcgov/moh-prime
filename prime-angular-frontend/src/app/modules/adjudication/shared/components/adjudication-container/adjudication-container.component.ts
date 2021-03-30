@@ -1,35 +1,33 @@
-import {Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTableDataSource} from '@angular/material/table';
+import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
 
-import {EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription} from 'rxjs';
-import {exhaustMap, map, tap} from 'rxjs/operators';
+import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
-import {RouteUtils} from '@lib/utils/route-utils.class';
-import {MatTableDataSourceUtils} from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
-import {UtilsService} from '@core/services/utils.service';
-import {ToastService} from '@core/services/toast.service';
-import {AgreementType} from '@shared/enums/agreement-type.enum';
-import {EnrolmentStatus} from '@shared/enums/enrolment-status.enum';
-import {SubmissionAction} from '@shared/enums/submission-action.enum';
-import {EnrolleeListViewModel, HttpEnrollee} from '@shared/models/enrolment.model';
-import {DialogOptions} from '@shared/components/dialogs/dialog-options.model';
-import {ConfirmDialogComponent} from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import {NoteComponent} from '@shared/components/dialogs/content/note/note.component';
-import {ManualFlagNoteComponent} from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import {DIALOG_DEFAULT_OPTION} from '@shared/components/dialogs/dialogs-properties.provider';
-import {DialogDefaultOptions} from '@shared/components/dialogs/dialog-default-options.model';
+import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
+import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import {
   AssignAction,
   AssignActionEnum,
   ClaimNoteComponent,
   ClaimType
 } from '@shared/components/dialogs/content/claim-note/claim-note.component';
-import {Role} from '@auth/shared/enum/role.enum';
-import {PermissionService} from '@auth/shared/services/permission.service';
-import {EnrolleeNote} from '@enrolment/shared/models/enrollee-note.model';
+import { Role } from '@auth/shared/enum/role.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import {AdjudicationResource} from '@adjudication/shared/services/adjudication-resource.service';
 import {AdjudicationRoutes} from '@adjudication/adjudication.routes';
@@ -47,7 +45,7 @@ export class AdjudicationContainerComponent implements OnInit {
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
-  public dataSource: MatTableDataSource<EnrolleeListViewModel>;
+  public enrollees: EnrolleeListViewModel[];
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -69,7 +67,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.action = new EventEmitter<void>();
 
     this.hasActions = false;
-    this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
+    this.enrollees = [];
 
     this.showSearchFilter = false;
   }
@@ -120,7 +118,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const response = { assigneeId: action.adjudicatorId };
         return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
           : of(response);
       }),
       exhaustMap((response: { note: EnrolleeNote, assigneeId: number }) => {
@@ -401,7 +399,7 @@ export class AdjudicationContainerComponent implements OnInit {
       : this.getEnrollees(queryParams);
 
     this.busy = results$
-      .subscribe((enrollees: EnrolleeListViewModel[]) => this.dataSource.data = enrollees);
+      .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
   }
 
   private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
@@ -421,9 +419,11 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   private updateEnrollee(enrollee: HttpEnrollee) {
-    this.dataSource.data = MatTableDataSourceUtils
-      .update<EnrolleeListViewModel>(this.dataSource, 'id', this.toEnrolleeListViewModel(enrollee));
+    const index = this.enrollees.findIndex(e => e.id === enrollee.id);
+    this.enrollees.splice(index, 1, this.toEnrolleeListViewModel(enrollee));
+    this.enrollees = [...this.enrollees];
   }
+
   private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
     return pipe(
       exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
@@ -442,9 +442,6 @@ export class AdjudicationContainerComponent implements OnInit {
    * @description
    * Common claim logic with a custom pipe to manage
    * an assignment through a claim or disclaim.
-   *
-   * @see onAssign
-   * @see onDeassign
    */
   private alterClaim(enrolleeId: number, data: DialogOptions, customPipe: OperatorFunction<AssignAction, string | void>): Observable<void> {
     return this.dialog.open(ClaimNoteComponent, { data })
@@ -457,12 +454,10 @@ export class AdjudicationContainerComponent implements OnInit {
         ),
         customPipe,
         map((idir: string) => {
-          const row = MatTableDataSourceUtils.first<EnrolleeListViewModel>(this.dataSource, 'id', enrolleeId);
-          row.adjudicatorIdir = idir ?? null;
-          return row;
-        }),
-        map((enrollee: EnrolleeListViewModel) => {
-          MatTableDataSourceUtils.update<EnrolleeListViewModel>(this.dataSource, 'id', enrollee);
+          const index = this.enrollees.findIndex(e => e.id === enrolleeId);
+          const updatedEnrollee = this.enrollees[index];
+          updatedEnrollee.adjudicatorIdir = idir ?? null;
+          this.enrollees.splice(index, 1, updatedEnrollee);
         })
       );
   }
