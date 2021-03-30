@@ -82,6 +82,7 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
 import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
 import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { BannerComponent } from '@shared/components/banner/banner.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
 import { SiteInformationFormComponent } from '@shared/components/forms/site-information-form/site-information-form.component';
@@ -173,7 +174,8 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
     VendorFormComponent,
     ContactProfileFormComponent,
     SameAsComponent,
-    SummaryCardComponent
+    SummaryCardComponent,
+    BannerComponent
   ],
   imports: [
     CommonModule,
@@ -261,7 +263,8 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
     VendorFormComponent,
     ContactProfileFormComponent,
     SameAsComponent,
-    SummaryCardComponent
+    SummaryCardComponent,
+    BannerComponent
   ],
   providers: [
     FullnamePipe,

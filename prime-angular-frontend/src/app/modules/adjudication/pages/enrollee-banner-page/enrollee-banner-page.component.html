@@ -1,0 +1,7 @@
+<app-page [busy]="busy"
+          mode="full">
+  <app-banner-maintenance [locationCode]="locationCode"
+                          [banner]="banner"
+                          (save)="onSave($event)"
+                          (delete)="onDelete()"></app-banner-maintenance>
+</app-page>
