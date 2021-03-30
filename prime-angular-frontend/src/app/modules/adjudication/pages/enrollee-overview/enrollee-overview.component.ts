@@ -50,7 +50,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
 
     const enrolleeId = this.route.snapshot.params.id;
 
-    this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
+    this.busy = this.adjudicationResource.getEnrolleeOverview(enrolleeId)
       .pipe(
         map((enrollee: HttpEnrollee) => [enrollee, this.enrolmentAdapter(enrollee)])
       )

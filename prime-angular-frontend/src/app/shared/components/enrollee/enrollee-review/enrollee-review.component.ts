@@ -67,10 +67,6 @@ export class EnrolleeReviewComponent {
     );
   }
 
-  public get hasMailingAddress(): boolean {
-    return (this.enrollee && this.enrollee.mailingAddress && !!this.enrollee.mailingAddress.countryCode);
-  }
-
   public get hasCertification(): boolean {
     return (this.enrolment && !!this.enrolment.certifications.length);
   }
@@ -137,14 +133,8 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public showCollegePrefix(licenceCode: number, collegeCode: number): number {
-    return (this.enrolmentService.shouldShowCollegePrefix(licenceCode))
-      ? collegeCode
-      : null;
-  }
-
   public getRemoteAccessSiteVendor(remoteAccessSiteId: number) {
-    const ras = this.remoteAccessSites.find((site => site.id == remoteAccessSiteId));
+    const ras = this.remoteAccessSites.find((site => site.id === remoteAccessSiteId));
     return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
   }
 

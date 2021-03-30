@@ -39,6 +39,12 @@ namespace Prime.Infrastructure.AutoMapperProfiles
 
             CreateMap<Certification, CertificationDto>();
 
+            CreateMap<EnrolmentStatus, EnrolmentStatusViewModel>();
+
+            CreateMap<EnrolmentStatusReason, EnrolmentStatusReasonViewModel>();
+
+            CreateMap<StatusReason, StatusReasonViewModel>();
+
             CreateMap<Certification, CertificationViewModel>();
 
             CreateMap<OboSite, OboSiteViewModel>();

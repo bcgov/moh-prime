@@ -67,6 +67,21 @@ export class AdjudicationResource {
       );
   }
 
+  public getEnrolleeOverview(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}/overview`, params)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolment could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
     return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
       .pipe(

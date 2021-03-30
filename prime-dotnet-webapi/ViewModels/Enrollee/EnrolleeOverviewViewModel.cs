@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Prime.Models;
 
 namespace Prime.ViewModels
 {
@@ -19,6 +20,8 @@ namespace Prime.ViewModels
         public string PhoneExtension { get; set; }
         public string Email { get; set; }
         public string SmsPhone { get; set; }
+        public EnrolmentStatusViewModel CurrentStatus { get; set; }
+        public ICollection<EnrolmentStatusViewModel> EnrolmentStatuses { get; set; }
         public IEnumerable<int> CareSettings { get; set; }
         public IEnumerable<CertificationViewModel> Certifications { get; set; }
         public IEnumerable<string> Jobs { get; set; }

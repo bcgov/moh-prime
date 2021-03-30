@@ -21,7 +21,7 @@ namespace Prime.Models
 
         public bool ShouldSerializeAdjudicatorNote()
         {
-            return (AdjudicatorNoteId != null);
+            return AdjudicatorNoteId != null;
         }
 
         public int? AdminId { get; set; }
@@ -30,7 +30,7 @@ namespace Prime.Models
 
         public bool ShouldSerializeAdjudicator()
         {
-            return (AdminId != null);
+            return AdminId != null;
         }
     }
 }
