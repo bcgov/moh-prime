@@ -9,6 +9,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 const routes: Routes = [
   {
@@ -17,27 +18,32 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.BCSC_LOGIN,
         canLoad: [AuthorizationRedirectGuard],
+        data: { locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE },
         loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module').then(m => m.BcscEnrolmentLoginPageModule)
       },
       {
         path: EnrolmentRoutes.BCEID_LOGIN,
         canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@enrolment/shared/modules/bceid-enrolment-login-page/bceid-enrolment-login-page.module').then(m => m.BceidEnrolmentLoginPageModule)
+        loadChildren: () => import('@enrolment/shared/modules/bceid-enrolment-login-page/bceid-enrolment-login-page.module')
+          .then(m => m.BceidEnrolmentLoginPageModule)
       },
       {
         path: SiteRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
+        data: { locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE },
         loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module').then(m => m.SiteRegistrationLoginPageModule)
       },
       {
         path: AdjudicationRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module').then(m => m.AdminLoginPageModule)
+        loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module')
+          .then(m => m.AdminLoginPageModule)
       },
       {
         path: PhsaEformsRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module').then(m => m.PhsaEformsLoginPageModule)
+        loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
+          .then(m => m.PhsaEformsLoginPageModule)
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,

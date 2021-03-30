@@ -1,8 +1,8 @@
 import { KeycloakLoginOptions } from 'keycloak-js';
 
+import { Role } from '@auth/shared/enum/role.enum';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
-import { Role } from '@auth/shared/enum/role.enum';
 import { IAccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class MockAccessTokenService implements IAccessTokenService {
@@ -12,8 +12,7 @@ export class MockAccessTokenService implements IAccessTokenService {
   // tslint:disable-next-line: variable-name
   private _loggedIn: boolean;
 
-  constructor(
-  ) {
+  constructor() {
     this._loggedIn = false;
   }
 
@@ -34,9 +33,9 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public async decodeToken(): Promise<AccessTokenParsed | null> {
-    return new Promise((resolve, reject) => {
-      const token: AccessTokenParsed = <AccessTokenParsed>{};
-      resolve(token)
+    return new Promise((resolve) => {
+      const token = {} as AccessTokenParsed;
+      resolve(token);
     });
   }
 
@@ -57,7 +56,7 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public loadBrokerProfile(forceReload?: boolean): Promise<BrokerProfile> {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const profile: BrokerProfile = {
         attributes: {
           birthdate: [],

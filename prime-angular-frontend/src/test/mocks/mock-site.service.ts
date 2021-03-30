@@ -9,14 +9,14 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 export class MockSiteService implements ISiteService {
   // tslint:disable-next-line: variable-name
-  private _site: BehaviorSubject<Site>;
+  private readonly _site: BehaviorSubject<Site>;
 
   constructor() {
     const siteId = faker.random.number();
     const address = new Address('CA', 'BC', faker.address.streetAddress(), '', faker.address.city(), faker.address.zipCode());
     const user = {
       id: faker.random.number(),
-      userId: `${ faker.random.uuid() }`,
+      userId: `${faker.random.uuid()}`,
       verifiedAddressId: faker.random.number(),
       verifiedAddress: address,
       mailingAddressId: faker.random.number(),
@@ -49,7 +49,22 @@ export class MockSiteService implements ISiteService {
       physicalAddressId: faker.random.number(),
       physicalAddress: address,
       businessHours: null,
-      remoteUsers: null,
+      remoteUsers: [
+        {
+          id: faker.random.number(),
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
+          email: faker.internet.email(),
+          remoteUserCertifications: [
+            {
+              id: faker.random.number(),
+              collegeCode: faker.random.number(),
+              licenseNumber: faker.random.words(1),
+              licenseCode: faker.random.number(),
+            }
+          ]
+        }
+      ],
       administratorPharmaNetId: faker.random.number(),
       administratorPharmaNet: user,
       privacyOfficerId: faker.random.number(),
