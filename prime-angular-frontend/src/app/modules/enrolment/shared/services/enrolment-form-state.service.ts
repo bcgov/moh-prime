@@ -414,6 +414,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   private convertCareSettingFormToJson(enrolleeId: number): any {
     // Variable names must match keys for FormArrays in the FormGroup to get values
+    // tslint:disable-next-line:prefer-const
     let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
 
     // Any checked HA is converted into an enrollee health authority object literal,
@@ -423,7 +424,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         selectedHealthAuthorities.push({
           enrolleeId,
           healthAuthorityCode: this.configService.healthAuthorities[i].code
-        })
+        });
       }
       return selectedHealthAuthorities;
     }, []);
@@ -557,7 +558,9 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public removeHealthAuthorities() {
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.controls.forEach(checkbox => { checkbox.setValue(false) });
+    enrolleeHealthAuthorities.controls.forEach(checkbox => {
+      checkbox.setValue(false);
+    });
   }
 
   private buildSelfDeclarationForm(): FormGroup {

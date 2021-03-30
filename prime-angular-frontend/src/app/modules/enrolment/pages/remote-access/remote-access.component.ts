@@ -106,7 +106,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     // remote access site forming the submission payload
     this.sites?.controls.forEach((checked, i) => {
       if (checked.value) {
-        var ras = this.remoteAccessSearch[i];
+        const ras = this.remoteAccessSearch[i];
         const enrolleeRemoteUser = this.enrolmentFormStateService.enrolleeRemoteUserFormGroup();
         enrolleeRemoteUser.patchValue({
           enrolleeId,
@@ -157,17 +157,17 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     this.form.controls.sites = this.fb.array(this.remoteAccessSearch.map(() => this.fb.control(false)));
 
     const checked = this.remoteAccessSearch
-      .reduce((checked: boolean[], r: RemoteAccessSearch) => {
+      .reduce((checks: boolean[], r: RemoteAccessSearch) => {
         const alreadyLinked = this.enrolleeRemoteUsers.controls
           .some(c => c.get('remoteUserId').value === r.remoteUserId);
 
         if (alreadyLinked) {
-          checked.push(true);
+          checks.push(true);
         } else {
-          checked.push(false);
+          checks.push(false);
         }
 
-        return checked;
+        return checks;
       }, []);
 
     this.sites.patchValue(checked);

@@ -79,6 +79,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get licenseCode(): FormControl {
     return this.form.get('licenseCode') as FormControl;
   }
+
   /**
    * @description
    * ID of a practitioner, but also known as prescriberId
@@ -174,16 +175,17 @@ export class CollegeCertificationFormComponent implements OnInit {
               // to optional will show the input
               isPrescribing = this.practitionerId.value;
               break;
-            case PrescriberIdTypeEnum.Mandatory: break; // NOOP
+            case PrescriberIdTypeEnum.Mandatory:
+              break; // NOOP
           }
 
           this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
         });
+    } else {
+      const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+      const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
+      this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
     }
-
-    const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-    const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
-    this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -277,7 +279,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   private loadPractices(collegeCode: number) {
     this.filteredPractices = this.filterPractices(collegeCode);
     this.practiceCode.patchValue(this.practiceCode.value || null);
-    this.hasPractices = (this.filteredPractices.length) ? true : false;
+    this.hasPractices = !!this.filteredPractices.length;
   }
 
   private filterLicenses(collegeCode: number): LicenseConfig[] {
