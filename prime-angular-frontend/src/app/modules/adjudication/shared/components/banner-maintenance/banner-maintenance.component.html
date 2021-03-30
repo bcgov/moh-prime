@@ -85,12 +85,12 @@
     <button mat-flat-button
             type="button"
             title="Delete Banner"
-            [disabled]="!(Role.ADMIN | inRole)"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
             (click)="onDelete()">
       <mat-icon class="red">delete</mat-icon>
     </button>
     <button mat-flat-button
-            [disabled]="!(Role.ADMIN | inRole)"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
             color="primary">Publish Banner</button>
   </div>
 
