@@ -82,6 +82,7 @@ import { ToggleContentComponent } from '@shared/components/toggle-content/toggle
 import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
 import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { BannerComponent } from '@shared/components/banner/banner.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
 import { SiteNameComponent } from '@shared/components/site/site-name/site-name.component';
@@ -165,7 +166,8 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
-    PrimeEnrolmentAccessComponent
+    PrimeEnrolmentAccessComponent,
+    BannerComponent
   ],
   imports: [
     CommonModule,
@@ -249,7 +251,8 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
-    PrimeEnrolmentAccessComponent
+    PrimeEnrolmentAccessComponent,
+    BannerComponent
   ],
   providers: [
     FullnamePipe,
