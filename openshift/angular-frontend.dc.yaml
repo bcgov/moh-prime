@@ -166,9 +166,9 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    name: "${NAME}${SUFFIX}-plrhl7"
+    name: "${NAME}${SUFFIX}-mutualauth"
   spec:
-    host: "plrhl7.${VANITY_URL}"
+    host: "mutualauth.${VANITY_URL}"
     port:
       targetPort: "8890"
     tls:
