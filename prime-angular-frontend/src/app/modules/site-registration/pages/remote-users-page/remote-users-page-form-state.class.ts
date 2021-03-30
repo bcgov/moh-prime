@@ -27,6 +27,10 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return this.formInstance.get('remoteUserCertifications') as FormArray;
   }
 
+  public getRemoteUsers(): RemoteUser[] {
+    return this.remoteUsers.getRawValue() as RemoteUser[];
+  }
+
   public get json(): RemoteUser[] {
     if (!this.formInstance) {
       return;
@@ -84,6 +88,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup();
+
     if (remoteUser) {
       const { id, firstName, lastName, email, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName, email });

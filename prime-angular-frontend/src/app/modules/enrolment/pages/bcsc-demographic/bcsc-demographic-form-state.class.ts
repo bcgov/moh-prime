@@ -5,8 +5,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 
-export interface BcscDemographicFormModel { }
-
 export class BcscDemographicFormState extends AbstractFormState<Enrollee> {
   public constructor(
     private fb: FormBuilder,
