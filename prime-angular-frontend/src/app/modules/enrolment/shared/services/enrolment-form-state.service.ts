@@ -170,14 +170,14 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   /**
    * @description
-   * Check for the requirement of at least one certification, or one job.
+   * Check for the requirement of at least one certification, or one obo site/job.
    */
   public hasCertificateOrJob(): boolean {
-    const jobs = this.jobsForm.get('jobs') as FormArray;
+    const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
-    return jobs.length || (certifications.length && certifications.value[0].licenseNumber);
+    return oboSites.length || (certifications.length && certifications.value[0].licenseNumber);
   }
 
   /**

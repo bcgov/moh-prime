@@ -70,10 +70,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.defaultOptionLabel = 'None';
   }
 
-  public get jobs(): FormArray {
-    return this.form.get('jobs') as FormArray;
-  }
-
   public get oboSites(): FormArray {
     return this.form.get('oboSites') as FormArray;
   }
