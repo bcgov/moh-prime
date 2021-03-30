@@ -52,6 +52,9 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
         CreateMap<Certification, CertificationDto>();
 
+        CreateMap<Banner, BannerDisplayViewModel>();
+        CreateMap<Banner, BannerViewModel>();
+
         CreateMap<GisEnrolment, GisViewModel>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Party.UserId))
             .ForMember(dest => dest.HPDID, opt => opt.MapFrom(src => src.Party.HPDID))

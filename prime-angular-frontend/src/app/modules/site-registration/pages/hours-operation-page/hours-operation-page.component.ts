@@ -23,7 +23,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { HoursOperationPageFormModel, HoursOperationPageFormState } from './hours-operation-page-form-state.class';
 
-export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
@@ -45,7 +45,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   public isCompleted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
-  public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
+  public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
   public WeekDay = WeekDay;
   public SiteRoutes = SiteRoutes;
 
@@ -126,7 +126,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.hoursOperationPageFormState;
-    this.busDayHoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
+    this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
   protected patchForm(): void {
