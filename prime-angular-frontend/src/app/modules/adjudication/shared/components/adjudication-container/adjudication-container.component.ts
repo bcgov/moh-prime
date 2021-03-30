@@ -369,8 +369,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public onSendBulkEmail() {
     const data: DialogOptions = {
-      title: 'Send Email - Bulk Actions',
-      data: {}
+      title: 'Send Email - Bulk Actions'
     };
     this.busy = this.dialog.open(SendBulkEmailComponent, { data })
     .afterClosed()
@@ -382,7 +381,9 @@ export class AdjudicationContainerComponent implements OnInit {
         )
       )
     .subscribe((emails: string[]) => {
-      this.utilsService.mailTo(emails.join(';'));
+      if(emails){
+        this.utilsService.mailTo(emails.join(';'));
+      }
     });
   }
 

@@ -920,15 +920,13 @@ namespace Prime.Services
                 _ => null,
             };
 
-            var result = await _context.Enrollees
+            return await _context.Enrollees
                 .Include(e => e.EnrolleeCareSettings)
                 .AsNoTracking()
                 .Where(predicate)
                 .Select(e => e.Email)
                 .DecompileAsync()
                 .ToListAsync();
-
-            return result;
         }
     }
 }

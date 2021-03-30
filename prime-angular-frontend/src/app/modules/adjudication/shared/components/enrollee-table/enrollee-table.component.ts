@@ -105,7 +105,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   }
 
   public onSendBulkEmail(): void {
-    console.log('here');
     this.sendBulkEmail.emit();
   }
 
