@@ -79,6 +79,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get licenseCode(): FormControl {
     return this.form.get('licenseCode') as FormControl;
   }
+
   /**
    * @description
    * ID of a practitioner, but also known as prescriberId
@@ -277,7 +278,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   private loadPractices(collegeCode: number) {
     this.filteredPractices = this.filterPractices(collegeCode);
     this.practiceCode.patchValue(this.practiceCode.value || null);
-    this.hasPractices = (this.filteredPractices.length) ? true : false;
+    this.hasPractices = !!this.filteredPractices.length;
   }
 
   private filterLicenses(collegeCode: number): LicenseConfig[] {
