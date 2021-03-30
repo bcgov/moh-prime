@@ -382,8 +382,7 @@ export class AdjudicationContainerComponent implements OnInit {
         )
       )
     .subscribe((emails: string[]) => {
-      console.log('emails: ', emails);
-      this.utilsService.mailTo(emails.join(','));
+      this.utilsService.mailTo(emails.join(';'));
     });
   }
 
