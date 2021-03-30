@@ -376,7 +376,9 @@ export class AdjudicationContainerComponent implements OnInit {
     .afterClosed()
       .pipe(
         exhaustMap((bulkEmailType: BulkEmailType) =>
-          this.adjudicationResource.getEnrolleeEmails(bulkEmailType)
+          bulkEmailType
+            ? this.adjudicationResource.getEnrolleeEmails(bulkEmailType)
+            : EMPTY
         )
       )
     .subscribe((emails: string[]) => {
