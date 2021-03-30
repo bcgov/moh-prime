@@ -25,7 +25,7 @@ export abstract class AbstractFormState<T> {
    * @description
    * Patch the reactive form with data.
    */
-  public abstract patchValue(data: T): void;
+  public abstract patchValue(data: T & unknown): void;
 
   /**
    * @description

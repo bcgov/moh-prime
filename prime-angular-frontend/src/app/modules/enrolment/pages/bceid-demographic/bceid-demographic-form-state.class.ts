@@ -1,11 +1,9 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
-
-export interface BceidDemographicFormModel { }
 
 export class BceidDemographicFormState extends AbstractFormState<Enrollee> {
   public constructor(

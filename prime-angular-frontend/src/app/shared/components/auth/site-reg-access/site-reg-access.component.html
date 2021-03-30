@@ -1,0 +1,158 @@
+<div class="container">
+  <app-banner></app-banner>
+  <div class="row">
+
+    <div class="col-sm-12 logo">
+
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
+
+    </div>
+    <div class="col-sm-12 header">
+
+      <h1>Site Registration for PharmaNet Access</h1>
+      <p>
+        A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at
+        one location, you have multiple sites.
+      </p>
+
+    </div>
+    <div class="col-sm-12">
+
+      <div class="row actions">
+        <div class="col col-md-auto">
+
+          <button mat-flat-button
+                  color="primary"
+                  class="large"
+                  (click)="onLogin()">Access Registration</button>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>BC Services Card</h2>
+
+          <p>
+            To register a site, you need to set up your BC Services Card on your mobile device. This is a one-time
+            process.
+
+            <br>
+            <br>
+
+            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/setup"
+                   target="_blank"
+                   rel="noopener noreferrer">
+              How to set up a mobile card
+            </a>
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/bc_services_card.svg"
+               alt="BC Services Card Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>Who can register a site?</h2>
+
+          <p>
+            The person legally responsible for an organization’s PharmaNet use registers the site.
+
+            <app-contextual-help>
+              A site must be registered by the organization's Signing Authority. The Signing Authority is responsible
+              for PharmaNet use, and can legally bind the organization to the terms of the registration and the
+              Organization Agreement for PharmaNet Use.
+            </app-contextual-help>
+          </p>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/signing_authority.svg"
+               alt="Signing Authority Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-md-4 steps">
+
+      <div class="step-container">
+        <section class="content">
+          <h2>What you need</h2>
+
+          <p>
+            Your mobile BC Services Card, a scan of your business licence and the contact details for these people in
+            your site:
+          </p>
+
+          <ul>
+            <li>
+              PharmaNet Administrator
+
+              <app-contextual-help>
+                Either directly sets up individual PharmaNet access accounts at a site or
+                has the authority to request accounts from the site's contracted PharmaNet software vendor. They may,
+                for example, be the site’s office administrator, HR lead, medical office assistant (MOA), or
+                practitioner. This may be the software vendor.
+              </app-contextual-help>
+            </li>
+            <li>
+              Privacy Officer
+
+              <app-contextual-help>
+                Under privacy legislation (PIPA and FOIPPA), organizations holding or accessing
+                personal information must designate a Privacy Officer, who responds to privacy and information
+                management concerns on the organization’s behalf. In the event of a security breach, or concerns with
+                how PharmaNet data is accessed or used at the site, the Privacy Officer will be asked to help with
+                investigations and provide critical information quickly.
+              </app-contextual-help>
+            </li>
+            <li>
+              Technical Support Contact
+
+              <app-contextual-help>
+                This individual may be either a staff person at the site, a corporate IT
+                resource, or an independent IT contractor. They will be contacted in the event of a technology-related
+                issue (e.g. malware, problematic network traffic). They should familiar with: the practice's network
+                structure, Internet connections in use at the site, the application(s) used to access PharmaNet at the
+                site and security mechanisms such as firewalls and anti-virus measures (generally and at the site).
+              </app-contextual-help>
+            </li>
+          </ul>
+        </section>
+
+        <div class="info-graphic">
+          <img src="/assets/enrolment.svg"
+               alt="Enrolment Icon">
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 support">
+
+      <app-pill>
+        <section>
+          <h2>Get Support</h2>
+
+          <p>
+            Questions about Site Registration should be directed to:
+            <br>
+            <app-prime-phone></app-prime-phone>
+            <br>
+            <app-prime-support-email></app-prime-support-email>
+          </p>
+        </section>
+      </app-pill>
+
+    </div>
+  </div>
+</div>

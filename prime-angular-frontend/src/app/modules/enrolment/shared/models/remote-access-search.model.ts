@@ -4,6 +4,6 @@ export interface RemoteAccessSearch {
   remoteUserId: number;
   siteId: number;
   siteAddress: Address;
-  siteDoingBusinessAs: string
+  siteDoingBusinessAs: string;
   vendorCodes: number;
 }

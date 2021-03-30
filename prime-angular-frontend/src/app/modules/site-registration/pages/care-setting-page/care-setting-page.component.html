@@ -3,8 +3,9 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
 
     <section class="mb-3">
       <app-page-subheader2>
@@ -26,7 +27,7 @@
                 {{ careSetting.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="careSettingCode.hasError('required')">
+            <mat-error *ngIf="formState.careSettingCode.hasError('required')">
               Required
             </mat-error>
           </mat-form-field>
@@ -72,31 +73,6 @@
       </section>
 
     </ng-container>
-
-    <section class="mb-4">
-      <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Site ID</ng-container>
-        <ng-container appPageSubheader2Summary>
-          Provide the sites ID or PEC Code.<br />
-          If this is a new site you will receive your Site ID upon approval.
-        </ng-container>
-      </app-page-subheader2>
-      <ng-container>
-        <mat-form-field>
-          <mat-label>Site ID</mat-label>
-          <input matInput
-                 formControlName="pec" />
-          <mat-error *ngIf="pec.hasError('required')">
-            Required
-          </mat-error>
-        </mat-form-field>
-        <div>
-          <mat-checkbox [formControl]="isNewSite">
-            This is a new site
-          </mat-checkbox>
-        </div>
-      </ng-container>
-    </section>
 
   </form>
 

@@ -1,10 +1,10 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { Site } from '@registration/shared/models/site.model';
 
-interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode' | 'siteVendors' | 'pec'> { }
+interface CareSettingPageDataModel extends Pick<Site, 'careSettingCode' | 'siteVendors'> { }
 
 export class CareSettingPageFormState extends AbstractFormState<CareSettingPageDataModel> {
   private siteId: number;
@@ -17,22 +17,30 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
     this.buildForm();
   }
 
+  public get careSettingCode(): FormControl {
+    return this.formInstance.get('careSettingCode') as FormControl;
+  }
+
+  public get vendorCode(): FormControl {
+    return this.formInstance.get('vendorCode') as FormControl;
+  }
+
   public get json(): CareSettingPageDataModel {
     if (!this.formInstance) {
       return;
     }
 
-    const { careSettingCode, vendorCode, pec } = this.formInstance.getRawValue();
+    const { careSettingCode, vendorCode } = this.formInstance.getRawValue();
     // TODO only use a single vendor, should look at dropping vendors for vendor
     const siteVendors = [{
       siteId: this.siteId,
       vendorCode
     }];
 
-    return { careSettingCode, siteVendors, pec };
+    return { careSettingCode, siteVendors };
   }
 
-  public patchValue({ careSettingCode, siteVendors, pec }: CareSettingPageDataModel): void {
+  public patchValue({ careSettingCode, siteVendors }: CareSettingPageDataModel): void {
     if (!this.formInstance) {
       return;
     }
@@ -44,7 +52,7 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
       vendorCode = code;
     }
 
-    this.formInstance.patchValue({ careSettingCode, vendorCode, pec });
+    this.formInstance.patchValue({ careSettingCode, vendorCode });
   }
 
   public buildForm(): void {
@@ -56,10 +64,6 @@ export class CareSettingPageFormState extends AbstractFormState<CareSettingPageD
       vendorCode: [
         0,
         [FormControlValidators.requiredIndex]
-      ],
-      pec: [
-        null,
-        [Validators.required]
       ]
     });
   }

@@ -82,5 +82,10 @@ namespace Prime
         {
             public static readonly string ClientCertThumbprint = GetEnvironmentVariable("PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT");
         }
+
+        public static class LdapApi
+        {
+            public static readonly string Url = GetEnvironmentVariable("LDAP_API_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/ldap";
+        }
     }
 }

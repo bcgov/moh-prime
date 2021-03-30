@@ -45,7 +45,7 @@ describe('FormUtilsService', () => {
   });
 
   it('should toPersonFormModel', () => {
-    const physicalAddress = <Address>{
+    const physicalAddress: Address = {
       city: 'Victoria',
       countryCode: 'CA',
       postal: 'V1X4M6',
@@ -54,7 +54,7 @@ describe('FormUtilsService', () => {
       id: 1,
       street2: '#123',
     };
-    const mailingAddress = <Address>{
+    const mailingAddress: Address = {
       city: 'Vancouver',
       countryCode: 'CA',
       postal: 'V5X4X6',
@@ -63,19 +63,19 @@ describe('FormUtilsService', () => {
       id: 2,
       street2: '#456',
     };
-    const data: Person = <Person>{
+    const data: Person = {
       id: 1,
       email: 'test@test.com',
       firstName: 'first',
       lastName: 'last',
-      jobRoleTitle: 'mamnager',
+      jobRoleTitle: 'manager',
       phone: '5555555555',
       fax: '6666666666',
       smsPhone: '4444444444',
       mailingAddressId: 1,
       physicalAddressId: 1,
-      physicalAddress: physicalAddress,
-      mailingAddress: mailingAddress,
+      physicalAddress,
+      mailingAddress
     };
 
     let formGroup = fb.group({});
@@ -138,5 +138,5 @@ describe('FormUtilsService', () => {
 
     service.toPersonFormModel<Person>([formGroup, data]);
     expect(formGroup.getRawValue().mailingAddress).toEqual(data.mailingAddress);
-  })
+  });
 });

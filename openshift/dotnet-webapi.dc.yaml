@@ -258,6 +258,13 @@ objects:
 
               - name: PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT
                 value: "6FA357305008C8EA814EA98768C21783DCCA374E"
+
+              # LDAP login environment variables
+              - name: LDAP_API_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: LDAP_API_URL
+                    name: "ldap-secrets"
             image: " "
             name: primeapi
             ports:

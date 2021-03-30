@@ -136,7 +136,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     this.hasPreferredName = !!(this.preferredFirstName.value || this.preferredLastName.value);
     this.togglePreferredNameValidators(this.hasPreferredName, this.preferredFirstName, this.preferredLastName);
 
-    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress)
+    this.hasVerifiedAddress = Address.isNotEmpty(this.bcscUser.verifiedAddress);
     if (!this.hasVerifiedAddress) {
       this.clearAddressValidator(this.verifiedAddress);
       this.setAddressValidator(this.physicalAddress);
@@ -145,7 +145,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       this.toggleAddressLineValidators(this.hasPhysicalAddress, this.physicalAddress);
     }
 
-    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value)
+    this.hasMailingAddress = Address.isNotEmpty(this.mailingAddress.value);
     this.toggleAddressLineValidators(this.hasMailingAddress, this.mailingAddress, this.hasVerifiedAddress);
   }
 
@@ -198,7 +198,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   }
 
   private clearAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

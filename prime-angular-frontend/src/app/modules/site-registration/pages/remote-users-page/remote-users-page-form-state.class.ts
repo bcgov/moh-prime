@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -13,6 +13,22 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     super();
 
     this.buildForm();
+  }
+
+  public get remoteUsers(): FormArray {
+    return this.formInstance.get('remoteUsers') as FormArray;
+  }
+
+  public get hasRemoteUsers(): FormControl {
+    return this.formInstance.get('hasRemoteUsers') as FormControl;
+  }
+
+  public get remoteUserCertifications(): FormArray {
+    return this.formInstance.get('remoteUserCertifications') as FormArray;
+  }
+
+  public getRemoteUsers(): RemoteUser[] {
+    return this.remoteUsers.getRawValue() as RemoteUser[];
   }
 
   public get json(): RemoteUser[] {
@@ -72,6 +88,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
    */
   public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
     const group = this.remoteUserFormGroup();
+
     if (remoteUser) {
       const { id, firstName, lastName, email, remoteUserCertifications } = remoteUser;
       group.patchValue({ id, firstName, lastName, email });

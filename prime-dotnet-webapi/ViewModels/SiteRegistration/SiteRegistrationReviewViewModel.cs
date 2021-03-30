@@ -10,6 +10,7 @@ namespace Prime.ViewModels.SiteRegistration
         public string OrganizationRegistrationId { get; set; }
         public string OrganizationDoingBusinessAs { get; set; }
         public string SiteName { get; set; }
+        public string PEC { get; set; }
         public PhysicalAddress SiteAddress { get; set; }
         public IEnumerable<BusinessHourViewModel> BusinessHours { get; set; }
         public IEnumerable<VendorViewModel> Vendors { get; set; }

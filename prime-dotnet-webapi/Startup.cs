@@ -72,6 +72,8 @@ namespace Prime
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
+            services.AddScoped<IBannerService, BannerService>();
+            services.AddScoped<IGisService, GisService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -193,6 +195,11 @@ namespace Prime
             services.AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
             {
                 client.BaseAddress = new Uri(PrimeEnvironment.AddressAutocompleteApi.Url.EnsureTrailingSlash());
+            });
+
+            services.AddHttpClient<ILdapClient, LdapClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
             });
         }
 

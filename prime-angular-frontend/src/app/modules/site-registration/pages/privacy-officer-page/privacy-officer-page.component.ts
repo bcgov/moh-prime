@@ -49,7 +49,7 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
     }
-    this.form.patchValue(contact);
+    this.formState.form.patchValue(contact);
   }
 
   public onBack() {
@@ -63,14 +63,13 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.privacyOfficerFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): NoContent {
@@ -79,7 +78,7 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW

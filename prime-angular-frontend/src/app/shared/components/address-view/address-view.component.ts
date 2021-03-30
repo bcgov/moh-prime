@@ -62,11 +62,12 @@ export class AddressViewComponent implements OnInit {
       : this.route.emit();
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  }
 
   private getRoutePath(routePath: string | string[]) {
     return (Array.isArray(routePath))
       ? routePath
-      : [routePath]
+      : [routePath];
   }
 }

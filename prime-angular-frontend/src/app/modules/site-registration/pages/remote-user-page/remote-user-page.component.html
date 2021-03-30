@@ -4,7 +4,8 @@
 
   <form [formGroup]="form"
         (ngOnSubmit)="onSubmit()"
-        novalidate>
+        novalidate
+        autocomplete="off">
 
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>
@@ -67,8 +68,7 @@
                                             [selectedColleges]="selectedCollegeCodes"
                                             [collegeFilterPredicate]="collegeFilterPredicate()"
                                             [licenceFilterPredicate]="licenceFilterPredicate()"
-                                            (remove)="removeCertification($event)">
-            </app-college-certification-form>
+                                            (remove)="removeCertification($event)"></app-college-certification-form>
 
           </ng-container>
 
