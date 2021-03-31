@@ -95,6 +95,7 @@ import { SiteRegAccessComponent } from './components/auth/site-reg-access/site-r
 import { PillComponent } from './components/auth/pill/pill.component';
 import { SimpleAccessComponent } from './components/auth/simple-access/simple-access.component';
 import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment-access/prime-enrolment-access.component';
+import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @NgModule({
   declarations: [
@@ -172,7 +173,8 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
-    BannerComponent
+    BannerComponent,
+    SendBulkEmailComponent
   ],
   imports: [
     CommonModule,
