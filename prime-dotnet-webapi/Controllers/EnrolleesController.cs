@@ -870,8 +870,8 @@ namespace Prime.Controllers
         /// <param name="bulkEmailType"></param>
         [HttpGet("emails", Name = nameof(GetEnrolleeEmails))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolleeEmails([FromQuery] BulkEmailType bulkEmailType)
         {
