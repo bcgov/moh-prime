@@ -911,7 +911,7 @@ namespace Prime.Services
             {
                 BulkEmailType.CommunityPractice => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPractice),
                 BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
-                BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
+                BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.HealthAuthority),
                 BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
                 BulkEmailType.RuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
                 BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
