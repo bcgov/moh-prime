@@ -27,7 +27,7 @@ import { DialogOptions } from '../../dialog-options.model';
 export class TriageComponent implements OnInit {
   @Input() public enrolleeId: number;
   @Input() public assigned: boolean;
-  @Output() public reload: EventEmitter<boolean>;
+  @Output() public reload: EventEmitter<void>;
 
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
@@ -41,7 +41,7 @@ export class TriageComponent implements OnInit {
     private utilsService: UtilsService,
     private dialog: MatDialog,
   ) {
-    this.reload = new EventEmitter<boolean>();
+    this.reload = new EventEmitter<void>();
     this.assigned = false;
   }
 
@@ -58,17 +58,21 @@ export class TriageComponent implements OnInit {
     };
 
     this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
-      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.reload.emit(true) : noop);
+      .subscribe((result: { reload: boolean }) =>
+        (result?.reload)
+          ? this.reload.emit()
+          : noop
+      );
   }
 
   public onEnableEditing() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.ENABLE_EDITING)
-      .subscribe(() => this.reload.emit(true));
+      .subscribe(() => this.reload.emit());
   }
 
   public onRerunRules() {
     this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.RERUN_RULES)
-      .subscribe(() => this.reload.emit(true));
+      .subscribe(() => this.reload.emit());
   }
 
   public onNotify() {
@@ -91,7 +95,8 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+  }
 
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);

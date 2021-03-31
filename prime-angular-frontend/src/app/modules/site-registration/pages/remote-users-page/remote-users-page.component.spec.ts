@@ -9,11 +9,12 @@ import { KeycloakService } from 'keycloak-angular';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { RemoteUsersPageComponent } from './remote-users-page.component';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AddressPipe } from '@shared/pipes/address.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteService } from '@registration/shared/services/site.service';
+import { RemoteUsersPageComponent } from './remote-users-page.component';
 
 describe('RemoteUsersPageComponent', () => {
   let component: RemoteUsersPageComponent;
@@ -23,7 +24,8 @@ describe('RemoteUsersPageComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         RemoteUsersPageComponent,
-        AddressPipe
+        AddressPipe,
+        FullnamePipe
       ],
       imports: [
         BrowserAnimationsModule,

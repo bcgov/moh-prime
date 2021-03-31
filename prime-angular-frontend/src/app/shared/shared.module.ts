@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { NgxMaskModule } from 'ngx-mask';
 
@@ -70,18 +71,23 @@ import { DocumentUploadComponent } from '@shared/components/document-upload/docu
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { OverviewSectionComponent } from '@shared/components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
-import { CollegeCertificationFormComponent } from '@shared/components/forms/college-certification-form/college-certification-form.component';
+import {
+  CollegeCertificationFormComponent
+} from '@shared/components/forms/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
-import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
+import {
+  EnrolleeSelfDeclarationsComponent
+} from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
 import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
 import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { BannerComponent } from '@shared/components/banner/banner.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
 import { SiteNameComponent } from '@shared/components/site/site-name/site-name.component';
@@ -165,7 +171,8 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
-    PrimeEnrolmentAccessComponent
+    PrimeEnrolmentAccessComponent,
+    BannerComponent
   ],
   imports: [
     CommonModule,
@@ -249,7 +256,8 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
-    PrimeEnrolmentAccessComponent
+    PrimeEnrolmentAccessComponent,
+    BannerComponent
   ],
   providers: [
     FullnamePipe,
@@ -258,4 +266,4 @@ import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment
     CapitalizePipe
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

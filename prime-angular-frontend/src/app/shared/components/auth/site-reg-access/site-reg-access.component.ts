@@ -3,6 +3,7 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { ViewportService } from '@core/services/viewport.service';
+import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 @UntilDestroy()
 @Component({
@@ -15,11 +16,13 @@ import { ViewportService } from '@core/services/viewport.service';
 })
 export class SiteRegAccessComponent implements OnInit {
   @Output() public login: EventEmitter<void>;
+  public locationCode: BannerLocationCode;
 
   constructor(
     private viewportService: ViewportService
   ) {
     this.login = new EventEmitter<void>();
+    this.locationCode = BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE;
   }
 
   public get isMobile(): boolean {

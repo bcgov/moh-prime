@@ -18,7 +18,6 @@ import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BcscDemographicFormState } from './bcsc-demographic-form-state.class';
@@ -70,13 +69,12 @@ describe('BcscDemographicComponent', () => {
     (fb: FormBuilder, formUtilsService: FormUtilsService) => {
       fixture = TestBed.createComponent(BcscDemographicComponent);
       component = fixture.componentInstance;
-      const bcscDemogrphicFormState = new BcscDemographicFormState(fb, formUtilsService);
-      component.form = bcscDemogrphicFormState.form;
+      const bcscDemographicFormState = new BcscDemographicFormState(fb, formUtilsService);
+      component.form = bcscDemographicFormState.form;
       fixture.detectChanges();
     }
   ));
 
-  //TODO fix null form
   it('should create', () => {
     expect(component).toBeTruthy();
   });
