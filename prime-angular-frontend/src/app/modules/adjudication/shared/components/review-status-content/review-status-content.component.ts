@@ -75,7 +75,9 @@ export class ReviewStatusContentComponent implements OnInit, OnChanges {
     if (changes.enrollee) {
       this.enrollee = changes.enrollee.currentValue;
       this.reasons = this.generateReasons(this.enrollee);
-      this.previousStatuses = this.generatePreviousStatuses(this.enrollee);
+      if(!this.hideStatusHistory) {
+        this.previousStatuses = this.generatePreviousStatuses(this.enrollee);
+      }
     }
   }
 
