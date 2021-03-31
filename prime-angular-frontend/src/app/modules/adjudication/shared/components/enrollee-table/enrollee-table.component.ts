@@ -144,7 +144,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log('CHANGES', changes.enrollees.currentValue);
     if (!changes.enrollees.firstChange) {
       this.dataSource.data = changes.enrollees.currentValue;
     }
