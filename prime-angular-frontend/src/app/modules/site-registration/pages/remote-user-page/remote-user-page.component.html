@@ -2,7 +2,7 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <form [formGroup]="formState.form"
+  <form [formGroup]="form"
         (ngOnSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
@@ -58,13 +58,13 @@
         <div class="col col-sm-10 py-3"
              formArrayName="remoteUserCertifications">
 
-          <ng-container *ngFor="let certificate of formState.remoteUserCertifications.controls; let i = index;"
+          <ng-container *ngFor="let certificate of remoteUserCertifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [condensed]="true"
                                             [form]="certificate"
                                             [index]="i"
-                                            [total]="formState.remoteUserCertifications.controls.length"
+                                            [total]="remoteUserCertifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
                                             [collegeFilterPredicate]="collegeFilterPredicate()"
                                             [licenceFilterPredicate]="licenceFilterPredicate()"

@@ -59,14 +59,13 @@ describe('BceidDemographicComponent', () => {
     (fb: FormBuilder, formUtilsService: FormUtilsService) => {
       fixture = TestBed.createComponent(BceidDemographicComponent);
       component = fixture.componentInstance;
-      const bceidDemogrphicFormState = new BceidDemographicFormState(fb, formUtilsService);
-      component.form = bceidDemogrphicFormState.form;
+      const bceidDemographicFormState = new BceidDemographicFormState(fb, formUtilsService);
+      component.form = bceidDemographicFormState.form;
       fixture.detectChanges();
     }
   ));
 
-  //TODO fix null form
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 });

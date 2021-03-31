@@ -3,9 +3,9 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
-import { SiteProgressIndicatorComponent } from './site-progress-indicator.component';
 import { SharedModule } from '@shared/shared.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteProgressIndicatorComponent } from './site-progress-indicator.component';
 
 describe('SiteProgressIndicatorComponent', () => {
   let component: SiteProgressIndicatorComponent;

@@ -7,7 +7,8 @@ interface LdapInformationPageDataModel {
   ldapUsername: string;
 }
 
-interface LdapInformationPageFormModel extends LdapCredential { }
+// tslint:disable-next-line:no-empty-interface
+interface LdapInformationPageFormModel extends LdapCredential {}
 
 export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageDataModel> {
   public constructor(
