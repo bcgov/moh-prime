@@ -30,7 +30,5 @@ export class SendBulkEmailComponent implements OnInit {
     this.dialogRef.close(bulkEmailType);
   }
 
-  public ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
