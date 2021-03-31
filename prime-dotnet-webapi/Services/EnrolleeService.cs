@@ -14,6 +14,7 @@ using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
 using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace Prime.Services
 {
@@ -901,6 +902,29 @@ namespace Prime.Services
             return await _context.EnrolleeNotes
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)
+        {
+            Expression<Func<Enrollee, bool>> predicate = bulkEmailType switch
+            {
+                BulkEmailType.CommunityPractice => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPractice),
+                BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
+                BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.HealthAuthority),
+                BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
+                BulkEmailType.RuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
+                BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
+                BulkEmailType.PharmRuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
+                BulkEmailType.PharmOboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
+                _ => null,
+            };
+
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(predicate)
+                .Select(e => e.Email)
+                .DecompileAsync()
                 .ToListAsync();
         }
     }
