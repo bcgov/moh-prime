@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
@@ -121,7 +121,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.checkValidity()) {
+    if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
@@ -176,8 +176,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * Check the validity of the form, as well as, perform
    * additional validation.
    */
-  protected checkValidity(): boolean {
-    return this.formUtilsService.checkValidity(this.formState.form) && this.additionalValidityChecks(this.formState.form.getRawValue());
+  protected checkValidity(form: FormGroup | FormArray): boolean {
+    return this.formUtilsService.checkValidity(form) && this.additionalValidityChecks(form.getRawValue());
   }
 
   /**
