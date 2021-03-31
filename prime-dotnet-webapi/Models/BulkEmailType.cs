@@ -6,9 +6,9 @@ namespace Prime.Models
         CommunityPharmacy = 2,
         HealthAuthority = 3,
         RequiresTOA = 4,
-        RUTOA = 5,
-        OBOTOA = 6,
-        PharmRUTOA = 7,
-        PharmOBOTOA = 8
+        RuTOA = 5,
+        OboTOA = 6,
+        PharmRuTOA = 7,
+        PharmOboTOA = 8
     }
 }

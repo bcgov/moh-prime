@@ -913,10 +913,10 @@ namespace Prime.Services
                 BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
                 BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
                 BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
-                BulkEmailType.RUTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
-                BulkEmailType.OBOTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
-                BulkEmailType.PharmRUTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
-                BulkEmailType.PharmOBOTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
+                BulkEmailType.RuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
+                BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
+                BulkEmailType.PharmRuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
+                BulkEmailType.PharmOboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
                 _ => null,
             };
 
