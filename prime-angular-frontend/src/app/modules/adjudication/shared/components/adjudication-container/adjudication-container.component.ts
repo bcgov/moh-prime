@@ -381,9 +381,9 @@ export class AdjudicationContainerComponent implements OnInit {
         )
       )
     .subscribe((emails: string[]) => {
-      if(emails){
-        this.utilsService.mailTo(emails.join(';'));
-      }
+      emails.length
+        ? this.utilsService.mailTo(emails.join(';'))
+        : this.toastService.openErrorToast('No enrollees found for email type.');
     });
   }
 

@@ -913,15 +913,14 @@ namespace Prime.Services
                 BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
                 BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
                 BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
-                BulkEmailType.RUTOA => e => e.AssignedTOAType.Value == AgreementType.RegulatedUserTOA,
-                BulkEmailType.OBOTOA => e => e.AssignedTOAType.Value == AgreementType.OboTOA,
-                BulkEmailType.PharmRUTOA => e => e.AssignedTOAType.Value == AgreementType.CommunityPharmacistTOA,
-                BulkEmailType.PharmOBOTOA => e => e.AssignedTOAType.Value == AgreementType.PharmacyOboTOA,
+                BulkEmailType.RUTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
+                BulkEmailType.OBOTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
+                BulkEmailType.PharmRUTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
+                BulkEmailType.PharmOBOTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
                 _ => null,
             };
 
             return await _context.Enrollees
-                .Include(e => e.EnrolleeCareSettings)
                 .AsNoTracking()
                 .Where(predicate)
                 .Select(e => e.Email)
