@@ -16,7 +16,8 @@
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
-                      (refresh)="onRefresh()"></app-enrollee-table>
+                      (refresh)="onRefresh()"
+                      (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <ng-container *ngIf="content">
 
@@ -43,7 +44,8 @@
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"
-                                 (reload)="onRefresh()"></app-adjudicator-actions>
+                                 (reload)="onRefresh()"
+                                 (sendBulkEmail)="onSendBulkEmail()"></app-adjudicator-actions>
 
       </div>
     </div>

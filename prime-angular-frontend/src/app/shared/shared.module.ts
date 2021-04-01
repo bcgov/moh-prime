@@ -99,6 +99,7 @@ import { VendorFormComponent } from '@shared/components/forms/vendor-form/vendor
 import { ContactProfileFormComponent } from '@shared/components/site/contact-profile-form/contact-profile-form.component';
 import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
 import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
+import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @NgModule({
   declarations: [
@@ -180,7 +181,8 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
     ContactProfileFormComponent,
     SameAsComponent,
     SummaryCardComponent,
-    BannerComponent
+    BannerComponent,
+    SendBulkEmailComponent
   ],
   imports: [
     CommonModule,
