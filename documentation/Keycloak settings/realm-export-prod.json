@@ -66,14 +66,6 @@
         "attributes": {}
       },
       {
-        "id": "5f4c16dd-507f-4e8f-b44a-b2a0e188f248",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "24587706-4661-4ac5-924e-a2802a3ceca8",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
@@ -118,12 +110,7 @@
       {
         "id": "ced33b81-df4d-4cfe-a6c7-808bd6b68faa",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -157,20 +144,6 @@
         "id": "8f6415e5-3fc4-4ebc-a4b6-c89f52cf742a",
         "name": "site_view",
         "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "50b86721-60df-4e32-8f18-035e31844822",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -526,8 +499,8 @@
         "prime_administrant",
         "enrollee_triage",
         "site_view",
-        "site_edit",
-        "enrollee_approve"
+        "enrollee_approve",
+        "site_edit"
       ],
       "clientRoles": {},
       "subGroups": []
