@@ -21,6 +21,9 @@ export class AdjudicationRoutes {
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
   public static SITE_REGISTRATION = 'site-registration';
 
+  public static HEALTH_AUTHORITYS = 'health-authoritys';
+  public static AUTHORIZED_USERS = 'authorized-users';
+
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
@@ -28,6 +31,6 @@ export class AdjudicationRoutes {
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
+    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
   }
 }

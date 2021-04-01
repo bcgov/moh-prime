@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { MatTabsModule } from '@angular/material/tabs';
+
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
@@ -47,6 +49,7 @@ import { ContextualSiteNotificationComponent } from './shared/components/context
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
+import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 
 @NgModule({
   declarations: [
@@ -87,12 +90,14 @@ import { BannerMaintenanceComponent } from './shared/components/banner-maintenan
     ContextualSiteNotificationComponent,
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
-    BannerMaintenanceComponent
+    BannerMaintenanceComponent,
+    HealthAuthorityTableComponent
   ],
   imports: [
     AdjudicationRoutingModule,
     SharedModule,
     DashboardModule,
+    MatTabsModule,
     EditorModule
   ]
 })
