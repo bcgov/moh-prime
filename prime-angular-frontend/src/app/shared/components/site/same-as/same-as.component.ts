@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { Person } from '@lib/models/person.model';
-import { Address, AddressType } from '@shared/models/address.model';
-import { SiteService } from '@registration/shared/services/site.service';
 import { Contact } from '@lib/models/contact.model';
+import { Address, AddressType } from '@shared/models/address.model';
 import { Party } from '@registration/shared/models/party.model';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-same-as',

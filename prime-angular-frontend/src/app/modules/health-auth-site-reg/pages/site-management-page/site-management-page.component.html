@@ -1,1 +1,193 @@
-<p>Coming Soon!</p>
+<app-page [busy]="busy">
+  <app-page-header>Site Management</app-page-header>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Use this management page to update your information or to add multiple sites.
+        <em class="emphasize">
+          A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at
+          one
+          location, you have multiple sites.
+        </em>
+      </ng-container>
+    </app-page-subheader2>
+  </section>
+
+  <app-summary-card icon="business"
+                    title="Organization Information"
+                    [properties]="[
+                      { key: 'Health Authority', value: 'Health Authority Name' }
+                    ]">
+  </app-summary-card>
+
+  <hr class="divider">
+
+  <div class="add-site">
+    <button mat-button
+            type="button"
+            color="primary"
+            (click)="addSite(1)">
+      <mat-icon>add_business</mat-icon>
+      Add Site
+    </button>
+  </div>
+
+  <app-summary-card *ngIf="hasSubmittedSite"
+                    icon="store"
+                    title="Site Information"
+                    [properties]="[
+                      { key: 'Site Name', value: 'Site Name' },
+                      { key: 'Care Setting', value: 'Acute Care' },
+                      { key: 'Site Address', value: '1818 Commercial Drive, Vancouver BC. V5N 4A6' },
+                      { key: 'Vendor', value: 'Medinet' },
+                      { key: 'Site ID', value: '942' }
+                    ]">
+    <div class="d-flex align-items-center mt-2">
+      <mat-icon class="mr-2"
+                color="warn">notification_important</mat-icon>
+      <span class="text-red">This site is waiting for approval</span>
+    </div>
+  </app-summary-card>
+
+  <!--  <ng-container *ngFor="let organization of organizations; let first = first">-->
+
+  <!--    <app-summary-card icon="business"-->
+  <!--                      title="Organization Information"-->
+  <!--                      [menu]="organizationMenu"-->
+  <!--                      [menuOutletContext]="{ organization: organization }"-->
+  <!--                      [properties]="getOrganizationProperties(organization)">-->
+  <!--    </app-summary-card>-->
+
+  <!--    <hr *ngIf="first"-->
+  <!--        class="divider">-->
+
+  <!--    <div *ngIf="first"-->
+  <!--         class="add-site">-->
+  <!--      <button mat-button-->
+  <!--              type="button"-->
+  <!--              color="primary"-->
+  <!--              [disabled]="!organization.completed"-->
+  <!--              (click)="addSite(organization.id)">-->
+  <!--        <mat-icon>add_business</mat-icon>-->
+  <!--        Add Site-->
+  <!--      </button>-->
+  <!--    </div>-->
+
+  <!--    <ng-container *ngFor="let site of organization.sites">-->
+
+  <!--      <app-summary-card icon="store"-->
+  <!--                        title="Site Information"-->
+  <!--                        [menu]="siteMenu"-->
+  <!--                        [menuOutletContext]="{ site: site, organizationId: organization.id }"-->
+  <!--                        [properties]="getSiteProperties(site)"-->
+  <!--                        (action)="viewSiteRemoteUsers(organization.id, site)">-->
+  <!--        <ng-container *ngIf="!site.submittedDate"-->
+  <!--                      [ngTemplateOutlet]="notification"-->
+  <!--                      [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">-->
+  <!--        </ng-container>-->
+  <!--        <ng-container *ngIf="isUnderReview(site)"-->
+  <!--                      [ngTemplateOutlet]="notification"-->
+  <!--                      [ngTemplateOutletContext]="{ props:-->
+  <!--                        {-->
+  <!--                          icon: 'notification_important',-->
+  <!--                          text: 'This site is waiting for approval and an assigned Site ID'-->
+  <!--                        }-->
+  <!--                      }">-->
+  <!--        </ng-container>-->
+  <!--        <ng-container *ngIf="isDeclined(site)"-->
+  <!--                      [ngTemplateOutlet]="notification"-->
+  <!--                      [ngTemplateOutletContext]="{ props:-->
+  <!--                        {-->
+  <!--                          icon: 'not_interested',-->
+  <!--                          text: 'Declined'-->
+  <!--                        }-->
+  <!--                      }">-->
+  <!--        </ng-container>-->
+  <!--        <ng-container *ngIf="isApproved(site)"-->
+  <!--                      [ngTemplateOutlet]="success_notification"-->
+  <!--                      [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">-->
+  <!--        </ng-container>-->
+  <!--      </app-summary-card>-->
+
+  <!--    </ng-container>-->
+
+  <!--  </ng-container>-->
+
+  <!--  <ng-template #notification-->
+  <!--               let-props="props">-->
+  <!--    <div class="d-flex align-items-center mt-2">-->
+  <!--      <mat-icon class="mr-2"-->
+  <!--                color="warn">{{ props.icon }}</mat-icon>-->
+  <!--      <span class="text-red">{{ props.text }}</span>-->
+  <!--      <button mat-flat-button-->
+  <!--              color="primary"-->
+  <!--              class="ml-auto"-->
+  <!--              (click)="props.route()">{{ props.label }}</button>-->
+  <!--    </div>-->
+  <!--  </ng-template>-->
+
+  <!--  <ng-template #success_notification-->
+  <!--               let-props="props">-->
+  <!--    <div class="d-flex align-self-center mt-2">-->
+  <!--      <mat-icon class="mr-2 green-icon">{{ props.icon }}</mat-icon>-->
+  <!--      <p class="text-green"-->
+  <!--         [innerHTML]="props.text"></p>-->
+  <!--    </div>-->
+  <!--  </ng-template>-->
+
+  <!--  <ng-template #organizationMenu-->
+  <!--               let-organization="organization">-->
+  <!--    <button mat-icon-button-->
+  <!--            [matMenuTriggerFor]="rootMenu">-->
+  <!--      <mat-icon>more_vert</mat-icon>-->
+  <!--    </button>-->
+
+  <!--    <mat-menu #rootMenu="matMenu"-->
+  <!--              aria-label="Organization actions menu">-->
+  <!--      <button mat-menu-item-->
+  <!--              (click)="viewOrganization(organization)">-->
+  <!--        <span>View/Update Organization</span>-->
+  <!--      </button>-->
+
+  <!--      <button mat-menu-item-->
+  <!--              [matMenuTriggerFor]="subMenu"-->
+  <!--              [disabled]="!organizationAgreements?.length">-->
+  <!--        <span>Download Organization Agreement</span>-->
+  <!--      </button>-->
+  <!--    </mat-menu>-->
+
+  <!--    <mat-menu #subMenu="matMenu">-->
+  <!--      <button *ngFor="let agreement of organizationAgreements"-->
+  <!--              mat-menu-item-->
+  <!--              (click)="viewAgreement(organization, agreement)">-->
+  <!--        <span>{{ AgreementType[agreement.agreementType] | case: 'snake' : 'space' | capitalize: true }}</span>-->
+  <!--      </button>-->
+  <!--    </mat-menu>-->
+
+  <!--  </ng-template>-->
+
+  <!--  <ng-template #siteMenu-->
+  <!--               let-site="site"-->
+  <!--               let-organizationId="organizationId">-->
+  <!--    <button mat-icon-button-->
+  <!--            [matMenuTriggerFor]="menu">-->
+  <!--      <mat-icon>more_vert</mat-icon>-->
+  <!--    </button>-->
+
+  <!--    <mat-menu #menu="matMenu"-->
+  <!--              aria-label="Site actions menu">-->
+  <!--      <button mat-menu-item-->
+  <!--              (click)="viewSite(organizationId, site)">-->
+  <!--        <span>View/Update Site Information</span>-->
+  <!--      </button>-->
+  <!--      <button mat-menu-item-->
+  <!--              [disabled]="!site.completed || site.siteVendors[0]?.vendorCode === VendorEnum.CARECONNECT || site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"-->
+  <!--              (click)="viewSiteRemoteUsers(organizationId, site)">-->
+  <!--        <span>View/Update Remote Practitioners</span>-->
+  <!--      </button>-->
+  <!--    </mat-menu>-->
+  <!--  </ng-template>-->
+
+</app-page>

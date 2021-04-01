@@ -30,13 +30,13 @@ export class CollectionNoticePageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // TODO temporarily commented out until a collection notice is provided
-    // this.authService.hasJustLoggedIn = true;
-    // TODO added until a collection notice is provided
-    this.nextRoute();
+    this.authService.hasJustLoggedIn = true;
   }
 
   private nextRoute() {
-    this.router.navigate([HealthAuthSiteRegRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent });
+    // TODO route to SITE_MANAGEMENT and have the guards manage route by status, but for now temporarily sent to authorized user
+    // TODO replace use of router with routeUtils
+    // this.router.navigate([HealthAuthSiteRegRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent });
+    this.router.navigate([HealthAuthSiteRegRoutes.AUTHORIZED_USER], { relativeTo: this.route.parent });
   }
 }

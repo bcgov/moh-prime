@@ -9,11 +9,6 @@ import { Site } from '@registration/shared/models/site.model';
  * Service is considered a source of truth and should be set
  * directly from a HTTP response.
  */
-export interface ISiteService {
-  site$: BehaviorSubject<Site>;
-  site: Site;
-}
-
 @Injectable({
   providedIn: 'root'
 })
