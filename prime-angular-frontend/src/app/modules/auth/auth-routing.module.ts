@@ -9,6 +9,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { VaccinationsRoutes } from '../vaccinations/vaccinations.routes';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 const routes: Routes = [
@@ -19,7 +20,8 @@ const routes: Routes = [
         path: EnrolmentRoutes.BCSC_LOGIN,
         canLoad: [AuthorizationRedirectGuard],
         data: { locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE },
-        loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module').then(m => m.BcscEnrolmentLoginPageModule)
+        loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module')
+          .then(m => m.BcscEnrolmentLoginPageModule)
       },
       {
         path: EnrolmentRoutes.BCEID_LOGIN,
@@ -31,7 +33,8 @@ const routes: Routes = [
         path: SiteRoutes.LOGIN_PAGE,
         canLoad: [AuthorizationRedirectGuard],
         data: { locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE },
-        loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module').then(m => m.SiteRegistrationLoginPageModule)
+        loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module')
+          .then(m => m.SiteRegistrationLoginPageModule)
       },
       {
         path: AdjudicationRoutes.LOGIN_PAGE,
@@ -49,7 +52,13 @@ const routes: Routes = [
         path: GisEnrolmentRoutes.LOGIN_PAGE,
         // TODO uncomment when redirection is possible based on the token
         // canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
+        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module')
+          .then(m => m.GisLoginModule)
+      },
+      {
+        path: VaccinationsRoutes.LOGIN_PAGE,
+        loadChildren: () => import('../vaccinations/shared/modules/vaccination-login/vaccination-login.module')
+          .then(m => m.VaccinationLoginModule)
       },
       {
         path: '', // Equivalent to `/` and alias for `info`
@@ -64,4 +73,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

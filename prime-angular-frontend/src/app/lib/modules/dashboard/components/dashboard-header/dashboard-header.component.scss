@@ -1,5 +1,6 @@
 @import 'palette';
 @import 'variables';
+@import 'bootstrap/bootstrap-imports';
 
 @mixin dashboard-header-theme($bgColor, $color, $brandMarginTop) {
   background-color: $bgColor;
@@ -35,6 +36,14 @@
 
     &.is-mobile img {
       width: 200px;
+    }
+  }
+
+  .byline {
+    margin-left: 25px;
+
+    @include media-breakpoint-down(md) {
+      display: none;
     }
   }
 

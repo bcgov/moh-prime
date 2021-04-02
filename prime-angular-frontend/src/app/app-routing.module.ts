@@ -12,6 +12,7 @@ import { AuthRoutes } from '@auth/auth.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { VaccinationsRoutes } from '@vaccinations/vaccinations.routes';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
   {
     path: GisEnrolmentRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/gis-enrolment/gis-enrolment.module').then(m => m.GisEnrolmentModule)
+  },
+  {
+    path: VaccinationsRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/vaccinations/vaccinations.module').then(m => m.VaccinationsModule)
   },
   {
     path: AppRoutes.DENIED,
@@ -79,4 +84,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

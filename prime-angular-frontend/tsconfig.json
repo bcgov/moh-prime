@@ -58,6 +58,9 @@
       ],
       "@gis/*": [
         "./app/modules/gis-enrolment/*"
+      ],
+      "@vaccinations/*": [
+        "./app/modules/vaccinations/*"
       ]
     }
   },

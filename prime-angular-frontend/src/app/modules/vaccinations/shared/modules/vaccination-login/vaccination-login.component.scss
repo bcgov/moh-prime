@@ -1,0 +1,48 @@
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
+
+div.container {
+  margin-top: 3rem;
+
+  @include media-breakpoint-up(sm) {
+    margin-top: 6rem;
+  }
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 4rem;
+  }
+}
+
+.header {
+  img {
+    width: 100px;
+    height: auto;
+  }
+
+  div {
+    padding-bottom: 2.5rem;
+  }
+
+  em {
+    font-size: 1.2rem;
+  }
+}
+
+.actions {
+  margin-bottom: 1.5rem;
+
+  .mat-flat-button {
+    width: 100%;
+    min-width: 220px;
+
+    @include media-breakpoint-up(md) {
+      width: 300px;
+    }
+
+    &.large {
+      height: 46px;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+    }
+  }
+}
