@@ -153,6 +153,12 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     }
   }
 
+  protected checkValidity(): boolean {
+    // Pass the local form for validation and submission instead
+    // of using the default form from the form state
+    return super.checkValidity(this.form);
+  }
+
   protected onSubmitFormIsValid(): void {
     this.removeIncompleteCertifications(true);
   }
@@ -183,6 +189,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       // Store the new remote user in the parent form for submission
       remoteUsersFormArray.push(this.form);
     }
+
+    parent.markAsPristine();
 
     return of(noop());
   }

@@ -1,0 +1,53 @@
+<mat-dialog-content>
+  <span>Which enrollees do you want to email?</span>
+
+  <div class="mt-4">
+    <button mat-stroked-button
+            class="mr-4"
+            cdkFocusInitial
+            (click)="onCancel()">Cancel</button>
+
+    <button mat-flat-button
+            color="primary"
+            [matMenuTriggerFor]="menu">
+      Filter enrollees by: <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+
+    <mat-menu #menu>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.REQUIRES_TOA)">
+        <span>Requires TOA</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.COMMUNITY_PRACTICE)">
+        <span>Private Community Health Practice</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.COMMUNITY_PHARMACY)">
+        <span>Community Pharmacy</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.HEALTH_AUTHORITY)">
+        <span>Health Authority</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.RU_TOA)">
+        <span>RU TOA</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.OBO_TOA)">
+        <span>OBO TOA</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.PHARM_RU_TOA)">
+        <span>PharmRU TOA</span>
+      </button>
+      <button mat-menu-item
+              (click)="onSelect(BulkEmailType.PHARM_OBO_TOA)">
+        <span>PharmOBO TOA</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-dialog-content>

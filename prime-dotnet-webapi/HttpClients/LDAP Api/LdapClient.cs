@@ -35,6 +35,7 @@ namespace Prime.HttpClients
             try
             {
                 response = await _client.PostAsync($"users", httpContent);
+
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 _logger.LogInformation("CONTENT RESPONSE: {body}", responseJsonString);
 

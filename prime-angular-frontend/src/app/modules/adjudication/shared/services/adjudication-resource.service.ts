@@ -26,6 +26,7 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
+import {BulkEmailType} from '@shared/enums/bulk-email-type';
 
 @Injectable({
   providedIn: 'root'
@@ -468,6 +469,20 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site Notifications could not be deleted');
           this.logger.error('[Adjudication] AdjudicationResource::deleteSiteNotifications error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getEnrolleeEmails(bulkEmailType: BulkEmailType): Observable<string[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ bulkEmailType });
+    return this.apiResource.get<string[]>('enrollees/emails', params)
+      .pipe(
+        map((response: ApiHttpResponse<string[]>) => response.result),
+        tap((enrollees: string[]) => this.logger.info('ENROLLEE_EMAILS', enrollees)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollees bulk emails could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeEmails error has occurred: ', error);
           throw error;
         })
       );
