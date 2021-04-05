@@ -89,21 +89,20 @@
 
               <ng-container *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY">
                 <!-- Protect against case code called from `initForm` not completed yet -->
-                <div *ngIf="healthAuthoritySites.length > 0">
+                <div *ngIf="hasHealthAuthoritySites">
 
                   <ng-container *ngFor="let eha of enrolment?.enrolleeHealthAuthorities; let i = index"
-                                formArrayName="healthAuthoritySites">
+                                formGroupName="healthAuthoritySites">
 
-
-                    <ng-container *ngFor="let site of $any(healthAuthoritySites.at(i)).controls; let j = index; let last = last"
-                                  [formArrayName]="i">
+                    <ng-container *ngFor="let site of healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"
+                                  [formArrayName]="eha.healthAuthorityCode">
 
                       <app-obo-site-form [form]="site"
                                          [index]="j"
                                          [careSettingCode]="careSetting.careSettingCode"
                                          [healthAuthorityName]="eha.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
                                          [site]="site"
-                                         [total]="$any(this.healthAuthoritySites.at(i)).controls.length"
+                                         [total]="healthAuthoritySitesAsControls(eha.healthAuthorityCode).length"
                                          [last]="last"
                                          [jobNames]="jobNames"
                                          [allowDefaultOption]="allowDefaultOption"

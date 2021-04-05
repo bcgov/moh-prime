@@ -248,7 +248,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         return clear(form.get('communityPharmacySites') as FormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        return clear(form.get('healthAuthoritySites') as FormArray);
+        const healthAuthoritySites = form.get('healthAuthoritySites') as FormGroup;
+        Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => {
+          const sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
+          sitesOfHealthAuthority.clearValidators();
+          sitesOfHealthAuthority.updateValueAndValidity();
+          healthAuthoritySites.removeControl(healthAuthorityCode);
+        });
       }
     }
   }

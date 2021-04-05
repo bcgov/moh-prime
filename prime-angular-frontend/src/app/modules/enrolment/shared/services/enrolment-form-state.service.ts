@@ -244,12 +244,12 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
       const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
       const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
-      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormArray;
+      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
 
       oboSites.clear();
       communityHealthSites.clear();
       communityPharmacySites.clear();
-      healthAuthoritySites.clear();
+      Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
@@ -266,8 +266,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.addHealthAuthorityOboSite(site, healthAuthoritySites,
-              this.determineHASitesIndex(s.healthAuthorityCode, enrolment.enrolleeHealthAuthorities));
+            this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
             break;
           }
         }
@@ -442,7 +441,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
-      healthAuthoritySites: this.fb.array([])
+      healthAuthoritySites: this.fb.group({})
     });
   }
 
@@ -583,33 +582,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    *  This nested FormArray contains a FormGroup for each facility that the enrollee works at, in that Health Authority
    * @param healthAuthoritySitesIndex - value from calling `determineHASitesIndex` method
    */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormArray, healthAuthoritySitesIndex: number) {
+  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
     const facilityName = haSiteForm.get('facilityName') as FormControl;
     this.formUtilsService.setValidators(facilityName, [Validators.required]);
-    let sitesOfHealthAuthority = healthAuthoritySites.at(healthAuthoritySitesIndex) as FormArray;
+    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
     if (!sitesOfHealthAuthority) {
       sitesOfHealthAuthority = this.fb.array([]);
       sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
-      healthAuthoritySites.push(sitesOfHealthAuthority);
+      healthAuthoritySites.setControl(String(healthAuthorityCode), sitesOfHealthAuthority);
     }
     sitesOfHealthAuthority.push(haSiteForm);
-  }
-
-  /**
-   * Uses the index of one array (`enrolleeHealthAuthorities`) as the index into another array (`healthAuthoritySites`).
-   *
-   * @param healthAuthorityCode
-   * @param enrolleeHealthAuthorities The health authorities that an enrollee works at
-   * @returns An index into the `healthAuthoritySites` FormArray that is part of the `JobsForm`, or -1
-   *  if `healthAuthorityCode` cannot be found in `enrolleeHealthAuthorities`
-   */
-  public determineHASitesIndex(healthAuthorityCode: number, enrolleeHealthAuthorities: HealthAuthority[]): number {
-    for (var i = 0; i < enrolleeHealthAuthorities.length; i++) {
-      if (healthAuthorityCode === enrolleeHealthAuthorities[i].healthAuthorityCode) {
-        return i;
-      }
-    }
-    return -1;
   }
 
   /**
