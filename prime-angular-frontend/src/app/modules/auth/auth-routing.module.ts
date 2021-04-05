@@ -10,7 +10,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
-import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { VaccinationsRoutes } from '../vaccinations/vaccinations.routes';
 
