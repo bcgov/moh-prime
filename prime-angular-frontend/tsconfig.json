@@ -59,6 +59,9 @@
       "@gis/*": [
         "./app/modules/gis-enrolment/*"
       ],
+      "@health-auth/*": [
+        "./app/modules/health-auth-site-reg/*"
+      ],
       "@vaccinations/*": [
         "./app/modules/vaccinations/*"
       ]

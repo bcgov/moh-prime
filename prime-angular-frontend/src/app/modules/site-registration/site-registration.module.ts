@@ -7,10 +7,7 @@ import { SiteRegistrationRoutingModule } from './site-registration-routing.modul
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
-import { ContactProfileFormComponent } from './shared/components/contact-profile-form/contact-profile-form.component';
-import { SameAsComponent } from './shared/components/same-as/same-as.component';
 import { SiteProgressIndicatorComponent } from './shared/components/site-progress-indicator/site-progress-indicator.component';
-import { SummaryCardComponent } from './shared/components/summary-card/summary-card.component';
 
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { SiteManagementPageComponent } from './pages/site-management-page/site-management-page.component';
@@ -47,9 +44,6 @@ import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.
     TechnicalSupportPageComponent,
     SiteRegistrationDashboardComponent,
     SiteProgressIndicatorComponent,
-    ContactProfileFormComponent,
-    SameAsComponent,
-    SummaryCardComponent,
     OverviewPageComponent,
     NextStepsPageComponent
   ],

@@ -190,6 +190,8 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       remoteUsersFormArray.push(this.form);
     }
 
+    parent.markAsPristine();
+
     return of(noop());
   }
 

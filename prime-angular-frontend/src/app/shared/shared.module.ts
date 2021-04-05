@@ -90,11 +90,15 @@ import { EscalationNoteComponent } from '@shared/components/dialogs/content/esca
 import { BannerComponent } from '@shared/components/banner/banner.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
-import { SiteNameComponent } from '@shared/components/site/site-name/site-name.component';
-import { SiteRegAccessComponent } from './components/auth/site-reg-access/site-reg-access.component';
-import { PillComponent } from './components/auth/pill/pill.component';
-import { SimpleAccessComponent } from './components/auth/simple-access/simple-access.component';
-import { PrimeEnrolmentAccessComponent } from './components/auth/prime-enrolment-access/prime-enrolment-access.component';
+import { SiteInformationFormComponent } from '@shared/components/forms/site-information-form/site-information-form.component';
+import { SiteRegAccessComponent } from '@shared/components/auth/site-reg-access/site-reg-access.component';
+import { PillComponent } from '@shared/components/auth/pill/pill.component';
+import { SimpleAccessComponent } from '@shared/components/auth/simple-access/simple-access.component';
+import { PrimeEnrolmentAccessComponent } from '@shared/components/auth/prime-enrolment-access/prime-enrolment-access.component';
+import { VendorFormComponent } from '@shared/components/forms/vendor-form/vendor-form.component';
+import { ContactProfileFormComponent } from '@shared/components/site/contact-profile-form/contact-profile-form.component';
+import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
+import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
 import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @NgModule({
@@ -168,11 +172,15 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     ClaimNoteComponent,
     AddressViewComponent,
     PageSectionComponent,
-    SiteNameComponent,
+    SiteInformationFormComponent,
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent,
     BannerComponent,
     SendBulkEmailComponent
   ],
@@ -254,11 +262,15 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     ClaimNoteComponent,
     AddressViewComponent,
     PageSectionComponent,
-    SiteNameComponent,
+    SiteInformationFormComponent,
     SiteRegAccessComponent,
     PillComponent,
     SimpleAccessComponent,
     PrimeEnrolmentAccessComponent,
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent,
     BannerComponent
   ],
   providers: [

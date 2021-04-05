@@ -1,16 +1,18 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
+import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 
 import { AuthRoutes } from './auth.routes';
+import { AuthorizationRedirectGuard } from './shared/guards/authorization-redirect.guard';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
-import { VaccinationsRoutes } from '../vaccinations/vaccinations.routes';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { VaccinationsRoutes } from '../vaccinations/vaccinations.routes';
 
 const routes: Routes = [
   {
@@ -54,6 +56,12 @@ const routes: Routes = [
         // canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module')
           .then(m => m.GisLoginModule)
+      },
+      {
+        path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
+        canLoad: [AuthorizationRedirectGuard],
+        loadChildren: () => import('@health-auth/shared/modules/health-auth-site-reg-login-page/health-auth-site-reg-login-page.module')
+          .then(m => m.HealthAuthSiteRegLoginPageModule)
       },
       {
         path: VaccinationsRoutes.LOGIN_PAGE,
