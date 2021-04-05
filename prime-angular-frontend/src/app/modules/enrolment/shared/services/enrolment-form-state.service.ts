@@ -580,7 +580,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * @param haSiteForm - aka Health Authority Facility Form
    * @param healthAuthoritySites - a FormArray where each element, representing a Health Authority where the enrollee works, contains a FormArray.
    *  This nested FormArray contains a FormGroup for each facility that the enrollee works at, in that Health Authority
-   * @param healthAuthoritySitesIndex - value from calling `determineHASitesIndex` method
+   * @param healthAuthorityCode
    */
   public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
     const facilityName = haSiteForm.get('facilityName') as FormControl;
@@ -592,6 +592,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       healthAuthoritySites.setControl(String(healthAuthorityCode), sitesOfHealthAuthority);
     }
     sitesOfHealthAuthority.push(haSiteForm);
+  }
+
+  public removeUnselectedHAOboSites() {
+    const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    this.configService.healthAuthorities.forEach((healthAuthority, index) => {
+      if (!enrolleeHealthAuthorities.at(index).value) {
+        healthAuthoritySites.removeControl(String(healthAuthority.code));
+      }
+    })
   }
 
   /**

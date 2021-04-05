@@ -97,6 +97,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.enrolmentFormStateService.removeHealthAuthorities();
     }
 
+    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    this.enrolmentFormStateService.removeUnselectedHAOboSites();
+
     super.onSubmit();
   }
 
