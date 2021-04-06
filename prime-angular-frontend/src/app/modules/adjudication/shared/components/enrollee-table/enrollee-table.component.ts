@@ -32,6 +32,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
+  @Output() public sendBulkEmail: EventEmitter<void>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -57,6 +58,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.reassign = new EventEmitter<number>();
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
+    this.sendBulkEmail = new EventEmitter<void>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -102,6 +104,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh.emit();
   }
 
+  public onSendBulkEmail(): void {
+    this.sendBulkEmail.emit();
+  }
+
   public sortData(sort: Sort) {
     if (!sort.active || !sort.direction) {
       return;
@@ -138,7 +144,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    console.log('CHANGES', changes.enrollees.currentValue);
     if (!changes.enrollees.firstChange) {
       this.dataSource.data = changes.enrollees.currentValue;
     }

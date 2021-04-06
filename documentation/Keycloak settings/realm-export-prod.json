@@ -66,14 +66,6 @@
         "attributes": {}
       },
       {
-        "id": "5f4c16dd-507f-4e8f-b44a-b2a0e188f248",
-        "name": "prime_readonly_admin",
-        "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
         "id": "24587706-4661-4ac5-924e-a2802a3ceca8",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
@@ -118,12 +110,7 @@
       {
         "id": "ced33b81-df4d-4cfe-a6c7-808bd6b68faa",
         "name": "prime_super_admin",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_admin"
-          ]
-        },
+        "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -157,20 +144,6 @@
         "id": "8f6415e5-3fc4-4ebc-a4b6-c89f52cf742a",
         "name": "site_view",
         "composite": false,
-        "clientRole": false,
-        "containerId": "v4mbqqas",
-        "attributes": {}
-      },
-      {
-        "id": "50b86721-60df-4e32-8f18-035e31844822",
-        "name": "prime_admin",
-        "description": "IDIR authenticated admin role",
-        "composite": true,
-        "composites": {
-          "realm": [
-            "prime_readonly_admin"
-          ]
-        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -526,8 +499,8 @@
         "prime_administrant",
         "enrollee_triage",
         "site_view",
-        "site_edit",
-        "enrollee_approve"
+        "enrollee_approve",
+        "site_edit"
       ],
       "clientRoles": {},
       "subGroups": []
@@ -1296,9 +1269,7 @@
       "defaultClientScopes": [
         "web-origins",
         "identity_provider",
-        "address",
-        "phone",
-        "profile",
+        "profile_eforms",
         "roles",
         "identity_assurance_level",
         "email"
@@ -2496,6 +2467,91 @@
             "id.token.claim": "true",
             "access.token.claim": "true",
             "claim.name": "groups",
+            "jsonType.label": "String"
+          }
+        }
+      ]
+    },
+    {
+      "id": "6782c7cd-57e8-429b-86c4-731870f3571f",
+      "name": "profile_eforms",
+      "description": "Profile scope for the eForms application",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "consent.screen.text": "${profileScopeConsentText}"
+      },
+      "protocolMappers": [
+        {
+          "id": "c0ab7fe7-fbfd-42d8-832a-ef070b6139c1",
+          "name": "given name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "firstName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "5bce67b0-4dcd-4b0f-9321-9fa7f2112fd9",
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "id": "4ecb94a9-2612-4d57-9433-1a5dde06da72",
+          "name": "family name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "lastName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "family_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "54a60942-2c7f-40a5-95e5-e33d472baabd",
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "username",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "37c762f6-8e09-4cda-b3eb-8ded0e369cbc",
+          "name": "given names",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "givenNames",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_names",
             "jsonType.label": "String"
           }
         }
