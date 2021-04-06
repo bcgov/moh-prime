@@ -8,9 +8,7 @@ describe('SafePipe', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      providers: [
-
-      ]
+      providers: []
     });
   }));
 
@@ -27,12 +25,12 @@ describe('SafePipe', () => {
     expect(result).toBeNull();
   });
 
-  it('should not throw exception if type of DOM sanitizer exists', () => {
+  it('should not throw an exception if the type of DOM sanitizer exists', () => {
     const value = 'Only testing that a DOM sanitizer exists';
     const domSanitizerTypes: DomSanitizerType[] = ['html', 'style', 'script', 'url', 'resourceUrl'];
     let result = true;
     try {
-      result = domSanitizerTypes.reduce((result, type) => result && !!pipe.transform(value, type), result);
+      result = domSanitizerTypes.reduce((finalResult, type) => finalResult && !!pipe.transform(value, type), result);
     } catch (e) {
       result = false;
     }
@@ -45,7 +43,7 @@ describe('SafePipe', () => {
     const message = `Invalid safe type specified: ${domSanitizerType}`;
     let result = null;
     try {
-      pipe.transform(value, domSanitizerType)
+      pipe.transform(value, domSanitizerType);
     } catch (e) {
       result = message;
     }

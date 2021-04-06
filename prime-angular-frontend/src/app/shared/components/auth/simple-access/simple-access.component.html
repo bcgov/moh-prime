@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div *ngIf="showLogo"
+         class="col-sm-12 logo">
+
+      <app-prime-logo label="right"
+                      [size]="(isMobile) ? 'small' : 'medium'"></app-prime-logo>
+
+    </div>
+    <div class="col-sm-12 header">
+
+      <h1>{{ title }}</h1>
+      <p>for health professionals of British Columbia</p>
+
+    </div>
+    <div class="col-sm-12">
+
+      <div class="row actions">
+        <div class="col col-md-auto">
+
+          <button mat-flat-button
+                  color="primary"
+                  class="large"
+                  (click)="onLogin()">{{ loginLabel }}</button>
+
+        </div>
+      </div>
+      <div class="col-sm-12 support">
+
+        <ng-content select="app-pill"></ng-content>
+
+      </div>
+    </div>
+  </div>
+</div>

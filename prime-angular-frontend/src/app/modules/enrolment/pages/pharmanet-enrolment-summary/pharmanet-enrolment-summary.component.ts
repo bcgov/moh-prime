@@ -42,7 +42,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     settingPlural: string,
     settingCode: number,
     formControl: FormControl,
-    subheaderContent: string
+    subheaderContent: string;
   }[];
 
   constructor(
@@ -141,7 +141,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTokenUrl(tokenId: string): string {
-    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
+    return `${ this.config.loginRedirectUrl }/provisioner-access/${ tokenId }`;
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -204,8 +204,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Private Community Health Practices',
             settingCode: careSetting.careSettingCode,
             formControl: this.communityHealthEmails,
-            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office
-              manager).`
+            subheaderContent: `Send your approval to your private community health practice\'s PharmaNet administrator (e.g., office manager).`
           };
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
@@ -223,8 +222,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
             settingPlural: 'Health Authorities',
             settingCode: careSetting.careSettingCode,
             formControl: this.healthAuthorityEmails,
-            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are
-              unsure who this is).`
+            subheaderContent: `Send your approval to your facility’s PharmaNet access administrator (ask your manager if you are unsure who this is). If you work in more than one facility or site you can include the email addresses for all the PharmaNet administrators separated by a comma.`
           };
         }
       }

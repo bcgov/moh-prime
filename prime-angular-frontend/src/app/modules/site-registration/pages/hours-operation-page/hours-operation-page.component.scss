@@ -1,0 +1,38 @@
+@import 'bootstrap/bootstrap-imports';
+
+section {
+  .weekdays {
+    .day {
+      padding-top: .9rem;
+      padding-bottom: .9rem;
+
+      .weekday {
+        display: inline-block;
+        width: 90px;
+        margin-right: .5rem;
+      }
+
+      mat-slide-toggle {
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  mat-form-field{
+    width: 6rem;
+
+    &:not(:last-child) {
+      margin-right: 1rem;
+    }
+  }
+}
+
+.hide {
+  display: none;
+}
+
+@include media-breakpoint-up(sm) {
+  .hide {
+    visibility: hidden;
+  }
+}

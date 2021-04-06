@@ -1,36 +1,34 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
+import { FormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
-import { StringUtils } from '@lib/utils/string-utils.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { FormGroupValidators } from '@lib/validators/form-group.validators';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { RouteStateService } from '@core/services/route-state.service';
 import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { Party } from '@registration/shared/models/party.model';
-import { Contact } from '@registration/shared/models/contact.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
-import { BusinessDay } from '@registration/shared/models/business-day.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { SiteAddressPageFormState } from '@registration/pages/site-address-page/site-address-page-form-state.class';
+import { HoursOperationPageFormState } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
+import { AdministratorPageFormState } from '@registration/pages/administrator-page/administrator-page-form-state.class';
+import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer-page/privacy-officer-page-form-state.class';
+import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
+import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
+import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
+import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormStateService<Site> {
-  public careSettingTypeForm: FormGroup;
-  public businessForm: FormGroup;
-  public siteAddressForm: FormGroup;
-  public hoursOperationForm: FormGroup;
-  public remoteUsersForm: FormGroup;
-  public administratorPharmaNetForm: FormGroup;
-  public privacyOfficerForm: FormGroup;
-  public technicalSupportForm: FormGroup;
+  public careSettingPageFormState: CareSettingPageFormState;
+  public businessLicencePageFormState: BusinessLicencePageFormState;
+  public siteAddressPageFormState: SiteAddressPageFormState;
+  public hoursOperationPageFormState: HoursOperationPageFormState;
+  public remoteUsersPageFormState: RemoteUsersPageFormState;
+  public administratorPharmaNetFormState: AdministratorPageFormState;
+  public privacyOfficerFormState: PrivacyOfficerPageFormState;
+  public technicalSupportFormState: TechnicalSupportPageFormState;
 
   private siteId: number;
   private organizationId: number;
@@ -56,6 +54,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     if (!site) {
       return;
     }
+
     // Store required site identifiers not captured in forms
     this.siteId = site.id;
     this.organizationId = site.organizationId;
@@ -69,29 +68,14 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Convert reactive form abstract controls into JSON.
    */
   public get json(): Site {
-    const { careSettingCode, vendorCode, pec } = this.careSettingTypeForm.getRawValue();
-    const { businessLicenceGuid, doingBusinessAs, deferredLicenceReason } = this.businessForm.getRawValue();
-    const { physicalAddress } = this.siteAddressForm.getRawValue();
-    const businessHours = this.hoursOperationForm.getRawValue().businessDays
-      .map((hours: BusinessDayHours, dayOfWeek: number) => {
-        if (hours.startTime && hours.endTime) {
-          hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
-          hours.endTime = StringUtils.splice(hours.endTime, 2, ':');
-        }
-        return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
-      })
-      .filter((day: BusinessDay) => day.startTime !== null);
-    const remoteUsers = this.remoteUsersForm.getRawValue().remoteUsers
-      .map((ru: RemoteUser) => {
-        // Remove the ID from the remote user to simplify updates on the server
-        const { id, ...remoteUser } = ru;
-        return remoteUser;
-      });
-    const [administratorPharmaNet, privacyOfficer, technicalSupport] = [
-      this.administratorPharmaNetForm.getRawValue(),
-      this.privacyOfficerForm.getRawValue(),
-      this.technicalSupportForm.getRawValue()
-    ].map((contact: Contact) => this.toPersonJson<Contact>(contact));
+    const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
+    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
+    const physicalAddress = this.siteAddressPageFormState.json;
+    const businessHours = this.hoursOperationPageFormState.json;
+    const remoteUsers = this.remoteUsersPageFormState.json;
+    const administratorPharmaNet = this.administratorPharmaNetFormState.json;
+    const privacyOfficer = this.privacyOfficerFormState.json;
+    const technicalSupport = this.technicalSupportFormState.json;
 
     // Includes site related keys to uphold relationships, and allow for updates
     // to a site. Keys not for update have been omitted and the type enforced
@@ -102,29 +86,24 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       provisionerId: this.provisionerId,
       // provisioner (N/A)
       careSettingCode,
-      // Only using single vendors for now
-      siteVendors: [{
-        siteId: this.siteId,
-        vendorCode
-      }],
-      businessLicenceGuid,
-      deferredLicenceReason,
+      siteVendors,
       doingBusinessAs,
-      physicalAddressId: physicalAddress?.id,
+      physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       physicalAddress,
       businessHours,
       remoteUsers,
-      administratorPharmaNetId: administratorPharmaNet?.id,
+      administratorPharmaNetId: administratorPharmaNet?.id, // TODO can this be dropped?
       administratorPharmaNet,
-      privacyOfficerId: privacyOfficer?.id,
+      privacyOfficerId: privacyOfficer?.id, // TODO can this be dropped?
       privacyOfficer,
-      technicalSupportId: technicalSupport?.id,
+      technicalSupportId: technicalSupport?.id, // TODO can this be dropped?
       technicalSupport,
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec
-    } as Site; // Enforced type
+      // TODO output should be a Site-like model instead due to missing properties
+    } as Site; // Enforced type due to N/A properties
   }
 
   /**
@@ -133,14 +112,14 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get forms(): AbstractControl[] {
     return [
-      this.careSettingTypeForm,
-      this.businessForm,
-      this.siteAddressForm,
-      this.hoursOperationForm,
-      this.remoteUsersForm,
-      this.administratorPharmaNetForm,
-      this.privacyOfficerForm,
-      this.technicalSupportForm
+      this.careSettingPageFormState.form,
+      this.businessLicencePageFormState.form,
+      this.siteAddressPageFormState.form,
+      this.hoursOperationPageFormState.form,
+      this.remoteUsersPageFormState.form,
+      this.administratorPharmaNetFormState.form,
+      this.privacyOfficerFormState.form,
+      this.technicalSupportFormState.form
     ];
   }
 
@@ -150,14 +129,14 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * clear previous form data from the service.
    */
   protected buildForms() {
-    this.careSettingTypeForm = this.buildCareSettingTypeForm();
-    this.businessForm = this.buildBusinessForm();
-    this.siteAddressForm = this.buildSiteAddressForm();
-    this.hoursOperationForm = this.buildHoursOperationForm();
-    this.remoteUsersForm = this.buildRemoteUsersForm();
-    this.administratorPharmaNetForm = this.buildAdministratorPharmaNetForm();
-    this.privacyOfficerForm = this.buildPrivacyOfficerForm();
-    this.technicalSupportForm = this.buildTechnicalSupportForm();
+    this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
+    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb);
+    this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
+    this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
+    this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
+    this.administratorPharmaNetFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
+    this.privacyOfficerFormState = new PrivacyOfficerPageFormState(this.fb, this.formUtilsService);
+    this.technicalSupportFormState = new TechnicalSupportPageFormState(this.fb, this.formUtilsService);
   }
 
   /**
@@ -169,251 +148,15 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    this.careSettingTypeForm.patchValue(site);
+    const { careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
 
-    if (site.siteVendors?.length) {
-      this.careSettingTypeForm.get('vendorCode').patchValue(site.siteVendors[0].vendorCode);
-    }
-
-    if (site.doingBusinessAs) {
-      this.businessForm.get('doingBusinessAs').patchValue(site.doingBusinessAs);
-    }
-
-    if (site.businessLicence) {
-      this.businessForm.get('deferredLicenceReason').patchValue(site.businessLicence.deferredLicenceReason);
-    }
-
-    if (site.physicalAddress) {
-      this.siteAddressForm.get('physicalAddress').patchValue(site.physicalAddress);
-    }
-
-    if (site.businessHours?.length) {
-      const businessDays = [...Array(7).keys()]
-        .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {
-          const day = site.businessHours.find(bh => bh.day === dayOfWeek);
-          if (day) {
-            day.startTime = day.startTime.replace(':', '');
-            day.endTime = day.endTime.replace(':', '');
-          }
-          days.push(day ?? {});
-          return days;
-        }, []);
-      this.hoursOperationForm.get('businessDays').patchValue(businessDays);
-    }
-
-    const remoteUsersForm = this.remoteUsersForm;
-    const remoteUsersFormArray = remoteUsersForm.get('remoteUsers') as FormArray;
-    remoteUsersFormArray.clear(); // Clear out existing indices
-    if (site.remoteUsers?.length) {
-      // Omitted from payload, but provided in the form to allow for
-      // validation to occur when "Have Remote Users" is toggled
-      remoteUsersForm.get('hasRemoteUsers').patchValue(!!site.remoteUsers.length);
-
-      site.remoteUsers.forEach((remoteUser: RemoteUser) => {
-        const group = this.createEmptyRemoteUserFormAndPatch(remoteUser);
-        remoteUsersFormArray.push(group);
-      });
-    }
-
-    [
-      [this.administratorPharmaNetForm, site.administratorPharmaNet],
-      [this.privacyOfficerForm, site.privacyOfficer],
-      [this.technicalSupportForm, site.technicalSupport]
-    ]
-      .filter(([form, data]: [FormGroup, Party]) => data)
-      .forEach((formParty: [FormGroup, Party]) => this.toPersonFormModel<Contact>(formParty));
-  }
-
-  /**
-   * Form Builders and Helpers
-   */
-
-  /**
-   * @description
-   * Create an empty remote user form group, and patch
-   * it with a remote user if provided.
-   */
-  public createEmptyRemoteUserFormAndPatch(remoteUser: RemoteUser = null): FormGroup {
-    const group = this.remoteUserFormGroup();
-    if (remoteUser) {
-      const { id, firstName, lastName, email, remoteUserCertifications } = remoteUser;
-      group.patchValue({ id, firstName, lastName, email });
-
-      const certs = group.get('remoteUserCertifications') as FormArray;
-      remoteUserCertifications.map((cert: RemoteUserCertification) => {
-        const formGroup = this.remoteUserCertificationFormGroup();
-        formGroup.patchValue(cert);
-        return formGroup;
-      }).forEach((remoteUserCertificationFormGroup: FormGroup) =>
-        certs.push(remoteUserCertificationFormGroup)
-      );
-    }
-
-    return group;
-  }
-
-  private buildCareSettingTypeForm(code: number = null, pec: string = null): FormGroup {
-    return this.fb.group({
-      careSettingCode: [
-        code,
-        [Validators.required]
-      ],
-      vendorCode: [
-        0,
-        [FormControlValidators.requiredIndex]
-      ],
-      pec: [
-        pec,
-        [Validators.required]
-      ]
-    });
-  }
-
-  private buildBusinessForm(): FormGroup {
-    return this.fb.group({
-      businessLicenceGuid: [
-        '',
-        []
-      ],
-      deferredLicenceReason: [
-        '',
-        []
-      ],
-      doingBusinessAs: [
-        '',
-        [Validators.required]
-      ]
-    });
-  }
-
-  private buildSiteAddressForm(): FormGroup {
-    return this.fb.group({
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        areDisabled: ['provinceCode', 'countryCode'],
-        useDefaults: ['provinceCode', 'countryCode'],
-        exclude: ['street2']
-      })
-    });
-  }
-
-  private buildHoursOperationForm(): FormGroup {
-    const groups = [...new Array(7)].map(() =>
-      this.fb.group({
-        startTime: [null, []],
-        endTime: [null, []],
-      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
-    );
-
-    return this.fb.group({
-      businessDays: this.fb.array(groups)
-      // TODO at least one business hours is required
-      // [FormArrayValidators.atLeast(1)]
-    });
-  }
-
-  private buildRemoteUsersForm(): FormGroup {
-    return this.fb.group({
-      // Omitted from payload, but provided in the form to allow for
-      // validation to occur when "Have Remote Users" is toggled
-      hasRemoteUsers: [
-        false,
-        []
-      ],
-      remoteUsers: this.fb.array(
-        [],
-        []
-      )
-      // TODO at least one remote users is required
-      // [FormArrayValidators.atLeast(1)]
-    });
-  }
-
-  private remoteUserFormGroup(): FormGroup {
-    return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      firstName: [
-        null,
-        [Validators.required]
-      ],
-      lastName: [
-        null,
-        [Validators.required]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ],
-      remoteUserCertifications: this.fb.array(
-        [],
-        { validators: FormArrayValidators.atLeast(1) }
-      )
-    });
-  }
-
-  public remoteUserCertificationFormGroup(): FormGroup {
-    return this.fb.group({
-      // Force selection of "None" on new certifications
-      collegeCode: ['', []],
-      // Validators are applied at the component-level when
-      // fields are made visible to allow empty submissions
-      licenseNumber: [null, []],
-      licenseCode: [null, []]
-    });
-  }
-
-  private buildAdministratorPharmaNetForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private buildPrivacyOfficerForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private buildTechnicalSupportForm(): FormGroup {
-    return this.partyFormGroup();
-  }
-
-  private partyFormGroup(disabled: boolean = false): FormGroup {
-    return this.fb.group({
-      id: [
-        0,
-        []
-      ],
-      firstName: [
-        { value: null, disabled },
-        [Validators.required]
-      ],
-      lastName: [
-        { value: null, disabled },
-        [Validators.required]
-      ],
-      jobRoleTitle: [
-        null,
-        [Validators.required]
-      ],
-      phone: [
-        null,
-        [Validators.required, FormControlValidators.phone]
-      ],
-      fax: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      smsPhone: [
-        null,
-        [FormControlValidators.phone]
-      ],
-      email: [
-        null,
-        [Validators.required, FormControlValidators.email]
-      ],
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        exclude: ['street2']
-      })
-    });
+    this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
+    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec, businessLicence });
+    this.siteAddressPageFormState.patchValue(site?.physicalAddress);
+    this.hoursOperationPageFormState.patchValue(site?.businessHours);
+    this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
+    this.administratorPharmaNetFormState.patchValue(site?.administratorPharmaNet);
+    this.privacyOfficerFormState.patchValue(site?.privacyOfficer);
+    this.technicalSupportFormState.patchValue(site?.technicalSupport);
   }
 }

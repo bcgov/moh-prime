@@ -18,8 +18,7 @@ import { AdjudicationContainerComponent } from '@adjudication/shared/components/
   templateUrl: './enrollee-overview.component.html',
   styleUrls: ['./enrollee-overview.component.scss']
 })
-export class EnrolleeOverviewComponent extends AdjudicationContainerComponent
-  implements OnInit {
+export class EnrolleeOverviewComponent extends AdjudicationContainerComponent implements OnInit {
   public enrollee: HttpEnrollee;
   public enrolment: Enrolment;
 

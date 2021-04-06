@@ -3,7 +3,7 @@ import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 export class RouteUtils {
   private route: ActivatedRoute;
   private router: Router;
-  private baseRoutePath: string;
+  private readonly baseRoutePath: string;
 
   constructor(
     route: ActivatedRoute,
@@ -34,7 +34,7 @@ export class RouteUtils {
    * Determine the current route path of a URL by removing query and
    * URI params that can't be mapped to existing module routes.
    */
-  public static currentRoutePath(url: string) {
+  public static currentRoutePath(url: string): string {
     // Truncate query parameters
     return url.split('?')
       .shift()
@@ -62,7 +62,7 @@ export class RouteUtils {
    * @description
    * Route relative to the active route.
    */
-  public routeRelativeTo(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}) {
+  public routeRelativeTo(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {
     this.routeTo(routePath, {
       relativeTo: this.route.parent,
       ...navigationExtras
@@ -74,7 +74,7 @@ export class RouteUtils {
    * Route within a specified base path, for example within a
    * module, otherwise uses root.
    */
-  public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}) {
+  public routeWithin(routePath: string | (string | number)[], navigationExtras: NavigationExtras = {}): void {
     let commands = (Array.isArray(routePath)) ? routePath : [routePath];
     commands = (this.baseRoutePath) ? [this.baseRoutePath, ...commands] : commands;
     this.routeTo(commands, {
@@ -88,7 +88,7 @@ export class RouteUtils {
    * to a view. Query parameters are merged, but can be removed by
    * setting the keys value to `null`.
    */
-  public updateQueryParams(queryParams: { [key: string]: any }) {
+  public updateQueryParams(queryParams: { [key: string]: any }): void {
     // Passing `null` values removes the query parameter from the URL
     queryParams = { ...this.route.snapshot.queryParams, ...queryParams };
     this.router.navigate([], { queryParams });
@@ -99,7 +99,7 @@ export class RouteUtils {
    * Remove every query parameter on the current route without routing
    * to a view.
    */
-  public removeQueryParams() {
-    this.router.navigate([], { queryParams: {} });
+  public removeQueryParams(queryParams: { [key: string]: any } = {}): void {
+    this.router.navigate([], { queryParams });
   }
 }

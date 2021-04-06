@@ -1,4 +1,4 @@
-import { MockPermissionService } from './../../../../../../test/mocks/mock-permission-service';
+import { MockPermissionService } from '../../../../../../test/mocks/mock-permission.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
