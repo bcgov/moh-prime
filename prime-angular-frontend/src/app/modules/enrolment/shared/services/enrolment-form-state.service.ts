@@ -175,9 +175,34 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public hasCertificateOrJob(): boolean {
     const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    let hasOboSiteForEveryHA = true;
+    // Using `for` loop rather than `every()` method for ease of debugging
+    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
+      const checkbox = enrolleeHealthAuthorities.controls[i];
+      // For every selected Health Authority ...
+      if (checkbox.value === true) {
+        let foundMatchingHAOboSite = false;
+        // ... there must be at least one Obo Site for that Health Authority
+        for (let j = 0; j < oboSites.controls.length; j++) {
+          const oboSiteForm = oboSites.controls[j] as FormGroup;
+          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
+            foundMatchingHAOboSite = true;
+            break;
+          }
+        }
+        // this.logger.trace(`Checkbox at ${i} -> result of ${foundMatchingHAOboSite}`);
+        if (!foundMatchingHAOboSite) {
+          hasOboSiteForEveryHA = false;
+          break;
+        }
+      } else {
+        // this.logger.trace(`Checkbox at ${i} was unchecked`);
+      }
+    }
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
-    return oboSites.length || (certifications.length && certifications.value[0].licenseNumber);
+    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
   }
 
   /**
@@ -595,10 +620,20 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   }
 
   public removeUnselectedHAOboSites() {
+    // Obo Sites need to be removed from two different collections
+    const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!enrolleeHealthAuthorities.at(index).value) {
+        for (let i = oboSites.controls.length - 1; i >= 0; i--) {
+          const oboSiteForm = oboSites.controls[i] as FormGroup;
+          if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
+            oboSites.removeAt(i);
+            // this.logger.trace(`Removed Obo Site at ${i} for ${healthAuthority.name}`);
+          }
+        }
         healthAuthoritySites.removeControl(String(healthAuthority.code));
       }
     })

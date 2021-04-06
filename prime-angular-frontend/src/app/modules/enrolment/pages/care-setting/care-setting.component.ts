@@ -194,11 +194,15 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   protected nextRouteAfterSubmit() {
     const oboSites = this.enrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.certifications;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
     } else if (oboSites?.length) {
+      nextRoutePath = EnrolmentRoutes.JOB;
+    } else if (certifications.length === 0 && oboSites?.length === 0) {
+      // No College Licence and need to enter Job information
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 
