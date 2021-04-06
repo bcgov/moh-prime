@@ -108,6 +108,11 @@ namespace Prime
         public DbSet<HAAuthorizedUser> HAAuthorizedUsers { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
+
+        // PLR Integration
+        public DbSet<PlrProvider> PlrProviders { get; set; }
+
+
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
 
