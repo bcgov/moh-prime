@@ -1,11 +1,13 @@
 export class SiteRoutes {
-  public static SITE_REGISTRATION = 'site-registration';
+  public static LOGIN_PAGE = 'site';
+
+  public static MODULE_PATH = 'site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
 
   // Kept as organizations so route paths indicate hierarchy of resources
   // TODO maybe don't make site management the root so paths make sense on site management
   public static SITE_MANAGEMENT = 'organizations';
-  // TODO make this the roote path for organizations and sites
+  // TODO make this the route path for organizations and sites
   // public static ORGANIZATIONS = 'organizations';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
@@ -27,14 +29,12 @@ export class SiteRoutes {
   public static SITE_REVIEW = 'site-review';
   public static NEXT_STEPS = 'next-steps';
 
-  public static MODULE_PATH = SiteRoutes.SITE_REGISTRATION;
-
   /**
    * @description
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${SiteRoutes.MODULE_PATH}/${route}`;
+    return `/${ SiteRoutes.MODULE_PATH }/${ route }`;
   }
 
   // Used to indicate the routes and order of registration for an initial

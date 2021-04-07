@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DashboardHeaderConfig } from '@lib/modules/dashboard/components/dashboard-header/dashboard-header.component';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 @Component({
@@ -15,17 +18,24 @@ export class GisLoginPageComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private authService: AuthService
   ) {
     this.title = route.snapshot.data.title;
-    this.dashboardHeaderConfig = {
-      theme: 'white',
-      showMobileToggle: true
-    };
+    this.dashboardHeaderConfig = { theme: 'white' };
   }
 
-  public login() {
-    this.router.navigate([GisEnrolmentRoutes.MODULE_PATH]);
+  public onLogin() {
+    // TODO commented out to prevent usage until ready for production
+    // Route to COLLECTION_NOTICE which determines the direction of routing
+    // const redirectRoute = GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.COLLECTION_NOTICE);
+    // const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+
+    // this.authService.login({
+    //   idpHint: IdentityProviderEnum.BCSC,
+    //   redirectUri
+    // });
   }
 
   public ngOnInit(): void { }

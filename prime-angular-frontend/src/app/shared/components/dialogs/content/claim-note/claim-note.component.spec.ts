@@ -3,12 +3,15 @@ import { NO_ERRORS_SCHEMA } from '@angular/compiler';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { KeycloakService } from 'keycloak-angular';
 
-import { ClaimNoteComponent } from './claim-note.component';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+
+import { ClaimNoteComponent, ClaimType } from './claim-note.component';
 
 describe('ClaimNoteComponent', () => {
   let component: ClaimNoteComponent;
@@ -20,7 +23,8 @@ describe('ClaimNoteComponent', () => {
         MatDialogModule,
         ReactiveFormsModule,
         HttpClientTestingModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        BrowserAnimationsModule,
       ],
       declarations: [
         ClaimNoteComponent,
@@ -32,7 +36,7 @@ describe('ClaimNoteComponent', () => {
           useValue: {
             data: {
               reassign: 1,
-              type: 1
+              type: ClaimType.ENROLLEE
             }
           }
         },

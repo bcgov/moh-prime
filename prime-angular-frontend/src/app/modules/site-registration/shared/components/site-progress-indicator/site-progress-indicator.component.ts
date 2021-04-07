@@ -2,7 +2,6 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';

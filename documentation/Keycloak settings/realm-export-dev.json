@@ -185,6 +185,15 @@
         "attributes": {}
       },
       {
+        "id": "7144c2a6-44a2-4d2e-b6c4-2b058252426b",
+        "name": "feature_site_ha",
+        "description": "Health Authority Site Registration feature flag",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "bac891a6-46f8-41a6-bfdf-735d125d4c00",
         "name": "feature_vc_issuance",
         "description": "Verified Credential feature flag",
@@ -512,8 +521,8 @@
       "attributes": {},
       "realmRoles": [
         "enrollee_view",
-        "site_view",
         "site_edit",
+        "site_view",
         "prime_administrant",
         "enrollee_approve",
         "enrollee_triage"
@@ -528,8 +537,8 @@
       "attributes": {},
       "realmRoles": [
         "enrollee_view",
-        "site_edit",
         "site_view",
+        "site_edit",
         "prime_administrant",
         "enrollee_triage"
       ],
@@ -556,8 +565,8 @@
       "attributes": {},
       "realmRoles": [
         "enrollee_view",
-        "site_edit",
         "site_view",
+        "site_edit",
         "enrollee_elevated_management",
         "prime_administrant",
         "enrollee_approve",
@@ -1162,9 +1171,7 @@
       "defaultClientScopes": [
         "web-origins",
         "identity_provider",
-        "address",
-        "phone",
-        "profile",
+        "profile_eforms",
         "roles",
         "identity_assurance_level",
         "email"
@@ -2863,6 +2870,91 @@
         "include.in.token.scope": "true",
         "display.on.consent.screen": "false"
       }
+    },
+    {
+      "id": "b484224a-6f0e-4443-9c7d-b660d3b7c62c",
+      "name": "profile_eforms",
+      "description": "Profile scope for the eForms application",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "true",
+        "consent.screen.text": "${profileScopeConsentText}"
+      },
+      "protocolMappers": [
+        {
+          "id": "240b8987-ed94-4a8b-911b-8e287c3da20b",
+          "name": "username",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "username",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "preferred_username",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "6f57199d-aedd-4c3f-a9cd-19bbdec0db3d",
+          "name": "family name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "lastName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "family_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "bd04a467-9386-4394-99f9-9455f42dae7b",
+          "name": "given name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "firstName",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_name",
+            "jsonType.label": "String"
+          }
+        },
+        {
+          "id": "e5a40ea6-51b1-43a9-8005-3da0d49f4c07",
+          "name": "full name",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-full-name-mapper",
+          "consentRequired": false,
+          "config": {
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "id": "ffc1bb69-4e50-4376-94d2-e98107a5cc5f",
+          "name": "given names",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "userinfo.token.claim": "true",
+            "user.attribute": "givenNames",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "given_names",
+            "jsonType.label": "String"
+          }
+        }
+      ]
     }
   ],
   "defaultDefaultClientScopes": [
@@ -2883,8 +2975,8 @@
     "xContentTypeOptions": "nosniff",
     "xRobotsTag": "none",
     "xFrameOptions": "SAMEORIGIN",
-    "xXSSProtection": "1; mode=block",
     "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xXSSProtection": "1; mode=block",
     "strictTransportSecurity": "max-age=31536000; includeSubDomains"
   },
   "smtpServer": {},
@@ -3043,6 +3135,34 @@
         "clientAuthMethod": "client_secret_post",
         "logoutUrl": "https://dev.oidc.gov.bc.ca/auth/realms/_bceid/protocol/openid-connect/logout",
         "clientSecret": "**********"
+      }
+    },
+    {
+      "alias": "bcsc_eforms",
+      "displayName": "BC Services Card for eForms",
+      "internalId": "337ab6ad-0be8-4832-b9ee-604afa7e8b0b",
+      "providerId": "oidc",
+      "enabled": true,
+      "updateProfileFirstLoginMode": "on",
+      "trustEmail": false,
+      "storeToken": false,
+      "addReadTokenRoleOnCreate": false,
+      "authenticateByDefault": false,
+      "linkOnly": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "userInfoUrl": "https://idtest.gov.bc.ca/oauth2/userinfo",
+        "validateSignature": "true",
+        "clientId": "urn.ca.bc.gov.health.eforms.dev",
+        "tokenUrl": "https://idtest.gov.bc.ca/oauth2/token",
+        "jwksUrl": "https://idtest.gov.bc.ca/oauth2/jwk.json",
+        "backchannelSupported": "false",
+        "issuer": "https://idtest.gov.bc.ca/oauth2/",
+        "useJwksUrl": "true",
+        "authorizationUrl": "https://idtest.gov.bc.ca/login/oidc/authorize",
+        "clientAuthMethod": "client_secret_post",
+        "clientSecret": "**********",
+        "defaultScope": "openid profile address"
       }
     }
   ],

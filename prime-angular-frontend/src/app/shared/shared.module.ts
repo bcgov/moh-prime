@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+
 registerPlugin(FilePondPluginFileValidateType, FilePondPluginFileValidateSize);
 import { NgxMaskModule } from 'ngx-mask';
 
@@ -70,20 +71,35 @@ import { DocumentUploadComponent } from '@shared/components/document-upload/docu
 import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
 import { OverviewSectionComponent } from '@shared/components/overview-section/overview-section.component';
 import { OverviewContainerComponent } from '@shared/components/site/overview-container/overview-container.component';
-import { CollegeCertificationFormComponent } from '@shared/components/forms/college-certification-form/college-certification-form.component';
+import {
+  CollegeCertificationFormComponent
+} from '@shared/components/forms/college-certification-form/college-certification-form.component';
 import { AddressAutocompleteComponent } from '@shared/components/address-autocomplete/address-autocomplete.component';
 import { RemoteUserReviewComponent } from '@shared/components/site/remote-user-review/remote-user-review.component';
 import { AccessCodeFormComponent } from '@shared/components/forms/access-code-form/access-code-form.component';
 import { ContactInformationFormComponent } from '@shared/components/forms/contact-information-form/contact-information-form.component';
-import { EnrolleeSelfDeclarationsComponent } from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
+import {
+  EnrolleeSelfDeclarationsComponent
+} from '@shared/components/enrollee/enrollee-self-declarations/enrollee-self-declarations.component';
 import { TriageComponent } from '@shared/components/dialogs/content/triage/triage.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { ToggleContentComponent } from '@shared/components/toggle-content/toggle-content.component';
 import { BcscProfileComponent } from '@shared/components/bcsc-profile/bcsc-profile.component';
 import { PreferredNameFormComponent } from '@shared/components/forms/preferred-name-form/preferred-name-form.component';
 import { EscalationNoteComponent } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { BannerComponent } from '@shared/components/banner/banner.component';
 import { ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { AddressViewComponent } from '@shared/components/address-view/address-view.component';
+import { SiteInformationFormComponent } from '@shared/components/forms/site-information-form/site-information-form.component';
+import { SiteRegAccessComponent } from '@shared/components/auth/site-reg-access/site-reg-access.component';
+import { PillComponent } from '@shared/components/auth/pill/pill.component';
+import { SimpleAccessComponent } from '@shared/components/auth/simple-access/simple-access.component';
+import { PrimeEnrolmentAccessComponent } from '@shared/components/auth/prime-enrolment-access/prime-enrolment-access.component';
+import { VendorFormComponent } from '@shared/components/forms/vendor-form/vendor-form.component';
+import { ContactProfileFormComponent } from '@shared/components/site/contact-profile-form/contact-profile-form.component';
+import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
+import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
+import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
 
 @NgModule({
   declarations: [
@@ -155,7 +171,18 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     EscalationNoteComponent,
     ClaimNoteComponent,
     AddressViewComponent,
-    PageSectionComponent
+    PageSectionComponent,
+    SiteInformationFormComponent,
+    SiteRegAccessComponent,
+    PillComponent,
+    SimpleAccessComponent,
+    PrimeEnrolmentAccessComponent,
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent,
+    BannerComponent,
+    SendBulkEmailComponent
   ],
   imports: [
     CommonModule,
@@ -234,7 +261,17 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     EscalationNoteComponent,
     ClaimNoteComponent,
     AddressViewComponent,
-    PageSectionComponent
+    PageSectionComponent,
+    SiteInformationFormComponent,
+    SiteRegAccessComponent,
+    PillComponent,
+    SimpleAccessComponent,
+    PrimeEnrolmentAccessComponent,
+    VendorFormComponent,
+    ContactProfileFormComponent,
+    SameAsComponent,
+    SummaryCardComponent,
+    BannerComponent
   ],
   providers: [
     FullnamePipe,
@@ -243,4 +280,4 @@ import { AddressViewComponent } from '@shared/components/address-view/address-vi
     CapitalizePipe
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

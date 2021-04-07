@@ -5,6 +5,7 @@ namespace Prime.Models
         Enrollee = 1,
         SigningAuthority = 2,
         Labtech = 3,
-        Immunizer = 4
+        Immunizer = 4,
+        Gis = 5
     }
 }

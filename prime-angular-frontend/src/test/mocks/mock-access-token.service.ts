@@ -1,8 +1,8 @@
 import { KeycloakLoginOptions } from 'keycloak-js';
 
+import { Role } from '@auth/shared/enum/role.enum';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
-import { Role } from '@auth/shared/enum/role.enum';
 import { IAccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class MockAccessTokenService implements IAccessTokenService {
@@ -12,8 +12,7 @@ export class MockAccessTokenService implements IAccessTokenService {
   // tslint:disable-next-line: variable-name
   private _loggedIn: boolean;
 
-  constructor(
-  ) {
+  constructor() {
     this._loggedIn = false;
   }
 
@@ -34,7 +33,10 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public async decodeToken(): Promise<AccessTokenParsed | null> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve) => {
+      const token = {} as AccessTokenParsed;
+      resolve(token);
+    });
   }
 
   public clearToken(): void {
@@ -54,7 +56,20 @@ export class MockAccessTokenService implements IAccessTokenService {
   }
 
   public loadBrokerProfile(forceReload?: boolean): Promise<BrokerProfile> {
-    throw new Error('Method not implemented.');
+    return new Promise((resolve) => {
+      const profile: BrokerProfile = {
+        attributes: {
+          birthdate: [],
+          country: [],
+          region: [],
+          givenNames: [],
+          locality: [],
+          postalCode: [],
+          streetAddress: [],
+        }
+      };
+      return resolve(profile);
+    });
   }
 
   public roles(allRoles?: boolean): string[] {

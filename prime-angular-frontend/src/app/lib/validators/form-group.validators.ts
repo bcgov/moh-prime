@@ -48,6 +48,32 @@ export class FormGroupValidators {
 
   /**
    * @description
+   * Checks that the start key dateTime is before the end key value.
+   */
+  public static isDateTimeBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isBefore(end)) ? null : { isBefore: true };
+    };
+  }
+
+  /**
+   * @description
+   * Checks that the start key dateTime is same or before the end key value.
+   */
+  public static isDateTimeSameOrBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isSameOrBefore(end)) ? null : { isSameOrBefore: true };
+    };
+  }
+
+  /**
+   * @description
    * Compares date range start and end.
    */
   public static dateRange(rangeStartKey: string, rangeEndKey: string, rangeName: string): ValidatorFn {

@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectionStrategy, Output, EventEmitter, Input } from '@angular/core';
 
 export interface DashboardHeaderConfig {
-  theme: 'blue' | 'white';
+  theme?: 'blue' | 'white';
   // TODO change name to reflect a default that will show the toggle
-  showMobileToggle: boolean;
+  showMobileToggle?: boolean;
 }
 
 @Component({
@@ -27,6 +27,9 @@ export class DashboardHeaderComponent implements OnInit {
    * @description
    * Indicator that viewport dimensions match a
    * mobile device.
+   *
+   * NOTE: showMobileToggle will on be displayed when
+   * the mobile device viewport dimension are provided.
    */
   @Input() public isMobile: boolean;
   /**
