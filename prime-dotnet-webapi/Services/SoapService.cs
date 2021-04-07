@@ -1,17 +1,18 @@
 using System;
 using System.IO;
-using System.Runtime.Serialization;
+using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
 using System.Xml.XPath;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Prime.Helpers;
+using Microsoft.Extensions.Primitives;
 using SoapCore.Extensibility;
+using Prime;
+
 
 namespace Prime.Services
 {
@@ -20,11 +21,38 @@ namespace Prime.Services
         public const string Prefix = "plr";
         public const string Uri = "urn:hl7-org:v3";
 
+        // This must be the header used by proxies that first receive the client certificate
+        // and pass on via HTTP Header
+        public const string ClientCertHeader = "X-SSL-CERT";
+
+
         public void Tune(HttpContext httpContext, object serviceInstance, SoapCore.ServiceModel.OperationDescription operation)
         {
             if (serviceInstance is SoapService service)
             {
-                service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
+                string urlEncoded = httpContext.Request.GetHeader(ClientCertHeader);
+                if (urlEncoded == null)
+                {
+                    throw new ArgumentException("Client certificate expected to be provided.");
+                }
+
+                if (PrimeEnvironment.PlrIntegration.ClientCertThumbprint == null)
+                {
+                    throw new SystemException("Receiving system is not configured properly; please advise system administrator.");
+                }
+
+                string decoded = HttpUtility.UrlDecode(urlEncoded);
+                byte[] certAsBytes = Encoding.ASCII.GetBytes(decoded);
+                var clientCert = new X509Certificate2(certAsBytes);
+                if (clientCert.Thumbprint == PrimeEnvironment.PlrIntegration.ClientCertThumbprint)
+                {
+                    service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
+                }
+                else
+                {
+                    ((SoapService)serviceInstance).LogWarning($"A client provided an unrecognized certifcate with thumbprint {clientCert.Thumbprint}.");
+                    throw new ArgumentException("The provided certificate is invalid to the receiving system.");
+                }
             }
         }
 
@@ -85,6 +113,11 @@ namespace Prime.Services
         {
             _logger.LogInformation("Update BC Provider");
             Console.WriteLine(DocumentRoot.ToString());
+        }
+
+        public void LogWarning(string warningMessage)
+        {
+            _logger.LogWarning(warningMessage);
         }
     }
 }

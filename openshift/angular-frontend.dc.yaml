@@ -98,6 +98,7 @@ objects:
           - containerPort: 8080
           - containerPort: 8443
           - containerPort: 8888
+          - containerPort: 8890
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -162,6 +163,21 @@ objects:
       kind: Service
       name: "${NAME}${SUFFIX}"
 
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: "${NAME}${SUFFIX}-mutualauth"
+  spec:
+    host: "mutualauth.${VANITY_URL}"
+    port:
+      targetPort: "8890"
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: passthrough
+    to:
+      kind: Service
+      name: "${NAME}${SUFFIX}"
+
 # Angular service (endpoint definition for internal routing to related pods)
 - apiVersion: v1
   kind: Service
@@ -181,6 +197,9 @@ objects:
     - name: "8888"
       port: 8888
       targetPort: 8888
+    - name: "8890"
+      port: 8890
+      targetPort: 8890
     selector:
       io.kompose.service: "${NAME}${SUFFIX}"
   status:
