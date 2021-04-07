@@ -3,8 +3,9 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
 
     <section class="mb-3">
       <app-page-subheader2>
@@ -62,7 +63,7 @@
                      color="primary"
                      target="_blank"
                      class="mt-3"
-                     [href]="getOrgBookLink(registrationId.value)">
+                     [href]="getOrgBookLink(formState.registrationId.value)">
                     View organization in OrgBook
                   </a>
                 </div>

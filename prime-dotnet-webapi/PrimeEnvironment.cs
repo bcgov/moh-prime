@@ -85,5 +85,15 @@ namespace Prime
             public static readonly string Key = GetEnvironmentVariable("METABASE_SECRET_KEY") ?? "f7a2ffbc8ebd7e273603896c0f63ae04a596b94ff76c276398ce5aa8ca216cee";
             public static readonly int DashboardId = int.Parse(GetEnvironmentVariable("METABASE_DASHBOARD_ID") ?? "4");
         }
+
+        public static class PlrIntegration
+        {
+            public static readonly string ClientCertThumbprint = GetEnvironmentVariable("PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT");
+        }
+
+        public static class LdapApi
+        {
+            public static readonly string Url = GetEnvironmentVariable("LDAP_API_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/ldap";
+        }
     }
 }

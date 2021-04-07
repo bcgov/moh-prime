@@ -25,7 +25,12 @@ import { Site, SiteListViewModel } from '@registration/shared/models/site.model'
 import { Role } from '@auth/shared/enum/role.enum';
 import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
-import { AssignAction, AssignActionEnum, ClaimNoteComponent, ClaimType } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import {
+  AssignAction,
+  AssignActionEnum,
+  ClaimNoteComponent,
+  ClaimType
+} from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
@@ -92,6 +97,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       }
     };
 
+    // TODO refactor this so the types align properly
     this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
@@ -100,7 +106,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
         exhaustMap((action: AssignAction) =>
           (action.note)
             ? this.siteResource.createSiteRegistrationNote(siteId, action.note)
-              .pipe(map((note: SiteRegistrationNote) => <any>{ note, assigneeId: action.adjudicatorId }))
+              .pipe(map((note: SiteRegistrationNote) => ({ note, assigneeId: action.adjudicatorId })))
             : of({ assigneeId: action.adjudicatorId })
         ),
         exhaustMap((result: { note: SiteRegistrationNote, assigneeId: number }) =>
@@ -131,20 +137,21 @@ export class SiteRegistrationContainerComponent implements OnInit {
         exhaustMap((action: AssignAction) =>
           (action.note)
             ? this.siteResource.createSiteRegistrationNote(siteId, action.note)
-              .pipe(map((note: SiteRegistrationNote) => <any>{ note, action: action }))
-            : of(null).pipe(map(() => <any>{ action: action }))
+              .pipe(map((note: SiteRegistrationNote) => ({ note, action })))
+            : of(null).pipe(map(() => ({ action })))
         ),
         exhaustMap((result: { note: SiteRegistrationNote, action: AssignAction }) =>
           (result.note)
-            ? this.adjudicationResource.createSiteNotification(siteId, result.note.id, result.action.adjudicatorId).pipe(map(() => result.action))
+            ? this.adjudicationResource.createSiteNotification(siteId, result.note.id, result.action.adjudicatorId)
+              .pipe(map(() => result.action))
             : of(noop).pipe(map(() => result.action))
         ),
         exhaustMap((action: AssignAction) =>
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-              this.siteResource.removeSiteAdjudicator(siteId),
-              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+            this.siteResource.removeSiteAdjudicator(siteId),
+            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -154,7 +161,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   public onNotify(siteId: number) {
     const data: DialogOptions = {
       title: 'Send Email',
-      data: { 'siteId': siteId }
+      data: { siteId }
     };
 
     this.busy = this.dialog.open(SendEmailComponent, { data })
@@ -320,7 +327,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   private deleteOrganization(organizationId: number) {
     if (organizationId) {
       const request$ = this.organizationResource.deleteOrganization(organizationId);
-      const supplementaryMessage = 'Deleting an organization also deletes all the organization\'s sites, including remote user information.';
+      const supplementaryMessage = 'Deleting an organization also deletes all the organization\'s sites, including remote users.';
       this.busy = this.deleteResource<Organization>(this.defaultOptions.delete('organization', supplementaryMessage), request$)
         .subscribe((organization: Organization) =>
           this.dataSource.data = MatTableDataSourceUtils

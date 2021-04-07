@@ -1,13 +1,16 @@
-import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Admin } from '@auth/shared/models/admin.model';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+
 import { BehaviorSubject } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
+
+import { SiteResource } from '@core/resources/site-resource.service';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { Admin } from '@auth/shared/models/admin.model';
+import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+
 import { ConfirmDialogComponent } from '../../confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '../../dialog-options.model';
 
@@ -79,7 +82,7 @@ export class EscalationNoteComponent implements OnInit {
       ]
     });
   }
-  
+
   private getAdjudicators() {
     this.adjudicationResource.getAdjudicators()
       .subscribe((adjudicators: Admin[]) => this.adjudicators$.next(adjudicators));

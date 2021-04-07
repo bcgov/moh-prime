@@ -4,6 +4,8 @@ import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
 import { Observable, of, pipe } from 'rxjs';
 import { debounceTime, switchMap, tap, exhaustMap, take, map } from 'rxjs/operators';
 
@@ -21,6 +23,7 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-organization-name-page',
   templateUrl: './organization-name-page.component.html',
@@ -54,18 +57,6 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get name(): FormControl {
-    return this.form.get('name') as FormControl;
-  }
-
-  public get registrationId(): FormControl {
-    return this.form.get('registrationId') as FormControl;
-  }
-
-  public get doingBusinessAs(): FormControl {
-    return this.form.get('doingBusinessAs') as FormControl;
-  }
-
   public getOrgBookLink(orgId: string, display: boolean = false) {
     const url = 'https://www.orgbook.gov.bc.ca/en/organization';
     return (display)
@@ -79,7 +70,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
       .pipe(
         this.orgBookResource.sourceIdMap(),
         tap((sourceId: string) => this.usedOrgBook = true),
-        tap((sourceId: string) => this.form.get('registrationId').patchValue(sourceId)),
+        tap((sourceId: string) => this.formState.form.get('registrationId').patchValue(sourceId)),
         this.getDoingBusinessAs()
       )
       .subscribe();
@@ -87,7 +78,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   public onInput() {
     this.usedOrgBook = false;
-    this.registrationId.reset();
+    this.formState.registrationId.reset();
   }
 
   public onBack() {
@@ -102,14 +93,13 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   protected createFormInstance() {
     this.formState = this.organizationFormStateService.organizationNamePageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const organization = this.organizationService.organization;
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     this.usedOrgBook = !!organization?.registrationId;
 
@@ -121,8 +111,9 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected initForm() {
-    this.name.valueChanges
+    this.formState.name.valueChanges
       .pipe(
+        untilDestroyed(this),
         debounceTime(400),
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
@@ -154,7 +145,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(siteId?: number): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];

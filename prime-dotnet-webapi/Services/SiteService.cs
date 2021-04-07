@@ -254,12 +254,12 @@ namespace Prime.Services
             }
         }
 
-        public async Task<int> UpdateCompletedAsync(int siteId)
+        public async Task<int> UpdateCompletedAsync(int siteId, bool completed)
         {
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            site.Completed = true;
+            site.Completed = completed;
 
             _context.Update(site);
 

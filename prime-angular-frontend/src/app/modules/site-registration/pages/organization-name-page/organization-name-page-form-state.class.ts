@@ -1,4 +1,4 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -12,6 +12,18 @@ export class OrganizationNamePageFormState extends AbstractFormState<Organizatio
     super();
 
     this.buildForm();
+  }
+
+  public get name(): FormControl {
+    return this.formInstance.get('name') as FormControl;
+  }
+
+  public get registrationId(): FormControl {
+    return this.formInstance.get('registrationId') as FormControl;
+  }
+
+  public get doingBusinessAs(): FormControl {
+    return this.formInstance.get('doingBusinessAs') as FormControl;
   }
 
   public get json(): OrganizationNamePageDataModel {
