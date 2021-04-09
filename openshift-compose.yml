@@ -2,9 +2,9 @@ version: "3"
 
 services:
 ####################### PostgreSQL Database Definition #######################
-  primedb:
+  postgresql:
     restart: always
-    container_name: primedb
+    container_name: prime-postgresql-db
     image: postgres:10.6
     environment:
       POSTGRES_PASSWORD: postgres

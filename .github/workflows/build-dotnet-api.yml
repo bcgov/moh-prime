@@ -42,16 +42,6 @@ jobs:
           # openshift_password: ${{ secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
-      # Use OpenShift CLI to retrieve necessary environment variables stored in OpenShift to build the frontend
-      - name: "Retrieve OpenShift Keycloak environment variables"
-        id: oc-env-vars-keycloak
-        run: |
-          echo "jwt_well_known_config=$(oc describe configmap keycloak | grep 'jwt_well_known_config' -A 2 | grep 'https')" >> $GITHUB_ENV
-          echo "keycloak_url=$(oc describe configmap keycloak | grep 'keycloak_url' -A 2 | grep 'https')" >> $GITHUB_ENV
-          echo "keycloak_realm=$(oc describe configmap keycloak | grep 'keycloak_realm' -A 2 | grep '[^keycloak_realm][a-z]*[0-9]*\w')" >> $GITHUB_ENV
-          echo "keycloak_client_id=$(oc describe configmap keycloak | grep 'keycloak_client_id' -A 2 | grep '[^keycloak_client_id][a-z]*[0-9]*\w')" >> $GITHUB_ENV
-        shell: bash
-
       - name: "Build .NET web API image"
         id: build-image
         env:
@@ -59,13 +49,7 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |          
           docker login ${{ secrets.REDHAT_REGISTRY_URL }} -u ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER }} -p ${{ secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN }}
-          docker-compose -f openshift-compose.yml build --force-rm --no-cache \
-          --build-arg ASPNETCORE_ENVIRONMENT=${{ secrets.API_ASPNETCORE_ENVIRONMENT }} \
-          --build-arg JWT_WELL_KNOWN_CONFIG=${{ env.jwt_well_known_config }} \
-          --build-arg KEYCLOAK_URL=${{ env.keycloak_url }} \
-          --build-arg KEYCLOAK_REALM=${{ env.keycloak_realm }} \
-          --build-arg KEYCLOAK_CLIENT_ID=${{ env.keycloak_client_id }} \
-          $SERVICE_NAME
+          docker-compose -f openshift-compose.yml build --force-rm --no-cache $SERVICE_NAME
       
       - name: "Tag .NET web API image"
         id: tag-image
