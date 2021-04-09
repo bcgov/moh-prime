@@ -51,7 +51,7 @@ services:
       context: prime-dotnet-webapi/
       dockerfile: openshift.dockerfile
     environment:
-      DB_HOST: primedb
+      DB_HOST: prime-postgresql-db
       PGPASSWORD: postgres
       POSTGRESQL_ADMIN_PASSWORD: postgres
       POSTGRESQL_USERNAME: postgres
@@ -67,7 +67,7 @@ services:
     networks:
       - openshift
     depends_on:
-      - primedb
+      - postgresql
 
 ####################### Web Frontend Definition #######################
   nginx-angular:
