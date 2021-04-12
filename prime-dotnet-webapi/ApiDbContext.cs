@@ -175,6 +175,10 @@ namespace Prime
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
+
+            modelBuilder.Entity<PlrProvider>()
+                .HasIndex(p => p.Ipc)
+                .IsUnique();
             #endregion
 
             #region Relationships
