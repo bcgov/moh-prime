@@ -20,8 +20,7 @@ namespace Prime.Services
         }
 
         //        public async Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject)
-
-        public int CreateOrUpdatePlrProvider(PlrProvider dataObject)
+        public int CreateOrUpdatePlrProvider(PlrProvider dataObject, bool expectExists = false)
         {
             // var existingPlrProvider = await _context.PlrProviders.SingleOrDefaultAsync(p => dataObject.Ipc == p.Ipc);
             var task = _context.PlrProviders.SingleOrDefaultAsync(p => dataObject.Ipc == p.Ipc);
@@ -30,11 +29,18 @@ namespace Prime.Services
             if (existingPlrProvider == null)
             {
                 _context.PlrProviders.Add(dataObject);
+                if (expectExists)
+                {
+                    _logger.LogWarning("Expected PLR Provider with IPC of {ipc} to exist but it cannot be found", dataObject.Ipc);
+                }
             }
             else
             {
-                _logger.LogInformation("Existing PLR Provider found with ID of {id} that has matching IPC of {ipc}", existingPlrProvider.Id, dataObject.Ipc);
-                // TODO: Update existingPlrProvider fields
+                existingPlrProvider.Update(dataObject);
+                if (!expectExists)
+                {
+                    _logger.LogWarning("Did not expect PLR Provider with IPC of {ipc} to exist but it was found with ID of {id}", dataObject.Ipc, existingPlrProvider.Id);
+                }
             }
 
             try
@@ -47,9 +53,7 @@ namespace Prime.Services
                 _logger.LogError(e, "Error updating PLR Provider with with ID of {id}", existingPlrProvider.Id);
                 return -1;
             }
-
-            // TODO: Need something like IPartyChangeModel?
-            return dataObject.Id;
+            return (existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id);
         }
     }
 }

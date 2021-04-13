@@ -57,9 +57,11 @@ namespace Prime.Services
         public void UpdateBcProvider()
         {
             _logger.LogInformation("Update BC Provider");
-            Console.WriteLine(DocumentRoot.ToString());
 
-            ReadDistributionMessage(DocumentRoot.ToString());
+            var plrProvider = ReadDistributionMessage(DocumentRoot.ToString());
+            var objectId = _dbService.CreateOrUpdatePlrProvider(plrProvider, true);
+            _logger.LogDebug("objectId=" + objectId);
+
         }
 
         public void LogWarning(string warningMessage)
@@ -121,11 +123,10 @@ namespace Prime.Services
             result.Province2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:state", documentRoot, messageId);
             result.Country2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:country", documentRoot, messageId);
             result.PostalCode2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:postalCode", documentRoot, messageId);
-            // TODO: What is initial value of DateTime field?
-            var temp = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId);
-            if (temp != null)
+            var dateValue = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId);
+            if (dateValue != null)
             {
-                result.Address2StartDate = ParseHL7v3DateTime(temp);
+                result.Address2StartDate = ParseHL7v3DateTime(dateValue);
             }
 
             // result.Credentials  // TODO: Verify with Vinder

@@ -97,5 +97,59 @@ namespace Prime.Models
         public string Email { get; set; }
 
         public string ConditionCode { get; set; }
+
+
+        /// <summary>
+        /// All properties should be update-able except for the keys:  Id and Ipc
+        /// </summary>
+        /// <param name="newer"></param>
+        public void Update(PlrProvider newer)
+        {
+            this.Address1Line1 = newer.Address1Line1;
+            this.Address1Line2 = newer.Address1Line2;
+            this.Address1Line3 = newer.Address1Line3;
+            this.Address1StartDate = newer.Address1StartDate;
+            this.City1 = newer.City1;
+            this.Province1 = newer.Province1;
+            this.Country1 = newer.Country1;
+            this.PostalCode1 = newer.PostalCode1;
+            this.Address1StartDate = newer.Address1StartDate;
+
+            this.Address2Line1 = newer.Address2Line1;
+            this.Address2Line2 = newer.Address2Line2;
+            this.Address2Line3 = newer.Address2Line3;
+            this.Address2StartDate = newer.Address2StartDate;
+            this.City2 = newer.City2;
+            this.Province2 = newer.Province2;
+            this.Country2 = newer.Country2;
+            this.PostalCode2 = newer.PostalCode2;
+            this.Address2StartDate = newer.Address2StartDate;
+
+            this.CollegeId = newer.CollegeId;
+            this.ConditionCode = newer.ConditionCode;
+            this.Credentials = newer.Credentials;
+            this.DateOfBirth = newer.DateOfBirth;
+            this.Email = newer.Email;
+            this.Expertise = newer.Expertise;
+            this.FaxAreaCode = newer.FaxAreaCode;
+            this.FirstName = newer.FirstName;
+            this.Gender = newer.Gender;
+            this.IdentifierType = newer.IdentifierType;
+            this.Languages = newer.Languages;
+            this.LastName = newer.LastName;
+            this.MspId = newer.MspId;
+            this.NamePrefix = newer.NamePrefix;
+            this.ProviderRoleType = newer.ProviderRoleType;
+            this.SecondName = newer.SecondName;
+            this.StatusCode = newer.StatusCode;
+            this.StatusExpiryDate = newer.StatusExpiryDate;
+            this.StatusReasonCode = newer.StatusReasonCode;
+            this.StatusStartDate = newer.StatusStartDate;
+            this.Suffix = newer.Suffix;
+            this.TelephoneAreaCode = newer.TelephoneAreaCode;
+            this.TelephoneNumber = newer.TelephoneNumber;
+            this.ThirdName = newer.ThirdName;
+        }
+
     }
 }

@@ -7,6 +7,6 @@ namespace Prime.Services
     {
         // public Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject);
 
-        public int CreateOrUpdatePlrProvider(PlrProvider dataObject);
+        public int CreateOrUpdatePlrProvider(PlrProvider dataObject, bool expectExists = false);
     }
 }
