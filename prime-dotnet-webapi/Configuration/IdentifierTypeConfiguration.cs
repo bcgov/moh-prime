@@ -17,7 +17,6 @@ namespace Prime.Configuration
                     new IdentifierType { Code = "2.16.840.1.113883.3.40.2.20", Name = "RNPID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new IdentifierType { Code = "2.16.840.1.113883.4.608",     Name = "RPNRC", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new IdentifierType { Code = "2.16.840.1.113883.3.40.2.14", Name = "PHID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new IdentifierType { Code = "2.16.840.1.113883.4.753",     Name = "POID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new IdentifierType { Code = "2.16.840.1.113883.3.40.2.18", Name = "RMID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new IdentifierType { Code = "2.16.840.1.113883.3.40.2.10", Name = "LPNID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
                     new IdentifierType { Code = "2.16.840.1.113883.3.40.2.4",  Name = "CPSID", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
