@@ -93,7 +93,7 @@ namespace Prime.Services
 
             // Primary attributes for PRIME
             result.Ipc = internalProviderCode;
-            // TODO: Translate from OID
+            // At this point, IdentifierType as OID
             result.IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8')]/@root", documentRoot, messageId);
             result.CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8')]/@extension", documentRoot, messageId);
             result.ProviderRoleType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId);
