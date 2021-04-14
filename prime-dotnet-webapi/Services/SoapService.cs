@@ -94,8 +94,8 @@ namespace Prime.Services
             // Primary attributes for PRIME
             result.Ipc = internalProviderCode;
             // At this point, IdentifierType as OID
-            result.IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8')]/@root", documentRoot, messageId);
-            result.CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8')]/@extension", documentRoot, messageId);
+            result.IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')]/@root", documentRoot, messageId);
+            result.CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')]/@extension", documentRoot, messageId);
             result.ProviderRoleType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId);
             result.FirstName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[1]", documentRoot, messageId);
             result.SecondName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[2]", documentRoot, messageId);
@@ -137,10 +137,14 @@ namespace Prime.Services
             result.FaxNumber = faxNumberParts[1];
             result.Gender = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:administrativeGenderCode/@code", documentRoot, messageId);
             // result.Languages  // TODO: Verify with Vinder
-            // result.MspId  // TODO: Verify with Vinder
+            result.MspId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.11']/@extension", documentRoot, messageId);
             result.NamePrefix = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:prefix", documentRoot, messageId);
-            // result.StatusStartDate  // TODO: Verify with Vinder
-            // result.StatusExpiryDate  // TODO: Verify with Vinder
+            result.StatusStartDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/{Prefix}:validTime/{Prefix}:low/@value", documentRoot, messageId));
+            dateValue = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/{Prefix}:validTime/{Prefix}:high/@value", documentRoot, messageId);
+            if (dateValue != null)
+            {
+                result.StatusExpiryDate = ParseHL7v3DateTime(dateValue);
+            }
             result.Suffix = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:suffix", documentRoot, messageId);
             string[] telephoneNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'tel')]/@value", documentRoot, messageId)));
             result.TelephoneAreaCode = telephoneNumberParts[0];
