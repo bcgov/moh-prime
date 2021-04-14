@@ -33,15 +33,15 @@ services:
   #     - primenet
 
 ####################### Redis Definition #######################
-  # redis:
-  #   image: redis:3.2-alpine
-  #   container_name: prime_cache
-  #   restart: always
-  #   command: redis-server --requirepass redis-password
-  #   ports:
-  #     - "6379:6379"
-  #   networks:
-  #     - primenet
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime_cache
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - openshift
 
 ####################### API Backend Definition #######################
   dotnet-webapi:
@@ -138,37 +138,23 @@ services:
   #     - primenet
 
 ####################### Document Manager Definition #######################
-  # document_manager_backend:
-  #   restart: always
-  #   container_name: document-manager-backend
-  #   build:
-  #     context: document-manager/backend
-  #   ports:
-  #     - 6001:6001
-  #   volumes:
-  #     - ./document-manager/backend/:/app/
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #     - document_manager_migrate
-  #   env_file: ./document-manager/backend/.env-local
-  #   networks:
-  #     - primenet
-
-  # document_manager_migrate:
-  #   restart: on-failure
-  #   container_name: document-manager-migrate
-  #   build:
-  #     context: document-manager/backend
-  #     dockerfile: Dockerfile.migrate
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #   volumes:
-  #     - ./document-manager/backend/:/app/
-  #   env_file: ./document-manager/backend/.env-local
-  #   networks:
-  #     - primenet
+  document-manager:
+    restart: always
+    container_name: prime-document-manager
+    build:
+      context: document-manager/backend
+      dockerfile: openshift.dockerfile
+      args:
+        BUILD_LOGLEVEL: ${BUILD_LOGLEVEL}
+    ports:
+      - 6001:6001
+    volumes:
+      - ./document-manager/backend/:/app/
+    depends_on:
+      - postgres
+      # - redis
+    networks:
+      - openshift
 
 ####################### Networks Definition #######################
 networks:
