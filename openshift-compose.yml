@@ -151,7 +151,7 @@ services:
     volumes:
       - ./document-manager/backend/:/app/
     depends_on:
-      - postgres
+      - postgresql
       # - redis
     networks:
       - openshift
