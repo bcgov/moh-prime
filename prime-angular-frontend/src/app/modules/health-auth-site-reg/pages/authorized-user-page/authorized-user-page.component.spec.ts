@@ -21,6 +21,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 
 describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
@@ -60,20 +61,22 @@ describe('AuthorizedUserPageComponent', () => {
           provide: AuthService,
           useClass: MockAuthService
         },
-        OrganizationFormStateService
+        OrganizationFormStateService,
+        HealthAuthSiteRegFormStateService
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
   beforeEach(inject(
-    [OrganizationService, OrganizationFormStateService],
-    (organizationService: OrganizationService, organizationFormStateService: OrganizationFormStateService) => {
+    [OrganizationService, OrganizationFormStateService, HealthAuthSiteRegFormStateService],
+    (organizationService: OrganizationService, organizationFormStateService: OrganizationFormStateService,
+      healthAuthSiteRegFormStateService: HealthAuthSiteRegFormStateService) => {
       fixture = TestBed.createComponent(AuthorizedUserPageComponent);
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);
       // Add the bound FormGroup to the component
-      component.formState = organizationFormStateService.organizationSigningAuthorityPageFormState;
+      component.formState = healthAuthSiteRegFormStateService.authorizedUserFormState;
       fixture.detectChanges();
     })
   );
