@@ -7,6 +7,12 @@ namespace Prime.Auth
         public const string BCServicesCard = "bcsc";
     }
 
+    public static class Schemes
+    {
+        public const string PrimeJwt = "PrimeJwt";
+        public const string MohJwt = "MohJwt";
+    }
+
     public static class Claims
     {
         public const string PreferredUsername = "preferred_username";
