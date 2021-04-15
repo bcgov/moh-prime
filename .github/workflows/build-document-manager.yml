@@ -40,7 +40,7 @@ jobs:
           openshift_token: ${{ secrets.OPENSHIFT_SERVICE_TOKEN }}
           namespace: ${{ secrets.OPENSHIFT_NAMESPACE }}
 
-      - name: "Build .NET web API image"
+      - name: "Build Document Manager image"
         id: build-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
@@ -51,7 +51,7 @@ jobs:
           --build-arg=$BUILD_LOGLEVEL \
           $SERVICE_NAME
       
-      - name: "Tag .NET web API image"
+      - name: "Tag Document Manager image"
         id: tag-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
@@ -59,7 +59,7 @@ jobs:
         run: |
           docker tag moh-prime_$SERVICE_NAME ${{ secrets.OPENSHIFT_EXTERNAL_REPOSITORY }}/${{ secrets.OPENSHIFT_NAMESPACE }}/$CONTAINER_NAME
       
-      - name: "Push .NET web API image to OpenShift registry"
+      - name: "Push Document Manager image to OpenShift registry"
         id: push-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
