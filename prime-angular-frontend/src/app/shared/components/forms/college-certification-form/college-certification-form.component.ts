@@ -212,10 +212,14 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private setCollegeCertificationValidators() {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.licenseNumber, [
-      Validators.required,
-      FormControlValidators.alphanumeric
-    ]);
+    const licenseNumberValidators = [Validators.required];
+    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
+      licenseNumberValidators.push(FormControlValidators.numeric, FormControlValidators.requiredLength(5));
+    }
+    else {
+      licenseNumberValidators.push(FormControlValidators.alphanumeric);
+    }
+    this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
