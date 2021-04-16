@@ -186,7 +186,7 @@
           <mat-form-field class="w-100">
             <mat-label>Health Authority</mat-label>
             <mat-select formControlName="healthAuthorityCode">
-              <mat-option *ngFor="let ha of this.configService.healthAuthorities"
+              <mat-option *ngFor="let ha of this.healthAuthorities"
                           [value]="ha.code">
                 {{ ha.name }}
               </mat-option>

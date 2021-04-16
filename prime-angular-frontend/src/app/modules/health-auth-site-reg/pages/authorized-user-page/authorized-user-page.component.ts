@@ -27,6 +27,7 @@ import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
 import { of } from 'rxjs';
+import { Config } from '@config/config.model';
 
 @Component({
   selector: 'app-authorized-user-page',
@@ -50,6 +51,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
+  public healthAuthorities: Config<number>[];
 
   constructor(
     protected dialog: MatDialog,
@@ -66,6 +68,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.healthAuthorities = configService.healthAuthorities;
   }
 
   // TODO remove this method add to allow routing between pages
