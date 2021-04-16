@@ -1,3 +1,4 @@
+import { ConfigService } from '@config/config.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -57,6 +58,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     private organizationResource: OrganizationResource,
     private formStateService: HealthAuthSiteRegFormStateService,
     private authService: AuthService,
+    private configService: ConfigService,
     private route: ActivatedRoute,
     router: Router
   ) {
