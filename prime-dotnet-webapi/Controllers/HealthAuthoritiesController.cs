@@ -12,24 +12,24 @@ using Prime.Services;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/health-authority")]
+    [Route("api/health-authorities")]
     [ApiController]
-    public class HealthAuthorityController : ControllerBase
+    public class HealthAuthoritiesController : ControllerBase
     {
         private readonly IHAAuthorizedUserService _haAuthorizedUserService;
 
-        public HealthAuthorityController(IHAAuthorizedUserService haAuthorizedUserService)
+        public HealthAuthoritiesController(IHAAuthorizedUserService haAuthorizedUserService)
         {
             _haAuthorizedUserService = haAuthorizedUserService;
         }
 
-        // POST: api/health-authority/5/authorized-user
+        // POST: api/health-authorities/5/authorized-users
         /// <summary>
         /// Create an authorized user for a health authority
         /// </summary>
         /// <param name="healthAuthorityCode"></param>
         /// <param name="model"></param>
-        [HttpPost("{healthAuthorityCode}/authorized-user", Name = nameof(CreateAuthorizedUser))]
+        [HttpPost("{healthAuthorityCode}/authorized-users", Name = nameof(CreateAuthorizedUser))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -40,14 +40,14 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(user));
         }
 
-        // PUT: api/health-authority/5/authorized-user/15
+        // PUT: api/health-authorities/5/authorized-users/15
         /// <summary>
         /// Update an authorized user for a health authority
         /// </summary>
         /// <param name="healthAuthorityCode"></param>
         /// <param name="authorizedUserId"></param>
         /// <param name="model"></param>
-        [HttpPut("{healthAuthorityCode}/authorized-user/{authorizedUserId}", Name = nameof(UpdateAuthorizedUser))]
+        [HttpPut("{healthAuthorityCode}/authorized-users/{authorizedUserId}", Name = nameof(UpdateAuthorizedUser))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -65,12 +65,12 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedBanner));
         }
 
-        // GET: api/health-authority/5/authorized-user
+        // GET: api/health-authorities/5/authorized-users
         /// <summary>
         /// Get Authorized users for a HA
         /// </summary>
         /// <param name="healthAuthorityCode"></param>
-        [HttpGet("{healthAuthorityCode}/authorized-user", Name = nameof(GetAuthorizedUsersByHA))]
+        [HttpGet("{healthAuthorityCode}/authorized-users", Name = nameof(GetAuthorizedUsersByHA))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -81,13 +81,13 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(users));
         }
 
-        // GET: api/health-authority/5/authorized-user/5
+        // GET: api/health-authorities/5/authorized-users/5
         /// <summary>
         /// Get Authorized by id for a HA
         /// </summary>
         /// <param name="healthAuthorityCode"></param>
         /// <param name="authorizedUserId"></param>
-        [HttpGet("{healthAuthorityCode}/authorized-user/{authorizedUserId}", Name = nameof(GetAuthorizedUserById))]
+        [HttpGet("{healthAuthorityCode}/authorized-users/{authorizedUserId}", Name = nameof(GetAuthorizedUserById))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -98,13 +98,13 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(user));
         }
 
-        // DELETE: api/health-authority/5/authorized-user/5
+        // DELETE: api/health-authorities/5/authorized-users/5
         /// <summary>
         /// Delete authorized user
         /// </summary>
         /// <param name="healthAuthorityCode"></param>
         /// <param name="authorizedUserId"></param>
-        [HttpDelete("{healthAuthorityCode}/authorized-user/{authorizedUserId}", Name = nameof(DeleteAuthorizedUser))]
+        [HttpDelete("{healthAuthorityCode}/authorized-users/{authorizedUserId}", Name = nameof(DeleteAuthorizedUser))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

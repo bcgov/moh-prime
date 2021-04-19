@@ -1,0 +1,33 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <ng-content select="app-page-header"></ng-content>
+
+  <ng-content select="app-page-subheader"></ng-content>
+
+  <mat-tab-group>
+    <mat-tab label="Registrations">
+      <ng-template matTabContent>
+        <app-search-form *ngIf="showSearchFilter"
+                         [disabled]="true"
+                         (search)="onSearch($event)"
+                         (filter)="onFilter($event)"
+                         (refresh)="onRefresh()"></app-search-form>
+
+        <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
+                                     [dataSource]="dataSource"
+                                     (assign)="onAssign($event)"
+                                     (reassign)="onReassign($event)"
+                                     (notify)="onNotify($event)"
+                                     (route)="onRoute($event)"
+                                     (reload)="onRefresh()"></app-site-registration-table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Health Authorities">
+      <ng-template matTabContent>
+        <app-health-authority-table></app-health-authority-table>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+</app-page>

@@ -50,6 +50,9 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
 import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
+import { HaAuthorizedUserEntryComponent } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry.component';
+import { HealthAuthorityContainerComponent } from './shared/components/health-authority-container/health-authority-container.component';
+import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +94,10 @@ import { HealthAuthorityTableComponent } from './shared/components/health-author
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
     BannerMaintenanceComponent,
-    HealthAuthorityTableComponent
+    HealthAuthorityTableComponent,
+    HaAuthorizedUserEntryComponent,
+    HealthAuthorityContainerComponent,
+    SiteRegistrationTabsComponent
   ],
   imports: [
     AdjudicationRoutingModule,
