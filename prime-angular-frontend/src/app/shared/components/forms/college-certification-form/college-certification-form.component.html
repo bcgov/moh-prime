@@ -51,11 +51,12 @@
           </mat-form-field>
 
         </div>
-        <div class="col-sm-12 pl-5">
+        <div class="col-sm-12 pl-5"
+             *ngIf="collegeCode.value !== CollegeLicenceClassEnum.CPSBC">
 
           <mat-form-field class="w-100">
             <input matInput
-                   [placeholder]="(collegeCode.value === CollegeLicenceClassEnum.CPSBC) ? 'CPSID Number' : 'Licence Number from College'"
+                   placeholder="Licence Number from College"
                    formControlName="licenseNumber">
             <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
             <mat-error *ngIf="licenseNumber.hasError('alphanumeric')">
@@ -104,6 +105,29 @@
           </div>
 
         </ng-container>
+
+        <div class="col-sm-12 pl-5"
+             *ngIf="collegeCode.value === CollegeLicenceClassEnum.CPSBC">
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>CPSID Number</ng-container>
+            <ng-container appPageSubheaderSummary>
+              This number is in your licence letter. It should be 5 digits long.
+              If your number is 6 digits or more, provide the last 5 digits only.
+              If your number is only 4 digits long, add a zero to the front.
+            </ng-container>
+          </app-page-subheader>
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="CPSID Number"
+                   maxlength="5"
+                   formControlName="licenseNumber">
+
+            <mat-error *ngIf="licenseNumber.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="licenseNumber.hasError('numeric') || licenseNumber.hasError('length')">
+              Must contain only 5 numeric characters
+            </mat-error>
+          </mat-form-field>
+        </div>
 
         <div *ngIf="!condensed && prescriberIdType !== PrescriberIdTypeEnum.NA"
              class="col-sm-12 pl-5">

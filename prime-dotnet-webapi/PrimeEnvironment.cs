@@ -1,5 +1,7 @@
 using static System.Environment;
 
+using Prime.Auth;
+
 namespace Prime
 {
     public static class PrimeEnvironment
@@ -21,11 +23,18 @@ namespace Prime
 
         public static class Keycloak
         {
-            public static readonly string WellKnownConfig = GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration";
-            public static readonly string TokenUrl = GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
+            public static readonly string RealmUrl = GetEnvironmentVariable("KEYCLOAK_REALM_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas";
+            public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
+            public static readonly string TokenUrl = KeycloakUrls.Token(RealmUrl);
             public static readonly string AdministrationUrl = GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_URL") ?? "https://dev.oidc.gov.bc.ca/auth/admin/realms/v4mbqqas";
             public static readonly string AdministrationClientId = "keycloak-service-account";
             public static readonly string AdministrationClientSecret = GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
+        }
+
+        public static class MohKeycloak
+        {
+            public static readonly string RealmUrl = GetEnvironmentVariable("MOH_KEYCLOAK_REALM_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications";
+            public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
         }
 
         public static class MailServer
