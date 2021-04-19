@@ -33,7 +33,9 @@
 
   <section class="mb-4">
     <div class="mb-3">
-      <mat-slide-toggle [formControl]="isNewSite">{{ this.isNewSite.value ? 'This is a new Site without a Site ID' :
+      <mat-slide-toggle [formControl]="isNewSite"
+                        color="primary">
+        {{ this.isNewSite.value ? 'This is a new Site without a Site ID' :
         'This is
         not a new Site and it has a PEC Code
         assigned' }}
