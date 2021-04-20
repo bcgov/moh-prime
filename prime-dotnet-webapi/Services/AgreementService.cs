@@ -186,7 +186,6 @@ namespace Prime.Services
         /// <param name="organizationId"></param>
         /// <param name="agreementId"></param>
         /// <param name="asEncodedPdf"></param>
-        /// <param name="withSignature"></param>
         /// <returns></returns>
         public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
         {
