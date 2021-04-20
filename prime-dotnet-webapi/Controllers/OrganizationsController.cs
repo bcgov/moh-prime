@@ -308,19 +308,25 @@ namespace Prime.Controllers
         /// Get the organization agreement as a signable PDF, Base 64 encoded.
         /// </summary>
         /// <param name="organizationId"></param>
-        /// <param name="agreementId"></param>
-        [HttpGet("{organizationId}/agreements/{agreementId}/signable", Name = nameof(GetSignableOrganizationAgreement))]
+        /// <param name="agreementType"></param>
+        [HttpGet("{organizationId:int}/signable", Name = nameof(GetSignableOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, int agreementId)
+        public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
         {
-            var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementId);
+            var allowedAgreementTypes = new[] { AgreementType.CommunityPracticeOrgAgreement, AgreementType.CommunityPharmacyOrgAgreement };
+            if (allowedAgreementTypes.Contains(agreementType))
+            {
+                return BadRequest(ApiResponse.Message($"Agreement with type {agreementType} not allowed"));
+            }
+
+            var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
             if (pdf == null)
             {
-                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+                return NotFound(ApiResponse.Message($"Agreement for Organization {organizationId} not found"));
             }
 
             return Ok(ApiResponse.Result(pdf));

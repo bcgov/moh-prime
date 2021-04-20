@@ -186,8 +186,9 @@ namespace Prime.Services
         /// <param name="organizationId"></param>
         /// <param name="agreementId"></param>
         /// <param name="asEncodedPdf"></param>
+        /// <param name="withSignature"></param>
         /// <returns></returns>
-        public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
+        public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false, bool withSignature = false)
         {
             var agreementVm = await _context.Agreements
                 .AsNoTracking()
@@ -200,12 +201,8 @@ namespace Prime.Services
                 return null;
             }
 
-            var orgName = await _context.Organizations
-                .Where(o => o.Id == organizationId)
-                .Select(o => o.Name)
-                .SingleAsync();
-
-            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, orgName, agreementVm.AcceptedDate, asEncodedPdf);
+            var orgName = await GetOrganizationName(organizationId);
+            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, orgName, agreementVm.AcceptedDate, asEncodedPdf, withSignature);
 
             if (asEncodedPdf)
             {
@@ -220,9 +217,9 @@ namespace Prime.Services
             return agreementVm;
         }
 
-        public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf)
+        public async Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf, bool withSignature)
         {
-            RazorTemplate<OrgAgreementRazorViewModel> template = (type, forPdf) switch
+            var template = (type, forPdf) switch
             {
                 (AgreementType.CommunityPharmacyOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPharmacy,
                 (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
@@ -235,29 +232,21 @@ namespace Prime.Services
             // Converting to BC time here since we aren't localizing this time in the web client
             displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderTemplateToStringAsync(template, new OrgAgreementRazorViewModel(orgName, displayDate));
+            return await _razorConverterService.RenderTemplateToStringAsync(template, new OrgAgreementRazorViewModel(orgName, displayDate, withSignature));
         }
 
         /// <summary>
-        /// Returns a Base64 encoded PDF of a given org agreement, for signing.
+        /// Returns a Base64 encoded PDF of a given org agreement for signing.
         /// </summary>
         /// <param name="organizationId"></param>
-        /// <param name="agreementId"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        public async Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId)
+        public async Task<string> GetSignableOrgAgreementAsync(int organizationId, AgreementType type)
         {
-            var type = await _context.Agreements
-                .AsNoTracking()
-                .Where(a => a.Id == agreementId && a.OrganizationId == organizationId)
-                .Select(a => (AgreementType?)a.AgreementVersion.AgreementType)
-                .SingleOrDefaultAsync();
-
-            if (!type.HasValue)
-            {
-                return null;
-            }
-
-            return GetEncodedPdf(type.Value);
+            var orgName = await GetOrganizationName(organizationId);
+            var html = await RenderOrgAgreementHtmlAsync(type, orgName, DateTimeOffset.Now, true, true);
+            var pdf = _pdfService.Generate(html);
+            return Convert.ToBase64String(pdf);
         }
 
         public async Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId)
@@ -304,25 +293,6 @@ namespace Prime.Services
             }
         }
 
-        private string GetEncodedPdf(AgreementType type)
-        {
-            var filename = type switch
-            {
-                AgreementType.CommunityPracticeOrgAgreement => "CommunityPracticeOrganizationAgreement.pdf",
-                AgreementType.CommunityPharmacyOrgAgreement => "CommunityPharmacyOrganizationAgreement.pdf",
-                _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(GetEncodedPdf)}")
-            };
-
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourcePath = assembly.GetManifestResourceNames()
-                .Single(str => str.EndsWith(filename));
-
-            using Stream stream = assembly.GetManifestResourceStream(resourcePath);
-            using var reader = new MemoryStream();
-            stream.CopyTo(reader);
-            return Convert.ToBase64String(reader.ToArray());
-        }
-
         private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
         {
             return await _context.AgreementVersions
@@ -331,6 +301,14 @@ namespace Prime.Services
                 .Where(a => a.AgreementType == type)
                 .Select(a => a.Id)
                 .FirstAsync();
+        }
+
+        private async Task<string> GetOrganizationName(int organizationId)
+        {
+            return await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
         }
     }
 }
