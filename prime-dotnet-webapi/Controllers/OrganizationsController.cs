@@ -309,7 +309,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         /// <param name="agreementType"></param>
-        [HttpGet("{organizationId:int}/signable", Name = nameof(GetSignableOrganizationAgreement))]
+        [HttpGet("{organizationId}/signable", Name = nameof(GetSignableOrganizationAgreement))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
