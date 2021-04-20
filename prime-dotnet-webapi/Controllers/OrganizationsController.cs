@@ -140,8 +140,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
-            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
-            if (organization == null)
+            if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
@@ -167,8 +166,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateOrganizationCompleted(int organizationId)
         {
-            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
-            if (organization == null)
+            if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
@@ -287,8 +285,12 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Agreement>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
         {
-            var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
-            if (organization == null)
+            if (!await _organizationService.OrganizationExistsAsync(organizationId))
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
+            if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
                 return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
             }
@@ -317,16 +319,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
         {
+            if (!await _organizationService.OrganizationExistsAsync(organizationId))
+            {
+                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+            }
+
             if (agreementType.IsEnrolleeAgreement())
             {
                 return BadRequest(ApiResponse.Message($"Agreement with type {agreementType} not allowed"));
             }
 
             var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
-            if (pdf == null)
-            {
-                return NotFound(ApiResponse.Message($"Agreement for Organization {organizationId} not found"));
-            }
 
             return Ok(ApiResponse.Result(pdf));
         }

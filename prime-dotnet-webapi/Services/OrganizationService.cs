@@ -36,6 +36,13 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        public async Task<bool> OrganizationExistsAsync(int organizationId)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == organizationId);
+        }
+
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync()
         {
             return await _context.Organizations
