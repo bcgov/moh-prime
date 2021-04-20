@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.ServiceModel;
@@ -129,9 +130,9 @@ namespace Prime.Services
                 result.Address2StartDate = ParseHL7v3DateTime(dateValue);
             }
 
-            // result.Credentials  // TODO: Verify with Vinder
+            result.Credentials = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId);
             result.Email = RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'mailto')]/@value", documentRoot, messageId));
-            // result.Expertise  // TODO: Verify with Vinder
+            result.Expertise = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[not({Prefix}:originalText/{Prefix}:reference)]/@code", documentRoot, messageId);
             string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId)));
             result.FaxAreaCode = faxNumberParts[0];
             result.FaxNumber = faxNumberParts[1];
@@ -183,6 +184,26 @@ namespace Prime.Services
             {
                 _logger.LogInformation(node.InnerXml);
                 return node.InnerXml;
+            }
+            else
+            {
+                _logger.LogWarning($"{xPath} did not match anything in the message with ID '{messageId}'");
+                return null;
+            }
+        }
+
+        private string[] ReadMultiNodeData(string xPath, XmlNode documentRoot, string messageId = null)
+        {
+            XmlNodeList nodes = documentRoot.SelectNodes(xPath, _nsManager);
+            if (nodes.Count != 0)
+            {
+                List<string> results = new List<string>();
+                foreach (XmlNode node in nodes)
+                {
+                    _logger.LogInformation(node.InnerXml);
+                    results.Add(node.InnerXml);
+                }
+                return results.ToArray();
             }
             else
             {
