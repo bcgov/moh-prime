@@ -1,5 +1,5 @@
 FROM registry.redhat.io/rhel8/python-36
-USER 0` 
+USER 0 
 ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
 
