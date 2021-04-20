@@ -48,7 +48,7 @@ namespace Prime.Models
 
         public DateTime StatusExpiryDate { get; set; }
 
-        public string Expertise { get; set; }
+        public string[] Expertise { get; set; }
 
         public string Languages { get; set; }
 
@@ -84,7 +84,7 @@ namespace Prime.Models
 
         public DateTime Address2StartDate { get; set; }
 
-        public string Credentials { get; set; }
+        public string[] Credentials { get; set; }
 
         public string TelephoneAreaCode { get; set; }
 

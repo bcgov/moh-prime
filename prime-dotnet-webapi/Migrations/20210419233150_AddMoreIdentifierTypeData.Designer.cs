@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210419233150_AddMoreIdentifierTypeData")]
+    partial class AddMoreIdentifierTypeData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -16020,8 +16022,8 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string[]>("Credentials")
-                        .HasColumnType("text[]");
+                    b.Property<string>("Credentials")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
@@ -16029,8 +16031,8 @@ namespace Prime.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string[]>("Expertise")
-                        .HasColumnType("text[]");
+                    b.Property<string>("Expertise")
+                        .HasColumnType("text");
 
                     b.Property<string>("FaxAreaCode")
                         .HasColumnType("text");
