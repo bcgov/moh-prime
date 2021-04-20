@@ -20,7 +20,7 @@ public class AutoMapping : Profile
         CreateMap<Site, SiteListViewModel>()
             .ForMember(dest => dest.AdjudicatorIdir, opt => opt.MapFrom(src => src.Adjudicator.IDIR))
             .ForMember(dest => dest.RemoteUserCount, opt => opt.MapFrom(src => src.RemoteUsers.Count));
-
+        CreateMap<BusinessLicence, BusinessLicence>();
         CreateMap<EnrolleeCreateModel, Enrollee>();
 
         IQueryable<int> newestAgreementIds = null;
