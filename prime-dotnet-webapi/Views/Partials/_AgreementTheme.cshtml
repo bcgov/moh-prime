@@ -2,6 +2,18 @@
 @await Html.PartialAsync("_FontTheme.cshtml")
 
 <style>
+  .keep-together {
+    page-break-inside: avoid;
+  }
+
+  .break-before {
+    page-break-before: always;
+  }
+
+  .break-after {
+    page-break-after: always;
+  }
+
   body {
     font-family: 'Roboto', 'Helvetica Neue', sans-serif;
   }
@@ -74,6 +86,6 @@
 
   ol[type="1"].decimal ol[type="1"]>li::before {
     content: counters(section, ".") " ";
-    margin-left: -26px;
+    margin-left: -30px;
   }
 </style>
