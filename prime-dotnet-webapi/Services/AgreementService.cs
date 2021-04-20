@@ -188,7 +188,7 @@ namespace Prime.Services
         /// <param name="asEncodedPdf"></param>
         /// <param name="withSignature"></param>
         /// <returns></returns>
-        public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false, bool withSignature = false)
+        public async Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false)
         {
             var agreementVm = await _context.Agreements
                 .AsNoTracking()
@@ -202,7 +202,7 @@ namespace Prime.Services
             }
 
             var orgName = await GetOrganizationName(organizationId);
-            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, orgName, agreementVm.AcceptedDate, asEncodedPdf, withSignature);
+            var html = await RenderOrgAgreementHtmlAsync(agreementVm.AgreementType, orgName, agreementVm.AcceptedDate, asEncodedPdf, false);
 
             if (asEncodedPdf)
             {
