@@ -34,7 +34,7 @@
                         [editRoute]="[SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_NAME]"
                         (route)="onRoute($event)">
     <app-enrollee-property title="Reference ID">
-      {{ organization?.id + 1000 | default }}
+      {{ organization?.displayId | default }}
     </app-enrollee-property>
 
     <app-enrollee-property title="Organization Name (Legal Entity Operating Site)">
