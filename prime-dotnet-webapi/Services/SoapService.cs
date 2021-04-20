@@ -130,8 +130,10 @@ namespace Prime.Services
                 result.Address2StartDate = ParseHL7v3DateTime(dateValue);
             }
 
+            // According to PLR team, Credentials will have a `reference` child node (i.e. designation text) ...
             result.Credentials = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId);
             result.Email = RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'mailto')]/@value", documentRoot, messageId));
+            // ... but Expertises will never have a `reference` child node
             result.Expertise = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[not({Prefix}:originalText/{Prefix}:reference)]/@code", documentRoot, messageId);
             string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId)));
             result.FaxAreaCode = faxNumberParts[0];
