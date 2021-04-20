@@ -40,11 +40,12 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
     if (this.formUtilsService.checkValidity(this.formState.form)) {
       const user = this.formState.json;
       if (this.auid) {
-        this.busy = this.healthAuthorityResource.updateAuthorizedUser(this.haid, this.auid, user).subscribe();
+        this.busy = this.healthAuthorityResource.updateAuthorizedUser(this.haid, this.auid, user)
+          .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
       } else {
-        this.busy = this.healthAuthorityResource.createAuthorizedUser(this.haid, user).subscribe();
+        this.busy = this.healthAuthorityResource.createAuthorizedUser(this.haid, user)
+          .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
       }
-      this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]);
     }
   }
 

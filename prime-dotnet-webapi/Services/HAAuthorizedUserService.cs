@@ -30,7 +30,7 @@ namespace Prime.Services
             return user;
         }
 
-        public async Task<HAAuthorizedUser> UpdateAuthorizedUserAsync(int authorizedUserId, HAAuthorizedUser updateModel)
+        public async Task<HAAuthorizedUser> UpdateAuthorizedUserAsync(int authorizedUserId, HAAuthorizedUserUpdateModel updateModel)
         {
             var user = await _context.HAAuthorizedUsers
                 .Where(u => u.Id == authorizedUserId)

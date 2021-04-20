@@ -51,8 +51,10 @@ import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-pa
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
 import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 import { HaAuthorizedUserEntryComponent } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry.component';
-import { HealthAuthorityContainerComponent } from './shared/components/health-authority-container/health-authority-container.component';
 import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
+import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
+import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorized-users-view/ha-authorized-users-view.component';
+import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 
 @NgModule({
   declarations: [
@@ -96,8 +98,10 @@ import { SiteRegistrationTabsComponent } from './shared/components/site-registra
     BannerMaintenanceComponent,
     HealthAuthorityTableComponent,
     HaAuthorizedUserEntryComponent,
-    HealthAuthorityContainerComponent,
-    SiteRegistrationTabsComponent
+    SiteRegistrationTabsComponent,
+    HealthAuthorityAuthorizedUserPageComponent,
+    HaAuthorizedUsersViewComponent,
+    HealthAuthorityAuthorizedUsersPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

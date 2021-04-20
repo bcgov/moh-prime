@@ -31,6 +31,8 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { HaAuthorizedUserEntryFormState } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry-form-state.class';
 import { HaAuthorizedUserEntryComponent } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry.component';
+import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
+import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 
 const routes: Routes = [
   {
@@ -182,17 +184,17 @@ const routes: Routes = [
             children: [
               {
                 path: '',
-                component: SiteOverviewComponent,
+                component: HealthAuthorityAuthorizedUsersPageComponent,
                 data: { title: 'Authorized Users' }
               },
               {
                 path: AdjudicationRoutes.CREATE_USER,
-                component: HaAuthorizedUserEntryComponent,
+                component: HealthAuthorityAuthorizedUserPageComponent,
                 data: { title: 'Authorized User' }
               },
               {
                 path: `:auid`,
-                component: HaAuthorizedUserEntryComponent,
+                component: HealthAuthorityAuthorizedUserPageComponent,
                 data: { title: 'Authorized User' }
               }
             ]

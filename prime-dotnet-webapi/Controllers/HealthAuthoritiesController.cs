@@ -53,7 +53,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<HAAuthorizedUser>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateAuthorizedUser(HealthAuthorityCode healthAuthorityCode, int authorizedUserId, HAAuthorizedUser model)
+        public async Task<ActionResult> UpdateAuthorizedUser(HealthAuthorityCode healthAuthorityCode, int authorizedUserId, HAAuthorizedUserUpdateModel model)
         {
             var user = await _haAuthorizedUserService.GetAuthorizedUserByIdAsync(authorizedUserId);
             if (user == null || user.HealthAuthorityCode != healthAuthorityCode)

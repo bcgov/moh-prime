@@ -25,7 +25,7 @@
     </mat-tab>
     <mat-tab label="Health Authorities">
       <ng-template matTabContent>
-        <app-health-authority-table></app-health-authority-table>
+        <app-health-authority-table (route)="onRoute($event)"></app-health-authority-table>
       </ng-template>
     </mat-tab>
   </mat-tab-group>

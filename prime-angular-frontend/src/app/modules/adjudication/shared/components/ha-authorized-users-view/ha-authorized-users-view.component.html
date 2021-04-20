@@ -1,0 +1,35 @@
+<div class="mb-4">
+  <button mat-flat-button
+          color="primary"
+          (click)="onAdd()">
+    <mat-icon>add</mat-icon> Add Authorized User
+  </button>
+</div>
+<div class="container-fluid">
+  <div class="row">
+
+    <ng-container *ngFor="let user of authorizedUsers; let i = index;">
+      <div class="col-md-6 col-sm-12">
+        <app-summary-card icon="account_circle"
+                          [title]="user | fullname"
+                          [menu]="authorizedUserMenu"
+                          [properties]="getUserPropertiess(user)"
+                          actionButtonTitle="Update Information"
+                          [actionDisabled]="false"
+                          (remove)="onRemove(user.id)"
+                          (action)="onEdit(user.id)"></app-summary-card>
+
+        <ng-template #authorizedUserMenu>
+          <button type="button"
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Remove Authorized User"
+                  (click)="onRemove(user.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+
+</div>
