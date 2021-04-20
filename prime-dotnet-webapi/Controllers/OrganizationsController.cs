@@ -351,7 +351,7 @@ namespace Prime.Controllers
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
-                return Forbid();GetOrganizationAgreement
+                return Forbid();
             }
 
             if (organizationAgreementGuid.HasValue)
@@ -380,7 +380,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignedAgreementGetOrganizationAgreementToken(int organizationId, int agreementId)
+        public async Task<ActionResult<string>> GetSignedAgreementToken(int organizationId, int agreementId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
