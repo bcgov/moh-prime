@@ -317,8 +317,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
         {
-            var allowedAgreementTypes = new[] { AgreementType.CommunityPracticeOrgAgreement, AgreementType.CommunityPharmacyOrgAgreement };
-            if (!allowedAgreementTypes.Contains(agreementType))
+            if (agreementType.IsEnrolleeAgreement())
             {
                 return BadRequest(ApiResponse.Message($"Agreement with type {agreementType} not allowed"));
             }
