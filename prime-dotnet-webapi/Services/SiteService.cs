@@ -141,7 +141,7 @@ namespace Prime.Services
             {
                 var currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
 
-                if (typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) is Contact updatedContact)
+                if (typeof(SiteUpdateModel).GetProperty(contactType)?.GetValue(updated) is Contact updatedContact)
                 {
                     if (currentContact == null)
                     {
@@ -150,15 +150,15 @@ namespace Prime.Services
                     else
                     {
                         _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
-                    }
 
-                    if (currentContact.PhysicalAddress != null && updatedContact.PhysicalAddress != null)
-                    {
-                        _context.Entry(currentContact.PhysicalAddress).CurrentValues.SetValues(updatedContact.PhysicalAddress);
-                    }
-                    else
-                    {
-                        currentContact.PhysicalAddress = updatedContact.PhysicalAddress;
+                        if (currentContact.PhysicalAddress != null && updatedContact.PhysicalAddress != null)
+                        {
+                            _context.Entry(currentContact.PhysicalAddress).CurrentValues.SetValues(updatedContact.PhysicalAddress);
+                        }
+                        else
+                        {
+                            currentContact.PhysicalAddress = updatedContact.PhysicalAddress;
+                        }
                     }
                 }
             }
