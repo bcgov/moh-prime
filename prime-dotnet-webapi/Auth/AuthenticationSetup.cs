@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -41,7 +41,7 @@ namespace Prime.Auth
 
             services.AddAuthorization(options =>
             {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder(Schemes.PrimeJwt, Schemes.MohJwt)
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(Schemes.PrimeJwt)
                     .RequireAuthenticatedUser()
                     .Build();
             });

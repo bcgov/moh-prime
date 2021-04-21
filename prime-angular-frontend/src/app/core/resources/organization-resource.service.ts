@@ -10,6 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
@@ -23,13 +24,14 @@ export class OrganizationResource {
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
     private logger: LoggerService
-  ) { }
+  ) {
+  }
 
-  public getOrganizations(): Observable<Organization[]>{
-    return this.apiResource.get<Organization[] | Organization[]>('organizations')
+  public getOrganizations(): Observable<Organization[]> {
+    return this.apiResource.get<Organization[]>('organizations')
       .pipe(
-        map((response: ApiHttpResponse<Organization[] | Organization[]>) => response.result),
-        tap((organizations: Organization[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
@@ -162,7 +164,7 @@ export class OrganizationResource {
   public getOrganizationAgreement(
     organizationId: number,
     agreementId: number,
-    asPdf?: boolean // TODO should we include format?
+    asPdf?: boolean
   ): Observable<OrganizationAgreementViewModel> {
     const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
     return this.apiResource.get<OrganizationAgreementViewModel>(`organizations/${organizationId}/agreements/${agreementId}`, params)
@@ -182,12 +184,15 @@ export class OrganizationResource {
    * Get a organization agreement for signing as HTML markup for inline
    * display, or Base64 (PDF) for downloading.
    */
-  // TODO is this accurate?
-  public getOrganizationAgreementForSigning(organizationId: number, agreementId: number) {
-    return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}/signable`)
+  public getOrganizationAgreementForSigning(
+    organizationId: number,
+    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT
+  ) {
+    const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
+    return this.apiResource.get<string>(`organizations/${organizationId}/signable`, params)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
-        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNABLE', organizationAgreement)),
+        map((response: ApiHttpResponse<string>) => response.result), // as Base64 string
+        tap((organizationAgreement: string) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNABLE', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationAgreementForSigning error has occurred: ', error);
