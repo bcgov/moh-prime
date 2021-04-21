@@ -23,6 +23,16 @@ ENV POSTGRESQL_USER postgres
 ENV POSTGRESQL_DATABASE postgres
 ENV PGPASSWORD postgres
 
+WORKDIR /vsdbg
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+            unzip \
+    && rm -rf /var/lib/apt/lists/* \
+    && curl -sSL https://aka.ms/getvsdbgsh \
+        | bash /dev/stdin -v latest -l /vsdbg \
+    && apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev
+
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
@@ -42,6 +52,6 @@ RUN apt-get update && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
 
-EXPOSE 8080 5001
+EXPOSE 8080 5001 5000
 
 ENTRYPOINT [ "./entrypoint.sh" ]
