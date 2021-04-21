@@ -2,12 +2,15 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Role } from '@auth/shared/enum/role.enum';
+
+import { Subscription } from 'rxjs';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityResourceService } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
-import { Subscription } from 'rxjs';
+import { Role } from '@auth/shared/enum/role.enum';
+
 import { HaAuthorizedUserEntryFormState } from './ha-authorized-user-entry-form-state.class';
 
 @Component({
@@ -53,7 +56,7 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.createFormInstance();
     if (this.auid) {
       this.getAuthorizedUser();
@@ -68,5 +71,4 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
   protected createFormInstance() {
     this.formState = new HaAuthorizedUserEntryFormState(this.fb);
   }
-
 }
