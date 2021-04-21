@@ -50,6 +50,8 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
       contact.physicalAddress = new Address();
     }
     this.formState.form.patchValue(contact);
+    // mark the form touched so address form can expand
+    this.formState.form.markAllAsTouched();
   }
 
   public onBack() {

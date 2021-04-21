@@ -15,6 +15,7 @@ import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-s
 export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
+  @Input() public showFax: boolean = true;
   public hasPhysicalAddress: boolean;
   @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
@@ -48,7 +49,7 @@ export class ContactProfileFormComponent implements OnInit {
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
-    if (!checked) {
+    if (checked) {
       this.physicalAddress.reset();
     }
 
@@ -63,10 +64,16 @@ export class ContactProfileFormComponent implements OnInit {
       .pipe(distinctUntilChanged())
       .subscribe((value: string) => (value) ? this.togglePhysicalAddress() : null);
 
-    this.togglePhysicalAddress();
+    // If first time loading, force address slider to be 'off' by default
+    if (!this.form.get('firstName').value) {
+      this.togglePhysicalAddress(true);
+    }
+    else {
+      this.togglePhysicalAddress();
+    }
   }
 
-  private togglePhysicalAddress() {
+  private togglePhysicalAddress(forceDefault?: boolean) {
     this.hasPhysicalAddress = !!(
       this.physicalAddress.get('countryCode').value ||
       this.physicalAddress.get('provinceCode').value ||
@@ -74,7 +81,7 @@ export class ContactProfileFormComponent implements OnInit {
       this.physicalAddress.get('street2').value ||
       this.physicalAddress.get('city').value ||
       this.physicalAddress.get('postal').value
-    );
+    ) || forceDefault;
 
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }

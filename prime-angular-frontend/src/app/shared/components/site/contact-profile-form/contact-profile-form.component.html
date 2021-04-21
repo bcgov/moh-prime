@@ -81,7 +81,8 @@
         </mat-form-field>
 
       </div>
-      <div class="col-12">
+      <div class="col-12"
+           *ngIf="showFax">
 
         <mat-form-field class="w-100">
           <input matInput
@@ -109,24 +110,25 @@
       </div>
     </div>
 
+    <ng-container *ngIf="hasPhysicalAddress">
+
+      <section class="mb-3">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Address</ng-container>
+        </app-page-subheader2>
+
+        <app-address-form [form]="physicalAddress"
+                          [showManualButton]="true"></app-address-form>
+      </section>
+
+    </ng-container>
+
     <mat-slide-toggle class="mb-3"
                       color="primary"
-                      [checked]="hasPhysicalAddress"
+                      [checked]="!hasPhysicalAddress"
                       (change)="onPhysicalAddressChange($event)">
-      The {{ title }}'s mailing address is different from this site’s address
+      The {{ title }}'s mailing address is the same as the site’s address
     </mat-slide-toggle>
   </section>
-
-  <ng-container *ngIf="hasPhysicalAddress">
-
-    <section class="mb-3">
-      <app-page-subheader2>
-        <ng-container appPageSubheader2Title>Address</ng-container>
-      </app-page-subheader2>
-
-      <app-address-form [form]="physicalAddress"></app-address-form>
-    </section>
-
-  </ng-container>
 
 </form>
