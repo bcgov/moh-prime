@@ -2,10 +2,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Role } from '@auth/shared/enum/role.enum';
+
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { Role } from '@auth/shared/enum/role.enum';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -13,12 +14,10 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
   styleUrls: ['./health-authority-table.component.scss']
 })
 export class HealthAuthorityTableComponent implements OnInit {
-  public dataSource: MatTableDataSource<Config<number>>;
-
   @Output() public route: EventEmitter<string | (string | number)[]>;
-
+                                       
+  public dataSource: MatTableDataSource<Config<number>>;
   public columns: string[];
-
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
   public haCode: HealthAuthorityEnum;
