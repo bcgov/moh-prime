@@ -2,6 +2,18 @@
 @await Html.PartialAsync("_FontTheme.cshtml")
 
 <style>
+  .keep-together {
+    page-break-inside: avoid;
+  }
+
+  .break-before {
+    page-break-before: always;
+  }
+
+  .break-after {
+    page-break-after: always;
+  }
+
   body {
     font-family: 'Roboto', 'Helvetica Neue', sans-serif;
   }
@@ -32,7 +44,7 @@
   }
 
   .text-indent {
-   text-indent: 1rem;
+    text-indent: 1rem;
   }
 
   .text-center {

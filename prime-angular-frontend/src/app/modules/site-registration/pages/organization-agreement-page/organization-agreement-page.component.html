@@ -43,7 +43,7 @@
 
   <ng-template #electronic>
     <div class="organization-agreement"
-         [innerHTML]="organizationAgreementContent | safe: 'html'"></div>
+         [innerHTML]="organizationAgreement?.agreementContent | safe: 'html'"></div>
 
     <div class="footer mb-4">
       <mat-checkbox #accept>

@@ -25,9 +25,9 @@ namespace Prime.Services
 
         Task<AgreementViewModel> GetOrgAgreementAsync(int organizationId, int agreementId, bool asEncodedPdf = false);
 
-        Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf);
+        Task<string> RenderOrgAgreementHtmlAsync(AgreementType type, string orgName, DateTimeOffset? acceptedDate, bool forPdf, bool withSignature = false);
 
-        Task<string> GetSignableOrgAgreementAsync(int organizationId, int agreementId);
+        Task<string> GetSignableOrgAgreementAsync(int organizationId, AgreementType type);
 
         Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
 
