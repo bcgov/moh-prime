@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+
 import { EMPTY, noop, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
@@ -79,7 +80,7 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
     ];
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getAuthorizedUser();
   }
 
@@ -87,5 +88,4 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
     this.busy = this.healthAuthorityResourceService.getAuthorizedUsersByHA(this.route.snapshot.params.haid)
       .subscribe((users: HAAuthorizedUser[]) => this.authorizedUsers = users);
   }
-
 }
