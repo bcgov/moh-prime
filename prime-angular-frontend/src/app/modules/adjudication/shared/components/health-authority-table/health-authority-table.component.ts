@@ -52,6 +52,5 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  ngOnInit(): void { }
-
+  public ngOnInit(): void { }
 }
