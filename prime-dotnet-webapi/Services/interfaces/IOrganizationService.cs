@@ -10,6 +10,7 @@ namespace Prime.Services
 {
     public interface IOrganizationService
     {
+        Task<bool> OrganizationExistsAsync(int organizationId);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync();
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);

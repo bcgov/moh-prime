@@ -61,7 +61,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   }
 
   public get certifications(): FormArray {
-    return this.formState.certifications;
+    return this.formState.certifications as FormArray;
   }
 
   public get selectedCollegeCodes(): number[] {
