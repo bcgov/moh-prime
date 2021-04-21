@@ -130,7 +130,8 @@ namespace Prime.Services
 
         private void UpdateContacts(Site current, SiteUpdateModel updated)
         {
-            string[] contactTypes = new string[] {
+            var contactTypes = new []
+            {
                 nameof(current.AdministratorPharmaNet),
                 nameof(current.PrivacyOfficer),
                 nameof(current.TechnicalSupport)
@@ -138,34 +139,26 @@ namespace Prime.Services
 
             foreach (var contactType in contactTypes)
             {
-                var contactIdName = $"{contactType}Id";
-                Contact currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
+                var currentContact = _context.Entry(current).Reference(contactType).CurrentValue as Contact;
 
                 if (typeof(SiteUpdateModel).GetProperty(contactType).GetValue(updated) is Contact updatedContact)
                 {
-                    if (updatedContact.Id != 0)
+                    if (currentContact == null)
                     {
-                        _context.Entry(current).Property(contactIdName).CurrentValue = updatedContact.Id;
+                        _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
                     }
                     else
                     {
-                        if (currentContact == null)
-                        {
-                            _context.Entry(current).Reference(contactType).CurrentValue = updatedContact;
-                        }
-                        else
-                        {
-                            _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
-                        }
+                        _context.Entry(currentContact).CurrentValues.SetValues(updatedContact);
+                    }
 
-                        if (updated.PhysicalAddress != null && current.PhysicalAddress != null)
-                        {
-                            _context.Entry(current.PhysicalAddress).CurrentValues.SetValues(updated.PhysicalAddress);
-                        }
-                        else
-                        {
-                            current.PhysicalAddress = updated.PhysicalAddress;
-                        }
+                    if (currentContact.PhysicalAddress != null && updatedContact.PhysicalAddress != null)
+                    {
+                        _context.Entry(currentContact.PhysicalAddress).CurrentValues.SetValues(updatedContact.PhysicalAddress);
+                    }
+                    else
+                    {
+                        currentContact.PhysicalAddress = updatedContact.PhysicalAddress;
                     }
                 }
             }
