@@ -33,6 +33,8 @@ RUN apt-get update \
         | bash /dev/stdin -v latest -l /vsdbg \
     && apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev
 
+ENV DOTNET_USE_POLLING_FILE_WATCHER 1
+
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/

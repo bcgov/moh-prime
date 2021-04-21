@@ -39,7 +39,7 @@
       "sourceFileMap": {
         "/app": "${workspaceRoot}"
       }
-    }
+    },
     {
       "name": "Docker .NET Core Launch",
       "type": "docker",
