@@ -249,10 +249,15 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private setPractitionerIdStateAndValidators(prescriberIdType: PrescriberIdTypeEnum, isPrescribing: boolean) {
+    // Always set prescriber related values, but don't
+    // update the validations unless not condensed
     this.prescriberIdType = prescriberIdType;
     this.isPrescribing = isPrescribing;
 
-    if (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA)) {
+    if (
+      !this.condensed &&
+      (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA))
+    ) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
         FormControlValidators.numeric,
