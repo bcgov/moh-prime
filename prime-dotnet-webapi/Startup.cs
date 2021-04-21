@@ -8,7 +8,6 @@ using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -29,7 +28,6 @@ using Prime.Services;
 using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
-using Prime.Models.Api;
 using Prime.Infrastructure;
 
 namespace Prime
@@ -120,7 +118,7 @@ namespace Prime
 
             ConfigureDatabase(services);
 
-            AuthenticationSetup.Initialize(services, Configuration, Environment);
+            AuthenticationSetup.Initialize(services);
         }
 
         protected void ConfigureClients(IServiceCollection services)

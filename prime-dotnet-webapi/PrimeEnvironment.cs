@@ -1,5 +1,7 @@
 using static System.Environment;
 
+using Prime.Auth;
+
 namespace Prime
 {
     public static class PrimeEnvironment
@@ -21,11 +23,18 @@ namespace Prime
 
         public static class Keycloak
         {
-            public static readonly string WellKnownConfig = GetEnvironmentVariable("JWT_WELL_KNOWN_CONFIG") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration";
-            public static readonly string TokenUrl = GetEnvironmentVariable("KEYCLOAK_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/protocol/openid-connect/token";
+            public static readonly string RealmUrl = GetEnvironmentVariable("KEYCLOAK_REALM_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas";
+            public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
+            public static readonly string TokenUrl = KeycloakUrls.Token(RealmUrl);
             public static readonly string AdministrationUrl = GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_URL") ?? "https://dev.oidc.gov.bc.ca/auth/admin/realms/v4mbqqas";
             public static readonly string AdministrationClientId = "keycloak-service-account";
             public static readonly string AdministrationClientSecret = GetEnvironmentVariable("KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
+        }
+
+        public static class MohKeycloak
+        {
+            public static readonly string RealmUrl = GetEnvironmentVariable("MOH_KEYCLOAK_REALM_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications";
+            public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
         }
 
         public static class MailServer
@@ -76,6 +85,11 @@ namespace Prime
             public static readonly string Url = GetEnvironmentVariable("METABASE_SITE_URL") ?? "https://metabase-test.pharmanetenrolment.gov.bc.ca";
             public static readonly string Key = GetEnvironmentVariable("METABASE_SECRET_KEY") ?? "f7a2ffbc8ebd7e273603896c0f63ae04a596b94ff76c276398ce5aa8ca216cee";
             public static readonly int DashboardId = int.Parse(GetEnvironmentVariable("METABASE_DASHBOARD_ID") ?? "4");
+        }
+
+        public static class PlrIntegration
+        {
+            public static readonly string ClientCertThumbprint = GetEnvironmentVariable("PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT");
         }
 
         public static class LdapApi
