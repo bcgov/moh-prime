@@ -226,7 +226,7 @@ namespace Prime.Controllers
 
         // POST: api/Organizations/5/agreements/update
         /// <summary>
-        /// Creates a new un-accepted Oganization Agreement based on the type of Site supplied, if a newer version exits.
+        /// Creates a new un-accepted Organization Agreement based on the type of Site supplied, if a newer version exits.
         /// Will return a reference to any existing un-accepted agreement instead of creating a new one, if able.
         /// </summary>
         /// <param name="organizationId"></param>
