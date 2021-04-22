@@ -15,8 +15,8 @@ export class HealthAuthorityAuthorizedUsersPageComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }

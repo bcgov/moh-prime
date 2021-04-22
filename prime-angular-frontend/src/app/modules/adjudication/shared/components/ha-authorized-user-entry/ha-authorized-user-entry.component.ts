@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { HealthAuthorityResourceService } from '@core/resources/health-authority-resource.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -28,11 +28,11 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
   public Role = Role;
 
   constructor(
-    protected fb: FormBuilder,
-    protected formUtilsService: FormUtilsService,
-    protected route: ActivatedRoute,
-    protected healthAuthorityResource: HealthAuthorityResourceService,
-    protected router: Router
+    private fb: FormBuilder,
+    private formUtilsService: FormUtilsService,
+    private route: ActivatedRoute,
+    private healthAuthorityResource: HealthAuthorityResource,
+    private router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.HEALTH_AUTHORITIES);
     this.haid = this.route.snapshot.params.haid;

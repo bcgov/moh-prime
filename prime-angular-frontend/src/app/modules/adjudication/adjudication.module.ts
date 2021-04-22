@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatTabsModule } from '@angular/material/tabs';
 
 import { EditorModule } from '@tinymce/tinymce-angular';
 
@@ -107,7 +106,6 @@ import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-auth
     AdjudicationRoutingModule,
     SharedModule,
     DashboardModule,
-    MatTabsModule,
     EditorModule
   ]
 })

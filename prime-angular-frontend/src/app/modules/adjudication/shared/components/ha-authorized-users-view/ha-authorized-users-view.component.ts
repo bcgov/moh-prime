@@ -7,7 +7,7 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
-import { HealthAuthorityResourceService } from '@core/resources/health-authority-resource.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -27,9 +27,9 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected healthAuthorityResourceService: HealthAuthorityResourceService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private healthAuthorityResourceService: HealthAuthorityResource,
     private dialog: MatDialog,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));

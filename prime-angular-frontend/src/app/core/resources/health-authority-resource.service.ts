@@ -14,7 +14,7 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 @Injectable({
   providedIn: 'root'
 })
-export class HealthAuthorityResourceService {
+export class HealthAuthorityResource {
 
   constructor(
     private apiResource: ApiResource,

@@ -15,7 +15,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 })
 export class HealthAuthorityTableComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
-                                       
+
   public dataSource: MatTableDataSource<Config<number>>;
   public columns: string[];
   public Role = Role;
@@ -23,9 +23,9 @@ export class HealthAuthorityTableComponent implements OnInit {
   public haCode: HealthAuthorityEnum;
 
   constructor(
-    protected configService: ConfigService,
-    protected router: Router,
-    protected activatedRoute: ActivatedRoute,
+    private configService: ConfigService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
     this.columns = [
       'referenceId',
@@ -38,8 +38,8 @@ export class HealthAuthorityTableComponent implements OnInit {
 
     this.haCode = this.activatedRoute.snapshot.params.haid;
     this.dataSource.data = (this.haCode)
-      ? this.configService.healthAuthorities.filter(ha => ha.code === +this.haCode)
-      : this.configService.healthAuthorities.sort((a, b) => a.code - b.code);
+      ? this.configService.healthAuthorities?.filter(ha => ha.code === +this.haCode)
+      : this.configService.healthAuthorities?.sort((a, b) => a.code - b.code);
   }
 
   public onRoute(haid: number) {

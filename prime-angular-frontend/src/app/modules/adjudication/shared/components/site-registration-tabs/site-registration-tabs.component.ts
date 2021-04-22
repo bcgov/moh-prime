@@ -54,11 +54,11 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected organizationResource: OrganizationResource,
-    protected siteResource: SiteResource,
-    protected adjudicationResource: AdjudicationResource,
+    private route: ActivatedRoute,
+    private router: Router,
+    private organizationResource: OrganizationResource,
+    private siteResource: SiteResource,
+    private adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
     private utilResource: UtilsService,
     private dialog: MatDialog

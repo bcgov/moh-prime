@@ -43,7 +43,7 @@
           *matRowDef="let row; columns: columns;"></tr>
     </table>
 
-    <p *ngIf="!dataSource?.data.length"
+    <p *ngIf="!dataSource?.data?.length"
        class="px-4 py-2 text-muted">
       No Health Authorities Found
     </p>
