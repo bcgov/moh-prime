@@ -66,6 +66,16 @@ services:
       - primenet
     depends_on:
       - postgres
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "echo Waiting for Database...;
+      sleep 15;
+      echo \"Running Database Migrations...\";
+      dotnet ef database update;
+      echo \"Starting API...\";
+      dotnet watch run --urls=http://+:8080"
+    ]
 
 # ####################### Web Frontend Definition #######################
 #   nginx-angular:

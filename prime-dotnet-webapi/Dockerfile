@@ -79,4 +79,9 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER 1
 
 WORKDIR /app
 
+# can't see to get this to work in the dockerfile so using VC version in docker-compose:
+# RUN dotnet ef database update
+# RUN ["/bin/bash", "-c", "dotnet ef database update"]
+# RUN ["/bin/bash", "-c", "echo waiting for database...; sleep 15; echo \"Running database migrations...\"; dotnet ef database update; echo \"Starting service...\"; dotnet watch run --urls=http://+:8080"]
+
 ENTRYPOINT dotnet watch run --urls=http://+:8080
