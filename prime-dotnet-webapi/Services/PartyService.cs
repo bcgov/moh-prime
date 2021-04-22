@@ -18,6 +18,13 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
+        public async Task<bool> PartyExistsAsync(int partyId)
+        {
+            return await _context.Parties
+                .AsNoTracking()
+                .AnyAsync(p => p.Id == partyId);
+        }
+
         public async Task<Party> GetPartyAsync(int partyId)
         {
             return await GetBasePartyQuery()
@@ -32,11 +39,9 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Creates or updates a party based on the User ID of the supplied user.
-        /// Returns the Id of the affected Party.
+        /// Creates or updates a party based on the User ID of the supplied user, and
+        /// returns the Id of the affected Party.
         /// </summary>
-        /// <param name="changeModel"></param>
-        /// <param name="user"></param>
         public async Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user)
         {
             var currentParty = await GetBasePartyQuery()
@@ -66,42 +71,33 @@ namespace Prime.Services
         public void UpdateAddress<T>(Party dbParty, T newAddress) where T : Address
         {
             var existingPartyAddress = dbParty.Addresses
-                .Where(ea => ea.Address is T)
-                .SingleOrDefault();
+                .SingleOrDefault(ea => ea.Address is T);
 
             if (existingPartyAddress == null)
             {
                 if (newAddress == null)
                 {
-                    // Noop
                     return;
                 }
-                else
+
+                newAddress.Id = 0;
+                dbParty.Addresses.Add(new PartyAddress
                 {
-                    // New
-                    newAddress.Id = 0;
-                    dbParty.Addresses.Add(new PartyAddress
-                    {
-                        Party = dbParty,
-                        Address = newAddress
-                    });
-                }
+                    Party = dbParty,
+                    Address = newAddress
+                });
             }
             else
             {
                 if (newAddress == null)
                 {
-                    // Remove
                     _context.Remove(existingPartyAddress.Address);
                     _context.Remove(existingPartyAddress);
                     return;
                 }
-                else
-                {
-                    // Update
-                    newAddress.Id = existingPartyAddress.AddressId;
-                    _context.Entry(existingPartyAddress.Address).CurrentValues.SetValues(newAddress);
-                }
+
+                newAddress.Id = existingPartyAddress.AddressId;
+                _context.Entry(existingPartyAddress.Address).CurrentValues.SetValues(newAddress);
             }
         }
 
@@ -138,6 +134,5 @@ namespace Prime.Services
                     .ThenInclude(pa => pa.Address)
                 .Include(p => p.PartyEnrolments);
         }
-
     }
 }
