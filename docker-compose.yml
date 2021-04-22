@@ -55,6 +55,10 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    volumes:
+      - ./prime-dotnet-webapi/:/app
+      - prime-dotnet-webapi-bin:/app/bin
+      - prime-dotnet-webapi-obj:/app/obj
     ports:
       - "5000:8080"
       - "5001:5001"
@@ -233,3 +237,5 @@ volumes:
   local_mongodb_data:
   db_backup_data:
   wallet-data:
+  prime-dotnet-webapi-bin:
+  prime-dotnet-webapi-obj:
