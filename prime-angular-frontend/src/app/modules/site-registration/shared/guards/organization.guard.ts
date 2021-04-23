@@ -35,13 +35,17 @@ export class OrganizationGuard extends BaseGuard {
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     return this.authService.getUser$()
       .pipe(
-        exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationsByUserId(user.userId)),
-        map((organizations: Organization[]) =>
-          (organizations.length)
+        // Having no signing authority or organizations results in the same
+        // redirection logic for the user, and therefore not handled individually
+        exhaustMap((user: BcscUser) =>
+          this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
+        ),
+        map((organizations: Organization[] | null) =>
+          (organizations?.length)
             ? organizations.shift()
             : null
         ),
-        map((organization: Organization) => {
+        map((organization: Organization | null) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.organizationService.organization = organization;

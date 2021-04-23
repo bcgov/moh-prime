@@ -38,8 +38,7 @@ const routes: Routes = [
     ],
     canActivateChild: [
       AuthenticationGuard,
-      RegistrantGuard,
-      OrganizationGuard
+      RegistrantGuard
     ],
     children: [
       {
@@ -53,12 +52,14 @@ const routes: Routes = [
           {
             path: '',
             component: SiteManagementPageComponent,
+            canActivate: [OrganizationGuard],
             data: { title: 'Site Management' },
           },
           {
             // During initial registration the ID will be set to
             // zero indicating the organization does not exist
             path: ':oid',
+            canActivateChild: [OrganizationGuard],
             children: [
               {
                 path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,

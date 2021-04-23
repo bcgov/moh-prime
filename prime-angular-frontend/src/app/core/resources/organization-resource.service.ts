@@ -89,6 +89,29 @@ export class OrganizationResource {
       );
   }
 
+  /**
+   * @description
+   * Get the organizations for a signing authority by user ID, and provide null when
+   * a signing authority could not be found.
+   */
+  public getSigningAuthorityOrganizationsByUserId(userId: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`signingauthority/${userId}/organizations`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            // No signing authority exists for the provided user ID
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationsByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getOrganizations(): Observable<Organization[]> {
     return this.apiResource.get<Organization[]>('organizations')
       .pipe(
@@ -97,20 +120,6 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getOrganizationsByUserId(userId: string): Observable<Organization[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({userId});
-    return this.apiResource.get<Organization[]>('organizations/user', params)
-      .pipe(
-        map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizationsByUserId error has occurred: ', error);
           throw error;
         })
       );
@@ -129,8 +138,8 @@ export class OrganizationResource {
       );
   }
 
-  public createOrganization(party: Party): Observable<Organization> {
-    return this.apiResource.post<Organization>('organizations', party)
+  public createOrganization(partyId: number): Observable<Organization> {
+    return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
         map((response: ApiHttpResponse<Organization>) => response.result),
         tap((newOrganization: Organization) => {

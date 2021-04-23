@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -18,6 +18,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { Party } from '@registration/shared/models/party.model';
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
 @Component({
@@ -51,7 +52,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     private organizationFormStateService: OrganizationFormStateService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    router: Router
+    private router: Router
   ) {
     super(dialog, formUtilsService);
 
@@ -134,23 +135,39 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.organizationFormStateService.json;
-    return this.organizationResource.updateOrganization(payload);
+  protected performSubmission(): Observable<Organization> {
+    const payload = this.formState.json;
+    let request$ = this.organizationResource.updateSigningAuthority(payload)
+      .pipe(map(() => this.organizationService.organization));
+
+    if (!this.organizationService.organization) {
+      // No organization indicates the possibility of no signing authority
+      request$ = this.organizationResource.getSigningAuthorityByUserId(this.bcscUser.userId)
+        .pipe(
+          exhaustMap((party: Party | null) =>
+            (!party)
+              ? this.organizationResource.createSigningAuthority(new Party(this.bcscUser))
+              : of(party)
+          ),
+          exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id))
+        );
+    }
+
+    return request$;
   }
 
-  protected afterSubmitIsSuccessful(): void {
+  protected afterSubmitIsSuccessful(organization: Organization): void {
     this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
-    let routePath: string | string[];
+    let routePath: (string | number)[];
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (this.isCompleted)
-        ? SiteRoutes.ORGANIZATION_REVIEW
-        : SiteRoutes.ORGANIZATION_NAME;
+        ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
+        : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
     }
 
     this.routeUtils.routeRelativeTo(routePath);
