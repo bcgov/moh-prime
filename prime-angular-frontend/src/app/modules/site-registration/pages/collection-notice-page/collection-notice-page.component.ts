@@ -29,12 +29,8 @@ export class CollectionNoticePageComponent implements OnInit {
 
   public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
-    // const organization = this.organizationService.organization;
-    // const routePath = (!organization || !organization.completed)
-    //   ? [organization?.id ?? 0, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
-    //   : [];
-    //
-    // this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT, ...routePath]);
+    // Attempt to redirect to centralized default route, and the guard will
+    // redirect an appropriate route when not allowed
     this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT]);
   }
 
