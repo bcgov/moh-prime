@@ -7,7 +7,6 @@ import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { SiteRoutes } from './site-registration.routes';
 import { RegistrantGuard } from './shared/guards/registrant.guard';
-import { RegistrationGuard } from './shared/guards/registration.guard';
 import { OrganizationGuard } from './shared/guards/organization.guard';
 import { SiteGuard } from './shared/guards/site.guard';
 import { SiteRegistrationDashboardComponent } from './shared/components/site-registration-dashboard/site-registration-dashboard.component';
@@ -40,7 +39,7 @@ const routes: Routes = [
     canActivateChild: [
       AuthenticationGuard,
       RegistrantGuard,
-      RegistrationGuard
+      OrganizationGuard
     ],
     children: [
       {
@@ -62,21 +61,18 @@ const routes: Routes = [
               {
                 path: SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY,
                 component: OrganizationSigningAuthorityPageComponent,
-                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
                 component: OrganizationNamePageComponent,
-                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Information' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_REVIEW,
                 component: OverviewPageComponent,
-                canActivate: [OrganizationGuard],
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Organization Review' }
               },
@@ -159,19 +155,19 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.ORGANIZATION_AGREEMENT,
                     component: OrganizationAgreementPageComponent,
-                    canActivate: [SiteGuard, OrganizationGuard],
+                    canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Organization Agreement' }
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
-                    canActivate: [SiteGuard, OrganizationGuard],
+                    canActivate: [SiteGuard],
                     component: OverviewPageComponent,
                     data: { title: 'Site Registration Review' }
                   },
                   {
                     path: SiteRoutes.NEXT_STEPS,
-                    canActivate: [SiteGuard, OrganizationGuard],
+                    canActivate: [SiteGuard],
                     component: NextStepsPageComponent,
                     data: { title: 'Next Steps' }
                   },
