@@ -16,13 +16,12 @@ import { OrganizationService } from '@registration/shared/services/organization.
 export class CollectionNoticePageComponent implements OnInit {
   public isFull: boolean;
   public routeUtils: RouteUtils;
-  public isCompleted: boolean;
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private authService: AuthService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    router: Router
   ) {
     this.isFull = true;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -31,15 +30,11 @@ export class CollectionNoticePageComponent implements OnInit {
   public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
     const organization = this.organizationService.organization;
+    const routePath = (!organization || !organization.completed)
+      ? [organization?.id ?? 0, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
+      : [];
 
-    // Collection notice is the initial route after login, and used as a hub
-    // for redirection to an appropriate view based on the organization
-    (organization.completed)
-      ? this.router.navigate([SiteRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent })
-      : this.router.navigate(
-        [SiteRoutes.SITE_MANAGEMENT, organization.id, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY],
-        { relativeTo: this.route.parent }
-      );
+    this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT, ...routePath]);
   }
 
   public ngOnInit(): void {

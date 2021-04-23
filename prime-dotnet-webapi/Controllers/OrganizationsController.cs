@@ -11,7 +11,6 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
-using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
 {
@@ -63,12 +62,12 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(organizations));
         }
 
-        // GET: api/Organizations
+        // GET: api/Organizations/user
         /// <summary>
         /// Gets all of the Organizations for a user.
         /// </summary>
         /// <param name="userId"></param>
-        [HttpGet(Name = nameof(GetOrganizations))]
+        [HttpGet("user", Name = nameof(GetOrganizationsByUserId))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]

@@ -41,7 +41,7 @@ export class OrganizationResource {
 
   public getOrganizationsByUserId(userId: string): Observable<Organization[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({userId});
-    return this.apiResource.get<Organization[]>('organizations', params)
+    return this.apiResource.get<Organization[]>('organizations/user', params)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
         tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),

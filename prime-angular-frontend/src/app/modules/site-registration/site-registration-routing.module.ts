@@ -56,6 +56,8 @@ const routes: Routes = [
             data: { title: 'Site Management' },
           },
           {
+            // During initial registration the ID will be set to
+            // zero indicating the organization does not exist
             path: ':oid',
             children: [
               {

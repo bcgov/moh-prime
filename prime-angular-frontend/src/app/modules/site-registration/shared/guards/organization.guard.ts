@@ -143,10 +143,9 @@ export class OrganizationGuard extends BaseGuard {
     if (!organization.completed) {
       // Initial organization creation has not been completed and should
       // be replaced with the allowed initial registration route order
-      allowedRoutes = allowedRoutes
-        .filter((route: string) =>
-          SiteRoutes.organizationRegistrationRouteOrder().includes(route)
-        );
+      allowedRoutes = allowedRoutes.filter((route: string) =>
+        SiteRoutes.organizationRegistrationRouteOrder().includes(route)
+      );
     } else {
       // Completed indicates the data entry has occurred, but does not
       // mean the organization agreement has been accepted or the
