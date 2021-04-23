@@ -6,6 +6,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
+import { Contact } from '@lib/models/contact.model';
 
 @Component({
   selector: 'app-contact-profile-form',
@@ -16,6 +17,9 @@ export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
   @Input() public showFax: boolean = true;
+  @Input() public showAddButton: boolean = false;
+  @Input() public contacts: Contact[];
+  public showFormFields: boolean;
   public hasPhysicalAddress: boolean;
   @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
@@ -57,6 +61,15 @@ export class ContactProfileFormComponent implements OnInit {
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }
 
+  public updateContact(contact: Contact): void {
+    this.form.patchValue(contact);
+    this.showFormFields = true;
+  }
+
+  public addContact(): void {
+    this.showFormFields = true;
+  }
+
   public ngOnInit() {
     // When the street is populated ensure the address is shown
     this.physicalAddress.get('street')
@@ -71,6 +84,8 @@ export class ContactProfileFormComponent implements OnInit {
     else {
       this.togglePhysicalAddress();
     }
+
+    this.showFormFields = !this.contacts?.length || !this.showAddButton;
   }
 
   private togglePhysicalAddress(forceDefault?: boolean) {

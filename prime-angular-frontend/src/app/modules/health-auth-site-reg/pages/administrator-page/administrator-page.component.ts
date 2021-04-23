@@ -29,6 +29,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = HealthAuthSiteRegRoutes;
+  public contacts: Contact[];
 
   private site: HealthAuthSite;
 
@@ -77,6 +78,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
+
+    // TODO: pass in the administrator array of the site
+    // currently site model only supports single administrator
+    this.contacts = [];
   }
 
   protected createFormInstance() {
