@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,12 +25,34 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
+        // GET: api/SigningAuthority/5fdd17a6-1797-47a4-97b7-5b27949dd614
+        /// <summary>
+        /// Gets a SigningAuthority by user ID.
+        /// </summary>
+        /// <param name="userId"></param>
+        [HttpGet("{userId:guid}", Name = nameof(GetSigningAuthorityByUserId))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityByUserId(Guid userId)
+        {
+            var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
+            if (signingAuthority == null)
+            {
+                return NotFound(ApiResponse.Message($"Signing authority not found with id {userId}"));
+            }
+
+            return Ok(ApiResponse.Result(signingAuthority));
+        }
+
         // GET: api/SigningAuthority/5
         /// <summary>
         /// Gets a specific SigningAuthority.
         /// </summary>
         /// <param name="partyId"></param>
-        [HttpGet("{partyId}", Name = nameof(GetSigningAuthorityById))]
+        [HttpGet("{partyId:int}", Name = nameof(GetSigningAuthorityById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -38,6 +61,11 @@ namespace Prime.Controllers
         public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityById(int partyId)
         {
             var signingAuthority = await _partyService.GetPartyAsync(partyId);
+            if (signingAuthority == null)
+            {
+                return NotFound(ApiResponse.Message($"Signing authority not found with id {partyId}"));
+            }
+
             return Ok(ApiResponse.Result(signingAuthority));
         }
 

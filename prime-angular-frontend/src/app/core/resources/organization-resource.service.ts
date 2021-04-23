@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -25,6 +25,69 @@ export class OrganizationResource {
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
+
+  public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
+    return this.apiResource.get<Party>(`signingauthority/${userId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Signing authority could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSigningAuthorityById(partyId: number): Observable<Party | null> {
+    return this.apiResource.get<Party>(`signingauthority/${partyId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Signing authority could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createSigningAuthority(party: Party): Observable<Party> {
+    return this.apiResource.post<Party>('signingauthority', party)
+      .pipe(
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((newParty: Party) => {
+          this.toastService.openSuccessToast('Signing authority has been created');
+          this.logger.info('NEW_SIGNING_AUTHORITY', newParty);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Signing authority could not be created');
+          this.logger.error('[Core] OrganizationResource::createSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateSigningAuthority(party: Party): NoContent {
+    return this.apiResource.put<NoContent>(`signingauthority/${party.id}`, party)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Signing authority has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Signing authority could not be updated');
+          this.logger.error('[Core] OrganizationResource::updateSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getOrganizations(): Observable<Organization[]> {
     return this.apiResource.get<Organization[]>('organizations')

@@ -187,7 +187,7 @@ export class OrganizationGuard extends BaseGuard {
     const comparePath = (destinationPath && oid !== null)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
-    console.log('COMPARE', routePath === comparePath);
+
     if (routePath === comparePath) {
       return true;
     } else {
