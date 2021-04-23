@@ -35,7 +35,6 @@ export class SiteManagementPageComponent implements OnInit {
   public title: string;
   public organizations: Organization[];
   public organizationAgreements: OrganizationAgreementViewModel[];
-  public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
   public AgreementType = AgreementType;
@@ -160,16 +159,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.checkQueryParams();
-    // TODO temporary hack to show success message until guards can be refactored
-    this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
-    this.organizationService.showSuccess = false;
     this.getOrganizations();
-  }
-
-  private checkQueryParams(): void {
-    this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
-    this.router.navigate([], { queryParams: { submitted: null } });
   }
 
   private getOrganizations(): void {

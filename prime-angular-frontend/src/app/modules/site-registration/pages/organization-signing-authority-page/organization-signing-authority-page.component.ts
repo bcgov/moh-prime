@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { map } from 'rxjs/operators';
 
@@ -60,7 +59,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
+  public onPreferredNameChange({ checked }: { checked: boolean }): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -68,11 +67,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
+  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
+  public onMailingAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
