@@ -29,12 +29,13 @@ export class CollectionNoticePageComponent implements OnInit {
 
   public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
-    const organization = this.organizationService.organization;
-    const routePath = (!organization || !organization.completed)
-      ? [organization?.id ?? 0, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
-      : [];
-
-    this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT, ...routePath]);
+    // const organization = this.organizationService.organization;
+    // const routePath = (!organization || !organization.completed)
+    //   ? [organization?.id ?? 0, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]
+    //   : [];
+    //
+    // this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT, ...routePath]);
+    this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT]);
   }
 
   public ngOnInit(): void {

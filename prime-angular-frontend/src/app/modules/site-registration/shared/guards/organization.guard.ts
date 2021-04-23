@@ -57,7 +57,7 @@ export class OrganizationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, organization: Organization) {
+  private routeDestination(routePath: string, organization: Organization | null) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
@@ -67,8 +67,8 @@ export class OrganizationGuard extends BaseGuard {
         : this.manageIncompleteOrganizationRouting(routePath, organization);
     }
 
-    // Otherwise, prevent the route from resolving
-    return false;
+    // Otherwise, no organization exists
+    return this.manageNoOrganizationRouting(routePath);
   }
 
   /**
@@ -83,13 +83,24 @@ export class OrganizationGuard extends BaseGuard {
 
   /**
    * @description
-   * Manage routing when an organization does not exist, or
-   * initial registration has not been completed.
+   * Manage routing when an organization initial registration has
+   * not been completed.
    */
   private manageIncompleteOrganizationRouting(routePath: string, organization: Organization) {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
     return this.manageRouting(routePath, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, organization);
+  }
+
+  /**
+   * @description
+   * Manage routing when an organization does not exist, or initial
+   * registration has not been completed.
+   */
+  private manageNoOrganizationRouting(routePath: string) {
+    // During initial registration the ID will be set to zero indicating the
+    // organization does not exist
+    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, 0);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
@@ -173,10 +184,10 @@ export class OrganizationGuard extends BaseGuard {
     oid: number = null
   ): boolean {
     const modulePath = this.config.routes.site;
-    const comparePath = (destinationPath && oid)
+    const comparePath = (destinationPath && oid !== null)
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
-
+    console.log('COMPARE', routePath === comparePath);
     if (routePath === comparePath) {
       return true;
     } else {
