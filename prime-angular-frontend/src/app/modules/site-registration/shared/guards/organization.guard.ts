@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Router, Params } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
@@ -10,6 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
@@ -32,8 +33,9 @@ export class OrganizationGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    return this.organizationResource.getOrganizations()
+    return this.authService.getUser$()
       .pipe(
+        exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationsByUserId(user.userId)),
         map((organizations: Organization[]) =>
           (organizations.length)
             ? organizations.shift()
