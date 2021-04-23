@@ -62,30 +62,6 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(organizations));
         }
 
-        // GET: api/Organizations/user
-        /// <summary>
-        /// Gets all of the Organizations for a user.
-        /// </summary>
-        /// <param name="userId"></param>
-        [HttpGet("user", Name = nameof(GetOrganizationsByUserId))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetOrganizationsByUserId([FromQuery] Guid userId)
-        {
-            if (userId != User.GetPrimeUserId())
-            {
-                return Forbid();
-            }
-
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
-            var organizations = (party != null)
-                ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
-                : Enumerable.Empty<OrganizationListViewModel>();
-
-            return Ok(ApiResponse.Result(organizations));
-        }
-
         // GET: api/Organizations/5
         /// <summary>
         /// Gets a specific Organization.
@@ -118,15 +94,15 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(int partyId)
+        public async Task<ActionResult<Organization>> CreateOrganization(CreateOrganizationViewModel createOrganization)
         {
-            if (!await _partyService.PartyExistsAsync(partyId))
+            if (!await _partyService.PartyExistsAsync(createOrganization.PartyId))
             {
                 ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in SigningAuthority does not exist.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(partyId);
+            var createdOrganizationId = await _organizationService.CreateOrganizationAsync(createOrganization.PartyId);
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 
             return CreatedAtAction(

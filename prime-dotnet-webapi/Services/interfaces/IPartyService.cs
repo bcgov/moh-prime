@@ -10,6 +10,7 @@ namespace Prime.Services
     public interface IPartyService
     {
         Task<bool> PartyExistsAsync(int partyId);
+        Task<bool> PartyExistsForUserIdAsync(Guid userId);
         Task<Party> GetPartyAsync(int partyId);
         Task<Party> GetPartyForUserIdAsync(Guid userId);
         Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user);

@@ -25,6 +25,13 @@ namespace Prime.Services
                 .AnyAsync(p => p.Id == partyId);
         }
 
+        public async Task<bool> PartyExistsForUserIdAsync(Guid userId)
+        {
+            return await _context.Parties
+                .AsNoTracking()
+                .AnyAsync(p => p.UserId == userId);
+        }
+
         public async Task<Party> GetPartyAsync(int partyId)
         {
             return await GetBasePartyQuery()

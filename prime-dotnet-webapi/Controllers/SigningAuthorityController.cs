@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Auth;
 using Prime.Models.Api;
 using Prime.Services;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
@@ -18,11 +21,14 @@ namespace Prime.Controllers
     public class SigningAuthorityController : ControllerBase
     {
         private readonly IPartyService _partyService;
+        private readonly IOrganizationService _organizationService;
 
         public SigningAuthorityController(
-            IPartyService partyService)
+            IPartyService partyService,
+            IOrganizationService organizationService)
         {
             _partyService = partyService;
+            _organizationService = organizationService;
         }
 
         // GET: api/SigningAuthority/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -118,6 +124,35 @@ namespace Prime.Controllers
             await _partyService.CreateOrUpdatePartyAsync(updatedSigningAuthority, User);
 
             return NoContent();
+        }
+
+        // GET: api/SigningAuthority/5fdd17a6-1797-47a4-97b7-5b27949dd614/organizations
+        /// <summary>
+        /// Gets all of the Organizations for a signing authority by userId.
+        /// </summary>
+        /// <param name="userId"></param>
+        [HttpGet("{userId}", Name = nameof(GetSigningAuthorityOrganizationsByUserId))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetSigningAuthorityOrganizationsByUserId(Guid userId)
+        {
+            if (userId != User.GetPrimeUserId())
+            {
+                return Forbid();
+            }
+
+            if (!await _partyService.PartyExistsForUserIdAsync(userId))
+            {
+                return NotFound(ApiResponse.Message($"SigningAuthority not found with user id {userId}"));
+            }
+
+            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            var organizations = (party != null)
+                ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
+                : Enumerable.Empty<OrganizationListViewModel>();
+
+            return Ok(ApiResponse.Result(organizations));
         }
     }
 }
