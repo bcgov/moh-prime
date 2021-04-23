@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.Parties;
@@ -25,7 +24,24 @@ namespace Prime.Controllers
             _partyService = partyService;
         }
 
-        // POST: api/SigningAuthorities
+        // GET: api/SigningAuthority/5
+        /// <summary>
+        /// Gets a specific SigningAuthority.
+        /// </summary>
+        /// <param name="partyId"></param>
+        [HttpGet("{partyId}", Name = nameof(GetSigningAuthorityById))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityById(int partyId)
+        {
+            var signingAuthority = await _partyService.GetPartyAsync(partyId);
+            return Ok(ApiResponse.Result(signingAuthority));
+        }
+
+        // POST: api/SigningAuthority
         /// <summary>
         /// Creates a new SigningAuthority.
         /// </summary>
@@ -34,11 +50,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateSigningAuthority(SigningAuthorityChangeModel signingAuthority)
+        public async Task<ActionResult<SigningAuthorityChangeModel>> CreateSigningAuthority(SigningAuthorityChangeModel signingAuthority)
         {
             if (signingAuthority == null)
             {
-                ModelState.AddModelError("SigningAuthority", "Could not create a SigningAuthority on null.");
+                ModelState.AddModelError("SigningAuthority", "SigningAuthority can not be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -47,45 +63,28 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(GetSigningAuthorityById),
-                new { signingAuthorityId = createdSigningAuthorityId },
+                new { partyId = createdSigningAuthorityId },
                 ApiResponse.Result(createdSigningAuthority)
             );
         }
 
-        // GET: api/SigningAuthorities/5
-        /// <summary>
-        /// Gets a specific SigningAuthority.
-        /// </summary>
-        /// <param name="signingAuthorityId"></param>
-        [HttpGet("{signingAuthorityId}", Name = nameof(GetSigningAuthorityById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> GetSigningAuthorityById(int signingAuthorityId)
-        {
-            var signingAuthority = await _partyService.GetPartyAsync(signingAuthorityId);
-            return Ok(ApiResponse.Result(signingAuthority));
-        }
-
-        // PUT: api/SigningAuthorities/5
+        // PUT: api/SigningAuthority/5
         /// <summary>
         /// Updates a specific SigningAuthority.
         /// </summary>
-        /// <param name="signingAuthorityId"></param>
+        /// <param name="partyId"></param>
         /// <param name="updatedSigningAuthority"></param>
-        [HttpPut("{signingAuthorityId}", Name = nameof(UpdateSigningAuthority))]
+        [HttpPut("{partyId}", Name = nameof(UpdateSigningAuthority))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSigningAuthority(int signingAuthorityId, SigningAuthorityChangeModel updatedSigningAuthority)
+        public async Task<IActionResult> UpdateSigningAuthority(int partyId, SigningAuthorityChangeModel updatedSigningAuthority)
         {
-            if (!await _partyService.PartyExistsAsync(signingAuthorityId))
+            if (!await _partyService.PartyExistsAsync(partyId))
             {
-                return NotFound(ApiResponse.Message($"SigningAuthority not found with id {signingAuthorityId}"));
+                return NotFound(ApiResponse.Message($"SigningAuthority not found with id {partyId}"));
             }
 
             await _partyService.CreateOrUpdatePartyAsync(updatedSigningAuthority, User);
