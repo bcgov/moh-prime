@@ -56,6 +56,7 @@ To run the project you will need to open two terminals:
 - one terminal in the [ngrok](./ngrok) folder: run the [start-ngrok.sh](./ngrok/start-ngrok.sh) script, this will initialize an ngrok tunnel that will be used to forward requests to your agent.
 
 - uncomment `agent` and `wallet` servies defined in [docker-compose.yml](./docker/docker-compose.yml). These must be run through the manage script to populate the required environment variables, and CANNOT be started doing docker-compose up --build.
+
 - one terminal in the [moh-prime]root folder: run `./manage start`. This will start all of the services defined in [docker-compose.yml](./docker/docker-compose.yml).
 
 Once started the agent services will be listening on localhost as follows:
