@@ -149,7 +149,9 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
               ? this.organizationResource.createSigningAuthority(new Party(this.bcscUser))
               : of(party)
           ),
-          exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id))
+          exhaustMap((party: Party) =>
+            this.organizationResource.createOrganization(party.id)
+          )
         );
     }
 

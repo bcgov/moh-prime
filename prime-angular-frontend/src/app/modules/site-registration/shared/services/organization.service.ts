@@ -10,8 +10,8 @@ import { Organization } from '@registration/shared/models/organization.model';
  * directly from a HTTP response.
  */
 export interface IOrganizationService {
-  organization$: BehaviorSubject<Organization>;
-  organization: Organization;
+  organization$: BehaviorSubject<Organization | null>;
+  organization: Organization | null;
 }
 
 @Injectable({
@@ -30,13 +30,13 @@ export class OrganizationService {
     this._organization.next((organization) ? { ...organization } : null);
   }
 
-  public get organization(): Organization {
+  public get organization(): Organization | null {
     // Allow access to current value, but prevent updates by reference
     const value = this._organization.value;
     return (value) ? { ...this._organization.value } : null;
   }
 
-  public get organization$(): Observable<Organization> {
+  public get organization$(): Observable<Organization | null> {
     // Allow subscriptions, but make immutable
     return this._organization.asObservable();
   }

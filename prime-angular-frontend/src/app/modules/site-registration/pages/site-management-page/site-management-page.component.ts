@@ -22,8 +22,9 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
-import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
   selector: 'app-site-management-page',
@@ -46,13 +47,12 @@ export class SiteManagementPageComponent implements OnInit {
     private router: Router,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
+    private utilsService: UtilsService,
+    private authService: AuthService,
+    private logger: LoggerService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
-    private configCodePipe: ConfigCodePipe,
-    private utilsService: UtilsService,
-    // Temporary hack to show success message until guards can be refactored
-    private organizationService: OrganizationService,
-    private logger: LoggerService
+    private configCodePipe: ConfigCodePipe
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -163,8 +163,9 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   private getOrganizations(): void {
-    this.busy = this.organizationResource.getOrganizations()
+    this.busy = this.authService.getUser$()
       .pipe(
+        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityOrganizationsByUserId(bcscUser.userId)),
         map((organizations: Organization[]) =>
           this.organizations = organizations
         ),
