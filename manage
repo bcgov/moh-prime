@@ -118,17 +118,12 @@ EOF
 # -----------------------------------------------------------------------------------------------------------------
 # Functions:
 # -----------------------------------------------------------------------------------------------------------------
-# build() {
-  # echo -e "\nBuilding dts-vc-issuer-api development image..."
-  # docker build \
-  #   -t 'dts-vc-issuer-api-dev' \
-  #   -f './api/issuer/Dockerfile.dev' '..'
-
-  # echo -e "\nBuilding dts-vc-immunization-api development image..."
-  # docker build \
-  #   -t 'dts-vc-immunization-api-dev' \
-  #   -f './api/immunization/Dockerfile.dev' '..'
-# }
+build() {
+  echo -e "\nBuilding dotnet web api development image..."
+  docker build \
+    -t 'moh-prime_dotnet-webapi' \
+    -f './prime-dotnet-webapi/Dockerfile' '..'
+}
 
 configureEnvironment() {
 
@@ -181,7 +176,8 @@ configureEnvironment() {
   export AGENT_ADMIN_PORT=8024
   export AGENT_HTTP_IN_PORT=8021
   export AGENT_WS_IN_PORT=8026
-  export AGENT_WEBHOOK_URL=${AGENT_WEBHOOK_URL:https://primeapi:5001/api/webhooks/0ce755d5-1fb1-483a-ba22-439061aa8f67}
+  export AGENT_WEBHOOK_API_KEY="0ce755d5-1fb1-483a-ba22-439061aa8f67"
+  export AGENT_WEBHOOK_URL=${AGENT_WEBHOOK_URL:-http://dotnet-webapi:8080/api/webhooks/${AGENT_WEBHOOK_API_KEY}}
   export AGENT_HTTP_INTERFACE_PORT=8021
   export AGENT_NAME="DTS VC Issuer"
   export AGENT_ENDPOINT=${NGROK_AGENT_ENDPOINT:-http://$DOCKERHOST:$AGENT_HTTP_INTERFACE_PORT}
