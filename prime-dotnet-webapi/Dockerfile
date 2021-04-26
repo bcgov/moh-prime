@@ -76,6 +76,7 @@ RUN dotnet tool install --global dotnet-ef --version 3.1.14
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1
+ENV API_PORT 8080
 
 WORKDIR /app
 
@@ -83,5 +84,7 @@ WORKDIR /app
 # RUN dotnet ef database update
 # RUN ["/bin/bash", "-c", "dotnet ef database update"]
 # RUN ["/bin/bash", "-c", "echo waiting for database...; sleep 15; echo \"Running database migrations...\"; dotnet ef database update; echo \"Starting service...\"; dotnet watch run --urls=http://+:8080"]
+
+EXPOSE 8080 5001 5000
 
 ENTRYPOINT dotnet watch run --urls=http://+:8080
