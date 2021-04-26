@@ -5,10 +5,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Config } from '@config/config.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
@@ -26,8 +28,6 @@ import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-au
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
-import { of } from 'rxjs';
-import { Config } from '@config/config.model';
 
 @Component({
   selector: 'app-authorized-user-page',
