@@ -137,7 +137,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   protected performSubmission(): Observable<Organization> {
     const payload = this.formState.json;
-    let request$ = this.organizationResource.updateSigningAuthority(payload)
+    const updateSigningAuthority$ = this.organizationResource.updateSigningAuthority(payload);
+    let request$ = updateSigningAuthority$
       .pipe(map(() => this.organizationService.organization));
 
     if (!this.organizationService.organization) {
@@ -146,8 +147,12 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         .pipe(
           exhaustMap((party: Party | null) =>
             (!party)
-              ? this.organizationResource.createSigningAuthority(new Party(this.bcscUser))
-              : of(party)
+              // TODO BCSC email not sent and shouldn't be included in BcscUser model to prevent issues
+              // Allow override of BCSC email, but otherwise no other overlap exists
+              ? this.organizationResource.createSigningAuthority({ ...this.bcscUser, ...payload })
+              // Prevent issue where the creation of an organization fails, but the
+              // signing authority data is resubmitted possibly with alteration
+              : updateSigningAuthority$
           ),
           exhaustMap((party: Party) =>
             this.organizationResource.createOrganization(party.id)
