@@ -68,7 +68,8 @@
                          placeholder="Email"
                          [formControl]="formControl">
                   <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
-                  <mat-error *ngIf="formControl.hasError('email')">Must be a valid email address</mat-error>
+                  <mat-error *ngIf="formControl.hasError('emails') && !formControl.hasError('trim')">Must be a valid email address(es)</mat-error>
+                  <mat-error *ngIf="formControl.hasError('emails') && formControl.hasError('trim')">Contains invalid space character(s)</mat-error>
                 </mat-form-field>
 
               </div>
