@@ -165,7 +165,9 @@ export class SiteManagementPageComponent implements OnInit {
   private getOrganizations(): void {
     this.busy = this.authService.getUser$()
       .pipe(
-        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityOrganizationsByUserId(bcscUser.userId)),
+        exhaustMap((user: BcscUser) =>
+          this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
+        ),
         map((organizations: Organization[]) =>
           this.organizations = organizations
         ),

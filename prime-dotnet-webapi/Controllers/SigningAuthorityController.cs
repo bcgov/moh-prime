@@ -131,7 +131,7 @@ namespace Prime.Controllers
         /// Gets all of the Organizations for a signing authority by userId.
         /// </summary>
         /// <param name="userId"></param>
-        [HttpGet("{userId}", Name = nameof(GetSigningAuthorityOrganizationsByUserId))]
+        [HttpGet("{userId}/organizations", Name = nameof(GetSigningAuthorityOrganizationsByUserId))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
