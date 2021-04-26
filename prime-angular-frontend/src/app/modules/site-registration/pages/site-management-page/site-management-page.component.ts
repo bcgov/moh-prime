@@ -128,7 +128,7 @@ export class SiteManagementPageComponent implements OnInit {
     return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
   }
 
-  public getUnderReviewSiteNotificationProperties(site: Site) {
+  public getUnderReviewSiteNotificationProperties(site: SiteListViewModel) {
     const andSiteId = (!site.pec) ? ' and an assigned Site ID' : '';
     return {
       icon: 'notification_important',
@@ -168,9 +168,7 @@ export class SiteManagementPageComponent implements OnInit {
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
         ),
-        map((organizations: Organization[]) =>
-          this.organizations = organizations
-        ),
+        map((organizations: Organization[]) => this.organizations = organizations),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )
