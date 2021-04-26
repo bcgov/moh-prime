@@ -20,7 +20,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
   providedIn: 'root'
 })
 export class OrganizationGuard extends BaseGuard {
-
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
@@ -49,10 +48,11 @@ export class OrganizationGuard extends BaseGuard {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.organizationService.organization = organization;
+
           // Determine the next route based on whether this is the initial
           // registration of an organization and site, or subsequent
           // registration of sites under an existing organization
-          return this.routeDestination(routePath, organization);
+          return this.routeDestination(routePath, params, organization);
         })
       );
   }
@@ -61,11 +61,21 @@ export class OrganizationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, organization: Organization | null) {
+  private routeDestination(routePath: string, params: Params, organization: Organization | null) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
-    } else if (organization) {
+    }
+
+    // When the organization ID mismatches the organizations route ID
+    // correct the route immediately
+    const redirectPath = this.detectRouteMismatch(routePath, params, organization?.id);
+    if (redirectPath) {
+      this.router.navigate([redirectPath]);
+      return false;
+    }
+
+    if (organization) {
       return (organization.completed)
         ? this.manageCompleteOrganizationRouting(routePath, organization)
         : this.manageIncompleteOrganizationRouting(routePath, organization);
@@ -73,6 +83,22 @@ export class OrganizationGuard extends BaseGuard {
 
     // Otherwise, no organization exists
     return this.manageNoOrganizationRouting(routePath);
+  }
+
+  /**
+   * @description
+   * Detect an organization ID mismatch to provide confidence in
+   * the organization ID URI param.
+   *
+   * NOTE: Dependent on the assumption that there is only a
+   * single organization per signing authority.
+   */
+  private detectRouteMismatch(routePath, params: Params, organizationId: number): string | null {
+    return (params.oid && (
+      (organizationId && organizationId !== +params.oid) || (!organizationId && +params.oid !== 0)
+    ))
+      ? routePath.replace(`${SiteRoutes.SITE_MANAGEMENT}/${params.oid}`, `${SiteRoutes.SITE_MANAGEMENT}/${organizationId}`)
+      : null;
   }
 
   /**
