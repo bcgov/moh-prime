@@ -64,9 +64,7 @@ export class OverviewPageComponent implements OnInit {
           (result)
             ? this.siteResource.submitSite(payload)
             : EMPTY
-        ),
-        // Temporary hack to show success message until guards can be refactored
-        tap(() => this.organizationService.showSuccess = true)
+        )
       )
       .subscribe(() => this.nextRoute());
   }
