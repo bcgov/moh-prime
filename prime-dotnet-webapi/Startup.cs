@@ -260,7 +260,7 @@ namespace Prime
                 endpoints.MapHealthChecks("/health");
             });
 
-            if (env.IsDevelopment())
+            if (PrimeEnvironment.IsLocal)
             {
                 lifetime.ApplicationStarted.Register(OnApplicationStartedAsync(app.ApplicationServices.GetRequiredService<IVerifiableCredentialClient>()).Wait);
             }
