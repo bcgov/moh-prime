@@ -52,7 +52,7 @@ export class SearchFormComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      textSearch: [{ value: null }, []],
+      textSearch: [null, []],
       statusCode: [{ value: '', disabled: this.hideStatus }, []]
     });
   }
