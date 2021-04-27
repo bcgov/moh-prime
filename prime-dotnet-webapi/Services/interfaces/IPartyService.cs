@@ -9,10 +9,10 @@ namespace Prime.Services
 {
     public interface IPartyService
     {
-        Task<bool> PartyExistsAsync(int partyId);
+        Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null);
         Task<bool> PartyExistsForUserIdAsync(Guid userId);
         Task<Party> GetPartyAsync(int partyId);
-        Task<Party> GetPartyForUserIdAsync(Guid userId);
+        Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null);
         Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user);
         void UpdateAddress<T>(Party dbParty, T newAddress) where T : Address;
         Task DeletePartyAsync(int partyId);
