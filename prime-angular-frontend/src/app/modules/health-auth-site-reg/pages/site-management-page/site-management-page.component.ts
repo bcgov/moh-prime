@@ -158,14 +158,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.checkQueryParams();
-    this.organizationService.showSuccess = false;
     this.getOrganizations();
-  }
-
-  private checkQueryParams(): void {
-    this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
-    this.routeUtils.removeQueryParams({ submitted: null });
   }
 
   private getOrganizations(): void {
