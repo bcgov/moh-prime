@@ -14,7 +14,7 @@ namespace Prime.Services
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync();
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
-        Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user);
+        Task<int> CreateOrganizationAsync(int signingAuthorityId);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);

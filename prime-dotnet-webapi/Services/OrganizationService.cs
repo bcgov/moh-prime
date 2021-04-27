@@ -68,16 +68,8 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user)
+        public async Task<int> CreateOrganizationAsync(int partyId)
         {
-            signingAuthority.ThrowIfNull(nameof(signingAuthority));
-
-            var partyId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, user);
-            if (partyId == -1)
-            {
-                throw new InvalidOperationException("Could not create Organization. Error when updating Signing Authority");
-            }
-
             var organizations = await GetOrganizationsByPartyIdAsync(partyId);
             if (organizations.Count() != 0)
             {
@@ -105,19 +97,7 @@ namespace Prime.Services
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var currentOrganization = await GetOrganizationAsync(organizationId);
-
-            // BCSC Fields
-            var userId = currentOrganization.SigningAuthority.UserId;
-
             _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
-            _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
-
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.PhysicalAddress);
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.MailingAddress);
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.VerifiedAddress);
-
-            // Keep userId the same from BCSC card, do not update
-            currentOrganization.SigningAuthority.UserId = userId;
 
             await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
 
@@ -172,13 +152,10 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is availible.
+        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is available.
         /// Otherwise, returns the newest existing Agreement of that type.
         /// Returns null if the Site doesn't exist on the Organization.
         /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="siteId"></param>
-        /// <returns></returns>
         public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
         {
             var siteSetting = await _context.Sites
