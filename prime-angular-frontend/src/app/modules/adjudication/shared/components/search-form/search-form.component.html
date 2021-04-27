@@ -8,7 +8,8 @@
              formControlName="textSearch">
     </mat-form-field>
 
-    <mat-form-field class="filter">
+    <mat-form-field class="filter"
+                    *ngIf="!hideStatus">
       <mat-label>Filter By Status</mat-label>
       <mat-select formControlName="statusCode">
         <mat-option value="">All</mat-option>

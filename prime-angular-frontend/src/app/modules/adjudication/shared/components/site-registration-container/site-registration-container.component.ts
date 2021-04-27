@@ -296,7 +296,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   }
 
   private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<Organization[]> {
-    return this.organizationResource.getOrganizations()
+    return this.organizationResource.getOrganizations(search)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

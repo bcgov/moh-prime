@@ -112,8 +112,9 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizations(): Observable<Organization[]> {
-    return this.apiResource.get<Organization[]>('organizations')
+  public getOrganizations(textSearch?: string): Observable<Organization[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch });
+    return this.apiResource.get<Organization[]>('organizations', params)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
         tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
