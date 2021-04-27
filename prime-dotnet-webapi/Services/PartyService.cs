@@ -18,10 +18,13 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task<bool> PartyExistsAsync(int partyId)
+        public async Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null)
         {
             return await _context.Parties
                 .AsNoTracking()
+                .If(withType.HasValue, q =>
+                    q.Where(party => party.PartyEnrolments
+                        .Any(pe => pe.PartyType == withType.Value)))
                 .AnyAsync(p => p.Id == partyId);
         }
 
@@ -38,11 +41,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == partyId);
         }
 
-        public async Task<Party> GetPartyForUserIdAsync(Guid userId)
+        public async Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.UserId == userId);
+                .If(withType.HasValue, q =>
+                    q.Where(party => party.PartyEnrolments
+                        .Any(pe => pe.PartyType == withType.Value)))
+                .SingleOrDefaultAsync(p => p.UserId == userId);
         }
 
         /// <summary>
