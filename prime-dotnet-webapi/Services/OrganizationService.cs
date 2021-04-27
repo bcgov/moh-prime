@@ -11,6 +11,8 @@ using Prime.ViewModels.Parties;
 using System.Security.Claims;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Prime.Models.Api;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -43,11 +45,29 @@ namespace Prime.Services
                 .AnyAsync(e => e.Id == organizationId);
         }
 
-        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync()
+        public async Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions searchOptions)
         {
-            return await _context.Organizations
+            searchOptions ??= new OrganizationSearchOptions();
+
+            var results = await _context.Organizations
+                .AsNoTracking()
+                .Search(
+                    o => o.Name,
+                    o => o.DisplayId.ToString())
+                .SearchCollections(
+                    o => o.Sites.Select(s => s.DoingBusinessAs),
+                    o => o.Sites.Select(s => s.PEC))
+                .Containing(searchOptions.TextSearch)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
+
+            return results
+                .Select(r => new OrganizationSearchViewModel
+                {
+                    Organization = r,
+                    MatchedOn = r.MatchedOn(searchOptions.TextSearch)
+                });
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
