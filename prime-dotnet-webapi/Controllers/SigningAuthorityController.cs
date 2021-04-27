@@ -45,7 +45,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityByUserId(Guid userId)
         {
-            var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId);
+            var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SigningAuthority);
             if (signingAuthority == null)
             {
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {userId}"));
@@ -67,7 +67,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityById(int partyId)
         {
-            var signingAuthority = await _partyService.GetPartyAsync(partyId);
+            var signingAuthority = await _partyService.GetPartyAsync(partyId, PartyType.SigningAuthority);
             if (signingAuthority == null)
             {
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {partyId}"));
@@ -117,7 +117,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateSigningAuthority(int partyId, SigningAuthorityChangeModel updatedSigningAuthority)
         {
-            if (!await _partyService.PartyExistsAsync(partyId))
+            if (!await _partyService.PartyExistsAsync(partyId, PartyType.SigningAuthority))
             {
                 return NotFound(ApiResponse.Message($"SigningAuthority not found with id {partyId}"));
             }
@@ -143,7 +143,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (!await _partyService.PartyExistsForUserIdAsync(userId))
+            if (!await _partyService.PartyExistsForUserIdAsync(userId, PartyType.SigningAuthority))
             {
                 return NotFound(ApiResponse.Message($"SigningAuthority not found with user id {userId}"));
             }
