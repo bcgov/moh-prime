@@ -96,7 +96,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
         public async Task<ActionResult<Organization>> CreateOrganization(CreateOrganizationViewModel createOrganization)
         {
-            if (!await _partyService.PartyExistsAsync(createOrganization.PartyId))
+            if (!await _partyService.PartyExistsAsync(createOrganization.PartyId, PartyType.SigningAuthority))
             {
                 ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in SigningAuthority does not exist.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
