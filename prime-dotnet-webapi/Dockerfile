@@ -1,64 +1,3 @@
-# FROM  mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-
-# USER 0
-# ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
-# WORKDIR /opt/app-root/app
-# ENV ASPNETCORE_ENVIRONMENT Development
-# ENV PATH="$PATH:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
-# ENV API_PORT 8080
-# RUN mkdir -p /opt/app-root/app
-# COPY *.csproj /opt/app-root/app
-
-# RUN dotnet restore
-# COPY . /opt/app-root/app
-
-# RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
-# RUN dotnet tool install --global dotnet-ef --version 3.1.1 && \
-#     dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
-
-# FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
-# ENV DB_CONNECTION_STRING "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
-# ENV DB_HOST primedb
-# ENV POSTGRESQL_USER postgres
-# ENV POSTGRESQL_DATABASE postgres
-# ENV PGPASSWORD postgres
-
-# WORKDIR /vsdbg
-
-# RUN apt-get update \
-#     && apt-get install -y --no-install-recommends \
-#     unzip \
-#     && rm -rf /var/lib/apt/lists/* \
-#     && curl -sSL https://aka.ms/getvsdbgsh \
-#     | bash /dev/stdin -v latest -l /vsdbg \
-#     && apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev
-
-# ENV DOTNET_USE_POLLING_FILE_WATCHER 1
-
-# WORKDIR /opt/app-root/app
-# COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
-# COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
-# COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
-
-# RUN apt-get update && \
-#     apt-get install -yqq gpgv gnupg2 wget moreutils && \
-#     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
-#     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-#     apt-get update && \
-#     apt-get install -yqq --no-install-recommends postgresql-client-10 && \
-#     apt-get install -y libfontconfig1 libxrender1 libgdiplus xvfb && \
-#     apt install -y procps
-# chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
-# /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
-# chmod +x entrypoint.sh && \
-# chmod 777 entrypoint.sh && \
-# chmod -R 777 /opt/app-root && \
-# chmod -R 777 /opt/app-root/.*
-
-# EXPOSE 8080 5001 5000
-
-# ENTRYPOINT [ "dotnet watch run --urls=http://+:8080" ]
-
 FROM mcr.microsoft.com/dotnet/sdk:3.1
 
 WORKDIR /vsdbg
@@ -79,11 +18,6 @@ ENV DOTNET_USE_POLLING_FILE_WATCHER 1
 ENV API_PORT 8080
 
 WORKDIR /app
-
-# can't see to get this to work in the dockerfile so using VC version in docker-compose:
-# RUN dotnet ef database update
-# RUN ["/bin/bash", "-c", "dotnet ef database update"]
-# RUN ["/bin/bash", "-c", "echo waiting for database...; sleep 15; echo \"Running database migrations...\"; dotnet ef database update; echo \"Starting service...\"; dotnet watch run --urls=http://+:8080"]
 
 EXPOSE 8080 5001 5000
 
