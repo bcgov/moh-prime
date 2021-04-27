@@ -1,35 +1,36 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-
-import { KeycloakService } from 'keycloak-angular';
+import { TestBed, inject } from '@angular/core/testing';
 
 import { OrganizationGuard } from './organization.guard';
+import { RouterTestingModule } from '@angular/router/testing';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { SharedModule } from '@shared/shared.module';
 
 describe('OrganizationGuard', () => {
-  let guard: OrganizationGuard;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
-        SiteRegistrationModule,
         RouterTestingModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        SharedModule
       ],
       providers: [
+        OrganizationGuard,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        KeycloakService
+        {
+          provide: AuthService,
+          useClass: MockAuthService
+        }
       ]
     });
-    guard = TestBed.inject(OrganizationGuard);
   });
 
-  it('should be created', () => {
+  it('should ...', inject([OrganizationGuard], (guard: OrganizationGuard) => {
     expect(guard).toBeTruthy();
-  });
+  }));
 });

@@ -8,4 +8,3 @@ namespace Prime.ViewModels.Parties
         Party UpdateParty(Party party, ClaimsPrincipal user);
     }
 }
-
