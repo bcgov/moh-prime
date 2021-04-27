@@ -40,7 +40,7 @@
              : 'This is not a new Site and it has a PEC Code assigned' }}
       </mat-slide-toggle>
     </div>
-    <ng-container *ngIf="this.isNewSite.value; else notNewSite">
+    <ng-container *ngIf="isNewSite.value; else notNewSite">
       If this is a new Site you will receive your Site ID upon approval.
     </ng-container>
     <ng-template #notNewSite>
