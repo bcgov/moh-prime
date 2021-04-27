@@ -30,7 +30,7 @@ namespace Prime.Services
         {
             return await _context.Parties
                 .AsNoTracking()
-                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
+                .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .AnyAsync(p => p.UserId == userId);
         }
 
@@ -45,7 +45,7 @@ namespace Prime.Services
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
-                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
+                .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .SingleOrDefaultAsync(p => p.UserId == userId);
         }
 
