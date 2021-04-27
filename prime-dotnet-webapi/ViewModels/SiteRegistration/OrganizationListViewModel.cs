@@ -26,22 +26,22 @@ namespace Prime.ViewModels
 
             if (DisplayId.ToString().ToLower().Contains(textSearch))
             {
-                matchedOn.Add("Reference Id");
+                matchedOn.Add(nameof(DisplayId));
             }
 
             if (Name.ToLower().Contains(textSearch))
             {
-                matchedOn.Add("Organization Name");
+                matchedOn.Add(nameof(Name));
             }
 
             if (Sites.Any(s => s.DoingBusinessAs.ToLower().Contains(textSearch)))
             {
-                matchedOn.Add("Site Name");
+                matchedOn.Add(nameof(Site.DoingBusinessAs));
             }
 
             if (Sites.Any(s => s.PEC.ToLower().Contains(textSearch)))
             {
-                matchedOn.Add("Site ID");
+                matchedOn.Add(nameof(Site.PEC));
             }
 
             return matchedOn;
