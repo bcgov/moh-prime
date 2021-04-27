@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
@@ -15,7 +16,7 @@ using Prime.ViewModels.Parties;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/parties/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SigningAuthorityController : ControllerBase
