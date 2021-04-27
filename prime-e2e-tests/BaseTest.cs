@@ -41,10 +41,17 @@ namespace TestPrimeE2E
             field.SendKeys(text);
         }
 
-
         protected void ClickButton(string buttonLabel)
         {
             _driver.FindPatiently($"//span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]").Click();
         }
+
+        protected void SelectItemInDropDown(string dropdownControlName, string itemName)
+        {
+            _driver.FindPatiently($"//mat-select[@formcontrolname='{dropdownControlName}']").Click();
+            _driver.FindPatiently($"//mat-option/span[contains(.,'{itemName}')]").Click();
+        }
+
+        
     }
 }
