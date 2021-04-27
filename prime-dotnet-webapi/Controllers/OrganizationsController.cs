@@ -46,7 +46,7 @@ namespace Prime.Controllers
         /// Gets all of the Organizations.
         /// </summary>
         [HttpGet(Name = nameof(GetOrganizations))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
