@@ -640,7 +640,12 @@
   </li>
 </ol>
 
-<p class="text-center">
+@if (@Model.WithSignature)
+{
+  @await Html.PartialAsync("~/Views/Partials/_OrgAgreementSignature.cshtml")
+}
+
+<p class="text-center break-before">
   <strong>SCHEDULE A – SPECIFIC PRIVACY AND SECURITY MEASURES</strong>
 </p>
 
