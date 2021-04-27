@@ -46,5 +46,30 @@ namespace TestPrimeE2E
         {
             _driver.FindPatiently($"//span[@class='mat-button-wrapper' and contains(text(), '{buttonLabel}')]").Click();
         }
+
+
+        protected void SelectDropdownItem(string formControlName, string itemLabel)
+        {
+            _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}']//div[contains(@class,'mat-select-value')]").Click();
+            _driver.FindPatiently($"//span[@class='mat-option-text' and contains(text(), '{itemLabel}')]").Click();
+        }
+
+
+        /// <param name="month">Three character long, e.g. "MAR"</param>
+        protected void PickDate(string year, string month, string dayOfMonth)
+        {
+            // TODO: Support more than one visible calendar control
+            month = month.ToUpper();
+            _driver.FindPatiently("//mat-datepicker-toggle//span[@class='mat-button-wrapper']").Click();
+            _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{year}')]").Click();
+            _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{month}')]").Click();
+            _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{dayOfMonth}')]").Click();
+        }
+
+
+        protected void ClickRadioButton(string formControlName, string radioButtonLabel)
+        {
+            _driver.FindPatiently($"//mat-radio-group[@formcontrolname='{formControlName}']//label[div[contains(text(), '{radioButtonLabel}')]]").Click();
+        }
     }
 }
