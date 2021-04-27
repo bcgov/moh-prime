@@ -13,4 +13,4 @@ These are topics that are large enough to warrant their own page for documentati
 Please reach out to the team for a link to our schema-spy url.
 
 ## Swagger
-Please reach out to the team for a link to our Swagger API url
+Please reach out to the team for a link to our Swagger API url.
