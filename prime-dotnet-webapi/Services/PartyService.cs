@@ -22,22 +22,22 @@ namespace Prime.Services
         {
             return await _context.Parties
                 .AsNoTracking()
-                .If(withType.HasValue, q =>
-                    q.Where(party => party.PartyEnrolments
-                        .Any(pe => pe.PartyType == withType.Value)))
+                .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .AnyAsync(p => p.Id == partyId);
         }
 
-        public async Task<bool> PartyExistsForUserIdAsync(Guid userId)
+        public async Task<bool> PartyExistsForUserIdAsync(Guid userId, PartyType? withType = null)
         {
             return await _context.Parties
                 .AsNoTracking()
+                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .AnyAsync(p => p.UserId == userId);
         }
 
-        public async Task<Party> GetPartyAsync(int partyId)
+        public async Task<Party> GetPartyAsync(int partyId, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
+                .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .SingleOrDefaultAsync(e => e.Id == partyId);
         }
 
@@ -45,9 +45,7 @@ namespace Prime.Services
         {
             return await GetBasePartyQuery()
                 .AsNoTracking()
-                .If(withType.HasValue, q =>
-                    q.Where(party => party.PartyEnrolments
-                        .Any(pe => pe.PartyType == withType.Value)))
+                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .SingleOrDefaultAsync(p => p.UserId == userId);
         }
 
