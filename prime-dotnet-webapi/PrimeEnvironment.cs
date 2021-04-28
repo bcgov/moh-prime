@@ -66,8 +66,8 @@ namespace Prime
         /// </summary>
         public static class VerifiableCredentialApi
         {
-            public static readonly string Url = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "https://prime-agent-admin-dev.pathfinder.gov.bc.ca/";
-            public static readonly string Key = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "P8ZmRJ05biXGWI1/bDtXcp1pixtWdsAqhcUJcn4S7QQ=";
+            public static readonly string Url = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "http://agent:8024/";
+            public static readonly string Key = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "agent-api-key-dev";
             public static readonly string WebhookKey = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
         }
 
