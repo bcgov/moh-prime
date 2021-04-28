@@ -51,13 +51,15 @@ namespace Prime.Services
 
             var results = await _context.Organizations
                 .AsNoTracking()
-                .Search(
-                    o => o.Name,
-                    o => o.DisplayId.ToString())
-                .SearchCollections(
-                    o => o.Sites.Select(s => s.DoingBusinessAs),
-                    o => o.Sites.Select(s => s.PEC))
-                .Containing(searchOptions.TextSearch)
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
+                    .Search(
+                        o => o.Name,
+                        o => o.DisplayId.ToString())
+                    .SearchCollections(
+                        o => o.Sites.Select(s => s.DoingBusinessAs),
+                        o => o.Sites.Select(s => s.PEC))
+                    .Containing(searchOptions.TextSearch)
+                )
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
                 .ToListAsync();
