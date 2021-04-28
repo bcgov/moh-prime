@@ -50,11 +50,13 @@ namespace TestPrimeE2E.SiteRegistration
                 TypeIntoField("Email", _contact.Email);
                 TypeIntoField("Mobile Phone (Optional)", "5555555555");
                 TypeIntoField("Fax (Optional)", "5555555555");
+                _driver.TakeScreenshot("Signing_Authority_Information");
                 ClickButton("Save and Continue");
 
                 //Organization Information
                 TypeIntoField("Organization Name (Legal Entity Operating Site)", "ROGERS");
                 TypeIntoField("Doing Business As (Optional)", _company.CompanyName());
+                _driver.TakeScreenshot("Organization_Information");
                 ClickButton("Save and Continue");
             }
 
@@ -63,6 +65,7 @@ namespace TestPrimeE2E.SiteRegistration
             SelectDropdownItem("careSettingCode", "Private Community Health Practice");
             // pick vendor
             _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'CareConnect')]]").Click();
+            _driver.TakeScreenshot("Care_Setting");
             ClickButton("Save and Continue");
 
             //site business licence
@@ -72,6 +75,7 @@ namespace TestPrimeE2E.SiteRegistration
             var siteId = _driver.FindPatiently("//input[@formcontrolname='pec']");
             siteId.Clear();
             siteId.SendKeys(_company.CompanyName());
+            _driver.TakeScreenshot("Site_Business_Licence");
             ClickButton("Save and Continue");
 
             //site address
@@ -81,14 +85,17 @@ namespace TestPrimeE2E.SiteRegistration
             var postal = _driver.FindPatiently("//input[@formControlName='postal']");
             postal.Clear();
             postal.SendKeys(_address.ZipCode("?#? #?#"));
+            _driver.TakeScreenshot("Site_Address");
             ClickButton("Save and Continue");
 
             //hours of operation
             _driver.FindPatiently("//mat-slide-toggle").Click();
+            _driver.TakeScreenshot("Hours_of_Operation");
             ClickButton("Save and Continue");
 
             //pharmanet administrator
             FillContactForm();
+            _driver.TakeScreenshot("Pharmanet_Administrator");
             ClickButton("Save and Continue");
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
@@ -97,12 +104,14 @@ namespace TestPrimeE2E.SiteRegistration
             wait.Until(ExpectedConditions.ElementExists(
                 By.XPath("//h2[@class='title' and contains(text(),'Privacy Officer')]")));
             FillContactForm();
+            _driver.TakeScreenshot("Privacy_Officer");
             ClickButton("Save and Continue");
 
             //technical support contact
             wait.Until(ExpectedConditions.ElementExists(
                 By.XPath("//h2[@class='title' and contains(text(),'Technical Support Contact')]")));
             FillContactForm();
+            _driver.TakeScreenshot("Technical_Support_Contact");
             ClickButton("Save and Continue");
 
             //organization agreement
@@ -110,6 +119,7 @@ namespace TestPrimeE2E.SiteRegistration
                 By.XPath("//h2[@class='title' and contains(text(),'Organization Agreement')]")));
             // tick checkbox
             _driver.TabAndInteract("//mat-slide-toggle", 5, Keys.Space);
+            _driver.TakeScreenshot("Organization_Agreement");
             // click accept button
             _driver.TabAndInteract("//mat-slide-toggle", 7, Keys.Enter);
             // confirm
@@ -120,10 +130,17 @@ namespace TestPrimeE2E.SiteRegistration
                 By.XPath("//h2[@class='title' and contains(text(),'Information Review')]")));
             // tick checkbox
             _driver.TabAndInteract("//button", 13, Keys.Space);
+            _driver.TakeScreenshot("Information_Review");
             // click accept button
             _driver.TabAndInteract("//button", 14, Keys.Enter);
             // confirm
             _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Save Site')]]").Click();
+
+            // Last page
+            wait.Until(ExpectedConditions.ElementExists(
+                By.XPath("//*[@class='title' and contains(text(),'Next Steps')]")));
+            _driver.TakeScreenshot("Submitted");
+
         }
 
         private void FillContactForm()

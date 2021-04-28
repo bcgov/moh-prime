@@ -12,6 +12,7 @@ namespace TestPrimeE2E
 
         public static readonly string BcscPassword = GetEnvironmentVariable("BCSC_PASSWORD");
 
+        // Path to the business licence file to be uploaded
         public static readonly string BusinessLicencePath = GetEnvironmentVariable("BUSINESSLICENCE_PATH");
     }
 }
