@@ -45,3 +45,6 @@ msbuild.wrn
 
 # Logging
 logs/
+
+# Environment Variables
+.env
