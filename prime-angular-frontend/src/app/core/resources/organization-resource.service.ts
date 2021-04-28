@@ -12,8 +12,9 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
-import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -112,12 +113,12 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizations(textSearch?: string): Observable<Organization[]> {
+  public getOrganizations(textSearch?: string): Observable<OrganizationSearchListViewModel[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ textSearch });
-    return this.apiResource.get<Organization[]>('organizations', params)
+    return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
       .pipe(
-        map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<OrganizationSearchListViewModel[]>) => response.result),
+        tap((organizations: OrganizationSearchListViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);

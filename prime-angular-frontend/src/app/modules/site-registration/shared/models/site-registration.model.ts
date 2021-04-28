@@ -1,7 +1,6 @@
 import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 
-
 export interface SiteListViewModelPartial extends
   Omit<SiteListViewModel, 'id' | 'completed' | 'doingBusinessAs'> {
   siteId: number;
@@ -12,6 +11,11 @@ export interface OrganizationListViewModelPartial extends
   Omit<Organization, 'id' | 'sites' | 'completed' | 'doingBusinessAs' | 'hasSubmittedSite' | 'hasAcceptedAgreement' | 'registrationId'> {
   organizationId: number;
   organizationDoingBusinessAs: string;
+}
+
+export interface OrganizationSearchListViewModel {
+  matchOn: string[];
+  organization: OrganizationListViewModelPartial;
 }
 
 /**
