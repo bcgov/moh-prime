@@ -191,13 +191,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
             break;
           }
         }
-        // this.logger.trace(`Checkbox at ${i} -> result of ${foundMatchingHAOboSite}`);
         if (!foundMatchingHAOboSite) {
           hasOboSiteForEveryHA = false;
           break;
         }
-      } else {
-        // this.logger.trace(`Checkbox at ${i} was unchecked`);
       }
     }
     // When you set certifications to 'None' there still exists an item in
@@ -631,7 +628,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
           const oboSiteForm = oboSites.controls[i] as FormGroup;
           if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
             oboSites.removeAt(i);
-            // this.logger.trace(`Removed Obo Site at ${i} for ${healthAuthority.name}`);
           }
         }
         healthAuthoritySites.removeControl(String(healthAuthority.code));
