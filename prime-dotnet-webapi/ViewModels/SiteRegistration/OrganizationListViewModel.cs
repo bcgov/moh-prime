@@ -34,17 +34,17 @@ namespace Prime.ViewModels
                 matchedOn.Add(nameof(DisplayId));
             }
 
-            if (Name.ToLower().Contains(textSearch))
+            if (Name != null && Name.ToLower().Contains(textSearch))
             {
                 matchedOn.Add(nameof(Name));
             }
 
-            if (Sites.Any(s => s.DoingBusinessAs.ToLower().Contains(textSearch)))
+            if (Sites.Any(s => s.DoingBusinessAs != null && s.DoingBusinessAs.ToLower().Contains(textSearch)))
             {
                 matchedOn.Add(nameof(Site.DoingBusinessAs));
             }
 
-            if (Sites.Any(s => s.PEC.ToLower().Contains(textSearch)))
+            if (Sites.Any(s => s.PEC != null && s.PEC.ToLower().Contains(textSearch)))
             {
                 matchedOn.Add(nameof(Site.PEC));
             }
