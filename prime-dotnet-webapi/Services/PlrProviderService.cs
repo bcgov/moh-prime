@@ -12,7 +12,6 @@ namespace Prime.Services
     {
         private readonly ILogger _logger;
 
-        private readonly List<IdentifierType> _identifierTypes;
 
         public PlrProviderService(
             ApiDbContext context,
@@ -21,21 +20,13 @@ namespace Prime.Services
             : base(context, httpContext)
         {
             _logger = logger;
-
-            var task = _context.Set<IdentifierType>()
-                            .AsNoTracking()
-                            .ToListAsync();
-            _identifierTypes = task.Result;
         }
 
-        //        public async Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject)
-        public int CreateOrUpdatePlrProvider(PlrProvider dataObject, bool expectExists = false)
+        public async Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false)
         {
-            TranslateIdentifierType(dataObject);
+            await TranslateIdentifierTypeAsync(dataObject);
 
-            // var existingPlrProvider = await _context.PlrProviders.SingleOrDefaultAsync(p => dataObject.Ipc == p.Ipc);
-            var task = _context.PlrProviders.SingleOrDefaultAsync(p => dataObject.Ipc == p.Ipc);
-            var existingPlrProvider = task.Result;
+            var existingPlrProvider = await _context.PlrProviders.SingleOrDefaultAsync(p => dataObject.Ipc == p.Ipc);
 
             if (existingPlrProvider == null)
             {
@@ -56,8 +47,7 @@ namespace Prime.Services
 
             try
             {
-                // await _context.SaveChangesAsync();
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException e)
             {
@@ -67,12 +57,13 @@ namespace Prime.Services
             return (existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id);
         }
 
-        private void TranslateIdentifierType(PlrProvider dataObject)
+        private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
         {
-            // Translate from "2.16.840.1.113883.3.40.2.20" to "RNPID", for example
-            var identifierType = _identifierTypes.Find(idType => idType.Code == dataObject.IdentifierType);
+            var idTypes = _context.Set<IdentifierType>().AsNoTracking();
+            var identifierType = await idTypes.SingleOrDefaultAsync(idType => idType.Code == dataObject.IdentifierType);
             if (identifierType != null)
             {
+                // Translate from "2.16.840.1.113883.3.40.2.20" to "RNPID", for example
                 dataObject.IdentifierType = identifierType.Name;
             }
             else

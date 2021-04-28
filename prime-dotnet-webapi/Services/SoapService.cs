@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.ServiceModel;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
@@ -15,10 +16,10 @@ namespace Prime.Services
     public interface ISoapService
     {
         [OperationContract(Name = "PRPM_IN301030CA")]
-        void AddBcProvider();
+        Task AddBcProviderAsync();
 
         [OperationContract(Name = "PRPM_IN303030CA")]
-        void UpdateBcProvider();
+        Task UpdateBcProviderAsync();
     }
 
     public class SoapService : ISoapService
@@ -45,22 +46,21 @@ namespace Prime.Services
 
         public XElement DocumentRoot { get; set; }
 
-        public void AddBcProvider()
+        public async Task AddBcProviderAsync()
         {
             _logger.LogInformation("Add BC Provider");
 
             var plrProvider = ReadDistributionMessage(DocumentRoot.ToString());
-            // var objectId = await _dbService.CreateOrUpdatePlrProviderAsync(plrProvider);
-            var objectId = _dbService.CreateOrUpdatePlrProvider(plrProvider);
+            var objectId = await _dbService.CreateOrUpdatePlrProviderAsync(plrProvider);
             _logger.LogDebug("objectId=" + objectId);
         }
 
-        public void UpdateBcProvider()
+        public async Task UpdateBcProviderAsync()
         {
             _logger.LogInformation("Update BC Provider");
 
             var plrProvider = ReadDistributionMessage(DocumentRoot.ToString());
-            var objectId = _dbService.CreateOrUpdatePlrProvider(plrProvider, true);
+            var objectId = await _dbService.CreateOrUpdatePlrProviderAsync(plrProvider, true);
             _logger.LogDebug("objectId=" + objectId);
 
         }
