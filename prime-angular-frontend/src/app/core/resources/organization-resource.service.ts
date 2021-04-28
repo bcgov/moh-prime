@@ -27,7 +27,7 @@ export class OrganizationResource {
   ) { }
 
   public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
-    return this.apiResource.get<Party>(`signingauthority/${userId}`)
+    return this.apiResource.get<Party>(`parties/signingauthority/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<Party>) => response.result),
         tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
@@ -44,7 +44,7 @@ export class OrganizationResource {
   }
 
   public getSigningAuthorityById(partyId: number): Observable<Party | null> {
-    return this.apiResource.get<Party>(`signingauthority/${partyId}`)
+    return this.apiResource.get<Party>(`parties/signingauthority/${partyId}`)
       .pipe(
         map((response: ApiHttpResponse<Party>) => response.result),
         tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
@@ -61,7 +61,7 @@ export class OrganizationResource {
   }
 
   public createSigningAuthority(party: Party): Observable<Party> {
-    return this.apiResource.post<Party>('signingauthority', party)
+    return this.apiResource.post<Party>('parties/signingauthority', party)
       .pipe(
         map((response: ApiHttpResponse<Party>) => response.result),
         tap((newParty: Party) => {
@@ -77,7 +77,7 @@ export class OrganizationResource {
   }
 
   public updateSigningAuthority(party: Party): NoContent {
-    return this.apiResource.put<NoContent>(`signingauthority/${party.id}`, party)
+    return this.apiResource.put<NoContent>(`parties/signingauthority/${party.id}`, party)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Signing authority has been updated')),
@@ -95,7 +95,7 @@ export class OrganizationResource {
    * a signing authority could not be found.
    */
   public getSigningAuthorityOrganizationsByUserId(userId: string): Observable<Organization[] | null> {
-    return this.apiResource.get<Organization[]>(`signingauthority/${userId}/organizations`)
+    return this.apiResource.get<Organization[]>(`parties/signingauthority/${userId}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
         tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
