@@ -105,21 +105,25 @@ namespace TestPrimeE2E.SiteRegistration
             FillContactForm();
             ClickButton("Save and Continue");
 
-            var subTitle = _driver.FindPatiently("//h2[@class='title']");
             //organization agreement
-            if (subTitle.Text == "Organization Agreement")
-            {
-                _driver.FindPatiently("//mat-checkbox").Click();
-                ClickButton("Save and Continue");
-                ClickButton("Accept Organization Agreement");
-            }
-            else
-            {
-                //information review
-                _driver.FindPatiently("//mat-checkbox").Click();
-                ClickButton("Save and Continue");
-                ClickButton("Save Site");
-            }
+            wait.Until(ExpectedConditions.ElementExists(
+                By.XPath("//h2[@class='title' and contains(text(),'Organization Agreement')]")));
+            // tick checkbox
+            _driver.TabAndInteract("//mat-slide-toggle", 5, Keys.Space);
+            // click accept button
+            _driver.TabAndInteract("//mat-slide-toggle", 7, Keys.Enter);
+            // confirm
+            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Accept Organization Agreement')]]").Click();
+
+            //information review
+            wait.Until(ExpectedConditions.ElementExists(
+                By.XPath("//h2[@class='title' and contains(text(),'Information Review')]")));
+            // tick checkbox
+            _driver.TabAndInteract("//button", 13, Keys.Space);
+            // click accept button
+            _driver.TabAndInteract("//button", 14, Keys.Enter);
+            // confirm
+            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Save Site')]]").Click();
         }
 
         private void FillContactForm()
