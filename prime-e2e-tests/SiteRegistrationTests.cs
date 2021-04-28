@@ -1,8 +1,10 @@
+using System;
 using System.IO;
 using Bogus;
 using Bogus.DataSets;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 
 namespace TestPrimeE2E.SiteRegistration
 {
@@ -24,12 +26,11 @@ namespace TestPrimeE2E.SiteRegistration
         [TearDown]
         public void CleanUp()
         {
-            //_driver.Close();
-            // clear up database
+            //_driver.Quit();
         }
 
         [Test]
-        public void SiteRegPchpInitial()
+        public void SiteRegInitial()
         {
             //Collection of Personal Information Notice
             Assert.AreEqual("Collection of Personal Information Notice", _driver.FindPatiently("//h1[@class='mb-4']").Text);
@@ -61,7 +62,7 @@ namespace TestPrimeE2E.SiteRegistration
             // choose private community health practice
             SelectItemInDropDown("careSettingCode", "Private Community Health Practice");
             // pick vendor
-            _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'Medinet')]]").Click();
+            _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'CareConnect')]]").Click();
             ClickButton("Save and Continue");
 
             //site business licence
@@ -85,6 +86,51 @@ namespace TestPrimeE2E.SiteRegistration
             //hours of operation
             _driver.FindPatiently("//mat-slide-toggle").Click();
             ClickButton("Save and Continue");
+
+            //pharmanet administrator
+            FillContactForm();
+            ClickButton("Save and Continue");
+
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+
+            //Privacy officer
+            wait.Until(ExpectedConditions.ElementExists(
+                By.XPath("//h2[@class='title' and contains(text(),'Privacy Officer')]")));
+            FillContactForm();
+            ClickButton("Save and Continue");
+
+            //technical support contact
+            wait.Until(ExpectedConditions.ElementExists(
+                By.XPath("//h2[@class='title' and contains(text(),'Technical Support Contact')]")));
+            FillContactForm();
+            ClickButton("Save and Continue");
+
+            var subTitle = _driver.FindPatiently("//h2[@class='title']");
+            //organization agreement
+            if (subTitle.Text == "Organization Agreement")
+            {
+                _driver.FindPatiently("//mat-checkbox").Click();
+                ClickButton("Save and Continue");
+                ClickButton("Accept Organization Agreement");
+            }
+            else
+            {
+                //information review
+                _driver.FindPatiently("//mat-checkbox").Click();
+                ClickButton("Save and Continue");
+                ClickButton("Save Site");
+            }
+        }
+
+        private void FillContactForm()
+        {
+            FillFormField("firstName", _name.FirstName());
+            FillFormField("lastName", _name.LastName());
+            FillFormField("jobRoleTitle", _name.JobTitle());
+            FillFormField("email", _contact.Email);
+            FillFormField("phone", "5555555555");
+            FillFormField("fax", "5555555555");
+            FillFormField("smsPhone", "5555555555");
         }
     }
 }

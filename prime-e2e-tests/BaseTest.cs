@@ -48,10 +48,16 @@ namespace TestPrimeE2E
 
         protected void SelectItemInDropDown(string dropdownControlName, string itemName)
         {
-            _driver.FindPatiently($"//mat-select[@formcontrolname='{dropdownControlName}']").Click();
+            _driver.FindPatiently($"//mat-select[@formControlName='{dropdownControlName}']").Click();
             _driver.FindPatiently($"//mat-option/span[contains(.,'{itemName}')]").Click();
         }
 
-        
+        protected void FillFormField(string formControlName, string text)
+        {
+            var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
+            control.Clear();
+            control.SendKeys(text);
+        }
+
     }
 }
