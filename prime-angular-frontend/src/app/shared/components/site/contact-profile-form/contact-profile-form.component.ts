@@ -1,13 +1,16 @@
-import { Component, OnInit, Input, ContentChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
 import { Contact } from '@lib/models/contact.model';
 
+@UntilDestroy()
 @Component({
   selector: 'app-contact-profile-form',
   templateUrl: './contact-profile-form.component.html',
@@ -19,10 +22,14 @@ export class ContactProfileFormComponent implements OnInit {
   @Input() public showFax: boolean = true;
   @Input() public showAddButton: boolean = false;
   @Input() public contacts: Contact[];
+  @Input() public formSubmitting: Observable<void> = new Observable<void>();
   public showFormFields: boolean;
   public hasPhysicalAddress: boolean;
+  public showAddressFields: boolean;
   @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
+  @ViewChild('sameAddressSlideToggle')
+  public sameAddressSlideToggle: MatSlideToggle;
 
   constructor(
     private formUtilsService: FormUtilsService
@@ -85,7 +92,13 @@ export class ContactProfileFormComponent implements OnInit {
       this.togglePhysicalAddress();
     }
 
-    this.showFormFields = !this.contacts?.length || !this.showAddButton;
+    this.formSubmitting.pipe(untilDestroyed(this))
+      .subscribe(() => {
+        // force show address fields if address form is invalid
+        this.showAddressFields = !this.sameAddressSlideToggle.checked && this.physicalAddress.invalid;
+      });
+
+    this.showFormFields = !this.contacts?.length || !this.hasPhysicalAddress;
   }
 
   private togglePhysicalAddress(forceDefault?: boolean) {

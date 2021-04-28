@@ -19,7 +19,7 @@
       <li *ngFor="let contact of contacts; index as i;">
         <mat-card>
           <mat-card-title>
-            <mat-icon color="primary">account_circle</mat-icon> 
+            <mat-icon color="primary">account_circle</mat-icon>
             {{ title }} #{{ i + 1 }} {{ contact.firstName }} {{ contact.lastName }}
           </mat-card-title>
           <mat-card-content>
@@ -153,12 +153,14 @@
         </app-page-subheader2>
 
         <app-address-form [form]="physicalAddress"
+                          [showAddressFields]="showAddressFields"
                           [showManualButton]="true"></app-address-form>
       </section>
 
     </ng-container>
 
-    <mat-slide-toggle class="mb-3"
+    <mat-slide-toggle #sameAddressSlideToggle
+                      class="mb-3"
                       color="primary"
                       [checked]="!hasPhysicalAddress"
                       (change)="onPhysicalAddressChange($event)">
