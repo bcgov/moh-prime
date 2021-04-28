@@ -21,8 +21,14 @@ namespace Prime.ViewModels
 
         public IEnumerable<string> MatchedOn(string textSearch)
         {
-            textSearch = textSearch.ToLower();
             var matchedOn = new List<string>();
+
+            if (textSearch == null)
+            {
+                return MatchedOn;
+            }
+
+            textSearch = textSearch.ToLower();
 
             if (DisplayId.ToString().ToLower().Contains(textSearch))
             {
