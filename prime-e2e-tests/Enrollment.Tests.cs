@@ -72,8 +72,7 @@ namespace TestPrimeE2E.Enrollment
             // OpenQA.Selenium.ElementClickInterceptedException : element click intercepted: Element <button _ngcontent-bwq-c268="" mat-flat-button="" color="primary" class="mat-focus-indicator mat-flat-button mat-button-base mat-primary">...</button> is not clickable at point (616, 822). Other element would receive the click: <snack-bar-container class="mat-snack-bar-container ng-tns-c30-52 ng-trigger ng-trigger-state mat-snack-bar-center ng-star-inserted" role="alert" style="transform: scale(1); opacity: 1;">...</snack-bar-container>
             // _driver.FindPatiently("//button[span[contains(text(), 'Submit Enrolment')]]").Click();
             _driver.TabAndInteract("//button[@mattooltip='Edit Self-declaration']", 2, Keys.Enter);
-            // TODO: XPath should be clear that confirm button is clicked
-            _driver.FindPatiently("(//app-confirm-dialog/mat-dialog-actions/button)[2]").Click();
+            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Submit Enrolment')]]").Click();
         }
 
 
