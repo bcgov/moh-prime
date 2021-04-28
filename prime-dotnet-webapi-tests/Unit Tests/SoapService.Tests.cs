@@ -1,11 +1,11 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prime.Services;
-using PrimeTests.Utils;
 using Xunit;
 
 namespace PrimeTests.UnitTests
@@ -34,12 +34,12 @@ namespace PrimeTests.UnitTests
         [InlineData("./Integration/PRPM_IN301030CA - missing message id.xml")]
         [InlineData("./Integration/PRPM_IN301030CA - missing IPC.xml")]
         // [InlineData("./README.md")] ... needs to be tested outside of this unit test since `XDocument.Load` will fail
-        public void TestHandlingMalformedInput(string filePath)
+        public async Task TestHandlingMalformedInput(string filePath)
         {
             Assert.True(File.Exists(filePath));
 
             _tested.DocumentRoot = XDocument.Load(filePath).Root;
-            Assert.ThrowsAny<Exception>(() => _tested.AddBcProvider());
+            await Assert.ThrowsAnyAsync<Exception>(() => _tested.AddBcProviderAsync());
         }
 
         [Fact]
