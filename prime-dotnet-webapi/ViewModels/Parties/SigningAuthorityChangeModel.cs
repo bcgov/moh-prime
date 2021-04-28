@@ -20,11 +20,10 @@ namespace Prime.ViewModels.Parties
         public VerifiedAddress VerifiedAddress { get; set; }
 
         /// <summary>
-        /// Updates the given Party with values from this SigningAuthorityCreateModel and the User. Also sets SigningAuthority in the Party's PartyEnrolments.
-        /// Returns the updated Party for convienience.
+        /// Updates the given Party with values from this SigningAuthorityCreateModel and the User.
+        /// Also sets SigningAuthority in the Party's PartyEnrolments, and returns the updated Party
+        /// for convenience.
         /// </summary>
-        /// <param name="party"></param>
-        /// <param name="user"></param>
         public Party UpdateParty(Party party, ClaimsPrincipal user)
         {
             party.PreferredFirstName = PreferredFirstName;
@@ -45,13 +44,11 @@ namespace Prime.ViewModels.Parties
             {
                 if (party.PhysicalAddress == null)
                 {
-
                     party.Addresses.Add(new PartyAddress
                     {
                         Party = party,
                         Address = PhysicalAddress,
                     });
-
                 }
                 else
                 {

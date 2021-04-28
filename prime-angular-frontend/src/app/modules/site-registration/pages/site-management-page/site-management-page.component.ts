@@ -22,8 +22,9 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
-import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
 @Component({
   selector: 'app-site-management-page',
@@ -35,7 +36,6 @@ export class SiteManagementPageComponent implements OnInit {
   public title: string;
   public organizations: Organization[];
   public organizationAgreements: OrganizationAgreementViewModel[];
-  public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
   public AgreementType = AgreementType;
@@ -47,13 +47,12 @@ export class SiteManagementPageComponent implements OnInit {
     private router: Router,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
+    private utilsService: UtilsService,
+    private authService: AuthService,
+    private logger: LoggerService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
-    private configCodePipe: ConfigCodePipe,
-    private utilsService: UtilsService,
-    // Temporary hack to show success message until guards can be refactored
-    private organizationService: OrganizationService,
-    private logger: LoggerService
+    private configCodePipe: ConfigCodePipe
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -129,7 +128,7 @@ export class SiteManagementPageComponent implements OnInit {
     return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
   }
 
-  public getUnderReviewSiteNotificationProperties(site: Site) {
+  public getUnderReviewSiteNotificationProperties(site: SiteListViewModel) {
     const andSiteId = (!site.pec) ? ' and an assigned Site ID' : '';
     return {
       icon: 'notification_important',
@@ -160,24 +159,16 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // this.checkQueryParams();
-    // TODO temporary hack to show success message until guards can be refactored
-    this.hasSubmittedSite = (this.organizationService.showSuccess) ? true : false;
-    this.organizationService.showSuccess = false;
     this.getOrganizations();
   }
 
-  private checkQueryParams(): void {
-    this.hasSubmittedSite = this.route.snapshot.queryParams?.submitted;
-    this.router.navigate([], { queryParams: { submitted: null } });
-  }
-
   private getOrganizations(): void {
-    this.busy = this.organizationResource.getOrganizations()
+    this.busy = this.authService.getUser$()
       .pipe(
-        map((organizations: Organization[]) =>
-          this.organizations = organizations
+        exhaustMap((user: BcscUser) =>
+          this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
         ),
+        map((organizations: Organization[]) => this.organizations = organizations),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )

@@ -3,14 +3,14 @@ using System.Globalization;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
-namespace TestPrimeE2E 
+namespace TestPrimeE2E
 {
     /// <summary>
     /// Only generic (non-PRIME) code should belong here
     /// </summary>
     public static class WebDriverExtensions
     {
-        public static IWebElement FindPatiently(this IWebDriver driver, string xPath) 
+        public static IWebElement FindPatiently(this IWebDriver driver, string xPath)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromMinutes(1));
             Func<IWebDriver, IWebElement> waitForElement = new Func<IWebDriver, IWebElement>((IWebDriver Web) =>
@@ -24,7 +24,7 @@ namespace TestPrimeE2E
 
 
         // TODO: Don't duplicate code shared with FindPatiently method
-        public static IWebElement FindPatientlyById(this IWebDriver driver, string id) 
+        public static IWebElement FindPatientlyById(this IWebDriver driver, string id)
         {
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromMinutes(1));
             Func<IWebDriver, IWebElement> waitForElement = new Func<IWebDriver, IWebElement>((IWebDriver Web) =>
@@ -37,7 +37,7 @@ namespace TestPrimeE2E
         }
 
 
-        public static IWebElement FindPossibleStaleById(this IWebDriver driver, string id) 
+        public static IWebElement FindPossibleStaleById(this IWebDriver driver, string id)
         {
             // TODO: Eliminate need for Sleep
             System.Threading.Thread.Sleep(1000);
@@ -53,11 +53,30 @@ namespace TestPrimeE2E
         }
 
 
-        // TODO: Parameter to permit saving to alternate folder rather than working directory 
-        public static void TakeScreenshot(this IWebDriver driver, string pageIdentifier) 
+        // TODO: Parameter to permit saving to alternate folder rather than working directory
+        public static void TakeScreenshot(this IWebDriver driver, string pageIdentifier)
         {
             Screenshot image = ((ITakesScreenshot)driver).GetScreenshot();
             image.SaveAsFile($"{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}_{pageIdentifier}.png", ScreenshotImageFormat.Png);
+        }
+
+
+        /// <summary>
+        /// This method may be useful to interact with elements that can't be clicked on (e.g. getting OpenQA.Selenium.ElementClickInterceptedException instead)
+        /// or don't respond to being clicked on through Selenium API.
+        /// </summary>
+        /// <param name="xPathToStartElement">XPath expression to obtain reference to "start" page element (before "end" element in the tab sequence order)</param>
+        /// <param name="numTabsToEndElement">Number of Tab presses to get to the "end" element</param>
+        /// <param name="keyToInteractAtEnd">Which keyboard key to press to interact with the "end" element (see <c>OpenQA.Selenium.Keys</c>)</param>
+        public static void TabAndInteract(this IWebDriver driver, string xPathToStartElement, int numTabsToEndElement, string keyToInteractAtEnd)
+        {
+            IWebElement currentElement = FindPatiently(driver, xPathToStartElement);
+            for (int i = 0; i < numTabsToEndElement; i++)
+            {
+                currentElement.SendKeys(Keys.Tab);
+                currentElement = driver.SwitchTo().ActiveElement();
+            }
+            currentElement.SendKeys(keyToInteractAtEnd);
         }
     }
 }

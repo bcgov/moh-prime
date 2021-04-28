@@ -2,6 +2,7 @@ import { Person } from '@lib/models/person.model';
 import { Address } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
+// TODO should implement or extend BcscUser
 export class Party implements Person {
   public id?: number;
 

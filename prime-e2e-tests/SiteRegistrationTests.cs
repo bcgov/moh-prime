@@ -60,7 +60,7 @@ namespace TestPrimeE2E.SiteRegistration
 
             //Care setting
             // choose private community health practice
-            SelectItemInDropDown("careSettingCode", "Private Community Health Practice");
+            SelectDropdownItem("careSettingCode", "Private Community Health Practice");
             // pick vendor
             _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'CareConnect')]]").Click();
             ClickButton("Save and Continue");
