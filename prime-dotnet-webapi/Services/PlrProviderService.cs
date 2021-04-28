@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,14 +13,18 @@ namespace Prime.Services
     {
         private readonly ILogger _logger;
 
+        private readonly IMapper _mapper;
+
 
         public PlrProviderService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            ILogger<PlrProviderService> logger)
+            ILogger<PlrProviderService> logger,
+            IMapper mapper)
             : base(context, httpContext)
         {
             _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false)
@@ -38,7 +43,7 @@ namespace Prime.Services
             }
             else
             {
-                existingPlrProvider.Update(dataObject);
+                _mapper.Map(dataObject, existingPlrProvider);
                 if (!expectExists)
                 {
                     _logger.LogWarning("Did not expect PLR Provider with IPC of {ipc} to exist but it was found with ID of {id}", dataObject.Ipc, existingPlrProvider.Id);
