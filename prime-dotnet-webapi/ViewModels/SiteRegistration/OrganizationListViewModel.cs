@@ -22,10 +22,9 @@ namespace Prime.ViewModels
         public IEnumerable<string> MatchedOn(string textSearch)
         {
             var matchedOn = new List<string>();
-
             if (textSearch == null)
             {
-                return MatchedOn;
+                return matchedOn;
             }
 
             textSearch = textSearch.ToLower();
