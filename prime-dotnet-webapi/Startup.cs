@@ -337,19 +337,29 @@ namespace Prime
 
         private async Task<Action> OnApplicationStartedAsync(IVerifiableCredentialClient _verifiableCredentialClient)
         {
-            var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
-            var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
-            if (schemaId == null)
+            try
             {
-                schemaId = await _verifiableCredentialClient.CreateSchemaAsync();
-            }
+                var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
 
-            var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
-            if (credentialDefinitionId == null)
+                if (issuerDid != null)
+                {
+                    var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+                    if (schemaId == null)
+                    {
+                        schemaId = await _verifiableCredentialClient.CreateSchemaAsync();
+                    }
+
+                    var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
+                    if (credentialDefinitionId == null)
+                    {
+                        await _verifiableCredentialClient.CreateCredentialDefinitionAsync(schemaId);
+                    }
+                }
+            }
+            catch
             {
-                await _verifiableCredentialClient.CreateCredentialDefinitionAsync(schemaId);
+                // Agent not setup
             }
-
             return null;
         }
     }
