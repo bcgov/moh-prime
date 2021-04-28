@@ -48,7 +48,6 @@ export class SiteManagementPageComponent implements OnInit {
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe,
     private utilsService: UtilsService,
-    // Temporary hack to show success message until guards can be refactored
     private organizationService: OrganizationService,
     private logger: LoggerService
   ) {
@@ -162,18 +161,18 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   private getOrganizations(): void {
-    this.busy = this.organizationResource.getOrganizations()
-      .pipe(
-        map((organizations: Organization[]) =>
-          this.organizations = organizations
-        ),
-        exhaustMap((organization: Organization[]) =>
-          this.organizationResource.getOrganizationAgreements(organization[0].id)
-        )
-      )
-      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
-        this.organizationAgreements = agreements
-      );
+    // this.busy = this.organizationResource.getOrganizations()
+    //   .pipe(
+    //     map((organizations: Organization[]) =>
+    //       this.organizations = organizations
+    //     ),
+    //     exhaustMap((organization: Organization[]) =>
+    //       this.organizationResource.getOrganizationAgreements(organization[0].id)
+    //     )
+    //   )
+    //   .subscribe((agreements: OrganizationAgreementViewModel[]) =>
+    //     this.organizationAgreements = agreements
+    //   );
   }
 
   private createSite(organizationId: number): void {
