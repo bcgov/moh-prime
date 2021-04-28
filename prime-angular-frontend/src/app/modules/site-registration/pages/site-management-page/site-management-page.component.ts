@@ -129,10 +129,11 @@ export class SiteManagementPageComponent implements OnInit {
     return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
   }
 
-  public getUnderReviewSiteNotificationProperties() {
+  public getUnderReviewSiteNotificationProperties(site: Site) {
+    const andSiteId = (!site.pec) ? ' and an assigned Site ID' : '';
     return {
       icon: 'notification_important',
-      text: 'This site is waiting for approval and an assigned Site ID',
+      text: `This site is waiting for approval${andSiteId}`,
     };
   }
 

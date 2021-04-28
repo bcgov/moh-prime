@@ -138,15 +138,10 @@ objects:
                 value: "https://${VANITY_URL}/api/docman/"
 
               # Keycloak related environment variables
-              - name: JWT_WELL_KNOWN_CONFIG
+              - name: KEYCLOAK_REALM_URL
                 valueFrom:
                   secretKeyRef:
-                    key: JWT_WELL_KNOWN_CONFIG
-                    name: "keycloak"
-              - name: KEYCLOAK_TOKEN_URL
-                valueFrom:
-                  secretKeyRef:
-                    key: KEYCLOAK_TOKEN_URL
+                    key: KEYCLOAK_REALM_URL
                     name: "keycloak"
               - name: KEYCLOAK_ADMINISTRATION_URL
                 valueFrom:
@@ -157,6 +152,12 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
+                    name: "keycloak"
+
+              - name: MOH_KEYCLOAK_REALM_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: MOH_KEYCLOAK_REALM_URL
                     name: "keycloak"
 
               # Mail server environment variables
@@ -255,6 +256,9 @@ objects:
                   secretKeyRef:
                     key: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
                     name: "verifiable-credential-secrets"
+
+              - name: PLR_INTEGRATION_CLIENT_CERT_THUMBPRINT
+                value: "6FA357305008C8EA814EA98768C21783DCCA374E"
 
               # LDAP login environment variables
               - name: LDAP_API_URL
