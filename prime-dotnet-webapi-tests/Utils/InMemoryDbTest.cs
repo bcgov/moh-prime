@@ -28,7 +28,7 @@ namespace PrimeTests.Utils
                 HttpContext = new DefaultHttpContext()
             };
 
-            TestDb = new ApiDbContext(options, httpContext, true);
+            TestDb = new ApiDbContext(options, httpContext);
             TestDb.Database.EnsureCreated();
 
             Seed();

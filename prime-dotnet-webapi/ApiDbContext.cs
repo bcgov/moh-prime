@@ -42,21 +42,12 @@ namespace Prime
     {
         private readonly IHttpContextAccessor _context;
 
-        private readonly bool _isInMemory;
-
         public ApiDbContext(
             DbContextOptions<ApiDbContext> options,
-            IHttpContextAccessor context,
-            bool isInMemory = false
+            IHttpContextAccessor context
             ) : base(options)
         {
             _context = context;
-
-            if (!isInMemory)
-            {
-                isInMemory = options.FindExtension<Microsoft.EntityFrameworkCore.InMemory.Infrastructure.Internal.InMemoryOptionsExtension>() != null;
-            }
-            this._isInMemory = isInMemory;
         }
 
         public DbSet<Certification> Certifications { get; set; }
@@ -274,31 +265,8 @@ namespace Prime
                 .OnDelete(DeleteBehavior.Cascade);
 
             #endregion
-
-            if (_isInMemory)
-            {
-                // To support use of in-memory database with string[] columns,
-                // see https://github.com/npgsql/efcore.pg/issues/774 and https://github.com/dotnet/efcore/issues/11926
-                modelBuilder
-                    .Entity<PlrProvider>().Property(e => e.Credentials)
-                    .HasConversion(
-                        v => new ArrayWrapper(v),
-                        v => v.Values);
-                modelBuilder
-                    .Entity<PlrProvider>().Property(e => e.Expertise)
-                    .HasConversion(
-                        v => new ArrayWrapper(v),
-                        v => v.Values);
-            }
         }
 
-        private struct ArrayWrapper
-        {
-            public ArrayWrapper(string[] values)
-                => Values = values;
-
-            public string[] Values { get; }
-        }
 
         // Uncomment for DB logging
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
