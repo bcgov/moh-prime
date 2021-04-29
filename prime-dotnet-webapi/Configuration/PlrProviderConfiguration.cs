@@ -19,6 +19,9 @@ namespace Prime.Configuration
                 .HasConversion(
                     v => string.Join('|', v),
                     v => v.Split('|', StringSplitOptions.RemoveEmptyEntries));
+
+            builder.HasIndex(p => p.Ipc)
+                .IsUnique();
         }
     }
 }
