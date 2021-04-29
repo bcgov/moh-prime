@@ -59,13 +59,15 @@ namespace Prime.Services
                 _logger.LogError(e, "Error updating PLR Provider with with ID of {id}", existingPlrProvider.Id);
                 return -1;
             }
-            return (existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id);
+            return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
         {
-            var idTypes = _context.Set<IdentifierType>().AsNoTracking();
-            var identifierType = await idTypes.SingleOrDefaultAsync(idType => idType.Code == dataObject.IdentifierType);
+            var identifierType = await _context.Set<IdentifierType>()
+                .AsNoTracking()
+                .SingleOrDefaultAsync(idType => idType.Code == dataObject.IdentifierType);
+
             if (identifierType != null)
             {
                 // Translate from "2.16.840.1.113883.3.40.2.20" to "RNPID", for example
