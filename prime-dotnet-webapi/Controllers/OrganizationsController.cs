@@ -47,16 +47,17 @@ namespace Prime.Controllers
         /// </summary>
         [HttpGet(Name = nameof(GetOrganizations))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetOrganizations()
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationSearchViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<OrganizationSearchViewModel>>> GetOrganizations([FromQuery] OrganizationSearchOptions search)
         {
+            var organizations = await _organizationService.GetOrganizationsAsync(search);
+
             var notifiedIds = await _siteService.GetNotifiedSiteIdsForAdminAsync(User);
-            var organizations = await _organizationService.GetOrganizationsAsync();
-            foreach (var organization in organizations)
+            foreach (var site in organizations.Select(o => o.Organization).SelectMany(o => o.Sites))
             {
-                organization.Sites = organization.Sites.Select(s => s.SetNotification(notifiedIds.Contains(s.Id)));
+                site.HasNotification = notifiedIds.Contains(site.Id);
             }
 
             return Ok(ApiResponse.Result(organizations));
