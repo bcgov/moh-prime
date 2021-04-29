@@ -1,13 +1,10 @@
-<div class="pagination-container" [hidden]="hidePaginator && paginator">
+<div class="pagination-container" [hidden]="hidePaginator || !paginator.getNumberOfPages()">
   <div>
     <span>Current page:</span>
 
     <mat-form-field class="input ml-2">
       <input matInput
              [formControl]="form">
-      <mat-error *ngIf="form.hasError('min') || form.hasError('max')">
-        Page must exist within the range of 1 and {{ paginator.getNumberOfPages() }}
-      </mat-error>
     </mat-form-field>
 
     <span>of <strong>{{ paginator.getNumberOfPages() }}</strong></span>
@@ -16,7 +13,7 @@
             class="ml-3"
             color="primary"
             matTooltip="Go to chosen page"
-            [disabled]="paginator.pageIndex > paginator.getNumberOfPages()"
+            [disabled]="disabled"
             (click)="onChange()">
       <mat-icon>search</mat-icon>
     </button>
