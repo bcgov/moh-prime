@@ -129,7 +129,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public getUnderReviewSiteNotificationProperties(site: SiteListViewModel) {
-    const andSiteId = (site.pec) ? ' and an assigned Site ID' : '';
+    const andSiteId = (!site.pec) ? ' and an assigned Site ID' : '';
     return {
       icon: 'notification_important',
       text: `This site is waiting for approval${andSiteId}`,
