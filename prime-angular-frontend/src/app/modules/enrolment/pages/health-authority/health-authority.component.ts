@@ -110,7 +110,7 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (oboSites.length) {
+    } else if (oboSites?.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 
