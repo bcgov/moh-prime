@@ -71,5 +71,12 @@ namespace TestPrimeE2E
         {
             _driver.FindPatiently($"//mat-radio-group[@formcontrolname='{formControlName}']//label[div[contains(text(), '{radioButtonLabel}')]]").Click();
         }
+
+        protected void FillFormField(string formControlName, string text)
+        {
+            var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
+            control.Clear();
+            control.SendKeys(text);
+        }
     }
 }
