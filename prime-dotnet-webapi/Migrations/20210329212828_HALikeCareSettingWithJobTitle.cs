@@ -72,9 +72,6 @@ namespace Prime.Migrations
                 end;
                 $$
             ");
-
-            migrationBuilder.DropTable(
-                name: "Job");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
