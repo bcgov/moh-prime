@@ -16020,8 +16020,8 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<string[]>("Credentials")
-                        .HasColumnType("text[]");
+                    b.Property<string>("Credentials")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
@@ -16029,8 +16029,8 @@ namespace Prime.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string[]>("Expertise")
-                        .HasColumnType("text[]");
+                    b.Property<string>("Expertise")
+                        .HasColumnType("text");
 
                     b.Property<string>("FaxAreaCode")
                         .HasColumnType("text");

@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210419233150_AddMoreIdentifierTypeData")]
-    partial class AddMoreIdentifierTypeData
+    [Migration("20210429004651_IntakePlrDistributions")]
+    partial class IntakePlrDistributions
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
