@@ -23,7 +23,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
+import {
+  SiteRegistrationListViewModel,
+  SiteListViewModelPartial,
+  OrganizationSearchListViewModel
+} from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import {
   AssignAction,
@@ -287,7 +291,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<Organization[]> {
+  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationSearchListViewModel[]> {
     return this.organizationResource.getOrganizations()
       .pipe(
         tap(() => this.showSearchFilter = true)
@@ -363,14 +367,15 @@ export class SiteRegistrationTabsComponent implements OnInit {
     }
   }
 
-  private toSiteRegistrations(organizations: Organization[]): SiteRegistrationListViewModel[] {
-    const siteRegistrations = organizations.reduce((registrations, ovm) => {
+  private toSiteRegistrations(results: OrganizationSearchListViewModel[]): SiteRegistrationListViewModel[] {
+    const siteRegistrations = results.reduce((registrations, result) => {
+      const { matchOn, organization: ovm } = result;
       const { id: organizationId, sites, ...organization } = ovm;
       const registration = sites.map((svm: SiteListViewModel, index: number) => {
         const { id: siteId, doingBusinessAs, ...site } = svm;
         return (!index)
-          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site }
-          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site };
+          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
+          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
       });
       registrations.push(registration);
       return registrations;

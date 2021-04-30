@@ -9,7 +9,7 @@
     <mat-tab label="Registrations">
       <ng-template matTabContent>
         <app-search-form *ngIf="showSearchFilter"
-                         [disabled]="true"
+                         [hideStatus]="true"
                          (search)="onSearch($event)"
                          (filter)="onFilter($event)"
                          (refresh)="onRefresh()"></app-search-form>
