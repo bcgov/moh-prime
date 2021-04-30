@@ -1,10 +1,10 @@
 using System;
-using System.IO;
 using Bogus;
 using Bogus.DataSets;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
 namespace TestPrimeE2E.SiteRegistration
 {
@@ -18,6 +18,8 @@ namespace TestPrimeE2E.SiteRegistration
         [SetUp]
         public void Init()
         {
+            _driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+
             _driver.Navigate().GoToUrl(TestParameters.SiteRegistrationUrl);
 
             LoginWithBCSC();
@@ -26,7 +28,7 @@ namespace TestPrimeE2E.SiteRegistration
         [TearDown]
         public void CleanUp()
         {
-            //_driver.Quit();
+            _driver.Quit();
         }
 
         [Test]
@@ -98,7 +100,7 @@ namespace TestPrimeE2E.SiteRegistration
             _driver.TakeScreenshot("Pharmanet_Administrator");
             ClickButton("Save and Continue");
 
-            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(10));
+            var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
 
             //Privacy officer
             wait.Until(ExpectedConditions.ElementExists(
@@ -114,33 +116,36 @@ namespace TestPrimeE2E.SiteRegistration
             _driver.TakeScreenshot("Technical_Support_Contact");
             ClickButton("Save and Continue");
 
+            // wait until page load complete
+            wait.Until(d => d.Url.EndsWith("organization-agreement") || d.Url.EndsWith("site-review"));
+            // The button right before the checkbox
+            var lastButtonIndex = 8;
             //organization agreement
-            wait.Until(ExpectedConditions.ElementExists(
-                By.XPath("//h2[@class='title' and contains(text(),'Organization Agreement')]")));
-            // tick checkbox
-            _driver.TabAndInteract("//mat-slide-toggle", 5, Keys.Space);
-            _driver.TakeScreenshot("Organization_Agreement");
-            // click accept button
-            _driver.TabAndInteract("//mat-slide-toggle", 7, Keys.Enter);
-            // confirm
-            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Accept Organization Agreement')]]").Click();
-
+            if (_driver.Url.EndsWith("organization-agreement"))
+            {
+                // tick checkbox
+                _driver.TabAndInteract("//mat-slide-toggle", 5, Keys.Space);
+                _driver.TakeScreenshot("Organization_Agreement");
+                // click accept button
+                _driver.TabAndInteract("//mat-slide-toggle", 7, Keys.Enter);
+                // confirm
+                _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Accept Organization Agreement')]]").Click();
+                //there are more buttons when first creating the organization
+                lastButtonIndex = 13;
+            }
             //information review
-            wait.Until(ExpectedConditions.ElementExists(
-                By.XPath("//h2[@class='title' and contains(text(),'Information Review')]")));
             // tick checkbox
-            _driver.TabAndInteract("//button", 13, Keys.Space);
+            _driver.TabAndInteract($"(//button)[{lastButtonIndex}]", 1, Keys.Space);
             _driver.TakeScreenshot("Information_Review");
             // click accept button
-            _driver.TabAndInteract("//button", 14, Keys.Enter);
+            _driver.TabAndInteract($"(//button)[{lastButtonIndex}]", 2, Keys.Enter);
             // confirm
             _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Save Site')]]").Click();
 
             // Last page
-            wait.Until(ExpectedConditions.ElementExists(
-                By.XPath("//*[@class='title' and contains(text(),'Next Steps')]")));
-            _driver.TakeScreenshot("Submitted");
-
+            // wait until page load complete
+            wait.Until(d => d.Url.EndsWith("organizations") || d.Url.EndsWith("next-steps"));
+            _driver.TakeScreenshot(_driver.Url.EndsWith("organizations") ? "Site_Management" : "Submitted");
         }
 
         private void FillContactForm()
