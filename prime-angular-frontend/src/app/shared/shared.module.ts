@@ -99,7 +99,8 @@ import { VendorFormComponent } from '@shared/components/forms/vendor-form/vendor
 import { ContactProfileFormComponent } from '@shared/components/site/contact-profile-form/contact-profile-form.component';
 import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
 import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
-import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
 
 @NgModule({
   declarations: [
@@ -182,7 +183,8 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     SameAsComponent,
     SummaryCardComponent,
     BannerComponent,
-    SendBulkEmailComponent
+    SendBulkEmailComponent,
+    PaginatorComponent
   ],
   imports: [
     CommonModule,
@@ -271,7 +273,8 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     ContactProfileFormComponent,
     SameAsComponent,
     SummaryCardComponent,
-    BannerComponent
+    BannerComponent,
+    PaginatorComponent
   ],
   providers: [
     FullnamePipe,
