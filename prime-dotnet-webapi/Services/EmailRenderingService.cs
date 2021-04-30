@@ -80,7 +80,7 @@ namespace Prime.Services.EmailInternal
             (
                 from: PrimeEmail,
                 to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "Remote Practioners Added",
+                subject: "Remote Practitioners Added",
                 body: await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Emails.RemoteUsersUpdated, viewModel)
             );
         }
