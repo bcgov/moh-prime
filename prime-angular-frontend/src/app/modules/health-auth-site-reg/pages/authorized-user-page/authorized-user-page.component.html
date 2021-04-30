@@ -170,18 +170,31 @@
           </mat-form-field>
 
         </div>
-        <div class="col-12">
+      </div>
+    </section>
 
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Health Authority</ng-container>
+        <ng-container appPageSubheader2Summary>
+          What Health Authority are you representing?
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col col-sm-6 py-3">
           <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Fax (Optional)"
-                   formControlName="fax"
-                   mask="(000) 000-0000"
-                   [showMaskTyped]="false">
-            <mat-error *ngIf="formState.fax.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="formState.fax.hasError('phone')">Must be a valid phone number</mat-error>
+            <mat-label>Health Authority</mat-label>
+            <mat-select formControlName="healthAuthorityCode">
+              <mat-option *ngFor="let ha of this.healthAuthorities"
+                          [value]="ha.code">
+                {{ ha.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formState.healthAuthorityCode.hasError('required')">
+              Required
+            </mat-error>
           </mat-form-field>
-
         </div>
       </div>
     </section>

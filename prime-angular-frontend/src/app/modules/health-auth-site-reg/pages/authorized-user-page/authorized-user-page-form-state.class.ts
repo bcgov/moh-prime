@@ -40,8 +40,8 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
     return this.formInstance.get('phone') as FormControl;
   }
 
-  public get fax(): FormControl {
-    return this.formInstance.get('fax') as FormControl;
+  public get healthAuthorityCode(): FormControl {
+    return this.formInstance.get('healthAuthorityCode') as FormControl;
   }
 
   public get smsPhone(): FormControl {
@@ -93,7 +93,7 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
         FormControlValidators.phone
       ]],
       smsPhone: [null, [FormControlValidators.phone]],
-      fax: [null, [FormControlValidators.phone]],
+      healthAuthorityCode: [null, [Validators.required]],
       jobRoleTitle: [null, [Validators.required]]
     });
   }

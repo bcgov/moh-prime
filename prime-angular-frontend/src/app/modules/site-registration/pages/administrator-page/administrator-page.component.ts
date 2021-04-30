@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Subject } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -28,6 +30,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -45,6 +48,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
@@ -97,5 +101,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
       : SiteRoutes.PRIVACY_OFFICER;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    //emit formSubmitting event
+    this.formSubmittingEvent.next();
   }
 }
