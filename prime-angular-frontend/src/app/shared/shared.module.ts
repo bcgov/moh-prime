@@ -280,4 +280,4 @@ import { SendBulkEmailComponent } from './components/dialogs/content/send-bulk-e
     CapitalizePipe
   ]
 })
-export class SharedModule {}
+export class SharedModule { }

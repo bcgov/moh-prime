@@ -33,7 +33,7 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not create banner.");
             }
 
-            return _mapper.Map<BannerViewModel>(banner); ;
+            return _mapper.Map<BannerViewModel>(banner);
         }
 
         public async Task<BannerViewModel> GetBannerAsync(int bannerId)
