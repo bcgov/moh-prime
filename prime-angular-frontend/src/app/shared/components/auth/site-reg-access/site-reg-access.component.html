@@ -17,7 +17,8 @@
       </p>
 
     </div>
-    <div class="col-sm-12">
+    <div *ngIf="mode === 'single'"
+         class="col-sm-12">
 
       <div class="row actions">
         <div class="col col-md-auto">
@@ -25,7 +26,8 @@
           <button mat-flat-button
                   color="primary"
                   class="large"
-                  (click)="onLogin()">Access Registration</button>
+                  (click)="onLogin()">Access Registration
+          </button>
 
         </div>
       </div>
@@ -44,9 +46,10 @@
             <br>
             <br>
 
-            <a href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/setup"
-                   target="_blank"
-                   rel="noopener noreferrer">
+            <a
+              href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card/log-in-with-card/setup"
+              target="_blank"
+              rel="noopener noreferrer">
               How to set up a mobile card
             </a>
           </p>
@@ -137,6 +140,36 @@
       </div>
 
     </div>
+  </div>
+</div>
+<div *ngIf="mode === 'multiple'"
+     class="authentication-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+
+        <div class="logins">
+          <div>
+            <h3>For Private Community Health Practices and Community Pharmacies:</h3>
+            <button mat-flat-button
+                    color="primary"
+                    (click)="onLogin(SiteRegistrationTypeEnum.COMM_PHARMACY_PRACTICE)">Access Registration</button>
+          </div>
+
+          <div>
+            <h3>For Health Authorities:</h3>
+            <button mat-flat-button
+                    color="primary"
+                    (click)="onLogin(SiteRegistrationTypeEnum.HEALTH_AUTHORITY)">Access Registration</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
     <div class="col-sm-12 support">
 
       <app-pill>
