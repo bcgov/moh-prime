@@ -232,13 +232,11 @@ namespace Prime.HttpClients
             }
             catch (Exception ex)
             {
-                await LogError(response, ex);
                 throw new VerifiableCredentialApiException("Error occurred attempting to get the issuer DID: ", ex);
             }
 
             if (!response.IsSuccessStatusCode)
             {
-                await LogError(response);
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetIssuerDidAsync");
             }
 
