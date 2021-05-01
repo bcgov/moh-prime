@@ -229,38 +229,7 @@
 
 </section>
 
-<section *ngIf="hasJob || (!hasJob && !hasCertification)"
-         class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Job Information</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Job Information"
-            (click)="onRoute(EnrolmentRoutes.JOB)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <ng-container *ngFor="let job of jobs">
-    <app-enrollee-property title="Job Title"
-                           [makeBold]="true">
-      {{ job.title | default }}
-    </app-enrollee-property>
-  </ng-container>
-
-  <app-enrollee-property-error *ngIf="!hasJob"
-                               message="When no College Certification is present a Job Title is required.">
-    <app-enrollee-property title="Job Title"
-                           [makeBold]="true">
-      None
-    </app-enrollee-property>
-  </app-enrollee-property-error>
-
-</section>
-
-<section *ngIf="hasJob && oboSites.length"
+<section *ngIf="oboSites.length"
          class="mb-4">
 
   <app-page-subheader>
@@ -280,7 +249,9 @@
       <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
         <app-enrollee-property title="Care Setting"
                                [makeBold]="true">
-          <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}</div>
+          <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
+            <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">({{ site.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})</span>
+          </div>
 
           <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
                                  title="Site Name"
@@ -298,6 +269,11 @@
                                  title="Site ID"
                                  [makeBold]="true">
             {{ site.pec | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Job Title"
+                                 [makeBold]="true">
+            {{ site.jobTitle | default }}
           </app-enrollee-property>
 
           <app-enrollee-property title="Site Address"

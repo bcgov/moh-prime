@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210329212828_HALikeCareSettingWithJobTitle")]
+    partial class HALikeCareSettingWithJobTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -8496,48 +8498,6 @@ namespace Prime.Migrations
                     b.ToTable("AssignedPrivilege");
                 });
 
-            modelBuilder.Entity("Prime.Models.Banner", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("BannerLocationCode")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("BannerType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("EndDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTimeOffset>("StartDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Banner");
-                });
-
             modelBuilder.Entity("Prime.Models.BusinessDay", b =>
                 {
                     b.Property<int>("Id")
@@ -15746,156 +15706,6 @@ namespace Prime.Migrations
                     b.HasIndex("PartyId");
 
                     b.ToTable("PartyEnrolment");
-                });
-
-            modelBuilder.Entity("Prime.Models.PlrProvider", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Address1Line1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address1Line2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address1Line3")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Address1StartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Address2Line1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2Line2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2Line3")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Address2StartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("City1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("City2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CollegeId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConditionCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Country2")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Credentials")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Expertise")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FaxAreaCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FaxNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("text");
-
-                    b.Property<string>("IdentifierType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Ipc")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Languages")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("MspId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("NamePrefix")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PostalCode1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PostalCode2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ProviderRoleType")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Province1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Province2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SecondName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("StatusCode")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StatusExpiryDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("StatusReasonCode")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("StatusStartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Suffix")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TelephoneAreaCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TelephoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ThirdName")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PlrProvider");
                 });
 
             modelBuilder.Entity("Prime.Models.Practice", b =>
