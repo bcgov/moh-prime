@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Subject } from 'rxjs';
+
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -26,6 +28,7 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = HealthAuthSiteRegRoutes;
 
   private site: HealthAuthSite;
@@ -43,6 +46,7 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   // TODO remove this method add to allow routing between pages
@@ -97,5 +101,10 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
       : HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    //emit formSubmitting event
+    this.formSubmittingEvent.next();
   }
 }
