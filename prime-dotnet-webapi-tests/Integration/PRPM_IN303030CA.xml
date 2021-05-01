@@ -61,12 +61,14 @@
                         <statusCode code="active"/>
                         <subject1 typeCode="SBJ">
                             <healthCareProvider classCode="PROV">
-                                <!--root OID Provider ID type, extension Provider ID-->
+                                <id root="2.16.840.1.113883.3.40.2.8" extension="1234567890"/>
+			                    <!--root OID Provider ID type, extension Provider ID-->
                                 <id root="2.16.840.1.113883.3.40.2.4" extension="55555"/>
+                                <id root="2.16.840.1.113883.3.40.2.11" extension="ABCDEF"/>
                                 <!--code Provider Type-->
                                 <code code="MD" codeSystemName="WHICProviderType"/>
                                 <addr use="PHYS DC">
-                                    <streetAddressLine>55 Rd.</streetAddressLine>
+                                    <streetAddressLine>67 Rd.</streetAddressLine>
                                     <city>Surrey</city>
                                     <state>BC</state>
                                     <country>CA</country>
@@ -82,7 +84,7 @@
                                     </useablePeriod>
                                 </telecom>
                                 <!--use combines purpose and type -->
-                                <telecom use="WP" value="tel:6046665555">
+                                <telecom use="WP" value="tel:6046661234">
                                     <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                                         <low value="20110506000000"/>
                                     </useablePeriod>
@@ -94,7 +96,7 @@
                                         <high value="20230501000000"/>
                                     </useablePeriod>
                                 </telecom>
-                                <telecom use="WP" value="mailto:terry_albert_test@gmail.com">
+                                <telecom use="WP" value="mailto:terry_albert_test@hotmail.com">
                                     <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                                         <low value="20120503000000"/>
                                     </useablePeriod>
@@ -244,11 +246,40 @@
                                             </addr>
                                         </qualificationGrantingOrganization>
                                     </qualifiedEntity>
+                                    <qualifiedEntity classCode="QUAL">
+                                        <id root="2.16.840.1.113883.3.40.1.2" extension="555"/>
+                                        <code code="RAC-A1">
+                                            <originalText>
+                                                <reference value="RAC-A1"/>
+                                            </originalText>
+                                        </code>
+                                        <effectiveTime>
+                                            <low value="20090501000000"/>
+                                        </effectiveTime>
+                                        <qualificationGrantingOrganization>
+                                            <name>Medical Institute Research Test</name>
+                                            <addr>
+                                                <city>Denver</city>
+                                                <state>BC</state>
+                                                <country>CA</country>
+                                            </addr>
+                                        </qualificationGrantingOrganization>
+                                    </qualifiedEntity>
                                 </relatedTo>
                                 <!--  expertise  -->
                                 <relatedTo typeCode="REL">
                                     <qualifiedEntity classCode="QUAL">
                                         <code xsi:type="CV" code="A110" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                            <originalText>110</originalText>
+                                        </code>
+                                        <effectiveTime>
+                                            <low value="20090508000000"/>
+                                        </effectiveTime>
+                                    </qualifiedEntity>
+                                </relatedTo>
+                                <relatedTo typeCode="REL">
+                                    <qualifiedEntity classCode="QUAL">
+                                        <code xsi:type="CV" code="LPNIMMUN" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                                             <originalText>110</originalText>
                                         </code>
                                         <effectiveTime>

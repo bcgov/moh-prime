@@ -64,5 +64,10 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.Party.DateOfBirth))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
+
+        // Don't copy over primary keys
+        CreateMap<PlrProvider, PlrProvider>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Ipc, opt => opt.Ignore());
     }
 }
