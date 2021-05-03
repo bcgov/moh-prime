@@ -1,11 +1,14 @@
 name: Build PR
 on:
+  # push:
+  #   branches:
+  #     - develop
   pull_request:
     branches:
       - develop
-  # workflow_dispatch:
-  #   branches:
-  #     - feature/prime-1195-1197-ocp4-jenkins
+  workflow_dispatch:
+    branches:
+      - feature/prime-1195-1197-ocp4-jenkins
 
 jobs:
   build-document-manager-backend:
