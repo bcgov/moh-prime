@@ -1,0 +1,678 @@
+---
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  name: prime
+  description: >-
+    Deployment template for the BC Parks App
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+  value: prime
+- name: OC_NAMESPACE
+  required: true
+  value: 9c33a9
+- name: OC_APP
+  required: true
+- name: FRONTEND_POD
+  required: true
+  value: frontend
+- name: FRONTEND_URL
+  required: true
+- name: API_POD
+  required: true
+  value: api-backend
+- name: API_URL
+  required: true
+- name: ASP_ENV
+  value: Development
+  required: true
+- name: DOCMAN_POD
+  required: true
+  value: document-manager
+- name: DB_POD
+  value: postgresql
+  required: true
+  required: true
+- name: DB_PORT
+  value: "5432"
+- name: DB_SSL
+  value: "false"
+- name: REDIS_POD
+  value: redis
+- name: WEB_SCHEMA
+  value: http
+- name: URL_STUB
+  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  required: false
+objects:
+###########################################
+###               Frontend              ###
+###########################################
+#   Frontend Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${FRONTEND_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${NAME}-${FRONTEND_POD}
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${FRONTEND_POD}
+      spec:
+        containers:
+          - name: ${NAME}-${FRONTEND_POD}
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${NAME}-${FRONTEND_POD}:${OC_APP}
+            ports:
+              - containerPort: 80
+                protocol: TCP
+              - containerPort: 8080
+                protocol: TCP
+              - containerPort: 8443
+                protocol: TCP
+            resources:
+              limits:
+                cpu: 2500m
+                memory: 2Gi
+              requests:
+                cpu: 1000m
+                memory: 512Mi
+            envFrom:
+            - configMapRef:
+                name: keycloak
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${NAME}-${FRONTEND_POD}
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_NAMESPACE}-tools"
+            name: '${NAME}-${FRONTEND_POD}:${OC_APP}'
+  status: {}
+#   Frontend Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${FRONTEND_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    ports:
+      - name: "npm"
+        port: 3000
+        targetPort: 3000
+      - name: "http"
+        port: 8080
+        targetPort: 8080
+      - name: "https"
+        port: 8443
+        targetPort: 8443
+    selector:
+      name: ${FRONTEND_POD}
+#   Frontend Route
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  labels:
+    app: ${FRONTEND_POD}
+    app.kubernetes.io/component: ${NAME}
+    app.kubernetes.io/instance: ${NAME}
+    app.kubernetes.io/part-of: ${NAME}
+  metadata:
+    name: ${FRONTEND_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+  spec:
+    host: ${FRONTEND_URL}${URL_STUB}
+    to:
+      kind: Service
+      name: ${FRONTEND_POD}
+      weight: 100
+    port:
+      targetPort: npm
+    wildcardPolicy: None
+
+###########################################
+###           Backend Web API           ###
+###########################################
+#   Backend Web API Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${API_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${API_POD}
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${API_POD}
+      spec:
+        containers:
+          - env:
+              - name: DOCUMENT_MANAGER_CLIENT_ID
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: DOCUMENT_MANAGER_CLIENT_ID
+              - name: PHARMANET_SSL_CERT_FILENAME
+                value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-name
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-user
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+              - name: POSTGRESQL_ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+            ports:
+              - containerPort: 1025
+                protocol: TCP
+              - containerPort: 5001
+                protocol: TCP
+              - containerPort: 8080
+                protocol: TCP
+            imagePullPolicy: IfNotPresent
+            terminationMessagePolicy: File
+            envFrom:
+              - configMapRef:
+                  name: canada-post-addresscomplete
+              - configMapRef:
+                  name: ches
+              - configMapRef:
+                  name: dotnet-webapi-backend
+              - configMapRef:
+                  name: keycloak
+              - configMapRef:
+                  name: pharmanet-api
+              - configMapRef:
+                  name: verifiable-credential
+              - secretRef:
+                  name: canada-post-addresscomplete-secrets
+              - secretRef:
+                  name: ches-secrets
+              - secretRef:
+                  name: document-manager-secrets
+              - secretRef:
+                  name: keycloak-secrets
+              - secretRef:
+                  name: pharmanet-api-secrets
+              - secretRef:
+                  name: pharmanet-api-ssl-certs
+              - secretRef:
+                  name: verifiable-credential-secrets
+              - secretRef:
+                  name: prime-postgresql-db
+            volumeMounts:
+              - name: cert-volume
+                mountPath: /opt/app-root/etc/certs
+                readOnly: true
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/api:${OC_APP}
+            name: ${API_POD}
+            ports:
+              - containerPort: 5000
+        volumes:
+          - name: cert-volume
+            secret:
+              secretName: pharmanet-api-ssl-certs
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${API_POD}
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_NAMESPACE}-tools"
+            name: 'api:${OC_APP}'
+  status: {}
+#   Backend Web API Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${API_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    ports:
+      - name: ${API_POD}
+        port: 5000
+        targetPort: 5000
+    selector:
+      name: ${API_POD}
+
+###########################################
+###      Document Manager (backend)     ###
+###########################################
+#   Document Manager (backend) Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${DOCMAN_POD}-backend
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${NAME}-${DOCMAN_POD}-backend
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${NAME}-${DOCMAN_POD}-backend
+      spec:
+        containers:
+          - env:
+              - name: CACHE_REDIS_HOST
+                value: redis
+              - name: CACHE_REDIS_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: redis
+                    key: database-password
+              - name: CACHE_REDIS_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: redis
+                    key: redis_port
+              - name: DB_HOST
+                value: prime-postgresql-db
+              - name: DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-name
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+              - name: DB_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgresql
+                    key: postgresql_database_port
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-user
+              - name: FLASK_ENV
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_ENV
+              - name: FLASK_RUN_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_HOST
+              - name: FLASK_DEBUG
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_DEBUG
+              - name: FLASK_APP
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_APP
+              - name: FLASK_RUN_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_PORT
+              - name: JWT_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    name: keycloak
+                    key: JWT_WELL_KNOWN_CONFIG
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${NAME}-${DOCMAN_POD}-backend:${OC_APP}
+            name: ${NAME}-${DOCMAN_POD}-backend
+            ports:
+              - containerPort: 6001
+                protocol: TCP
+              - containerPort: 9191
+                protocol: TCP
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${NAME}-${DOCMAN_POD}-backend
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_NAMESPACE}-tools"
+            name: '${NAME}-${DOCMAN_POD}-backend:${OC_APP}'
+  status: {}
+#   Document Manager (backend) Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${DOCMAN_POD}-backend
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    ports:
+      - name: ${NAME}-${DOCMAN_POD}-backend
+        port: 6001
+        targetPort: 6001
+    selector:
+      name: ${NAME}-${DOCMAN_POD}-backend
+
+###########################################
+###     Document Manager (Migration)    ###
+###########################################
+### Document Manager (Migration) Deployment Config
+### Used for Alembic to run database migrations against the PostgreSQL database 
+### for all Document Manager related tables. This pod will run once PostgreSQL 
+### is verified to be open to query connections.
+- apiVersion: apps.openshift.io/v1
+  kind: Pod
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${DOCMAN_POD}-migration
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${NAME}-${DOCMAN_POD}-migration
+      spec:
+        containers:
+          - command:
+              # Script force waits migration pod execution until PostgreSQL is verified to 
+              # be open to query connections.
+              - /opt/app-root/src/app.sh
+            args: 
+              - migrate
+            env:
+              - name: CACHE_REDIS_HOST
+                value: redis
+              - name: CACHE_REDIS_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: redis
+                    key: database-password
+              - name: CACHE_REDIS_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: redis
+                    key: redis_port
+              - name: DB_HOST
+                value: prime-postgresql-db
+              - name: DB_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-name
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+              - name: DB_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgresql
+                    key: postgresql_database_port
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-user
+              - name: FLASK_ENV
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_ENV
+              - name: FLASK_RUN_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_HOST
+              - name: FLASK_DEBUG
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_DEBUG
+              - name: FLASK_APP
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_APP
+              - name: FLASK_RUN_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    name: document-manager
+                    key: FLASK_RUN_PORT
+              - name: JWT_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    name: keycloak
+                    key: JWT_WELL_KNOWN_CONFIG
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: prime-postgresql-db
+                    key: database-password
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${NAME}-${DOCMAN_POD}-migration:${OC_APP}
+            name: ${NAME}-${DOCMAN_POD}-migration
+    triggers:
+      - type: ConfigChange
+      - type: ImageChange
+        imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${NAME}-${DOCMAN_POD}-migration
+          from:
+            kind: ImageStreamTag
+            namespace: "${OC_NAMESPACE}-tools"
+            name: '${NAME}-${DOCMAN_POD}-migration:${OC_APP}'
+  status: {}
+
+###########################################
+###         PostgreSQL Database         ###
+###########################################
+#   PostgreSQL database Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${DB_POD}-db
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    replicas: 1
+    selector:
+      name: ${NAME}-${DB_POD}-db
+    strategy: null
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${NAME}-${DB_POD}-db
+      spec:
+        containers:
+          - capabilities: {}
+            env:
+              - name: DB_HOST
+                value: ${NAME}-${DB_POD}-db
+              # PostgreSQL environment variables
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: DATABASE_PASSWORD
+                    name: ${NAME}-${DB_POD}-db-secrets
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: DATABASE_USERNAME
+                    name: ${NAME}-${DB_POD}-db-secrets
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: DATABASE_PASSWORD
+                    name: ${NAME}-${DB_POD}-db-secrets
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    key: DATABASE_USERNAME
+                    name: ${NAME}-${DB_POD}-db-secrets
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
+            imagePullPolicy: IfNotPresent
+            lifecycle:
+              preStop:
+                exec:
+                  command: ['pg_ctl', 'stop']
+            livenessProbe:
+              initialDelaySeconds: 30
+              tcpSocket:
+                port: 5432
+              timeoutSeconds: 1
+            name: ${NAME}-${DB_POD}-db
+            ports:
+              - containerPort: 5432
+                protocol: TCP
+                name: postgresql
+            resources: {}
+            securityContext:
+              capabilities: {}
+              privileged: false
+            terminationMessagePath: /dev/termination-log
+            volumeMounts:
+              - mountPath: /var/lib/pgsql/data
+                name: ${NAME}-${DB_POD}-db-data
+              - mountPath: /var/run/postgresql
+                name: ${NAME}-${DB_POD}-db-run
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        volumes:
+          - name: ${NAME}-${DB_POD}-db-data
+            emptyDir: {}
+          - name: ${NAME}-${DB_POD}-db-run
+            emptyDir: {}
+  status: {}
+#   PostgreSQL Service
+- apiVersion: v1
+  kind: Service
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${DB_POD}-db
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    ports:
+      - name: ${NAME}-${DB_POD}-db
+        nodePort: 0
+        port: 5432
+        protocol: TCP
+        targetPort: 5432
+    selector:
+      name: ${NAME}-${DB_POD}-db
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+    
+###########################################
+###           Network Policies          ###
+###########################################
+- apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: allow-internal-traffic
+    namespace: ${OC_NAMESPACE}-dev
+  spec:
+    podSelector: {}
+    ingress:
+      - ports:
+          - protocol: TCP
+            port: 80
+          - protocol: TCP
+            port: 5001
+          - protocol: TCP
+            port: 5432
+          - protocol: TCP
+            port: 6001
+          - protocol: TCP
+            port: 8080
+          - protocol: TCP
+            port: 9191
+    policyTypes:
+      - Ingress
