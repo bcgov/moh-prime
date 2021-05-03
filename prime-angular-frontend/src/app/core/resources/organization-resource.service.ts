@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
+import { Party } from '@lib/models/party.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -12,7 +13,6 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
-import { Party } from '@registration/shared/models/party.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
 
