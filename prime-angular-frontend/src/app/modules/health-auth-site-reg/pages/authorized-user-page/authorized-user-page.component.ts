@@ -83,7 +83,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     }
   }
 
-  public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
+  public onPreferredNameChange({ checked }: { checked: boolean }): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -91,11 +91,11 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
+  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
+  public onMailingAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
