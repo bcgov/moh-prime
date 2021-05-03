@@ -350,6 +350,17 @@ namespace Prime.Services
             return site;
         }
 
+        public async Task<Site> EnableEditingSite(int siteId)
+        {
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            site.Status = SiteStatusType.Editable;
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
+
+            return site;
+        }
+
         private void DeleteContactFromSite(Contact contact)
         {
             if (contact != null)

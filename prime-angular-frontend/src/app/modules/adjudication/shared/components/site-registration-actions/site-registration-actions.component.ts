@@ -15,6 +15,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public decline: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
+  @Output() public enableEditing: EventEmitter<number>;
 
   public Role = Role;
 
@@ -26,6 +27,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.approve = new EventEmitter<number>();
     this.decline = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
+    this.enableEditing = new EventEmitter<number>();
   }
 
   public onApprove(): void {
@@ -59,6 +61,12 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
+  }
+
+  public onEnableEditing(): void {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
+      this.enableEditing.emit(this.siteRegistration.siteId);
+    }
   }
 
   public ngOnInit(): void { }

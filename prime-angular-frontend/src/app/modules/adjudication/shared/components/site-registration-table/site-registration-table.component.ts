@@ -73,13 +73,27 @@ export class SiteRegistrationTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
+
   // TODO status lookup for sites would remove the need for this method and only require pipes
   public displayStatus(status: SiteStatusType) {
-    return (status === SiteStatusType.APPROVED)
-      ? 'Approved'
-      : (status === SiteStatusType.DECLINED)
-        ? 'Declined'
-        : 'Under Review';
+    let displayStatus: string = '';
+    switch (status) {
+      case SiteStatusType.APPROVED:
+        displayStatus = 'Approved';
+        break;
+      case SiteStatusType.DECLINED:
+        displayStatus = 'Declined';
+        break;
+      case SiteStatusType.UNDER_REVIEW:
+        displayStatus = 'Under Review';
+        break;
+      case SiteStatusType.EDITABLE:
+        displayStatus = 'Editable';
+        break;
+      default:
+        break;
+    }
+    return displayStatus;
   }
 
   public remoteUsers(siteRegistration: SiteRegistrationListViewModel): number | 'Yes' | 'No' | 'N/A' {

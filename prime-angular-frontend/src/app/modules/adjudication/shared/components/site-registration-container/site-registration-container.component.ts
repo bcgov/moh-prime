@@ -263,6 +263,13 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe();
   }
 
+  public onEnableEditing(siteId: number) {
+    this.busy = this.siteResource.enableEditingSite(siteId)
+      .subscribe((updatedSite: Site) => {
+        this.updateSite(updatedSite);
+      });
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
