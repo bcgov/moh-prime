@@ -43,7 +43,8 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-        run: |          
+        run: |
+          echo "Github ref=$GITHUB_REF"
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg=$BUILD_LOGLEVEL \
           $SERVICE_NAME
