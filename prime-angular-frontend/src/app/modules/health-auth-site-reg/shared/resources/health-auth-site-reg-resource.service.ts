@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -12,7 +13,9 @@ import { LoggerService } from '@core/services/logger.service';
 // TODO move to @lib/models
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
+import { AuthorizedUser } from '@health-auth/shared/models/authorized-user.model';
 import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { AuthorizedUserStatusEnum } from '@health-auth/shared/enums/authorized-user-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +27,13 @@ export class HealthAuthSiteRegResource {
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
+
+  public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser> {
+    return of({
+      userId: '',
+      status: AuthorizedUserStatusEnum.APPROVED
+    });
+  }
 
   public updateSite(site: HealthAuthSite): NoContent {
     return of().pipe(NoContentResponse);

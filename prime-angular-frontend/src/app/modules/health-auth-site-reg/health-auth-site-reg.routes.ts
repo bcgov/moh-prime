@@ -4,8 +4,14 @@ export class HealthAuthSiteRegRoutes {
   public static MODULE_PATH = 'health-authority-site-registration';
   public static COLLECTION_NOTICE = 'collection-notice';
 
-  public static SITE_MANAGEMENT = 'site-management';
+  public static ACCESS = 'access';
+  public static ACCESS_AUTHORIZED_USER = 'authorized-user';
+  public static ACCESS_REQUEST_CONFIRMATION = 'confirmation';
+
   public static AUTHORIZED_USER = 'authorized-user';
+  public static SITE_MANAGEMENT = 'site-management';
+
+  public static ORGANIZATIONS = 'health-authorities';
   public static VENDOR = 'vendor';
   public static HEALTH_AUTH_CARE_SETTING = 'health-auth-care-setting';
   public static SITE_INFORMATION = 'site-information';
@@ -19,6 +25,13 @@ export class HealthAuthSiteRegRoutes {
 
   public static routePath(route: string): string {
     return `/${ HealthAuthSiteRegRoutes.MODULE_PATH }/${ route }`;
+  }
+
+  public static requestAccessRouteOrder(): string[] {
+    return [
+      this.ACCESS_AUTHORIZED_USER,
+      this.ACCESS_REQUEST_CONFIRMATION
+    ];
   }
 
   // Used to indicate the routes and order of registration for sites

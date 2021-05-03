@@ -4,7 +4,7 @@ import {
   ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params
 } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { isObservable, Observable } from 'rxjs';
 
 import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -26,9 +26,8 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
 
   public canLoad(
     route: Route,
-    segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
+    segments: UrlSegment[]): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(segments);
-    // TODO pass params to checkAccess
     return this.checkAccess(url);
   }
 
@@ -51,7 +50,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * Hook for customizing access, which defaults to validating
    * access based on authentication.
    */
-  protected canAccess(authenticated: boolean, routePath: string = null): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string = null, params?: Params): Promise<boolean> {
     return new Promise((resolve, reject) => (authenticated) ? resolve(true) : reject(false));
   }
 
@@ -63,7 +62,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     return new Promise(async (resolve, reject) => {
       try {
         this.authenticated = await this.authService.isLoggedIn();
-        const result = await this.canAccess(this.authenticated, routePath);
+        const result = await this.canAccess(this.authenticated, routePath, params);
         resolve(result);
       } catch (error) {
         const destination = (routePath) ? ` to ${ routePath } ` : ' ';

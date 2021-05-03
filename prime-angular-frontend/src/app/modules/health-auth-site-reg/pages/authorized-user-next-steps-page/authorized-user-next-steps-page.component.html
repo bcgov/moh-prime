@@ -1,0 +1,26 @@
+<app-page>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-progress-indicator message="Initial registration under review"></app-progress-indicator>
+
+  <div class="mb-5">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You have applied to become an Authorized User for this Health Authority.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+  </app-page-subheader>
+
+  <p>
+    The Ministry of Health will review your request to be an Authorized User. You will be contacted with a decision
+    shortly via email.
+  </p>
+
+</app-page>

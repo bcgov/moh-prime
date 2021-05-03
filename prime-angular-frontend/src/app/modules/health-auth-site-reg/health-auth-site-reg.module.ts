@@ -22,6 +22,7 @@ import { AdministratorPageComponent } from '@health-auth/pages/administrator-pag
 import { PrivacyOfficerPageComponent } from '@health-auth/pages/privacy-officer-page/privacy-officer-page.component';
 import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
+import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview
     AdministratorPageComponent,
     PrivacyOfficerPageComponent,
     TechnicalSupportPageComponent,
-    OverviewPageComponent
+    OverviewPageComponent,
+    AuthorizedUserNextStepsPageComponent
   ],
   imports: [
     SharedModule,
