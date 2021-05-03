@@ -23,19 +23,18 @@ parameters:
   required: true
 - name: API_POD
   required: true
-  value: api-backend
+  value: webapi
 - name: API_URL
   required: true
 - name: ASP_ENV
-  value: Development
   required: true
+  value: Development
 - name: DOCMAN_POD
   required: true
   value: document-manager
 - name: DB_POD
+  required: true
   value: postgresql
-  required: true
-  required: true
 - name: DB_PORT
   value: "5432"
 - name: DB_SSL
@@ -73,7 +72,7 @@ objects:
       metadata:
         labels:
           dev-app: ${NAME}
-          name: ${FRONTEND_POD}
+          name: ${NAME}-${FRONTEND_POD}
       spec:
         containers:
           - name: ${NAME}-${FRONTEND_POD}
@@ -119,9 +118,6 @@ objects:
       app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: "npm"
-        port: 3000
-        targetPort: 3000
       - name: "http"
         port: 8080
         targetPort: 8080
@@ -129,27 +125,27 @@ objects:
         port: 8443
         targetPort: 8443
     selector:
-      name: ${FRONTEND_POD}
+      name: ${NAME}-${FRONTEND_POD}
 #   Frontend Route
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${FRONTEND_POD}
+    app: ${NAME}-${FRONTEND_POD}
     app.kubernetes.io/component: ${NAME}
     app.kubernetes.io/instance: ${NAME}
     app.kubernetes.io/part-of: ${NAME}
   metadata:
-    name: ${FRONTEND_POD}
+    name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     host: ${FRONTEND_URL}${URL_STUB}
     to:
       kind: Service
-      name: ${FRONTEND_POD}
+      name: ${NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: npm
+      targetPort: https
     wildcardPolicy: None
 
 ###########################################
@@ -160,7 +156,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${API_POD}
+    name: ${NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
@@ -168,7 +164,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${API_POD}
+      name: ${NAME}-${API_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -177,7 +173,7 @@ objects:
       metadata:
         labels:
           dev-app: ${NAME}
-          name: ${API_POD}
+          name: ${NAME}-${API_POD}-backend
       spec:
         containers:
           - env:
@@ -257,9 +253,7 @@ objects:
                 readOnly: true
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/api:${OC_APP}
-            name: ${API_POD}
-            ports:
-              - containerPort: 5000
+            name: ${NAME}-{API_POD}-backend
         volumes:
           - name: cert-volume
             secret:
@@ -270,28 +264,28 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${API_POD}
+            - ${NAME}-{API_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'api:${OC_APP}'
+            name: '${NAME}-{API_POD}-backend:${OC_APP}'
   status: {}
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${API_POD}
+    name: ${NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${API_POD}
-        port: 5000
-        targetPort: 5000
+      - name: ${NAME}-${API_POD}-backend
+        port: 5001
+        targetPort: 5001
     selector:
-      name: ${API_POD}
+      name: ${NAME}-${API_POD}-backend
 
 ###########################################
 ###      Document Manager (backend)     ###
