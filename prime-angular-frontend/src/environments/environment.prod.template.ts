@@ -22,5 +22,5 @@ export const environment = {
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
   },
-  env: '$OC_APP'
+  environmentName: '$OC_APP'
 };
