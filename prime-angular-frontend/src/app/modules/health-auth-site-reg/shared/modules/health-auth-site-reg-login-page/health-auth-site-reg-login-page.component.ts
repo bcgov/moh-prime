@@ -14,7 +14,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 })
 export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   public title: string;
-  public hideLogin: boolean;
+  public disableLogin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,7 +23,7 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     private authService: AuthService
   ) {
     this.title = route.snapshot.data.title;
-    this.hideLogin = false;
+    this.disableLogin = false;
   }
 
   public onLogin() {
@@ -38,6 +38,6 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.hideLogin = this.config.env === 'prod';
+    this.disableLogin = this.config.env === 'prod';
   }
 }
