@@ -14,6 +14,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 })
 export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   public title: string;
+  public hideLogin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -22,12 +23,13 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     private authService: AuthService
   ) {
     this.title = route.snapshot.data.title;
+    this.hideLogin = false;
   }
 
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC,
@@ -35,5 +37,7 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.hideLogin = this.config.env === 'prod';
+  }
 }

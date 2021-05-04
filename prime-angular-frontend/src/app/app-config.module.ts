@@ -24,6 +24,7 @@ export class AppConfig {
   phoneNumbers: {
     director: string;
   };
+  env: string;
   routes: {
     denied: string;
     maintenance: string;
@@ -48,6 +49,7 @@ export const APP_DI_CONFIG: AppConfig = {
   phoneNumbers: {
     director: environment.phoneNumbers.director
   },
+  env: environment.env,
   routes: {
     denied: AppRoutes.DENIED,
     maintenance: AppRoutes.MAINTENANCE,

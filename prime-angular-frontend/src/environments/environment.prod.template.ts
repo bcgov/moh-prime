@@ -21,5 +21,6 @@ export const environment = {
       onLoad: 'check-sso'
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
-  }
+  },
+  env: '$OC_APP'
 };
