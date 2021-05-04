@@ -4,10 +4,13 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Config } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
@@ -25,7 +28,6 @@ import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-au
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-authorized-user-page',
@@ -49,6 +51,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
+  public healthAuthorities: Config<number>[];
 
   constructor(
     protected dialog: MatDialog,
@@ -57,6 +60,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     private organizationResource: OrganizationResource,
     private formStateService: HealthAuthSiteRegFormStateService,
     private authService: AuthService,
+    private configService: ConfigService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -64,6 +68,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.healthAuthorities = configService.healthAuthorities;
   }
 
   // TODO remove this method add to allow routing between pages

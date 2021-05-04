@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210429004651_IntakePlrDistributions")]
+    partial class IntakePlrDistributions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -15753,13 +15755,6 @@ namespace Prime.Migrations
                     b.Property<string>("FacilityName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("HealthAuthorityCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -15780,8 +15775,6 @@ namespace Prime.Migrations
                     b.HasIndex("CareSettingCode");
 
                     b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("HealthAuthorityCode");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -18869,10 +18862,6 @@ namespace Prime.Migrations
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityCode");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

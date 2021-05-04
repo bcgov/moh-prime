@@ -1,0 +1,16 @@
+@import 'palette';
+@import 'variables';
+
+.mat-card-title {
+  font-weight: bold;
+  font-size: 1em;
+  color: $h3-colour;
+}
+
+.mat-icon {
+  vertical-align: middle
+}
+
+.mat-card-content > div > div > span {
+  color: $h3-colour;;
+}
