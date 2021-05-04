@@ -47,7 +47,7 @@ jobs:
       #     password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
       
       - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+        # id: findPr
       - run: echo "Your PR is ${PR}"
         if: success() && steps.findPr.outputs.number
         env:
