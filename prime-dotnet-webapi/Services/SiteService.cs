@@ -91,7 +91,7 @@ namespace Prime.Services
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
-            if (currentSite.SubmittedDate == null)
+            if (currentSite.SubmittedDate == null || currentSite.Status == SiteStatusType.Editable)
             {
                 UpdateAddress(currentSite, updatedSite);
                 UpdateVendors(currentSite, updatedSite);
