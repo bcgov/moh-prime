@@ -19,7 +19,6 @@ export class SiteRegAccessComponent implements OnInit {
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
 
-
   constructor(
     private viewportService: ViewportService
   ) {
