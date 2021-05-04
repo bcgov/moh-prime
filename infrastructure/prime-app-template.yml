@@ -187,28 +187,28 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-name
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -245,8 +245,6 @@ objects:
                   name: pharmanet-api-ssl-certs
               - secretRef:
                   name: verifiable-credential-secrets
-              - secretRef:
-                  name: prime-postgresql-db
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
@@ -329,17 +327,17 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: prime-postgresql-db
+                value: ${NAME}-{DB_POD}-db
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-name
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
                   configMapKeyRef:
@@ -348,8 +346,8 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
@@ -383,8 +381,8 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${NAME}-${DOCMAN_POD}-backend:${OC_APP}
             name: ${NAME}-${DOCMAN_POD}-backend
@@ -465,17 +463,17 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: prime-postgresql-db
+                value: ${NAME}-${DB_POD}-db
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-name
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
                   configMapKeyRef:
@@ -484,8 +482,8 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
@@ -519,8 +517,8 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${NAME}-${DB_POD}-db-secrets
+                    key: DATABASE_PASSWORD
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/${NAME}-${DOCMAN_POD}-migration:${OC_APP}
             name: ${NAME}-${DOCMAN_POD}-migration
@@ -643,7 +641,91 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-    
+
+###########################################
+###                Redis                ###
+###########################################
+#   Redis Deployment Config
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  metadata:
+    name: ${NAME}-${REDIS_POD}-cache
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${NAME}
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      name: ${NAME}-${REDIS_POD}-cache
+    strategy:
+      type: Recreate
+      maxSurge: 50%
+      maxUnavailable: 0
+      recreateParams:
+        timeoutSeconds: 600
+      activeDeadlineSeconds: 21600
+    template:
+      metadata:
+        labels:
+          dev-app: ${NAME}
+          name: ${NAME}-${REDIS_POD}-cache
+      spec:
+        volumes:
+          - name: ${NAME}-${REDIS_POD}-cache-data
+            emptyDir: {}
+        containers:
+          - resources:
+              limits:
+                memory: 512Mi
+            readinessProbe:
+              exec:
+                command:
+                  - /bin/sh
+                  - '-i'
+                  - '-c'
+                  - >-
+                    test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)" ==
+                    "PONG"
+              initialDelaySeconds: 5
+              timeoutSeconds: 1
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            terminationMessagePath: /dev/termination-log
+            name: redis
+            livenessProbe:
+              tcpSocket:
+                port: 6379
+              initialDelaySeconds: 30
+              timeoutSeconds: 1
+              periodSeconds: 10
+              successThreshold: 1
+              failureThreshold: 3
+            env:
+              - name: REDIS_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ${NAME}-${REDIS_POD}-cache-secrets
+                    key: database-password
+            securityContext:
+              capabilities: {}
+              privileged: false
+            ports:
+              - containerPort: 6379
+                protocol: TCP
+            imagePullPolicy: IfNotPresent
+            volumeMounts:
+              - name: ${NAME}-${REDIS_POD}-cache-data
+                mountPath: /var/lib/redis/data
+            terminationMessagePolicy: File
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/openshift/redis:5
+        restartPolicy: Always
+        dnsPolicy: ClusterFirst
+
+
 ###########################################
 ###           Network Policies          ###
 ###########################################
