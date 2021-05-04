@@ -26,7 +26,7 @@ export const environment = {
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
   },
-  env: 'local'
+  environmentName: 'local'
 };
 
 /*

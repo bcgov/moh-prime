@@ -10,6 +10,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+export type environmentName = 'prod' | 'test' | 'dev' | 'local';
 
 export class AppConfig {
   apiEndpoint: string;
@@ -24,7 +25,7 @@ export class AppConfig {
   phoneNumbers: {
     director: string;
   };
-  env: string;
+  environmentName: environmentName;
   routes: {
     denied: string;
     maintenance: string;
@@ -49,7 +50,7 @@ export const APP_DI_CONFIG: AppConfig = {
   phoneNumbers: {
     director: environment.phoneNumbers.director
   },
-  env: environment.env,
+  environmentName: environment.environmentName as environmentName,
   routes: {
     denied: AppRoutes.DENIED,
     maintenance: AppRoutes.MAINTENANCE,
