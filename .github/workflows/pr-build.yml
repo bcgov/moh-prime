@@ -50,8 +50,8 @@ jobs:
         run: |
           echo "Github ref=$GITHUB_REF"
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
-          --build-arg=$BUILD_LOGLEVEL \
-          $SERVICE_NAME
+            --build-arg=$BUILD_LOGLEVEL \
+            $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
           docker image push --all-tags ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
 
@@ -84,21 +84,23 @@ jobs:
       - name: "Build, tag and push .NET web API image"
         id: build-image
         env:
+          PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
+          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-        run: |          
+        run: |
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
-          --build-arg DB_HOST=primedb-$GITHUB_REF \
-          --build-arg PGPASSWORD=${{secrets_PRIME_DB_PASSWORD}} \
-          --build-arg POSTGRESQL_ADMIN_PASSWORD=${{secrets_PRIME_DB_PASSWORD}} \
-          --build-arg POSTGRESQL_USERNAME=${{secrets_PRIME_DB_USER}} \
-          --build-arg POSTGRESQL_DATABASE=postgres \
-          --build-arg DB_CONNECTION_STRING="host=primedb-$GITHUB_REF;port=5432;database=postgres;username=${{secrets_PRIME_DB_USER}};password=${{secrets_PRIME_DB_PASSWORD}}" \
-          --build-arg ASPNETCORE_HTTPS_PORT=5001 \
-          --build-arg ASPNETCORE_ENVIRONMENT="Development" \
-          --build-arg ASPNETCORE_URLS="http://+:8080" \
-          --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
-          $SERVICE_NAME
+            --build-arg DB_HOST=primedb-$GITHUB_REF \
+            --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
+            --build-arg POSTGRESQL_DATABASE=postgres \
+            --build-arg DB_CONNECTION_STRING="host=primedb-$GITHUB_REF;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+            --build-arg ASPNETCORE_URLS="http://+:8080" \
+            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+            $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
           docker image push --all-tags ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
 
@@ -140,11 +142,11 @@ jobs:
           DOCKER_BUILDKIT: 1
         run: |
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
-          --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
-          --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
-          --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
-          --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-          --build-arg REDIRECT_URL=$REDIRECT_URL \
-          $SERVICE_NAME
+            --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
+            --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
+            --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
+            --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+            --build-arg REDIRECT_URL=$REDIRECT_URL \
+            $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_EXTERNAL_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
           docker image push --all-tags ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$GITHUB_REF
