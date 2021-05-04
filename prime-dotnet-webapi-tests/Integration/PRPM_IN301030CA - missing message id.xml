@@ -2,7 +2,9 @@
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
     <soap:Body>
         <PRPM_IN301030CA ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+			<!--
             <id root="2.16.840.1.113883.3.40.1.5" extension="69f126ed-0198-4222-a971-8519a91dbc51"/>
+			-->
             <creationTime value="20180528110330"/>
             <versionCode code="DEV"/>
             <!-- -->
@@ -58,7 +60,6 @@
                         <statusCode code="active"/>
                         <subject1 typeCode="SBJ">
                             <healthCareProvider classCode="PROV">
-                                <id root="2.16.840.1.113883.3.40.2.8" extension="1234567890"/>
                                 <!--root OID Provider ID type, extension Provider ID-->
                                 <id root="2.16.840.1.113883.3.40.2.4" extension="55555"/>
                                 <!--code Provider Type-->

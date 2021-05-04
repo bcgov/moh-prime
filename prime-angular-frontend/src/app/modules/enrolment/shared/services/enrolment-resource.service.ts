@@ -443,7 +443,6 @@ export class EnrolmentResource {
     });
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);

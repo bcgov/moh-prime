@@ -12,6 +12,9 @@ import { Job } from '@enrolment/shared/models/job.model';
   templateUrl: './job-form.component.html',
   styleUrls: ['./job-form.component.scss']
 })
+/**
+ * @deprecated Due to moving Job Title to Obo Site (PRIME-1459)
+ */
 export class JobFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public index: number;
