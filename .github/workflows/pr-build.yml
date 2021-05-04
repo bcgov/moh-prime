@@ -44,7 +44,7 @@ jobs:
       
       - name: "Get vars"
         run: |
-          printenv | grep GITHUB
+          printenv | sort
 
   #     - name: "Build, tag and push Document Manager image"
   #       id: build-image
