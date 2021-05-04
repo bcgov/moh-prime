@@ -23,6 +23,7 @@ jobs:
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
       IMAGE_TAGS: latest
+      PR_NUMBER: ${{ github.event.pull_request.number }}
       
     steps:
       - name: "Checkout the repo"
