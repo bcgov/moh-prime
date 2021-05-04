@@ -89,11 +89,11 @@ jobs:
         run: |          
           docker-compose -f openshift-compose.yml build --force-rm --no-cache \
           --build-arg DB_HOST=primedb-$GITHUB_REF \
-          --build-arg PGPASSWORD=${{secrets_PRIME_DB_PASSWD}} \
-          --build-arg POSTGRESQL_ADMIN_PASSWORD=${{secrets_PRIME_DB_PASSWD}} \
+          --build-arg PGPASSWORD=${{secrets_PRIME_DB_PASSWORD}} \
+          --build-arg POSTGRESQL_ADMIN_PASSWORD=${{secrets_PRIME_DB_PASSWORD}} \
           --build-arg POSTGRESQL_USERNAME=${{secrets_PRIME_DB_USER}} \
           --build-arg POSTGRESQL_DATABASE=postgres \
-          --build-arg DB_CONNECTION_STRING="host=primedb-$GITHUB_REF;port=5432;database=postgres;username=${{secrets_PRIME_DB_USER}};password=${{secrets_PRIME_DB_PASSWD}}" \
+          --build-arg DB_CONNECTION_STRING="host=primedb-$GITHUB_REF;port=5432;database=postgres;username=${{secrets_PRIME_DB_USER}};password=${{secrets_PRIME_DB_PASSWORD}}" \
           --build-arg ASPNETCORE_HTTPS_PORT=5001 \
           --build-arg ASPNETCORE_ENVIRONMENT="Development" \
           --build-arg ASPNETCORE_URLS="http://+:8080" \
