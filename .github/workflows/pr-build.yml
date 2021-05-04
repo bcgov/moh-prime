@@ -45,6 +45,8 @@ jobs:
       
       - name: "Get vars"
         run: |
+          echo "PR number = ${{ github.event.pull_request.number }}"
+          echo "PR number = ${{ env.PR_NUMBER }}"
           printenv | sort
 
   #     - name: "Build, tag and push Document Manager image"
