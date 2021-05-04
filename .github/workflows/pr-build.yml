@@ -32,8 +32,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME}}
-          password: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
@@ -71,8 +71,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME}}
-          password: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
@@ -125,8 +125,8 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
-          username: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_USERNAME}}
-          password: ${{secrets.OPENSHIFT_SERVICE_ACCOUNT_PASSWORD}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
