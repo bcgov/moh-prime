@@ -389,9 +389,9 @@ export class SiteResource {
     return this.apiResource.put<Site>(`sites/${siteId}/enable-editing`)
       .pipe(
         map((response: ApiHttpResponse<Site>) => response.result),
-        tap(() => this.toastService.openSuccessToast('Site registration has been enabled editing')),
+        tap(() => this.toastService.openSuccessToast('Site registration editing has been enabled')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site registration could not be enabled editing');
+          this.toastService.openErrorToast('Site registration editing could not be enabled');
           this.logger.error('[SiteRegistration] SiteResource::enableEditingSite error has occurred: ', error);
           throw error;
         })
