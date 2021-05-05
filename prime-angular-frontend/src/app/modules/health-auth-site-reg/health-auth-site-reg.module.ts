@@ -32,7 +32,7 @@ import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview
     CollectionNoticePageComponent,
     AuthorizedUserPageComponent,
     AuthorizedUserNextStepsPageComponent,
-    AuthorizedUserDeclinedPageComponent
+    AuthorizedUserDeclinedPageComponent,
     SiteManagementPageComponent,
     HealthAuthCareSettingPageComponent,
     VendorPageComponent,
