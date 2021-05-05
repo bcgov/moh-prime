@@ -61,8 +61,8 @@ jobs:
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
 
   build-backend:
     runs-on: ubuntu-20.04
@@ -108,19 +108,19 @@ jobs:
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg DB_HOST=primedb-PR-$PR_NUMBER \
+            --build-arg DB_HOST=primedb-pr-$PR_NUMBER \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
             --build-arg POSTGRESQL_DATABASE=postgres \
-            --build-arg DB_CONNECTION_STRING="host=primedb-PR-$PR_NUMBER;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_CONNECTION_STRING="host=primedb-pr-$PR_NUMBER;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
 
   build-frontend:
     runs-on: ubuntu-20.04
@@ -133,7 +133,7 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
-      REDIRECT_URL: "https://prime-frontend-PR-$PR_NUMBER-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+      REDIRECT_URL: "https://prime-frontend-pr-$PR_NUMBER-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
       
     steps:
       - name: "Checkout the repo"
@@ -175,5 +175,5 @@ jobs:
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:PR-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER

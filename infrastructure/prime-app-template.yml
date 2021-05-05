@@ -23,6 +23,7 @@ parameters:
   value: frontend
 - name: FRONTEND_URL
   required: true
+  value: frontend
 - name: API_POD
   required: true
   value: webapi
@@ -55,15 +56,15 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+    name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+      name: ${NAME}-${FRONTEND_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -71,11 +72,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+          dev-app: ${NAME}
+          name: ${NAME}-${FRONTEND_POD}
       spec:
         containers:
-          - name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+          - name: ${NAME}-${FRONTEND_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${SUFFIX}
             ports:
@@ -101,7 +102,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}${SUFFIX}-${FRONTEND_POD}
+            - ${NAME}-${FRONTEND_POD}
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -112,10 +113,10 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+    name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
       - name: "http"
@@ -125,24 +126,24 @@ objects:
         port: 8443
         targetPort: 8443
     selector:
-      name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+      name: ${NAME}-${FRONTEND_POD}
 #   Frontend Route
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${NAME}${SUFFIX}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${NAME}${SUFFIX}
-    app.kubernetes.io/instance: ${NAME}${SUFFIX}
-    app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+    app: ${NAME}-${FRONTEND_POD}
+    app.kubernetes.io/component: ${NAME}
+    app.kubernetes.io/instance: ${NAME}
+    app.kubernetes.io/part-of: ${NAME}
   metadata:
-    name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+    name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     host: ${FRONTEND_URL}${URL_STUB}
     to:
       kind: Service
-      name: ${NAME}${SUFFIX}-${FRONTEND_POD}
+      name: ${NAME}-${FRONTEND_POD}
       weight: 100
     port:
       targetPort: https
@@ -156,15 +157,15 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${API_POD}-backend
+    name: ${NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}${SUFFIX}-${API_POD}-backend
+      name: ${NAME}-${API_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -172,8 +173,8 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${API_POD}-backend
+          dev-app: ${NAME}
+          name: ${NAME}-${API_POD}-backend
       spec:
         containers:
           - env:
@@ -262,7 +263,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}${SUFFIX}-{API_POD}-backend
+            - ${NAME}-{API_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -273,17 +274,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${API_POD}-backend
+    name: ${NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${NAME}${SUFFIX}-${API_POD}-backend
+      - name: ${NAME}-${API_POD}-backend
         port: 5001
         targetPort: 5001
     selector:
-      name: ${NAME}${SUFFIX}-${API_POD}-backend
+      name: ${NAME}-${API_POD}-backend
 
 ###########################################
 ###      Document Manager (backend)     ###
@@ -293,15 +294,15 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+    name: ${NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+      name: ${NAME}-${DOCMAN_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -309,8 +310,8 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+          dev-app: ${NAME}
+          name: ${NAME}-${DOCMAN_POD}-backend
       spec:
         containers:
           - env:
@@ -327,7 +328,7 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: ${NAME}${SUFFIX}-{DB_POD}-db
+                value: ${NAME}-{DB_POD}-db
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
@@ -385,7 +386,7 @@ objects:
                     key: DATABASE_PASSWORD
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
-            name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+            name: ${NAME}-${DOCMAN_POD}-backend
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -397,7 +398,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+            - ${NAME}-${DOCMAN_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -408,17 +409,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+    name: ${NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+      - name: ${NAME}-${DOCMAN_POD}-backend
         port: 6001
         targetPort: 6001
     selector:
-      name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
+      name: ${NAME}-${DOCMAN_POD}-backend
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -431,16 +432,16 @@ objects:
   kind: Pod
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${DOCMAN_POD}-migration
+    name: ${NAME}-${DOCMAN_POD}-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${DOCMAN_POD}-migration
+          dev-app: ${NAME}
+          name: ${NAME}-${DOCMAN_POD}-migration
       spec:
         containers:
           - command:
@@ -463,7 +464,7 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: ${NAME}${SUFFIX}-${DB_POD}-db
+                value: ${NAME}-${DB_POD}-db
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
@@ -521,14 +522,14 @@ objects:
                     key: DATABASE_PASSWORD
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
-            name: ${NAME}${SUFFIX}-${DOCMAN_POD}-migration
+            name: ${NAME}-${DOCMAN_POD}-migration
     triggers:
       - type: ConfigChange
       - type: ImageChange
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}${SUFFIX}-${DOCMAN_POD}-migration
+            - ${NAME}-${DOCMAN_POD}-migration
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -543,26 +544,26 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${DB_POD}-db
+    name: ${NAME}-${DB_POD}-db
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     replicas: 1
     selector:
-      name: ${NAME}${SUFFIX}-${DB_POD}-db
+      name: ${NAME}-${DB_POD}-db
     strategy: null
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${DB_POD}-db
+          dev-app: ${NAME}
+          name: ${NAME}-${DB_POD}-db
       spec:
         containers:
           - capabilities: {}
             env:
               - name: DB_HOST
-                value: ${NAME}${SUFFIX}-${DB_POD}-db
+                value: ${NAME}-${DB_POD}-db
               # PostgreSQL environment variables
               - name: PGPASSWORD
                 valueFrom:
@@ -596,7 +597,7 @@ objects:
               tcpSocket:
                 port: 5432
               timeoutSeconds: 1
-            name: ${NAME}${SUFFIX}-${DB_POD}-db
+            name: ${NAME}-${DB_POD}-db
             ports:
               - containerPort: 5432
                 protocol: TCP
@@ -608,15 +609,15 @@ objects:
             terminationMessagePath: /dev/termination-log
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
-                name: ${NAME}${SUFFIX}-${DB_POD}-db-data
+                name: ${NAME}-${DB_POD}-db-data
               - mountPath: /var/run/postgresql
-                name: ${NAME}${SUFFIX}-${DB_POD}-db-run
+                name: ${NAME}-${DB_POD}-db-run
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-          - name: ${NAME}${SUFFIX}-${DB_POD}-db-data
+          - name: ${NAME}-${DB_POD}-db-data
             emptyDir: {}
-          - name: ${NAME}${SUFFIX}-${DB_POD}-db-run
+          - name: ${NAME}-${DB_POD}-db-run
             emptyDir: {}
   status: {}
 #   PostgreSQL Service
@@ -624,19 +625,19 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${DB_POD}-db
+    name: ${NAME}-${DB_POD}-db
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${NAME}${SUFFIX}-${DB_POD}-db
+      - name: ${NAME}-${DB_POD}-db
         nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
     selector:
-      name: ${NAME}${SUFFIX}-${DB_POD}-db
+      name: ${NAME}-${DB_POD}-db
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -650,15 +651,15 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}${SUFFIX}-${REDIS_POD}-cache
+    name: ${NAME}-${REDIS_POD}-cache
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}${SUFFIX}
+      app.kubernetes.io/part-of: ${NAME}
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}${SUFFIX}-${REDIS_POD}-cache
+      name: ${NAME}-${REDIS_POD}-cache
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -669,11 +670,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}${SUFFIX}
-          name: ${NAME}${SUFFIX}-${REDIS_POD}-cache
+          dev-app: ${NAME}
+          name: ${NAME}-${REDIS_POD}-cache
       spec:
         volumes:
-          - name: ${NAME}${SUFFIX}-${REDIS_POD}-cache-data
+          - name: ${NAME}-${REDIS_POD}-cache-data
             emptyDir: {}
         containers:
           - resources:
@@ -707,7 +708,7 @@ objects:
               - name: REDIS_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${REDIS_POD}-cache-secrets
+                    name: ${NAME}-${REDIS_POD}-cache-secrets
                     key: database-password
             securityContext:
               capabilities: {}
@@ -717,7 +718,7 @@ objects:
                 protocol: TCP
             imagePullPolicy: IfNotPresent
             volumeMounts:
-              - name: ${NAME}${SUFFIX}-${REDIS_POD}-cache-data
+              - name: ${NAME}-${REDIS_POD}-cache-data
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
@@ -732,8 +733,8 @@ objects:
 - apiVersion: networking.k8s.io/v1
   kind: NetworkPolicy
   metadata:
-    name: allow-internal-traffic
-    namespace: ${OC_NAMESPACE}-dev
+    name: allow-${NAME}-traffic
+    namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     podSelector: {}
     ingress:
