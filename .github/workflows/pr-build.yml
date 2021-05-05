@@ -60,6 +60,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           BUILD_LOGLEVEL: 2
+          PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
@@ -112,6 +113,7 @@ jobs:
           PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=primedb-$PR_NUMBER \
@@ -176,6 +178,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
