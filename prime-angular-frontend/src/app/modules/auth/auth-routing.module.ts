@@ -11,6 +11,8 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { MohKeycloakInitGuard } from '@gis/shared/guards/moh-keycloak-init.guard';
+import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
@@ -18,45 +20,58 @@ const routes: Routes = [
     children: [
       {
         path: EnrolmentRoutes.BCSC_LOGIN,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         data: { locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE },
         loadChildren: () => import('@enrolment/shared/modules/bcsc-enrolment-login-page/bcsc-enrolment-login-page.module')
           .then(m => m.BcscEnrolmentLoginPageModule)
       },
       {
         path: EnrolmentRoutes.BCEID_LOGIN,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         loadChildren: () => import('@enrolment/shared/modules/bceid-enrolment-login-page/bceid-enrolment-login-page.module')
           .then(m => m.BceidEnrolmentLoginPageModule)
       },
       {
         path: SiteRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         data: { locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE },
         loadChildren: () => import('@registration/shared/modules/site-registration-login-page/site-registration-login-page.module')
           .then(m => m.SiteRegistrationLoginPageModule)
       },
       {
         path: AdjudicationRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module')
           .then(m => m.AdminLoginPageModule)
       },
       {
         path: PhsaEformsRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
           .then(m => m.PhsaEformsLoginPageModule)
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
-        // TODO uncomment when redirection is possible based on the token
-        // canLoad: [AuthorizationRedirectGuard],
+        // canActivate: [
+        //   AuthorizationRedirectGuard
+        // ],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
       },
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
-        canLoad: [AuthorizationRedirectGuard],
+        canActivate: [
+          AuthorizationRedirectGuard
+        ],
         loadChildren: () => import('@health-auth/shared/modules/health-auth-site-reg-login-page/health-auth-site-reg-login-page.module')
           .then(m => m.HealthAuthSiteRegLoginPageModule)
       },
@@ -73,4 +88,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AuthRoutingModule {}
+export class AuthRoutingModule { }

@@ -25,6 +25,17 @@ export const environment = {
       onLoad: 'check-sso'
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
+  },
+  mohKeycloakConfig: {
+    config: {
+      url: 'https://dev.oidc.gov.bc.ca/auth',
+      realm: 'v4mbqqas',
+      clientId: 'prime-application-local'
+    },
+    initOptions: {
+      onLoad: 'check-sso'
+    },
+    bearerExcludedUrls: ['/provisioner-access/certificate']
   }
 };
 

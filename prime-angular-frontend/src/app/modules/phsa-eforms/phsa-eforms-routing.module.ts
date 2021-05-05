@@ -14,15 +14,17 @@ import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demograp
 import { AvailableAccessComponent } from './pages/available-access/available-access.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
+import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: PhsaEformsDashboardComponent,
     canActivate: [
-      AuthenticationGuard
+      PrimeKeycloakInitGuard
     ],
     canActivateChild: [
+      AuthenticationGuard,
       PhsaEformsGuard
     ],
     children: [

@@ -13,16 +13,14 @@ import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap
 import { OrganizationInformationPageComponent } from './pages/organization-information-page/organization-information-page.component';
 import { EnrolleeInformationPageComponent } from './pages/enrollee-information-page/enrollee-information-page.component';
 import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
+import { MohKeycloakInitGuard } from './shared/guards/moh-keycloak-init.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: GisDashboardComponent,
-    canLoad: [
-      AuthenticationGuard
-    ],
     canActivate: [
-      AuthenticationGuard
+      MohKeycloakInitGuard
     ],
     canActivateChild: [
       AuthenticationGuard,

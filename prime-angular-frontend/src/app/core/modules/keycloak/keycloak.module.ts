@@ -8,39 +8,39 @@ import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
 import { AuthRoutes } from '@auth/auth.routes';
 
-function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<void> {
-  const routeToDefault = () => injector.get(Router).navigateByUrl(AuthRoutes.MODULE_PATH);
+// function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<void> {
+//   const routeToDefault = () => injector.get(Router).navigateByUrl(AuthRoutes.MODULE_PATH);
 
-  return async (): Promise<void> => {
-    const authenticated = await keycloak.init((environment.keycloakConfig as KeycloakOptions));
-    keycloak.getKeycloakInstance().onTokenExpired = () => {
-      keycloak.updateToken()
-        .catch(() => {
-          injector.get(ToastService).openErrorToast('Your session has expired, you will need to re-authenticate');
-          routeToDefault();
-        });
-    };
+//   return async (): Promise<void> => {
+//     const authenticated = await keycloak.init((environment.keycloakConfig as KeycloakOptions));
+//     keycloak.getKeycloakInstance().onTokenExpired = () => {
+//       keycloak.updateToken()
+//         .catch(() => {
+//           injector.get(ToastService).openErrorToast('Your session has expired, you will need to re-authenticate');
+//           routeToDefault();
+//         });
+//     };
 
-    if (authenticated) {
-      // Ensure configuration is populated before the application
-      // is fully initialized to prevent race conditions
-      await injector.get(ConfigService).load().toPromise();
+//     if (authenticated) {
+//       // Ensure configuration is populated before the application
+//       // is fully initialized to prevent race conditions
+//       await injector.get(ConfigService).load().toPromise();
 
-      // Force refresh to begin expiry timer.
-      keycloak.updateToken(-1);
-    }
-  };
-}
+//       // Force refresh to begin expiry timer.
+//       keycloak.updateToken(-1);
+//     }
+//   };
+// }
 
 @NgModule({
   imports: [KeycloakAngularModule],
-  providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializer,
-      multi: true,
-      deps: [KeycloakService, Injector]
-    }
-  ]
+  // providers: [
+  //   {
+  //     provide: APP_INITIALIZER,
+  //     useFactory: initializer,
+  //     multi: true,
+  //     deps: [KeycloakService, Injector]
+  //   }
+  // ]
 })
 export class KeycloakModule { }

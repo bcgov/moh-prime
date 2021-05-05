@@ -21,15 +21,15 @@ import { AdministratorPageComponent } from '@health-auth/pages/administrator-pag
 import { PrivacyOfficerPageComponent } from '@health-auth/pages/privacy-officer-page/privacy-officer-page.component';
 import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
+import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: HealthAuthSiteRegDashboardComponent,
-    canLoad: [
-      HealthAuthSiteRegGuard
+    canActivate: [
+      PrimeKeycloakInitGuard
     ],
-    canActivate: [],
     canActivateChild: [
       HealthAuthSiteRegGuard
     ],

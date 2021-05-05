@@ -1,5 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
+import {
+  CanLoad, CanActivate, CanActivateChild, Route, UrlSegment,
+  ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params
+} from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
@@ -8,19 +12,50 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Role } from '../enum/role.enum';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { Observable, of } from 'rxjs';
+import { KeycloakUtilsService } from '@core/services/keycloak-utils.service';
+import { environment } from '@env/environment';
+import { KeycloakOptions } from 'keycloak-angular';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizationRedirectGuard extends BaseGuard {
+export class AuthorizationRedirectGuard implements CanActivate {
+  private authenticated: boolean;
+
   constructor(
     protected authService: AuthService,
     protected logger: LoggerService,
     private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router
-  ) {
-    super(authService, logger);
+    private router: Router,
+    private keycloakUtil: KeycloakUtilsService,
+  ) { }
+
+  public canActivate(
+    next: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    const url = this.getUrl(state);
+    return this.checkAccess(url, next.params);
+  }
+
+  /**
+   * @description
+   * Check the access of a user based on the resolution of a hook.
+   */
+  protected checkAccess(routePath: string = null, params?: Params): Observable<boolean> | Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        this.authenticated = await this.isAuthenticated();
+        const result = await this.canAccess(this.authenticated, routePath);
+        resolve(result);
+      } catch (error) {
+        const destination = (routePath) ? ` to ${routePath} ` : ' ';
+        const message = `Route access${destination}has been denied`;
+        this.logger.error(message);
+        reject(`${message}: ${error}`);
+      }
+    });
   }
 
   /**
@@ -52,5 +87,31 @@ export class AuthorizationRedirectGuard extends BaseGuard {
       this.router.navigate([destinationRoute]);
       return reject(false);
     });
+  }
+
+  private async isAuthenticated(): Promise<boolean> {
+    let authenticated = false;
+    // Initialize Prime Keycloak and see if authenticated.
+    await this.keycloakUtil.initialize(environment.keycloakConfig as KeycloakOptions);
+    authenticated = await this.authService.isLoggedIn();
+
+    // If not authenticated try Ministry of Health Keycloak
+    if (!authenticated) {
+      await this.keycloakUtil.initialize(environment.mohKeycloakConfig as KeycloakOptions);
+      authenticated = await this.authService.isLoggedIn();
+    }
+
+    return authenticated;
+  }
+
+  /**
+   * @description
+   * Construct a common route URL.
+   */
+  // TODO needs updating to account for query params using router.parseUrl(...)
+  private getUrl(routeParam: UrlSegment[] | RouterStateSnapshot): string {
+    return (Array.isArray(routeParam))
+      ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')
+      : routeParam.url;
   }
 }

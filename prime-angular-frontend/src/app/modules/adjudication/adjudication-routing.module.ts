@@ -29,17 +29,18 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
+import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
     path: AdjudicationRoutes.MODULE_PATH,
     component: AdjudicationDashboardComponent,
     canActivate: [
-      AuthenticationGuard,
-      AdjudicationGuard
+      PrimeKeycloakInitGuard
     ],
     canActivateChild: [
-      AuthenticationGuard
+      AuthenticationGuard,
+      AdjudicationGuard
     ],
     children: [
       {
@@ -136,7 +137,7 @@ const routes: Routes = [
             data: { title: 'Site Banner' }
           },
           {
-            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',

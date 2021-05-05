@@ -27,17 +27,18 @@ import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
     path: SiteRoutes.MODULE_PATH,
     component: SiteRegistrationDashboardComponent,
     canActivate: [
-      AuthenticationGuard,
-      UnderagedGuard
+      PrimeKeycloakInitGuard
     ],
     canActivateChild: [
       AuthenticationGuard,
+      UnderagedGuard,
       RegistrantGuard
     ],
     children: [
@@ -85,7 +86,7 @@ const routes: Routes = [
                 pathMatch: 'full'
               },
               {
-                path: `${ SiteRoutes.SITES }/:sid`,
+                path: `${SiteRoutes.SITES}/:sid`,
                 children: [
                   {
                     path: SiteRoutes.CARE_SETTING,
