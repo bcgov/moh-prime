@@ -1,6 +1,8 @@
-import { AuthorizedUserStatusEnum } from '@health-auth/shared/enums/authorized-user-status.enum';
+import { Party } from '@lib/models/party.model';
+import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
-export interface AuthorizedUser {
-  userId: string;
-  status: AuthorizedUserStatusEnum;
+export interface AuthorizedUser extends Party {
+  employmentIdentifier: string;
+  healthAuthorityCode: number;
+  status: AccessStatusEnum;
 }
