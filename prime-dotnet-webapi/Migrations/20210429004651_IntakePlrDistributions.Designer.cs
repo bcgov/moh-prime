@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210429004651_IntakePlrDistributions")]
+    partial class IntakePlrDistributions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -14166,49 +14168,6 @@ namespace Prime.Migrations
                     b.ToTable("GisEnrolment");
                 });
 
-            modelBuilder.Entity("Prime.Models.HAAuthorizedUser", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("HealthAuthorityCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityCode");
-
-                    b.ToTable("HAAuthorizedUser");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
                 {
                     b.Property<int>("Code")
@@ -15079,7 +15038,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             LicensedToProvideCare = true,
                             Manual = true,
-                            Name = "Podiatric Surgeon",
+                            Name = "Podiatrists",
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -15796,13 +15755,6 @@ namespace Prime.Migrations
                     b.Property<string>("FacilityName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("HealthAuthorityCode")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("JobTitle")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -15823,8 +15775,6 @@ namespace Prime.Migrations
                     b.HasIndex("CareSettingCode");
 
                     b.HasIndex("EnrolleeId");
-
-                    b.HasIndex("HealthAuthorityCode");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -18881,15 +18831,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.HAAuthorizedUser", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -18921,10 +18862,6 @@ namespace Prime.Migrations
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityCode");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

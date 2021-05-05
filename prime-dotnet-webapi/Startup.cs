@@ -76,6 +76,7 @@ namespace Prime
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IHAAuthorizedUserService, HAAuthorizedUserService>();
             services.AddScoped<IGisService, GisService>();
+            services.AddScoped<IPlrProviderService, PlrProviderService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

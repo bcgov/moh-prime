@@ -264,6 +264,7 @@ namespace Prime
             #endregion
         }
 
+
         // Uncomment for DB logging
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //     => optionsBuilder.UseLoggerFactory(DbLoggerFactory);
