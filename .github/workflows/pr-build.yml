@@ -42,17 +42,26 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build document manager"
+      - name: "Get current pull request"
+        id: PR
         uses: 8BitJonny/gh-get-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-        id: build-image
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
+        if: success() && steps.PR.outputs.number
         env:
           PR_NUMBER: ${{steps.PR.outputs.number}}
+
+      - name: "Build, tag and push Document Manager image"
+        id: build-image
+        env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           BUILD_LOGLEVEL: 2
+          PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -87,11 +96,20 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build .NET API"
-        uses: 8BitJonny/gh-get-current-pr@1.0.1
+      - name: "Get current pull request"
+        uses: 8BitJonny/gh-ge
+        id: PR-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
+        if: success() && steps.PR.outputs.number
+        env:
+          PR_NUMBER: ${{steps.PR.outputs.number}}
+
+      - name: "Build, tag and push .NET web API image"
         id: build-image
         env:
           PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
@@ -147,11 +165,20 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build frontend"
+      - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
+        id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
+        if: success() && steps.PR.outputs.number
+        env:
+          PR_NUMBER: ${{steps.PR.outputs.number}}
+
+      - name: "Build, tag & push Angular frontend image"
         id: build-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
