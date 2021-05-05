@@ -91,7 +91,7 @@ jobs:
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
-        uses: 8BitJonny/gh-ge
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
         id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
