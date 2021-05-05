@@ -429,7 +429,7 @@ objects:
 ### for all Document Manager related tables. This pod will run once PostgreSQL 
 ### is verified to be open to query connections.
 - apiVersion: apps.openshift.io/v1
-  kind: Pod
+  kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
     name: ${NAME}-${DOCMAN_POD}-migration
