@@ -11,11 +11,16 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AuthorizedUser } from '@health-auth/shared/models/authorized-user.model';
+import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
-import { SiteRoutes } from '@registration/site-registration.routes';
-import { AuthorizedUserStatusEnum } from '@health-auth/shared/enums/authorized-user-status.enum';
 
+/**
+ * @description
+ * Used to gate entry to routes based on the authorized user's
+ * access status.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -53,21 +58,23 @@ export class AuthorizedUserGuard extends BaseGuard {
   }
 
   private routeDestination(routePath: string, params: Params, authorizedUser: AuthorizedUser | null) {
-    // TODO add this into a base enrolment guard
     // On login the user will always be redirected to the collection notice
-    if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
+    if (routePath.includes(HealthAuthSiteRegRoutes.COLLECTION_NOTICE)) {
       return true;
     }
 
     switch (authorizedUser?.status) {
-      case AuthorizedUserStatusEnum.APPROVED: {
+      case AccessStatusEnum.UNDER_REVIEW: {
+        return this.manageUnderReviewAuthorizedUser(routePath);
+      }
+      case AccessStatusEnum.APPROVED: {
         return this.manageApprovedAuthorizedUser(routePath);
       }
-      case AuthorizedUserStatusEnum.DECLINED: {
-        return this.manageDeclinedAuthorizedUser(routePath);
+      case AccessStatusEnum.ACTIVE: {
+        return this.manageActiveAuthorizedUser(routePath);
       }
-      case AuthorizedUserStatusEnum.UNDER_REVIEW: {
-        return this.manageUnderReviewAuthorizedUser(routePath);
+      case AccessStatusEnum.DECLINED: {
+        return this.manageDeclinedAuthorizedUser(routePath);
       }
     }
 
@@ -75,20 +82,38 @@ export class AuthorizedUserGuard extends BaseGuard {
     return this.manageNoAuthorizedUser(routePath);
   }
 
+  private manageUnderReviewAuthorizedUser(routePath: string): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.ACCESS,
+      HealthAuthSiteRegRoutes.ACCESS_REQUESTED
+    ]);
+  }
+
   private manageApprovedAuthorizedUser(routePath: string): boolean {
-    return true;
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.ACCESS,
+      HealthAuthSiteRegRoutes.ACCESS_CONFIRMED
+    ]);
+  }
+
+  private manageActiveAuthorizedUser(routePath: string): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    ]);
   }
 
   private manageDeclinedAuthorizedUser(routePath: string): boolean {
-    return true;
-  }
-
-  private manageUnderReviewAuthorizedUser(routePath: string): boolean {
-    return true;
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.ACCESS,
+      HealthAuthSiteRegRoutes.ACCESS_DECLINED
+    ]);
   }
 
   private manageNoAuthorizedUser(routePath: string): boolean {
-    return true;
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.ACCESS,
+      HealthAuthSiteRegRoutes.ACCESS_AUTHORIZED_USER
+    ]);
   }
 
   /**
@@ -96,22 +121,14 @@ export class AuthorizedUserGuard extends BaseGuard {
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  // private navigate(
-  //   routePath: string,
-  //   loopPath: string,
-  //   destinationPath: string = null,
-  //   oid: number = null
-  // ): boolean {
-  //   const modulePath = this.config.routes.site;
-  //   const comparePath = (destinationPath && oid !== null)
-  //     ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
-  //     : `/${modulePath}/${loopPath}`;
-  //
-  //   if (routePath === comparePath) {
-  //     return true;
-  //   } else {
-  //     this.router.navigate([comparePath]);
-  //     return false;
-  //   }
-  // }
+  private navigate(routePath: string, destinationSegments: string[]): boolean {
+    const destinationPath = HealthAuthSiteRegRoutes.routePath(destinationSegments.join('/'));
+
+    if (routePath === destinationPath) {
+      return true;
+    } else {
+      this.router.navigate([destinationPath]);
+      return false;
+    }
+  }
 }
