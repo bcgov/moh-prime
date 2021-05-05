@@ -48,12 +48,6 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-      
-      - name: "Populate stub"
-        run: echo "PR-${PR}"
-        if: success() && steps.PR.outputs.number
-        env:
-          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag and push Document Manager image"
         id: build-image
@@ -98,16 +92,10 @@ jobs:
 
       - name: "Get current pull request"
         uses: 8BitJonny/gh-ge
-        id: PR-current-pr@1.0.1
+        id: PR
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-      
-      - name: "Populate stub"
-        run: echo "PR-${PR}"
-        if: success() && steps.PR.outputs.number
-        env:
-          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag and push .NET web API image"
         id: build-image
@@ -171,12 +159,6 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-      
-      - name: "Populate stub"
-        run: echo "PR-${PR}"
-        if: success() && steps.PR.outputs.number
-        env:
-          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
