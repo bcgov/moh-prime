@@ -157,7 +157,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${API_POD}-backend
+    name: ${NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
@@ -165,7 +165,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${API_POD}-backend
+      name: ${NAME}-${API_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -174,10 +174,13 @@ objects:
       metadata:
         labels:
           dev-app: ${NAME}
-          name: ${NAME}-${API_POD}-backend
+          name: ${NAME}-${API_POD}
       spec:
         containers:
-          - env:
+          - name: ${NAME}-${API_POD}
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${SUFFIX}
+            env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
                   configMapKeyRef:
@@ -188,27 +191,27 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
             ports:
               - containerPort: 1025
@@ -250,9 +253,6 @@ objects:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
                 readOnly: true
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${SUFFIX}
-            name: ${NAME}-api-backend
         volumes:
           - name: cert-volume
             secret:
@@ -263,7 +263,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-{API_POD}-backend
+            - ${NAME}-${API_POD}
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -274,17 +274,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${API_POD}-backend
+    name: ${NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${NAME}-${API_POD}-backend
+      - name: ${NAME}-${API_POD}
         port: 5001
         targetPort: 5001
     selector:
-      name: ${NAME}-${API_POD}-backend
+      name: ${NAME}-${API_POD}
 
 ###########################################
 ###      Document Manager (backend)     ###
@@ -314,7 +314,10 @@ objects:
           name: ${NAME}-${DOCMAN_POD}-backend
       spec:
         containers:
-          - env:
+          - name: ${NAME}-${DOCMAN_POD}-backend
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
+            env:
               - name: CACHE_REDIS_HOST
                 value: redis
               - name: CACHE_REDIS_PASS
@@ -332,12 +335,12 @@ objects:
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
@@ -347,7 +350,7 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
@@ -382,11 +385,8 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
-            name: ${NAME}-${DOCMAN_POD}-backend
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -402,7 +402,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager-backend:${SUFFIX}'
+            name: 'prime-document-manager:${SUFFIX}'
   status: {}
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -444,7 +444,10 @@ objects:
           name: ${NAME}-${DOCMAN_POD}-migration
       spec:
         containers:
-          - command:
+          - name: ${NAME}-${DOCMAN_POD}-migration
+            image: >-
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
+            command:
               # Script force waits migration pod execution until PostgreSQL is verified to 
               # be open to query connections.
               - /opt/app-root/src/app.sh
@@ -468,12 +471,12 @@ objects:
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
@@ -483,7 +486,7 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
@@ -518,11 +521,8 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
                     key: DATABASE_PASSWORD
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
-            name: ${NAME}-${DOCMAN_POD}-migration
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -569,22 +569,22 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_PASSWORD
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_USERNAME
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_PASSWORD
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_USERNAME
-                    name: ${NAME}-${DB_POD}-db-secrets
+                    name: postgres-secrets
             image: >-
               image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
             imagePullPolicy: IfNotPresent
@@ -708,7 +708,7 @@ objects:
               - name: REDIS_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}-${REDIS_POD}-cache-secrets
+                    name: redis-cache-secrets
                     key: database-password
             securityContext:
               capabilities: {}
@@ -718,7 +718,7 @@ objects:
                 protocol: TCP
             imagePullPolicy: IfNotPresent
             volumeMounts:
-              - name: ${NAME}-${REDIS_POD}-cache-data
+              - name: ${NAME}-redis-cache-data
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
@@ -733,7 +733,7 @@ objects:
 - apiVersion: networking.k8s.io/v1
   kind: NetworkPolicy
   metadata:
-    name: allow-${NAME}-traffic
+    name: allow-internal-traffic
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     podSelector: {}

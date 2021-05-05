@@ -108,12 +108,12 @@ jobs:
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg DB_HOST=primedb-pr-$PR_NUMBER \
+            --build-arg DB_HOST=pr-$PR_NUMBER-primedb \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
             --build-arg POSTGRESQL_DATABASE=postgres \
-            --build-arg DB_CONNECTION_STRING="host=primedb-pr-$PR_NUMBER;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-primedb;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
