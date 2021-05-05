@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -16,7 +17,9 @@ namespace TestPrimeE2E
         [SetUp]
         public void TestSetup()
         {
-            _driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.SetLoggingPreference(LogType.Browser, LogLevel.Severe);
+            _driver = new ChromeDriver(options);
             _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
 
@@ -77,6 +80,24 @@ namespace TestPrimeE2E
             var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
             control.Clear();
             control.SendKeys(text);
+        }
+
+
+        protected void CheckLogThenScreenshot(string pageTitle)
+        {
+            // See https://stackoverflow.com/questions/36455533/c-sharp-selenium-access-browser-log
+            // The following works with Selenium.WebDriver version 4.0.0-beta2 but not the stable version 3.141.0
+            // System.Collections.Generic.List<LogEntry> logs = _driver.Manage().Logs.GetLog(LogType.Browser).ToList();
+            // foreach (LogEntry log in logs)
+            // {
+            //     Console.Error.WriteLine(log.Message);
+            // }
+            // if (logs.Count > 0)
+            // {
+            //     throw new Exception($"Received {logs.Count} error messages on the page '{pageTitle}'.");
+            // }
+
+            _driver.TakeScreenshot(String.Concat(pageTitle.Replace(' ', '_'), "_Completed"), TestParameters.ScreenshotsArchivePath);
         }
     }
 }

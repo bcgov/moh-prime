@@ -14,5 +14,8 @@ namespace TestPrimeE2E
 
         // Path to the business licence file to be uploaded
         public static readonly string BusinessLicencePath = GetEnvironmentVariable("BUSINESSLICENCE_PATH");
+
+        // Path to where screenshots will be archived.  If not specified, the working directory should be the location used
+        public static readonly string ScreenshotsArchivePath = GetEnvironmentVariable("SCREENSHOTS_ARCHIVE_PATH");
     }
 }
