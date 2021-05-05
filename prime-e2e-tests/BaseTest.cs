@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Bogus;
+using Bogus.DataSets;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -37,6 +39,10 @@ namespace TestPrimeE2E
         }
 
 
+        /// <summary>
+        /// Where possible, use <c>FillFormField</c> instead, as a label is more likely to change
+        /// than an internal <c>formControlName</c>.
+        /// </summary>
         protected void TypeIntoField(string fieldId, string text)
         {
             var field = _driver.FindPatiently($"//input[@data-placeholder='{fieldId}']");
@@ -98,6 +104,35 @@ namespace TestPrimeE2E
             // }
 
             _driver.TakeScreenshot(String.Concat(pageTitle.Replace(' ', '_'), "_Completed"), TestParameters.ScreenshotsArchivePath);
+        }
+
+
+        /// <summary>
+        /// Due to the structure of most pages, this method can usually be used
+        /// to confirm the title of a page.
+        /// </summary>
+        protected void VerifyTitle(string expectedTitle)
+        {
+            Assert.AreEqual(expectedTitle, _driver.FindPatiently("//h2[contains(@class, 'title')]").Text);
+        }
+
+
+        protected string GetVancouverPhoneNum(Person aPerson)
+        {
+            // Vancouver-like phone number
+            return String.Concat("604", aPerson.Phone.Substring(3));
+        }
+
+
+        protected string GetCanadianPostalCode(Address anAddress)
+        {
+            return anAddress.ZipCode("?#? #?#");
+        }
+
+
+        protected IWebElement FindDropdownControl(string formControlName)
+        {
+            return _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}']");
         }
     }
 }

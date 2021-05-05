@@ -12,3 +12,4 @@ Check which environment variables are set by `ls env:` on Windows.
 Run tests:  `dotnet test`
 
 Run a subset of tests, e.g. only those related to enrollment:  `dotnet test --filter TestPrimeE2E.Enrollment.EnrollmentTests` 
+or even more specifically, e.g. `dotnet test --filter TestPrimeE2E.Enrollment.EnrollmentTests.MedicalOfficeAssistant_HappyPath`
