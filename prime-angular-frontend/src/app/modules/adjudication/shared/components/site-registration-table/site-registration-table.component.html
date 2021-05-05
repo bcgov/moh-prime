@@ -77,8 +77,7 @@
             class="status"
             [class.under-review]="row.status === SiteStatusType.UNDER_REVIEW"
             [class.approved]="row.status === SiteStatusType.APPROVED"
-            [class.declined]="row.status === SiteStatusType.DECLINED"
-            [class.editable]="row.status === SiteStatusType.EDITABLE">
+            [class.declined]="row.status === SiteStatusType.DECLINED">
           {{ displayStatus(row.status) | capitalize: true | default }}
         </td>
       </ng-container>

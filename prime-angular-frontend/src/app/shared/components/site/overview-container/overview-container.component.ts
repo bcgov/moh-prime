@@ -9,7 +9,6 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-overview-container',
@@ -23,7 +22,6 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
-  public SiteStatusType = SiteStatusType;
 
   constructor(
     protected route: ActivatedRoute,

@@ -15,7 +15,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-overview-page',
@@ -94,7 +93,7 @@ export class OverviewPageComponent implements OnInit {
       this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
-      this.showSubmissionAction = !this.site.submittedDate || this.site.status === SiteStatusType.EDITABLE;
+      this.showSubmissionAction = !this.site.submittedDate;
     }
   }
 
