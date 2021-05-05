@@ -4,6 +4,9 @@ services:
 ####################### API Backend Definition #######################
   dotnet-webapi:
     container_name: prime-webapi-backend
+    build:
+      context: prime-dotnet-webapi/
+      dockerfile: openshift.dockerfile
     networks:
       - openshift
     depends_on:

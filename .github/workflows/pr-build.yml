@@ -59,6 +59,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          BUILD_LOGLEVEL: 2
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
@@ -112,8 +113,6 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          echo "PR Number=$PR_NUMBER"
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=primedb-$PR_NUMBER \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
