@@ -19,8 +19,6 @@ services:
     # command: "nginx -g 'daemon off;'"
     networks:
       - openshift
-    depends_on:
-      - openshift
 
 ####################### Local SMTP Server Definition #######################
   mailhog:
