@@ -13,7 +13,6 @@ parameters:
   value: prime
 - name: SUFFIX
   required: false
-  value: "-"
 - name: OC_NAMESPACE
   required: true
   value: 9c33a9
@@ -78,7 +77,7 @@ objects:
         containers:
           - name: ${NAME}${SUFFIX}-${FRONTEND_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${OC_APP}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${SUFFIX}
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -106,7 +105,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-frontend:${OC_APP}'
+            name: 'prime-frontend:${SUFFIX}'
   status: {}
 #   Frontend Service
 - apiVersion: v1
@@ -188,27 +187,27 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
             ports:
               - containerPort: 1025
@@ -251,7 +250,7 @@ objects:
                 mountPath: /opt/app-root/etc/certs
                 readOnly: true
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${OC_APP}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${SUFFIX}
             name: ${NAME}-api-backend
         volumes:
           - name: cert-volume
@@ -267,7 +266,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-webapi-backend:${OC_APP}'
+            name: 'prime-webapi-backend:${SUFFIX}'
   status: {}
 #   Backend Web API Service
 - apiVersion: v1
@@ -332,12 +331,12 @@ objects:
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
@@ -347,7 +346,7 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
@@ -382,10 +381,10 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${OC_APP}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
             name: ${NAME}${SUFFIX}-${DOCMAN_POD}-backend
             ports:
               - containerPort: 6001
@@ -402,7 +401,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager-backend:${OC_APP}'
+            name: 'prime-document-manager-backend:${SUFFIX}'
   status: {}
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -468,12 +467,12 @@ objects:
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
               - name: DB_PORT
                 valueFrom:
@@ -483,7 +482,7 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
@@ -518,10 +517,10 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
                     key: DATABASE_PASSWORD
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${OC_APP}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
             name: ${NAME}${SUFFIX}-${DOCMAN_POD}-migration
     triggers:
       - type: ConfigChange
@@ -533,7 +532,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${OC_APP}'
+            name: 'prime-document-manager:${SUFFIX}'
   status: {}
 
 ###########################################
@@ -569,22 +568,22 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_PASSWORD
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_USERNAME
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_PASSWORD
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     key: DATABASE_USERNAME
-                    name: ${NAME}${SUFFIX}-${DB_POD}-db-secrets
+                    name: ${NAME}-${DB_POD}-db-secrets
             image: >-
               image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
             imagePullPolicy: IfNotPresent
