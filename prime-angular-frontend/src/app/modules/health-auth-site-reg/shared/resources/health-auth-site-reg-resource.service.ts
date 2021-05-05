@@ -18,7 +18,6 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 import { AuthorizedUser } from '@health-auth/shared/models/authorized-user.model';
 import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
-import { AuthorizedUserStatusEnum } from '@health-auth/shared/enums/authorized-user-status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -31,11 +30,11 @@ export class HealthAuthSiteRegResource {
     private logger: LoggerService
   ) { }
 
-  public getAuthorizedUserByUserId(userId: string): Observable<Party | null> {
-    return this.apiResource.get<Party>(`parties/authorizeduser/${userId}`)
+  public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorizeduser/${userId}`)
       .pipe(
-        map((response: ApiHttpResponse<Party>) => response.result),
-        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
         catchError((error: any) => {
           if (error.status === 404) {
             return of(null);
@@ -48,11 +47,11 @@ export class HealthAuthSiteRegResource {
       );
   }
 
-  public getAuthorizedUserById(partyId: number): Observable<Party | null> {
-    return this.apiResource.get<Party>(`parties/authorizeduser/${partyId}`)
+  public getAuthorizedUserById(partyId: number): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorizeduser/${partyId}`)
       .pipe(
-        map((response: ApiHttpResponse<Party>) => response.result),
-        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
         catchError((error: any) => {
           if (error.status === 404) {
             return of(null);
@@ -65,13 +64,13 @@ export class HealthAuthSiteRegResource {
       );
   }
 
-  public createAuthorizedUser(party: Party): Observable<Party> {
-    return this.apiResource.post<Party>('parties/authorizeduser', party)
+  public createAuthorizedUser(party: AuthorizedUser): Observable<AuthorizedUser> {
+    return this.apiResource.post<AuthorizedUser>('parties/authorizeduser', party)
       .pipe(
-        map((response: ApiHttpResponse<Party>) => response.result),
-        tap((newParty: Party) => {
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((newAuthorizedUser: AuthorizedUser) => {
           this.toastService.openSuccessToast('Authorized user has been created');
-          this.logger.info('NEW_SIGNING_AUTHORITY', newParty);
+          this.logger.info('NEW_AUTHORIZED_USER', newAuthorizedUser);
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be created');
@@ -97,21 +96,22 @@ export class HealthAuthSiteRegResource {
   /**
    * @description
    * Get the organizations for a authorized user by user ID, and provide null when
-   * a signing authority could not be found.
+   * an authorized user could not be found.
    */
-  public getAuthorizedUserOrganizationsByUserId(userId: string): Observable<Organization[] | null> {
-    return this.apiResource.get<Organization[]>(`parties/signingauthority/${userId}/organizations`)
+  // TODO create health authority model, which might simply be inheriting the Organization model
+  public getAuthorizedUserHealthAuthorityByUserId(userId: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/authorizeduser/${userId}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
-        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        tap((organizations: Organization[]) => this.logger.info('HEALTH_AUTHORITIES', organizations)),
         catchError((error: any) => {
           if (error.status === 404) {
-            // No signing authority exists for the provided user ID
+            // No authorized user exists for the provided user ID
             return of(null);
           }
 
-          this.toastService.openErrorToast('Organizations could not be retrieved');
-          this.logger.error('[Core] OrganizationResource::getOrganizationsByUserId error has occurred: ', error);
+          this.toastService.openErrorToast('Health authorities could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getAuthorizedUserHealthAuthorityByUserId error has occurred: ', error);
           throw error;
         })
       );
