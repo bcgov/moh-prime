@@ -353,7 +353,7 @@ namespace Prime.Services
         public async Task<Site> EnableEditingSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.SubmittedDate = null; ;
+            site.SubmittedDate = null;
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
