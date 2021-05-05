@@ -19,7 +19,7 @@ services:
     networks:
       - openshift
     depends_on:
-      - dotnet-webapi
+      - openshift
 
 ####################### Local SMTP Server Definition #######################
   mailhog:
@@ -31,7 +31,7 @@ services:
       - 1025:1025
       - 8025:8025 # Visit localhost:8025 to see the list of captured emails
     networks:
-      - primenet
+      - openshift
 
 ####################### Database Inspection Definition #######################
   schema-spy:
@@ -45,7 +45,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - primenet
+      - openshift
 
 ####################### Backup Definition #######################
   backup:
@@ -62,7 +62,7 @@ services:
       - db_backup_data:/opt/backup
       - local_postgres_data:/var/lib/postgresql/data
     networks:
-      - primenet
+      - openshift
 
 ####################### Document Manager Definition #######################
   document-manager:

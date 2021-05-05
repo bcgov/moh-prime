@@ -58,7 +58,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker-compose -f openshift-compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$PR_NUMBER
@@ -110,7 +110,7 @@ jobs:
         run: |
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo "PR Number=$PR_NUMBER"
-          docker-compose -f openshift-compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=primedb-$PR_NUMBER \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
@@ -172,7 +172,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker-compose -f openshift-compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
