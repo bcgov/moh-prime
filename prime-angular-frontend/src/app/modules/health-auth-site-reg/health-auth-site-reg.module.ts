@@ -10,6 +10,8 @@ import { SiteProgressIndicatorComponent } from '@health-auth/shared/components/s
 
 import { CollectionNoticePageComponent } from '@health-auth/pages/collection-notice-page/collection-notice-page.component';
 import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-page/authorized-user-page.component';
+import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
+import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
@@ -22,7 +24,6 @@ import { AdministratorPageComponent } from '@health-auth/pages/administrator-pag
 import { PrivacyOfficerPageComponent } from '@health-auth/pages/privacy-officer-page/privacy-officer-page.component';
 import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
-import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,8 @@ import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-ne
     SiteProgressIndicatorComponent,
     CollectionNoticePageComponent,
     AuthorizedUserPageComponent,
+    AuthorizedUserNextStepsPageComponent,
+    AuthorizedUserDeclinedPageComponent
     SiteManagementPageComponent,
     HealthAuthCareSettingPageComponent,
     VendorPageComponent,
@@ -42,7 +45,6 @@ import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-ne
     PrivacyOfficerPageComponent,
     TechnicalSupportPageComponent,
     OverviewPageComponent,
-    AuthorizedUserNextStepsPageComponent
   ],
   imports: [
     SharedModule,
