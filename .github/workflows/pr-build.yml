@@ -44,9 +44,7 @@ jobs:
 
       - name: "Find Current Pull Request"
         uses: jwalton/gh-find-current-pr@v1.0.2
-
-      - name: "Inject PR#"
-        run: echo "PR-${PR}"
+      - run: echo "PR-${PR}"
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -91,9 +89,7 @@ jobs:
 
       - name: "Find Current Pull Request"
         uses: jwalton/gh-find-current-pr@v1.0.2
-
-      - name: "Inject PR#"
-        run: echo "PR-${PR}"
+      - run: echo "PR-${PR}"
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
@@ -156,9 +152,7 @@ jobs:
 
       - name: "Find Current Pull Request"
         uses: jwalton/gh-find-current-pr@v1.0.2
-
-      - name: "Inject PR#"
-        run: echo "PR-${PR}"
+      - run: echo "PR-${PR}"
         if: success() && steps.findPr.outputs.number
         env:
           PR_NUMBER: ${{ steps.findPr.outputs.pr }}
