@@ -26,7 +26,7 @@ jobs:
       
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -42,12 +42,16 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Find Current Pull Request"
-        uses: jwalton/gh-find-current-pr@v1.0.2
+      - name: Get Current Pull Request
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
       - run: echo "PR-${PR}"
-        if: success() && steps.findPr.outputs.number
+        if: success() && steps.PR.outputs.number
         env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag and push Document Manager image"
         id: build-image
@@ -71,7 +75,7 @@ jobs:
       
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -87,12 +91,16 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Find Current Pull Request"
-        uses: jwalton/gh-find-current-pr@v1.0.2
+      - name: Get Current Pull Request
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
       - run: echo "PR-${PR}"
-        if: success() && steps.findPr.outputs.number
+        if: success() && steps.PR.outputs.number
         env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag and push .NET web API image"
         id: build-image
@@ -134,7 +142,7 @@ jobs:
       
     steps:
       - name: "Checkout the repo"
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -150,12 +158,16 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Find Current Pull Request"
-        uses: jwalton/gh-find-current-pr@v1.0.2
+      - name: Get Current Pull Request
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
       - run: echo "PR-${PR}"
-        if: success() && steps.findPr.outputs.number
+        if: success() && steps.PR.outputs.number
         env:
-          PR_NUMBER: ${{ steps.findPr.outputs.pr }}
+          PR_NUMBER: ${{steps.PR.outputs.number}}
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
