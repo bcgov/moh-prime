@@ -8,10 +8,10 @@ import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.gua
 import { AuthorizedUserGuard } from './shared/guards/authorized-user.guard';
 import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
 
-
 import { CollectionNoticePageComponent } from '@health-auth/pages/collection-notice-page/collection-notice-page.component';
 import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-page/authorized-user-page.component';
 import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
+import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
@@ -42,7 +42,6 @@ const routes: Routes = [
         component: CollectionNoticePageComponent,
         data: { title: 'Collection Notice' }
       },
-      // TODO add guard for forking routes based on access
       // Authorized user request for approval routes to gain
       // access to Health Authority site registration
       {
@@ -56,9 +55,19 @@ const routes: Routes = [
             data: { title: 'Authorized User' }
           },
           {
-            path: HealthAuthSiteRegRoutes.ACCESS_REQUEST_CONFIRMATION,
+            path: HealthAuthSiteRegRoutes.ACCESS_REQUESTED,
             component: AuthorizedUserNextStepsPageComponent,
-            data: { title: 'Next Steps' }
+            data: { title: 'Access Requested' }
+          },
+          {
+            path: HealthAuthSiteRegRoutes.ACCESS_DECLINED,
+            component: AuthorizedUserDeclinedPageComponent,
+            data: { title: 'Access Declined' }
+          },
+          {
+            path: '', // Equivalent to `/` and alias for default view
+            redirectTo: HealthAuthSiteRegRoutes.ACCESS_AUTHORIZED_USER,
+            pathMatch: 'full'
           }
         ]
       },
