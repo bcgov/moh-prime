@@ -42,13 +42,14 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: Get Current Pull Request
+      - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-
-      - run: echo "PR-${PR}"
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
         if: success() && steps.PR.outputs.number
         env:
           PR_NUMBER: ${{steps.PR.outputs.number}}
@@ -59,7 +60,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$PR_NUMBER
@@ -91,13 +92,14 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: Get Current Pull Request
+      - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-
-      - run: echo "PR-${PR}"
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
         if: success() && steps.PR.outputs.number
         env:
           PR_NUMBER: ${{steps.PR.outputs.number}}
@@ -112,7 +114,7 @@ jobs:
         run: |
           PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo "PR Number=$PR_NUMBER"
-          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=primedb-$PR_NUMBER \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
@@ -158,13 +160,14 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: Get Current Pull Request
+      - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-
-      - run: echo "PR-${PR}"
+      
+      - name: "Populate stub"
+        run: echo "PR-${PR}"
         if: success() && steps.PR.outputs.number
         env:
           PR_NUMBER: ${{steps.PR.outputs.number}}
@@ -175,7 +178,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
         run: |
-          docker-compose -f oc4.compose.yml build --force-rm --no-cache \
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
