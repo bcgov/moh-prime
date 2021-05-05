@@ -68,7 +68,7 @@ export class AuthorizationRedirectGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       if (!authenticated) {
         // Allow route to resolve for user to authenticate
-        return resolve(true);
+        resolve(true);
       }
 
       let destinationRoute = this.config.routes.denied;
@@ -84,8 +84,7 @@ export class AuthorizationRedirectGuard implements CanActivate {
       }
 
       // Otherwise, redirect to an appropriate destination
-      this.router.navigate([destinationRoute]);
-      return reject(false);
+      reject(this.navigate(routePath, destinationRoute));
     });
   }
 
@@ -113,5 +112,19 @@ export class AuthorizationRedirectGuard implements CanActivate {
     return (Array.isArray(routeParam))
       ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')
       : routeParam.url;
+  }
+
+  /**
+   * @description
+   * Prevent infinite route loops by navigating to a route only
+   * when the current route path is not the destination path.
+   */
+  private navigate(routePath: string, destinationPath: string): boolean {
+    if (routePath === destinationPath) {
+      return true;
+    } else {
+      this.router.navigate([destinationPath]);
+      return false;
+    }
   }
 }

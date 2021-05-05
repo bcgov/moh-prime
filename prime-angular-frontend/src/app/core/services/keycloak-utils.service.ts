@@ -29,14 +29,14 @@ export class KeycloakUtilsService {
         });
     };
 
-    if (authenticated) {
-      // Ensure configuration is populated before the application
-      // is fully initialized to prevent race conditions
-      await this.configService.load().toPromise();
+    // if (authenticated) {
+    //   // Ensure configuration is populated before the application
+    //   // is fully initialized to prevent race conditions
+    //   await this.configService.load().toPromise();
 
-      // Force refresh to begin expiry timer.
-      this.keycloak.updateToken(-1);
-    }
+    //   // Force refresh to begin expiry timer.
+    //   this.keycloak.updateToken(-1);
+    // }
     return true;
   }
 }
