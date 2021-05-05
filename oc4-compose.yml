@@ -22,47 +22,47 @@ services:
       - dotnet-webapi
 
 ####################### Local SMTP Server Definition #######################
-  # mailhog:
-  #   container_name: mailhog
-  #   restart: always
-  #   image: mailhog/mailhog:latest
-  #   ports:
-  #     - 25:1025
-  #     - 1025:1025
-  #     - 8025:8025 # Visit localhost:8025 to see the list of captured emails
-  #   networks:
-  #     - primenet
+  mailhog:
+    container_name: mailhog
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - 25:1025
+      - 1025:1025
+      - 8025:8025 # Visit localhost:8025 to see the list of captured emails
+    networks:
+      - primenet
 
 ####################### Database Inspection Definition #######################
-  # schema-spy:
-  #   container_name: schema-spy
-  #   build:
-  #     context: schemaspy/
-  #   image: openjdk:jre-alpine
-  #   ports:
-  #     - "8069:8069"
-  #     - "80:8069"
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - primenet
+  schema-spy:
+    container_name: schema-spy
+    build:
+      context: schemaspy/
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    depends_on:
+      - postgres
+    networks:
+      - primenet
 
 ####################### Backup Definition #######################
-  # backup:
-  #   container_name: backup
-  #   build:
-  #     context: prime-database-backup
-  #   ports:
-  #     - 6432:5432
-  #     - 9081:8081
-  #   depends_on:
-  #     - postgres
-  #     - mongo
-  #   volumes:
-  #     - db_backup_data:/opt/backup
-  #     - local_postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - primenet
+  backup:
+    container_name: backup
+    build:
+      context: prime-database-backup
+    ports:
+      - 6432:5432
+      - 9081:8081
+    depends_on:
+      - postgres
+      - mongo
+    volumes:
+      - db_backup_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - primenet
 
 ####################### Document Manager Definition #######################
   document-manager:
