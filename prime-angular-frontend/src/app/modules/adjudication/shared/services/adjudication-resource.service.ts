@@ -26,7 +26,7 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Injectable({
   providedIn: 'root'
@@ -502,10 +502,6 @@ export class AdjudicationResource {
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
-    }
-
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
     }
 
     if (!enrollee.enrolleeCareSettings) {

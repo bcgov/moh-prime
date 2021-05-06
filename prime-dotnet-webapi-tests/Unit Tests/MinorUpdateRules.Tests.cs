@@ -163,20 +163,20 @@ namespace PrimeTests.UnitTests
                 enrollee.Certifications = new Certification[] { new Certification() };
             }
 
-            // New job
-            EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
-            profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
-            await AssertAllowableChanges(expected, enrollee, profile);
+            // // New job
+            // EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
+            // profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
+            // await AssertAllowableChanges(expected, enrollee, profile);
 
-            // Edit job
-            profile = enrollee.CopyToUpdateModel();
-            profile.Jobs.First().Title = "Bespoke lifehack crafter";
-            await AssertAllowableChanges(expected, enrollee, profile);
+            // // Edit job
+            // profile = enrollee.CopyToUpdateModel();
+            // profile.Jobs.First().Title = "Bespoke lifehack crafter";
+            // await AssertAllowableChanges(expected, enrollee, profile);
 
-            // Remove job
-            profile = enrollee.CopyToUpdateModel();
-            profile.Jobs = profile.Jobs.Skip(1).ToList();
-            await AssertAllowableChanges(expected, enrollee, profile);
+            // // Remove job
+            // profile = enrollee.CopyToUpdateModel();
+            // profile.Jobs = profile.Jobs.Skip(1).ToList();
+            // await AssertAllowableChanges(expected, enrollee, profile);
         }
 
         [Fact]

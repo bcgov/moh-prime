@@ -106,7 +106,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       : this.bcscDemographicFormState.json;
     const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
-    const { jobs, oboSites } = this.jobsForm.getRawValue();
+    const { oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.convertCareSettingFormToJson(id);
@@ -122,7 +122,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       },
       certifications,
       ...deviceProvider,
-      jobs,
       oboSites,
       ...careSettings,
       enrolleeRemoteUsers,

@@ -82,11 +82,11 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-            if (!isObo // Only OBOs can change Job titles; if not an OBO, Jobs must be same
-                && !CompareCollections(comparitor, enrollee.Jobs, _updatedProfile.Jobs))
-            {
-                return Task.FromResult(false);
-            }
+            // if (!isObo // Only OBOs can change Job titles; if not an OBO, Jobs must be same
+            //     && !CompareCollections(comparitor, enrollee.Jobs, _updatedProfile.Jobs))
+            // {
+            //     return Task.FromResult(false);
+            // }
 
             if (!CompareCollections(comparitor, enrollee.OboSites, _updatedProfile.OboSites))
             {
@@ -143,10 +143,6 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Enrollee>(x => x.SmsPhone);
             config.IgnoreProperty<Enrollee>(x => x.Phone);
             config.IgnoreProperty<Enrollee>(x => x.PhoneExtension);
-            if (isObo)
-            {
-                config.IgnoreProperty<Enrollee>(x => x.Jobs);
-            }
 
             // Ignored fields on models due to the frontend not sending all keys/navigation properties
             config.IgnoreProperty<BaseAuditable>(x => x.CreatedUserId);

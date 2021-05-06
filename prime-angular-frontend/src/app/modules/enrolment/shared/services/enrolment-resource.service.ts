@@ -357,10 +357,6 @@ export class EnrolmentResource {
       enrollee.certifications = [];
     }
 
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
-    }
-
     if (!enrollee.oboSites) {
       enrollee.oboSites = [];
     }
