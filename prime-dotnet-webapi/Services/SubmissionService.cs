@@ -138,6 +138,17 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task ConfirmSubmissionAsync(int enrolleeId)
+        {
+            var submission = await _context.Submissions
+                .Where(s => s.EnrolleeId == enrolleeId)
+                .OrderByDescending(s => s.CreatedDate)
+                .FirstAsync();
+
+            submission.Confirmed = true;
+            await _context.SaveChangesAsync();
+        }
+
         private async Task<bool> HandleSubmissionActionAsync(SubmissionAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
