@@ -11,8 +11,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { MohKeycloakInitGuard } from '@gis/shared/guards/moh-keycloak-init.guard';
-import { PrimeKeycloakInitGuard } from '@shared/guards/prime-keycloak-init.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +18,7 @@ const routes: Routes = [
     children: [
       {
         path: EnrolmentRoutes.BCSC_LOGIN,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         data: { locationCode: BannerLocationCode.ENROLMENT_LANDING_PAGE },
@@ -29,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: EnrolmentRoutes.BCEID_LOGIN,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         loadChildren: () => import('@enrolment/shared/modules/bceid-enrolment-login-page/bceid-enrolment-login-page.module')
@@ -37,7 +35,7 @@ const routes: Routes = [
       },
       {
         path: SiteRoutes.LOGIN_PAGE,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         data: { locationCode: BannerLocationCode.SITE_REGISTRATION_LANDING_PAGE },
@@ -46,7 +44,7 @@ const routes: Routes = [
       },
       {
         path: AdjudicationRoutes.LOGIN_PAGE,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         loadChildren: () => import('@adjudication/shared/modules/admin-login-page/admin-login-page.module')
@@ -54,7 +52,7 @@ const routes: Routes = [
       },
       {
         path: PhsaEformsRoutes.LOGIN_PAGE,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         loadChildren: () => import('@phsa/shared/modules/phsa-eforms-login-page/phsa-eforms-login-page.module')
@@ -62,14 +60,14 @@ const routes: Routes = [
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
-        // canActivate: [
+        // canLoad: [
         //   AuthorizationRedirectGuard
         // ],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
       },
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
-        canActivate: [
+        canLoad: [
           AuthorizationRedirectGuard
         ],
         loadChildren: () => import('@health-auth/shared/modules/health-auth-site-reg-login-page/health-auth-site-reg-login-page.module')

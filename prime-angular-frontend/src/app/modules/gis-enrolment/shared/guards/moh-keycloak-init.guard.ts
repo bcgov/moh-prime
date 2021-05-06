@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate } from '@angular/router';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { KeycloakUtilsService } from '@core/services/keycloak-utils.service';
+import { LoggerService } from '@core/services/logger.service';
 import { environment } from '@env/environment';
 import { KeycloakOptions } from 'keycloak-angular';
 import { Observable } from 'rxjs';
@@ -12,9 +14,17 @@ export class MohKeycloakInitGuard implements CanActivate {
 
   constructor(
     protected keycloakUtils: KeycloakUtilsService,
+    protected authService: AuthService,
+    protected logger: LoggerService
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    return this.keycloakUtils.initialize(environment.mohKeycloakConfig as KeycloakOptions);
+    try {
+      this.authService.isLoggedIn();
+      return true;
+    } catch (error) {
+      this.logger.error(error);
+      return this.keycloakUtils.initialize(environment.mohKeycloakConfig as KeycloakOptions);
+    }
   }
 }

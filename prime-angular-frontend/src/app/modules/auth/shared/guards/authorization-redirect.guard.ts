@@ -20,7 +20,7 @@ import { KeycloakOptions } from 'keycloak-angular';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthorizationRedirectGuard implements CanActivate {
+export class AuthorizationRedirectGuard implements CanLoad {
   private authenticated: boolean;
 
   constructor(
@@ -31,6 +31,12 @@ export class AuthorizationRedirectGuard implements CanActivate {
     private router: Router,
     private keycloakUtil: KeycloakUtilsService,
   ) { }
+
+  canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+    const url = this.getUrl(segments);
+    // TODO pass params to checkAccess
+    return this.checkAccess(url);
+  }
 
   public canActivate(
     next: ActivatedRouteSnapshot,
@@ -68,7 +74,7 @@ export class AuthorizationRedirectGuard implements CanActivate {
     return new Promise((resolve, reject) => {
       if (!authenticated) {
         // Allow route to resolve for user to authenticate
-        resolve(true);
+        return resolve(true);
       }
 
       let destinationRoute = this.config.routes.denied;
@@ -84,7 +90,7 @@ export class AuthorizationRedirectGuard implements CanActivate {
       }
 
       // Otherwise, redirect to an appropriate destination
-      reject(this.navigate(routePath, destinationRoute));
+      return resolve(this.navigate(routePath, destinationRoute));
     });
   }
 
