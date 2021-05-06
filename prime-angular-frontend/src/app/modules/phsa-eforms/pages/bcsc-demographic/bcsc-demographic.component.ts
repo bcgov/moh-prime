@@ -81,7 +81,7 @@ export class BcscDemographicComponent implements OnInit {
     this.getUser$()
       .pipe(
         map((enrollee: PhsaEnrollee) => this.enrollee = enrollee),
-        map((enrollee: PhsaEnrollee) => this.patchForm())
+        map((_: PhsaEnrollee) => this.patchForm())
       )
       .subscribe(() => this.initForm());
   }
@@ -114,7 +114,7 @@ export class BcscDemographicComponent implements OnInit {
   }
 
   private clearAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems)
+    this.formUtilsService.resetAndClearValidators(addressLine, optionalAddressLineItems);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

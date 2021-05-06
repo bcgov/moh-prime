@@ -3,26 +3,28 @@
     <form [formGroup]="form">
       <table mat-table
              matSort
-             (matSortChange)="sortData($event)"
+             class="w-100"
              [dataSource]="dataSource"
-             class="w-100">
+             (matSortChange)="sortData($event)">
 
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;</th>
+              scope="col">&nbsp;
+          </th>
           <td mat-cell
               *matCellDef="let row;">
-            <div class="flex-container flex-wrap d-flex">
+            <div class="d-flex flex-wrap triage-container">
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
                           [enrolleeId]="row.id"
                           [assigned]="(row.adjudicatorIdir)"
-                          (reload)="onReload($event)"></app-triage>
+                          (reload)="onReload()"></app-triage>
+
               <app-contextual-enrollee-notification *ngIf="row.hasNotification"
                                                     class="align-self-end"
                                                     [enrolleeId]="row.id"
-                                                    (removed)="onReload($event)"></app-contextual-enrollee-notification>
+                                                    (removed)="onReload()"></app-contextual-enrollee-notification>
             </div>
           </td>
         </ng-container>
@@ -31,7 +33,8 @@
           <th mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              scope="col"> Reference ID </th>
+              scope="col"> Reference ID
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.displayId }} </td>
         </ng-container>
@@ -39,7 +42,8 @@
         <ng-container matColumnDef="name">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Enrollee Name </th>
+              scope="col"> Enrollee Name
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row | fullname }} </td>
         </ng-container>
@@ -47,7 +51,8 @@
         <ng-container matColumnDef="givenNames">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Given Names </th>
+              scope="col"> Given Names
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.givenNames | default }} </td>
         </ng-container>
@@ -72,7 +77,8 @@
                                    *ngIf="hasAppliedDateRange">
               <mat-icon matDatepickerToggleIcon
                         matTooltip="Clear date range"
-                        (click)="clearAppliedDateRange()">clear</mat-icon>
+                        (click)="clearAppliedDateRange()">clear
+              </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #appliedDatePicker></mat-date-range-picker>
           </th>
@@ -100,7 +106,8 @@
                                    *ngIf="hasRenewalDateRange">
               <mat-icon matDatepickerToggleIcon
                         matTooltip="Clear date range"
-                        (click)="clearRenewalDateRange()">clear</mat-icon>
+                        (click)="clearRenewalDateRange()">clear
+              </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #renewalDatePicker></mat-date-range-picker>
           </th>
@@ -111,7 +118,8 @@
         <ng-container matColumnDef="currentTOA">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Current ToA </th>
+              scope="col"> Current ToA
+          </th>
           <td mat-cell
               *matCellDef="let row;">
             <mat-chip-list [selectable]="false">
@@ -123,7 +131,8 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> State </th>
+              scope="col"> State
+          </th>
           <td mat-cell
               *matCellDef="let row;"
               class="status"
@@ -131,14 +140,16 @@
             {{ row.currentStatusCode | configCode: 'statuses' | default }}
             <mat-icon *ngIf="row.alwaysManual"
                       matTooltip="Enrollee flagged for manual adjudication"
-                      matTooltipPosition="after">flag</mat-icon>
+                      matTooltipPosition="after">flag
+            </mat-icon>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="remoteAccess">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Remote Access </th>
+              scope="col"> Remote Access
+          </th>
           <td mat-cell
               *matCellDef="let row;">
             <mat-chip-list [selectable]="false">
@@ -153,8 +164,8 @@
               scope="col">
             Assigned To
             <button mat-icon-button
-                    [color]="hasAssignedToFilter$.value ? 'primary' : ''"
                     matTooltip="Filter assigned to me"
+                    [color]="(hasAssignedToFilter$.value) ? 'primary' : null"
                     (click)="toggleFilterAssigned()">
               <mat-icon>assignment_ind icon</mat-icon>
             </button>
@@ -166,7 +177,8 @@
         <ng-container matColumnDef="careSetting">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Care Setting </th>
+              scope="col"> Care Setting
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.careSettingCodes | careSetting: 'abbr' | join | default }} </td>
         </ng-container>
@@ -174,14 +186,15 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;</th>
+              scope="col">
+            <ng-container [ngTemplateOutlet]="bulkActions"></ng-container>
+          </th>
           <td mat-cell
               *matCellDef="let row;"
               class="text-right">
 
             <ng-container [ngTemplateOutlet]="menu"
                           [ngTemplateOutletContext]="{ row: row }"></ng-container>
-
           </td>
         </ng-container>
 
@@ -190,12 +203,37 @@
         <tr mat-row
             *matRowDef="let row; columns: columns;"></tr>
       </table>
+
+      <app-paginator [hidePaginator]="hidePaginator">
+        <mat-paginator></mat-paginator>
+      </app-paginator>
     </form>
 
     <p *ngIf="!dataSource?.data.length"
        class="px-4 py-2 text-muted">
       No Enrolments Found
     </p>
+
+    <ng-template #bulkActions
+                 let-row="row">
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.BANNER])">
+          <mat-icon>bookmark</mat-icon>
+          <span>Create Banner</span>
+        </button>
+        <button mat-menu-item
+                (click)="onSendBulkEmail()">
+          <mat-icon>email</mat-icon>
+          <span>Send Email</span>
+        </button>
+      </mat-menu>
+    </ng-template>
 
     <ng-template #menu
                  let-row="row">
@@ -241,14 +279,14 @@
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onAssign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Assign Enrolment</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+                [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
                 (click)="onReassign(row.id)">
           <mat-icon>pan_tool</mat-icon>
           <span>Reassign Enrolment</span>

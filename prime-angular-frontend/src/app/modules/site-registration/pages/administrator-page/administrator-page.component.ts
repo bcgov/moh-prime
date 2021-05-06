@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Subject } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -28,6 +30,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -45,13 +48,14 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
     }
-    this.form.patchValue(contact);
+    this.formState.form.patchValue(contact);
   }
 
   public onBack() {
@@ -75,14 +79,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.administratorPharmaNetFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): NoContent {
@@ -91,12 +94,17 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.PRIVACY_OFFICER;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    //emit formSubmitting event
+    this.formSubmittingEvent.next();
   }
 }

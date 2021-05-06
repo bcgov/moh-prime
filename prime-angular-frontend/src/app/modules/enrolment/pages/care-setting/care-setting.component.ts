@@ -97,6 +97,9 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       this.enrolmentFormStateService.removeHealthAuthorities();
     }
 
+    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    this.enrolmentFormStateService.removeUnselectedHAOboSites();
+
     super.onSubmit();
   }
 
@@ -190,12 +193,17 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
+    const oboSites = this.enrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
+    const certifications = this.enrolmentFormStateService.regulatoryFormState.certifications;
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (jobs?.length) {
+    } else if (oboSites?.length) {
+      // Should edit existing Job/OboSites next
+      nextRoutePath = EnrolmentRoutes.JOB;
+    } else if (!certifications.length && !oboSites?.length) {
+      // No College Licence and need to enter Job information
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 
@@ -248,7 +256,13 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         return clear(form.get('communityPharmacySites') as FormArray);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        return clear(form.get('healthAuthoritySites') as FormArray);
+        const healthAuthoritySites = form.get('healthAuthoritySites') as FormGroup;
+        Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => {
+          const sitesOfHealthAuthority = healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+          sitesOfHealthAuthority.clearValidators();
+          sitesOfHealthAuthority.updateValueAndValidity();
+          healthAuthoritySites.removeControl(healthAuthorityCode);
+        });
       }
     }
   }

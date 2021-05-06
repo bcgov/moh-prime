@@ -84,7 +84,7 @@ namespace PrimeTests.UnitTests
         public async void TestRender_OrgAgreement(RazorTemplate<OrgAgreementRazorViewModel> template)
         {
             var service = CreateService();
-            var model = new OrgAgreementRazorViewModel("My Cool Site", DateTimeOffset.Now);
+            var model = new OrgAgreementRazorViewModel("My Cool Site", DateTimeOffset.Now, false);
 
             var html = await service.RenderTemplateToStringAsync(template, model);
 

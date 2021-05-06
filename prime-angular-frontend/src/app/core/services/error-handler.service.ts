@@ -8,7 +8,6 @@ import { LoggerService } from '@core/services/logger.service';
   providedIn: 'root'
 })
 export class ErrorHandlerService implements ErrorHandler {
-
   constructor(
     // Can't use DI in constructor of error handler since it's
     // loaded first therefore have to use the injector
@@ -26,7 +25,7 @@ export class ErrorHandlerService implements ErrorHandler {
         return logger.error('No Internet Connection');
       } else {
         // HTTP error has occurred (error.status = 403, 404, 500...)
-        return logger.error(`${error.status} - ${error.message}`);
+        return logger.error(`${ error.status } - ${ error.message }`);
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)

@@ -14,7 +14,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
   styleUrls: ['./search-form.component.scss']
 })
 export class SearchFormComponent implements OnInit {
-  @Input() public disabled: boolean;
+  @Input() public hideStatus: boolean;
   @Output() public search: EventEmitter<string>;
   @Output() public filter: EventEmitter<EnrolmentStatus>;
   @Output() public refresh: EventEmitter<void>;
@@ -52,8 +52,8 @@ export class SearchFormComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      textSearch: [{ value: null, disabled: this.disabled }, []],
-      statusCode: [{ value: '', disabled: this.disabled }, []]
+      textSearch: [null, []],
+      statusCode: [{ value: '', disabled: this.hideStatus }, []]
     });
   }
 

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+        <PRPM_IN301030CA ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+			<!--
+            <id root="2.16.840.1.113883.3.40.1.5" extension="69f126ed-0198-4222-a971-8519a91dbc51"/>
+			-->
+            <creationTime value="20180528110330"/>
+            <versionCode code="DEV"/>
+            <!-- -->
+            <!-- The extension is the message interaction ID, may be different from root XML element i.e. PRPM_IN301030CA -->
+            <!-- -->
+            <interactionId root="2.16.840.1.113883.3.40.3.1" extension="IN301030CA"/>
+            <profileId root="2.16.840.1.113883.3.40.1.7" extension="CHGONLY FUTURE OK"/>
+            <processingCode code="T"/>
+            <processingModeCode code="T"/>
+            <acceptAckCode code="NE"/>
+            <receiver typeCode="RCV">
+                <telecom value="http://cinnamon.hlth.gov.bc.ca:11780/FakeDistribution-0.1-SNAPSHOT/PRS_IB_Odx_PRPM_IN303030CA_RP_Direct_Receive_PRS_Msg"/>
+                <device>
+                    <id root="2.16.840.1.113883.3.40.1.14" extension="DEV"/>
+                    <id root="2.16.840.1.113883.3.40.5.1" extension="distribution_targetfacility"/>
+                    <name>distribution_targetserver</name>
+                    <asAgent>
+                        <representedOrganization>
+                            <id root="2.16.840.1.113883.3.40.4.1" extension="hlth.gov.bc.ca"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </receiver>
+            <sender typeCode="SND">
+                <telecom value="hlth.gov.bc.ca"/>
+                <device>
+                    <id root="2.16.840.1.113883.3.40.5.2" extension="SENDING FACILITY CHID"/>
+                    <name/>
+                    <asAgent>
+                        <representedOrganization>
+                            <id root="2.16.840.1.113883.3.40.4.2" extension="hlth.gov.bc.ca"/>
+                        </representedOrganization>
+                    </asAgent>
+                </device>
+            </sender>
+            <controlActProcess>
+                <priorityCode xsi:type="CS" code="R" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                <authorOrPerformer typeCode="PRF">
+                    <assignedPerson>
+                        <id root="2.16.840.1.113883.3.40.6.2"/>
+                        <representedOrganization>
+                            <name/>
+                        </representedOrganization>
+                    </assignedPerson>
+                </authorOrPerformer>
+                <authorOrPerformer typeCode="PRF">
+                    <assignedPerson>
+                        <id root="2.16.840.1.113883.3.40.6.1"/>
+                    </assignedPerson>
+                </authorOrPerformer>
+                <subject typeCode="SUBJ">
+                    <registrationEvent>
+                        <statusCode code="active"/>
+                        <subject1 typeCode="SBJ">
+                            <healthCareProvider classCode="PROV">
+                                <!--root OID Provider ID type, extension Provider ID-->
+                                <id root="2.16.840.1.113883.3.40.2.4" extension="55555"/>
+                                <!--code Provider Type-->
+                                <code code="MD" codeSystemName="WHICProviderType"/>
+                                <!--This is where the CRED name is placed. Empty if there is no CRED name. 
+							In HL7V3 a CRED name is coded as 'C'.-->
+                                <name/>
+                                <!--use combines purpose and type-->
+                                <addr use="PHYS DC">
+                                    <streetAddressLine>55 Rd.</streetAddressLine>
+                                    <city>Surrey</city>
+                                    <state>BC</state>
+                                    <country>CA</country>
+                                    <postalCode>V8V8V8</postalCode>
+                                    <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                        <low value="20100501000000"/>
+                                    </useablePeriod>
+                                </addr>
+                                <!--Telecom use is Purpose, Type in value-->
+                                <telecom use="WP" value="tel:6046665555">
+                                    <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                        <low value="20110506000000"/>
+                                    </useablePeriod>
+                                </telecom>
+                                <!--Telecom use is Purpose, Type in value-->
+                                <telecom use="WP" value="fax:6046665557">
+                                    <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                        <low value="20120504000000"/>
+                                    </useablePeriod>
+                                </telecom>
+                                <!--Telecom use is Purpose, Type in value-->
+                                <telecom use="WP" value="mailto:terry_albert_test@gmail.com">
+                                    <useablePeriod xsi:type="IVL_TS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                        <low value="20120503000000"/>
+                                    </useablePeriod>
+                                </telecom>
+                                <!--code Status Code-->
+                                <!--Status Class is always 'LIC' in HL7v3, no mapping-->
+                                <!--see subjectOf2 for Status End Reason (extension status1)-->
+                                <statusCode code="ACTIVE">
+                                    <controlActReferenceId root="2.16.840.1.113883.3.40.1.12" extension="status1"/>
+                                    <validTime>
+                                        <low value="20100502000000"/>
+                                    </validTime>
+                                </statusCode>
+                                <effectiveTime>
+                                    <low value="20100502000000"/>
+                                </effectiveTime>
+                                <healthCarePrincipalPerson classCode="PSN" determinerCode="INSTANCE">
+                                    <!--This is where the CURR name is placed. Empty if there is no CURR name.
+								In HL7V3 a CURR name is coded as 'L'.-->
+                                    <name use="L">
+                                        <family>Albert</family>
+                                        <given>Terry</given>
+                                        <prefix>Dr</prefix>
+                                        <validTime>
+                                            <low value="20090501000000"/>
+                                        </validTime>
+                                    </name>
+                                    <!--For gender, birth date, deceased date, birth place, each can have a validTime-->
+                                    <!--The processing picks for the effectiveStartDate the low value date-->
+                                    <!--and for the effectiveEndDate takes the high value date.-->
+                                    <!--gender-->
+                                    <administrativeGenderCode xsi:type="CS" code="M" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                        <validTime xsi:type="IVL_TS">
+                                            <low value="20010101000000"/>
+                                            <high value="20200101000000"/>
+                                        </validTime>
+                                    </administrativeGenderCode>
+                                    <!--birth date-->
+                                    <birthTime value="19700501000000">
+                                        <validTime xsi:type="IVL_TS">
+                                            <low value="20010101000000"/>
+                                            <high value="20200101000000"/>
+                                        </validTime>
+                                    </birthTime>
+                                    <birthplace classCode="BIRTHPL">
+                                        <addr>
+                                            <country>US</country>
+                                            <state>AL</state>
+                                        </addr>
+                                        <validTime xsi:type="IVL_TS">
+                                            <low value="20010101000000"/>
+                                            <high value="20200101000000"/>
+                                        </validTime>
+                                    </birthplace>
+                                </healthCarePrincipalPerson>
+                                <issuingOrganization classCode="ORG" determinerCode="INSTANCE">
+                                    <territorialAuthority classCode="TERR">
+                                        <code xsi:type="CS" code="Province" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                        <territory classCode="PLC" determinerCode="INSTANCE">
+                                            <!--Jurisdiction-->
+                                            <code xsi:type="CS" code="BC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                                        </territory>
+                                    </territorialAuthority>
+                                </issuingOrganization>
+                                <!-- status reason code block -->
+                                <subjectOf2 typeCode="SBJ">
+                                    <roleActivation classCode="CACT">
+                                        <reasonCode code="GS"/>
+                                        <subjectOf typeCode="SUBJ">
+                                            <controlActEvent>
+                                                <id root="2.16.840.1.113883.3.40.1.12" extension="status1"/>
+                                            </controlActEvent>
+                                        </subjectOf>
+                                    </roleActivation>
+                                </subjectOf2>
+                                <!--  credential  -->
+                                <relatedTo typeCode="REL">
+                                    <qualifiedEntity classCode="QUAL">
+                                        <!--registration number-->
+                                        <id root="2.16.840.1.113883.3.40.1.2" extension="555"/>
+                                        <!--Type-->
+                                        <code code="MD">
+                                            <originalText>
+                                                <!--designation text-->
+                                                <reference value="MD"/>
+                                            </originalText>
+                                        </code>
+                                        <effectiveTime>
+                                            <low value="20090501000000"/>
+                                        </effectiveTime>
+                                        <qualificationGrantingOrganization>
+                                            <!--granting institution text-->
+                                            <name>Medical Institute Research Test</name>
+                                            <!--institution address, city, state/prov/ and country-->
+                                            <addr>
+                                                <city>Denver</city>
+                                                <state>BC</state>
+                                                <country>CA</country>
+                                            </addr>
+                                        </qualificationGrantingOrganization>
+                                    </qualifiedEntity>
+                                </relatedTo>
+                                <!--  expertise  -->
+                                <relatedTo typeCode="REL">
+                                    <qualifiedEntity classCode="QUAL">
+                                        <!--Type-->
+                                        <code xsi:type="CV" code="A110" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                                            <!--Original source-->
+                                            <originalText>110</originalText>
+                                        </code>
+                                        <effectiveTime>
+                                            <low value="20090508000000"/>
+                                        </effectiveTime>
+                                    </qualifiedEntity>
+                                </relatedTo>
+                            </healthCareProvider>
+                        </subject1>
+                        <author>
+                            <assignedEntity>
+                                <id root="2.16.840.1.113883.3.40.3.3" extension="some org chid"/>
+                            </assignedEntity>
+                        </author>
+                        <custodian>
+                            <assignedEntity>
+                                <id root="2.16.840.1.113883.3.40.4.2" extension="hlth.gov.bc.ca"/>
+                            </assignedEntity>
+                        </custodian>
+                    </registrationEvent>
+                </subject>
+                <reasonOf xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </controlActProcess>
+        </PRPM_IN301030CA>
+    </soap:Body>
+</soap:Envelope>

@@ -24,8 +24,12 @@ ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
 
-# Copy everything and build
-COPY . .
+ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
+ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
+ENV API_PORT 8080
+COPY *.csproj /opt/app-root/app
+RUN dotnet restore
+COPY . /opt/app-root/app
 
 RUN dotnet restore "prime.csproj"
 RUN dotnet build "prime.csproj" -c Release -o /opt/app-root/app/out
@@ -35,12 +39,8 @@ RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:Microso
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
-########################################
-### Stage 2 - Production environment ###
-########################################
-# FROM registry.redhat.io/dotnet/dotnet-31-rhel7 AS runtime
-FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
-
+ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
+ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
 
 WORKDIR /opt/app-root/app

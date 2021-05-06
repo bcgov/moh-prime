@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
 import { ApiResource } from '@core/resources/api-resource.service';
@@ -10,9 +10,11 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 
-import { Organization } from '@registration/shared/models/organization.model';
 import { Party } from '@registration/shared/models/party.model';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,11 +27,98 @@ export class OrganizationResource {
     private logger: LoggerService
   ) { }
 
-  public getOrganizations(): Observable<Organization[]>{
-    return this.apiResource.get<Organization[] | Organization[]>('organizations')
+  public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
+    return this.apiResource.get<Party>(`parties/signingauthority/${userId}`)
       .pipe(
-        map((response: ApiHttpResponse<Organization[] | Organization[]>) => response.result),
-        tap((organizations: Organization[] | Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Signing authority could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthorityByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getSigningAuthorityById(partyId: number): Observable<Party | null> {
+    return this.apiResource.get<Party>(`parties/signingauthority/${partyId}`)
+      .pipe(
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((party: Party) => this.logger.info('SIGNING_AUTHORITY', party)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Signing authority could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createSigningAuthority(party: Party): Observable<Party> {
+    return this.apiResource.post<Party>('parties/signingauthority', party)
+      .pipe(
+        map((response: ApiHttpResponse<Party>) => response.result),
+        tap((newParty: Party) => {
+          this.toastService.openSuccessToast('Signing authority has been created');
+          this.logger.info('NEW_SIGNING_AUTHORITY', newParty);
+        }),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Signing authority could not be created');
+          this.logger.error('[Core] OrganizationResource::createSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateSigningAuthority(party: Party): NoContent {
+    return this.apiResource.put<NoContent>(`parties/signingauthority/${party.id}`, party)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Signing authority has been updated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Signing authority could not be updated');
+          this.logger.error('[Core] OrganizationResource::updateSigningAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Get the organizations for a signing authority by user ID, and provide null when
+   * a signing authority could not be found.
+   */
+  public getSigningAuthorityOrganizationsByUserId(userId: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/signingauthority/${userId}/organizations`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('ORGANIZATIONS', organizations)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            // No signing authority exists for the provided user ID
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Organizations could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationsByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizations(textSearch?: string): Observable<OrganizationSearchListViewModel[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch });
+    return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationSearchListViewModel[]>) => response.result),
+        tap((organizations: OrganizationSearchListViewModel[]) => this.logger.info('ORGANIZATIONS', organizations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organizations could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizations error has occurred: ', error);
@@ -51,8 +140,8 @@ export class OrganizationResource {
       );
   }
 
-  public createOrganization(party: Party): Observable<Organization> {
-    return this.apiResource.post<Organization>('organizations', party)
+  public createOrganization(partyId: number): Observable<Organization> {
+    return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
         map((response: ApiHttpResponse<Organization>) => response.result),
         tap((newOrganization: Organization) => {
@@ -162,7 +251,7 @@ export class OrganizationResource {
   public getOrganizationAgreement(
     organizationId: number,
     agreementId: number,
-    asPdf?: boolean // TODO should we include format?
+    asPdf?: boolean
   ): Observable<OrganizationAgreementViewModel> {
     const params = this.apiResourceUtilsService.makeHttpParams({ asPdf });
     return this.apiResource.get<OrganizationAgreementViewModel>(`organizations/${organizationId}/agreements/${agreementId}`, params)
@@ -182,12 +271,15 @@ export class OrganizationResource {
    * Get a organization agreement for signing as HTML markup for inline
    * display, or Base64 (PDF) for downloading.
    */
-  // TODO is this accurate?
-  public getOrganizationAgreementForSigning(organizationId: number, agreementId: number) {
-    return this.apiResource.get<OrganizationAgreement>(`organizations/${organizationId}/agreements/${agreementId}/signable`)
+  public getOrganizationAgreementForSigning(
+    organizationId: number,
+    agreementType: AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT | AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT
+  ) {
+    const params = this.apiResourceUtilsService.makeHttpParams({ agreementType });
+    return this.apiResource.get<string>(`organizations/${organizationId}/signable`, params)
       .pipe(
-        map((response: ApiHttpResponse<OrganizationAgreement>) => response.result),
-        tap((organizationAgreement: OrganizationAgreement) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNABLE', organizationAgreement)),
+        map((response: ApiHttpResponse<string>) => response.result), // as Base64 string
+        tap((organizationAgreement: string) => this.logger.info('ORGANIZATION_AGREEMENT_SIGNABLE', organizationAgreement)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization agreement could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationAgreementForSigning error has occurred: ', error);

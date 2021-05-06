@@ -8,7 +8,6 @@ using System.ServiceModel.Channels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
@@ -29,8 +28,8 @@ using Prime.Services;
 using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
-using Prime.Models.Api;
 using Prime.Infrastructure;
+using System.Threading.Tasks;
 
 namespace Prime
 {
@@ -74,6 +73,9 @@ namespace Prime
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
+            services.AddScoped<IBannerService, BannerService>();
+            services.AddScoped<IGisService, GisService>();
+            services.AddScoped<IPlrProviderService, PlrProviderService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -118,7 +120,7 @@ namespace Prime
 
             ConfigureDatabase(services);
 
-            AuthenticationSetup.Initialize(services, Configuration, Environment);
+            AuthenticationSetup.Initialize(services);
         }
 
         protected void ConfigureClients(IServiceCollection services)
@@ -196,10 +198,15 @@ namespace Prime
             {
                 client.BaseAddress = new Uri(PrimeEnvironment.AddressAutocompleteApi.Url.EnsureTrailingSlash());
             });
+
+            services.AddHttpClient<ILdapClient, LdapClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -253,6 +260,11 @@ namespace Prime
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
+
+            if (PrimeEnvironment.IsLocal)
+            {
+                lifetime.ApplicationStarted.Register(OnApplicationStartedAsync(app.ApplicationServices.GetRequiredService<IVerifiableCredentialClient>()).Wait);
+            }
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
@@ -322,6 +334,34 @@ namespace Prime
                     }
                 };
             });
+        }
+
+        private async Task<Action> OnApplicationStartedAsync(IVerifiableCredentialClient _verifiableCredentialClient)
+        {
+            try
+            {
+                var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+
+                if (issuerDid != null)
+                {
+                    var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+                    if (schemaId == null)
+                    {
+                        schemaId = await _verifiableCredentialClient.CreateSchemaAsync();
+                    }
+
+                    var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
+                    if (credentialDefinitionId == null)
+                    {
+                        await _verifiableCredentialClient.CreateCredentialDefinitionAsync(schemaId);
+                    }
+                }
+            }
+            catch
+            {
+                // Agent not setup
+            }
+            return null;
         }
     }
 }

@@ -3,8 +3,9 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
-        novalidate>
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
 
     <section class="mb-3">
       <app-page-subheader2>
@@ -23,7 +24,7 @@
         </ng-container>
       </app-page-subheader2>
 
-      <app-bcsc-profile [user]="organization?.signingAuthority"
+      <app-bcsc-profile [user]="bcscUser"
                         [showAddress]="false"></app-bcsc-profile>
 
       <app-toggle-content label="Provide your preferred name, if you have one."
@@ -39,7 +40,7 @@
             </ng-container>
           </app-page-subheader2>
 
-          <app-preferred-name-form [form]="form"></app-preferred-name-form>
+          <app-preferred-name-form [form]="formState.form"></app-preferred-name-form>
         </section>
 
       </app-toggle-content>
@@ -71,7 +72,7 @@
               <ng-container appPageSubheader2Title>Physical Address</ng-container>
             </app-page-subheader2>
 
-            <app-address-form [form]="physicalAddress"
+            <app-address-form [form]="formState.physicalAddress"
                               [inBc]="true"
                               [showManualButton]="true"
                               [showAddressFields]="hasPhysicalAddress"></app-address-form>
@@ -89,7 +90,7 @@
           </ng-container>
         </app-page-subheader2>
 
-        <app-address-form [form]="physicalAddress"
+        <app-address-form [form]="formState.physicalAddress"
                           [inBc]="true"
                           [showManualButton]="true"
                           [showAddressFields]="hasPhysicalAddress"></app-address-form>
@@ -104,7 +105,7 @@
             <ng-container appPageSubheader2Title>Mailing Address</ng-container>
           </app-page-subheader2>
 
-          <app-address-form [form]="mailingAddress"
+          <app-address-form [form]="formState.mailingAddress"
                             [showManualButton]="true"
                             [showAddressFields]="hasMailingAddress"></app-address-form>
         </section>
@@ -140,8 +141,8 @@
                    formControlName="phone"
                    mask="(000) 000-0000"
                    [showMaskTyped]="false">
-            <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="phone.hasError('phone')">Must be a valid phone number</mat-error>
+            <mat-error *ngIf="formState.phone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.phone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
         </div>
@@ -151,8 +152,8 @@
             <input matInput
                    placeholder="Email"
                    formControlName="email">
-            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+            <mat-error *ngIf="formState.email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.email.hasError('email')">Must be a valid email address</mat-error>
           </mat-form-field>
 
         </div>
@@ -164,8 +165,8 @@
                    formControlName="smsPhone"
                    mask="(000) 000-0000"
                    [showMaskTyped]="false">
-            <mat-error *ngIf="smsPhone.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
+            <mat-error *ngIf="formState.smsPhone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.smsPhone.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
         </div>
@@ -177,8 +178,8 @@
                    formControlName="fax"
                    mask="(000) 000-0000"
                    [showMaskTyped]="false">
-            <mat-error *ngIf="fax.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="fax.hasError('phone')">Must be a valid phone number</mat-error>
+            <mat-error *ngIf="formState.fax.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.fax.hasError('phone')">Must be a valid phone number</mat-error>
           </mat-form-field>
 
         </div>

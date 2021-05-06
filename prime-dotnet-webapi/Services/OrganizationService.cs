@@ -11,6 +11,8 @@ using Prime.ViewModels.Parties;
 using System.Security.Claims;
 using AutoMapper.QueryableExtensions;
 using AutoMapper;
+using Prime.Models.Api;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -36,11 +38,38 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsAsync()
+        public async Task<bool> OrganizationExistsAsync(int organizationId)
         {
             return await _context.Organizations
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == organizationId);
+        }
+
+        public async Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions searchOptions)
+        {
+            searchOptions ??= new OrganizationSearchOptions();
+
+            var results = await _context.Organizations
+                .AsNoTracking()
+                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
+                    .Search(
+                        o => o.Name,
+                        o => o.DisplayId.ToString())
+                    .SearchCollections(
+                        o => o.Sites.Select(s => s.DoingBusinessAs),
+                        o => o.Sites.Select(s => s.PEC))
+                    .Containing(searchOptions.TextSearch)
+                )
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
+
+            return results
+                .Select(r => new OrganizationSearchViewModel
+                {
+                    Organization = r,
+                    MatchedOn = r.MatchedOn(searchOptions.TextSearch)
+                });
         }
 
         public async Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId)
@@ -61,16 +90,8 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
-        public async Task<int> CreateOrganizationAsync(SigningAuthorityChangeModel signingAuthority, ClaimsPrincipal user)
+        public async Task<int> CreateOrganizationAsync(int partyId)
         {
-            signingAuthority.ThrowIfNull(nameof(signingAuthority));
-
-            var partyId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, user);
-            if (partyId == -1)
-            {
-                throw new InvalidOperationException("Could not create Organization. Error when updating Signing Authority");
-            }
-
             var organizations = await GetOrganizationsByPartyIdAsync(partyId);
             if (organizations.Count() != 0)
             {
@@ -98,19 +119,7 @@ namespace Prime.Services
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             var currentOrganization = await GetOrganizationAsync(organizationId);
-
-            // BCSC Fields
-            var userId = currentOrganization.SigningAuthority.UserId;
-
             _context.Entry(currentOrganization).CurrentValues.SetValues(updatedOrganization);
-            _context.Entry(currentOrganization.SigningAuthority).CurrentValues.SetValues(updatedOrganization.SigningAuthority);
-
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.PhysicalAddress);
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.MailingAddress);
-            _partyService.UpdateAddress(currentOrganization.SigningAuthority, updatedOrganization.SigningAuthority.VerifiedAddress);
-
-            // Keep userId the same from BCSC card, do not update
-            currentOrganization.SigningAuthority.UserId = userId;
 
             await _businessEventService.CreateOrganizationEventAsync(currentOrganization.Id, currentOrganization.SigningAuthorityId, "Organization Updated");
 
@@ -165,13 +174,10 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is availible.
+        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is available.
         /// Otherwise, returns the newest existing Agreement of that type.
         /// Returns null if the Site doesn't exist on the Organization.
         /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="siteId"></param>
-        /// <returns></returns>
         public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
         {
             var siteSetting = await _context.Sites

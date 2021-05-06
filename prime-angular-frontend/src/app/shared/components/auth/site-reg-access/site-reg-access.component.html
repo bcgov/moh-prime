@@ -1,5 +1,7 @@
 <div class="container">
+  <app-banner></app-banner>
   <div class="row">
+
     <div class="col-sm-12 logo">
 
       <app-prime-logo label="right"
@@ -23,6 +25,7 @@
           <button mat-flat-button
                   color="primary"
                   class="large"
+                  [disabled]="disableLogin"
                   (click)="onLogin()">Access Registration</button>
 
         </div>

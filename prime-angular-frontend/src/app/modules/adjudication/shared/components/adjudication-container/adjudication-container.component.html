@@ -10,13 +10,14 @@
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
 
-  <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
-                      [dataSource]="dataSource"
+  <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
+                      [enrollees]="enrollees"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
-                      (reload)="onRefresh()"></app-enrollee-table>
+                      (refresh)="onRefresh()"
+                      (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <ng-container *ngIf="content">
 
@@ -24,14 +25,14 @@
       <div class="col py-5">
 
         <ng-container [ngTemplateOutlet]="content"
-                      [ngTemplateOutletContext]="{ enrollee: dataSource?.data[0] }"></ng-container>
+                      [ngTemplateOutletContext]="{ enrollee: enrollees[0] }"></ng-container>
 
       </div>
       <div *ngIf="hasActions"
            class="col-auto py-5">
 
-        <app-adjudicator-actions *ngIf="dataSource?.data[0]"
-                                 [enrollee]="dataSource?.data[0]"
+        <app-adjudicator-actions *ngIf="enrollees?.length"
+                                 [enrollee]="enrollees[0]"
                                  (approve)="onApprove($event)"
                                  (decline)="onDecline($event)"
                                  (lock)="onLock($event)"

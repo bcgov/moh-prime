@@ -2,7 +2,6 @@ import { Component, OnInit, Input, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { IProgressIndicator } from '@shared/components/progress-indicator/progress-indicator.component';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -31,9 +30,8 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
-    // TODO PRIME-1131 (trap)
     // Possible route pathways within site registration
-    const routePaths = (!organizationService.organization.hasAcceptedAgreement)
+    const routePaths = (!organizationService.organization?.hasAcceptedAgreement)
       // Combine organization and site routes, which includes
       // the organization agreement
       ? [SiteRoutes.initialRegistrationRouteOrder()]
