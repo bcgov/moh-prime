@@ -12,39 +12,59 @@ parameters:
   required: true
   value: prime
 - name: SUFFIX
+  displayName: Suffix
+  description: Usually a PR#, gets appended to all assets in the template to differentiate apps
   required: false
 - name: OC_NAMESPACE
+  displayName: OpenShift License Plate
+  description: Prepends your dev/test/prod URL
   required: true
   value: 9c33a9
 - name: OC_APP
+  displayName: Openshift Environment
+  description: dev/test/prod
   required: true
 - name: FRONTEND_POD
+  displayName: Frontend Pod Name
+  description: For naming the web/reverse proxy pod
   required: true
   value: frontend
 - name: FRONTEND_URL
+  displayName: Frontend URL
+  description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
   required: true
   value: frontend
 - name: API_POD
+  displayName: API Pod Name
+  description: For the .NET API
   required: true
   value: webapi
 - name: ASP_ENV
+  displayName: ASP.NET Environment
+  description: Development or Production
   required: true
   value: Development
 - name: DOCMAN_POD
+  displayName: Document Manager Pod Name
+  description: For other pods to reference it
   required: true
   value: document-manager
 - name: DB_POD
+  displayName: Database Pod
+  description: Postgres database
   required: true
   value: postgresql
-- name: DB_PORT
-  value: "5432"
-- name: DB_SSL
-  value: "false"
 - name: REDIS_POD
+  displayName: Redis Pod
+  description: Redis in-memory database
   value: redis
 - name: WEB_SCHEMA
+  displayName: Web Schema
+  description: http OR https
   value: http
 - name: URL_STUB
+  displayName: URL Stub
+  description: Appended to all URLs, used in PRs
   value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
   required: false
 objects:
@@ -140,13 +160,13 @@ objects:
     name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: ${FRONTEND_URL}${URL_STUB}
+    host: ${FRONTEND_URL}${SUFFIX}${URL_STUB}
     to:
       kind: Service
       name: ${NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: https
+      targetPort: ${WEB_SCHEMA}
     wildcardPolicy: None
 
 ###########################################
@@ -428,8 +448,8 @@ objects:
 ### Used for Alembic to run database migrations against the PostgreSQL database 
 ### for all Document Manager related tables. This pod will run once PostgreSQL 
 ### is verified to be open to query connections.
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
+- apiVersion: batch/v1
+  kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
     name: ${NAME}-${DOCMAN_POD}-migration
@@ -443,86 +463,87 @@ objects:
           dev-app: ${NAME}
           name: ${NAME}-${DOCMAN_POD}-migration
       spec:
+        restartPolicy: OnFailure
         containers:
-          - name: ${NAME}-${DOCMAN_POD}-migration
-            image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
-            command:
-              # Script force waits migration pod execution until PostgreSQL is verified to 
-              # be open to query connections.
-              - /opt/app-root/src/app.sh
-            args: 
-              - migrate
-            env:
-              - name: CACHE_REDIS_HOST
-                value: redis
-              - name: CACHE_REDIS_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: redis
-                    key: database-password
-              - name: CACHE_REDIS_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: redis
-                    key: redis_port
-              - name: DB_HOST
-                value: ${NAME}-${DB_POD}-db
-              - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres-secrets
-                    key: DATABASE_USERNAME
-              - name: DB_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres-secrets
-                    key: DATABASE_PASSWORD
-              - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgresql
-                    key: postgresql_database_port
-              - name: DB_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres-secrets
-                    key: DATABASE_USERNAME
-              - name: FLASK_ENV
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_ENV
-              - name: FLASK_RUN_HOST
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_HOST
-              - name: FLASK_DEBUG
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_DEBUG
-              - name: FLASK_APP
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_APP
-              - name: FLASK_RUN_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: document-manager
-                    key: FLASK_RUN_PORT
-              - name: JWT_WELL_KNOWN_CONFIG
-                valueFrom:
-                  configMapKeyRef:
-                    name: keycloak
-                    key: JWT_WELL_KNOWN_CONFIG
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: postgres-secrets
-                    key: DATABASE_PASSWORD
+        - name: ${NAME}-${DOCMAN_POD}-migration
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
+          command:
+            # Script force waits migration pod execution until PostgreSQL is verified to 
+            # be open to query connections.
+            - /opt/app-root/src/app.sh
+          args: 
+            - migrate
+          env:
+            - name: CACHE_REDIS_HOST
+              value: redis
+            - name: CACHE_REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: database-password
+            - name: CACHE_REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: redis
+                  key: redis_port
+            - name: DB_HOST
+              value: ${NAME}-${DB_POD}-db
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DATABASE_USERNAME
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DATABASE_PASSWORD
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgresql
+                  key: postgresql_database_port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DATABASE_USERNAME
+            - name: FLASK_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_ENV
+            - name: FLASK_RUN_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_RUN_HOST
+            - name: FLASK_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_DEBUG
+            - name: FLASK_APP
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_APP
+            - name: FLASK_RUN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_RUN_PORT
+            - name: JWT_WELL_KNOWN_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak
+                  key: JWT_WELL_KNOWN_CONFIG
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secrets
+                  key: DATABASE_PASSWORD
     triggers:
       - type: ConfigChange
       - type: ImageChange
