@@ -80,6 +80,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -181,6 +182,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -318,6 +320,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: python
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -456,6 +459,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: python
   spec:
     template:
       metadata:
@@ -569,6 +573,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: postgresql
   spec:
     replicas: 1
     selector:
@@ -676,6 +681,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
+      app.openshift.io/runtime: redis
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -729,7 +735,7 @@ objects:
               - name: REDIS_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: redis-cache-secrets
+                    name: redis
                     key: database-password
             securityContext:
               capabilities: {}
