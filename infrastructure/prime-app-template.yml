@@ -168,6 +168,9 @@ objects:
       weight: 100
     port:
       targetPort: ${WEB_SCHEMA}
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
 
 ###########################################
