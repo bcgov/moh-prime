@@ -5,6 +5,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+
 @Component({
   selector: 'app-site-registration-actions',
   templateUrl: './site-registration-actions.component.html',
