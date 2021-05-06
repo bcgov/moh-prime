@@ -30,7 +30,6 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetLookups()
         {
