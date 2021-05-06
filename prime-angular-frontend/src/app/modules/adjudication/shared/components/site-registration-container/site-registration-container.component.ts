@@ -265,9 +265,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
   public onEnableEditing(siteId: number) {
     this.busy = this.siteResource.enableEditingSite(siteId)
-      .subscribe((updatedSite: Site) => {
-        this.updateSite(updatedSite);
-      });
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
   public ngOnInit(): void {
