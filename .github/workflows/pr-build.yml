@@ -178,10 +178,11 @@ jobs:
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
 
+  apply-oc-template:
+    runs-on: ubuntu-20.04
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
-
 
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
