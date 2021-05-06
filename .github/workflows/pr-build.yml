@@ -218,4 +218,4 @@ jobs:
             -p OC_NAMESPACE=9c33a9 \
             -p OC_APP=dev \
             -p URL_STUB=-9c33a9-dev.apps.silver.devops.gov.bc.ca \
-            -n 9c33a9-dev | oc create -f -
+            -n 9c33a9-dev | oc apply -f -
