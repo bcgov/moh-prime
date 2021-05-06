@@ -180,6 +180,7 @@ jobs:
 
   apply-oc-template:
     runs-on: ubuntu-20.04
+    environment: Development
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -193,7 +194,8 @@ jobs:
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          openshift_username: serviceaccount
+          openshift_password: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
           namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
 
       - name: "Get current pull request"
