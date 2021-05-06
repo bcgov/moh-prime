@@ -150,6 +150,23 @@ namespace Prime.Controllers
             return await SubmissionActionInternal(enrolleeId, SubmissionAction.EnableEditing);
         }
 
+        // POST: api/enrollees/5/submission/cancel-toa
+        /// <summary>
+        /// Puts the Enrolle back into Under Review from Requires TOA.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPost("{enrolleeId}/submission/cancel-toa", Name = nameof(CancelToaAssignment))]
+        [Authorize(Roles = Roles.ApproveEnrollee)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> CancelToaAssignment(int enrolleeId)
+        {
+            return await SubmissionActionInternal(enrolleeId, SubmissionAction.CancelToaAssignment);
+        }
+
         // POST: api/enrollees/5/submission/lock-profile
         /// <summary>
         /// Locks the Enrolle's profile.
