@@ -23,7 +23,7 @@ jobs:
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
       IMAGE_TAGS: latest
-      
+
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -133,7 +133,6 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
-      REDIRECT_URL: "https://frontendpr-$PR_NUMBER-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
       
     steps:
       - name: "Checkout the repo"
@@ -166,6 +165,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          REDIRECT_URL: "https://frontendpr-${{steps.PR.outputs.number}}${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -177,3 +177,44 @@ jobs:
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+
+    steps:
+      - name: "Use the OpenShift template"
+        uses: actions/checkout@v2
+
+
+      - name: Install OC
+        uses: redhat-actions/oc-installer@v1
+        with:
+          version: '4.6'
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_username: serviceaccount
+          openshift_password: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
+
+      - name: "Get current pull request"
+        uses: 8BitJonny/gh-get-current-pr@1.0.1
+        id: PR
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          filterOutClosed: true
+
+      - name: "Process template"
+        id: oc
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          PR_NUMBER: ${{steps.PR.outputs.number}}
+        run: |
+          echo PR_NUMBER=${PR_NUMBER}
+          oc process -f prime-app-template.yml \
+            -p NAME=pr-${PR_NUMBER} \
+            -p SUFFIX=pr-${PR_NUMBER} \
+            -p OC_NAMESPACE=9c33a9 \
+            -p OC_APP=dev \
+            -p URL_STUB=-9c33a9-dev.apps.silver.devops.gov.bc.ca \
+            -n 9c33a9-dev | oc create -f -
