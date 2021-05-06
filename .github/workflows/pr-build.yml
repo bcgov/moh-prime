@@ -187,14 +187,13 @@ jobs:
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
         with:
-          version: '4.6'
+          oc_version: '4.6'
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_username: serviceaccount
-          openshift_password: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
           namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
 
       - name: "Get current pull request"
