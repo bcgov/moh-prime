@@ -215,7 +215,15 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p NAME=pr-${PR_NUMBER} \
             -p SUFFIX=pr-${PR_NUMBER} \
-            -p OC_NAMESPACE=9c33a9 \
+            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
-            -p URL_STUB=-9c33a9-dev.apps.silver.devops.gov.bc.ca \
-            -n 9c33a9-dev | oc apply -f -
+            -p FRONTEND_POD=frontend \
+            -p FRONTEND_URL=frontend \
+            -p API_POD=webapi \
+            -p ASP_ENV=Development \
+            -p DOCMAN_POD=document-manager \
+            -p DB_POD=postgres \
+            -p REDIS_POD=redis \
+            -p WEB_SCHEMA=http \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc apply -f -
