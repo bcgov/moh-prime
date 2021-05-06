@@ -53,7 +53,7 @@ parameters:
   displayName: Database Pod
   description: Postgres database
   required: true
-  value: postgresql
+  value: postgres-db
 - name: REDIS_POD
   displayName: Redis Pod
   description: Redis in-memory database
