@@ -14,10 +14,11 @@ namespace Prime.Services
     public class BannerService : BaseService, IBannerService
     {
         private readonly IMapper _mapper;
+
         public BannerService(
             ApiDbContext context,
-            IMapper mapper,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IMapper mapper)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -38,18 +39,20 @@ namespace Prime.Services
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
             // Comparing of only the Date portion.
             if (banner != null && currentDate.Date >= banner.StartDate.Date && currentDate.Date <= banner.EndDate.Date)
             {
                 return banner;
             }
+
             return null;
         }
 
         public async Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel)
         {
             var banner = await _context.Banners
-                .SingleOrDefaultAsync(a => a.BannerLocationCode == locationCode);
+                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
 
             if (banner == null)
             {
@@ -76,15 +79,13 @@ namespace Prime.Services
         public async Task DeleteBannerAsync(BannerLocationCode locationCode)
         {
             var banner = await _context.Banners
-                            .SingleOrDefaultAsync(a => a.BannerLocationCode == locationCode);
+                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
 
-            if (banner == null)
+            if (banner != null)
             {
-                return;
+                _context.Banners.Remove(banner);
+                await _context.SaveChangesAsync();
             }
-
-            _context.Banners.Remove(banner);
-            await _context.SaveChangesAsync();
         }
     }
 }
