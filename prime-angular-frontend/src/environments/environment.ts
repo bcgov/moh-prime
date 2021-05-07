@@ -29,15 +29,10 @@ export const environment = {
   },
   mohKeycloakConfig: {
     config: {
-      url: 'https://common-login-dev.hlth.gov.bc.ca/auth',
+      url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
       realm: 'moh_applications',
-      clientId: 'prime-application-local'
-    },
-    initOptions: {
-      onLoad: 'check-sso'
-    },
-    // TODO feels like this could be removed?
-    bearerExcludedUrls: ['/provisioner-access/certificate']
+      clientId: 'PRIME-WEBAPP-ENROLLMENT'
+    }
   }
 };
 
