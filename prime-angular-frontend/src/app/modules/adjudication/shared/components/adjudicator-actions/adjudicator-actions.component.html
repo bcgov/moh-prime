@@ -67,8 +67,8 @@
       <span>Enable Editing</span>
     </button>
     <button mat-menu-item
-            [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
             *ngIf="enrollee.currentStatusCode === EnrolmentStatus.REQUIRES_TOA"
+            [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
             (click)="onCancelToa()">
       <mat-icon>error_outline</mat-icon>
       <span>Cancel TOA Assignment</span>
