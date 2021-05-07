@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     checkout scm
-                    sh "./player.sh sparsify"
+                    sh "./devops/OC3/bash/player.sh sparsify"
                 }
             }
         }
@@ -33,21 +33,21 @@ pipeline {
             steps {
                 script {
                   echo "Reducing files to minimum for build and deploy..."
-                  sh "./player.sh sparsify"
+                  sh "./devops/OC3/bash/player.sh sparsify"
                   echo "Priming GitHub for notification..."
-                  sh "./player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
+                  sh "./devops/OC3/bash/player.sh notifyGitHub pending build $GITHUB_CREDENTIAL"
                   echo "Building ..."
-                  sh "./player.sh build api tools ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                //   sh "./player.sh build frontend tools ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
-                //   sh "./player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
+                  sh "./devops/OC3/bash/player.sh build api tools ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                //   sh "./devops/OC3/bash/player.sh build frontend tools ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                //   sh "./devops/OC3/bash/player.sh build document-manager dev -p SUFFIX=${SUFFIX}"
                 }
             }
             post {
               success {
-                sh "./player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub success build $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "./player.sh notifyGitHub failure build $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub failure build $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -59,23 +59,23 @@ pipeline {
             agent { label 'master' }
             steps {
                 script {
-                    sh "./player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
+                    sh "./devops/OC3/bash/player.sh notifyGitHub pending deployment $GITHUB_CREDENTIAL"
 
                     echo "Deploy to dev..."
-                    // sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy postgres-ephemeral tools -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                    // sh "./player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL}" 
-                    // sh "./player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
-                    // sh "./player.sh deploy api tools ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend tools ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    // sh "./devops/OC3/bash/player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
+                    sh "./devops/OC3/bash/player.sh deploy postgres-ephemeral tools -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    // sh "./devops/OC3/bash/player.sh deploy document-manager-ephemeral dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL}" 
+                    // sh "./devops/OC3/bash/player.sh deploy mongo-ephemeral dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=256Mi"
+                    // sh "./devops/OC3/bash/player.sh deploy api tools ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./devops/OC3/bash/player.sh deploy frontend tools ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
             post {
               success {
-                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -88,20 +88,20 @@ pipeline {
             steps {
                 script {
                     echo "Deploy to dev..."
-                    sh "./player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL} -p VOLUME_CAPACITY=1Gi"
-                    // sh "./player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
-                    sh "./player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
-                    sh "./player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./devops/OC3/bash/player.sh deploy redis dev -p SUFFIX=${SUFFIX}"
+                    sh "./devops/OC3/bash/player.sh deploy postgres dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./devops/OC3/bash/player.sh deploy document-manager dev -p SUFFIX=${SUFFIX} -p VANITY_URL=${VANITY_URL} -p VOLUME_CAPACITY=1Gi"
+                    // sh "./devops/OC3/bash/player.sh deploy mongo dev -p SUFFIX=${SUFFIX} -p VOLUME_CAPACITY=1Gi"
+                    sh "./devops/OC3/bash/player.sh deploy api dev ${API_ARGS} -p SUFFIX=${SUFFIX}"
+                    sh "./devops/OC3/bash/player.sh deploy frontend dev ${FRONTEND_ARGS} -p SUFFIX=${SUFFIX}"
                 }
             }
             post {
               success {
-                sh "./player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub success deployment $GITHUB_CREDENTIAL"
               }
               failure {
-                sh "./player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
+                sh "./devops/OC3/bash/player.sh notifyGitHub failure deployment $GITHUB_CREDENTIAL"
               }
             }
         }
@@ -110,11 +110,11 @@ pipeline {
           agent { label 'master' }
           when { expression { (BRANCH_NAME ==~ /PR-\d+/) }; }
           steps {
-        //     sh "./player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
+        //     sh "./devops/OC3/bash/player.sh notifyGitHub pending continuous-integration/jenkins/integrity-test $GITHUB_CREDENTIAL"
         //
         //     timeout(time: 10, unit: 'MINUTES') {
         //       withSonarQubeEnv('SonarQube Server') {
-                sh "./player.sh scan" // ???
+                sh "./devops/OC3/bash/player.sh scan" // ???
         //       }
         //     }
           }
@@ -130,10 +130,10 @@ pipeline {
         //   }
         //   post {
         //     success {
-        //       sh "./player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+        //       sh "./devops/OC3/bash/player.sh notifyGitHub success continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
         //     }
         //     failure {
-        //       sh "./player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
+        //       sh "./devops/OC3/bash/player.sh notifyGitHub failure continuous-integration/jenkins/tests $GITHUB_CREDENTIAL"
         //     }
         //   }
         // }
@@ -147,20 +147,20 @@ pipeline {
                     agent { label 'code-tests' }
                     steps {
                         checkout scm
-                        sh "./player.sh scan"
+                        sh "./devops/OC3/bash/player.sh scan"
                     }
                 }
                 stage('Zap') {
                     agent { label 'code-tests' }
                     steps {
                         checkout scm
-                        sh "./player.sh zap frontend"
+                        sh "./devops/OC3/bash/player.sh zap frontend"
                     }
                 }
                 stage('SchemaSpy') {
                     agent { label 'master' }
                     steps {
-                        sh "./player.sh toolbelt schemaspy dev"
+                        sh "./devops/OC3/bash/player.sh toolbelt schemaspy dev"
                     }
                 }
             }
@@ -169,7 +169,7 @@ pipeline {
         // stage('Cleanup') {
         //     agent { label 'master' }
         //     steps {
-        //         sh "./player.sh sparsify"
+        //         sh "./devops/OC3/bash/player.sh sparsify"
         //     }
         // }
     }
