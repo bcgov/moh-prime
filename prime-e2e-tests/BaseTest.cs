@@ -39,6 +39,15 @@ namespace TestPrimeE2E
         }
 
 
+        protected void LoginWithIdirAccount()
+        {
+            ClickButton("IDIR Login");
+            _driver.FindPatientlyById("user").SendKeys(TestParameters.IdirId);
+            _driver.FindPatientlyById("password").SendKeys(TestParameters.IdirPassword);
+            _driver.FindPatiently("//input[@name='btnSubmit']").Click();
+        }
+
+
         /// <summary>
         /// Where possible, use <c>FillFormField</c> instead, as a label is more likely to change
         /// than an internal <c>formControlName</c>.
