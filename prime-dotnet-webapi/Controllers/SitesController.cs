@@ -814,7 +814,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<Site>> EnableEditingSite(int siteId)
+        public async Task<ActionResult> EnableEditingSite(int siteId)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
