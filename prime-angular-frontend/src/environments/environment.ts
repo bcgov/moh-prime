@@ -4,6 +4,7 @@
 
 export const environment = {
   production: false,
+  environmentName: 'local',
   version: '1.0.0',
   apiEndpoint: 'http://localhost:5000/api',
   loginRedirectUrl: 'http://localhost:4200',
@@ -26,7 +27,18 @@ export const environment = {
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
   },
-  environmentName: 'local'
+  mohKeycloakConfig: {
+    config: {
+      url: 'https://common-login-dev.hlth.gov.bc.ca/auth',
+      realm: 'moh_applications',
+      clientId: 'prime-application-local'
+    },
+    initOptions: {
+      onLoad: 'check-sso'
+    },
+    // TODO feels like this could be removed?
+    bearerExcludedUrls: ['/provisioner-access/certificate']
+  }
 };
 
 /*
