@@ -257,6 +257,8 @@ objects:
               - configMapRef:
                   name: keycloak
               - configMapRef:
+                  name: ldap
+              - configMapRef:
                   name: metabase-embedded
               - configMapRef:
                   name: pharmanet-api
