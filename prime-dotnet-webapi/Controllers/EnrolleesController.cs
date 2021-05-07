@@ -67,7 +67,10 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees
         /// <summary>
-        /// Gets a enrollee by adjacent id if user has ADMIN role, can be either next or previous
+        /// Gets an adjacent enrollee by id if user has ADMIN role, can be either next or previous
+        /// returns same enrollee there is only one in db
+        /// returns enrollee with max id if input id is min in db for previous adjacent
+        /// returns enrollee with min id if input id is max in db for next adjacent
         /// </summary>
         [HttpGet("adjacent", Name = nameof(GetAdjacentEnrollee))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
