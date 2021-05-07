@@ -86,7 +86,7 @@ namespace Prime.Services
             string internalProviderCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.8']/@extension", documentRoot, messageId);
             if (internalProviderCode == null)
             {
-                _logger.LogError("Mandatory IPC was not found for the message {id}'", messageId);
+                _logger.LogError("Mandatory IPC was not found for the message '{id}'", messageId);
                 throw new ArgumentNullException("IPC missing.");
             }
 
