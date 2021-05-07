@@ -134,6 +134,37 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<EnrolleeListViewModel> GetAdjacentEnrolleeAsync(EnrolleeRangeOptions rangeOptions = null)
+        {
+            rangeOptions ??= new EnrolleeRangeOptions();
+
+            IQueryable<int> newestAgreementIds = _context.AgreementVersions
+                .Select(a => a.AgreementType)
+                .Distinct()
+                .Select(type => _context.AgreementVersions
+                    .OrderByDescending(a => a.EffectiveDate)
+                    .First(a => a.AgreementType == type)
+                    .Id
+                );
+
+            return await _context.Enrollees
+                .If(rangeOptions.ReverseDirection == true, q => q
+                    .Where(e => e.Id < rangeOptions.EnrolleeId)
+                )
+                .If(rangeOptions.ReverseDirection != true, q => q
+                    .Where(e => e.Id > rangeOptions.EnrolleeId)
+                )
+                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
+                .DecompileAsync()
+                .If(rangeOptions.ReverseDirection == true, q => q
+                    .OrderByDescending(e => e.Id)
+                )
+                .If(rangeOptions.ReverseDirection != true, q => q
+                    .OrderBy(e => e.Id)
+                )
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await GetBaseEnrolleeQuery()

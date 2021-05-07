@@ -10,7 +10,21 @@
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;
+              scope="col">
+            <ng-container *ngIf="showJumpArrow">
+              <button mat-icon-button
+                      (click)="jumpNext()"
+                      aria-label="next"
+                      matTooltip="next">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button mat-icon-button
+                      (click)="jumpNext(true)"
+                      aria-label="previous"
+                      matTooltip="previous">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+            </ng-container>
           </th>
           <td mat-cell
               *matCellDef="let row;">

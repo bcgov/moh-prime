@@ -26,7 +26,7 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Injectable({
   providedIn: 'root'
@@ -63,6 +63,20 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdjacentEnrollee(enrolleeId: number, reverseDirection?: boolean): Observable<EnrolleeListViewModel> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ enrolleeId, reverseDirection });
+    return this.apiResource.get<EnrolleeListViewModel>('enrollees/adjacent', params)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeListViewModel>) => response.result),
+        tap((enrollees: EnrolleeListViewModel) => this.logger.info('ENROLLEES', enrollees)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrolments could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjacentEnrollees error has occurred: ', error);
           throw error;
         })
       );

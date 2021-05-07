@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,6 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @UntilDestroy()
 @Component({
@@ -27,12 +29,14 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
+  @Input() public showJumpArrow: boolean;
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
   @Output() public sendBulkEmail: EventEmitter<void>;
+  @Output() public nextData: EventEmitter<boolean>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -59,6 +63,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.sendBulkEmail = new EventEmitter<void>();
+    this.nextData = new EventEmitter<boolean>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -75,6 +80,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     ];
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
     this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
+    this.showJumpArrow = false;
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -147,6 +153,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     if (!changes.enrollees.firstChange) {
       this.dataSource.data = changes.enrollees.currentValue;
     }
+  }
+
+  public jumpNext(reverse?: boolean): void {
+    this.nextData.emit(reverse);
   }
 
   public ngOnInit(): void {

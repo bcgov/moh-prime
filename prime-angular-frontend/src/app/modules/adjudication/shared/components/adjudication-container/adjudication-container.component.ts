@@ -29,10 +29,10 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
-import {AdjudicationResource} from '@adjudication/shared/services/adjudication-resource.service';
-import {AdjudicationRoutes} from '@adjudication/adjudication.routes';
-import {SendBulkEmailComponent} from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -50,7 +50,7 @@ export class AdjudicationContainerComponent implements OnInit {
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
-  private routeUtils: RouteUtils;
+  protected routeUtils: RouteUtils;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -60,7 +60,7 @@ export class AdjudicationContainerComponent implements OnInit {
     private permissionService: PermissionService,
     private dialog: MatDialog,
     private utilsService: UtilsService,
-    private toastService: ToastService,
+    protected toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 

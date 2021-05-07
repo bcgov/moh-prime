@@ -6,11 +6,12 @@ import { map } from 'rxjs/operators';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
-import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeListViewModel, Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
 
 @Component({
@@ -44,11 +45,27 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.hasActions = true;
   }
 
+  public onNextData(reverse: boolean) {
+    this.busy = this.adjudicationResource.getAdjacentEnrollee(this.route.snapshot.params.id, reverse)
+      .subscribe((result: EnrolleeListViewModel) => {
+        if (result) {
+          this.routeUtils.routeWithin([result.id, this.AdjudicationRoutes.ENROLLEE_OVERVIEW]);
+          this.enrollees = [result];
+          this.loadEnrollee(result.id);
+        }
+        else {
+          this.toastService.openErrorToast("Enrolment could not be retrieved");
+        }
+      });
+  }
+
   public ngOnInit(): void {
     super.ngOnInit();
 
-    const enrolleeId = this.route.snapshot.params.id;
+    this.loadEnrollee(this.route.snapshot.params.id);
+  }
 
+  private loadEnrollee(enrolleeId: number): void {
     this.busy = this.adjudicationResource.getEnrolleeById(enrolleeId)
       .pipe(
         map((enrollee: HttpEnrollee) => [enrollee, this.enrolmentAdapter(enrollee)])

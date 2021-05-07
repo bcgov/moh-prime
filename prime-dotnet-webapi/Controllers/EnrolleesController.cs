@@ -65,6 +65,35 @@ namespace Prime.Controllers
             }
         }
 
+        // GET: api/Enrollees
+        /// <summary>
+        /// Gets a enrollee by adjacent id if user has ADMIN role, can be either next or previous
+        /// </summary>
+        [HttpGet("adjacent", Name = nameof(GetAdjacentEnrollee))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeListViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAdjacentEnrollee([FromQuery] EnrolleeRangeOptions rangeOptions)
+        {
+            if (User.IsAdministrant())
+            {
+                var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
+                var enrollee = await _enrolleeService.GetAdjacentEnrolleeAsync(rangeOptions);
+                if (enrollee == null)
+                {
+                    return NotFound(ApiResponse.Message($"Adjacent enrollee not found for id {rangeOptions.EnrolleeId}"));
+                }
+                var result = new[] { enrollee }.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
+                return Ok(ApiResponse.Result(result.FirstOrDefault()));
+            }
+            else
+            {
+                return Forbid();
+            }
+        }
+
         // GET: api/Enrollees/5
         /// <summary>
         /// Gets a specific Enrollee.
