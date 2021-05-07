@@ -49,9 +49,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.busy = this.adjudicationResource.getAdjacentEnrollee(this.route.snapshot.params.id, reverse)
       .subscribe((result: EnrolleeListViewModel) => {
         if (result) {
-          this.routeUtils.routeWithin([result.id, this.AdjudicationRoutes.ENROLLEE_OVERVIEW]);
+          this.routeUtils.routeWithin([result.id, RouteUtils.currentRoutePath(this.router.url)]);
+          // update datasource
           this.enrollees = [result];
-          this.loadEnrollee(result.id);
         }
         else {
           this.toastService.openErrorToast("Enrolment could not be retrieved");
@@ -62,7 +62,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public ngOnInit(): void {
     super.ngOnInit();
 
-    this.loadEnrollee(this.route.snapshot.params.id);
+    this.route.params.subscribe(params => this.loadEnrollee(params.id));
   }
 
   private loadEnrollee(enrolleeId: number): void {

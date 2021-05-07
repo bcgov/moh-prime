@@ -42,6 +42,7 @@ import { BulkEmailType } from '@shared/enums/bulk-email-type';
 export class AdjudicationContainerComponent implements OnInit {
   @Input() public hasActions: boolean;
   @Input() public content: TemplateRef<any>;
+  @Input() public showJumpArrow: boolean;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
@@ -70,6 +71,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.enrollees = [];
 
     this.showSearchFilter = false;
+    this.showJumpArrow = false;
   }
 
   public onSearch(search: string | null): void {
@@ -81,7 +83,7 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onRefresh(): void {
-    this.getDataset(this.route.snapshot.queryParams);
+    this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams);
   }
 
   public onNotify(enrolleeId: number) {
@@ -148,7 +150,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const response = { action };
         return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
           : of(response);
       }),
       exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
@@ -372,7 +374,7 @@ export class AdjudicationContainerComponent implements OnInit {
       title: 'Send Email - Bulk Actions'
     };
     this.busy = this.dialog.open(SendBulkEmailComponent, { data })
-    .afterClosed()
+      .afterClosed()
       .pipe(
         exhaustMap((bulkEmailType: BulkEmailType) =>
           bulkEmailType
@@ -380,22 +382,36 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         )
       )
-    .subscribe((emails: string[]) => {
-      emails.length
-        ? this.utilsService.mailTo(emails.join(';'))
-        : this.toastService.openErrorToast('No enrollees found for email type.');
-    });
+      .subscribe((emails: string[]) => {
+        emails.length
+          ? this.utilsService.mailTo(emails.join(';'))
+          : this.toastService.openErrorToast('No enrollees found for email type.');
+      });
+  }
+
+  public onNextData(reverse: boolean) {
+    this.busy = this.adjudicationResource.getAdjacentEnrollee(this.route.snapshot.params.id, reverse)
+      .subscribe((result: EnrolleeListViewModel) => {
+        if (result) {
+          this.onRoute([result.id, RouteUtils.currentRoutePath(this.router.url)]);
+        }
+        else {
+          this.toastService.openErrorToast("Enrolment could not be retrieved");
+        }
+      });
   }
 
   public ngOnInit() {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
+    // url params could change due to jump action, subscribe to changes
+    this.route.params
+      .subscribe((params) => this.getDataset(params.id, {}));
   }
 
-  private getDataset(queryParams: { search?: string, status?: number }) {
-    const enrolleeId = this.route.snapshot.params.id;
+  private getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
     const results$ = (enrolleeId)
       ? this.getEnrolleeById(enrolleeId)
       : this.getEnrollees(queryParams);

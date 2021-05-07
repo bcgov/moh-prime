@@ -45,21 +45,22 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
   }
 
   public onAction() {
-    this.getAccessTerms(this.selectedYear);
+    this.getAccessTerms(this.route.snapshot.params.id, this.selectedYear);
   }
 
   public onChange({ value: year }: MatSelectChange) {
     this.setQueryParams({ year });
-    this.getAccessTerms(year);
+    this.getAccessTerms(this.route.snapshot.params.id, year);
   }
 
   public ngOnInit() {
-    this.selectedYear = this.route.snapshot.queryParams.year || this.getCurrentYear();
-    this.getAccessTerms(this.selectedYear);
+    this.route.params.subscribe((params) => {
+      this.selectedYear = this.route.snapshot.queryParams.year || this.getCurrentYear();
+      this.getAccessTerms(params.id, this.selectedYear);
+    });
   }
 
-  private getAccessTerms(year: number = null) {
-    const enrolleeId = this.route.snapshot.params.id;
+  private getAccessTerms(enrolleeId: number, year: number = null) {
     this.busy = this.adjudicationResource.getEnrolmentCardsByYear(enrolleeId, year)
       .subscribe((enrolmentCards: EnrolmentCard[]) => this.enrolmentCards = enrolmentCards);
   }
