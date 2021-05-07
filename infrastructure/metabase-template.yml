@@ -121,6 +121,8 @@ objects:
   kind: DeploymentConfig
   metadata:
     name: ${METABASE_SERVICE_NAME}-database
+    labels:
+      app.kubernetes.io/part-of: prime
   spec:
     replicas: 1
     selector:
@@ -203,10 +205,14 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
+    annotations:
+      app.openshift.io/connects-to: >-
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"metabase-database"}]
     name: ${METABASE_SERVICE_NAME}
     labels:
       app: metabase
       service: ${METABASE_SERVICE_NAME}
+      app.kubernetes.io/part-of: prime
   spec:
     replicas: 1
     selector:
