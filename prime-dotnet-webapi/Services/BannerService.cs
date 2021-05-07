@@ -60,7 +60,7 @@ namespace Prime.Services
                 _context.Banners.Add(banner);
             }
 
-            _context.Entry(banner).CurrentValues.SetValues(updateModel); // reflection
+            _context.Entry(banner).CurrentValues.SetValues(updateModel);
 
             try
             {
