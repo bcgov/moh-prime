@@ -42,6 +42,8 @@ namespace Prime.Services
                 var clientCert = new X509Certificate2(certAsBytes);
                 if (clientCert.Thumbprint == PrimeEnvironment.PlrIntegration.ClientCertThumbprint)
                 {
+                    ((SoapService)serviceInstance).LogWarning($"{httpContext.Connection.RemoteIpAddress} -> {httpContext.Connection.LocalIpAddress}");
+
                     service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
                 }
                 else
