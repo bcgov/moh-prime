@@ -11,10 +11,6 @@ parameters:
   description: A prefix appended to all objects
   required: true
   value: prime
-- name: SUFFIX
-  displayName: Suffix
-  description: Usually a PR#, gets appended to all assets in the template to differentiate apps
-  required: false
 - name: OC_NAMESPACE
   displayName: OpenShift License Plate
   description: Prepends your dev/test/prod URL
@@ -99,7 +95,7 @@ objects:
         containers:
           - name: ${NAME}-${FRONTEND_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${SUFFIX}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${NAME}
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -127,7 +123,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-frontend:${SUFFIX}'
+            name: 'prime-frontend:${NAME}'
   status: {}
 #   Frontend Service
 - apiVersion: v1
@@ -161,7 +157,7 @@ objects:
     name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: ${FRONTEND_URL}${SUFFIX}${URL_STUB}
+    host: ${FRONTEND_URL}${NAME}${URL_STUB}
     to:
       kind: Service
       name: ${NAME}-${FRONTEND_POD}
@@ -204,7 +200,7 @@ objects:
         containers:
           - name: ${NAME}-${API_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${SUFFIX}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${NAME}
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
@@ -298,7 +294,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-webapi-backend:${SUFFIX}'
+            name: 'prime-webapi-backend:${NAME}'
   status: {}
 #   Backend Web API Service
 - apiVersion: v1
@@ -348,7 +344,7 @@ objects:
         containers:
           - name: ${NAME}-${DOCMAN_POD}-backend
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${NAME}
             env:
               - name: CACHE_REDIS_HOST
                 value: redis
@@ -434,7 +430,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${SUFFIX}'
+            name: 'prime-document-manager:${NAME}'
   status: {}
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -480,7 +476,7 @@ objects:
         containers:
         - name: ${NAME}-${DOCMAN_POD}-migration
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${SUFFIX}
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${NAME}
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to 
             # be open to query connections.
@@ -567,7 +563,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${SUFFIX}'
+            name: 'prime-document-manager:${NAME}'
   status: {}
 
 ###########################################

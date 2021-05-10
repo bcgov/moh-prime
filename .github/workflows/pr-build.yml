@@ -47,10 +47,12 @@ jobs:
           DOCKER_BUILDKIT: 1
           BUILD_LOGLEVEL: 2
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          NAME: pr-${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg=$BUILD_LOGLEVEL \
+            --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
+            --build-arg NAME=$NAME \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -62,7 +64,6 @@ jobs:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
       IMAGE_TAGS: latest
-      
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -96,8 +97,9 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          NAME: pr-${{steps.PR.outputs.number}}
         run: |
-          echo PR_NUMBER=${PR_NUMBER}  pull_request:
+          echo PR_NUMBER=${PR_NUMBER} 
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=pr-$PR_NUMBER-postgres-db \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
@@ -109,9 +111,10 @@ jobs:
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+            --build-arg NAME=$NAME \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
 
   build-frontend:
     runs-on: ubuntu-20.04
@@ -156,7 +159,9 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          NAME: pr-${{steps.PR.outputs.number}}
           REDIRECT_URL: "https://frontendpr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+          
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -164,10 +169,11 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+            --build-arg NAME=$NAME \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
 
   apply-oc-template:
     runs-on: ubuntu-20.04
@@ -175,7 +181,7 @@ jobs:
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
-
+            --build-arg NAME=pr-$PR_NUMBER \
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
 
@@ -199,11 +205,11 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          NAME: pr-${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=pr-$PR_NUMBER \
-            -p SUFFIX=pr-$PR_NUMBER \
+            -p NAME=$NAME \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
             -p FRONTEND_POD=frontend \
