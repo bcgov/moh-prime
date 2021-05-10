@@ -74,9 +74,9 @@ namespace Prime
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<IBannerService, BannerService>();
-            services.AddScoped<IHAAuthorizedUserService, HAAuthorizedUserService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
+            services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

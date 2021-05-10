@@ -43,7 +43,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AuthorizedUserChangeModel>> GetAuthorizedUserByUserId(Guid userId)
+        public async Task<ActionResult> GetAuthorizedUserByUserId(Guid userId)
         {
             var authorizedUser = await _partyService.GetPartyForUserIdAsync(userId, PartyType.AuthorizedUser);
             if (authorizedUser == null)
@@ -65,7 +65,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<AuthorizedUserChangeModel>> GetAuthorizedUserById(int partyId)
+        public async Task<ActionResult> GetAuthorizedUserById(int partyId)
         {
             var authorizedUser = await _partyService.GetPartyAsync(partyId, PartyType.AuthorizedUser);
             if (authorizedUser == null)
@@ -85,7 +85,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<AuthorizedUserChangeModel>> CreateAuthorizedUser(AuthorizedUserChangeModel authorizedUser)
+        public async Task<ActionResult> CreateAuthorizedUser(AuthorizedUserChangeModel authorizedUser)
         {
             if (authorizedUser == null)
             {
@@ -136,7 +136,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetAuthorizedUserOrganizationsByUserId(Guid userId)
+        public async Task<ActionResult> GetAuthorizedUserOrganizationsByUserId(Guid userId)
         {
             if (userId != User.GetPrimeUserId())
             {
