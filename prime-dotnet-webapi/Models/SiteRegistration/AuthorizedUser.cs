@@ -8,6 +8,10 @@ namespace Prime.Models
         [Key]
         public int Id { get; set; }
 
+        public int PartyId { get; set; }
+
+        public Party Party { get; set; }
+
         public string EmploymentIdentifier { get; set; }
 
         [Required]
@@ -17,9 +21,5 @@ namespace Prime.Models
         public HealthAuthority HealthAuthority { get; set; }
 
         public AccessStatusType Status { get; set; }
-
-        public int PartyId { get; set; }
-
-        public Party Party { get; set; }
     }
 }
