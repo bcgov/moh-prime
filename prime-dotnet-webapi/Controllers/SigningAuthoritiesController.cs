@@ -16,7 +16,7 @@ using Prime.ViewModels.Parties;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/parties/[controller]")]
+    [Route("api/parties/signing-authorities")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SigningAuthorityController : ControllerBase

@@ -16,15 +16,15 @@ using Prime.ViewModels.Parties;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/parties/[controller]")]
+    [Route("api/parties/authorized-users")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class AuthorizedUserController : ControllerBase
+    public class AuthorizedUsersController : ControllerBase
     {
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
 
-        public AuthorizedUserController(
+        public AuthorizedUsersController(
             IPartyService partyService,
             IOrganizationService organizationService)
         {
