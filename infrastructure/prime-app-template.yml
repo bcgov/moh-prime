@@ -49,7 +49,7 @@ parameters:
   displayName: Database Pod
   description: Postgres database
   required: true
-  value: postgres-db
+  value: postgres
 - name: REDIS_POD
   displayName: Redis Pod
   description: Redis in-memory database
@@ -61,7 +61,7 @@ parameters:
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
-  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  value: "9c33a9-dev.apps.silver.devops.gov.bc.ca"
   required: false
 objects:
 ###########################################

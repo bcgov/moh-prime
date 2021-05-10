@@ -178,9 +178,10 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           IMAGE_TAG: prod
+          NAME: prime
         run: |
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=$IMAGE_TAG \
+            -p NAME=$NAME \
             -p SUFFIX=$IMAGE_TAG \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
