@@ -1,6 +1,7 @@
 name: Build PR
 on:
   push:
+  workflow_dispatch:
   pull_request:
     branches-ignore:
       - 'develop'
@@ -210,8 +211,8 @@ jobs:
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DOCMAN_POD=document-manager \
-            -p DB_POD=pr-$PR_NUMBER-postgres-db \
-            -p REDIS_POD=pr-$PR_NUMBER-redis \
+            -p DB_POD=postgres-db \
+            -p REDIS_POD=redis \
             -p WEB_SCHEMA=http \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc apply -f -
