@@ -1,5 +1,7 @@
 name: Build PR
-on: [push, pull_request]
+  pull_request:
+    branches:
+      - develop
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
@@ -92,7 +94,9 @@ jobs:
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
-          echo PR_NUMBER=${PR_NUMBER}
+          echo PR_NUMBER=${PR_NUMBER}  pull_request:
+    branches:
+      - master
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg DB_HOST=pr-$PR_NUMBER-postgres-db \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
