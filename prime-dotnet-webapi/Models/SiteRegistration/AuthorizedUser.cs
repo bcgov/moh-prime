@@ -18,6 +18,8 @@ namespace Prime.Models
 
         public AccessStatusType Status { get; set; }
 
+        public int PartyId { get; set; }
+
         public Party Party { get; set; }
     }
 }
