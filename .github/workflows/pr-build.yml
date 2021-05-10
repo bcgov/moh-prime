@@ -54,8 +54,8 @@ jobs:
             --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
             --build-arg NAME=$NAME \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$NAME
 
   build-backend:
     runs-on: ubuntu-20.04
