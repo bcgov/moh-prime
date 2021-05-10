@@ -175,7 +175,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install OC
-        uses: redhat-actions/oc-installer@v1pr-${PR_NUMBER}
+        uses: redhat-actions/oc-installer@v1
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
