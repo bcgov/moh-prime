@@ -65,7 +65,7 @@ parameters:
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
-  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  value: "9c33a9-dev.apps.silver.devops.gov.bc.ca"
   required: false
 objects:
 ###########################################
@@ -161,7 +161,7 @@ objects:
     name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: ${FRONTEND_URL}${SUFFIX}${URL_STUB}
+    host: ${FRONTEND_URL}-${SUFFIX}-${URL_STUB}
     to:
       kind: Service
       name: ${NAME}-${FRONTEND_POD}
