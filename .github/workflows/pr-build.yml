@@ -198,10 +198,10 @@ jobs:
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
-          echo PR_NUMBER=${PR_NUMBER}
+          echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=pr-${PR_NUMBER} \
-            -p SUFFIX=pr-${PR_NUMBER} \
+            -p NAME=pr-$PR_NUMBER \
+            -p SUFFIX=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
             -p FRONTEND_POD=frontend \
