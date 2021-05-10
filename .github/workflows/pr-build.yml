@@ -1,5 +1,6 @@
 name: Build PR
 on:
+  push:
   pull_request:
     branches-ignore:
       - 'develop'
