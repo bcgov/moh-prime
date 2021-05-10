@@ -1,8 +1,8 @@
 name: Build PR
 on:
-  push:
   pull_request:
-    branches: [develop]
+    branches:
+      - develop
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
