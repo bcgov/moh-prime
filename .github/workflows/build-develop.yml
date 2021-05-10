@@ -152,3 +152,45 @@ jobs:
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
           docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
+
+  apply-oc-template:
+    runs-on: ubuntu-20.04
+    environment: Development
+    steps:
+      - name: "Use the OpenShift template"
+        uses: actions/checkout@v2
+
+      - name: Install OC
+        uses: redhat-actions/oc-installer@v1
+        with:
+          oc_version: '4.6'
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
+
+      - name: "Process template"
+        id: oc
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          IMAGE_TAG: dev
+        run: |
+          oc process -f infrastructure/prime-app-template.yml \
+            -p NAME=$IMAGE_TAG \
+            -p SUFFIX=$IMAGE_TAG \
+            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
+            -p OC_APP=dev \
+            -p FRONTEND_POD=frontend \
+            -p FRONTEND_URL=frontend \
+            -p API_POD=webapi \
+            -p ASP_ENV=Development \
+            -p DOCMAN_POD=document-manager \
+            -p DB_POD=postgres-db \
+            -p REDIS_POD=redis \
+            -p WEB_SCHEMA=http \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc apply -f -
