@@ -29,10 +29,10 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
-import {AdjudicationResource} from '@adjudication/shared/services/adjudication-resource.service';
-import {AdjudicationRoutes} from '@adjudication/adjudication.routes';
-import {SendBulkEmailComponent} from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -148,7 +148,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const response = { action };
         return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
           : of(response);
       }),
       exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
@@ -372,7 +372,7 @@ export class AdjudicationContainerComponent implements OnInit {
       title: 'Send Email - Bulk Actions'
     };
     this.busy = this.dialog.open(SendBulkEmailComponent, { data })
-    .afterClosed()
+      .afterClosed()
       .pipe(
         exhaustMap((bulkEmailType: BulkEmailType) =>
           bulkEmailType
@@ -380,11 +380,11 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         )
       )
-    .subscribe((emails: string[]) => {
-      emails.length
-        ? this.utilsService.mailTo(emails.join(';'))
-        : this.toastService.openErrorToast('No enrollees found for email type.');
-    });
+      .subscribe((emails: string[]) => {
+        emails.length
+          ? this.utilsService.mailTo(emails.join(';'))
+          : this.toastService.openErrorToast('No enrollees found for email type.');
+      });
   }
 
   public ngOnInit() {
@@ -504,6 +504,8 @@ export class AdjudicationContainerComponent implements OnInit {
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
+      requiresConfirmation: false,
+      confirmed: false
     };
   }
 }

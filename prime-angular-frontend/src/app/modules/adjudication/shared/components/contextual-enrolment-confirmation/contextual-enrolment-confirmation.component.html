@@ -1,0 +1,34 @@
+<app-contextual-help icon="topic"
+                     titleIcon="network_check"
+                     class="test"
+                     [small]="true"
+                     [advanced]="true"
+                     (opened)="onOpen()">
+  <ng-container appContextualTitle>
+    Confirm Enrolment
+  </ng-container>
+
+  <ng-container appContextualContent>
+    <h2 class="h5 mb-3">
+      Make sure you have checked the following things:
+    </h2>
+    <!-- <ul class="list-unstyled mb-4 ml-3">
+      <li *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons; let last = last"
+          class="blue"
+          [class.pb-2]="!last">
+        {{ reason.statusReason.name }}
+      </li>
+    </ul> -->
+  </ng-container>
+
+
+  <button mat-menu-item
+          [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
+          (click)="onEscalate()">
+    <mat-icon>error_outline</mat-icon>
+    <span>Enrolment Escalation</span>
+  </button>
+
+
+
+</app-contextual-help>

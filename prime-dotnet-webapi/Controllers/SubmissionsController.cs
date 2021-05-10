@@ -315,7 +315,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> ConfirmSubmission(int enrolleeId)
         {
-            return await ManualFlagInternal(enrolleeId, true);
+            await _submissionService.ConfirmSubmissionAsync(enrolleeId);
+            return NoContent();
         }
 
         private async Task<ActionResult> ManualFlagInternal(int enrolleeId, bool alwaysManual)

@@ -25,6 +25,10 @@
                                                     class="align-self-end"
                                                     [enrolleeId]="row.id"
                                                     (removed)="onReload()"></app-contextual-enrollee-notification>
+              <app-contextual-enrollee-notification *ngIf="row.requiresConfirmation"
+                                                    class="align-self-end"
+                                                    [enrolleeId]="row.id"
+                                                    (removed)="onReload()"></app-contextual-enrollee-notification>
             </div>
           </td>
         </ng-container>
