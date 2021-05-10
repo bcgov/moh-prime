@@ -31,7 +31,7 @@ export class HealthAuthSiteRegResource {
   ) { }
 
   public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorizeduser/${userId}`)
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
@@ -48,7 +48,7 @@ export class HealthAuthSiteRegResource {
   }
 
   public getAuthorizedUserById(partyId: number): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorizeduser/${partyId}`)
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${partyId}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
@@ -65,7 +65,7 @@ export class HealthAuthSiteRegResource {
   }
 
   public createAuthorizedUser(party: AuthorizedUser): Observable<AuthorizedUser> {
-    return this.apiResource.post<AuthorizedUser>('parties/authorizeduser', party)
+    return this.apiResource.post<AuthorizedUser>('parties/authorized-users', party)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((newAuthorizedUser: AuthorizedUser) => {
@@ -81,7 +81,7 @@ export class HealthAuthSiteRegResource {
   }
 
   public updateAuthorizedUser(party: Party): NoContent {
-    return this.apiResource.put<NoContent>(`parties/authorizeduser/${party.id}`, party)
+    return this.apiResource.put<NoContent>(`parties/authorized-users/${party.id}`, party)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Authorized user has been updated')),
@@ -100,7 +100,7 @@ export class HealthAuthSiteRegResource {
    */
   // TODO create health authority model, which might simply be inheriting the Organization model
   public getAuthorizedUserHealthAuthorityByUserId(userId: string): Observable<Organization[] | null> {
-    return this.apiResource.get<Organization[]>(`parties/authorizeduser/${userId}/organizations`)
+    return this.apiResource.get<Organization[]>(`parties/authorized-users/${userId}/organizations`)
       .pipe(
         map((response: ApiHttpResponse<Organization[]>) => response.result),
         tap((organizations: Organization[]) => this.logger.info('HEALTH_AUTHORITIES', organizations)),
