@@ -257,6 +257,10 @@ objects:
               - configMapRef:
                   name: keycloak
               - configMapRef:
+                  name: ldap
+              - configMapRef:
+                  name: metabase-embedded
+              - configMapRef:
                   name: pharmanet-api
               - configMapRef:
                   name: verifiable-credential
@@ -268,6 +272,8 @@ objects:
                   name: document-manager-secrets
               - secretRef:
                   name: keycloak-secrets
+              - secretRef:
+                  name: metabase-embedded-secrets
               - secretRef:
                   name: pharmanet-api-secrets
               - secretRef:
