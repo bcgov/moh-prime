@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Prime.Models
 {
-    public class AuthorizedUser : Party
+    public class AuthorizedUser : BaseAuditable
     {
         public string EmploymentIdentifier { get; set; }
 
@@ -14,5 +14,7 @@ namespace Prime.Models
         public HealthAuthority HealthAuthority { get; set; }
 
         public AccessStatusType Status { get; set; }
+
+        public Party Party { get; set; }
     }
 }
