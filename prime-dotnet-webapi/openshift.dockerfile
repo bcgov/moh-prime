@@ -39,7 +39,7 @@ RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:Microso
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
-FROM registry.redhat.io/rhel8/dotnet-31-runtime AS runtime
+FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
@@ -49,7 +49,8 @@ COPY --from=build /opt/app-root/app /opt/app-root/app
 
 # Install packages necessary for PRIME (incl. PostgreSQL client for waiting on DB, and wkhtmltopdf to render HTML into PDF)
 USER 0
-RUN yum install -y postgresql10
+RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    dnf install -y postgresql10
 
 RUN chmod +x entrypoint.sh
 RUN chmod 777 entrypoint.sh
