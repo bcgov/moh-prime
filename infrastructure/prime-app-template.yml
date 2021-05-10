@@ -109,11 +109,11 @@ objects:
                 protocol: TCP
             resources:
               limits:
-                cpu: 2500m
-                memory: 2Gi
-              requests:
-                cpu: 1000m
+                cpu: 500m
                 memory: 512Mi
+              requests:
+                cpu: 250m
+                memory: 256Mi
             envFrom:
             - configMapRef:
                 name: keycloak
