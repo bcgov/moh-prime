@@ -8,7 +8,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 
-import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 
 @Injectable({
@@ -22,11 +22,24 @@ export class HealthAuthorityResource {
     private logger: LoggerService
   ) { }
 
-  public createAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, user: HAAuthorizedUser): Observable<HAAuthorizedUser> {
-    return this.apiResource.post<HAAuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users`, user)
+  public getAuthorizedUserById(healthAuthorityCode: HealthAuthorityEnum, authorizedUserId: number): Observable<AuthorizedUser> {
+    return this.apiResource.get<AuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`)
       .pipe(
-        map((response: ApiHttpResponse<HAAuthorizedUser>) => response.result),
-        tap((newUser: HAAuthorizedUser) => {
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((user: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', user)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized User could not be retrieved');
+          this.logger.error('[SiteRegistration] HealthAuthorityResource::getAuthorizedUserById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
+    return this.apiResource.post<AuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users`, authorizedUser)
+      .pipe(
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((newUser: AuthorizedUser) => {
           this.toastService.openSuccessToast('Authorized User has been created');
           this.logger.info('NEW_AUTHORIZED_USER', newUser);
         }),
@@ -38,12 +51,12 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, authorizedUserId: number, user: HAAuthorizedUser): Observable<HAAuthorizedUser> {
+  public updateAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
     return this.apiResource
-      .put<HAAuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`, user)
+      .put<AuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUser.id}`, authorizedUser)
       .pipe(
-        map((response: ApiHttpResponse<HAAuthorizedUser>) => response.result),
-        tap((updatedUser: HAAuthorizedUser) => {
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
+        tap((updatedUser: AuthorizedUser) => {
           this.toastService.openSuccessToast('Authorized User has been updated');
           this.logger.info('UPDATED_AUTHORIZED_USER', updatedUser);
         }),
@@ -55,11 +68,11 @@ export class HealthAuthorityResource {
       );
   }
 
-  public deleteAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, authorizedUserId: number): Observable<HAAuthorizedUser> {
+  public deleteAuthorizedUser(healthAuthorityCode: HealthAuthorityEnum, authorizedUserId: number): Observable<AuthorizedUser> {
     return this.apiResource
-      .delete<HAAuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`)
+      .delete<AuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`)
       .pipe(
-        map((response: ApiHttpResponse<HAAuthorizedUser>) => response.result),
+        map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap(() => {
           this.toastService.openSuccessToast('Authorized User has been deleted');
         }),
@@ -71,24 +84,11 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getAuthorizedUserById(healthAuthorityCode: HealthAuthorityEnum, authorizedUserId: number): Observable<HAAuthorizedUser> {
-    return this.apiResource.get<HAAuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`)
+  public getAuthorizedUsersByHealthAuthority(healthAuthorityCode: HealthAuthorityEnum): Observable<AuthorizedUser[]> {
+    return this.apiResource.get<AuthorizedUser[]>(`health-authorities/${healthAuthorityCode}/authorized-users`)
       .pipe(
-        map((response: ApiHttpResponse<HAAuthorizedUser>) => response.result),
-        tap((user: HAAuthorizedUser) => this.logger.info('AUTHORIZED_USER', user)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Authorized User could not be retrieved');
-          this.logger.error('[SiteRegistration] HealthAuthorityResource::getAuthorizedUserById error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAuthorizedUsersByHA(healthAuthorityCode: HealthAuthorityEnum): Observable<HAAuthorizedUser[]> {
-    return this.apiResource.get<HAAuthorizedUser[]>(`health-authorities/${healthAuthorityCode}/authorized-users`)
-      .pipe(
-        map((response: ApiHttpResponse<HAAuthorizedUser[]>) => response.result),
-        tap((users: HAAuthorizedUser[]) => this.logger.info('AUTHORIZED_USERS', users)),
+        map((response: ApiHttpResponse<AuthorizedUser[]>) => response.result),
+        tap((users: AuthorizedUser[]) => this.logger.info('AUTHORIZED_USERS', users)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized Users could not be retrieved');
           this.logger.error('[SiteRegistration] HealthAuthorityResource::getAuthorizedUsersByHA error has occurred: ', error);

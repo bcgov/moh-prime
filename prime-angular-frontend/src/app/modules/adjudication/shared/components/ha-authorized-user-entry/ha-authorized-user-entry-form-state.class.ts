@@ -1,9 +1,9 @@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
-export class HaAuthorizedUserEntryFormState extends AbstractFormState<HAAuthorizedUser> {
+export class HaAuthorizedUserEntryFormState extends AbstractFormState<AuthorizedUser> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -28,7 +28,7 @@ export class HaAuthorizedUserEntryFormState extends AbstractFormState<HAAuthoriz
     return this.formInstance.get('email') as FormGroup;
   }
 
-  public get json(): HAAuthorizedUser {
+  public get json(): AuthorizedUser {
     if (!this.formInstance) {
       return;
     }
@@ -36,7 +36,7 @@ export class HaAuthorizedUserEntryFormState extends AbstractFormState<HAAuthoriz
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(user: HAAuthorizedUser): void {
+  public patchValue(user: AuthorizedUser): void {
     if (!this.formInstance || !user) {
       return;
     }

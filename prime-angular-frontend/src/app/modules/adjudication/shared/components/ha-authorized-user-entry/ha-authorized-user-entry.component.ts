@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
 import { HaAuthorizedUserEntryFormState } from './ha-authorized-user-entry-form-state.class';
@@ -41,12 +41,13 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.formState.form)) {
-      const user = this.formState.json;
+      const authorizedUser: AuthorizedUser = this.formState.json;
       if (this.auid) {
-        this.busy = this.healthAuthorityResource.updateAuthorizedUser(this.haid, this.auid, user)
+        authorizedUser.id = this.auid;
+        this.busy = this.healthAuthorityResource.updateAuthorizedUser(this.haid, authorizedUser)
           .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
       } else {
-        this.busy = this.healthAuthorityResource.createAuthorizedUser(this.haid, user)
+        this.busy = this.healthAuthorityResource.createAuthorizedUser(this.haid, authorizedUser)
           .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
       }
     }
@@ -65,7 +66,7 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
 
   protected getAuthorizedUser() {
     this.busy = this.healthAuthorityResource.getAuthorizedUserById(this.haid, this.auid)
-      .subscribe((user: HAAuthorizedUser) => this.formState.patchValue(user))
+      .subscribe((user: AuthorizedUser) => this.formState.patchValue(user))
   }
 
   protected createFormInstance() {

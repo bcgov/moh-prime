@@ -71,7 +71,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     this.healthAuthorities = configService.healthAuthorities;
   }
 
-  // TODO remove this method add to allow routing between pages
+  // TODO remove this method added to allow routing between pages
   public onSubmit() {
     this.hasAttemptedSubmission = true;
 

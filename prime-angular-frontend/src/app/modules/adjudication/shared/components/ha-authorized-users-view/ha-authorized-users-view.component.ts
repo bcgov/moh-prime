@@ -8,7 +8,7 @@ import { exhaustMap } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { HAAuthorizedUser } from '@shared/models/ha-authorized-user.model';
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -22,7 +22,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class HaAuthorizedUsersViewComponent implements OnInit {
   public busy: Subscription;
-  public authorizedUsers: HAAuthorizedUser[];
+  public authorizedUsers: AuthorizedUser[];
 
   private routeUtils: RouteUtils;
 
@@ -66,7 +66,7 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
     this.routeUtils.routeRelativeTo([id]);
   }
 
-  public getUserPropertiess(user: HAAuthorizedUser) {
+  public getUserPropertiess(user: AuthorizedUser) {
     const formatDatePipe = new FormatDatePipe();
     return [
       {
@@ -85,7 +85,7 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
   }
 
   private getAuthorizedUser(): void {
-    this.busy = this.healthAuthorityResourceService.getAuthorizedUsersByHA(this.route.snapshot.params.haid)
-      .subscribe((users: HAAuthorizedUser[]) => this.authorizedUsers = users);
+    this.busy = this.healthAuthorityResourceService.getAuthorizedUsersByHealthAuthority(this.route.snapshot.params.haid)
+      .subscribe((users: AuthorizedUser[]) => this.authorizedUsers = users);
   }
 }
