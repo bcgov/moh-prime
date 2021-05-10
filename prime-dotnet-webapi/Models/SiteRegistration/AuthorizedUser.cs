@@ -5,6 +5,9 @@ namespace Prime.Models
 {
     public class AuthorizedUser : BaseAuditable
     {
+        [Key]
+        public int Id { get; set; }
+
         public string EmploymentIdentifier { get; set; }
 
         [Required]
