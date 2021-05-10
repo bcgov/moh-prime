@@ -47,7 +47,7 @@ jobs:
           DOCKER_BUILDKIT: 1
           BUILD_LOGLEVEL: 2
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          NAME: pr-${{steps.PR.outputs.number}}
+          NAME: pr-$PR_NUMBER
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -97,7 +97,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          NAME: pr-${{steps.PR.outputs.number}}
+          NAME: pr-$PR_NUMBER
         run: |
           echo PR_NUMBER=${PR_NUMBER} 
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -159,8 +159,8 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          NAME: pr-${{steps.PR.outputs.number}}
-          REDIRECT_URL: "https://frontendpr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+          NAME: pr-$PR_NUMBER
+          REDIRECT_URL: "https://frontend$NAME-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
           
         run: |
           echo PR_NUMBER=${PR_NUMBER}
@@ -205,7 +205,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          NAME: pr-${{steps.PR.outputs.number}}
+          NAME: pr-$PR_NUMBER
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
