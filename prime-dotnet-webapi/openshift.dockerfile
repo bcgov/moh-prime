@@ -49,7 +49,7 @@ COPY --from=build /opt/app-root/app /opt/app-root/app
 
 # Install packages necessary for PRIME (incl. PostgreSQL client for waiting on DB, and wkhtmltopdf to render HTML into PDF)
 USER 0
-RUN yum install -y httpsFROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/dotnet-30-runtime-rhel7 AS runtimegresql10
+RUN yum install -y postgresql10
 
 RUN chmod +x entrypoint.sh
 RUN chmod 777 entrypoint.sh
