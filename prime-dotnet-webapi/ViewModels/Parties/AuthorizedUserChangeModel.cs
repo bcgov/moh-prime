@@ -1,5 +1,5 @@
 using System.Security.Claims;
-
+using Prime.Controllers;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
@@ -16,6 +16,7 @@ namespace Prime.ViewModels.Parties
         public PhysicalAddress PhysicalAddress { get; set; }
         public string JobRoleTitle { get; set; }
         public string EmploymentIdentifier { get; set; }
+        public HealthAuthorityCode HealthAuthorityCode { get; set; }
 
         /// <summary>
         /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types
@@ -24,6 +25,7 @@ namespace Prime.ViewModels.Parties
         public AuthorizedUser UpdateAuthorizedUser(AuthorizedUser authorizedUser, ClaimsPrincipal user)
         {
             authorizedUser.EmploymentIdentifier = EmploymentIdentifier;
+            authorizedUser.HealthAuthorityCode = HealthAuthorityCode;
 
             authorizedUser.Party = UpdateParty(authorizedUser.Party, user);
 

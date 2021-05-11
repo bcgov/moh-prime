@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -37,26 +38,36 @@ namespace Prime.Services
         public async Task<AuthorizedUser> GetAuthorizedUserAsync(int authorizedUserId)
         {
             return await GetBaseAuthorizedUserQuery()
-                .SingleOrDefaultAsync(e => e.Id == authorizedUserId);
+                .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
         }
 
         public async Task<AuthorizedUser> GetAuthorizedUserForUserIdAsync(Guid userId)
         {
             return await GetBaseAuthorizedUserQuery()
                 .AsNoTracking()
-                .SingleOrDefaultAsync(p => p.Party.UserId == userId);
+                .SingleOrDefaultAsync(au => au.Party.UserId == userId);
         }
 
         public async Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user)
         {
             var authorizedUser = await GetBaseAuthorizedUserQuery()
-                .SingleOrDefaultAsync(p => p.Party.UserId == user.GetPrimeUserId());
+                .SingleOrDefaultAsync(au => au.Party.UserId == user.GetPrimeUserId());
 
             if (authorizedUser == null)
             {
-                authorizedUser = new AuthorizedUser();
+                var party = new Party
+                {
+                    Addresses = new List<PartyAddress>()
+                };
+                _context.Parties.Add(party);
+
+                authorizedUser = new AuthorizedUser
+                {
+                    Party = party,
+                    // TODO set or perform on separate request
+                    Status = AccessStatusType.UnderReview
+                };
                 _context.AuthorizedUsers.Add(authorizedUser);
-                authorizedUser.Party = new Party();
             }
 
             changeModel.UpdateAuthorizedUser(authorizedUser, user);

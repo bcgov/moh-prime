@@ -73,9 +73,7 @@ export class HealthAuthorityResource {
       .delete<AuthorizedUser>(`health-authorities/${healthAuthorityCode}/authorized-users/${authorizedUserId}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap(() => {
-          this.toastService.openSuccessToast('Authorized User has been deleted');
-        }),
+        tap(() => this.toastService.openSuccessToast('Authorized User has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized User could not be deleted');
           this.logger.error('[SiteRegistration] HealthAuthorityResource::deleteAuthorizedUser error has occurred: ', error);
