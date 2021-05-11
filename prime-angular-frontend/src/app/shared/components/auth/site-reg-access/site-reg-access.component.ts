@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -16,7 +16,6 @@ import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registr
   ]
 })
 export class SiteRegAccessComponent implements OnInit {
-  @Input() public disableLogin: boolean;
   /**
    * @description
    * Whether the site registration login will handle a single, or
@@ -26,7 +25,14 @@ export class SiteRegAccessComponent implements OnInit {
    * Temporary until site registrations are integrated together, and
    * single site registration can be dropped
    */
-  @Input() mode: 'single' | 'multiple';
+  @Input() public mode: 'single' | 'multiple';
+  /**
+   * @description
+   * Disable authentication.
+   *
+   * TODO remove when feature flag is removed on health authority site registration
+   */
+  @Input() public disableLogin: boolean;
   /**
    * @description
    * Emit the login event with the type of site registration
