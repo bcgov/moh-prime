@@ -71,7 +71,6 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
-            .ForMember(dest => dest.PartyId, opt => opt.MapFrom(src => src.Party.Id))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Party.UserId))
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Party.FirstName))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Party.LastName))
