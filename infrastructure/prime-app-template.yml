@@ -107,13 +107,7 @@ objects:
                 protocol: TCP
               - containerPort: 8443
                 protocol: TCP
-            resources:
-              limits:
-                cpu: 500m
-                memory: 512Mi
-              requests:
-                cpu: 250m
-                memory: 256Mi
+            resources: {}
             envFrom:
             - configMapRef:
                 name: keycloak
