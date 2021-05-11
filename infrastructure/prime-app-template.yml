@@ -98,9 +98,6 @@ objects:
       spec:
         containers:
           - name: ${NAME}-${FRONTEND_POD}
-            env: 
-              - name: NAME
-                value: ${NAME}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
