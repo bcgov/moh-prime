@@ -803,6 +803,29 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(updatedSite));
         }
 
+        // PUT: api/Sites/5/enable-editing
+        /// <summary>
+        /// Enable editing a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/enable-editing", Name = nameof(EnableEditingSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> EnableEditingSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+            }
+
+            var updatedSite = await _siteService.EnableEditingSite(siteId);
+            return Ok(ApiResponse.Result(updatedSite));
+        }
+
         // POST: api/Sites/5/site-registration-notes
         /// <summary>
         /// Creates a new site registration note on a site.
