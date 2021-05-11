@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
@@ -122,6 +123,36 @@ namespace Prime.Controllers
             }
 
             await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
+
+            return NoContent();
+        }
+
+        // POST: api/parties/authorized-user/5/activate
+        /// <summary>
+        /// Activates the authorized user.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpPost("{authorizedUserId}/activate", Name = nameof(ActivateAuthorizedUser))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ActivateAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+            }
+
+            if (authorizedUser.Status != AccessStatusType.Approved)
+            {
+                ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {Enum.GetName(typeof(AccessStatusType), 3)}");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
+            await _authorizedUserService.ActivateAuthorizedUser(authorizedUserId);
 
             return NoContent();
         }

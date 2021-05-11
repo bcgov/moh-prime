@@ -18,8 +18,13 @@
     <ng-container appPageSubheaderTitle>Next Steps</ng-container>
   </app-page-subheader>
 
-  <p>
+  <p class="mb-5">
     Continue to add sites to your Health Authority.
   </p>
+
+  <div class="d-flex justify-content-end">
+    <button mat-flat-button
+            color="primary" (click)="onContinue()">Continue</button>
+  </div>
 
 </app-page>

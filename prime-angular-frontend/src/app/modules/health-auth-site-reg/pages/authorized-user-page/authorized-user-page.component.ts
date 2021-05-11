@@ -31,7 +31,6 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   public title: string;
   public routeUtils: RouteUtils;
   public isApproved: boolean;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
   /**
    * @description
    * User information from the provider not contained

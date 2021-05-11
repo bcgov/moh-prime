@@ -91,6 +91,19 @@ export class HealthAuthorityResource {
       );
   }
 
+  public activateAuthorizedUser(authorizedUserId: number): NoContent {
+    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Authorized user has been activated')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user could not be activated');
+          this.logger.error('[Core] HealthAuthSiteRegResource::updateAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   /**
    * @description
    * Get the organizations for a authorized user by user ID, and provide null when

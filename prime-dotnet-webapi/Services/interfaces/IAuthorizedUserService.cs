@@ -14,6 +14,7 @@ namespace Prime.Services
         Task<AuthorizedUserViewModel> GetAuthorizedUserAsync(int authorizedUserId);
         Task<AuthorizedUserViewModel> GetAuthorizedUserForUserIdAsync(Guid userId);
         Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user);
+        Task<int> ActivateAuthorizedUser(int authorizedUserId);
         Task DeleteAuthorizedUserAsync(int authorizedUserId);
     }
 }
