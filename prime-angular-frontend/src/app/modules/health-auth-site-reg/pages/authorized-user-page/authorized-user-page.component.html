@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+  <app-site-progress-indicator [inProgress]="!isApproved"></app-site-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="formState.form"
@@ -95,22 +95,6 @@
                           [showManualButton]="true"
                           [showAddressFields]="hasPhysicalAddress"></app-address-form>
       </ng-template>
-
-      <app-toggle-content label="Provide your preferred mailing address, if you have one"
-                          [checked]="hasMailingAddress"
-                          (toggle)="onMailingAddressChange($event)">
-
-        <section>
-          <app-page-subheader2>
-            <ng-container appPageSubheader2Title>Mailing Address</ng-container>
-          </app-page-subheader2>
-
-          <app-address-form [form]="formState.mailingAddress"
-                            [showManualButton]="true"
-                            [showAddressFields]="hasMailingAddress"></app-address-form>
-        </section>
-
-      </app-toggle-content>
     </section>
 
     <section class="mb-3">

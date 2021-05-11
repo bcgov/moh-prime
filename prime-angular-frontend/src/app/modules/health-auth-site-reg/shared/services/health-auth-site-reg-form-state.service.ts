@@ -23,7 +23,6 @@ import { TechnicalSupportPageFormState } from '@health-auth/pages/technical-supp
   providedIn: 'root'
 })
 export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<HealthAuthSite> {
-  public authorizedUserFormState: AuthorizedUserPageFormState;
   public vendorPageFormState: VendorPageFormState;
   public healthAuthCareSettingPageFormState: HealthAuthCareSettingPageFormState;
   public siteInfoPageFormState: SiteInformationPageFormState;
@@ -50,7 +49,6 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   }
 
   public get json(): HealthAuthSite {
-    const authorizedUser = this.authorizedUserFormState.json;
     const { siteVendors } = this.vendorPageFormState.json;
     const { careSettingCode } = this.healthAuthCareSettingPageFormState.json;
     const { doingBusinessAs, pec } = this.siteInfoPageFormState.json;
@@ -94,7 +92,6 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
 
   public get forms(): AbstractControl[] {
     return [
-      this.authorizedUserFormState.form,
       this.vendorPageFormState.form,
       this.healthAuthCareSettingPageFormState.form,
       this.siteInfoPageFormState.form,
@@ -108,7 +105,6 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   }
 
   protected buildForms(): void {
-    this.authorizedUserFormState = new AuthorizedUserPageFormState(this.fb, this.formUtilsService);
     this.vendorPageFormState = new VendorPageFormState(this.fb);
     this.healthAuthCareSettingPageFormState = new HealthAuthCareSettingPageFormState(this.fb);
     this.siteInfoPageFormState = new SiteInformationPageFormState(this.fb);

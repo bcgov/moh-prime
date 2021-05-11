@@ -5,18 +5,18 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Party } from '@lib/models/party.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+// TODO move to @lib/models
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
 // TODO move to @lib/models
 import { Organization } from '@registration/shared/models/organization.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
-import { AuthorizedUser } from '@health-auth/shared/models/authorized-user.model';
 import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
 
 @Injectable({
@@ -34,7 +34,7 @@ export class HealthAuthSiteRegResource {
     return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
+        tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
         catchError((error: any) => {
           if (error.status === 404) {
             return of(null);
@@ -47,11 +47,11 @@ export class HealthAuthSiteRegResource {
       );
   }
 
-  public getAuthorizedUserById(partyId: number): Observable<AuthorizedUser | null> {
-    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${partyId}`)
+  public getAuthorizedUserById(authorizedUserId: number): Observable<AuthorizedUser | null> {
+    return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${authorizedUserId}`)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
-        tap((party: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', party)),
+        tap((authorizedUser: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', authorizedUser)),
         catchError((error: any) => {
           if (error.status === 404) {
             return of(null);
@@ -64,8 +64,8 @@ export class HealthAuthSiteRegResource {
       );
   }
 
-  public createAuthorizedUser(party: AuthorizedUser): Observable<AuthorizedUser> {
-    return this.apiResource.post<AuthorizedUser>('parties/authorized-users', party)
+  public createAuthorizedUser(authorizedUser: AuthorizedUser): Observable<AuthorizedUser> {
+    return this.apiResource.post<AuthorizedUser>('parties/authorized-users', authorizedUser)
       .pipe(
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((newAuthorizedUser: AuthorizedUser) => {
@@ -80,8 +80,8 @@ export class HealthAuthSiteRegResource {
       );
   }
 
-  public updateAuthorizedUser(party: Party): NoContent {
-    return this.apiResource.put<NoContent>(`parties/authorized-users/${party.id}`, party)
+  public updateAuthorizedUser(authorizedUser: AuthorizedUser): NoContent {
+    return this.apiResource.put<NoContent>(`parties/authorized-users/${authorizedUser.id}`, authorizedUser)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Authorized user has been updated')),

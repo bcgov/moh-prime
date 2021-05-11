@@ -6,15 +6,15 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { AuthorizedUser } from '@health-auth/shared/models/authorized-user.model';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 /**
  * @description
@@ -30,7 +30,7 @@ export class AuthorizedUserGuard extends BaseGuard {
     protected logger: LoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private healthAuthSiteRegService: HealthAuthSiteRegService,
+    private authorizedUserService: AuthorizedUserService,
     private healthAuthSiteRegResource: HealthAuthSiteRegResource
   ) {
     super(authService, logger);
@@ -50,6 +50,10 @@ export class AuthorizedUserGuard extends BaseGuard {
             : null
         ),
         map((authorizedUser: AuthorizedUser | null) => {
+          // Store the authorized user for access throughout registration, which
+          // will allows be the most up-to-date authorized user
+          this.authorizedUserService.authorizedUser = authorizedUser;
+
           // Determine the next route based on the existence and status of
           // the authorized user
           return this.routeDestination(routePath, params, authorizedUser);
