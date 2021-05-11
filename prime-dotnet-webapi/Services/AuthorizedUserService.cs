@@ -110,6 +110,22 @@ namespace Prime.Services
             return updated;
         }
 
+        public async Task<int> ApproveAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _context.AuthorizedUsers
+                .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
+
+            authorizedUser.Status = AccessStatusType.Approved;
+
+            var updated = await _context.SaveChangesAsync();
+            if (updated < 1)
+            {
+                throw new InvalidOperationException($"Could not update the authorized user status to {Enum.GetName(typeof(AccessStatusType), 2)}.");
+            }
+
+            return updated;
+        }
+
         public async Task DeleteAuthorizedUserAsync(int authorizedUserId)
         {
             var authorizedUser = await _context.AuthorizedUsers
