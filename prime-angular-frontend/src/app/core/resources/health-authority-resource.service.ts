@@ -93,7 +93,7 @@ export class HealthAuthorityResource {
   }
 
   public activateAuthorizedUser(authorizedUserId: number): NoContent {
-    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}`)
+    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}/activate`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Authorized user has been activated')),
