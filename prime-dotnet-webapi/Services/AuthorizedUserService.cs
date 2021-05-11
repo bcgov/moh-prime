@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -12,14 +15,17 @@ namespace Prime.Services
 {
     public class AuthorizedUserService : BaseService, IAuthorizedUserService
     {
+        private readonly IMapper _mapper;
         private readonly IPartyService _partyService;
 
         public AuthorizedUserService(
             ApiDbContext context,
+            IMapper mapper,
             IHttpContextAccessor httpContext,
             IPartyService partyService)
             : base(context, httpContext)
         {
+            _mapper = mapper;
             _partyService = partyService;
         }
 
@@ -30,22 +36,27 @@ namespace Prime.Services
                 .AnyAsync(au => au.Id == authorizedUserId);
         }
 
-        public async Task<bool> AuthorizedUserForUserIdAsync(Guid userId)
+        public async Task<bool> AuthorizedUserExistsForUserIdAsync(Guid userId)
         {
             return await _partyService.PartyExistsForUserIdAsync(userId, PartyType.AuthorizedUser);
         }
 
-        public async Task<AuthorizedUser> GetAuthorizedUserAsync(int authorizedUserId)
+        public async Task<AuthorizedUserViewModel> GetAuthorizedUserAsync(int authorizedUserId)
         {
-            return await GetBaseAuthorizedUserQuery()
-                .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
+            return await _context.AuthorizedUsers
+                .Include(au => au.Party)
+                .Where(au => au.Id == authorizedUserId)
+                .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
         }
 
-        public async Task<AuthorizedUser> GetAuthorizedUserForUserIdAsync(Guid userId)
+        public async Task<AuthorizedUserViewModel> GetAuthorizedUserForUserIdAsync(Guid userId)
         {
-            return await GetBaseAuthorizedUserQuery()
-                .AsNoTracking()
-                .SingleOrDefaultAsync(au => au.Party.UserId == userId);
+            return await _context.AuthorizedUsers
+                .Include(au => au.Party)
+                .Where(au => au.Party.UserId == userId)
+                .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
         }
 
         public async Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user)
@@ -64,7 +75,6 @@ namespace Prime.Services
                 authorizedUser = new AuthorizedUser
                 {
                     Party = party,
-                    // TODO set or perform on separate request
                     Status = AccessStatusType.UnderReview
                 };
                 _context.AuthorizedUsers.Add(authorizedUser);
@@ -86,7 +96,7 @@ namespace Prime.Services
 
         public async Task DeleteAuthorizedUserAsync(int authorizedUserId)
         {
-            var authorizedUser = await GetBaseAuthorizedUserQuery()
+            var authorizedUser = await _context.AuthorizedUsers
                 .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
 
             if (authorizedUser == null)

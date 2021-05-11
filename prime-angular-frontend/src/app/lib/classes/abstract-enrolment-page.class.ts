@@ -109,7 +109,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   protected canDeactivateWhitelist: string[];
 
-  constructor(
+  protected constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService
   ) { }

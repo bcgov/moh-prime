@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ApiResource } from './api-resource.service';
@@ -28,6 +28,10 @@ export class HealthAuthorityResource {
         map((response: ApiHttpResponse<AuthorizedUser>) => response.result),
         tap((user: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', user)),
         catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
           this.toastService.openErrorToast('Authorized User could not be retrieved');
           this.logger.error('[SiteRegistration] HealthAuthorityResource::getAuthorizedUserById error has occurred: ', error);
           throw error;

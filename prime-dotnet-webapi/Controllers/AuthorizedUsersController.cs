@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
@@ -132,6 +131,7 @@ namespace Prime.Controllers
         /// Gets all of the Organizations for a authorized user by userId.
         /// </summary>
         /// <param name="userId"></param>
+        // TODO endpoint needs to be refactored
         [HttpGet("{userId}/organizations", Name = nameof(GetAuthorizedUserOrganizationsByUserId))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -143,7 +143,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (!await _authorizedUserService.AuthorizedUserForUserIdAsync(userId))
+            if (!await _authorizedUserService.AuthorizedUserExistsForUserIdAsync(userId))
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with user id {userId}"));
             }

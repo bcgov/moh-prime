@@ -10,9 +10,9 @@ namespace Prime.Services
     public interface IAuthorizedUserService
     {
         Task<bool> AuthorizedUserExistsAsync(int authorizedUserId);
-        Task<bool> AuthorizedUserForUserIdAsync(Guid userId);
-        Task<AuthorizedUser> GetAuthorizedUserAsync(int authorizedUserId);
-        Task<AuthorizedUser> GetAuthorizedUserForUserIdAsync(Guid userId);
+        Task<bool> AuthorizedUserExistsForUserIdAsync(Guid userId);
+        Task<AuthorizedUserViewModel> GetAuthorizedUserAsync(int authorizedUserId);
+        Task<AuthorizedUserViewModel> GetAuthorizedUserForUserIdAsync(Guid userId);
         Task<int> CreateOrUpdateAuthorizedUserAsync(AuthorizedUserChangeModel changeModel, ClaimsPrincipal user);
         Task DeleteAuthorizedUserAsync(int authorizedUserId);
     }

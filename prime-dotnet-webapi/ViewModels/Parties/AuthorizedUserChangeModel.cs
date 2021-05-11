@@ -9,11 +9,11 @@ namespace Prime.ViewModels.Parties
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
+        public VerifiedAddress VerifiedAddress { get; set; }
+        public PhysicalAddress PhysicalAddress { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string SmsPhone { get; set; }
-        public VerifiedAddress VerifiedAddress { get; set; }
-        public PhysicalAddress PhysicalAddress { get; set; }
         public string JobRoleTitle { get; set; }
         public string EmploymentIdentifier { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
@@ -47,6 +47,7 @@ namespace Prime.ViewModels.Parties
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
+            // TODO what happens on update?
             if (VerifiedAddress != null)
             {
                 if (party.VerifiedAddress == null)

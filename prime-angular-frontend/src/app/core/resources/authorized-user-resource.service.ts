@@ -12,7 +12,6 @@ import { ApiResource } from './api-resource.service';
   providedIn: 'root'
 })
 export class AuthorizedUserResourceService {
-
   constructor(
     private apiResource: ApiResource,
     private toastService: ToastService,
@@ -29,7 +28,7 @@ export class AuthorizedUserResourceService {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized User could not be created');
-          this.logger.error('[SiteRegistration] uthorizedUserResource::createAuthorizedUser error has occurred: ', error);
+          this.logger.error('[SiteRegistration] AuthorizedUserResource::createAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -46,7 +45,7 @@ export class AuthorizedUserResourceService {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized User could not be updated');
-          this.logger.error('[SiteRegistration] uthorizedUserResource::updateAuthorizedUser error has occurred: ', error);
+          this.logger.error('[SiteRegistration] AuthorizedUserResource::updateAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -59,7 +58,7 @@ export class AuthorizedUserResourceService {
         tap((user: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', user)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized User could not be retrieved');
-          this.logger.error('[SiteRegistration] uthorizedUserResource::getAuthorizedUserById error has occurred: ', error);
+          this.logger.error('[SiteRegistration] AuthorizedUserResource::getAuthorizedUserById error has occurred: ', error);
           throw error;
         })
       );
@@ -72,7 +71,7 @@ export class AuthorizedUserResourceService {
         tap((user: AuthorizedUser) => this.logger.info('AUTHORIZED_USER', user)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized User could not be retrieved');
-          this.logger.error('[SiteRegistration] uthorizedUserResource::getAuthorizedUserById error has occurred: ', error);
+          this.logger.error('[SiteRegistration] AuthorizedUserResource::getAuthorizedUserById error has occurred: ', error);
           throw error;
         })
       );
@@ -86,7 +85,7 @@ export class AuthorizedUserResourceService {
         tap((users: AuthorizedUser[]) => this.logger.info('AUTHORIZED_USERS', users)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized Users could not be retrieved');
-          this.logger.error('[SiteRegistration] uthorizedUserResource::getAuthorizedUsersByHA error has occurred: ', error);
+          this.logger.error('[SiteRegistration] AuthorizedUserResource::getAuthorizedUsersByHA error has occurred: ', error);
           throw error;
         })
       );
