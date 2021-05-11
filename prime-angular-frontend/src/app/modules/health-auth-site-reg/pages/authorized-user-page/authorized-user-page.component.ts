@@ -3,24 +3,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { exhaustMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
-import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
-import { AuthorizedUser } from '@shared/models/authorized-user.model';
-import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
+import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
 
 @Component({
   selector: 'app-authorized-user-page',
@@ -47,7 +46,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private healthAuthoritySiteRegResource: HealthAuthSiteRegResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private authService: AuthService,
     private configService: ConfigService,
     private authorizedUserService: AuthorizedUserService,
@@ -137,9 +136,9 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     console.log(payload, authorizedUser);
 
     return (!authorizedUser)
-      ? this.healthAuthoritySiteRegResource.createAuthorizedUser(payload)
+      ? this.healthAuthorityResource.createAuthorizedUser(payload)
         .pipe(NoContentResponse)
-      : this.healthAuthoritySiteRegResource.updateAuthorizedUser({ ...authorizedUser, ...payload });
+      : this.healthAuthorityResource.updateAuthorizedUser({ ...authorizedUser, ...payload });
   }
 
   protected afterSubmitIsSuccessful(): void {
