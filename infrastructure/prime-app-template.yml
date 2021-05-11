@@ -58,10 +58,10 @@ parameters:
   displayName: Redis Pod
   description: Redis in-memory database
   value: redis
-- name: WEB_SCHEMA
-  displayName: Web Schema
-  description: http OR https
-  value: http
+- name: WEB_PORT
+  displayName: Web Port for NGINX
+  description: Termination port on NGINX (8080 or 8443)
+  value: 8080
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
@@ -164,7 +164,7 @@ objects:
       name: ${NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: ${WEB_SCHEMA}
+      targetPort: ${WEB_PORT}
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
