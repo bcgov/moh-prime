@@ -7,7 +7,7 @@ export class HealthAuthSiteRegRoutes {
   public static ACCESS = 'access';
   public static ACCESS_AUTHORIZED_USER = 'authorized-user';
   public static ACCESS_REQUESTED = 'access-requested';
-  public static ACCESS_CONFIRMED = 'access-confirmed';
+  public static ACCESS_APPROVED = 'access-approved';
   public static ACCESS_DECLINED = 'access-declined';
 
   public static AUTHORIZED_USER = 'authorized-user';

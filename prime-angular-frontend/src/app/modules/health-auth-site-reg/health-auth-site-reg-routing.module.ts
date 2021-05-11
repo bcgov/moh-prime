@@ -11,6 +11,7 @@ import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-
 import { CollectionNoticePageComponent } from '@health-auth/pages/collection-notice-page/collection-notice-page.component';
 import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-page/authorized-user-page.component';
 import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
+import { AuthorizedUserApprovedPageComponent } from '@health-auth/pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
@@ -58,6 +59,11 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.ACCESS_REQUESTED,
             component: AuthorizedUserNextStepsPageComponent,
             data: { title: 'Access Requested' }
+          },
+          {
+            path: HealthAuthSiteRegRoutes.ACCESS_APPROVED,
+            component: AuthorizedUserApprovedPageComponent,
+            data: { title: 'Access Confirmed' }
           },
           {
             path: HealthAuthSiteRegRoutes.ACCESS_DECLINED,

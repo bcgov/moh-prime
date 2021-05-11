@@ -14,7 +14,6 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 /**
@@ -97,13 +96,7 @@ export class AuthorizedUserGuard extends BaseGuard {
   private manageApprovedAuthorizedUser(routePath: string): boolean {
     return this.navigate(routePath, [
       HealthAuthSiteRegRoutes.ACCESS,
-      HealthAuthSiteRegRoutes.ACCESS_CONFIRMED
-    ]);
-  }
-
-  private manageActiveAuthorizedUser(routePath: string): boolean {
-    return this.navigate(routePath, [
-      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+      HealthAuthSiteRegRoutes.ACCESS_APPROVED
     ]);
   }
 
@@ -111,6 +104,12 @@ export class AuthorizedUserGuard extends BaseGuard {
     return this.navigate(routePath, [
       HealthAuthSiteRegRoutes.ACCESS,
       HealthAuthSiteRegRoutes.ACCESS_DECLINED
+    ]);
+  }
+
+  private manageActiveAuthorizedUser(routePath: string): boolean {
+    return this.navigate(routePath, [
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
     ]);
   }
 
