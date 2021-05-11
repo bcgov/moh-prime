@@ -11,7 +11,7 @@ ARG KEYCLOAK_URL
 ARG OC_APP
 ARG REDIRECT_URL
 ARG VANITY_URL
-ARG NAME
+ARG SVC_NAME
 
 # Set working directory
 ENV DOCUMENT_MANAGER_URL ${DOCUMENT_MANAGER_URL}
@@ -22,7 +22,7 @@ ENV KEYCLOAK_CLIENT_ID ${KEYCLOAK_CLIENT_ID}
 ENV OC_APP ${OC_APP}
 ENV REDIRECT_URL ${REDIRECT_URL}
 ENV VANITY_URL ${VANITY_URL}
-ENV NAME ${NAME}
+ENV SVC_NAME ${SVC_NAME}
 ENV NODE_ROOT /usr/src/app
 
 RUN mkdir -p /usr/src/app
@@ -46,7 +46,7 @@ RUN ng build --prod
 ### Stage 2 - Production environment ###
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
-ENV NAME ${NAME}
+ENV SVC_NAME ${SVC_NAME}
 USER 0
 COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf

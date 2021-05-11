@@ -1,4 +1,5 @@
 FROM registry.redhat.io/rhel8/python-36
+ARG SVC_NAME
 USER 0 
 ENV APP_ROOT /opt/app-root
 SHELL ["/bin/bash","-c"]
@@ -20,7 +21,8 @@ RUN set -x && \
 # Create working directory
 WORKDIR ${APP_ROOT}/src
 ENV FLASK_APP app.py
-ENV DB_HOST prime-postgresql-db
+ENV SVC_NAME ${SVC_NAME}}
+ENV DB_HOST prime-postgresql-db-${SVC_NAME}
 
 # Run the server
 EXPOSE 5001 9191

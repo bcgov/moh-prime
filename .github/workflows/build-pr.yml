@@ -51,7 +51,7 @@ jobs:
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
-            --build-arg NAME="pr-$PR_NUMBER" \
+            --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -102,14 +102,14 @@ jobs:
             --build-arg DB_HOST=$NAME-postgres-db \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
-            --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
+            --build-arg POSTGRESQL_USERSVC_NAME=$PRIME_DB_USER \
             --build-arg POSTGRESQL_DATABASE=postgres \
-            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=postgres;userSVC_NAME=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
-            --build-arg NAME="pr-$PR_NUMBER" \
+            --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -166,7 +166,7 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-            --build-arg NAME="pr-$PR_NUMBER" \
+            --build-arg SVC_NAME="pr-$PR_NUMBER" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -204,7 +204,7 @@ jobs:
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=pr-$PR_NUMBER \
+            -p SVC_NAME=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
