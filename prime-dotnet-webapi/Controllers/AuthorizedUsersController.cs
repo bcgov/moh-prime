@@ -31,7 +31,7 @@ namespace Prime.Controllers
             _organizationService = organizationService;
         }
 
-        // GET: api/AuthorizedUser/5fdd17a6-1797-47a4-97b7-5b27949dd614
+        // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614
         /// <summary>
         /// Gets a AuthorizedUser by user ID.
         /// </summary>
@@ -53,7 +53,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(authorizedUser));
         }
 
-        // GET: api/AuthorizedUser/5
+        // GET: api/parties/authorized-users/5
         /// <summary>
         /// Gets a specific AuthorizedUser.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(authorizedUser));
         }
 
-        // POST: api/AuthorizedUser
+        // POST: api/parties/authorized-users
         /// <summary>
         /// Creates a new AuthorizedUser.
         /// </summary>
@@ -102,7 +102,7 @@ namespace Prime.Controllers
             );
         }
 
-        // PUT: api/AuthorizedUser/5
+        // PUT: api/parties/authorized-users/5
         /// <summary>
         /// Updates a specific AuthorizedUser.
         /// </summary>
@@ -126,7 +126,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // GET: api/AuthorizedUser/5fdd17a6-1797-47a4-97b7-5b27949dd614/organizations
+        // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/organizations
         /// <summary>
         /// Gets all of the Organizations for a authorized user by userId.
         /// </summary>

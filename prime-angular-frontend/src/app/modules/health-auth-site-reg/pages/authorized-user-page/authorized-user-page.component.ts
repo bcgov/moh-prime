@@ -130,20 +130,20 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected performSubmission(): NoContent {
-    const authorizedUser = this.authorizedUserService.authorizedUser;
+    const authorizedUserId = this.authorizedUserService.authorizedUser?.id;
     const payload = this.formState.json;
 
-    console.log(payload, authorizedUser);
+    if (!authorizedUserId) {
+      return this.healthAuthorityResource.createAuthorizedUser(payload)
+        .pipe(NoContentResponse);
+    }
 
-    return (!authorizedUser)
-      ? this.healthAuthorityResource.createAuthorizedUser(payload)
-        .pipe(NoContentResponse)
-      : this.healthAuthorityResource.updateAuthorizedUser({ ...authorizedUser, ...payload });
+    return this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
   }
 
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.markAsPristine();
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_MANAGEMENT);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ACCESS_REQUESTED);
   }
 
   private togglePreferredNameValidators(hasPreferredName: boolean, preferredFirstName: FormControl, preferredLastName: FormControl): void {
