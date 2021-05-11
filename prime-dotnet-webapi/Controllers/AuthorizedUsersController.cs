@@ -21,14 +21,14 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class AuthorizedUsersController : ControllerBase
     {
-        private readonly IPartyService _partyService;
+        private readonly IAuthorizedUserService _authorizedUserService;
         private readonly IOrganizationService _organizationService;
 
         public AuthorizedUsersController(
-            IPartyService partyService,
+            IAuthorizedUserService authorizedUserService,
             IOrganizationService organizationService)
         {
-            _partyService = partyService;
+            _authorizedUserService = authorizedUserService;
             _organizationService = organizationService;
         }
 
@@ -45,7 +45,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAuthorizedUserByUserId(Guid userId)
         {
-            var authorizedUser = await _partyService.GetPartyForUserIdAsync(userId, PartyType.AuthorizedUser);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
             if (authorizedUser == null)
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {userId}"));
@@ -58,19 +58,19 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets a specific AuthorizedUser.
         /// </summary>
-        /// <param name="partyId"></param>
-        [HttpGet("{partyId:int}", Name = nameof(GetAuthorizedUserById))]
+        /// <param name="authorizedUserId"></param>
+        [HttpGet("{authorizedUserId:int}", Name = nameof(GetAuthorizedUserById))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAuthorizedUserById(int partyId)
+        public async Task<ActionResult> GetAuthorizedUserById(int authorizedUserId)
         {
-            var authorizedUser = await _partyService.GetPartyAsync(partyId, PartyType.AuthorizedUser);
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {partyId}"));
+                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
             }
 
             return Ok(ApiResponse.Result(authorizedUser));
@@ -93,12 +93,12 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            var createdAuthorizedUserId = await _partyService.CreateOrUpdatePartyAsync(authorizedUser, User);
-            var createdAuthorizedUser = await _partyService.GetPartyAsync(createdAuthorizedUserId);
+            var createdAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(authorizedUser, User);
+            var createdAuthorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(createdAuthorizedUserId);
 
             return CreatedAtAction(
                 nameof(GetAuthorizedUserById),
-                new { partyId = createdAuthorizedUserId },
+                new { authorizedUserId = createdAuthorizedUserId },
                 ApiResponse.Result(createdAuthorizedUser)
             );
         }
@@ -107,22 +107,22 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates a specific AuthorizedUser.
         /// </summary>
-        /// <param name="partyId"></param>
+        /// <param name="authorizedUserId"></param>
         /// <param name="updatedAuthorizedUser"></param>
-        [HttpPut("{partyId}", Name = nameof(UpdateAuthorizedUser))]
+        [HttpPut("{authorizedUserId}", Name = nameof(UpdateAuthorizedUser))]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateAuthorizedUser(int partyId, AuthorizedUserChangeModel updatedAuthorizedUser)
+        public async Task<IActionResult> UpdateAuthorizedUser(int authorizedUserId, AuthorizedUserChangeModel updatedAuthorizedUser)
         {
-            if (!await _partyService.PartyExistsAsync(partyId, PartyType.AuthorizedUser))
+            if (!await _authorizedUserService.AuthorizedUserExistsAsync(authorizedUserId))
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {partyId}"));
+                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
             }
 
-            await _partyService.CreateOrUpdatePartyAsync(updatedAuthorizedUser, User);
+            await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
 
             return NoContent();
         }
@@ -143,12 +143,12 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            if (!await _partyService.PartyExistsForUserIdAsync(userId, PartyType.AuthorizedUser))
+            if (!await _authorizedUserService.AuthorizedUserForUserIdAsync(userId))
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with user id {userId}"));
             }
 
-            var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());
+            var party = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(User.GetPrimeUserId());
             var organizations = (party != null)
                 ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
                 : Enumerable.Empty<OrganizationListViewModel>();

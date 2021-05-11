@@ -8,6 +8,7 @@ namespace Prime.ViewModels.Parties
     public class AuthorizedUserViewModel
     {
         public int Id { get; set; }
+        public string EmploymentIdentifier { get; set; }
         public Guid UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -23,6 +24,5 @@ namespace Prime.ViewModels.Parties
         public MailingAddress MailingAddress { get; set; }
         public PhysicalAddress PhysicalAddress { get; set; }
         public VerifiedAddress VerifiedAddress { get; set; }
-        public string EmploymentIdentifier { get; set; }
     }
 }

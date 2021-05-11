@@ -12,16 +12,24 @@ namespace Prime.ViewModels.Parties
         public string Email { get; set; }
         public string Phone { get; set; }
         public string SmsPhone { get; set; }
-        public string JobRoleTitle { get; set; }
-        public MailingAddress MailingAddress { get; set; }
-        public PhysicalAddress PhysicalAddress { get; set; }
         public VerifiedAddress VerifiedAddress { get; set; }
+        public PhysicalAddress PhysicalAddress { get; set; }
+        public string JobRoleTitle { get; set; }
+        public string EmploymentIdentifier { get; set; }
 
         /// <summary>
-        /// Updates the given Party with values from this AuthorizedUserCreateModel and the User.
-        /// Also sets AuthorizedUser in the Party's PartyEnrolments, and returns the updated Party
-        /// for convenience.
+        /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types
+        /// in the Party's PartyEnrolments, and returns the updated Party for convenience.
         /// </summary>
+        public AuthorizedUser UpdateAuthorizedUser(AuthorizedUser authorizedUser, ClaimsPrincipal user)
+        {
+            authorizedUser.EmploymentIdentifier = EmploymentIdentifier;
+
+            authorizedUser.Party = UpdateParty(authorizedUser.Party, user);
+
+            return authorizedUser;
+        }
+
         public Party UpdateParty(Party party, ClaimsPrincipal user)
         {
             party.PreferredFirstName = PreferredFirstName;
@@ -36,6 +44,21 @@ namespace Prime.ViewModels.Parties
             party.FirstName = user.GetFirstName();
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
+
+            if (VerifiedAddress != null)
+            {
+                if (party.VerifiedAddress == null)
+                {
+                    party.Addresses.Add(new PartyAddress
+                    {
+                        Party = party,
+                        Address = new VerifiedAddress(),
+                    });
+                }
+
+                VerifiedAddress.Id = party.VerifiedAddress.Id;
+                party.VerifiedAddress?.SetValues(VerifiedAddress);
+            }
 
             if (PhysicalAddress != null)
             {
@@ -52,38 +75,6 @@ namespace Prime.ViewModels.Parties
                     PhysicalAddress.Id = party.PhysicalAddress.Id;
                     party.PhysicalAddress.SetValues(PhysicalAddress);
                 }
-            }
-
-            if (MailingAddress != null)
-            {
-                if (party.MailingAddress == null)
-                {
-                    party.Addresses.Add(new PartyAddress
-                    {
-                        Party = party,
-                        Address = MailingAddress,
-                    });
-                }
-                else
-                {
-                    MailingAddress.Id = party.MailingAddress.Id;
-                    party.MailingAddress.SetValues(MailingAddress);
-                }
-            }
-
-            if (VerifiedAddress != null)
-            {
-                if (party.VerifiedAddress == null)
-                {
-                    party.Addresses.Add(new PartyAddress
-                    {
-                        Party = party,
-                        Address = new VerifiedAddress(),
-                    });
-                }
-
-                VerifiedAddress.Id = party.VerifiedAddress.Id;
-                party.VerifiedAddress?.SetValues(VerifiedAddress);
             }
 
             party.SetPartyTypes(PartyType.AuthorizedUser);
