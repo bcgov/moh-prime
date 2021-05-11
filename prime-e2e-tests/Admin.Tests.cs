@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-namespace TestPrimeE2E.Enrollment
+namespace TestPrimeE2E.Admin
 {
     public class AdminTests : BaseTest
     {
