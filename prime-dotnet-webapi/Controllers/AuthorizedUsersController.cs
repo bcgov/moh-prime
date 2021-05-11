@@ -157,6 +157,30 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/parties/authorized-user/5/approve
+        /// <summary>
+        /// Approves the authorized user.
+        /// </summary>
+        /// <param name="authorizedUserId"></param>
+        [HttpPost("{authorizedUserId}/approve", Name = nameof(ApproveAuthorizedUser))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ApproveAuthorizedUser(int authorizedUserId)
+        {
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+            }
+
+            await _authorizedUserService.ApproveAuthorizedUser(authorizedUserId);
+
+            return NoContent();
+        }
+
         // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/health-authorities
         /// <summary>
         /// Gets all of the HealthAuthorities for a authorized user by userId.

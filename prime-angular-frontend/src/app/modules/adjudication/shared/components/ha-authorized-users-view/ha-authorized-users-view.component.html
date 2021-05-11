@@ -1,10 +1,3 @@
-<div class="mb-4">
-  <button mat-flat-button
-          color="primary"
-          (click)="onAdd()">
-    <mat-icon>add</mat-icon> Add Authorized User
-  </button>
-</div>
 <div class="container-fluid">
   <div class="row">
 
@@ -12,24 +5,48 @@
       <div class="col-md-6 col-sm-12">
         <app-summary-card icon="account_circle"
                           [title]="user | fullname"
-                          [menu]="authorizedUserMenu"
-                          [properties]="getUserPropertiess(user)"
-                          actionButtonTitle="Update Information"
+                          [properties]="getUserProperties(user)"
+                          actionButtonTitle="View Submission"
                           [actionDisabled]="false"
-                          (remove)="onRemove(user.id)"
-                          (action)="onEdit(user.id)"></app-summary-card>
-
-        <ng-template #authorizedUserMenu>
-          <button type="button"
-                  mat-icon-button
-                  color="primary"
-                  matTooltip="Remove Authorized User"
-                  (click)="onRemove(user.id)">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </ng-template>
+                          (action)="onView(user.id)">
+          <ng-container *ngIf="isApproved(user)"
+                        [ngTemplateOutlet]="success_notification"
+                        [ngTemplateOutletContext]="{ props:
+                            {
+                              icon: 'verified',
+                              text: 'This Authorized User is approved'
+                            }
+                          }">
+          </ng-container>
+          <ng-container *ngIf="isUnderReview(user)"
+                        [ngTemplateOutlet]="notification"
+                        [ngTemplateOutletContext]="{ props:
+                        {
+                          icon: 'notification_important',
+                          text: 'This Authorized User is waiting for approval'
+                        }
+                      }">
+          </ng-container>
+        </app-summary-card>
       </div>
     </ng-container>
   </div>
+
+  <ng-template #notification
+               let-props="props">
+    <div class="d-flex align-items-center mt-2">
+      <mat-icon class="mr-2"
+                color="warn">{{ props.icon }}</mat-icon>
+      <span class="text-red">{{ props.text }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #success_notification
+               let-props="props">
+    <div class="d-flex align-self-center mt-2">
+      <mat-icon class="mr-2 green-icon">{{ props.icon }}</mat-icon>
+      <span class="text-green">{{ props.text }}</span>
+    </div>
+  </ng-template>
 
 </div>

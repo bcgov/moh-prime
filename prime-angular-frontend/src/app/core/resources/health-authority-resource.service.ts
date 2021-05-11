@@ -99,7 +99,20 @@ export class HealthAuthorityResource {
         tap(() => this.toastService.openSuccessToast('Authorized user has been activated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be activated');
-          this.logger.error('[Core] HealthAuthorityResource::updateAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::activateAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveAuthorizedUser(authorizedUserId: number): NoContent {
+    return this.apiResource.post<NoContent>(`parties/authorized-users/${authorizedUserId}/approve`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Authorized user has been approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user could not be approved');
+          this.logger.error('[Core] HealthAuthorityResource::approveAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
