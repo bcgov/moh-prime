@@ -69,7 +69,11 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ADMINISTRATOR);
+    const routePath = (!this.isCompleted)
+      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
+      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
+
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() {

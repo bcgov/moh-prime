@@ -26,8 +26,8 @@
           <button mat-flat-button
                   color="primary"
                   class="large"
-                  (click)="onLogin()">Access Registration
-          </button>
+                  [disabled]="disableLogin"
+                  (click)="onLogin()">Access Registration</button>
 
         </div>
       </div>

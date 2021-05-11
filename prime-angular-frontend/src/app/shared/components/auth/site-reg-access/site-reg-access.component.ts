@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -16,6 +16,7 @@ import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registr
   ]
 })
 export class SiteRegAccessComponent implements OnInit {
+  @Input() public disableLogin: boolean;
   /**
    * @description
    * Whether the site registration login will handle a single, or

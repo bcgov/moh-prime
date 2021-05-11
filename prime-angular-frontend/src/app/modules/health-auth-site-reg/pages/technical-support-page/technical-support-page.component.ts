@@ -69,7 +69,11 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.PRIVACY_OFFICER);
+    const routePath = (!this.isCompleted)
+      ? HealthAuthSiteRegRoutes.PRIVACY_OFFICER
+      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
+
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() {
