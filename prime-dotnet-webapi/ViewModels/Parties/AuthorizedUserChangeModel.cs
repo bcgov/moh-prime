@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Prime.Controllers;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
