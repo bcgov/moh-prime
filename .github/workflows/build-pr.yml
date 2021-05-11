@@ -215,6 +215,6 @@ jobs:
             -p DOCMAN_POD=document-manager \
             -p DB_POD=postgres-db \
             -p REDIS_POD=redis \
-            -p WEB_SCHEMA=http \
+            -p WEB_PORT=8080 \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc replace -f -
