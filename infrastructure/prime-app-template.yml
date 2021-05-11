@@ -6,9 +6,9 @@ metadata:
   description: >-
     Deployment template for the BC Parks App
 parameters:
-- name: NAME
+- name: SVC_NAME
   displayName: Name
-  description: A prefix appended to all objects
+  description: A name appended to all objects
   required: true
   value: prime
 - name: IMAGE_TAG
@@ -76,16 +76,16 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-${FRONTEND_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -93,11 +93,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${FRONTEND_POD}
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${FRONTEND_POD}
       spec:
         containers:
-          - name: ${NAME}-${FRONTEND_POD}
+          - name: ${SVC_NAME}-${FRONTEND_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
@@ -117,7 +117,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-${FRONTEND_POD}
+            - ${SVC_NAME}-${FRONTEND_POD}
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -128,10 +128,10 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
       - name: "http"
@@ -141,24 +141,24 @@ objects:
         port: 8443
         targetPort: 8443
     selector:
-      name: ${NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-${FRONTEND_POD}
 #   Frontend Route
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${NAME}
-    app.kubernetes.io/instance: ${NAME}
-    app.kubernetes.io/part-of: ${NAME}
+    app: ${SVC_NAME}-${FRONTEND_POD}
+    app.kubernetes.io/component: ${SVC_NAME}
+    app.kubernetes.io/instance: ${SVC_NAME}
+    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     host: ${FRONTEND_URL}${URL_STUB}
     to:
       kind: Service
-      name: ${NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
       targetPort: ${WEB_PORT}
@@ -175,16 +175,16 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${API_POD}-backend
+    name: ${SVC_NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${API_POD}-backend
+      name: ${SVC_NAME}-${API_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -192,11 +192,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${API_POD}-backend
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${API_POD}-backend
       spec:
         containers:
-          - name: ${NAME}-${API_POD}-backend
+          - name: ${SVC_NAME}-${API_POD}-backend
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
             env:
@@ -288,7 +288,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-${API_POD}-backend
+            - ${SVC_NAME}-${API_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -299,17 +299,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${API_POD}
+    name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${NAME}-${API_POD}
+      - name: ${SVC_NAME}-${API_POD}
         port: 5001
         targetPort: 5001
     selector:
-      name: ${NAME}-${API_POD}
+      name: ${SVC_NAME}-${API_POD}
 
 ###########################################
 ###      Document Manager (backend)     ###
@@ -319,16 +319,16 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -336,11 +336,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${DOCMAN_POD}-backend
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${DOCMAN_POD}-backend
       spec:
         containers:
-          - name: ${NAME}-${DOCMAN_POD}-backend
+          - name: ${SVC_NAME}-${DOCMAN_POD}-backend
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
@@ -357,7 +357,7 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: ${NAME}-{DB_POD}-db
+                value: ${SVC_NAME}-{DB_POD}-db
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
@@ -424,7 +424,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-${DOCMAN_POD}-backend
+            - ${SVC_NAME}-${DOCMAN_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -435,17 +435,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${NAME}-${DOCMAN_POD}-backend
+      - name: ${SVC_NAME}-${DOCMAN_POD}-backend
         port: 6001
         targetPort: 6001
     selector:
-      name: ${NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}-backend
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -458,21 +458,21 @@ objects:
   kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DOCMAN_POD}-migration
+    name: ${SVC_NAME}-${DOCMAN_POD}-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
   spec:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${DOCMAN_POD}-migration
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${DOCMAN_POD}-migration
       spec:
         restartPolicy: OnFailure
         containers:
-        - name: ${NAME}-${DOCMAN_POD}-migration
+        - name: ${SVC_NAME}-${DOCMAN_POD}-migration
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
           command:
@@ -495,7 +495,7 @@ objects:
                   name: redis
                   key: redis_port
             - name: DB_HOST
-              value: ${NAME}-${DB_POD}
+              value: ${SVC_NAME}-${DB_POD}
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
@@ -557,7 +557,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-${DOCMAN_POD}-migration
+            - ${SVC_NAME}-${DOCMAN_POD}-migration
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -572,27 +572,27 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DB_POD}
+    name: ${SVC_NAME}-${DB_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: postgresql
   spec:
     replicas: 1
     selector:
-      name: ${NAME}-${DB_POD}
+      name: ${SVC_NAME}-${DB_POD}
     strategy: null
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${DB_POD}
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${DB_POD}
       spec:
         containers:
           - capabilities: {}
             env:
               - name: DB_HOST
-                value: ${NAME}-${DB_POD}
+                value: ${SVC_NAME}-${DB_POD}
               # PostgreSQL environment variables
               - name: PGPASSWORD
                 valueFrom:
@@ -626,7 +626,7 @@ objects:
               tcpSocket:
                 port: 5432
               timeoutSeconds: 1
-            name: ${NAME}-${DB_POD}
+            name: ${SVC_NAME}-${DB_POD}
             ports:
               - containerPort: 5432
                 protocol: TCP
@@ -638,15 +638,15 @@ objects:
             terminationMessagePath: /dev/termination-log
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
-                name: ${NAME}-${DB_POD}-data
+                name: ${SVC_NAME}-${DB_POD}-data
               - mountPath: /var/run/postgresql
-                name: ${NAME}-${DB_POD}-run
+                name: ${SVC_NAME}-${DB_POD}-run
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-          - name: ${NAME}-${DB_POD}-data
+          - name: ${SVC_NAME}-${DB_POD}-data
             emptyDir: {}
-          - name: ${NAME}-${DB_POD}-run
+          - name: ${SVC_NAME}-${DB_POD}-run
             emptyDir: {}
   status: {}
 #   PostgreSQL Service
@@ -654,19 +654,19 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DB_POD}
+    name: ${SVC_NAME}-${DB_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${NAME}-${DB_POD}
+      - name: ${SVC_NAME}-${DB_POD}
         nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
     selector:
-      name: ${NAME}-${DB_POD}
+      name: ${SVC_NAME}-${DB_POD}
     sessionAffinity: None
     type: ClusterIP
   status:
@@ -680,16 +680,16 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${REDIS_POD}-cache
+    name: ${SVC_NAME}-${REDIS_POD}-cache
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${REDIS_POD}-cache
+      name: ${SVC_NAME}-${REDIS_POD}-cache
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -700,11 +700,11 @@ objects:
     template:
       metadata:
         labels:
-          dev-app: ${NAME}
-          name: ${NAME}-${REDIS_POD}-cache
+          dev-app: ${SVC_NAME}
+          name: ${SVC_NAME}-${REDIS_POD}-cache
       spec:
         volumes:
-          - name: ${NAME}-${REDIS_POD}-cache-data
+          - name: ${SVC_NAME}-${REDIS_POD}-cache-data
             emptyDir: {}
         containers:
           - resources:
@@ -748,7 +748,7 @@ objects:
                 protocol: TCP
             imagePullPolicy: IfNotPresent
             volumeMounts:
-              - name: ${NAME}-redis-cache-data
+              - name: ${SVC_NAME}-redis-cache-data
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
