@@ -182,7 +182,7 @@ jobs:
         run: |
           oc process -f infrastructure/prime-app-template.yml \
             -p NAME=$NAME \
-            -p SUFFIX=$IMAGE_TAG \
+            -p IMAGE_TAG=$IMAGE_TAG \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
             -p FRONTEND_POD=frontend \

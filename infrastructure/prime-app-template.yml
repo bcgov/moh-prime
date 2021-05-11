@@ -11,6 +11,10 @@ parameters:
   description: A prefix appended to all objects
   required: true
   value: prime
+- name: IMAGE_TAG
+  displayName: Image Tag
+  description: an identifier that labels which version an image belongs to.
+  required: true
 - name: OC_NAMESPACE
   displayName: OpenShift License Plate
   description: Prepends your dev/test/prod URL
@@ -95,7 +99,7 @@ objects:
         containers:
           - name: ${NAME}-${FRONTEND_POD}
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${NAME}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -123,7 +127,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-frontend:${NAME}'
+            name: 'prime-frontend:${IMAGE_TAG}'
   status: {}
 #   Frontend Service
 - apiVersion: v1
@@ -157,7 +161,7 @@ objects:
     name: ${NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: ${FRONTEND_URL}${NAME}${URL_STUB}
+    host: ${NAME}-${FRONTEND_URL}-${URL_STUB}
     to:
       kind: Service
       name: ${NAME}-${FRONTEND_POD}
@@ -177,7 +181,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${API_POD}
+    name: ${NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
@@ -186,7 +190,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${NAME}-${API_POD}
+      name: ${NAME}-${API_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -195,12 +199,12 @@ objects:
       metadata:
         labels:
           dev-app: ${NAME}
-          name: ${NAME}-${API_POD}
+          name: ${NAME}-${API_POD}-backend
       spec:
         containers:
-          - name: ${NAME}-${API_POD}
+          - name: ${NAME}-${API_POD}-backend
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${NAME}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
@@ -290,11 +294,11 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${NAME}-${API_POD}
+            - ${NAME}-${API_POD}-backend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-webapi-backend:${NAME}'
+            name: 'prime-webapi-backend:${IMAGE_TAG}'
   status: {}
 #   Backend Web API Service
 - apiVersion: v1
@@ -344,7 +348,7 @@ objects:
         containers:
           - name: ${NAME}-${DOCMAN_POD}-backend
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${NAME}
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
               - name: CACHE_REDIS_HOST
                 value: redis
@@ -430,7 +434,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${NAME}'
+            name: 'prime-document-manager:${IMAGE_TAG}'
   status: {}
 #   Document Manager (backend) Service
 - apiVersion: v1
@@ -476,7 +480,7 @@ objects:
         containers:
         - name: ${NAME}-${DOCMAN_POD}-migration
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${NAME}
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to 
             # be open to query connections.
@@ -563,7 +567,7 @@ objects:
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${NAME}'
+            name: 'prime-document-manager:${IMAGE_TAG}'
   status: {}
 
 ###########################################
