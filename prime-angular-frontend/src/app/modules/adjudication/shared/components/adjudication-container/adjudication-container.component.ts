@@ -29,10 +29,10 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
-import {AdjudicationResource} from '@adjudication/shared/services/adjudication-resource.service';
-import {AdjudicationRoutes} from '@adjudication/adjudication.routes';
-import {SendBulkEmailComponent} from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -148,7 +148,7 @@ export class AdjudicationContainerComponent implements OnInit {
         const response = { action };
         return (action.note)
           ? this.adjudicationResource.createAdjudicatorNote(enrolleeId, action.note, false)
-            .pipe(map((note: EnrolleeNote) => ({note, ...response})))
+            .pipe(map((note: EnrolleeNote) => ({ note, ...response })))
           : of(response);
       }),
       exhaustMap((response: { note: EnrolleeNote, action: AssignAction }) => {
@@ -287,6 +287,26 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
+  public onCancelToa(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Cancel TOA Assignment',
+      message: 'Are you sure you want to cancel this TOA assignment and move the enrollee back into Under Review?',
+      actionType: 'warn',
+      actionText: 'Cancel TOA Assignment',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        this.adjudicationActionPipe(enrolleeId, SubmissionAction.CANCEL_TOA)
+      )
+      .subscribe((enableEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(enableEnrollee);
+        this.action.emit();
+      });
+  }
+
   public onRerunRules(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Rerun Rules',
@@ -372,7 +392,7 @@ export class AdjudicationContainerComponent implements OnInit {
       title: 'Send Email - Bulk Actions'
     };
     this.busy = this.dialog.open(SendBulkEmailComponent, { data })
-    .afterClosed()
+      .afterClosed()
       .pipe(
         exhaustMap((bulkEmailType: BulkEmailType) =>
           bulkEmailType
@@ -380,11 +400,11 @@ export class AdjudicationContainerComponent implements OnInit {
             : EMPTY
         )
       )
-    .subscribe((emails: string[]) => {
-      emails.length
-        ? this.utilsService.mailTo(emails.join(';'))
-        : this.toastService.openErrorToast('No enrollees found for email type.');
-    });
+      .subscribe((emails: string[]) => {
+        emails.length
+          ? this.utilsService.mailTo(emails.join(';'))
+          : this.toastService.openErrorToast('No enrollees found for email type.');
+      });
   }
 
   public ngOnInit() {
