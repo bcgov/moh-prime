@@ -7,6 +7,7 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { ActivatedRoute } from '@angular/router';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-site-registration-table',
@@ -15,12 +16,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  @Input() public careSettingFilter$: Observable<CareSettingEnum> = of(0);
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public notify: EventEmitter<number>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
+  private originalColumns: string[];
   public columns: string[];
 
   public SiteStatusType = SiteStatusType;
@@ -36,16 +39,17 @@ export class SiteRegistrationTableComponent implements OnInit {
       'displayId',
       'organizationName',
       'signingAuthority',
+      'authorizedUser',
       'siteDoingBusinessAs',
       'submissionDate',
       'assignedTo',
       'state',
       'siteId',
       'remoteUsers',
-      'careSetting',
       'missingBusinessLicence',
       'actions'
     ];
+    this.originalColumns = this.columns;
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
     this.notify = new EventEmitter<number>();
@@ -92,5 +96,22 @@ export class SiteRegistrationTableComponent implements OnInit {
       : 'N/A';
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.careSettingFilter$.subscribe((value) => {
+      switch (value) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE:
+          this.columns = this.originalColumns.filter(column => !['missingBusinessLicence', 'authorizedUser'].includes(column));
+          break;
+        case CareSettingEnum.COMMUNITY_PHARMACIST:
+          this.columns = this.originalColumns.filter(column => !['remoteUsers', 'authorizedUser'].includes(column));
+          break;
+        case CareSettingEnum.HEALTH_AUTHORITY:
+          this.columns = this.originalColumns.filter(column => !['missingBusinessLicence', 'signingAuthority'].includes(column));
+          break;
+        default:
+          this.columns = this.originalColumns;
+          break;
+      }
+    });
+  }
 }

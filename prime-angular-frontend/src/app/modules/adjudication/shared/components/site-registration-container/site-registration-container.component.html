@@ -11,8 +11,16 @@
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
 
+  <mat-tab-group *ngIf="showTabs"
+                 (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Private Community Health Practice"></mat-tab>
+    <mat-tab label="Community Pharmacy"></mat-tab>
+    <mat-tab label="Health Authority"></mat-tab>
+  </mat-tab-group>
+
   <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                [dataSource]="dataSource"
+                               [careSettingFilter$]="selectedCareSetting$"
                                (assign)="onAssign($event)"
                                (reassign)="onReassign($event)"
                                (notify)="onNotify($event)"

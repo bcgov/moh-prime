@@ -44,6 +44,14 @@
             *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="authorizedUser">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Authorized user </th>
+        <td mat-cell
+            *matCellDef="let row;"> </td>
+      </ng-container>
+
       <ng-container matColumnDef="siteDoingBusinessAs">
         <th mat-header-cell
             *matHeaderCellDef

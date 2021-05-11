@@ -1,9 +1,10 @@
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Component, OnInit, Input, Output, TemplateRef, EventEmitter, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
+import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat, BehaviorSubject } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -38,6 +39,7 @@ import {
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -49,6 +51,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   @Input() public actions: TemplateRef<any>;
   @Input() public content: TemplateRef<any>;
   @Input() public refresh: Observable<boolean>;
+  @Input() public showTabs: boolean = false;
   @Output() public action: EventEmitter<void>;
 
   public busy: Subscription;
@@ -56,6 +59,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
 
   public showSearchFilter: boolean;
+  public selectedCareSetting$: BehaviorSubject<CareSettingEnum>;
   public AdjudicationRoutes = AdjudicationRoutes;
 
   private routeUtils: RouteUtils;
@@ -77,6 +81,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
 
     this.hasActions = false;
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+    this.selectedCareSetting$ = new BehaviorSubject(0);
   }
 
   public onSearch(search: string | null): void {
@@ -154,8 +159,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-            this.siteResource.removeSiteAdjudicator(siteId),
-            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -263,6 +268,22 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe();
   }
 
+  public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
+    switch (tabChangeEvent.index) {
+      case 0:
+        this.selectedCareSetting$.next(CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+        break;
+      case 1:
+        this.selectedCareSetting$.next(CareSettingEnum.COMMUNITY_PHARMACIST);
+        break;
+      case 2:
+        this.selectedCareSetting$.next(CareSettingEnum.HEALTH_AUTHORITY);
+        break;
+      default:
+        break;
+    }
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -276,6 +297,21 @@ export class SiteRegistrationContainerComponent implements OnInit {
           this.onRefresh();
         }
       });
+    }
+
+    this.dataSource.filterPredicate = this.getFilterPredicate();
+    if (this.showTabs) {
+      this.selectedCareSetting$.subscribe((value) => this.dataSource.filter = JSON.stringify({ careSettingCode: value }));
+      // Default to private community health practice view
+      this.selectedCareSetting$.next(CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE);
+    }
+  }
+
+  // TODO: to support more filter fields
+  private getFilterPredicate(): (data: SiteRegistrationListViewModel, filter: string) => boolean {
+    return (data: SiteRegistrationListViewModel, filter: string) => {
+      const filterObj = JSON.parse(filter);
+      return data.careSettingCode === filterObj.careSettingCode;
     }
   }
 
