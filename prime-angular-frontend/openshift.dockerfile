@@ -34,7 +34,7 @@ COPY package.json package-lock.json ./
 COPY . .
 
 # Fill template with environment variables
-RUN (eval "echo \"$(cat /usr/src/app/openshift.nginx.conf)\"" ) > /etc/nginx/conf.d/prime.conf
+RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 # Install Angular CLI
 RUN npm install -g @angular/cli
 # Install dependencies
@@ -49,7 +49,7 @@ FROM registry.redhat.io/rhel8/nginx-118
 
 COPY --from=build-deps /usr/src/app /opt/app-root/
 COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
-# COPY --from=build-deps /usr/src/app/openshift.nginx.conf /etc/nginx/conf.d/prime.conf
-
+COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
+RUN (eval "echo \"$(cat /usr/src/app/openshift.nginx.conf )\"" ) > /etc/nginx/conf.d/prime.conf
 EXPOSE 80 8080 4200:8080
 CMD ["sh","-c","nginx -g 'daemon off;'"]
