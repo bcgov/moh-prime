@@ -24,7 +24,6 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     private authService: AuthService
   ) {
     this.title = route.snapshot.data.title;
-    this.disableLogin = false;
   }
 
   public onLogin(type: SiteRegistrationTypeEnum) {

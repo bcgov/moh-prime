@@ -161,6 +161,7 @@
             <h3>For Health Authorities:</h3>
             <button mat-flat-button
                     color="primary"
+                    [disabled]="disableLogin"
                     (click)="onLogin(SiteRegistrationTypeEnum.HEALTH_AUTHORITY)">Access Registration</button>
           </div>
         </div>
