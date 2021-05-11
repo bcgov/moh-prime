@@ -85,7 +85,7 @@ namespace TestPrimeE2E.Enrollment
             // Note that `Text` returns "add Add Additional Care Setting"
             Assert.IsTrue(_driver.FindPatiently("(//span[@class='mat-button-wrapper'])[2]").Text.Contains("Add Additional Care Setting"));
             // To ensure that the new page is loaded, we search for the unique widget (i.e. "Add Additional Care Setting") BEFORE verifying the title of current page
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             SelectDropdownItem("careSettingCode", "Community Pharmacy");
             CheckLogThenScreenshot(expectedTitle);
             ClickButton("Save and Continue");
@@ -96,7 +96,7 @@ namespace TestPrimeE2E.Enrollment
         {
             string expectedTitle = "College Licence Information";
             FindDropdownControl("collegeCode");
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             SelectDropdownItem("collegeCode", "College of Physicians and Surgeons of BC");
             SelectDropdownItem("licenseCode", "Full - Family");
             PickDate("2023", "MAR", "5");
@@ -112,7 +112,7 @@ namespace TestPrimeE2E.Enrollment
         {
             string expectedTitle = "College Licence Information";
             FindDropdownControl("collegeCode");
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             CheckLogThenScreenshot(expectedTitle);
             ClickButton("Save and Continue");
         }
@@ -124,7 +124,7 @@ namespace TestPrimeE2E.Enrollment
 
             string expectedTitle = "Site Information";
             FindDropdownControl("provinceCode");
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             FillFormField("siteName", siteAddress.BuildingNumber());
             FillFormField("jobTitle", "Medical office assistant");
             FillFormField("street", siteAddress.StreetAddress());
@@ -141,7 +141,7 @@ namespace TestPrimeE2E.Enrollment
         {
             string expectedTitle = "Self-declaration";
             _driver.FindPatiently("//mat-radio-group[@formcontrolname='hasRegistrationSuspended']");
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             ClickRadioButton("hasRegistrationSuspended", "No");
             ClickRadioButton("hasConviction", "No");
             // Need to Tab over to click 'No' radio button
@@ -157,7 +157,7 @@ namespace TestPrimeE2E.Enrollment
         {
             string expectedTitle = "Enrolment Review";
             _driver.FindPatiently("//span[@class='mat-button-wrapper' and contains(text(), 'Submit Enrolment')]");
-            VerifyTitle(expectedTitle);
+            VerifyEnrollmentPageTitle(expectedTitle);
             // Need to Tab over to tick checkbox
             _driver.TabAndInteract("//button[@mattooltip='Edit Self-declaration']", 1, Keys.Space);
             // Need to Tab over to click 'Submit Enrolment' button
