@@ -104,7 +104,6 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected onSubmitFormIsInvalid(): void {
-    //emit formSubmitting event
     this.formSubmittingEvent.next();
   }
 }
