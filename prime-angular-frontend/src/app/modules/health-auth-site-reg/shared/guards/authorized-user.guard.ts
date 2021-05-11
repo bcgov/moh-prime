@@ -108,9 +108,23 @@ export class AuthorizedUserGuard extends BaseGuard {
   }
 
   private manageActiveAuthorizedUser(routePath: string): boolean {
-    return this.navigate(routePath, [
-      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
-    ]);
+    // Remove query params as they aren't needed to determine
+    // the viability of the destination
+    const destinationSegment = routePath
+      .split('?').shift()
+      .split('/').pop();
+
+    const allowedRoutes = HealthAuthSiteRegRoutes.siteRegistrationRouteOrder();
+
+    // Redirect to an appropriate default route
+    if (!allowedRoutes.includes(destinationSegment)) {
+      return this.navigate(routePath, [
+        HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+      ]);
+    }
+
+    // Otherwise, allow access to the route
+    return true;
   }
 
   private manageNoAuthorizedUser(routePath: string): boolean {

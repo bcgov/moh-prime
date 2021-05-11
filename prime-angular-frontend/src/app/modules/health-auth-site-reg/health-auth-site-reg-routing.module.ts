@@ -95,7 +95,7 @@ const routes: Routes = [
       // Site registration and maintenance routes for administration
       // of health authority information
       {
-        path: `${HealthAuthSiteRegRoutes.ORGANIZATIONS}/oid`,
+        path: `${HealthAuthSiteRegRoutes.ORGANIZATIONS}/:haid`,
         canActivate: [AuthorizedUserGuard],
         children: [
           {
@@ -167,7 +167,7 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
             component: OverviewPageComponent,
             data: { title: 'Information Review' }
-          },
+          }
         ]
       },
       {

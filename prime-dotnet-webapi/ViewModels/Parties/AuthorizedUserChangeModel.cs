@@ -46,7 +46,6 @@ namespace Prime.ViewModels.Parties
             party.LastName = user.GetLastName();
             party.DateOfBirth = user.GetDateOfBirth().Value;
 
-            // TODO what happens on update?
             if (VerifiedAddress != null)
             {
                 if (party.VerifiedAddress == null)
