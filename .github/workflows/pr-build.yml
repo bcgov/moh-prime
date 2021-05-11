@@ -181,7 +181,7 @@ jobs:
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
-            --build-arg NAME=$NAME \
+
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
 
@@ -209,7 +209,7 @@ jobs:
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=$NAME \
+            -p NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
             -p FRONTEND_POD=frontend \
