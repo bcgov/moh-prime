@@ -130,7 +130,7 @@ namespace Prime.Services
 
         private void UpdateContacts(Site current, SiteUpdateModel updated)
         {
-            var contactTypes = new []
+            var contactTypes = new[]
             {
                 nameof(current.AdministratorPharmaNet),
                 nameof(current.PrivacyOfficer),
@@ -346,6 +346,17 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Declined");
+
+            return site;
+        }
+
+        public async Task<Site> EnableEditingSite(int siteId)
+        {
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            site.SubmittedDate = null;
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
 
             return site;
         }

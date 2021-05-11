@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
@@ -15,6 +15,7 @@ import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
   ]
 })
 export class SiteRegAccessComponent implements OnInit {
+  @Input() public disableLogin: boolean;
   @Output() public login: EventEmitter<void>;
   public locationCode: BannerLocationCode;
 
