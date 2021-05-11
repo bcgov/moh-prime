@@ -21,14 +21,16 @@
                           [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload()"></app-triage>
 
+              <app-contextual-enrolment-confirmation *ngIf="row.requiresConfirmation"
+                                                     class="align-self-start"
+                                                     [enrolleeId]="row.id"
+                                                     (removed)="onReload()"></app-contextual-enrolment-confirmation>
+
               <app-contextual-enrollee-notification *ngIf="row.hasNotification"
                                                     class="align-self-end"
                                                     [enrolleeId]="row.id"
                                                     (removed)="onReload()"></app-contextual-enrollee-notification>
-              <app-contextual-enrollee-notification *ngIf="row.requiresConfirmation"
-                                                    class="align-self-end"
-                                                    [enrolleeId]="row.id"
-                                                    (removed)="onReload()"></app-contextual-enrollee-notification>
+
             </div>
           </td>
         </ng-container>

@@ -1,7 +1,8 @@
-<app-contextual-help icon="topic"
-                     titleIcon="network_check"
+<app-contextual-help icon="rule_folder"
+                     titleIcon="speed"
                      class="test"
                      [small]="true"
+                     [outlined]="true"
                      [advanced]="true"
                      (opened)="onOpen()">
   <ng-container appContextualTitle>
@@ -12,18 +13,15 @@
     <h2 class="h5 mb-3">
       Make sure you have checked the following things:
     </h2>
-    <!-- <ul class="list-unstyled mb-4 ml-3">
-      <li *ngFor="let reason of (status$ | async)?.enrolmentStatusReasons; let last = last"
-          class="blue"
-          [class.pb-2]="!last">
-        {{ reason.statusReason.name }}
-      </li>
-    </ul> -->
+    <form (ngSubmit)="onSubmit()"
+          [formGroup]="form">
+      <mat-checkbox [required]="true"> Name appears in the College directory </mat-checkbox>
+      <mat-checkbox [required]="true"> Phone number is in BC </mat-checkbox>
+    </form>
   </ng-container>
 
 
-  <button mat-menu-item
-          [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
+  <button [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
           (click)="onEscalate()">
     <mat-icon>error_outline</mat-icon>
     <span>Enrolment Escalation</span>

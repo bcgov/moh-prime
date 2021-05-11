@@ -11,6 +11,7 @@ import { EscalationNoteComponent, EscalationType } from '@shared/components/dial
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
   public Role = Role;
+  public form: FormGroup;
 
   constructor(
     private enrolmentResource: EnrolmentResource,
@@ -35,6 +37,7 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
     private toastService: ToastService,
     private utilsService: UtilsService,
     private dialog: MatDialog,
+    private fb: FormBuilder
   ) {
     this.reload = new EventEmitter<void>();
     this.assigned = false;
@@ -42,6 +45,10 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
 
   public onOpen() {
     this.getCurrentStatus();
+  }
+
+  public onSubmit() {
+
   }
 
   public onEscalate() {
@@ -61,6 +68,10 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.form = this.fb.group({
+      nameinDirectory: this.fb.control,
+      phoneInBC: this.fb.control
+    });
   }
 
   private getCurrentStatus() {
