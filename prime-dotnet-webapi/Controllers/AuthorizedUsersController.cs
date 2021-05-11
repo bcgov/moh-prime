@@ -157,7 +157,6 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // TODO future ticket for populating site-management with cards, but needs refactoring
         // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/health-authorities
         /// <summary>
         /// Gets all of the HealthAuthorities for a authorized user by userId.
@@ -167,6 +166,7 @@ namespace Prime.Controllers
         // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        // TODO needed to populate site-management with cards, but needs refactoring
         // public async Task<ActionResult> GetAuthorizedUserHealthAuthorityByUserId(Guid userId)
         // {
         //     if (userId != User.GetPrimeUserId())

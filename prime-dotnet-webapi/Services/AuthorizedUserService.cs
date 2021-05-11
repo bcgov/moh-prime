@@ -127,6 +127,8 @@ namespace Prime.Services
         {
             return _context.AuthorizedUsers
                 .Include(au => au.Party)
+                    .ThenInclude(p => p.Addresses)
+                        .ThenInclude(pa => pa.Address)
                 .Include(au => au.HealthAuthority);
         }
     }
