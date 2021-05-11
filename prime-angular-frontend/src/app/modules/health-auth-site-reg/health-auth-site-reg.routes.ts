@@ -13,7 +13,7 @@ export class HealthAuthSiteRegRoutes {
   public static AUTHORIZED_USER = 'authorized-user';
   public static SITE_MANAGEMENT = 'site-management';
 
-  public static ORGANIZATIONS = 'health-authorities';
+  public static HEALTH_AUTHORITIES = 'health-authorities';
   public static VENDOR = 'vendor';
   public static HEALTH_AUTH_CARE_SETTING = 'health-auth-care-setting';
   public static SITE_INFORMATION = 'site-information';
