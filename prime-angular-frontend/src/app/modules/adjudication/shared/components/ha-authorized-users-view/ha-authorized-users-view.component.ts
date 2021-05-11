@@ -29,7 +29,7 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private healthAuthorityResourceService: HealthAuthorityResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private dialog: MatDialog,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -56,8 +56,9 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
         ),
       )
       .subscribe(() =>
-        this.healthAuthorityResourceService
-          .deleteAuthorizedUser(this.route.snapshot.params.haid, id)
+        this.healthAuthorityResource.deleteAuthorizedUser(id)
+          // TODO Nathan this is an observable in an observable you'll want to use exhaustMap, and
+          //  put this.busy in front of this observable instead of the inner one
           .subscribe(() => this.getAuthorizedUser())
       );
   }
@@ -81,11 +82,14 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // TODO you'll want to put this.busy in front of this call, and then use an empty subscribe
     this.getAuthorizedUser();
   }
 
   private getAuthorizedUser(): void {
-    this.busy = this.healthAuthorityResourceService.getAuthorizedUsersByHealthAuthority(this.route.snapshot.params.haid)
-      .subscribe((users: AuthorizedUser[]) => this.authorizedUsers = users);
+    // TODO commented out to draw attention to the above TODOs
+    // this.busy = this.healthAuthorityResource.getAuthorizedUsersByHealthAuthority(this.route.snapshot.params.haid)
+    // TODO you'll want to use a pipe and map to set this instead of subscribe
+    //   .subscribe((users: AuthorizedUser[]) => this.authorizedUsers = users);
   }
 }

@@ -157,34 +157,34 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/organizations
+        // TODO future ticket for populating site-management with cards, but needs refactoring
+        // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/health-authorities
         /// <summary>
-        /// Gets all of the Organizations for a authorized user by userId.
+        /// Gets all of the HealthAuthorities for a authorized user by userId.
         /// </summary>
         /// <param name="userId"></param>
-        // TODO endpoint needs to be refactored
-        [HttpGet("{userId}/organizations", Name = nameof(GetAuthorizedUserOrganizationsByUserId))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAuthorizedUserOrganizationsByUserId(Guid userId)
-        {
-            if (userId != User.GetPrimeUserId())
-            {
-                return Forbid();
-            }
+        // [HttpGet("{userId}/health-authorities", Name = nameof(GetAuthorizedUserHealthAuthorityByUserId))]
+        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
+        // public async Task<ActionResult> GetAuthorizedUserHealthAuthorityByUserId(Guid userId)
+        // {
+        //     if (userId != User.GetPrimeUserId())
+        //     {
+        //         return Forbid();
+        //     }
 
-            if (!await _authorizedUserService.AuthorizedUserExistsForUserIdAsync(userId))
-            {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with user id {userId}"));
-            }
+        //     if (!await _authorizedUserService.AuthorizedUserExistsForUserIdAsync(userId))
+        //     {
+        //         return NotFound(ApiResponse.Message($"AuthorizedUser not found with user id {userId}"));
+        //     }
 
-            var party = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(User.GetPrimeUserId());
-            var organizations = (party != null)
-                ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
-                : Enumerable.Empty<OrganizationListViewModel>();
+        //     var party = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(User.GetPrimeUserId());
+        //     var organizations = (party != null)
+        //         ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
+        //         : Enumerable.Empty<OrganizationListViewModel>();
 
-            return Ok(ApiResponse.Result(organizations));
-        }
+        //     return Ok(ApiResponse.Result(organizations));
+        // }
     }
 }

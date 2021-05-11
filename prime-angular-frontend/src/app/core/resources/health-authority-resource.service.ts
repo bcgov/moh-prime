@@ -16,6 +16,7 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 // TODO move to @lib/models
 import { Organization } from '@registration/shared/models/organization.model';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +40,7 @@ export class HealthAuthorityResource {
           }
 
           this.toastService.openErrorToast('Authorized user could not be retrieved');
-          this.logger.error('[Core] HealthAuthSiteRegResource::getAuthorizedUserByUserId error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUserByUserId error has occurred: ', error);
           throw error;
         })
       );
@@ -56,7 +57,7 @@ export class HealthAuthorityResource {
           }
 
           this.toastService.openErrorToast('Authorized user could not be retrieved');
-          this.logger.error('[Core] HealthAuthSiteRegResource::getAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -72,7 +73,7 @@ export class HealthAuthorityResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be created');
-          this.logger.error('[Core] HealthAuthSiteRegResource::createAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::createAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -85,7 +86,7 @@ export class HealthAuthorityResource {
         tap(() => this.toastService.openSuccessToast('Authorized user has been updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be updated');
-          this.logger.error('[Core] HealthAuthSiteRegResource::updateAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::updateAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -98,7 +99,20 @@ export class HealthAuthorityResource {
         tap(() => this.toastService.openSuccessToast('Authorized user has been activated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized user could not be activated');
-          this.logger.error('[Core] HealthAuthSiteRegResource::updateAuthorizedUser error has occurred: ', error);
+          this.logger.error('[Core] HealthAuthorityResource::updateAuthorizedUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public deleteAuthorizedUser(authorizedUserId: number): NoContent {
+    return this.apiResource.delete<NoContent>(`parties/authorized-users/${authorizedUserId}`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Authorized user has been deleted')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized user could not be deleted');
+          this.logger.error('[Core] HealthAuthorityResource::deleteAuthorizedUser error has occurred: ', error);
           throw error;
         })
       );
@@ -106,25 +120,38 @@ export class HealthAuthorityResource {
 
   /**
    * @description
-   * Get the organizations for a authorized user by user ID, and provide null when
+   * Get the health authorities for a authorized user by user ID, and provide null when
    * an authorized user could not be found.
    */
-  // TODO needs to be update to reflect changes to schema
-  // public getAuthorizedUserHealthAuthorityByUserId(userId: string): Observable<Organization[] | null> {
-  //   return this.apiResource.get<Organization[]>(`parties/authorized-users/${userId}/organizations`)
-  //     .pipe(
-  //       map((response: ApiHttpResponse<Organization[]>) => response.result),
-  //       tap((organizations: Organization[]) => this.logger.info('HEALTH_AUTHORITIES', organizations)),
-  //       catchError((error: any) => {
-  //         if (error.status === 404) {
-  //           // No authorized user exists for the provided user ID
-  //           return of(null);
-  //         }
-  //
-  //         this.toastService.openErrorToast('Health authorities could not be retrieved');
-  //         this.logger.error('[Core] OrganizationResource::getAuthorizedUserHealthAuthorityByUserId error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  // TODO needs to be refactored for health authority for displaying a list of cards in site management
+  public getAuthorizedUserHealthAuthorityByUserId(userId: string): Observable<Organization[] | null> {
+    return this.apiResource.get<Organization[]>(`parties/authorized-users/${userId}/health-authority`)
+      .pipe(
+        map((response: ApiHttpResponse<Organization[]>) => response.result),
+        tap((organizations: Organization[]) => this.logger.info('HEALTH_AUTHORITIES', organizations)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            // No authorized user exists for the provided user ID
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('Health authorities could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUserHealthAuthorityByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAuthorizedUsersByHealthAuthority(healthAuthorityCode: HealthAuthorityEnum): Observable<AuthorizedUser[]> {
+    return this.apiResource.get<AuthorizedUser[]>(`health-authorities/${healthAuthorityCode}/authorized-users`)
+      .pipe(
+        map((response: ApiHttpResponse<AuthorizedUser[]>) => response.result),
+        tap((authorizedUsers: AuthorizedUser[]) => this.logger.info('AUTHORIZED_USERS', authorizedUsers)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Authorized users could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUsersByHealthAuthority error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

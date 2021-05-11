@@ -12,6 +12,7 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Role } from '@auth/shared/enum/role.enum';
 
 import { HaAuthorizedUserEntryFormState } from './ha-authorized-user-entry-form-state.class';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
 @Component({
   selector: 'app-ha-authorized-user-entry',
@@ -41,15 +42,18 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.formState.form)) {
-      const authorizedUser: AuthorizedUser = this.formState.json;
-      if (this.auid) {
-        authorizedUser.id = this.auid;
-        this.busy = this.healthAuthorityResource.updateAuthorizedUser(this.haid, authorizedUser)
-          .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
+      const payload = this.formState.json;
+      let request$: NoContent;
+
+      if (!this.auid) {
+        request$ = this.healthAuthorityResource.createAuthorizedUser(payload)
+          .pipe(NoContentResponse);
       } else {
-        this.busy = this.healthAuthorityResource.createAuthorizedUser(this.haid, authorizedUser)
-          .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
+        request$ = this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: this.auid });
       }
+
+      this.busy = request$
+        .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
     }
   }
 
@@ -65,8 +69,8 @@ export class HaAuthorizedUserEntryComponent implements OnInit {
   }
 
   protected getAuthorizedUser() {
-    this.busy = this.healthAuthorityResource.getAuthorizedUserById(this.haid, this.auid)
-      .subscribe((user: AuthorizedUser) => this.formState.patchValue(user))
+    this.busy = this.healthAuthorityResource.getAuthorizedUserById(this.auid)
+      .subscribe((user: AuthorizedUser) => this.formState.patchValue(user));
   }
 
   protected createFormInstance() {
