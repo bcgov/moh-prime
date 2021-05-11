@@ -180,35 +180,5 @@ namespace Prime.Controllers
 
             return NoContent();
         }
-
-        // GET: api/parties/authorized-users/5fdd17a6-1797-47a4-97b7-5b27949dd614/health-authorities
-        /// <summary>
-        /// Gets all of the HealthAuthorities for a authorized user by userId.
-        /// </summary>
-        /// <param name="userId"></param>
-        // [HttpGet("{userId}/health-authorities", Name = nameof(GetAuthorizedUserHealthAuthorityByUserId))]
-        // [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
-        // [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        // [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        // TODO needed to populate site-management with cards, but needs refactoring
-        // public async Task<ActionResult> GetAuthorizedUserHealthAuthorityByUserId(Guid userId)
-        // {
-        //     if (userId != User.GetPrimeUserId())
-        //     {
-        //         return Forbid();
-        //     }
-
-        //     if (!await _authorizedUserService.AuthorizedUserExistsForUserIdAsync(userId))
-        //     {
-        //         return NotFound(ApiResponse.Message($"AuthorizedUser not found with user id {userId}"));
-        //     }
-
-        //     var party = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(User.GetPrimeUserId());
-        //     var organizations = (party != null)
-        //         ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
-        //         : Enumerable.Empty<OrganizationListViewModel>();
-
-        //     return Ok(ApiResponse.Result(organizations));
-        // }
     }
 }
