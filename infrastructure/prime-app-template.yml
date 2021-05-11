@@ -497,7 +497,7 @@ objects:
                   name: redis
                   key: redis_port
             - name: DB_HOST
-              value: ${NAME}-${DB_POD}-db
+              value: ${NAME}-${DB_POD}
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
@@ -574,7 +574,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DB_POD}-db
+    name: ${NAME}-${DB_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
@@ -582,19 +582,19 @@ objects:
   spec:
     replicas: 1
     selector:
-      name: ${NAME}-${DB_POD}-db
+      name: ${NAME}-${DB_POD}
     strategy: null
     template:
       metadata:
         labels:
           dev-app: ${NAME}
-          name: ${NAME}-${DB_POD}-db
+          name: ${NAME}-${DB_POD}
       spec:
         containers:
           - capabilities: {}
             env:
               - name: DB_HOST
-                value: ${NAME}-${DB_POD}-db
+                value: ${NAME}-${DB_POD}
               # PostgreSQL environment variables
               - name: PGPASSWORD
                 valueFrom:
@@ -628,7 +628,7 @@ objects:
               tcpSocket:
                 port: 5432
               timeoutSeconds: 1
-            name: ${NAME}-${DB_POD}-db
+            name: ${NAME}-${DB_POD}
             ports:
               - containerPort: 5432
                 protocol: TCP
@@ -640,15 +640,15 @@ objects:
             terminationMessagePath: /dev/termination-log
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
-                name: ${NAME}-${DB_POD}-db-data
+                name: ${NAME}-${DB_POD}-data
               - mountPath: /var/run/postgresql
-                name: ${NAME}-${DB_POD}-db-run
+                name: ${NAME}-${DB_POD}-run
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-          - name: ${NAME}-${DB_POD}-db-data
+          - name: ${NAME}-${DB_POD}-data
             emptyDir: {}
-          - name: ${NAME}-${DB_POD}-db-run
+          - name: ${NAME}-${DB_POD}-run
             emptyDir: {}
   status: {}
 #   PostgreSQL Service
@@ -656,19 +656,19 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${NAME}-${DB_POD}-db
+    name: ${NAME}-${DB_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${NAME}
   spec:
     ports:
-      - name: ${NAME}-${DB_POD}-db
+      - name: ${NAME}-${DB_POD}
         nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
     selector:
-      name: ${NAME}-${DB_POD}-db
+      name: ${NAME}-${DB_POD}
     sessionAffinity: None
     type: ClusterIP
   status:
