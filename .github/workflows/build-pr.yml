@@ -217,4 +217,4 @@ jobs:
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc replace -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc apply -f -
