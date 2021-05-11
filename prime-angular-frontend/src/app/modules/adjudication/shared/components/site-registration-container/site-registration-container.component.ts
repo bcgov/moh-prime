@@ -268,6 +268,11 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe();
   }
 
+  public onEnableEditing(siteId: number) {
+    this.busy = this.siteResource.enableEditingSite(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
     switch (tabChangeEvent.index) {
       case 0:
