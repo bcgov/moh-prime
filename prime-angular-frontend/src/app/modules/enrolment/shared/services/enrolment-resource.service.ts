@@ -477,10 +477,6 @@ export class EnrolmentResource {
       );
   }
 
-  private removeIncompleteJobs(jobs: Job[]) {
-    return jobs.filter((job: Job) => (job.title !== ''));
-  }
-
   private removeIncompleteCareSettings(careSettings: CareSetting[]) {
     return careSettings.filter((careSetting: CareSetting) => careSetting.careSettingCode);
   }
