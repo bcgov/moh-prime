@@ -1,10 +1,9 @@
-import { EnrolleeNavigation } from './../../../../../shared/models/enrollee-navigation-model';
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
-import { exhaustMap, map, shareReplay, tap } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
@@ -29,6 +28,7 @@ import {
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
+import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
