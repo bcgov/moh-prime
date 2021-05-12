@@ -43,8 +43,7 @@ namespace Prime.Services
 
         public async Task<AuthorizedUserViewModel> GetAuthorizedUserAsync(int authorizedUserId)
         {
-            return await _context.AuthorizedUsers
-                .Include(au => au.Party)
+            return await GetBaseAuthorizedUserQuery()
                 .Where(au => au.Id == authorizedUserId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
@@ -52,8 +51,7 @@ namespace Prime.Services
 
         public async Task<AuthorizedUserViewModel> GetAuthorizedUserForUserIdAsync(Guid userId)
         {
-            return await _context.AuthorizedUsers
-                .Include(au => au.Party)
+            return await GetBaseAuthorizedUserQuery()
                 .Where(au => au.Party.UserId == userId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
