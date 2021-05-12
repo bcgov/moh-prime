@@ -209,7 +209,7 @@ jobs:
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
             -p FRONTEND_POD=frontend \
-            -p FRONTEND_URL=frontend \
+            -p FRONTEND_URL=pr-$PR_NUMBER \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DOCMAN_POD=document-manager \
