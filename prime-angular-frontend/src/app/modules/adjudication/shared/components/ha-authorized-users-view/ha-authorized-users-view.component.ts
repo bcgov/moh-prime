@@ -52,7 +52,8 @@ export class HaAuthorizedUsersViewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.healthAuthorityResource.getAuthorizedUsersByHealthAuthority(this.route.snapshot.params.haid)
+    this.busy = this.healthAuthorityResource
+      .getAuthorizedUsersByHealthAuthority(this.route.snapshot.params.haid)
       .subscribe((users: AuthorizedUser[]) => this.authorizedUsers = users);
   }
 }
