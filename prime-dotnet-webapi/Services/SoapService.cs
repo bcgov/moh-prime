@@ -145,7 +145,7 @@ namespace Prime.Services
             if (faxNumberData != null)
             {
                 string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(faxNumberData));
-                if (faxNumberData.Length == 2)
+                if (faxNumberParts.Length == 2)
                 {
                     result.FaxAreaCode = faxNumberParts[0];
                     result.FaxNumber = faxNumberParts[1];
@@ -194,6 +194,12 @@ namespace Prime.Services
             return (colonIndex != -1) ? telecomValue[(colonIndex + 1)..] : telecomValue;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="telecomNumber">Expects a 10-digit string but works with other input</param>
+        /// <returns>A 2-element array containing area code and local number, if input was a 10-digit string.
+        ///     Otherwise, simply returns <c>telecomNumber</c> as the single element in the array</returns>
         public static string[] SplitHL7v3TelecomNumber(string telecomNumber)
         {
             var allDigitsRegex = new Regex("^[0-9]+$");
@@ -204,7 +210,6 @@ namespace Prime.Services
             else
             {
                 return new string[] { telecomNumber };
-                // throw new ArgumentOutOfRangeException(nameof(telecomNumber), telecomNumber, "Not a 10 digit string");
             }
         }
 
