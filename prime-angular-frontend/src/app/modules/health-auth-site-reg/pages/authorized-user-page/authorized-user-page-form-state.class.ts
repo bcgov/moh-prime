@@ -90,7 +90,8 @@ export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUse
       smsPhone: [null, [FormControlValidators.phone]],
       // TODO employmentIdentifier is no longer a field?
       jobRoleTitle: [null, [Validators.required]],
-      healthAuthorityCode: [null, [Validators.required]]
+      employmentIdentifier: [null, []],
+      healthAuthorityCode: [null, [Validators.required]],
     });
   }
 
