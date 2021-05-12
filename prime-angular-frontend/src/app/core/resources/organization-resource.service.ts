@@ -15,6 +15,7 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -113,8 +114,8 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizations(textSearch?: string): Observable<OrganizationSearchListViewModel[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ textSearch });
+  public getOrganizations(queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }): Observable<OrganizationSearchListViewModel[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
       .pipe(
         map((response: ApiHttpResponse<OrganizationSearchListViewModel[]>) => response.result),

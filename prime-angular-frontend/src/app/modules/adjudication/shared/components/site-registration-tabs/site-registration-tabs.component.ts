@@ -38,6 +38,8 @@ import {
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-site-registration-tabs',
@@ -53,6 +55,9 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public CareSettingEnum = CareSettingEnum;
+
+  private careSettingCode: CareSettingEnum;
 
   private routeUtils: RouteUtils;
 
@@ -69,6 +74,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+    this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
   }
 
   public onSearch(search: string | null): void {
@@ -81,6 +87,26 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   public onRefresh(): void {
     this.getDataset(this.route.snapshot.queryParams);
+  }
+
+  public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
+    switch (tabChangeEvent.index) {
+      case 0:
+        this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+        this.getDataset(this.route.snapshot.queryParams);
+        break;
+      case 1:
+        this.careSettingCode = CareSettingEnum.COMMUNITY_PHARMACIST;
+        this.getDataset(this.route.snapshot.queryParams);
+        break;
+      case 2:
+        this.careSettingCode = CareSettingEnum.HEALTH_AUTHORITY;
+        // TODO: Health authorities are currently not organizations
+        // this.getDataset(this.route.snapshot.queryParams);
+        break;
+      default:
+        break;
+    }
   }
 
   public onAssign(siteId: number) {
@@ -271,43 +297,19 @@ export class SiteRegistrationTabsComponent implements OnInit {
     }
   }
 
-  private getDataset(queryParams: { search?: string, status?: number }): void {
-    const { oid, sid } = this.route.snapshot.params;
-    const request$ = (oid)
-      ? combineLatest([
-        this.getOrganizationById(oid),
-        this.getSiteById(sid)
-      ])
-        .pipe(
-          take(1),
-          map(this.toSiteRegistration())
-        )
-      : this.getOrganizations(queryParams)
-        .pipe(
-          map(this.toSiteRegistrations)
-        );
-
-    this.busy = request$
+  private getDataset(queryParams: { textSearch?: string }): void {
+    this.busy = this.getOrganizations({ careSettingCode: this.careSettingCode, ...queryParams })
+      .pipe(
+        map(this.toSiteRegistrations)
+      )
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationSearchListViewModel[]> {
-    return this.organizationResource.getOrganizations()
+  private getOrganizations(queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }): Observable<OrganizationSearchListViewModel[]> {
+    return this.organizationResource.getOrganizations(queryParam)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
-  }
-
-  private getOrganizationById(organizationId: number): Observable<Organization> {
-    return this.organizationResource.getOrganizationById(organizationId)
-      .pipe(
-        map((organization: Organization) => organization),
-        tap(() => this.showSearchFilter = false)
-      );
-  }
-
-  private getSiteById(siteId: number): Observable<Site> {
-    return this.siteResource.getSiteById(siteId);
   }
 
   private updateSite(updatedSite: Site) {
