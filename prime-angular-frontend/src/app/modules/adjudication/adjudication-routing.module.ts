@@ -29,8 +29,6 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
-import { HaAuthorizedUserEntryFormState } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry-form-state.class';
-import { HaAuthorizedUserEntryComponent } from './shared/components/ha-authorized-user-entry/ha-authorized-user-entry.component';
 import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 
