@@ -166,7 +166,7 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-            --build-arg NAME="pr-$PR_NUMBER" \
+            --build-arg SVC_NAME="pr-$PR_NUMBER" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -204,7 +204,7 @@ jobs:
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=pr-$PR_NUMBER \
+            -p SVC_NAME=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
