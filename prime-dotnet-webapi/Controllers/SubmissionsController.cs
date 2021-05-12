@@ -308,7 +308,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpPut("{enrolleeId}/submission/confirm", Name = nameof(ConfirmSubmission))]
-        [Authorize(Roles = Roles.ManageEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
