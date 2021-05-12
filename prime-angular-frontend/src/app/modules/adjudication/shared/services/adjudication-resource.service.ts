@@ -129,13 +129,11 @@ export class AdjudicationResource {
   }
 
   public confirmSubmission(enrolleeId: number): NoContent {
-    const url = `enrollees/${enrolleeId}/submission/confirm`;
-
-    return this.apiResource.put<NoContent>(url)
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/submission/confirm`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrollee could not be marked as always manual');
+          this.toastService.openErrorToast('Enrollee submission could not be confirmed');
           this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
