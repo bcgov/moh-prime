@@ -425,7 +425,7 @@ export class AdjudicationContainerComponent implements OnInit {
 
   protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
     if (enrolleeId) {
-      this.getEnrolleeById(enrolleeId)
+      this.getEnrolleeById(enrolleeId);
     }
     else {
       this.busy = this.getEnrollees(queryParams)
