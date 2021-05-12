@@ -70,7 +70,7 @@ namespace Prime.Controllers
         /// Gets adjacent next and previous enrollee IDs for a given enrolleeId
         /// </summary>
         [HttpGet("{enrolleeId}/adjacent", Name = nameof(GetAdjacentEnrolleeId))]
-        [Authorize(Roles = Roles.PrimeAdministrant)]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNavigation>), StatusCodes.Status200OK)]
