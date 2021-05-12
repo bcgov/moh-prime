@@ -19,7 +19,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
   templateUrl: './contextual-enrolment-confirmation.component.html',
   styleUrls: ['./contextual-enrolment-confirmation.component.scss']
 })
-export class ContextualEnrolmentConfirmationComponent implements OnInit {
+export class ContextualEnrolmentConfirmationComponent {
 
   @Input() public enrolleeId: number;
   @Input() public assigned: boolean;
@@ -33,13 +33,8 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   public phoneInBC: FormControl;
 
   constructor(
-    private enrolmentResource: EnrolmentResource,
-    private authService: AuthService,
     private adjudicationResource: AdjudicationResource,
-    private toastService: ToastService,
-    private utilsService: UtilsService,
     private dialog: MatDialog,
-    private fb: FormBuilder
   ) {
     this.reload = new EventEmitter<void>();
     this.assigned = false;
@@ -55,8 +50,6 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
     if (this.hasConfirmed) {
       this.adjudicationResource.confirmSubmission(this.enrolleeId)
         .subscribe(() => this.reload.emit());
-    } else {
-
     }
   }
 
@@ -74,10 +67,6 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
           ? this.reload.emit()
           : noop
       );
-  }
-
-  public ngOnInit(): void {
-
   }
 
 }
