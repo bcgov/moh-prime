@@ -148,9 +148,7 @@ namespace Prime.Services
                 .Select(e => e.Id)
                 .FirstOrDefaultAsync();
 
-            return await _context.Enrollees
-                .Select(e => new EnrolleeNavigation { NextId = nextId, PreviousId = previousId })
-                .FirstOrDefaultAsync();
+            return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
         }
 
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
