@@ -31,6 +31,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   @Output() public enableEnrollee: EventEmitter<number>;
   @Output() public toggleManualAdj: EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>;
   @Output() public enableEditing: EventEmitter<number>;
+  @Output() public cancelToa: EventEmitter<number>;
   @Output() public rerunRules: EventEmitter<number>;
   @Output() public delete: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
@@ -56,6 +57,7 @@ export class AdjudicatorActionsComponent implements OnInit {
     this.unlock = new EventEmitter<number>();
     this.enableEnrollee = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
+    this.cancelToa = new EventEmitter<number>();
     this.rerunRules = new EventEmitter<number>();
     this.delete = new EventEmitter<number>();
     this.assignToa = new EventEmitter<{ enrolleeId: number, agreementType: AgreementType }>();
@@ -123,6 +125,12 @@ export class AdjudicatorActionsComponent implements OnInit {
   public onEnableEditing() {
     if (this.permissionService.hasRoles(Role.APPROVE_ENROLLEE)) {
       this.enableEditing.emit(this.enrollee.id);
+    }
+  }
+
+  public onCancelToa() {
+    if (this.permissionService.hasRoles(Role.APPROVE_ENROLLEE)) {
+      this.cancelToa.emit(this.enrollee.id);
     }
   }
 
