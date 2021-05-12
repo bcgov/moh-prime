@@ -84,6 +84,8 @@ export class SiteRoutes {
   // Used to indicate the routes and order for sites for editing
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
+      this.CARE_SETTING,
+      this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
       this.REMOTE_USER, // Included since it's a child of remote_users

@@ -19,8 +19,8 @@ import { Contact } from '@lib/models/contact.model';
 export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
-  @Input() public showFax: boolean = true;
-  @Input() public showAddButton: boolean = false;
+  @Input() public showFax: boolean;
+  @Input() public showAddButton: boolean;
   @Input() public contacts: Contact[];
   @Input() public formSubmitting: Observable<void> = new Observable<void>();
   public showFormFields: boolean;
@@ -33,7 +33,10 @@ export class ContactProfileFormComponent implements OnInit {
 
   constructor(
     private formUtilsService: FormUtilsService
-  ) { }
+  ) {
+    this.showFax = true;
+    this.showAddButton = false;
+  }
 
   public get hasPageSubheaderMoreInfo(): boolean {
     return !!this.pageSubheaderMoreInfoChildren.length;
