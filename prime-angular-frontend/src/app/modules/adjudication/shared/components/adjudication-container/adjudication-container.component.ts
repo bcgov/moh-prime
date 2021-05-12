@@ -289,6 +289,26 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
+  public onCancelToa(enrolleeId: number) {
+    const data: DialogOptions = {
+      title: 'Cancel TOA Assignment',
+      message: 'Are you sure you want to cancel this TOA assignment and move the enrollee back into Under Review?',
+      actionType: 'warn',
+      actionText: 'Cancel TOA Assignment',
+      component: NoteComponent,
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        this.adjudicationActionPipe(enrolleeId, SubmissionAction.CANCEL_TOA)
+      )
+      .subscribe((enableEnrollee: HttpEnrollee) => {
+        this.updateEnrollee(enableEnrollee);
+        this.action.emit();
+      });
+  }
+
   public onRerunRules(enrolleeId: number) {
     const data: DialogOptions = {
       title: 'Rerun Rules',
