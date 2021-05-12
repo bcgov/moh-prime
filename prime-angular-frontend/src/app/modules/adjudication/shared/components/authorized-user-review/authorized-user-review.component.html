@@ -70,7 +70,7 @@
           (click)="onBack()"
           type="button">Back</button>
   <button mat-flat-button
-          [disabled]="!(Role.SUPER_ADMIN | inRole) || user.status === AccessStatusEnum.APPROVED"
+          [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
           (click)="onApprove()"
           color="primary">Approve Authorized User</button>
 </div>

@@ -163,6 +163,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpPost("{authorizedUserId}/approve", Name = nameof(ApproveAuthorizedUser))]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

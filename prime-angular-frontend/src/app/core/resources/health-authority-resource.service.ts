@@ -167,4 +167,17 @@ export class HealthAuthorityResource {
         })
       );
   }
+
+  public getHealthAuthorityCodesWithUnderReviewUsers(): Observable<HealthAuthorityEnum[]> {
+    return this.apiResource.get<HealthAuthorityEnum[]>(`health-authorities/under-review`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthorityEnum[]>) => response.result),
+        tap((code: HealthAuthorityEnum[]) => this.logger.info('HA_CODES', code)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health Authority Codes could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCodesWithUnderReviewUsers error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

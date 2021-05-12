@@ -5,6 +5,23 @@
            [dataSource]="dataSource"
            class="w-100">
 
+      <ng-container matColumnDef="prefixes">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col">&nbsp;
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"
+            class="prefix">
+          <button *ngIf="flaggedHealthAuthorities?.includes(row.code)"
+                  mat-icon-button
+                  title="View Pending Authorized Users"
+                  (click)="onRoute(row.code)">
+            <mat-icon class="red-icon">admin_panel_settings</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="referenceId">
         <th mat-header-cell
             *matHeaderCellDef

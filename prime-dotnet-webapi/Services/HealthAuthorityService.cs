@@ -30,5 +30,13 @@ namespace Prime.Services
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
+
+        public async Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync()
+        {
+            var underReviewUsers = await _context.AuthorizedUsers
+                .Where(u => u.Status == AccessStatusType.UnderReview).ToListAsync();
+
+            return underReviewUsers.Select(u => u.HealthAuthorityCode).ToList().Distinct();
+        }
     }
 }

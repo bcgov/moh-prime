@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 
+//TODO Remove this from existence once HA make their way into organizations
 namespace Prime.Controllers
 {
     [Produces("application/json")]
@@ -37,6 +38,21 @@ namespace Prime.Controllers
         {
             var users = await _healthAuthorityService.GetAuthorizedUsersByHealthAuthorityAsync(healthAuthorityCode);
             return Ok(ApiResponse.Result(users));
+        }
+
+        // GET: api/health-authorities/under-review
+        /// <summary>
+        /// Get health authority codes with under review authorized users
+        /// </summary>
+        [HttpGet("under-review", Name = nameof(GetHealthAuthorityCodesWithUnderReviewAuthorizedUsers))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthorityCode>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsers()
+        {
+            var haIds = await _healthAuthorityService.GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
+            return Ok(ApiResponse.Result(haIds));
         }
     }
 }

@@ -7,6 +7,8 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { Role } from '@auth/shared/enum/role.enum';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -22,12 +24,16 @@ export class HealthAuthorityTableComponent implements OnInit {
   public AdjudicationRoutes = AdjudicationRoutes;
   public haCode: HealthAuthorityEnum;
 
+  public flaggedHealthAuthorities: HealthAuthorityEnum[];
+
   constructor(
     private configService: ConfigService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
+    private healthAuthorityResource: HealthAuthorityResource
   ) {
     this.columns = [
+      'prefixes',
       'referenceId',
       'name',
       'actions'
@@ -35,7 +41,6 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route = new EventEmitter<string | (string | number)[]>();
 
     this.dataSource = new MatTableDataSource<Config<number>>([]);
-
     this.haCode = this.activatedRoute.snapshot.params.haid;
     this.dataSource.data = (this.haCode)
       ? this.configService.healthAuthorities?.filter(ha => ha.code === +this.haCode)
@@ -43,13 +48,11 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public onRoute(haid: number) {
-    const routePath = [AdjudicationRoutes.HEALTH_AUTHORITIES, haid, AdjudicationRoutes.AUTHORIZED_USERS];
-    if (this.haCode) {
-      // If on single ha vied go to create user
-      routePath.push(AdjudicationRoutes.CREATE_USER);
-    }
-    this.route.emit(routePath);
+    this.route.emit([AdjudicationRoutes.HEALTH_AUTHORITIES, haid, AdjudicationRoutes.AUTHORIZED_USERS]);
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.healthAuthorityResource
+      .getHealthAuthorityCodesWithUnderReviewUsers().subscribe(codes => this.flaggedHealthAuthorities = codes);
+  }
 }
