@@ -189,7 +189,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
             this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
-              const sitesOfHealthAuthority = this.healthAuthoritySites.get(String(ha.healthAuthorityCode)) as FormArray;
+              const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
               if (!sitesOfHealthAuthority) {
                 this.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
               }
