@@ -13,11 +13,11 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
 
-import { AuthService } from '@auth/shared/services/auth.service';
-import { PermissionService } from '@auth/shared/services/permission.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
 import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-contextual-help.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
 import { HealthAuthorityAuthorizedUsersPageComponent } from './health-authority-authorized-users-page.component';

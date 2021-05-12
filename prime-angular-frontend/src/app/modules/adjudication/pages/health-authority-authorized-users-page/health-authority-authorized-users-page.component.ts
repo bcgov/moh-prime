@@ -25,6 +25,5 @@ export class HealthAuthorityAuthorizedUsersPageComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
-  ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 }
