@@ -46,7 +46,7 @@ import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview
     AdministratorPageComponent,
     PrivacyOfficerPageComponent,
     TechnicalSupportPageComponent,
-    OverviewPageComponent,
+    OverviewPageComponent
   ],
   imports: [
     SharedModule,
