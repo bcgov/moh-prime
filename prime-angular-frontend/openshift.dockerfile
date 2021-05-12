@@ -46,6 +46,7 @@ RUN ng build --prod
 ### Stage 2 - Production environment ###
 ########################################
 FROM registry.redhat.io/rhel8/nginx-118
+ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
 COPY --from=build-deps /usr/src/app /opt/app-root/
