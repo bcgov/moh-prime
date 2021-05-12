@@ -10,7 +10,23 @@
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;
+              scope="col">
+            <ng-container *ngIf="enrolleeNavigation">
+              <button mat-icon-button
+                      aria-label="next"
+                      matTooltip="next"
+                      [disabled]="!enrolleeNavigation?.nextId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.nextId)">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button mat-icon-button
+                      aria-label="previous"
+                      matTooltip="previous"
+                      [disabled]="!enrolleeNavigation?.previousId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.previousId)">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+            </ng-container>
           </th>
           <td mat-cell
               *matCellDef="let row;">
