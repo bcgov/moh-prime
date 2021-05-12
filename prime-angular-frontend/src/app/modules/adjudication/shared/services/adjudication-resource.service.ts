@@ -26,7 +26,7 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
-import {BulkEmailType} from '@shared/enums/bulk-email-type';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Injectable({
   providedIn: 'root'
@@ -122,6 +122,20 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public confirmSubmission(enrolleeId: number): NoContent {
+    const url = `enrollees/${enrolleeId}/submission/confirm`;
+
+    return this.apiResource.put<NoContent>(url)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee could not be marked as always manual');
+          this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
       );

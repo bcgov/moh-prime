@@ -11,7 +11,7 @@ import { EscalationNoteComponent, EscalationType } from '@shared/components/dial
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -29,6 +29,8 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   public status$: Observable<EnrolmentStatus>;
   public Role = Role;
   public form: FormGroup;
+  public nameInDirectory: FormControl;
+  public phoneInBC: FormControl;
 
   constructor(
     private enrolmentResource: EnrolmentResource,
@@ -41,14 +43,21 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   ) {
     this.reload = new EventEmitter<void>();
     this.assigned = false;
+    this.nameInDirectory = new FormControl(false);
+    this.phoneInBC = new FormControl(false);
   }
 
-  public onOpen() {
-    this.getCurrentStatus();
+  public get hasConfirmed(): boolean {
+    return this.nameInDirectory.value && this.phoneInBC.value;
   }
 
-  public onSubmit() {
+  public onConfirm() {
+    if (this.hasConfirmed) {
+      this.adjudicationResource.confirmSubmission(this.enrolleeId)
+        .subscribe(() => this.reload.emit());
+    } else {
 
+    }
   }
 
   public onEscalate() {
@@ -68,14 +77,7 @@ export class ContextualEnrolmentConfirmationComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.form = this.fb.group({
-      nameinDirectory: this.fb.control,
-      phoneInBC: this.fb.control
-    });
-  }
 
-  private getCurrentStatus() {
-    this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);
   }
 
 }

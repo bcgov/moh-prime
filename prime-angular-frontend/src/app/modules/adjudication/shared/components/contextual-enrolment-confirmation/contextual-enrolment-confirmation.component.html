@@ -3,8 +3,7 @@
                      class="test"
                      [small]="true"
                      [outlined]="true"
-                     [advanced]="true"
-                     (opened)="onOpen()">
+                     [advanced]="true">
   <ng-container appContextualTitle>
     Confirm Enrolment
   </ng-container>
@@ -13,20 +12,38 @@
     <h2 class="h5 mb-3">
       Make sure you have checked the following things:
     </h2>
-    <form (ngSubmit)="onSubmit()"
-          [formGroup]="form">
-      <mat-checkbox [required]="true"> Name appears in the College directory </mat-checkbox>
-      <mat-checkbox [required]="true"> Phone number is in BC </mat-checkbox>
-    </form>
+    <mat-checkbox [formControl]="nameInDirectory"
+                  (click)="$event.stopPropagation()"> Name appears in the College directory </mat-checkbox>
+    <mat-checkbox [formControl]="phoneInBC"
+                  (click)="$event.stopPropagation()"> Phone number is in BC </mat-checkbox>
   </ng-container>
 
+  <div class="row justify-content-between">
+    <div class="col pt-4">
 
-  <button [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
-          (click)="onEscalate()">
-    <mat-icon>error_outline</mat-icon>
-    <span>Enrolment Escalation</span>
-  </button>
+      <button mat-stroked-button
+              [mat-dialog-close]="false"
+              cdkFocusInitial
+              class="my-2 mr-2">Cancel</button>
+    </div>
+    <div class="col pt-4">
+      <div class="row">
 
+        <button mat-flat-button
+                color="primary"
+                class="my-2 mr-1"
+                [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
+                (click)="onEscalate()">
+          Escalate
+        </button>
 
+        <button mat-flat-button
+                color="primary"
+                [disabled]="!hasConfirmed"
+                (click)="onConfirm()"
+                class="my-2 mr-1"> Confirm </button>
+      </div>
+    </div>
+  </div>
 
 </app-contextual-help>

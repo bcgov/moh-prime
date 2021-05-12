@@ -302,12 +302,12 @@ namespace Prime.Controllers
             return await ManualFlagInternal(enrolleeId, false);
         }
 
-        // PUT: api/enrollees/5/confirm
+        // PUT: api/enrollees/5/submission/confirm
         /// <summary>
         /// Confirm an Enrollee's most recent submission
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/confirm", Name = nameof(ConfirmSubmission))]
+        [HttpPut("{enrolleeId}/submission/confirm", Name = nameof(ConfirmSubmission))]
         [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
