@@ -38,7 +38,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="userId"></param>
         [HttpGet("{userId:guid}", Name = nameof(GetAuthorizedUserByUserId))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -60,7 +59,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpGet("{authorizedUserId:int}", Name = nameof(GetAuthorizedUserById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -110,7 +108,6 @@ namespace Prime.Controllers
         /// <param name="authorizedUserId"></param>
         /// <param name="updatedAuthorizedUser"></param>
         [HttpPut("{authorizedUserId}", Name = nameof(UpdateAuthorizedUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -164,7 +161,6 @@ namespace Prime.Controllers
         /// <param name="authorizedUserId"></param>
         [HttpPost("{authorizedUserId}/approve", Name = nameof(ApproveAuthorizedUser))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
