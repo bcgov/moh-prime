@@ -62,10 +62,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
 
-    if (
-      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
-      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
-    ) {
+    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       routePath = SiteRoutes.HOURS_OPERATION;
     }
 
@@ -104,7 +101,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected onSubmitFormIsInvalid(): void {
-    //emit formSubmitting event
     this.formSubmittingEvent.next();
   }
 }
