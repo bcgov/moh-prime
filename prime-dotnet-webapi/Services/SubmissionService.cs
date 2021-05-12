@@ -199,6 +199,8 @@ namespace Prime.Services
             await _emailService.SendReminderEmailAsync(enrollee.Id);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
+            // Manually Approved submissions are automatically confirmed
+            await ConfirmSubmissionAsync(enrollee.Id);
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
