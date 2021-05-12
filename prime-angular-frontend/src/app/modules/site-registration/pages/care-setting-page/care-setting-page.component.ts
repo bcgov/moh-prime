@@ -43,7 +43,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   public vendorConfig: VendorConfig[];
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
-  public vendorChangeDialogOptions: DialogOptions;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -64,25 +63,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.careSettingConfig = this.configService.careSettings;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
-    this.vendorChangeDialogOptions = {
-      title: 'Vendor Change',
-      message: 'CareConnect does not support remote access to PharmaNet, all the remote practitioners you have submitted in the application will be deleted and do not have permission to access PharmaNet remotely.'
-    };
     this.filteredVendorConfig = [];
-  }
-
-  public onVendorChange(change: MatRadioChange) {
-    this.hasNoVendorError = false;
-
-    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
-      const data: DialogOptions = {
-        icon: 'announcement',
-        ...this.vendorChangeDialogOptions,
-        actionText: 'Ok',
-        cancelHide: true
-      };
-      this.dialog.open(ConfirmDialogComponent, { data });
-    }
   }
 
   public enableCareSetting(careSettingCode: number): boolean {
@@ -181,26 +162,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
-    const data: DialogOptions = {
-      ...this.vendorChangeDialogOptions,
-      actionType: 'warn',
-      actionText: 'Continue'
-    };
-    const update$ = this.siteResource.updateSite(payload);
-    return (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers.length)
-      ? this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) => {
-            if (!result) {
-              return EMPTY;
-            }
-
-            payload.remoteUsers = [];
-            return update$;
-          })
-        )
-      : update$;
+    return this.siteResource.updateSite(payload);
   }
 
   protected afterSubmitIsSuccessful(): void {

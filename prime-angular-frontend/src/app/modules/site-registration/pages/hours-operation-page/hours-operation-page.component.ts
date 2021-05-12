@@ -88,7 +88,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     return (
       group.get('startTime').value === this.business24Hours.startTime &&
       group.get('endTime').value === this.business24Hours.endTime
-    ) ? true : false;
+    );
   }
 
   public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
@@ -167,10 +167,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
 
-    if (
-      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
-      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
-    ) {
+    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       routePath = SiteRoutes.ADMINISTRATOR;
     } else if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;

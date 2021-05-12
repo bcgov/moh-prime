@@ -85,7 +85,6 @@
       "netCore": {
         "appProject": "${workspaceFolder}/prime.csproj",
         "enableDebugging": true,
-        // "configureSsl": true
       }
     },
     {
