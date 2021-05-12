@@ -3,12 +3,13 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Subscription } from 'rxjs';
+
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { Role } from '@auth/shared/enum/role.enum';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-health-authority-table',
