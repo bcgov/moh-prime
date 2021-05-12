@@ -32,6 +32,11 @@
     </ng-container>
   </div>
 
+  <p *ngIf="!authorizedUsers?.length"
+     class="px-4 py-2 text-muted">
+    No Authorized Users Found
+  </p>
+
   <ng-template #notification
                let-props="props">
     <div class="d-flex align-items-center mt-2">
