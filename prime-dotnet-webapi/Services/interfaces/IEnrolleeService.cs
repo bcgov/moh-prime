@@ -19,7 +19,7 @@ namespace Prime.Services
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
-        Task<EnrolleeListViewModel> GetAdjacentEnrolleeAsync(EnrolleeRangeOptions rangeOptions = null);
+        Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
         Task DeleteEnrolleeAsync(int enrolleeId);

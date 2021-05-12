@@ -134,70 +134,22 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeListViewModel> GetAdjacentEnrolleeAsync(EnrolleeRangeOptions rangeOptions = null)
+        public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
         {
-            rangeOptions ??= new EnrolleeRangeOptions();
-
-            IQueryable<int> newestAgreementIds = _context.AgreementVersions
-                .Select(a => a.AgreementType)
-                .Distinct()
-                .Select(type => _context.AgreementVersions
-                    .OrderByDescending(a => a.EffectiveDate)
-                    .First(a => a.AgreementType == type)
-                    .Id
-                );
-
-            var idRange = await _context.Enrollees
-                .GroupBy(e => 1)
-                .Select(g => new
-                {
-                    MinId = g.Min(e => e.Id),
-                    MaxId = g.Max(e => e.Id)
-                })
+            var nextId = await _context.Enrollees
+                .Where(e => e.Id > enrolleeId)
+                .OrderBy(e => e.Id)
+                .Select(e => e.Id)
                 .FirstOrDefaultAsync();
 
-            // return null if no data in table
-            if (idRange == null)
-            {
-                return null;
-            }
+            var previousId = await _context.Enrollees
+                .Where(e => e.Id < enrolleeId)
+                .OrderByDescending(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
 
-            var query = _context.Enrollees.AsQueryable();
-            // return the only one record in table
-            if (idRange.MinId == idRange.MaxId)
-            {
-                query = query.Take(1);
-            }
-            // if id is out of the lower bound, get the last record
-            else if (rangeOptions.EnrolleeId <= idRange.MinId && rangeOptions.ReverseDirection == true)
-            {
-                query = query.Where(e => e.Id == idRange.MaxId);
-            }
-            // if id is out of the upper bound, get the first record
-            else if (rangeOptions.EnrolleeId >= idRange.MaxId && rangeOptions.ReverseDirection != true)
-            {
-                query = query.Where(e => e.Id == idRange.MinId);
-            }
-            // all other scenarios
-            else
-            {
-                query = query.If(rangeOptions.ReverseDirection == true, q => q
-                    .Where(e => e.Id < rangeOptions.EnrolleeId)
-                )
-                .If(rangeOptions.ReverseDirection != true, q => q
-                    .Where(e => e.Id > rangeOptions.EnrolleeId)
-                );
-            }
-
-            return await query
-                .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
-                .DecompileAsync()
-                .If(rangeOptions.ReverseDirection == true, q => q
-                    .OrderByDescending(e => e.Id)
-                )
-                .If(rangeOptions.ReverseDirection != true, q => q
-                    .OrderBy(e => e.Id)
-                )
+            return await _context.Enrollees
+                .Select(e => new EnrolleeNavigation { NextId = nextId, PreviousId = previousId })
                 .FirstOrDefaultAsync();
         }
 

@@ -13,6 +13,7 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -29,14 +30,14 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 })
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
-  @Input() public showJumpArrow: boolean;
+  @Input() public enrolleeNavigation: EnrolleeNavigation;
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
   @Output() public sendBulkEmail: EventEmitter<void>;
-  @Output() public nextData: EventEmitter<boolean>;
+  @Output() public navigateEnrollee: EventEmitter<number>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -63,7 +64,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.sendBulkEmail = new EventEmitter<void>();
-    this.nextData = new EventEmitter<boolean>();
+    this.navigateEnrollee = new EventEmitter<number>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -80,7 +81,6 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     ];
     this.dataSource = new MatTableDataSource<EnrolleeListViewModel>([]);
     this.hasAssignedToFilter$ = new BehaviorSubject<boolean>(false);
-    this.showJumpArrow = false;
   }
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
@@ -155,8 +155,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     }
   }
 
-  public jumpNext(reverse?: boolean): void {
-    this.nextData.emit(reverse);
+  public navigateToEnrollee(enrolleeId: number): void {
+    this.navigateEnrollee.emit(enrolleeId);
   }
 
   public ngOnInit(): void {

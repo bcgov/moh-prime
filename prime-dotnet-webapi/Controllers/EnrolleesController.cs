@@ -65,36 +65,19 @@ namespace Prime.Controllers
             }
         }
 
-        // GET: api/Enrollees
+        // GET: api/Enrollees/1/adjacent
         /// <summary>
-        /// Gets an adjacent enrollee by id if user has ADMIN role, can be either next or previous
-        /// returns same enrollee there is only one in db
-        /// returns enrollee with max id if input id is min in db for previous adjacent
-        /// returns enrollee with min id if input id is max in db for next adjacent
+        /// Gets adjacent next and previous enrollee IDs for a given enrolleeId
         /// </summary>
-        [HttpGet("adjacent", Name = nameof(GetAdjacentEnrollee))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("{enrolleeId}/adjacent", Name = nameof(GetAdjacentEnrolleeId))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeListViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAdjacentEnrollee([FromQuery] EnrolleeRangeOptions rangeOptions)
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNavigation>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAdjacentEnrolleeId(int enrolleeId)
         {
-            if (User.IsAdministrant())
-            {
-                var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-                var enrollee = await _enrolleeService.GetAdjacentEnrolleeAsync(rangeOptions);
-                if (enrollee == null)
-                {
-                    return NotFound(ApiResponse.Message($"Adjacent enrollee not found for id {rangeOptions.EnrolleeId}"));
-                }
-                var result = new[] { enrollee }.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
-                return Ok(ApiResponse.Result(result.FirstOrDefault()));
-            }
-            else
-            {
-                return Forbid();
-            }
+            var result = await _enrolleeService.GetAdjacentEnrolleeIdAsync(enrolleeId);
+            return Ok(ApiResponse.Result(result));
         }
 
         // GET: api/Enrollees/5

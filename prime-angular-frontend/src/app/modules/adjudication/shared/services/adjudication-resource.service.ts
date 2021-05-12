@@ -1,3 +1,4 @@
+import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -68,15 +69,14 @@ export class AdjudicationResource {
       );
   }
 
-  public getAdjacentEnrollee(enrolleeId: number, reverseDirection?: boolean): Observable<EnrolleeListViewModel> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ enrolleeId, reverseDirection });
-    return this.apiResource.get<EnrolleeListViewModel>('enrollees/adjacent', params)
+  public getAdjacentEnrolleeId(enrolleeId: number): Observable<EnrolleeNavigation> {
+    return this.apiResource.get<EnrolleeNavigation>(`enrollees/${enrolleeId}/adjacent`)
       .pipe(
-        map((response: ApiHttpResponse<EnrolleeListViewModel>) => response.result),
-        tap((enrollees: EnrolleeListViewModel) => this.logger.info('ENROLLEES', enrollees)),
+        map((response: ApiHttpResponse<EnrolleeNavigation>) => response.result),
+        tap((enrolleeNaviagation: EnrolleeNavigation) => this.logger.info('ENROLLEE_NAVIGATION', enrolleeNaviagation)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolments could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getAdjacentEnrollees error has occurred: ', error);
+          this.toastService.openErrorToast('EnrolleeNaviagation could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjacentEnrolleeId error has occurred: ', error);
           throw error;
         })
       );

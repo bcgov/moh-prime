@@ -11,17 +11,19 @@
           <th mat-header-cell
               *matHeaderCellDef
               scope="col">
-            <ng-container *ngIf="showJumpArrow">
+            <ng-container *ngIf="enrolleeNavigation">
               <button mat-icon-button
-                      (click)="jumpNext()"
                       aria-label="next"
-                      matTooltip="next">
+                      matTooltip="next"
+                      [disabled]="!enrolleeNavigation?.nextId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.nextId)">
                 <mat-icon>arrow_downward</mat-icon>
               </button>
               <button mat-icon-button
-                      (click)="jumpNext(true)"
                       aria-label="previous"
-                      matTooltip="previous">
+                      matTooltip="previous"
+                      [disabled]="!enrolleeNavigation?.previousId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.previousId)">
                 <mat-icon>arrow_upward</mat-icon>
               </button>
             </ng-container>
