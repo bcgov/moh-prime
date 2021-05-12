@@ -21,7 +21,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
-  public columns: string[];
+  @Input() public columns: string[];
 
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;

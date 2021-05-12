@@ -50,12 +50,14 @@ export class SiteRegistrationTabsComponent implements OnInit {
   public busy: Subscription;
   @Input() public refresh: Observable<boolean>;
 
-  public columns: string[];
   public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
   public CareSettingEnum = CareSettingEnum;
+
+  public communityPracticeColumns: string[];
+  public communityPharmacyColumns: string[];
 
   private careSettingCode: CareSettingEnum;
 
@@ -75,6 +77,33 @@ export class SiteRegistrationTabsComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
     this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+
+    this.communityPracticeColumns = [
+      'prefixes',
+      'displayId',
+      'organizationName',
+      'signingAuthority',
+      'siteDoingBusinessAs',
+      'submissionDate',
+      'assignedTo',
+      'state',
+      'siteId',
+      'remoteUsers',
+      'actions'
+    ];
+    this.communityPharmacyColumns = [
+      'prefixes',
+      'displayId',
+      'organizationName',
+      'signingAuthority',
+      'siteDoingBusinessAs',
+      'submissionDate',
+      'assignedTo',
+      'state',
+      'siteId',
+      'missingBusinessLicence',
+      'actions'
+    ];
   }
 
   public onSearch(search: string | null): void {

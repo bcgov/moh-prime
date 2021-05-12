@@ -17,6 +17,7 @@
                          (refresh)="onRefresh()"></app-search-form>
         <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                      [dataSource]="dataSource"
+                                     [columns]="communityPracticeColumns"
                                      (assign)="onAssign($event)"
                                      (reassign)="onReassign($event)"
                                      (notify)="onNotify($event)"
@@ -34,6 +35,7 @@
                          (refresh)="onRefresh()"></app-search-form>
         <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
                                      [dataSource]="dataSource"
+                                     [columns]="communityPharmacyColumns"
                                      (assign)="onAssign($event)"
                                      (reassign)="onReassign($event)"
                                      (notify)="onNotify($event)"
