@@ -180,6 +180,10 @@ namespace Prime.Services
                     await RerunRulesAsync(enrollee);
                     break;
 
+                case SubmissionAction.CancelToaAssignment:
+                    await CancelToaAssignmentAsync(enrollee);
+                    break;
+
                 default:
                     throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleSubmissionActionAsync)}");
             }
@@ -296,6 +300,17 @@ namespace Prime.Services
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator manually ran the enrollee application rules");
             await ProcessEnrolleeApplicationRules(enrollee.Id);
             await _context.SaveChangesAsync();
+            await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
+        }
+
+        private async Task CancelToaAssignmentAsync(Enrollee enrollee)
+        {
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            newStatus.AddStatusReason(StatusReasonType.Manual, "Adjudicator cancelled TOA assignment");
+            await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrollee.Id, false);
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Adjudicator cancelled TOA assignment");
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 

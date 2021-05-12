@@ -160,7 +160,7 @@ export class BannerMaintenanceComponent implements OnInit {
       ...banner,
       startDate: banner.dateRange.startDate,
       endDate: banner.dateRange.endDate
-    }
+    };
   }
 
   private createFormInstance() {
