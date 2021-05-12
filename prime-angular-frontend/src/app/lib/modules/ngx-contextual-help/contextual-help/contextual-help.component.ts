@@ -41,5 +41,4 @@ export class ContextualHelpComponent {
     event.stopPropagation();
     this.opened.emit();
   }
-
 }
