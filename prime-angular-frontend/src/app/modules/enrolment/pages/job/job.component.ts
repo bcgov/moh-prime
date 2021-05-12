@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
@@ -16,10 +13,8 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
@@ -99,7 +94,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   }
 
   public healthAuthoritySitesAsControls(healthAuthorityCode: number): AbstractControl[] {
-    const sites = this.healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
+    const sites = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
     return sites?.controls;
   }
 
@@ -147,7 +142,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        let sitesOfHealthAuthority = this.healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
+        const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
         sitesOfHealthAuthority.removeAt(index);
         break;
       }
@@ -194,11 +189,11 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
             this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
-              let sitesOfHealthAuthority = this.healthAuthoritySites.get(String(ha.healthAuthorityCode)) as FormArray;
+              const sitesOfHealthAuthority = this.healthAuthoritySites.get(String(ha.healthAuthorityCode)) as FormArray;
               if (!sitesOfHealthAuthority) {
                 this.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
               }
-            })
+            });
             break;
           }
         }
