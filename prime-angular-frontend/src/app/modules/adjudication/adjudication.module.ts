@@ -101,7 +101,7 @@ import { ContextualEnrolmentConfirmationComponent } from './shared/components/co
     HealthAuthorityAuthorizedUserPageComponent,
     HaAuthorizedUsersViewComponent,
     HealthAuthorityAuthorizedUsersPageComponent,
-    AuthorizedUserReviewComponent
+    AuthorizedUserReviewComponent,
     ContextualEnrolmentConfirmationComponent
   ],
   imports: [
