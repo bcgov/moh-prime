@@ -192,14 +192,14 @@
                 [disabled]="!(Role.EDIT_SITE | inRole)"
                 (click)="onAssign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Assign Enrolment</span>
+          <span>Assign Registration</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
                 [disabled]="!(Role.EDIT_SITE | inRole)"
                 (click)="onReassign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Reassign Enrolment</span>
+          <span>Reassign Registration</span>
         </button>
 
       </mat-menu>
