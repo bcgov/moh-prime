@@ -38,7 +38,7 @@ parameters:
   displayName: API Pod Name
   description: For the .NET API
   required: true
-  value: dotnet-webapi
+  value: webapi
 - name: ASP_ENV
   displayName: ASP.NET Environment
   description: Development or Production
@@ -178,9 +178,10 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
+
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DB_POD}"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}-backend"}]  
     name: ${SVC_NAME}-${API_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -315,7 +316,7 @@ objects:
         port: 5001
         targetPort: 5001
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-${API_POD}-backend
 
 ###########################################
 ###      Document Manager (backend)     ###
