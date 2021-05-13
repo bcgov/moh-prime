@@ -174,10 +174,10 @@ objects:
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
-    host: ${SVC_NAME}-${FRONTEND_POD}
+    host: ${SVC_NAME}${URL_STUB}
     to:
       kind: Service
-      name: ${SVC_NAME}${URL_STUB}
+      name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
       targetPort: http
