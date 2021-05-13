@@ -64,15 +64,12 @@ namespace Prime.Services
 
             if (authorizedUser == null)
             {
-                var party = new Party
-                {
-                    Addresses = new List<PartyAddress>()
-                };
-                _context.Parties.Add(party);
-
                 authorizedUser = new AuthorizedUser
                 {
-                    Party = party,
+                    Party = new Party
+                    {
+                        Addresses = new List<PartyAddress>()
+                    },
                     Status = AccessStatusType.UnderReview
                 };
                 _context.AuthorizedUsers.Add(authorizedUser);
@@ -130,8 +127,7 @@ namespace Prime.Services
             return _context.AuthorizedUsers
                 .Include(au => au.Party)
                     .ThenInclude(p => p.Addresses)
-                        .ThenInclude(pa => pa.Address)
-                .Include(au => au.HealthAuthority);
+                        .ThenInclude(pa => pa.Address);
         }
     }
 }

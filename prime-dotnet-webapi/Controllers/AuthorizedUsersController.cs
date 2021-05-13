@@ -42,7 +42,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAuthorizedUserByUserId(Guid userId)
         {
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
@@ -63,7 +63,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAuthorizedUserById(int authorizedUserId)
         {
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
@@ -83,7 +83,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserChangeModel>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateAuthorizedUser(AuthorizedUserChangeModel authorizedUser)
         {
             if (authorizedUser == null)
@@ -177,7 +177,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpPost("{authorizedUserId}/approve", Name = nameof(ApproveAuthorizedUser))]
-        [Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

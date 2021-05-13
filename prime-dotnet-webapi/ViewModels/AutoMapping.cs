@@ -78,19 +78,7 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
-            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Party.UserId))
-            .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Party.FirstName))
-            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Party.LastName))
-            .ForMember(dest => dest.GivenNames, opt => opt.MapFrom(src => src.Party.GivenNames))
-            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.Party.DateOfBirth))
-            .ForMember(dest => dest.PreferredFirstName, opt => opt.MapFrom(src => src.Party.PreferredFirstName))
-            .ForMember(dest => dest.PreferredMiddleName, opt => opt.MapFrom(src => src.Party.PreferredMiddleName))
-            .ForMember(dest => dest.PreferredLastName, opt => opt.MapFrom(src => src.Party.PreferredLastName))
-            .ForMember(dest => dest.VerifiedAddress, opt => opt.MapFrom(src => src.Party.VerifiedAddress))
-            .ForMember(dest => dest.PhysicalAddress, opt => opt.MapFrom(src => src.Party.PhysicalAddress))
-            .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
-            .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone))
-            .ForMember(dest => dest.SmsPhone, opt => opt.MapFrom(src => src.Party.SMSPhone))
-            .ForMember(dest => dest.JobRoleTitle, opt => opt.MapFrom(src => src.Party.JobRoleTitle));
+            .IncludeMembers(src => src.Party);
+        CreateMap<Party, AuthorizedUserViewModel>();
     }
 }
