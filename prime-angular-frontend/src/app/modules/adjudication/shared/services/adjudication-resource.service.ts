@@ -129,7 +129,7 @@ export class AdjudicationResource {
   }
 
   public confirmSubmission(enrolleeId: number): NoContent {
-    const url = `enrollees/${enrolleeId}/submission/confirm`;
+    const url = `enrollees/${enrolleeId}/submissions/latest/confirm`;
 
     return this.apiResource.put<NoContent>(url)
       .pipe(

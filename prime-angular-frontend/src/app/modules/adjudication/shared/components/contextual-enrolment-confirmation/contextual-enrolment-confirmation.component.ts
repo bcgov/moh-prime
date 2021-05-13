@@ -67,5 +67,16 @@ export class ContextualEnrolmentConfirmationComponent {
           ? this.reload.emit()
           : noop
       );
+
+    this.clearCheckboxes();
+  }
+
+  public onClose() {
+    this.clearCheckboxes();
+  }
+
+  private clearCheckboxes() {
+    this.nameInDirectory.patchValue(false);
+    this.phoneInBC.patchValue(false);
   }
 }
