@@ -19,8 +19,6 @@ import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model
 import { HttpEnrollee, EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReference } from '@shared/models/enrolment-status-reference.model';
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
-import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
-import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
