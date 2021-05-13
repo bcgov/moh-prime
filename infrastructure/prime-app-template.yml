@@ -110,6 +110,10 @@ objects:
                 protocol: TCP
               - containerPort: 8443
                 protocol: TCP
+              - containerPort: 8888
+                protocol: TCP
+              - containerPort: 8890
+                protocol: TCP
             resources: {}
             envFrom:
             - configMapRef:
@@ -143,9 +147,15 @@ objects:
       - name: "https"
         port: 8443
         targetPort: 8443
+      - name: "health-practitioner-registration"
+        port: 8888
+        targetPort: 8888
+      - name: "mutual-auth"
+        port: 8890
+        targetPort: 8890
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
-#   Frontend Route
+#   Frontend Route (Web)
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -169,6 +179,54 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
+#   Frontend Route (Health Practitioner Registration)
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  labels:
+    app: ${SVC_NAME}-${FRONTEND_POD}
+    app.kubernetes.io/component: ${SVC_NAME}
+    app.kubernetes.io/instance: ${SVC_NAME}
+    app.kubernetes.io/part-of: ${SVC_NAME}
+  metadata:
+    name: ${SVC_NAME}-${FRONTEND_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+  spec:
+    host: healthpractitionerregistration${URL_STUB}
+    to:
+      kind: Service
+      name: ${SVC_NAME}-${FRONTEND_POD}
+      weight: 100
+    port:
+      targetPort: ${WEB_PORT}
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: Allow
+    wildcardPolicy: None
+#   Frontend Route (Mutual Authentication)
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+  labels:
+    app: ${SVC_NAME}-${FRONTEND_POD}
+    app.kubernetes.io/component: ${SVC_NAME}
+    app.kubernetes.io/instance: ${SVC_NAME}
+    app.kubernetes.io/part-of: ${SVC_NAME}
+  metadata:
+    name: ${SVC_NAME}-${FRONTEND_POD}
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+  spec:
+    host: mutualauth${URL_STUB}
+    to:
+      kind: Service
+      name: ${SVC_NAME}-${FRONTEND_POD}
+      weight: 100
+    port:
+      targetPort: ${WEB_PORT}
+    tls:
+      termination: passthrough
+      insecureEdgeTerminationPolicy: Redirect
+    wildcardPolicy: None
 
 ###########################################
 ###           Backend Web API           ###
@@ -180,7 +238,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DB_POD}"}]  
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -190,7 +248,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-${API_POD}-backend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -220,22 +278,22 @@ objects:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-password
-              - name: database-name
+              - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-user
-              - name: database-user
+              - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-user
-              - name: database-password
+              - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-password
-              - name: database-password
+              - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
@@ -370,19 +428,22 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: database-user
+                    key: database-name
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: database-password
+                    key: DATABASE_PASSWORD
               - name: DB_PORT
-                value: "5432"
+                valueFrom:
+                  configMapKeyRef:
+                    name: postgresql
+                    key: postgresql_database_port
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: database-user
+                    key: DATABASE_USERNAME
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
@@ -417,7 +478,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: database-user
+                    key: database-password
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -512,7 +573,10 @@ objects:
                   name: prime-postgresql-db
                   key: database-password
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                configMapKeyRef:
+                  name: postgresql
+                  key: postgresql_database_port
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
@@ -604,7 +668,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: prime-postgresql-db                    
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -615,7 +679,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: database-user
+                    key: database-name
             image: >-
               image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
             imagePullPolicy: IfNotPresent
