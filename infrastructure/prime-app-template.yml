@@ -169,14 +169,11 @@ objects:
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${SVC_NAME}${URL_STUB}
     to:
@@ -184,7 +181,7 @@ objects:
       name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: 8080
+      targetPort: http
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
