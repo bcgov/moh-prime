@@ -364,19 +364,19 @@ objects:
                     key: redis_port
               - name: DB_HOST
                 value: ${SVC_NAME}-{DB_POD}-db
-              - name: DB_NAME
+              - name: database-name
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-user
-              - name: DB_PASS
+              - name: database-password
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-password
               - name: DB_PORT
                 value: "5432"
-              - name: DB_USER
+              - name: database-user
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
@@ -411,11 +411,6 @@ objects:
                   configMapKeyRef:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -499,19 +494,19 @@ objects:
                   key: redis_port
             - name: DB_HOST
               value: ${SVC_NAME}-${DB_POD}
-            - name: database-name
+            - name: DB_NAME
               valueFrom:
                 secretKeyRef:
                   name: prime-postgresql-db
                   key: database-user
-            - name: database-password
+            - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: prime-postgresql-db
                   key: database-password
             - name: DB_PORT
               value: "5432"
-            - name: database-user
+            - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: prime-postgresql-db
