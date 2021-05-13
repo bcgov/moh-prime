@@ -115,7 +115,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected onSubmitFormIsInvalid(): void {
-    //emit formSubmitting event
     this.formSubmittingEvent.next();
   }
 }
