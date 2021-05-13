@@ -1,5 +1,5 @@
 import { noop, Observable, Subscription } from 'rxjs';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Role } from '@auth/shared/enum/role.enum';
@@ -44,6 +44,10 @@ export class ContextualEnrolmentConfirmationComponent {
 
   public get hasConfirmed(): boolean {
     return this.nameInDirectory.value && this.phoneInBC.value;
+  }
+
+  public onOpen() {
+    this.clearCheckboxes();
   }
 
   public onConfirm() {
