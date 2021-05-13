@@ -202,7 +202,7 @@ objects:
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     host: healthpractitionerregistration${URL_STUB}
@@ -226,7 +226,7 @@ objects:
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     host: mutualauth${URL_STUB}
