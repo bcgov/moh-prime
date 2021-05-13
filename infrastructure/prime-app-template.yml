@@ -273,7 +273,7 @@ objects:
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-${DB_POD}
-              - name: database-password
+              - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
@@ -433,7 +433,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: DATABASE_PASSWORD
+                    key: database-password
               - name: DB_PORT
                 valueFrom:
                   configMapKeyRef:
@@ -443,7 +443,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: prime-postgresql-db
-                    key: DATABASE_USERNAME
+                    key: database-user
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
