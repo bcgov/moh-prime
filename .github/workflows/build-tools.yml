@@ -5,26 +5,26 @@
 # Images are then deployed to the respective OpenShift namespace via the
 # prime-app-template.yml in the infrastructure folder.
 
-name: Build PRIME from Test branch and Deploy to OpenShift Image Registry
+name: Build PRIME from Tools branch and Deploy to OpenShift Image Registry
 
 on:
   push:
     branches:
-      - test
+      - tools
 
   workflow_dispatch:
     branches:
-      - test
+      - tools
 
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
-    environment: Test
+    environment: Tools
     env:
       BUILD_LOGLEVEL: "2"
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
-      IMAGE_TAG: test
+      IMAGE_TAG: tools
       
     steps:
       - name: "Checkout the repo"
@@ -59,11 +59,11 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Test
+    environment: Tools
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
-      IMAGE_TAG: test
+      IMAGE_TAG: tools
       
     steps:
       - name: "Checkout the repo"
@@ -108,11 +108,11 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Test
+    environment: Tools
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
-      IMAGE_TAG: test
+      IMAGE_TAG: tools
       JWT_WELL_KNOWN_CONFIG: "https://test.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
       KEYCLOAK_CLIENT_ID: "prime-application-test"
       KEYCLOAK_URL: "https://test.oidc.gov.bc.ca/auth"
@@ -177,7 +177,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          IMAGE_TAG: test
+          IMAGE_TAG: tools
           NAME: prime
         run: |
           oc process -f infrastructure/prime-app-template.yml \
