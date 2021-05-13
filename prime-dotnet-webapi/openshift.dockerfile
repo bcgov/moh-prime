@@ -39,6 +39,9 @@ RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:Microso
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 
+########################################
+###   Stage 2 - Runtime environment  ###
+########################################
 FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL

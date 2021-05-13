@@ -156,6 +156,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          OC_APP: dev
           PR_NUMBER: ${{steps.PR.outputs.number}}
           REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
           
@@ -167,6 +168,7 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+            --build-arg OC_APP=$OC_APP \
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME

@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM public.ecr.aws/bitnami/node:14.15.5-prod AS build-deps
+FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
 
 
 ## Everything should be proxied through nginx now, no separate url
@@ -50,7 +50,7 @@ ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
 COPY --from=build-deps /usr/src/app /opt/app-root/
-# COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
 RUN envsubst < /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
     chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
