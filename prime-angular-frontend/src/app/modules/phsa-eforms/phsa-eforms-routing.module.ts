@@ -23,6 +23,7 @@ const routes: Routes = [
       AuthenticationGuard
     ],
     canActivateChild: [
+      AuthenticationGuard,
       PhsaEformsGuard
     ],
     children: [

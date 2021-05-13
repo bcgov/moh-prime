@@ -52,7 +52,7 @@ const routes: Routes = [
         path: GisEnrolmentRoutes.LOGIN_PAGE,
         // TODO uncomment when redirection is possible based on the token
         // canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
+        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login-page.module').then(m => m.GisLoginPageModule)
       },
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,

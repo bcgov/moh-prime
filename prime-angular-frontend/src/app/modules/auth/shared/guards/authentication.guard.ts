@@ -56,6 +56,7 @@ export class AuthenticationGuard extends BaseGuard {
           idpHint
         };
 
+        // Keycloak must be initialized
         this.authService.login(options)
           .catch((error: any) => {
             this.logger.error(`Error occurred during attempted authentication`, error);

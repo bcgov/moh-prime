@@ -16,4 +16,4 @@ import { GisLoginPageComponent } from './gis-login-page.component';
     GisLoginRoutingModule
   ]
 })
-export class GisLoginModule { }
+export class GisLoginPageModule { }
