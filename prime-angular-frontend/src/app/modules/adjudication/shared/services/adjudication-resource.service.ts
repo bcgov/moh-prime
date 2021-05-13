@@ -29,6 +29,7 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -136,6 +137,18 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public confirmSubmission(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/submissions/latest/confirm`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee submission could not be confirmed');
+          this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
       );

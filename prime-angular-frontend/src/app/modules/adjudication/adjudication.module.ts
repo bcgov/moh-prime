@@ -47,6 +47,7 @@ import { ContextualSiteNotificationComponent } from './shared/components/context
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
+import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +88,8 @@ import { BannerMaintenanceComponent } from './shared/components/banner-maintenan
     ContextualSiteNotificationComponent,
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
-    BannerMaintenanceComponent
+    BannerMaintenanceComponent,
+    ContextualEnrolmentConfirmationComponent
   ],
   imports: [
     AdjudicationRoutingModule,
