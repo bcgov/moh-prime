@@ -5,10 +5,12 @@
 
   <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
                       [enrollees]="enrollees"
+                      [enrolleeNavigation]="enrolleeNavigation"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
+                      (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
