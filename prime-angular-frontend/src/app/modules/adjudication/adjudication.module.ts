@@ -54,6 +54,7 @@ import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-autho
 import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorized-users-view/ha-authorized-users-view.component';
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     HaAuthorizedUsersViewComponent,
     HealthAuthorityAuthorizedUsersPageComponent,
     AuthorizedUserReviewComponent
+    ContextualEnrolmentConfirmationComponent
   ],
   imports: [
     AdjudicationRoutingModule,
