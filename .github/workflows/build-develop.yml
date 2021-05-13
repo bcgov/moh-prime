@@ -181,7 +181,7 @@ jobs:
           NAME: prime
         run: |
           oc process -f infrastructure/prime-app-template.yml \
-            -p NAME=$NAME \
+            -p SVC_NAME=$NAME \
             -p IMAGE_TAG=$IMAGE_TAG \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
