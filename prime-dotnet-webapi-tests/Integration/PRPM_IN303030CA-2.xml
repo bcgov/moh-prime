@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Body>
+		<PRPM_IN303030CA xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+			<id root="2.16.840.1.113883.3.40.1.5" extension="e5be1fa7-57b6-4522-8155-8bc6294608c0"/>
+			<creationTime value="20210506103321"/>
+			<versionCode code="IAT"/>
+			<interactionId root="2.16.840.1.113883.3.40.3.1" extension="IN303030CA"/>
+			<profileId root="2.16.840.1.113883.3.40.1.7" extension="PRIME-IAT"/>
+			<processingCode code="T"/>
+			<processingModeCode code="T"/>
+			<acceptAckCode code="NE"/>
+			<receiver typeCode="RCV">
+				<telecom value="https://mutualauth-pr-1247.pharmanetenrolment.gov.bc.ca/api/v1/PLRHL7"/>
+				<device>
+					<id root="2.16.840.1.113883.3.40.1.14" extension="IAT"/>
+					<id root="2.16.840.1.113883.3.40.5.1" extension="Dist Target Facility"/>
+					<name>Dist Target Server</name>
+					<asAgent>
+						<representedOrganization>
+							<id root="2.16.840.1.113883.3.40.4.1" extension="hlth.gov.bc.ca"/>
+						</representedOrganization>
+					</asAgent>
+				</device>
+			</receiver>
+			<sender typeCode="SND">
+				<telecom value="hlth.gov.bc.ca"/>
+				<device>
+					<id root="2.16.840.1.113883.3.40.5.2"/>
+					<name/>
+					<asAgent>
+						<representedOrganization>
+							<id root="2.16.840.1.113883.3.40.4.2" extension="hlth.gov.bc.ca"/>
+						</representedOrganization>
+					</asAgent>
+				</device>
+			</sender>
+			<controlActProcess>
+				<priorityCode xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CS" code="R"/>
+				<authorOrPerformer typeCode="PRF">
+					<assignedPerson>
+						<id root="2.16.840.1.113883.3.40.6.2"/>
+						<representedOrganization>
+							<name/>
+						</representedOrganization>
+					</assignedPerson>
+				</authorOrPerformer>
+				<authorOrPerformer typeCode="PRF">
+					<assignedPerson>
+						<id root="2.16.840.1.113883.3.40.6.1"/>
+					</assignedPerson>
+				</authorOrPerformer>
+				<subject typeCode="SUBJ">
+					<registrationEvent>
+						<statusCode code="active"/>
+						<subject1 typeCode="SBJ">
+							<healthCareProvider classCode="PROV">
+								<id root="2.16.840.1.113883.3.40.2.3" extension="CPN.00003638.BC.PRS"/>
+								<id root="2.16.840.1.113883.3.40.2.4" extension="124515"/>
+								<id root="2.16.840.1.113883.3.40.2.8" extension="IPC.00003638.BC.PRS"/>
+								<id root="2.16.840.1.113883.3.40.2.11" extension="121466115"/>
+								<code code="MD" codeSystemName="WHICProviderType"/>
+								<addr use="PST WP">
+									<streetAddressLine>15406 Kilkee Pl</streetAddressLine>
+									<city>Surrey</city>
+									<state>BC</state>
+									<country>CA</country>
+									<postalCode>V3S 6E8</postalCode>
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110131000000"/>
+									</useablePeriod>
+								</addr>
+								<addr use="PST H">
+									<streetAddressLine>15406 Kilkee Pl</streetAddressLine>
+									<city>Surrey</city>
+									<state>BC</state>
+									<country>CA</country>
+									<postalCode>V3S 6E8</postalCode>
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110927000000"/>
+		<high value="20110928000000"/>
+									</useablePeriod>
+								</addr>
+								<addr use="PHYS WP">
+									<streetAddressLine>1175 Douglas St</streetAddressLine>
+									<city>Victoria</city>
+									<state>BC</state>
+									<country>CA</country>
+									<postalCode>V8W 2E1</postalCode>
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110131000000"/>
+									</useablePeriod>
+								</addr>
+								<telecom use="WP" value="fax:866123456">
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110131000000"/>
+									</useablePeriod>
+								</telecom>
+								<telecom use="WP" value="tel:8662818165">
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110131000000"/>
+									</useablePeriod>
+								</telecom>
+								<telecom use="H" value="tel:6045743275">
+									<useablePeriod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="IVL_TS">
+		<low value="20110927000000"/>
+		<high value="20110928000000"/>
+									</useablePeriod>
+								</telecom>
+								<statusCode code="SUSPENDED">
+									<controlActReferenceId root="2.16.840.1.113883.3.40.1.12" extension="status1"/>
+									<validTime>
+		<low value="20140601000000"/>
+									</validTime>
+								</statusCode>
+								<effectiveTime>
+									<low value="20140601000000"/>
+								</effectiveTime>
+								<healthCarePrincipalPerson classCode="PSN" determinerCode="INSTANCE">
+									<name use="L">
+		<family>Davis</family>
+		<given>Martin</given>
+		<given>Owen</given>
+		<prefix>Dr.</prefix>
+		<validTime>
+			<low value="19740104000000"/>
+		</validTime>
+									</name>
+									<administrativeGenderCode xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CS" code="M"/>
+									<birthTime value="19940928000000"/>
+									<deceasedTime value="19990122000000"/>
+								</healthCarePrincipalPerson>
+								<issuingOrganization classCode="ORG" determinerCode="INSTANCE">
+									<territorialAuthority classCode="TERR">
+		<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CS" code="Province"/>
+		<territory classCode="PLC" determinerCode="INSTANCE">
+			<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CS" code="BC"/>
+		</territory>
+									</territorialAuthority>
+								</issuingOrganization>
+								<subjectOf2 typeCode="SBJ">
+									<roleActivation classCode="CACT">
+		<reasonCode code="RET"/>
+		<subjectOf typeCode="SUBJ">
+			<controlActEvent>
+				<id root="2.16.840.1.113883.3.40.1.12" extension="status1"/>
+			</controlActEvent>
+		</subjectOf>
+									</roleActivation>
+								</subjectOf2>
+								<relatedTo typeCode="REL">
+									<qualifiedEntity classCode="QUAL">
+		<id root="2.16.840.1.113883.3.40.1.2" extension="007256"/>
+		<code code="MD">
+			<originalText>
+				<reference value="Medical Doctor"/>
+			</originalText>
+		</code>
+		<effectiveTime>
+			<low value="19740104000000"/>
+		</effectiveTime>
+		<qualificationGrantingOrganization>
+			<name>Aberdeen</name>
+			<addr>
+				<city/>
+				<state/>
+				<country/>
+			</addr>
+		</qualificationGrantingOrganization>
+									</qualifiedEntity>
+								</relatedTo>
+								<relatedTo typeCode="REL">
+									<qualifiedEntity classCode="QUAL">
+		<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CV" code="165">
+			<originalText>M51</originalText>
+		</code>
+		<effectiveTime>
+			<low value="19951116000000"/>
+		</effectiveTime>
+									</qualifiedEntity>
+								</relatedTo>
+								<relatedTo typeCode="REL">
+									<qualifiedEntity classCode="QUAL">
+		<code xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CV" code="S31">
+			<originalText>Spanish</originalText>
+		</code>
+		<effectiveTime>
+			<low value="20090101000000"/>
+			<high value="20120131000000"/>
+		</effectiveTime>
+									</qualifiedEntity>
+								</relatedTo>
+							</healthCareProvider>
+						</subject1>
+						<author>
+							<assignedEntity>
+								<id root="2.16.840.1.113883.3.40.3.3" extension="00003454"/>
+							</assignedEntity>
+						</author>
+						<custodian>
+							<assignedEntity>
+								<id root="2.16.840.1.113883.3.40.4.2" extension="hlth.gov.bc.ca"/>
+							</assignedEntity>
+						</custodian>
+					</registrationEvent>
+				</subject>
+				<reasonOf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+			</controlActProcess>
+		</PRPM_IN303030CA>
+    </soap:Body>
+</soap:Envelope>
