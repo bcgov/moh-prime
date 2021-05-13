@@ -174,7 +174,7 @@ objects:
       name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: ${WEB_PORT}
+      targetPort: 8080
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
@@ -198,7 +198,7 @@ objects:
       name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: ${WEB_PORT}
+      targetPort: 8888
     tls:
       termination: edge
       insecureEdgeTerminationPolicy: Allow
@@ -222,7 +222,7 @@ objects:
       name: ${SVC_NAME}-${FRONTEND_POD}
       weight: 100
     port:
-      targetPort: ${WEB_PORT}
+      targetPort: 8890
     tls:
       termination: passthrough
       insecureEdgeTerminationPolicy: Redirect
