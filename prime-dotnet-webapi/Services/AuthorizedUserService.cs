@@ -7,7 +7,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-
+using Prime.Extensions;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -86,42 +86,30 @@ namespace Prime.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                return -1;
+                return InvalidId;
             }
 
             return authorizedUser.Id;
         }
 
-        public async Task<int> ActivateAuthorizedUser(int authorizedUserId)
+        public async Task ActivateAuthorizedUser(int authorizedUserId)
         {
             var authorizedUser = await _context.AuthorizedUsers
                 .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
 
             authorizedUser.Status = AccessStatusType.Active;
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the authorized user status to {Enum.GetName(typeof(AccessStatusType), 3)}.");
-            }
-
-            return updated;
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<int> ApproveAuthorizedUser(int authorizedUserId)
+        public async Task ApproveAuthorizedUser(int authorizedUserId)
         {
             var authorizedUser = await _context.AuthorizedUsers
                 .SingleOrDefaultAsync(au => au.Id == authorizedUserId);
 
             authorizedUser.Status = AccessStatusType.Approved;
 
-            var updated = await _context.SaveChangesAsync();
-            if (updated < 1)
-            {
-                throw new InvalidOperationException($"Could not update the authorized user status to {Enum.GetName(typeof(AccessStatusType), 2)}.");
-            }
-
-            return updated;
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAuthorizedUserAsync(int authorizedUserId)

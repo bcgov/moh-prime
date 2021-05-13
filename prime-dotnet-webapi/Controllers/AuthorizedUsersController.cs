@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Extensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
@@ -92,6 +93,12 @@ namespace Prime.Controllers
             }
 
             var createdAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(authorizedUser, User);
+
+            if (createdAuthorizedUserId.IsInvalidId())
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not create the authorized user." });
+            }
+
             var createdAuthorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(createdAuthorizedUserId);
 
             return CreatedAtAction(
@@ -119,7 +126,12 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
             }
 
-            await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
+            var updatedAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
+
+            if (updatedAuthorizedUserId.IsInvalidId())
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the authorized user." });
+            }
 
             return NoContent();
         }
@@ -141,6 +153,11 @@ namespace Prime.Controllers
             if (authorizedUser == null)
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+            }
+
+            if (authorizedUser.Status == AccessStatusType.Active)
+            {
+                return NoContent();
             }
 
             if (authorizedUser.Status != AccessStatusType.Approved)
