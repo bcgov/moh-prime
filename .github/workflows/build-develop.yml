@@ -117,7 +117,9 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
+      OC_APP: "dev"
       REDIRECT_URL: "https://prime-frontend-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+      SVC_NAME: "prime"
       
     steps:
       - name: "Checkout the repo"
@@ -148,6 +150,8 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+            --build-arg OC_APP=$OC_APP \
+            --build-arg SVC_NAME=$SVC_NAME \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
@@ -178,10 +182,10 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           IMAGE_TAG: dev
-          NAME: prime
+          SVC_NAME: prime
         run: |
           oc process -f infrastructure/prime-app-template.yml \
-            -p SVC_NAME=$NAME \
+            -p SVC_NAME=$SVC_NAME \
             -p IMAGE_TAG=$IMAGE_TAG \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=dev \
