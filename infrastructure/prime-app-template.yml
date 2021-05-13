@@ -166,16 +166,15 @@ objects:
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
 #   Frontend Route (Web)
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+- kind: Route
+  apiVersion: route.openshift.io/v1
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    name: ${SVC_NAME}-${FRONTEND_POD}-frontend
+    namespace: 9c33a9-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
-    host: ${SVC_NAME}${URL_STUB}
+    host: ${SVC_NAME}-${FRONTEND_POD}
     to:
       kind: Service
       name: ${SVC_NAME}-${FRONTEND_POD}
@@ -184,8 +183,9 @@ objects:
       targetPort: http
     tls:
       termination: edge
-      insecureEdgeTerminationPolicy: Redirect
+      insecureEdgeTerminationPolicy: None
     wildcardPolicy: None
+  status: {}
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
