@@ -162,7 +162,7 @@ jobs:
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg OC_APP=dev
+            --build-arg OC_APP=dev \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
