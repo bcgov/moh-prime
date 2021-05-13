@@ -183,7 +183,7 @@ objects:
       targetPort: http
     tls:
       termination: edge
-      insecureEdgeTerminationPolicy: None
+      insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
   status: {}
 #   Frontend Route (Health Practitioner Registration)
