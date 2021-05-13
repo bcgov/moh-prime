@@ -92,7 +92,7 @@ jobs:
         id: build-image
         env:
           PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
-          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}$NAME
+          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
