@@ -147,10 +147,10 @@ objects:
       - name: "https"
         port: 8443
         targetPort: 8443
-      - name: "health-practitioner-registration"
+      - name: "hpr"
         port: 8888
         targetPort: 8888
-      - name: "mutual-auth"
+      - name: "mutualauth"
         port: 8890
         targetPort: 8890
     selector:
@@ -248,7 +248,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${API_POD}-backend
+      name: ${SVC_NAME}-${API_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
