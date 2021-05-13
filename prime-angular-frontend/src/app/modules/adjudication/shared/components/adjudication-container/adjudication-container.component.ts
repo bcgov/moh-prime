@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } f
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription } from 'rxjs';
+import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, forkJoin } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -13,6 +13,7 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { SubmissionAction } from '@shared/enums/submission-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
@@ -46,11 +47,12 @@ export class AdjudicationContainerComponent implements OnInit {
 
   public busy: Subscription;
   public enrollees: EnrolleeListViewModel[];
+  public enrolleeNavigation: EnrolleeNavigation;
 
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
-  private routeUtils: RouteUtils;
+  protected routeUtils: RouteUtils;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -60,7 +62,7 @@ export class AdjudicationContainerComponent implements OnInit {
     private permissionService: PermissionService,
     private dialog: MatDialog,
     private utilsService: UtilsService,
-    private toastService: ToastService,
+    protected toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
 
@@ -81,7 +83,7 @@ export class AdjudicationContainerComponent implements OnInit {
   }
 
   public onRefresh(): void {
-    this.getDataset(this.route.snapshot.queryParams);
+    this.getDataset(this.route.snapshot.params.id, this.route.snapshot.queryParams);
   }
 
   public onNotify(enrolleeId: number) {
@@ -407,30 +409,50 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
+  public onNavigateEnrollee(enrolleeId: number) {
+    this.onRoute([enrolleeId, RouteUtils.currentRoutePath(this.router.url)]);
+  }
+
   public ngOnInit() {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
+    // url params could change due to jump action, subscribe to changes
+    this.route.params
+      .subscribe((params) => this.getDataset(params.id, {}));
   }
 
-  private getDataset(queryParams: { search?: string, status?: number }) {
-    const enrolleeId = this.route.snapshot.params.id;
-    const results$ = (enrolleeId)
-      ? this.getEnrolleeById(enrolleeId)
-      : this.getEnrollees(queryParams);
-
-    this.busy = results$
-      .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
+  protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
+    if (enrolleeId) {
+      this.getEnrolleeById(enrolleeId);
+    }
+    else {
+      this.busy = this.getEnrollees(queryParams)
+        .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
+    }
   }
 
-  private getEnrolleeById(enrolleeId: number): Observable<EnrolleeListViewModel[]> {
-    return this.adjudicationResource.getEnrolleeById(enrolleeId)
-      .pipe(
-        map(this.toEnrolleeListViewModel),
-        map((enrollee: EnrolleeListViewModel) => [enrollee]),
-        tap(() => this.showSearchFilter = false)
-      );
+  private getEnrolleeById(enrolleeId: number): void {
+    this.busy =
+      forkJoin({
+        enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
+          .pipe(
+            map(this.toEnrolleeListViewModel),
+            tap(() => this.showSearchFilter = false)
+          ),
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
+      }).subscribe(({ enrollee, enrolleeNavigation }) => {
+        this.enrollees = [enrollee];
+        // Set enrolleeNavigation to null to disable navigation arrows for certain routes
+        // TODO: add support for enrollee event page and notes page
+        this.enrolleeNavigation =
+          [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
+          AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
+          AdjudicationRoutes.EVENT_LOG,
+          AdjudicationRoutes.ADJUDICATOR_NOTES]
+            .includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
+      });
   }
 
   private getEnrollees({ search, status }: { search?: string, status?: number }) {
@@ -484,7 +506,7 @@ export class AdjudicationContainerComponent implements OnInit {
       );
   }
 
-  private toEnrolleeListViewModel(enrollee: HttpEnrollee): EnrolleeListViewModel {
+  protected toEnrolleeListViewModel(enrollee: HttpEnrollee): EnrolleeListViewModel {
     const {
       id,
       displayId,
