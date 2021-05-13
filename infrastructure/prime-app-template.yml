@@ -375,7 +375,7 @@ objects:
                     name: prime-postgresql-db
                     key: database-password
               - name: DB_PORT
-                value: 5432
+                value: "5432"
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
@@ -510,7 +510,7 @@ objects:
                   name: prime-postgresql-db
                   key: database-password
             - name: DB_PORT
-              value: 5432
+              value: "5432"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
