@@ -38,7 +38,7 @@ parameters:
   displayName: API Pod Name
   description: For the .NET API
   required: true
-  value: dotnet-webapi
+  value: webapi
 - name: ASP_ENV
   displayName: ASP.NET Environment
   description: Development or Production
