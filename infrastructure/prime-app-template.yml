@@ -178,7 +178,7 @@ objects:
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: mutualauth${URL_STUB}
+    host: ${SVC_NAME}-{URL_STUB}
     to:
       kind: Service
       name: ${SVC_NAME}-${FRONTEND_POD}
