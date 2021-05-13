@@ -389,8 +389,8 @@ objects:
   spec:
     ports:
       - name: ${SVC_NAME}-${API_POD}
-        port: 5001
-        targetPort: 5001
+        port: 8080
+        targetPort: 8080
     selector:
       name: ${SVC_NAME}-${API_POD}
 
