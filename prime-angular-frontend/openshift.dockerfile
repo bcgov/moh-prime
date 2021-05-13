@@ -1,5 +1,5 @@
 # Stage 1:  Build an Angular Docker Image
-FROM node:10.16 as build
+FROM node:14.17.0 as build
 
 USER 0
 ENV NODE_ROOT /usr/src/app
