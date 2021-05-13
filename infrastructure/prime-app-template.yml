@@ -177,7 +177,7 @@ objects:
     host: ${SVC_NAME}-${FRONTEND_POD}
     to:
       kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}${URL_STUB}
       weight: 100
     port:
       targetPort: http
