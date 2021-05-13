@@ -169,7 +169,7 @@ objects:
 - kind: Route
   apiVersion: route.openshift.io/v1
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}-frontend
+    name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: 9c33a9-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
