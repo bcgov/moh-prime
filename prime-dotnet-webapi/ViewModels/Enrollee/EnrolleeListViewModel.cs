@@ -71,5 +71,8 @@ namespace Prime.ViewModels
             return this;
         }
 
+        public bool RequiresConfirmation { get; set; }
+
+        public bool Confirmed { get; set; }
     }
 }

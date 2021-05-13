@@ -319,6 +319,23 @@ namespace Prime.Controllers
             return await ManualFlagInternal(enrolleeId, false);
         }
 
+        // PUT: api/enrollees/5/submissions/latest/confirm
+        /// <summary>
+        /// Confirm an Enrollee's most recent submission
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/submissions/latest/confirm", Name = nameof(ConfirmSubmission))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ConfirmSubmission(int enrolleeId)
+        {
+            await _submissionService.ConfirmSubmissionAsync(enrolleeId);
+            return NoContent();
+        }
+
         private async Task<ActionResult> ManualFlagInternal(int enrolleeId, bool alwaysManual)
         {
             var enrolleeExists = await _enrolleeService.EnrolleeExistsAsync(enrolleeId);
