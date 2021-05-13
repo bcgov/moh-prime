@@ -60,8 +60,8 @@ namespace PrimeTests.UnitTests
         public void TestSplitTelecomNumber()
         {
             Assert.Equal(new string[] { "604", "6665555" }, SoapService.SplitHL7v3TelecomNumber("6046665555"));
-            Assert.ThrowsAny<ArgumentOutOfRangeException>(() => SoapService.SplitHL7v3TelecomNumber("1234567"));
-            Assert.ThrowsAny<ArgumentOutOfRangeException>(() => SoapService.SplitHL7v3TelecomNumber("(604)666-5555"));
+            Assert.Equal(new string[] { "1234567" }, SoapService.SplitHL7v3TelecomNumber("1234567"));
+            Assert.Equal(new string[] { "(604)666-5555" }, SoapService.SplitHL7v3TelecomNumber("(604)666-5555"));
         }
     }
 }
