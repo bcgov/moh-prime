@@ -166,7 +166,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     // Paginator must exist within the DOM, but does not
     // have to be visible based on the size of the dataset
-    this.hidePaginator = this.paginator.pageSize > this.enrollees.length;
+    this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
     this.dataSource.data = this.enrollees;
   }
 

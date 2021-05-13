@@ -546,6 +546,8 @@ export class AdjudicationContainerComponent implements OnInit {
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
+      requiresConfirmation: false,
+      confirmed: false
     };
   }
 }
