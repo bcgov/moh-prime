@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
+FROM public.ecr.aws/bitnami/node:14.15.5-prod AS build-deps
 
 ARG DOCUMENT_MANAGER_URL 
 ARG JWT_WELL_KNOWN_CONFIG
@@ -11,7 +11,6 @@ ARG KEYCLOAK_URL
 ARG OC_APP
 ARG REDIRECT_URL
 ARG VANITY_URL
-ARG SVC_NAME
 
 # Set working directory
 ENV DOCUMENT_MANAGER_URL ${DOCUMENT_MANAGER_URL}
@@ -22,7 +21,6 @@ ENV KEYCLOAK_CLIENT_ID ${KEYCLOAK_CLIENT_ID}
 ENV OC_APP ${OC_APP}
 ENV REDIRECT_URL ${REDIRECT_URL}
 ENV VANITY_URL ${VANITY_URL}
-ENV SVC_NAME ${SVC_NAME}
 ENV NODE_ROOT /usr/src/app
 
 RUN mkdir -p /usr/src/app
@@ -36,11 +34,11 @@ COPY . .
 # Fill template with environment variables
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 # Install Angular CLI
-RUN cat /usr/src/app/src/environments/environment.prod.ts && \
-  npm install @angular/cli  -g --silent && \
-  npm install && \
-  npm ci && \
-  ng build --prod
+RUN npm install -g @angular/cli
+# Install dependencies
+RUN npm ci
+# Add application
+RUN ng build --prod
 
 ########################################
 ### Stage 2 - Production environment ###
@@ -50,7 +48,7 @@ ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
 COPY --from=build-deps /usr/src/app /opt/app-root/
-# COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
 RUN envsubst < /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
     chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
