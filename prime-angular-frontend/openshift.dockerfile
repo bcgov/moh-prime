@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM public.ecr.aws/bitnami/node:14.15.5-prod AS build-deps
+FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
 
 ARG DOCUMENT_MANAGER_URL 
 ARG JWT_WELL_KNOWN_CONFIG
