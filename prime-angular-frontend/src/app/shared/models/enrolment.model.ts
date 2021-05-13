@@ -126,4 +126,6 @@ export interface EnrolleeListViewModel {
   remoteAccess: boolean;
   careSettingCodes: number[];
   hasNotification: boolean;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }

@@ -1,3 +1,4 @@
+import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -68,6 +69,19 @@ export class AdjudicationResource {
       );
   }
 
+  public getAdjacentEnrolleeId(enrolleeId: number): Observable<EnrolleeNavigation> {
+    return this.apiResource.get<EnrolleeNavigation>(`enrollees/${enrolleeId}/adjacent`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNavigation>) => response.result),
+        tap((enrolleeNaviagation: EnrolleeNavigation) => this.logger.info('ENROLLEE_NAVIGATION', enrolleeNaviagation)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('EnrolleeNaviagation could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjacentEnrolleeId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
     return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
       .pipe(
@@ -122,6 +136,18 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public confirmSubmission(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/submissions/latest/confirm`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee submission could not be confirmed');
+          this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
       );

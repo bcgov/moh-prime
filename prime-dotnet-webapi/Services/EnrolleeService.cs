@@ -134,6 +134,23 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
+        {
+            var nextId = await _context.Enrollees
+                .Where(e => e.Id > enrolleeId)
+                .OrderBy(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            var previousId = await _context.Enrollees
+                .Where(e => e.Id < enrolleeId)
+                .OrderByDescending(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
+        }
+
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await GetBaseEnrolleeQuery()
