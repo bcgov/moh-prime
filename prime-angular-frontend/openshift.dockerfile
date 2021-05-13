@@ -36,11 +36,11 @@ COPY . .
 # Fill template with environment variables
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
 # Install Angular CLI
-RUN npm install -g @angular/cli
-# Install dependencies
-RUN npm ci
-# Add application
-RUN ng build --prod
+RUN cat /usr/src/app/src/environments/environment.prod.ts && \
+  npm install @angular/cli  -g --silent && \
+  npm install && \
+  npm ci && \
+  ng build --prod
 
 ########################################
 ### Stage 2 - Production environment ###
