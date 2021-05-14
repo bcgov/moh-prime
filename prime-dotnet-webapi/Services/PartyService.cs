@@ -44,7 +44,6 @@ namespace Prime.Services
         public async Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
-                .AsNoTracking()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .SingleOrDefaultAsync(p => p.UserId == userId);
         }
