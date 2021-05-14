@@ -24,8 +24,8 @@ jobs:
       BUILD_LOGLEVEL: "2"
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
-      IMAGE_TAG: test
-      
+      SVC_NAME: test
+      OC_APP: test
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -52,10 +52,11 @@ jobs:
           BUILD_LOGLEVEL: 2
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg=$BUILD_LOGLEVEL \
+            --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
+            --build-arg SVC_NAME="$SVC_NAME" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
 
   build-backend:
     runs-on: ubuntu-20.04
@@ -63,8 +64,8 @@ jobs:
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
-      IMAGE_TAG: test
-      
+      SVC_NAME: test
+      OC_APP: test 
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -90,21 +91,22 @@ jobs:
           PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-        run: |
+        run: |      
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg DB_HOST=primedb-pr-$PR_NUMBER \
+            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+            --build-arg ASPNETCORE_URLS="http://+:8080" \
+            --build-arg DB_CONNECTION_STRING="host=$SVC_NAME-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_HOST=$SVC_NAME-postgres-db \
+            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
             --build-arg POSTGRESQL_DATABASE=postgres \
-            --build-arg DB_CONNECTION_STRING="host=prime-postgresql-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
-            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
-            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
-            --build-arg ASPNETCORE_URLS="http://+:8080" \
-            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+            --build-arg SVC_NAME="$SVC_NAME" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
 
   build-frontend:
     runs-on: ubuntu-20.04
@@ -112,15 +114,13 @@ jobs:
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
-      IMAGE_TAG: test
       JWT_WELL_KNOWN_CONFIG: "https://test.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
       KEYCLOAK_CLIENT_ID: "prime-application-test"
       KEYCLOAK_URL: "https://test.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
-      OC_APP: "test"
-      REDIRECT_URL: "https://prime-frontend-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"
-      SVC_NAME: "prime"
-      
+      REDIRECT_URL: "https://prime-frontend-${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}.apps.silver.devops.gov.bc.ca"
+      SVC_NAME: test
+      OC_APP: test
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -144,18 +144,20 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          REDIRECT_URL: "https://${{env.IMAGE_TAG}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}.apps.silver.devops.gov.bc.ca"      
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+            --build-arg OC_APP=$OC_APP \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
             --build-arg OC_APP=$OC_APP \
-            --build-arg SVC_NAME="prime" \
+            --build-arg SVC_NAME="$SVC_NAME" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$IMAGE_TAG
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:$SVC_NAME
 
   apply-oc-template:
     runs-on: ubuntu-20.04
@@ -163,39 +165,33 @@ jobs:
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
-
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
-        with:
-          oc_version: '4.6'
-
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}
 
       - name: "Process template"
         id: oc
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          IMAGE_TAG: test
-          SVC_NAME: prime
         run: |
           oc process -f infrastructure/prime-app-template.yml \
             -p SVC_NAME=$SVC_NAME \
-            -p IMAGE_TAG=$IMAGE_TAG \
+            -p IMAGE_TAG=$SVC_NAME \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=dev \
+            -p OC_APP=$OC_APP \
             -p FRONTEND_POD=frontend \
-            -p FRONTEND_URL=frontend \
+            -p FRONTEND_URL=$SVC_NAME \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DOCMAN_POD=document-manager \
             -p DB_POD=postgres-db \
             -p REDIS_POD=redis \
-            -p WEB_SCHEMA=http \
-            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev | oc apply -f -
+            -p WEB_PORT=8080 \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP.apps.silver.devops.gov.bc.ca \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP | oc apply -f -
