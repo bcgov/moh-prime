@@ -60,9 +60,11 @@ namespace Prime.Services
 
             if (currentParty == null)
             {
-                currentParty = new Party();
+                currentParty = new Party
+                {
+                    Addresses = new List<PartyAddress>()
+                };
                 _context.Parties.Add(currentParty);
-                currentParty.Addresses = new List<PartyAddress>();
             }
 
             changeModel.UpdateParty(currentParty, user);

@@ -22,11 +22,11 @@ export class FormGroupValidators {
    * @description
    * Checks that at least one field has been chosen within a form group.
    */
-  public static atLeastOne(validator: ValidatorFn = Validators.required, whitelist: string[] = []): ValidatorFn {
+  public static atLeastOne(validator: ValidatorFn = Validators.required, allowlist: string[] = []): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const atLeastOne = group && group.controls &&
         Object.keys(group.controls)
-          .filter(key => whitelist.indexOf(key) !== -1)
+          .filter(key => allowlist.indexOf(key) !== -1)
           .some(key => validator(group.controls[key]) === null);
       return (atLeastOne) ? null : { atleastone: true };
     };

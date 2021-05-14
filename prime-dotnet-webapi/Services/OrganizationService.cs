@@ -60,7 +60,7 @@ namespace Prime.Services
                         o => o.Sites.Select(s => s.PEC))
                     .Containing(searchOptions.TextSearch)
                 )
-                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { careSettingCode = searchOptions.CareSettingCode })
                 .DecompileAsync()
                 .ToListAsync();
 
