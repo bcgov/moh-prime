@@ -50,8 +50,8 @@ ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
 # COPY --from=build-deps /usr/src/app /opt/app-root/
-### this is breaking us
-# COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
 # COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
 COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
