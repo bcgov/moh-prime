@@ -64,12 +64,13 @@ namespace Prime.Services
 
             if (authorizedUser == null)
             {
+                var party = await _partyService.GetPartyForUserIdAsync(changeModel.UserId) ?? new Party
+                {
+                    Addresses = new List<PartyAddress>()
+                };
                 authorizedUser = new AuthorizedUser
                 {
-                    Party = new Party
-                    {
-                        Addresses = new List<PartyAddress>()
-                    },
+                    Party = party,
                     Status = AccessStatusType.UnderReview
                 };
                 _context.AuthorizedUsers.Add(authorizedUser);
