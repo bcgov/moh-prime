@@ -445,7 +445,7 @@ objects:
                     name: redis
                     key: redis_port
               - name: DB_HOST
-                value: ${SVC_NAME}-{DB_POD}-db
+                value: ${SVC_NAME}-${DB_POD}
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
