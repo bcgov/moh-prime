@@ -443,7 +443,6 @@ export class EnrolmentResource {
     });
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);
@@ -474,11 +473,11 @@ export class EnrolmentResource {
   }
 
   private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const whitelist = ['practiceCode', 'practitionerId'];
+    const allowlist = ['practiceCode', 'practitionerId'];
 
     return Object.keys(certification)
       .every((key: string) =>
-        (!whitelist.includes(key) && !certification[key]) ? certification[key] : true
+        (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
       );
   }
 

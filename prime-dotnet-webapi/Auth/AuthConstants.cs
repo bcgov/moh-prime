@@ -3,7 +3,6 @@ namespace Prime.Auth
     public static class AuthConstants
     {
         public const string Audience = "prime-web-api";
-
         public const string BCServicesCard = "bcsc";
     }
 

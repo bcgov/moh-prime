@@ -105,6 +105,7 @@ namespace Prime
         public DbSet<PreApprovedRegistration> PreApprovedRegistrations { get; set; }
         public DbSet<EnrolleeNotification> EnrolleeNotifications { get; set; }
         public DbSet<SiteNotification> SiteNotifications { get; set; }
+        public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
 
@@ -262,6 +263,7 @@ namespace Prime
 
             #endregion
         }
+
 
         // Uncomment for DB logging
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

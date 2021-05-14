@@ -1,3 +1,5 @@
 <app-dashboard-header></app-dashboard-header>
 
-<app-site-reg-access (login)="onLogin()"></app-site-reg-access>
+<app-site-reg-access mode="multiple"
+                     [disableLogin]="disableLogin"
+                     (login)="onLogin($event)"></app-site-reg-access>

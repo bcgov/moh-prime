@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -28,6 +28,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = HealthAuthSiteRegRoutes;
 
   private site: HealthAuthSite;
@@ -45,6 +46,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   // TODO remove this method add to allow routing between pages
@@ -67,7 +69,11 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.PRIVACY_OFFICER);
+    const routePath = (!this.isCompleted)
+      ? HealthAuthSiteRegRoutes.PRIVACY_OFFICER
+      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
+
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public ngOnInit() {
@@ -95,5 +101,9 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.markAsPristine();
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.formSubmittingEvent.next();
   }
 }

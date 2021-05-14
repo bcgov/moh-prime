@@ -6,6 +6,7 @@ import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { SiteRegistrationTypeEnum } from '@health-auth/shared/enums/site-registration-type.enum';
 
 @Component({
   selector: 'app-health-auth-site-reg-login-page',
@@ -14,6 +15,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 })
 export class HealthAuthSiteRegLoginPageComponent implements OnInit {
   public title: string;
+  public disableLogin: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -24,10 +26,11 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     this.title = route.snapshot.data.title;
   }
 
-  public onLogin() {
+  public onLogin(type: SiteRegistrationTypeEnum) {
+    // TODO choose authentication based on the site registration type
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: IdentityProviderEnum.BCSC,
@@ -35,5 +38,7 @@ export class HealthAuthSiteRegLoginPageComponent implements OnInit {
     });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.disableLogin = this.config.environmentName === 'prod';
+  }
 }

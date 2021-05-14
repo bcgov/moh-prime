@@ -8496,6 +8496,46 @@ namespace Prime.Migrations
                     b.ToTable("AssignedPrivilege");
                 });
 
+            modelBuilder.Entity("Prime.Models.AuthorizedUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EmploymentIdentifier")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityCode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityCode");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("AuthorizedUsers");
+                });
+
             modelBuilder.Entity("Prime.Models.Banner", b =>
                 {
                     b.Property<int>("Id")
@@ -14286,6 +14326,232 @@ namespace Prime.Migrations
                     b.ToTable("IdentificationDocument");
                 });
 
+            modelBuilder.Entity("Prime.Models.IdentifierType", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("IdentifierTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.19",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RNID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.20",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RNPID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.608",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RPNRC",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.14",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "PHID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.454",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RACID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.18",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RMID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.10",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "LPNID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.4",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "CPSID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.429",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "OPTID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.3.40.2.6",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "DENID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.363",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "CCID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.364",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "OTID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.362",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "PSYCHID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.361",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "SWID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.422",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "CHIROID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.414",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "PHYSIOID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.433",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RMTID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.439",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "KNID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.401",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "PHTID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.477",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "COUNID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.452",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "MFTID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Code = "2.16.840.1.113883.4.530",
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "RDID",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
             modelBuilder.Entity("Prime.Models.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -14810,7 +15076,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             LicensedToProvideCare = true,
                             Manual = true,
-                            Name = "Podiatrists",
+                            Name = "Podiatric Surgeon",
                             NamedInImReg = false,
                             Prefix = "93",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
@@ -15527,6 +15793,13 @@ namespace Prime.Migrations
                     b.Property<string>("FacilityName")
                         .HasColumnType("text");
 
+                    b.Property<int?>("HealthAuthorityCode")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -15547,6 +15820,8 @@ namespace Prime.Migrations
                     b.HasIndex("CareSettingCode");
 
                     b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("HealthAuthorityCode");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -15885,6 +16160,9 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Ipc")
+                        .IsUnique();
 
                     b.ToTable("PlrProvider");
                 });
@@ -17961,6 +18239,9 @@ namespace Prime.Migrations
                     b.Property<int?>("AgreementType")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -18265,6 +18546,21 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("PrivilegeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.AuthorizedUser", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -18631,6 +18927,10 @@ namespace Prime.Migrations
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityCode");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

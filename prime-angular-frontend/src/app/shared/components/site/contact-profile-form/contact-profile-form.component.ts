@@ -1,12 +1,16 @@
-import { Component, OnInit, Input, ContentChildren, QueryList } from '@angular/core';
+import { Component, OnInit, Input, ContentChildren, QueryList, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { Observable, Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
+import { Contact } from '@lib/models/contact.model';
 
+@UntilDestroy()
 @Component({
   selector: 'app-contact-profile-form',
   templateUrl: './contact-profile-form.component.html',
@@ -15,13 +19,24 @@ import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-s
 export class ContactProfileFormComponent implements OnInit {
   @Input() public title: string;
   @Input() public form: FormGroup;
+  @Input() public showFax: boolean;
+  @Input() public showAddButton: boolean;
+  @Input() public contacts: Contact[];
+  @Input() public formSubmitting: Observable<void> = new Observable<void>();
+  public showFormFields: boolean;
   public hasPhysicalAddress: boolean;
+  public showAddressFields: boolean;
   @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
+  @ViewChild('sameAddressSlideToggle')
+  public sameAddressSlideToggle: MatSlideToggle;
 
   constructor(
     private formUtilsService: FormUtilsService
-  ) { }
+  ) {
+    this.showFax = true;
+    this.showAddButton = false;
+  }
 
   public get hasPageSubheaderMoreInfo(): boolean {
     return !!this.pageSubheaderMoreInfoChildren.length;
@@ -48,12 +63,21 @@ export class ContactProfileFormComponent implements OnInit {
   }
 
   public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
-    if (!checked) {
+    if (checked) {
       this.physicalAddress.reset();
     }
 
     this.hasPhysicalAddress = !this.hasPhysicalAddress;
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
+  }
+
+  public updateContact(contact: Contact): void {
+    this.form.patchValue(contact);
+    this.showFormFields = true;
+  }
+
+  public addContact(): void {
+    this.showFormFields = true;
   }
 
   public ngOnInit() {
@@ -63,10 +87,24 @@ export class ContactProfileFormComponent implements OnInit {
       .pipe(distinctUntilChanged())
       .subscribe((value: string) => (value) ? this.togglePhysicalAddress() : null);
 
-    this.togglePhysicalAddress();
+    // If first time loading, force address slider to be 'off' by default
+    if (!this.form.get('firstName').value) {
+      this.togglePhysicalAddress(true);
+    }
+    else {
+      this.togglePhysicalAddress();
+    }
+
+    this.formSubmitting.pipe(untilDestroyed(this))
+      .subscribe(() => {
+        // force show address fields if address form is invalid
+        this.showAddressFields = !this.sameAddressSlideToggle.checked && this.physicalAddress.invalid;
+      });
+
+    this.showFormFields = !this.contacts?.length || !this.hasPhysicalAddress;
   }
 
-  private togglePhysicalAddress() {
+  private togglePhysicalAddress(forceDefault?: boolean) {
     this.hasPhysicalAddress = !!(
       this.physicalAddress.get('countryCode').value ||
       this.physicalAddress.get('provinceCode').value ||
@@ -74,7 +112,7 @@ export class ContactProfileFormComponent implements OnInit {
       this.physicalAddress.get('street2').value ||
       this.physicalAddress.get('city').value ||
       this.physicalAddress.get('postal').value
-    );
+    ) || forceDefault;
 
     this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
   }

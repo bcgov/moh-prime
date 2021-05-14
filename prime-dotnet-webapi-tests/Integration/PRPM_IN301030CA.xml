@@ -58,6 +58,7 @@
                         <statusCode code="active"/>
                         <subject1 typeCode="SBJ">
                             <healthCareProvider classCode="PROV">
+                                <id root="2.16.840.1.113883.3.40.2.8" extension="1234567890"/>
                                 <!--root OID Provider ID type, extension Provider ID-->
                                 <id root="2.16.840.1.113883.3.40.2.4" extension="55555"/>
                                 <!--code Provider Type-->

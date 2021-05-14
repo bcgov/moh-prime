@@ -2,15 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
+import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -52,7 +52,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     private organizationFormStateService: OrganizationFormStateService,
     private authService: AuthService,
     private route: ActivatedRoute,
-    router: Router
+    private router: Router
   ) {
     super(dialog, formUtilsService);
 
@@ -60,7 +60,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public onPreferredNameChange({ checked }: MatSlideToggleChange): void {
+  public onPreferredNameChange({ checked }: { checked: boolean }): void {
     if (!this.hasPreferredName) {
       this.formState.form.get('preferredMiddleName').reset();
     }
@@ -68,11 +68,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.togglePreferredNameValidators(checked, this.formState.preferredFirstName, this.formState.preferredLastName);
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange): void {
+  public onPhysicalAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.physicalAddress);
   }
 
-  public onMailingAddressChange({ checked }: MatSlideToggleChange): void {
+  public onMailingAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
@@ -135,23 +135,46 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.organizationFormStateService.json;
-    return this.organizationResource.updateOrganization(payload);
+  protected performSubmission(): Observable<Organization> {
+    const payload = this.formState.json;
+    const updateSigningAuthority$ = this.organizationResource.updateSigningAuthority(payload);
+    let request$ = updateSigningAuthority$
+      .pipe(map(() => this.organizationService.organization));
+
+    if (!this.organizationService.organization) {
+      // No organization indicates the possibility of no signing authority
+      request$ = this.organizationResource.getSigningAuthorityByUserId(this.bcscUser.userId)
+        .pipe(
+          exhaustMap((party: Party | null) =>
+            (!party)
+              // TODO BCSC email not sent and shouldn't be included in BcscUser model to prevent issues
+              // Allow override of BCSC email, but otherwise no other overlap exists
+              ? this.organizationResource.createSigningAuthority({ ...this.bcscUser, ...payload })
+              // Prevent issue where the creation of an organization fails, but the
+              // signing authority data is resubmitted possibly with alteration
+              : updateSigningAuthority$
+          ),
+          exhaustMap((party: Party) =>
+            this.organizationResource.createOrganization(party.id)
+          )
+        );
+    }
+
+    return request$;
   }
 
-  protected afterSubmitIsSuccessful(): void {
+  protected afterSubmitIsSuccessful(organization: Organization): void {
     this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
-    let routePath: string | string[];
+    let routePath: (string | number)[];
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (this.isCompleted)
-        ? SiteRoutes.ORGANIZATION_REVIEW
-        : SiteRoutes.ORGANIZATION_NAME;
+        ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
+        : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
     }
 
     this.routeUtils.routeRelativeTo(routePath);

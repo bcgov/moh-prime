@@ -134,6 +134,23 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
+        {
+            var nextId = await _context.Enrollees
+                .Where(e => e.Id > enrolleeId)
+                .OrderBy(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            var previousId = await _context.Enrollees
+                .Where(e => e.Id < enrolleeId)
+                .OrderByDescending(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
+        }
+
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await GetBaseEnrolleeQuery()
@@ -417,10 +434,12 @@ namespace Prime.Services
                     {
                         Enrollee = dbEnrollee,
                         CareSettingCode = site.CareSettingCode,
+                        HealthAuthorityCode = site.HealthAuthorityCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,
-                        FacilityName = site.FacilityName
+                        FacilityName = site.FacilityName,
+                        JobTitle = site.JobTitle
                     };
                     _context.Entry(newAddress).State = EntityState.Added;
                     _context.Entry(newSite).State = EntityState.Added;

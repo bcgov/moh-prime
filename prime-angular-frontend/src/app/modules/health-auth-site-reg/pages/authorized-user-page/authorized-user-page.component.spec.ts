@@ -71,7 +71,7 @@ describe('AuthorizedUserPageComponent', () => {
   beforeEach(inject(
     [OrganizationService, OrganizationFormStateService, HealthAuthSiteRegFormStateService],
     (organizationService: OrganizationService, organizationFormStateService: OrganizationFormStateService,
-      healthAuthSiteRegFormStateService: HealthAuthSiteRegFormStateService) => {
+     healthAuthSiteRegFormStateService: HealthAuthSiteRegFormStateService) => {
       fixture = TestBed.createComponent(AuthorizedUserPageComponent);
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);

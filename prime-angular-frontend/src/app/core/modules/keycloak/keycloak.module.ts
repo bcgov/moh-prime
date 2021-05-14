@@ -1,5 +1,5 @@
 import { NgModule, APP_INITIALIZER, Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { KeycloakAngularModule, KeycloakService, KeycloakOptions } from 'keycloak-angular';
 

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
@@ -47,6 +48,13 @@ import { ContextualSiteNotificationComponent } from './shared/components/context
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
+import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
+import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
+import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
+import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorized-users-view/ha-authorized-users-view.component';
+import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
+import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +95,14 @@ import { BannerMaintenanceComponent } from './shared/components/banner-maintenan
     ContextualSiteNotificationComponent,
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
-    BannerMaintenanceComponent
+    BannerMaintenanceComponent,
+    HealthAuthorityTableComponent,
+    SiteRegistrationTabsComponent,
+    HealthAuthorityAuthorizedUserPageComponent,
+    HaAuthorizedUsersViewComponent,
+    HealthAuthorityAuthorizedUsersPageComponent,
+    AuthorizedUserReviewComponent,
+    ContextualEnrolmentConfirmationComponent
   ],
   imports: [
     AdjudicationRoutingModule,

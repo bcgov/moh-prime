@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -30,6 +30,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -48,6 +49,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
@@ -109,5 +111,9 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.formSubmittingEvent.next();
   }
 }
