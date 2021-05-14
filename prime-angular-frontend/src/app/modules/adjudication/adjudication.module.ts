@@ -48,6 +48,7 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
 import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
+import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
 import { EnrolleeToaMaintenanceComponent } from './pages/enrollee-toa-maintenance/enrollee-toa-maintenance.component';
 
 @NgModule({
@@ -91,6 +92,7 @@ import { EnrolleeToaMaintenanceComponent } from './pages/enrollee-toa-maintenanc
     SiteBannerPageComponent,
     BannerMaintenanceComponent,
     ContextualEnrolmentConfirmationComponent,
+    EnrolleeMaintenanceComponent,
     EnrolleeToaMaintenanceComponent
   ],
   imports: [
