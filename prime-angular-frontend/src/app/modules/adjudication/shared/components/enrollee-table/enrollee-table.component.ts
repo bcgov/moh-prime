@@ -170,7 +170,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.dataSource.data = this.enrollees;
   }
 
-  private createFormInstance() {
+  private createFormInstance(): void {
     this.form = this.fb.group({
       appliedDateRangeStart: ['', []],
       appliedDateRangeEnd: ['', []],
@@ -180,7 +180,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     });
   }
 
-  private initForm() {
+  private initForm(): void {
     this.form.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe(value => this.dataSource.filter = value);

@@ -1,0 +1,40 @@
+@import 'palette';
+
+.mat-card {
+  .mat-card-title {
+    color: theme-palette(blue);
+    font-size: 1rem;
+    margin-left: -1rem;
+    padding-top: .2rem;
+  }
+  .mat-card-content {
+    div {
+      color: theme-palette(blue, light);
+      padding-bottom: .4rem;
+
+      strong {
+        color: theme-palette(blue);
+        font-weight: 500;
+
+        &::after {
+          content: ':\00a0\00a0';
+        }
+      }
+    }
+  }
+  .mat-card-actions {
+    text-align: right;
+  }
+}
+
+.text-red {
+  color: theme-palette(red);
+}
+
+.text-green {
+  color: theme-palette(green);
+}
+
+.green-icon {
+  color: theme-palette(green);
+}

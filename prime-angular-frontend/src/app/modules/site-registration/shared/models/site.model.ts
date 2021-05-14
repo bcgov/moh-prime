@@ -1,8 +1,8 @@
+import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
 import { Address } from '@shared/models/address.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
-import { Party } from './party.model';
 import { Vendor } from './vendor.model';
 import { RemoteUser } from './remote-user.model';
 import { BusinessDay } from './business-day.model';

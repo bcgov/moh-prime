@@ -1,0 +1,54 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <ng-content select="app-page-header"></ng-content>
+
+  <ng-content select="app-page-subheader"></ng-content>
+
+  <mat-tab-group animationDuration="0ms"
+                 (selectedTabChange)="onTabChange($event)">
+    <mat-tab label="Private Community Health Practices"
+             [id]="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE">
+      <ng-template matTabContent>
+        <app-search-form *ngIf="showSearchFilter"
+                         [hideStatus]="true"
+                         (search)="onSearch($event)"
+                         (filter)="onFilter($event)"
+                         (refresh)="onRefresh()"></app-search-form>
+        <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
+                                     [dataSource]="dataSource"
+                                     [columns]="communityPracticeColumns"
+                                     (assign)="onAssign($event)"
+                                     (reassign)="onReassign($event)"
+                                     (notify)="onNotify($event)"
+                                     (route)="onRoute($event)"
+                                     (reload)="onRefresh()"></app-site-registration-table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Community Pharmacies"
+             [id]="CareSettingEnum.COMMUNITY_PHARMACIST">
+      <ng-template matTabContent>
+        <app-search-form *ngIf="showSearchFilter"
+                         [hideStatus]="true"
+                         (search)="onSearch($event)"
+                         (filter)="onFilter($event)"
+                         (refresh)="onRefresh()"></app-search-form>
+        <app-site-registration-table *ngIf="busy.closed || dataSource?.data.length"
+                                     [dataSource]="dataSource"
+                                     [columns]="communityPharmacyColumns"
+                                     (assign)="onAssign($event)"
+                                     (reassign)="onReassign($event)"
+                                     (notify)="onNotify($event)"
+                                     (route)="onRoute($event)"
+                                     (reload)="onRefresh()"></app-site-registration-table>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Health Authorities"
+             [id]="CareSettingEnum.HEALTH_AUTHORITY">
+      <ng-template matTabContent>
+        <app-health-authority-table (route)="onRoute($event)"></app-health-authority-table>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+
+</app-page>
