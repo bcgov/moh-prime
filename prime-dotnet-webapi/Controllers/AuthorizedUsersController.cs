@@ -101,7 +101,7 @@ namespace Prime.Controllers
             }
             if (!authorizedUser.Validate(User))
             {
-                ModelState.AddModelError("Authorized User", "One or more Properties did not match the information on the card.");
+                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -135,7 +135,7 @@ namespace Prime.Controllers
         {
             if (updatedAuthorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUSer", "Authorized user update model cannot be null.");
+                ModelState.AddModelError("AuthorizedUser", "Authorized user update model cannot be null.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             if (!updatedAuthorizedUser.Validate(User))

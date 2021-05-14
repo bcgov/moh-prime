@@ -133,7 +133,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     const payload = this.formState.json;
 
     if (!authorizedUserId) {
-      return this.healthAuthorityResource.createAuthorizedUser(payload)
+      return this.healthAuthorityResource.createAuthorizedUser({ ...payload, ...this.bcscUser })
         .pipe(NoContentResponse);
     }
 
