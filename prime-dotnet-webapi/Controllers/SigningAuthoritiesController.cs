@@ -16,7 +16,7 @@ using Prime.ViewModels.Parties;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/parties/[controller]")]
+    [Route("api/parties/signing-authorities")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
     public class SigningAuthorityController : ControllerBase
@@ -43,7 +43,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityByUserId(Guid userId)
+        public async Task<ActionResult> GetSigningAuthorityByUserId(Guid userId)
         {
             var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SigningAuthority);
             if (signingAuthority == null)
@@ -65,7 +65,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<SigningAuthorityChangeModel>> GetSigningAuthorityById(int partyId)
+        public async Task<ActionResult> GetSigningAuthorityById(int partyId)
         {
             var signingAuthority = await _partyService.GetPartyAsync(partyId, PartyType.SigningAuthority);
             if (signingAuthority == null)
@@ -85,7 +85,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<SigningAuthorityChangeModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<SigningAuthorityChangeModel>> CreateSigningAuthority(SigningAuthorityChangeModel signingAuthority)
+        public async Task<ActionResult> CreateSigningAuthority(SigningAuthorityChangeModel signingAuthority)
         {
             if (signingAuthority == null)
             {
@@ -115,7 +115,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSigningAuthority(int partyId, SigningAuthorityChangeModel updatedSigningAuthority)
+        public async Task<ActionResult> UpdateSigningAuthority(int partyId, SigningAuthorityChangeModel updatedSigningAuthority)
         {
             if (!await _partyService.PartyExistsAsync(partyId, PartyType.SigningAuthority))
             {
@@ -136,7 +136,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationListViewModel>>> GetSigningAuthorityOrganizationsByUserId(Guid userId)
+        public async Task<ActionResult> GetSigningAuthorityOrganizationsByUserId(Guid userId)
         {
             if (userId != User.GetPrimeUserId())
             {

@@ -10,6 +10,9 @@ import { SiteProgressIndicatorComponent } from '@health-auth/shared/components/s
 
 import { CollectionNoticePageComponent } from '@health-auth/pages/collection-notice-page/collection-notice-page.component';
 import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-page/authorized-user-page.component';
+import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
+import { AuthorizedUserApprovedPageComponent } from './pages/authorized-user-approved-page/authorized-user-approved-page.component';
+import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
 import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
@@ -29,6 +32,9 @@ import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview
     SiteProgressIndicatorComponent,
     CollectionNoticePageComponent,
     AuthorizedUserPageComponent,
+    AuthorizedUserNextStepsPageComponent,
+    AuthorizedUserApprovedPageComponent,
+    AuthorizedUserDeclinedPageComponent,
     SiteManagementPageComponent,
     HealthAuthCareSettingPageComponent,
     VendorPageComponent,

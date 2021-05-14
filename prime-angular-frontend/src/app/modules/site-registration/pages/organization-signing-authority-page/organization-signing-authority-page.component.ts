@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -18,7 +19,6 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
-import { Party } from '@registration/shared/models/party.model';
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
 @Component({

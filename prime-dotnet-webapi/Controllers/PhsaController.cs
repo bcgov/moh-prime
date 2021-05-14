@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Extensions;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
@@ -56,9 +57,9 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            if (await _partyService.CreateOrUpdatePartyAsync(changeModel, User) == -1)
+            if ((await _partyService.CreateOrUpdatePartyAsync(changeModel, User)).IsInvalidId())
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when saving the Party." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not create the Party." });
             }
 
             if (!await _keycloakClient.UpdatePhsaUserInfo(User.GetPrimeUserId(), changeModel))

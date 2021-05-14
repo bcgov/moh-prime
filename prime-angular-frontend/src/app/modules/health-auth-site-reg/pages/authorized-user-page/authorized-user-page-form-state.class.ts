@@ -3,10 +3,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
+// TODO move into @lib
+import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
-import { Party } from '@registration/shared/models/party.model';
 
-export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
+export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUser> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -26,10 +27,6 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
 
   public get verifiedAddress(): FormGroup {
     return this.formInstance.get('verifiedAddress') as FormGroup;
-  }
-
-  public get mailingAddress(): FormGroup {
-    return this.formInstance.get('mailingAddress') as FormGroup;
   }
 
   public get physicalAddress(): FormGroup {
@@ -52,27 +49,26 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
     return this.formInstance.get('email') as FormControl;
   }
 
-  public get json(): Party {
+  public get json(): AuthorizedUser {
     if (!this.formInstance) {
       return;
     }
 
-    return this.toPartyJson(this.formInstance.getRawValue());
+    return this.toAuthorizedUserJson(this.formInstance.getRawValue());
   }
 
-  public patchValue(party: Party): void {
+  public patchValue(authorizedUser: AuthorizedUser): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.toPartyFormModel(this.formInstance, party);
+    this.toAuthorizedUserFormModel(this.formInstance, authorizedUser);
   }
 
   // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
-      id: [0, []], // TODO do we need this?
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       givenNames: [{ value: null, disabled: true }, [Validators.required]],
@@ -82,7 +78,6 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
       verifiedAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['countryCode', 'provinceCode', 'city', 'street', 'postal']
       }),
-      mailingAddress: this.formUtilsService.buildAddressForm(),
       physicalAddress: this.formUtilsService.buildAddressForm(),
       email: [null, [
         Validators.required,
@@ -93,21 +88,22 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
         FormControlValidators.phone
       ]],
       smsPhone: [null, [FormControlValidators.phone]],
+      jobRoleTitle: [null, [Validators.required]],
+      employmentIdentifier: [null, []],
       healthAuthorityCode: [null, [Validators.required]],
-      jobRoleTitle: [null, [Validators.required]]
     });
   }
 
   /**
    * @description
-   * Convert party JSON to form model for reactive forms.
+   * Convert authorized user JSON to form model for reactive forms.
    */
-  private toPartyFormModel(formGroup: FormGroup, data: Party): void {
+  private toAuthorizedUserFormModel(formGroup: FormGroup, data: AuthorizedUser): void {
     if (data) {
-      const { verifiedAddress, physicalAddress, mailingAddress, ...person } = data;
-      const addresses = { verifiedAddress, physicalAddress, mailingAddress };
+      const { verifiedAddress, physicalAddress, ...remainder } = data;
+      const addresses = { verifiedAddress, physicalAddress };
 
-      formGroup.patchValue(person);
+      formGroup.patchValue(remainder);
 
       Object.keys(addresses)
         .forEach((addressType: AddressType) => {
@@ -122,31 +118,31 @@ export class AuthorizedUserPageFormState extends AbstractFormState<Party> {
 
   /**
    * @description
-   * Convert the party form model into JSON.
+   * Convert the authorized user form model into JSON.
    */
-  private toPartyJson(party: Party): Party {
-    // Minimal check that party is invalid
-    if (!party.firstName) {
+  private toAuthorizedUserJson(authorizedUser: AuthorizedUser): AuthorizedUser {
+    // Minimal check that authorized user is invalid
+    if (!authorizedUser.firstName) {
       return null;
     }
 
     addressTypes
       .forEach((addressType: AddressType) => {
-        const address = party[addressType];
+        const address = authorizedUser[addressType];
         if (Address.isEmpty(address)) {
-          party[addressType] = null;
+          authorizedUser[addressType] = null;
         } else if (address.street && !address.id) {
           // Added to prevent errors on submission when the
           // backend attempts to instantiate the address model
-          party.id = 0;
+          authorizedUser.id = 0;
         }
 
-        // Add the address reference ID to the party
-        party[`${ addressType }Id`] = (!!party[addressType]?.id)
-          ? party[addressType].id
+        // Add the address reference ID to the authorizedUser
+        authorizedUser[`${ addressType }Id`] = (!!authorizedUser[addressType]?.id)
+          ? authorizedUser[addressType].id
           : 0;
       });
 
-    return party;
+    return authorizedUser;
   }
 }

@@ -1,10 +1,10 @@
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
+import { Party } from '@lib/models/party.model';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
-import { Party } from '@registration/shared/models/party.model';
 
 export class OrganizationSigningAuthorityPageFormState extends AbstractFormState<Party> {
   public constructor(

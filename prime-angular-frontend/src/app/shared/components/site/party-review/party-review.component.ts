@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { Party } from '@registration/shared/models/party.model';
+import { Party } from '@lib/models/party.model';
 
 // TODO refactor this component it doesn't match a consistent pattern with enrolments for reuse
 @Component({

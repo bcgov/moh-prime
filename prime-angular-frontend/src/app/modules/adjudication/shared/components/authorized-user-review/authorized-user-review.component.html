@@ -1,0 +1,80 @@
+<app-overview-section title="Authorized User"
+                      [showEditRedirect]="false">
+  <app-enrollee-property title="Name">
+    {{ user | fullname | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Date of Birth">
+    {{ user?.dateOfBirth | formatDate | default }}
+  </app-enrollee-property>
+
+  <ng-container *ngIf="user?.preferredFirstName">
+    <app-enrollee-property title="Preferred First Name">
+      {{ user?.preferredFirstName | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Preferred Middle Name">
+      {{ user?.preferredMiddleName | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Preferred Last Name">
+      {{ user?.preferredLastName | default }}
+    </app-enrollee-property>
+  </ng-container>
+</app-overview-section>
+
+<app-address-view title="Verified Address"
+                  [address]="user?.verifiedAddress"
+                  [showRedirect]="false"
+                  [showIfEmpty]="true">
+</app-address-view>
+
+<app-address-view title="Physical Address"
+                  [address]="user?.physicalAddress"
+                  [showRedirect]="false"
+                  [showIfEmpty]="true">
+</app-address-view>
+
+<app-overview-section title="Contact Information"
+                      [showEditRedirect]="false">
+  <app-enrollee-property title="Phone">
+    {{ user?.phone | phone | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="SMS Phone">
+    {{ user?.smsPhone | phone | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Email">
+    {{ user?.email | default }}
+  </app-enrollee-property>
+</app-overview-section>
+
+<app-overview-section title="Job Information"
+                      [showEditRedirect]="false">
+  <app-enrollee-property title="Job Title">
+    {{ user?.jobRoleTitle | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Employee Identifier">
+    {{ user?.employmentIdentifier | default }}
+  </app-enrollee-property>
+</app-overview-section>
+
+<app-overview-section title="Health Authority"
+                      [showEditRedirect]="false">
+  <app-enrollee-property title="Health Authority">
+    {{ healthAuthorities[user?.healthAuthorityCode]?.name | default }}
+  </app-enrollee-property>
+</app-overview-section>
+
+<div class="d-flex justify-content-between mb-4">
+  <button mat-stroked-button
+          [disabled]="!(Role.SUPER_ADMIN | inRole)"
+          (click)="onBack()"
+          type="button">Back</button>
+  <button mat-flat-button
+          [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
+          (click)="onApprove()"
+          color="primary">Approve Authorized User</button>
+</div>
