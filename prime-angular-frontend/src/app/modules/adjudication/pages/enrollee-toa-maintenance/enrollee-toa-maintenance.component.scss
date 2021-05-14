@@ -1,0 +1,11 @@
+@import 'variables';
+
+mat-card-title {
+  font-weight: bold;
+  font-size: 1em;
+  color: $h3-colour;
+}
+
+mat-card-content {
+  color: $paragraph-colour;
+}

@@ -15,6 +15,8 @@ export class AdjudicationRoutes {
   public static DOCUMENT_UPLOAD = 'documents';
   public static ENROLLEE_OVERVIEW = 'overview';
   public static BANNER = 'banner';
+  public static MAINTENANCE = 'maintenance';
+  public static TOA = 'toa';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';
@@ -28,6 +30,6 @@ export class AdjudicationRoutes {
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
+    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
   }
 }

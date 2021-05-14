@@ -29,6 +29,7 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
+import { EnrolleeToaMaintenanceComponent } from './pages/enrollee-toa-maintenance/enrollee-toa-maintenance.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,10 @@ const routes: Routes = [
             path: AdjudicationRoutes.BANNER,
             component: EnrolleeBannerPageComponent,
             data: { title: 'Enrollee Banner' }
+          },
+          {
+            path: AdjudicationRoutes.MAINTENANCE,
+            component: EnrolleeToaMaintenanceComponent,
           },
           {
             path: ':id',
@@ -136,7 +141,7 @@ const routes: Routes = [
             data: { title: 'Site Banner' }
           },
           {
-            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',
