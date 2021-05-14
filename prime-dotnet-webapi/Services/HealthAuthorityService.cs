@@ -23,6 +23,8 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        // This Controller is a temp fix for the time being before we most likely move HA's into organizations
+        // To reduce bloat we just use one view model for the time being.
         public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code)
         {
             return await _context.AuthorizedUsers
@@ -33,10 +35,11 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync()
         {
-            var underReviewUsers = await _context.AuthorizedUsers
-                .Where(u => u.Status == AccessStatusType.UnderReview).ToListAsync();
-
-            return underReviewUsers.Select(u => u.HealthAuthorityCode).ToList().Distinct();
+            return await _context.AuthorizedUsers
+                .Where(u => u.Status == AccessStatusType.UnderReview)
+                .Select(u => u.HealthAuthorityCode)
+                .Distinct()
+                .ToListAsync();
         }
     }
 }
