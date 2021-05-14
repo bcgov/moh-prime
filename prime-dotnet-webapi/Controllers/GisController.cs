@@ -44,7 +44,6 @@ namespace Prime.Controllers
             }
 
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
-
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
 
             return CreatedAtAction(
