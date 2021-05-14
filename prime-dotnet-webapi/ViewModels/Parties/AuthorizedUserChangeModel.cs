@@ -1,10 +1,21 @@
+using System;
 using System.Security.Claims;
+using Newtonsoft.Json;
+using Prime.Auth;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
 {
     public class AuthorizedUserChangeModel : IPartyChangeModel
     {
+        [JsonIgnore]
+        public Party Party { get; set; }
+        public Guid UserId { get; set; }
+        public string HPDID { get; set; }
+        public string FirstName { get; set; }
+        public string GivenNames { get; set; }
+        public string LastName { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public string PreferredFirstName { get; set; }
         public string PreferredMiddleName { get; set; }
         public string PreferredLastName { get; set; }
@@ -33,6 +44,13 @@ namespace Prime.ViewModels.Parties
 
         public Party UpdateParty(Party party, ClaimsPrincipal user)
         {
+            party.UserId = UserId;
+            party.HPDID = HPDID;
+            party.FirstName = FirstName;
+            party.LastName = LastName;
+            party.GivenNames = GivenNames;
+            party.DateOfBirth = DateOfBirth;
+
             party.PreferredFirstName = PreferredFirstName;
             party.PreferredMiddleName = PreferredMiddleName;
             party.PreferredLastName = PreferredLastName;
@@ -81,6 +99,16 @@ namespace Prime.ViewModels.Parties
             party.SetPartyTypes(PartyType.AuthorizedUser);
 
             return party;
+        }
+
+        public bool Validate(ClaimsPrincipal user)
+        {
+            return UserId == user.GetPrimeUserId()
+               && HPDID == user.FindFirstValue(Claims.PreferredUsername)
+               && FirstName == user.FindFirstValue(Claims.GivenName)
+               && LastName == user.FindFirstValue(Claims.FamilyName)
+               && GivenNames == user.FindFirstValue(Claims.GivenNames)
+               && DateOfBirth == user.GetDateOfBirth();
         }
     }
 }

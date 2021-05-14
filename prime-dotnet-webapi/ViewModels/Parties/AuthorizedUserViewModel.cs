@@ -1,6 +1,6 @@
 using System;
 using System.Security.Claims;
-
+using Newtonsoft.Json;
 using Prime.Models;
 
 namespace Prime.ViewModels.Parties
@@ -25,5 +25,7 @@ namespace Prime.ViewModels.Parties
         public string EmploymentIdentifier { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public AccessStatusType Status { get; set; }
+        [JsonIgnore]
+        public Party Party { get; set; }
     }
 }
