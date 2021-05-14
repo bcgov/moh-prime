@@ -501,6 +501,14 @@ objects:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-password
+              volumeMounts:
+              # Mount Document Manager to PVC
+              - mountPath: /app/
+                name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+            volumes:
+            - name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+              persistentVolumeClaim:
+                claimName: '${SVC_NAME}-${DOCMAN_POD}-backend-pvc'
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -539,6 +547,23 @@ objects:
         targetPort: 6001
     selector:
       name: ${SVC_NAME}-${DOCMAN_POD}-backend
+#   Document Manager (backend) Persistent Volume Claim
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  status:
+    accessModes:
+      - ReadWriteOnce
+    capacity:
+      storage: 1Gi
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -779,6 +804,23 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
+#   Document Manager (backend) Persistent Volume Claim
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: ${SVC_NAME}-${DB_POD}-backend-pvc
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+  spec:
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  status:
+    accessModes:
+      - ReadWriteOnce
+    capacity:
+      storage: 1Gi
 
 ###########################################
 ###                Redis                ###
