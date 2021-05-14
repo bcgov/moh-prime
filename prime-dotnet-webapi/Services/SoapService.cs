@@ -86,7 +86,7 @@ namespace Prime.Services
             string internalProviderCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.8']/@extension", documentRoot, messageId);
             if (internalProviderCode == null)
             {
-                _logger.LogError("Mandatory IPC was not found for the message {id}'", messageId);
+                _logger.LogError("Mandatory IPC was not found for the message '{id}'", messageId);
                 throw new ArgumentNullException("IPC missing.");
             }
 
@@ -134,12 +134,27 @@ namespace Prime.Services
 
             // According to PLR team, Credentials will have a `reference` child node (i.e. designation text) ...
             result.Credentials = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId);
-            result.Email = RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'mailto')]/@value", documentRoot, messageId));
+            string emailData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'mailto')]/@value", documentRoot, messageId);
+            if (emailData != null)
+            {
+                result.Email = RemoveHL7v3TelecomType(emailData);
+            }
             // ... but Expertises will never have a `reference` child node
             result.Expertise = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[not({Prefix}:originalText/{Prefix}:reference)]/@code", documentRoot, messageId);
-            string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId)));
-            result.FaxAreaCode = faxNumberParts[0];
-            result.FaxNumber = faxNumberParts[1];
+            string faxNumberData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId);
+            if (faxNumberData != null)
+            {
+                string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(faxNumberData));
+                if (faxNumberParts.Length == 2)
+                {
+                    result.FaxAreaCode = faxNumberParts[0];
+                    result.FaxNumber = faxNumberParts[1];
+                }
+                else
+                {
+                    result.FaxNumber = faxNumberParts[0];
+                }
+            }
             result.Gender = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:administrativeGenderCode/@code", documentRoot, messageId);
             // result.Languages  // TODO: Verify with Vinder
             result.MspId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.11']/@extension", documentRoot, messageId);
@@ -151,9 +166,20 @@ namespace Prime.Services
                 result.StatusExpiryDate = ParseHL7v3DateTime(dateValue);
             }
             result.Suffix = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:suffix", documentRoot, messageId);
-            string[] telephoneNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'tel')]/@value", documentRoot, messageId)));
-            result.TelephoneAreaCode = telephoneNumberParts[0];
-            result.TelephoneNumber = telephoneNumberParts[1];
+            string telephoneNumData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'tel')]/@value", documentRoot, messageId);
+            if (telephoneNumData != null)
+            {
+                string[] telephoneNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(telephoneNumData));
+                if (telephoneNumberParts.Length == 2)
+                {
+                    result.TelephoneAreaCode = telephoneNumberParts[0];
+                    result.TelephoneNumber = telephoneNumberParts[1];
+                }
+                else
+                {
+                    result.TelephoneNumber = telephoneNumberParts[0];
+                }
+            }
             return result;
         }
 
@@ -168,6 +194,12 @@ namespace Prime.Services
             return (colonIndex != -1) ? telecomValue[(colonIndex + 1)..] : telecomValue;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="telecomNumber">Expects a 10-digit string but works with other input</param>
+        /// <returns>A 2-element array containing area code and local number, if input was a 10-digit string.
+        ///     Otherwise, simply returns <c>telecomNumber</c> as the single element in the array</returns>
         public static string[] SplitHL7v3TelecomNumber(string telecomNumber)
         {
             var allDigitsRegex = new Regex("^[0-9]+$");
@@ -177,7 +209,7 @@ namespace Prime.Services
             }
             else
             {
-                throw new ArgumentOutOfRangeException(nameof(telecomNumber), telecomNumber, "Not a 10 digit string");
+                return new string[] { telecomNumber };
             }
         }
 
