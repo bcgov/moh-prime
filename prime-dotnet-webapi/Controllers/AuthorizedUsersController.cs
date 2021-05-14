@@ -50,6 +50,10 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {userId}"));
             }
+            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             return Ok(ApiResponse.Result(authorizedUser));
         }
@@ -71,6 +75,10 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
             }
+            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
 
             return Ok(ApiResponse.Result(authorizedUser));
         }
@@ -88,12 +96,16 @@ namespace Prime.Controllers
         {
             if (authorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUser", "AuthorizedUser can not be null.");
+                ModelState.AddModelError("AuthorizedUser", "Could not create AuthorizedUser, the passed in model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+            if (!authorizedUser.Validate(User))
+            {
+                ModelState.AddModelError("Authorized User", "One or more Properties did not match the information on the card.");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var createdAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(authorizedUser, User);
-
             if (createdAuthorizedUserId.IsInvalidId())
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not create the authorized user." });
@@ -121,13 +133,28 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> UpdateAuthorizedUser(int authorizedUserId, AuthorizedUserChangeModel updatedAuthorizedUser)
         {
-            if (!await _authorizedUserService.AuthorizedUserExistsAsync(authorizedUserId))
+            if (updatedAuthorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+                ModelState.AddModelError("AuthorizedUSer", "Authorized user update model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+            if (!updatedAuthorizedUser.Validate(User))
+            {
+                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+
+            var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
+            if (authorizedUser == null)
+            {
+                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
+            }
+            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
 
             var updatedAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
-
             if (updatedAuthorizedUserId.IsInvalidId())
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the authorized user." });
@@ -154,12 +181,14 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
             }
-
+            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
             if (authorizedUser.Status == AccessStatusType.Active)
             {
                 return NoContent();
             }
-
             if (authorizedUser.Status != AccessStatusType.Approved)
             {
                 ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {Enum.GetName(typeof(AccessStatusType), 3)}");
@@ -188,6 +217,10 @@ namespace Prime.Controllers
             if (authorizedUser == null)
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+            }
+            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
 
             await _authorizedUserService.ApproveAuthorizedUser(authorizedUserId);
