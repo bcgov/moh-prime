@@ -204,8 +204,7 @@ jobs:
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc project ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-tools -f infrastructure/prime-app-template.yml \
+          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-dev -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
