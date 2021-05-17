@@ -4,7 +4,7 @@ kind: Template
 metadata:
   name: prime
   description: >-
-    Deployment template for the BC Parks App
+    Deployment template for the Ministry of Health PharmaNet Revisions for Information Management Enhancements
 parameters:
 - name: SVC_NAME
   displayName: Name
