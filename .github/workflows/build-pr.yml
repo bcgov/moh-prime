@@ -180,14 +180,14 @@ jobs:
       - name: Install OC
         uses: redhat-actions/oc-installer@v1
 
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
-          openshift_password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
+      # - name: Authenticate and set context
+      #   uses: redhat-actions/oc-login@v1
+      #   with:
+      #     openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+      #     openshift_username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+      #     openshift_password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+      #     openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+      #     namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev
 
       - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
@@ -204,6 +204,8 @@ jobs:
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
+          oc login --token ${{secrets.OPENSHIFT_SERVICE_TOKEN}} -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev --server=${{secrets.OPENSHIFT_API_URL}}
+
           oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-dev -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
