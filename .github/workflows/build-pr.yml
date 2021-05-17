@@ -163,7 +163,7 @@ jobs:
   #           --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
   #           --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
   #           --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-  #           --build-arg OC_APP=$OC_APP \
+  #           --build-arg OC_APP=${{secrets.OC_APP}} \
   #           --build-arg SVC_NAME="pr-$PR_NUMBER" \
   #           --build-arg REDIRECT_URL=$REDIRECT_URL \
   #           $SERVICE_NAME
@@ -202,12 +202,11 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          OC_APP: dev
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc login --token ${{secrets.OPENSHIFT_SERVICE_TOKEN}} -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP --server=${{secrets.OPENSHIFT_API_URL}}
+          oc login --token ${{secrets.OPENSHIFT_SERVICE_TOKEN}} -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} --server=${{secrets.OPENSHIFT_API_URL}}
 
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP -f infrastructure/prime-app-template.yml \
+          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -217,8 +216,8 @@ jobs:
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=$OC_APP \
+            -p OC_APP=${{secrets.OC_APP}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
