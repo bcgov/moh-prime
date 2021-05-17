@@ -149,7 +149,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            var agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
             if (agreement == null)
             {
                 return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));

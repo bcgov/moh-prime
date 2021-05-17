@@ -44,7 +44,6 @@ namespace Prime.Services
         public async Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null)
         {
             return await GetBasePartyQuery()
-                .AsNoTracking()
                 .If(withType.HasValue, q => q.WithPartyType(withType.Value))
                 .SingleOrDefaultAsync(p => p.UserId == userId);
         }
@@ -60,9 +59,11 @@ namespace Prime.Services
 
             if (currentParty == null)
             {
-                currentParty = new Party();
+                currentParty = new Party
+                {
+                    Addresses = new List<PartyAddress>()
+                };
                 _context.Parties.Add(currentParty);
-                currentParty.Addresses = new List<PartyAddress>();
             }
 
             changeModel.UpdateParty(currentParty, user);

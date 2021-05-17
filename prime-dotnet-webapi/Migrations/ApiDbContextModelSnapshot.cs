@@ -8496,6 +8496,46 @@ namespace Prime.Migrations
                     b.ToTable("AssignedPrivilege");
                 });
 
+            modelBuilder.Entity("Prime.Models.AuthorizedUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("EmploymentIdentifier")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityCode")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityCode");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("AuthorizedUsers");
+                });
+
             modelBuilder.Entity("Prime.Models.Banner", b =>
                 {
                     b.Property<int>("Id")
@@ -18506,6 +18546,21 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Privilege", "Privilege")
                         .WithMany("AssignedPrivileges")
                         .HasForeignKey("PrivilegeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.AuthorizedUser", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
