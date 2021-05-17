@@ -501,19 +501,19 @@ objects:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-password
-              volumeMounts:
-              # Mount Document Manager to PVC
+            volumeMounts:
+            # Mount Document Manager to PVC
               - mountPath: /app/
                 name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
-            volumes:
-            - name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
-              persistentVolumeClaim:
-                claimName: '${SVC_NAME}-${DOCMAN_POD}-backend-pvc'
             ports:
               - containerPort: 6001
                 protocol: TCP
               - containerPort: 9191
                 protocol: TCP
+        volumes:
+          - name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+            persistentVolumeClaim:
+              claimName: '${SVC_NAME}-${DOCMAN_POD}-backend-pvc'
     triggers:
       - type: ConfigChange
       - type: ImageChange
