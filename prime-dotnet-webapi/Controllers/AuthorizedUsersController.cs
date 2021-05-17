@@ -50,7 +50,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {userId}"));
             }
-            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -75,7 +75,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
             }
-            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -149,10 +149,6 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
             }
-            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
 
             var updatedAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
             if (updatedAuthorizedUserId.IsInvalidId())
@@ -181,7 +177,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
             }
-            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
@@ -191,7 +187,7 @@ namespace Prime.Controllers
             }
             if (authorizedUser.Status != AccessStatusType.Approved)
             {
-                ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {Enum.GetName(typeof(AccessStatusType), 3)}");
+                ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {nameof(AccessStatusType.Active)}");
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
@@ -218,7 +214,7 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
             }
-            if (!authorizedUser.Party.PermissionsRecord().AccessableBy(User))
+            if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }

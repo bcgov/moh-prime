@@ -5,7 +5,7 @@ using Prime.Models;
 
 namespace Prime.ViewModels.Parties
 {
-    public class AuthorizedUserViewModel
+    public class AuthorizedUserViewModel : IUserBoundModel
     {
         public int Id { get; set; }
         public Guid UserId { get; set; }
@@ -25,7 +25,5 @@ namespace Prime.ViewModels.Parties
         public string EmploymentIdentifier { get; set; }
         public HealthAuthorityCode HealthAuthorityCode { get; set; }
         public AccessStatusType Status { get; set; }
-        [JsonIgnore]
-        public Party Party { get; set; }
     }
 }
