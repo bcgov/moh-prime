@@ -155,7 +155,7 @@ jobs:
   #         COMPOSE_DOCKER_CLI_BUILD: 1
   #         DOCKER_BUILDKIT: 1
   #         PR_NUMBER: ${{steps.PR.outputs.number}}
-  #         REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}.apps.silver.devops.gov.bc.ca"       
+  #         REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"       
   #       run: |
   #         echo PR_NUMBER=${PR_NUMBER}
   #         docker-compose -f oc4-compose.yml build --force-rm --no-cache \
@@ -167,8 +167,8 @@ jobs:
   #           --build-arg SVC_NAME="pr-$PR_NUMBER" \
   #           --build-arg REDIRECT_URL=$REDIRECT_URL \
   #           $SERVICE_NAME
-  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   apply-oc-template:
     runs-on: ubuntu-20.04
@@ -202,11 +202,12 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
+          OC_APP: dev
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc login --token ${{secrets.OPENSHIFT_SERVICE_TOKEN}} -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev --server=${{secrets.OPENSHIFT_API_URL}}
+          oc login --token ${{secrets.OPENSHIFT_SERVICE_TOKEN}} -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP --server=${{secrets.OPENSHIFT_API_URL}}
 
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-dev -f infrastructure/prime-app-template.yml \
+          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -216,8 +217,8 @@ jobs:
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=dev \
-            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}.apps.silver.devops.gov.bc.ca \
+            -p OC_APP=$OC_APP \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-$OC_APP -f -
