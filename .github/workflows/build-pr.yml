@@ -52,8 +52,8 @@ jobs:
   #           --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
   #           --build-arg SVC_NAME="pr-$PR_NUMBER" \
   #           $SERVICE_NAME
-  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   # build-backend:
   #   runs-on: ubuntu-20.04
@@ -110,8 +110,8 @@ jobs:
   #           --build-arg POSTGRESQL_DATABASE=postgres \
   #           --build-arg SVC_NAME="pr-$PR_NUMBER" \
   #           $SERVICE_NAME
-  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+  #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   # build-frontend:
   #   runs-on: ubuntu-20.04
@@ -204,8 +204,8 @@ jobs:
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc project ${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}
-          oc process -f infrastructure/prime-app-template.yml \
+          oc project ${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools
+          oc process -n -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -219,4 +219,4 @@ jobs:
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}}.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}} | oc apply -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{env.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev -f -
