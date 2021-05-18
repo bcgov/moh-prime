@@ -11,11 +11,12 @@ on:
   push:
     branches:
       - master
-      # - OC4-merge-dev
+      - OC4-merge-dev
+      
   workflow_dispatch:
     branches:
       - master
-      # - OC4-merge-dev
+      - OC4-merge-dev
 
 jobs:
   build-document-manager-backend:

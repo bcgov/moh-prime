@@ -3,12 +3,10 @@ on:
   push:
     branches:
       - test
-      - OC4-merge-dev
 
   workflow_dispatch:
     branches:
       - test
-      - OC4-merge-dev
       
 jobs:
   build-document-manager-backend:
