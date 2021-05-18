@@ -67,6 +67,12 @@ parameters:
   description: Appended to all URLs, used in PRs
   value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
   required: false
+- name: HPR_URL
+  displayName: Health Practicioner URL
+  value: ${SVC_NAME}-hpr${URL_STUB}
+- name: MAUTH_URL
+  displayName: MUTUAL_AUTHENTICATION URL
+  value: ${SVC_NAME}-hpr${URL_STUB}
 objects:
 ###########################################
 ###               Frontend              ###
@@ -199,7 +205,7 @@ objects:
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: healthpractitionerregistration${URL_STUB}
+    host: ${HPR_URL}
     to:
       kind: Service
       name: ${SVC_NAME}-${FRONTEND_POD}
@@ -223,7 +229,7 @@ objects:
     name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    host: mutualauth${URL_STUB}
+    host: ${MAUTH_URL}
     to:
       kind: Service
       name: ${SVC_NAME}-${FRONTEND_POD}
