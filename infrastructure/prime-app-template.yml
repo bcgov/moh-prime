@@ -69,10 +69,10 @@ parameters:
   required: false
 - name: HPR_URL
   displayName: Health Practicioner URL
-  value: ${SVC_NAME}-hpr${URL_STUB}
+  value: ""
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
-  value: ${SVC_NAME}-hpr${URL_STUB}
+  value: ""
 objects:
 ###########################################
 ###               Frontend              ###
