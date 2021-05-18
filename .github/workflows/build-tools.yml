@@ -132,7 +132,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://tools-${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools.apps.silver.devops.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
