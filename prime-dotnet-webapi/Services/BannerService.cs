@@ -26,30 +26,25 @@ namespace Prime.Services
 
         public async Task<BannerViewModel> GetBannerAsync(BannerLocationCode locationCode)
         {
-            return await _context.Banners
+            var banner = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+
+            return banner;
         }
 
         public async Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode)
         {
-            var currentDate = DateTime.Today;
-            var banner = await _context.Banners
+            DateTime atTime = DateTime.UtcNow;
+            return await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
+                .Where(b => b.StartDate <= atTime && atTime <= b.EndDate)
                 .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
-
-            // Comparing of only the Date portion.
-            if (banner != null && currentDate.Date >= banner.StartDate.Date && currentDate.Date <= banner.EndDate.Date)
-            {
-                return banner;
-            }
-
-            return null;
         }
 
-        public async Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel)
+        public async Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel bannerVM)
         {
             var banner = await _context.Banners
                 .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
@@ -63,7 +58,11 @@ namespace Prime.Services
                 _context.Banners.Add(banner);
             }
 
-            _context.Entry(banner).CurrentValues.SetValues(updateModel);
+            banner.BannerType = bannerVM.BannerType;
+            banner.Title = bannerVM.Title;
+            banner.Content = bannerVM.Content;
+            banner.StartDate = bannerVM.StartDate.ToUniversalTime();
+            banner.EndDate = bannerVM.EndDate.ToUniversalTime();
 
             try
             {
