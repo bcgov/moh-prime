@@ -1,11 +1,9 @@
-using System.Linq;
+using System;
 using System.Security.Claims;
-using System.Collections.Generic;
+using Newtonsoft.Json;
 
 using Prime.Auth;
 using Prime.Models;
-using Newtonsoft.Json;
-using System;
 
 namespace Prime.ViewModels.Parties
 {
@@ -26,11 +24,9 @@ namespace Prime.ViewModels.Parties
         public string Role { get; set; }
 
         /// <summary>
-        /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types in the Party's PartyEnrolments.
-        /// Returns the updated Party for convienience.
+        /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types
+        /// in the Party's PartyEnrolments, and returns the updated Party for convenience.
         /// </summary>
-        /// <param name="gisEnrolment"></param>
-        /// <param name="user"></param>
         public GisEnrolment UpdateGisParty(GisEnrolment gisEnrolment, ClaimsPrincipal user)
         {
             user.ThrowIfNull(nameof(user));

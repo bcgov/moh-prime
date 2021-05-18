@@ -283,4 +283,4 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
     CapitalizePipe
   ]
 })
-export class SharedModule {}
+export class SharedModule { }
