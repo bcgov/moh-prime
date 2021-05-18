@@ -31,7 +31,7 @@ RUN dotnet tool install --global dotnet-ef --version 5.0.6
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
 #FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
 #FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
-FROM docker-registry.default.svc:5000/dqszvc-tools/aspnet:5.0 AS runtime
+FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
