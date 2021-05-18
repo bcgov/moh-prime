@@ -127,8 +127,11 @@ objects:
                 protocol: TCP
             resources: {}
             envFrom:
-            - configMapRef:
-                name: keycloak
+              - configMapRef:
+                  name: keycloak
+            env:
+              - name: DOCUMENT_MANAGER_URL
+                value: ${FRONTEND_URL}/api/docman
     triggers:
       - type: ConfigChange
       - type: ImageChange
