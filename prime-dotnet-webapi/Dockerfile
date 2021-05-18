@@ -11,7 +11,7 @@ RUN apt-get update \
     && apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev \
     && apt install -y procps
 
-RUN dotnet tool install --global dotnet-ef --version 3.1.14
+RUN dotnet tool install --global dotnet-ef --version 5.0.6
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1
