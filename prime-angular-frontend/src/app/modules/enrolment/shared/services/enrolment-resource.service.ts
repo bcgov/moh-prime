@@ -24,6 +24,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 @Injectable({
   providedIn: 'root'
@@ -200,6 +201,23 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
+  // Agreement Versions
+  // ---
+
+  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
+    return this.apiResource.get<AgreementVersion[]>('agreementversions/enrollee/latest')
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersion: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
           throw error;
         })
       );

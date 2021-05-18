@@ -1,9 +1,49 @@
 <app-page mode="full">
   <app-page-header>TOA Maintenance</app-page-header>
-  <app-page-subheader>
+  <app-page-subheader *ngIf="!previewingToa">
     <ng-container appPageSubheaderTitle>View TOA</ng-container>
     <ng-container appPageSubheaderSummary>
       Select what TOA you would like to view
     </ng-container>
   </app-page-subheader>
+
+  <div class="row"
+       [hidden]="previewingToa">
+    <div class="d-flex mb-4 col-6"
+         *ngFor="let av of enrolleeAgreementVersions$ | async">
+      <mat-card class="w-100">
+        <mat-card-header>
+          <mat-card-title>
+            {{ AgreementTypeNameMap[av.agreementType] }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="ml-3">
+          last modified {{ av.updatedDate | formatDate | default }}
+        </mat-card-content>
+        <mat-card-actions class="d-flex justify-content-end">
+          <button mat-stroked-button
+                  color="primary"
+                  type="button"
+                  (click)="previewToa(av)">View</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="previewingToa">
+    <div class="row mb-4">
+      <button mat-icon-button
+              color="primary"
+              type="button"
+              matTooltip="Back"
+              (click)="back()">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <h2 class="ml-3">{{ AgreementTypeNameMap[previewingToa.agreementType] }}</h2>
+    </div>
+    <h3>Preview:</h3>
+
+    <div [innerHTML]="previewingToa.agreementContent"></div>
+  </div>
+
 </app-page>

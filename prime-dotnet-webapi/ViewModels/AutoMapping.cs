@@ -74,5 +74,9 @@ public class AutoMapping : Profile
         CreateMap<PlrProvider, PlrProvider>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
+
+        CreateMap<AgreementVersion, AgreementVersionViewModel>()
+            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp))
+            .ForMember(dest => dest.AgreementContent, opt => opt.MapFrom(src => src.Text));
     }
 }
