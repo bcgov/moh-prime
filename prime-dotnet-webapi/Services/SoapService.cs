@@ -90,13 +90,14 @@ namespace Prime.Services
                 throw new ArgumentNullException("IPC missing.");
             }
 
+            string ignoreOtherOidsExpression = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
             var result = new PlrProvider
             {
                 // Primary attributes for PRIME
                 Ipc = internalProviderCode,
                 // At this point, IdentifierType as OID
-                IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')]/@root", documentRoot, messageId),
-                CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')]/@extension", documentRoot, messageId),
+                IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@root", documentRoot, messageId),
+                CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@extension", documentRoot, messageId),
                 ProviderRoleType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId),
                 FirstName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[1]", documentRoot, messageId),
                 SecondName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[2]", documentRoot, messageId),
