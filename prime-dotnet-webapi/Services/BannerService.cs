@@ -31,12 +31,17 @@ namespace Prime.Services
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
+            // Banner time stamps are stored as UTC, but are materialized as DateTimeKind.Unspecified
+            // Once we upgrade our EF / Npgsql, we can use NodaTime instead
+            banner.StartDate = DateTime.SpecifyKind(banner.StartDate, DateTimeKind.Utc);
+            banner.EndDate = DateTime.SpecifyKind(banner.EndDate, DateTimeKind.Utc);
+
             return banner;
         }
 
-        public async Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode)
+        public async Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode, DateTime atTime)
         {
-            DateTime atTime = DateTime.UtcNow;
+            atTime = atTime.ToUniversalTime();
             return await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
                 .Where(b => b.StartDate <= atTime && atTime <= b.EndDate)

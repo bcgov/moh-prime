@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -126,7 +127,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<BannerDisplayViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetActiveBannerByLocationCode([FromQuery] BannerLocationCode locationCode)
         {
-            var banner = await _bannerService.GetActiveBannerAsync(locationCode);
+            var banner = await _bannerService.GetActiveBannerAsync(locationCode, DateTime.UtcNow);
             return Ok(ApiResponse.Result(banner));
         }
     }
