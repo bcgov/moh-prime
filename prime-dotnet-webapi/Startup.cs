@@ -310,7 +310,7 @@ namespace Prime
 
             services.AddDbContext<ApiDbContext>(options =>
             {
-                options.UseNpgsql(connectionString, o => o.UseNodaTime());
+                options.UseNpgsql(connectionString);
                 options.EnableSensitiveDataLogging(sensitiveDataLoggingEnabled: false);
             });
 
