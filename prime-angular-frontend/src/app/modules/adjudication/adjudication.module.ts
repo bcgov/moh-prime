@@ -55,6 +55,15 @@ import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorize
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
 import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
+import { MaintenanceContainerComponent } from './shared/components/maintenance-container/maintenance-container.component';
+import { NotificationEmailsContainerComponent } from './shared/components/notification-emails-container/notification-emails-container.component';
+import { NotificationEmailViewComponent } from './shared/components/notification-email-view/notification-email-view.component';
+import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
+import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
+import { SiteEmailNotificationListPageComponent } from './pages/site-email-notification-list-page/site-email-notification-list-page.component';
+import { EnrolleeEmailNotificationListPageComponent } from './pages/enrollee-email-notification-list-page/enrollee-email-notification-list-page.component';
+import { EnrolleeEmailNotificationPageComponent } from './pages/enrollee-email-notification-page/enrollee-email-notification-page.component';
+import { SiteEmailNotificationPageComponent } from './pages/site-email-notification-page/site-email-notification-page.component';
 
 @NgModule({
   declarations: [
@@ -102,7 +111,16 @@ import { ContextualEnrolmentConfirmationComponent } from './shared/components/co
     HaAuthorizedUsersViewComponent,
     HealthAuthorityAuthorizedUsersPageComponent,
     AuthorizedUserReviewComponent,
-    ContextualEnrolmentConfirmationComponent
+    ContextualEnrolmentConfirmationComponent,
+    MaintenanceContainerComponent,
+    NotificationEmailsContainerComponent,
+    NotificationEmailViewComponent,
+    EnrolleeMaintenancePageComponent,
+    SiteMaintenancePageComponent,
+    SiteEmailNotificationListPageComponent,
+    EnrolleeEmailNotificationListPageComponent,
+    EnrolleeEmailNotificationPageComponent,
+    SiteEmailNotificationPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

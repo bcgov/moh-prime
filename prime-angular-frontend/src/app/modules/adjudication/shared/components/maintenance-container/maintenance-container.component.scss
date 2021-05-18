@@ -1,0 +1,15 @@
+.mat-card {
+  .mat-card-title {
+    color: theme-palette(blue);
+    font-size: 1rem;
+    margin-left: -1rem;
+    padding-top: .2rem;
+  }
+  .mat-card-content {
+    color: theme-palette(blue);
+    font-weight: 500;
+  }
+  .mat-card-actions {
+    text-align: right;
+  }
+}

@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="row">
+    <ng-container *ngFor="let template of emailTemplates">
+      <div class="col-md-6 col-sm-12">
+        <app-summary-card class=""
+                          icon="email"
+                          [title]="EmailTemplateTypeEnum[template.emailType] | replace: '_':' ' | capitalize: true"
+                          [properties]="getTemplateProperties(template)"
+                          actionButtonTitle="View"
+                          [actionDisabled]="false"
+                          (action)="onView(template.id)">
+        </app-summary-card>
+      </div>
+    </ng-container>
+  </div>
+</div>

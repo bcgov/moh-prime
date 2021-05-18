@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,8 +12,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using RazorEngine;
+using RazorEngine.Templating;
 
 using Prime.Services.Razor;
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -22,17 +26,20 @@ namespace Prime.Services
         private readonly ITempDataProvider _tempDataProvider;
         private readonly IServiceProvider _serviceProvider;
         private readonly IHttpContextAccessor _contextAccessor;
+        private readonly IEmailTemplateService _emailTemplateService;
 
         public RazorConverterService(
             IRazorViewEngine viewEngine,
             ITempDataProvider tempDataProvider,
             IServiceProvider serviceProvider,
+            IEmailTemplateService emailTemplateService,
             IHttpContextAccessor contextAccessor)
         {
             _viewEngine = viewEngine;
             _tempDataProvider = tempDataProvider;
             _serviceProvider = serviceProvider;
             _contextAccessor = contextAccessor;
+            _emailTemplateService = emailTemplateService;
         }
 
         public async Task<string> RenderTemplateToStringAsync<TModel>(RazorTemplate<TModel> template, TModel viewModel)
@@ -57,6 +64,27 @@ namespace Prime.Services
             await view.RenderAsync(viewContext);
 
             return output.ToString();
+        }
+
+        public string RenderStringTemplateToString<TModel>(string template, TModel model)
+        {
+            try
+            {
+                Guid guid = Guid.NewGuid();
+                return Engine.Razor.RunCompile(template, guid.ToString(), typeof(TModel), model);
+            }
+            catch (TemplateCompilationException ex)
+            {
+                // TODO: This is the error thrown then @Model.X and X doesn't exist in the model
+                throw ex;
+            }
+
+        }
+
+        public async Task<string> RenderEmailTemplateToString<TModel>(EmailTemplateType type, TModel viewModel)
+        {
+            var emailTemplate = await _emailTemplateService.GetEmailTemplateByTypeAsync(type);
+            return RenderStringTemplateToString(emailTemplate.Template, viewModel);
         }
 
         private IView GetView(ActionContext actionContext, string viewName)

@@ -31,6 +31,12 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
+import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
+import { SiteEmailNotificationListPageComponent } from './pages/site-email-notification-list-page/site-email-notification-list-page.component';
+import { SiteEmailNotificationPageComponent } from './pages/site-email-notification-page/site-email-notification-page.component';
+import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
+import { EnrolleeEmailNotificationListPageComponent } from './pages/enrollee-email-notification-list-page/enrollee-email-notification-list-page.component';
+import { EnrolleeEmailNotificationPageComponent } from './pages/enrollee-email-notification-page/enrollee-email-notification-page.component';
 
 const routes: Routes = [
   {
@@ -56,6 +62,31 @@ const routes: Routes = [
             path: AdjudicationRoutes.BANNER,
             component: EnrolleeBannerPageComponent,
             data: { title: 'Enrollee Banner' }
+          },
+          {
+            path: AdjudicationRoutes.MAINTENANCE,
+            children: [
+              {
+                path: '',
+                component: EnrolleeMaintenancePageComponent,
+                data: { title: 'Enrollee Maintenance' }
+              },
+              {
+                path: AdjudicationRoutes.NOTIFICATION_EMAILS,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeEmailNotificationListPageComponent,
+                    data: { title: 'Enrollee Notification Emails' }
+                  },
+                  {
+                    path: ':eid',
+                    component: EnrolleeEmailNotificationPageComponent,
+                    data: { title: 'Enrollee Notification Email' }
+                  },
+                ]
+              },
+            ]
           },
           {
             path: ':id',
@@ -136,6 +167,31 @@ const routes: Routes = [
             path: AdjudicationRoutes.BANNER,
             component: SiteBannerPageComponent,
             data: { title: 'Site Banner' }
+          },
+          {
+            path: AdjudicationRoutes.MAINTENANCE,
+            children: [
+              {
+                path: '',
+                component: SiteMaintenancePageComponent,
+                data: { title: 'Site Maintenance' }
+              },
+              {
+                path: AdjudicationRoutes.NOTIFICATION_EMAILS,
+                children: [
+                  {
+                    path: '',
+                    component: SiteEmailNotificationListPageComponent,
+                    data: { title: 'Site Notification Emails' }
+                  },
+                  {
+                    path: ':eid',
+                    component: SiteEmailNotificationPageComponent,
+                    data: { title: 'Site Notification Email' }
+                  },
+                ]
+              },
+            ]
           },
           {
             path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
