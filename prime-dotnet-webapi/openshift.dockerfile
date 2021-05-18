@@ -1,6 +1,3 @@
-#FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS build
-#FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-31-rhel7 AS build
-#FROM docker-registry.default.svc:5000/dqszvc-tools/sdk:5.0 AS build
 FROM registry.access.redhat.com/ubi8/dotnet-50 AS build
 WORKDIR /opt/app-root/app
 
@@ -16,7 +13,6 @@ ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-#ENV DB_CONNECTION_STRING "host=postgresql$SUFFIX;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
@@ -29,8 +25,7 @@ COPY . /opt/app-root/app
 RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 5.0.6
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
-#FROM docker-registry.default.svc:5000/dqszvc-tools/dotnet-22-runtime-rhel7 AS runtime
-#FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
+
 FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
@@ -42,7 +37,6 @@ ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-#ENV DB_CONNECTION_STRING "host=postgresql$SUFFIX;port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
 
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
