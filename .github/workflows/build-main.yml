@@ -12,7 +12,7 @@ on:
     branches:
       - master
       - OC4-merge-dev
-      
+
   workflow_dispatch:
     branches:
       - master
@@ -198,7 +198,7 @@ jobs:
 ##### Demo environment below
 # Uses Prod image with Test vars
 
-  build-document-manager-backend:
+  demo-document-manager-backend:
     runs-on: ubuntu-20.04
     environment: Test
     env:
@@ -237,7 +237,7 @@ jobs:
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
-  build-backend:
+  demo-backend:
     runs-on: ubuntu-20.04
     environment: Test
     env:
@@ -286,7 +286,7 @@ jobs:
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
-  build-frontend:
+  demo-frontend:
     runs-on: ubuntu-20.04
     environment: Test
     env:
@@ -333,7 +333,7 @@ jobs:
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
-  apply-oc-template:
+  demo-oc-template:
     runs-on: ubuntu-20.04
     environment: Test
     steps:
