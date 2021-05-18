@@ -139,7 +139,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://prod-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -177,7 +177,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
         run: |
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f infrastructure/prime-app-template.yml \
+          oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -236,7 +236,7 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
@@ -285,7 +285,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
@@ -316,7 +316,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://demo-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -332,7 +332,7 @@ jobs:
 
   apply-oc-template:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -354,7 +354,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
         run: |
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f infrastructure/prime-app-template.yml \
+          oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -368,4 +368,8 @@ jobs:
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+        
+          oc process -f infrastructure/metabase-template.yml
+            -p METABASE_ROUTE_HOST=demo-metabase-test.apps.silver.devops.gov.bc.ca
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -

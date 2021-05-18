@@ -1,7 +1,61 @@
 apiVersion: template.openshift.io/v1
 kind: Template
+parameters:
+- name: APP_NAME
+  displayName: Application Name
+  description: For grouping together utilities by scope
+  value: utilities
+- name: METABASE_SERVICE_NAME
+  displayName: Metabase Service Name
+  value: metabase
+  required: true
+- name: METABASE_ROUTE_HOST
+  displayName: Metabase Route Host (FQDN)
+  description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
+  value: ""
+  required: false
+- name: METABASE_IMAGE
+  displayName: Metabase Docker Image
+  value: registry.hub.docker.com/metabase/metabase:latest
+  description: The metabase docker image to use
+  required: true
+- description: Version of PostgreSQL image to be used (9.4, 9.5, 9.6 or latest).
+  displayName: Version of PostgreSQL Image
+  name: POSTGRESQL_VERSION
+  required: true
+  value: "9.6"
+- name: POSTGRESQL_IMAGE_NAMESPACE
+  displayName: PostgreSQL Image Namespace
+  value: openshift
+  description: The OpenShift namespace for the postgresql image to use
+  required: true
+- name: POSTGRESQL_DATABASE
+  displayName: PostgreSQL Database
+  description: Database name to use
+  value: metabase
+  required: true
+- name: POSTGRESQL_USER
+  displayName: PostgreSQL Username
+  description: Username for metabase database user
+  value: metabase
+  required: true
+- name: POSTGRESQL_PASSWORD
+  displayName: PostgreSQL Password
+  description: Password for metabase database user
+  generate: expression
+  from: "[a-zA-Z0-9]{32}"
+  required: true
+- name: POSTGRESQL_VOLUME_CAPACITY
+  displayName: Database Data Volume Capacity
+  description: Capacity required for the PostgreSQL database data volume
+  value: 1Gi
+  required: true
 labels:
   template: metabase-database-template
+  app: ${APP_NAME}
+  app.kubernetes.io/component: ${APP_NAME}
+  app.kubernetes.io/instance: ${APP_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
 message: |-
   The following service(s) have been created in your project:
     1. ${METABASE_SERVICE_NAME}
@@ -297,49 +351,3 @@ objects:
           kind: ImageStreamTag
           name: ${METABASE_SERVICE_NAME}:latest
         lastTriggeredImage: ""
-parameters:
-- name: METABASE_SERVICE_NAME
-  displayName: Metabase Service Name
-  value: metabase
-  required: true
-- name: METABASE_ROUTE_HOST
-  displayName: Metabase Route Host (FQDN)
-  description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
-  value: ""
-  required: false
-- name: METABASE_IMAGE
-  displayName: Metabase Docker Image
-  value: registry.hub.docker.com/metabase/metabase:latest
-  description: The metabase docker image to use
-  required: true
-- description: Version of PostgreSQL image to be used (9.4, 9.5, 9.6 or latest).
-  displayName: Version of PostgreSQL Image
-  name: POSTGRESQL_VERSION
-  required: true
-  value: "9.6"
-- name: POSTGRESQL_IMAGE_NAMESPACE
-  displayName: PostgreSQL Image Namespace
-  value: openshift
-  description: The OpenShift namespace for the postgresql image to use
-  required: true
-- name: POSTGRESQL_DATABASE
-  displayName: PostgreSQL Database
-  description: Database name to use
-  value: metabase
-  required: true
-- name: POSTGRESQL_USER
-  displayName: PostgreSQL Username
-  description: Username for metabase database user
-  value: metabase
-  required: true
-- name: POSTGRESQL_PASSWORD
-  displayName: PostgreSQL Password
-  description: Password for metabase database user
-  generate: expression
-  from: "[a-zA-Z0-9]{32}"
-  required: true
-- name: POSTGRESQL_VOLUME_CAPACITY
-  displayName: Database Data Volume Capacity
-  description: Capacity required for the PostgreSQL database data volume
-  value: 1Gi
-  required: true

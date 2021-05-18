@@ -106,7 +106,7 @@ jobs:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
       JWT_WELL_KNOWN_CONFIG: "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-      KEYCLOAK_CLIENT_ID: "prime-application-test"
+      KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
     steps:
@@ -170,7 +170,7 @@ jobs:
           DOCKER_BUILDKIT: 1
 
         run: |
-          oc process -n {{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f infrastructure/prime-app-template.yml \
+          oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
@@ -184,4 +184,14 @@ jobs:
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+          oc process -f infrastructure/mailhog-template.yml \
+            -p MAILHOG_SERVICE_NAME=mailhog-server \
+            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+          
+          oc process -f infrastructure/metabase-template.yml
+            -p MAILHOG_SERVICE_NAME=mailhog-server \
+            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -

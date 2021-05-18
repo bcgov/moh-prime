@@ -1,11 +1,36 @@
 apiVersion: template.openshift.io/v1
 kind: Template
-labels:
-  template: ${MAILHOG_SERVICE_NAME}-template
+parameters:
+- name: APP_NAME
+  displayName: Application Name
+  description: For grouping together utilities by scope
+  value: utilities
+- name: MAILHOG_SERVICE_NAME
+  displayName: Mailhog Service Name
+  value: mailhog-server
+  required: true
+- name: MAILHOG_ROUTE_HOST
+  displayName: Mailhog Route Host
+  description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
+  value: ""
+  required: false
+- name: MAILHOG_IMAGE
+  displayName: Mailhog Docker Image
+  value: registry.hub.docker.com/mailhog/mailhog:latest
+  description: The mailhog docker image to use
+  required: true
 message: |-
   The following service(s) have been created in your project:
     1. ${MAILHOG_SERVICE_NAME}
+labels:
+  template: mailhog-template
+  app: ${APP_NAME}
+  app.kubernetes.io/component: ${APP_NAME}
+  app.kubernetes.io/instance: ${APP_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
 metadata:
+  labels:
+    app.kubernetes.io/part-of: ${SVC_NAME}
   name: mailhog
   annotations:
     openshift.io/display-name: "Mailhog"
@@ -122,18 +147,3 @@ objects:
         from:
           kind: ImageStreamTag
           name: ${MAILHOG_SERVICE_NAME}:latest
-parameters:
-- name: MAILHOG_SERVICE_NAME
-  displayName: Mailhog Service Name
-  value: mailhog-server
-  required: true
-- name: MAILHOG_ROUTE_HOST
-  displayName: Mailhog Route Host
-  description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
-  value: ""
-  required: false
-- name: MAILHOG_IMAGE
-  displayName: Mailhog Docker Image
-  value: registry.hub.docker.com/mailhog/mailhog:latest
-  description: The mailhog docker image to use
-  required: true
