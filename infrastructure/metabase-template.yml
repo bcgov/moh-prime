@@ -61,7 +61,7 @@ message: |-
     1. ${METABASE_SERVICE_NAME}
     2. ${METABASE_SERVICE_NAME}-database
 metadata:
-  name: metabase
+  name: ${METABASE_SERVICE_NAME}
   annotations:
     openshift.io/display-name: "Metabase backed by PostgreSQL"
     openshift.io/long-description: >
@@ -72,20 +72,23 @@ metadata:
       easy, open source way for everyone in your company to ask questions and learn from data.
     iconClass: "pficon-trend-up"
     tags: analytics,database,metabase
+  labels:
+      app.kubernetes.io/part-of: ${APP_NAME}
+      app.openshift.io/runtime: java
 objects:
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
     name: ${METABASE_SERVICE_NAME}
     labels:
-      app: metabase
+      app: ${APP_NAME}
       service: ${METABASE_SERVICE_NAME}
 - apiVersion: v1
   kind: Secret
   metadata:
       name: ${METABASE_SERVICE_NAME}-database-credentials
       labels:
-        app: metabase
+        app: ${APP_NAME}
         service: ${METABASE_SERVICE_NAME}
   stringData:
     username: ${POSTGRESQL_USER}
@@ -97,7 +100,7 @@ objects:
   metadata:
     name: ${METABASE_SERVICE_NAME}-database
     labels:
-      app: metabase
+      app: ${APP_NAME}
       service: ${METABASE_SERVICE_NAME}
   spec:
     accessModes:
@@ -109,7 +112,7 @@ objects:
   kind: ImageStream
   metadata:
     labels:
-      app: metabase
+      app: ${APP_NAME}
     name: ${METABASE_SERVICE_NAME}
   spec:
     tags:
@@ -127,7 +130,7 @@ objects:
       template.openshift.io/expose-uri: http://{.spec.clusterIP}:{.spec.ports[?(.name=="${METABASE_SERVICE_NAME}")].port}
     name: ${METABASE_SERVICE_NAME}
     labels:
-      app: metabase
+      app: ${APP_NAME}
       service: ${METABASE_SERVICE_NAME}
   spec:
     ports:
@@ -136,7 +139,7 @@ objects:
       protocol: TCP
       targetPort: 3000
     selector:
-      app: metabase
+      app: ${APP_NAME}
       deploymentconfig: ${METABASE_SERVICE_NAME}
     sessionAffinity: None
     type: ClusterIP
@@ -161,7 +164,7 @@ objects:
   metadata:
     name: ${METABASE_SERVICE_NAME}
     labels:
-      app: metabase
+      app: ${APP_NAME}
       service: ${METABASE_SERVICE_NAME}
   spec:
     host: ${METABASE_ROUTE_HOST}
@@ -176,7 +179,8 @@ objects:
   metadata:
     name: ${METABASE_SERVICE_NAME}-database
     labels:
-      app.kubernetes.io/part-of: prime
+      app.kubernetes.io/part-of: ${APP_NAME}
+      app.openshift.io/runtime: postgresql
   spec:
     replicas: 1
     selector:
@@ -261,23 +265,23 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"metabase-database"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${METABASE_SERVICE_NAME}-database"}]  
     name: ${METABASE_SERVICE_NAME}
     labels:
-      app: metabase
+      app: ${APP_NAME}
       service: ${METABASE_SERVICE_NAME}
       app.kubernetes.io/part-of: prime
   spec:
     replicas: 1
     selector:
-      app: metabase
+      app: ${APP_NAME}
       deploymentconfig: ${METABASE_SERVICE_NAME}
     strategy:
       type: Recreate
     template:
       metadata:
         labels:
-          app: metabase
+          app: ${APP_NAME}
           service: ${METABASE_SERVICE_NAME}
           deploymentconfig: ${METABASE_SERVICE_NAME}
           template: metabase
@@ -349,5 +353,5 @@ objects:
         - ${METABASE_SERVICE_NAME}
         from:
           kind: ImageStreamTag
-          name: ${METABASE_SERVICE_NAME}:latest
+          name: ${METABASE_IMAGE}
         lastTriggeredImage: ""

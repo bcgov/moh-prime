@@ -31,6 +31,7 @@ labels:
 metadata:
   labels:
     app.kubernetes.io/part-of: ${SVC_NAME}
+    app.openshift.io/runtime: golang
   name: mailhog
   annotations:
     openshift.io/display-name: "Mailhog"
