@@ -47,13 +47,13 @@ COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
-RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-    dnf -qy module disable postgresql && \
-    dnf install -y postgresql10
+RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    yum -qy module disable postgresql && \
+    yum install -y postgresql10
 
-RUN dnf update && \
-    dnf install -yqq gpgv gnupg2 wget && \
-    dnf install -yf libfontconfig1 libxrender1 libgdiplus xvfb
+RUN yum update && \
+    yum install -yqq gpgv gnupg2 wget && \
+    yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb
 
 RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
