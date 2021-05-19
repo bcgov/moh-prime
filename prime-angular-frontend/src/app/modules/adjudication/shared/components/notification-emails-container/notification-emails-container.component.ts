@@ -40,7 +40,5 @@ export class NotificationEmailsContainerComponent implements OnInit {
     ];
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
