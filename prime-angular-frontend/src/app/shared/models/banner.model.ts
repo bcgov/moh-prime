@@ -27,6 +27,10 @@ export class BannerViewModel {
   }
 
   public static toBanner(bannerVm: BannerViewModel): Banner {
+    if (!bannerVm) {
+      return null;
+    }
+
     const start = moment(bannerVm.startDate).local();
     const end = moment(bannerVm.endDate).local();
 
