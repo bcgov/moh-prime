@@ -1,7 +1,8 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-maintenance-container',
@@ -34,7 +35,5 @@ export class MaintenanceContainerComponent implements OnInit {
     ];
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
