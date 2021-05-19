@@ -16,7 +16,7 @@ parameters:
   required: false
 - name: METABASE_IMAGE
   displayName: Metabase Docker Image
-  value: registry.hub.docker.com/metabase/metabase:latest
+  value: registry.hub.docker.com/metabase/metabase:v0.39.2
   description: The metabase docker image to use
   required: true
 - description: Version of PostgreSQL image to be used (9.4, 9.5, 9.6 or latest).
