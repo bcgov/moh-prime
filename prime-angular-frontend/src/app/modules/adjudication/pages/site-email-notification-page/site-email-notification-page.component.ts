@@ -1,10 +1,13 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-site-email-notification-page',
@@ -29,7 +32,7 @@ export class SiteEmailNotificationPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../']);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getEmailTemplate();
   }
 
