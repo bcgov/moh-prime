@@ -15,13 +15,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class SiteRegistrationTableComponent implements OnInit {
   @Input() public dataSource: MatTableDataSource<SiteRegistrationListViewModel>;
+  @Input() public columns: string[];
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public notify: EventEmitter<number>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
-
-  public columns: string[];
 
   public SiteStatusType = SiteStatusType;
   public CareSettingEnum = CareSettingEnum;

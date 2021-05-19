@@ -56,7 +56,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack() {
-    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING]);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING);
   }
 
   public ngOnInit(): void {
