@@ -155,6 +155,10 @@ namespace PrimeTests.UnitTests
 
             // No changes should definitely pass Minor Update rule
             await AssertAllowableChanges(true, enrollee, profile);
+
+            // Changing a job title should still pass Minor Update rule
+            profile.OboSites.First().JobTitle = "BS Executive";
+            await AssertAllowableChanges(true, enrollee, profile);
         }
 
         [Fact]
