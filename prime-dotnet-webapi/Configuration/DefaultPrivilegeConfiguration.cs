@@ -121,11 +121,11 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 2, PrivilegeId = 19 },
 
                     // Special
-                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 5  },
-                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 6  },
-                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 7  },
-                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 8  },
-                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 9  },
+                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 5 },
+                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 6 },
+                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 7 },
+                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 8 },
+                    new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 9 },
                     new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 10 },
                     new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 11 },
                     new DefaultPrivilege { LicenseCode = 3, PrivilegeId = 12 },
