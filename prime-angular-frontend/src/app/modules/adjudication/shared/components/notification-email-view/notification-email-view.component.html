@@ -2,7 +2,7 @@
                     class="mb-4"
                     [divider]="false">
   <ng-container appPageSubheaderTitle>
-    {{EmailTemplateTypeEnum[emailTemplate.emailType] | replace: '_':' ' | capitalize: true}}
+    {{ EmailTemplateTypeEnum[emailTemplate.emailType] | replace: '_':' ' | capitalize: true }}
   </ng-container>
   <ng-container appPageSubheaderSummary>
     This is what the "{{ EmailTemplateTypeEnum[emailTemplate.emailType] | replace: '_':' ' | capitalize: true }}" email
