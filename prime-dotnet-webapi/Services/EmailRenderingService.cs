@@ -111,7 +111,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteApprovedHibcEmail(SiteApprovalEmailViewModel viewModel)
+        public async Task<Email> RenderSiteApprovedHibcEmailAsync(SiteApprovalEmailViewModel viewModel)
         {
             return new Email
             (
