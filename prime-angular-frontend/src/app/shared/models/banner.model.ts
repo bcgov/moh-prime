@@ -1,5 +1,5 @@
 import { BannerType } from '@shared/enums/banner-type.enum';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 export interface Banner {
   bannerType: BannerType;
@@ -16,8 +16,8 @@ export class BannerViewModel {
     public bannerType: BannerType,
     public title: string,
     public content: string,
-    public startDate: moment.Moment,
-    public endDate: moment.Moment
+    public startDate: Moment,
+    public endDate: Moment
   ) {
     this.bannerType = bannerType;
     this.title = title;
