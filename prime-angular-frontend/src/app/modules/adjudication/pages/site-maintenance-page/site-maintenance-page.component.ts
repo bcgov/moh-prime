@@ -6,10 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./site-maintenance-page.component.scss']
 })
 export class SiteMaintenancePageComponent implements OnInit {
-
   constructor() { }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
