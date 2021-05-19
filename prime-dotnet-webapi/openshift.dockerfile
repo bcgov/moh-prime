@@ -47,13 +47,13 @@ COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
-RUN apt-get update && \
-    apt-get install -yqq gpgv gnupg2 wget && \
+RUN yum update && \
+    yum install -yqq gpgv gnupg2 wget && \
     echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    apt-get update && \
-    apt-get install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
-    apt-get install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
+    yum update && \
+    yum install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
+    yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
     chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \
