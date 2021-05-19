@@ -131,7 +131,7 @@ objects:
                   name: keycloak
             env:
               - name: DOCUMENT_MANAGER_URL
-                value: ${FRONTEND_URL}/api/docman
+                value: ${SVC_NAME}${URL_STUB}/api/docman
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -204,7 +204,7 @@ objects:
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
-  metadata:
+  metadata:            -p DOCMAN_URL=
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
