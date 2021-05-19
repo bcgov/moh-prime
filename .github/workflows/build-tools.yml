@@ -184,3 +184,11 @@ jobs:
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+          oc process -f infrastructure/mailhog-template.yml \
+            -p MAILHOG_SERVICE_NAME=mailhog-server \
+            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+          
+          oc process -f infrastructure/metabase-template.yml \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
