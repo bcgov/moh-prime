@@ -112,7 +112,8 @@ namespace Prime.Services.Rules
             }
 
             // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
-            if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
+            //            if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
+            if (_updatedProfile.SelfDeclarations.Any(sd => (sd.DocumentGuids != null && sd.DocumentGuids.Any()))
                 || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
             {
                 return Task.FromResult(false);
@@ -183,6 +184,11 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<SelfDeclaration>(x => x.Enrollee);
             config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
             config.IgnoreProperty<SelfDeclaration>(x => x.DocumentGuids);
+
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.Id);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.EnrolleeId);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.HealthAuthority);
 
             return new CompareLogic(config);
         }
