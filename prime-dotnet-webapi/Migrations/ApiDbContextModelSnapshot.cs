@@ -8558,10 +8558,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("StartTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")

@@ -16,23 +16,23 @@ export class BannerViewModel {
     public bannerType: BannerType,
     public title: string,
     public content: string,
-    public startDate: Moment,
-    public endDate: Moment
+    public startTimestamp: Moment,
+    public endTimestamp: Moment
   ) {
     this.bannerType = bannerType;
     this.title = title;
     this.content = content;
-    this.startDate = startDate;
-    this.endDate = endDate;
+    this.startTimestamp = startTimestamp;
+    this.endTimestamp = endTimestamp;
   }
 
-  public static toBanner(bannerVm: BannerViewModel): Banner {
+  public static toBanner(bannerVm: BannerViewModel): Banner | null {
     if (!bannerVm) {
       return null;
     }
 
-    const start = moment(bannerVm.startDate).local();
-    const end = moment(bannerVm.endDate).local();
+    const start = moment(bannerVm.startTimestamp).local();
+    const end = moment(bannerVm.endTimestamp).local();
 
     return {
       bannerType: bannerVm.bannerType,

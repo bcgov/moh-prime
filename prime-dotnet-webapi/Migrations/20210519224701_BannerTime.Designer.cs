@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210518183206_BannerTime")]
+    [Migration("20210519224701_BannerTime")]
     partial class BannerTime
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -8560,10 +8560,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime>("EndTimestamp")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime>("StartTimestamp")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Title")
