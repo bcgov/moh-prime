@@ -10,7 +10,7 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new BusinessEventType { Code = 1, Name = "Status Changes"      },
+                    new BusinessEventType { Code = 1, Name = "Status Change"      },
                     new BusinessEventType { Code = 2, Name = "Email"              },
                     new BusinessEventType { Code = 3, Name = "Note"               },
                     new BusinessEventType { Code = 4, Name = "Admin Claim"        },
