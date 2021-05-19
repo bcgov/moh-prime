@@ -1,7 +1,5 @@
-import { Moment } from 'moment';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import moment from 'moment';
-// import * as moment from 'moment';
 
 export interface Banner {
   bannerType: BannerType;
@@ -14,11 +12,19 @@ export interface Banner {
 }
 
 export class BannerViewModel {
-  public bannerType: BannerType;
-  public title: string;
-  public content: string;
-  public startDate: Moment;
-  public endDate: Moment;
+  public constructor(
+    public bannerType: BannerType,
+    public title: string,
+    public content: string,
+    public startDate: moment.Moment,
+    public endDate: moment.Moment
+  ) {
+    this.bannerType = bannerType;
+    this.title = title;
+    this.content = content;
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
 
   public static toBanner(bannerVm: BannerViewModel): Banner {
     const start = moment(bannerVm.startDate).local();
@@ -35,27 +41,19 @@ export class BannerViewModel {
     };
   }
 
-  public static fromBanner(banner: Banner): BannerViewModel {
-    const startDate = moment(banner.startDate);
-    const startTime = moment(banner.startTime, 'HHmm');
-    const endDate = moment(banner.endDate);
-    const endTime = moment(banner.endTime, 'HHmm');
+  public static fromBanner({ bannerType, title, content, startDate, startTime, endDate, endTime }: Banner): BannerViewModel {
+    const parsedStartTime = moment(startTime, 'HHmm');
+    const parsedEndTime = moment(endTime, 'HHmm');
 
-    const start = startDate.set({
-      hour: startTime.get('hour'),
-      minute: startTime.get('minute')
+    const startDateTime = moment(startDate).set({
+      hour: parsedStartTime.get('hour'),
+      minute: parsedStartTime.get('minute')
     });
-    const end = endDate.set({
-      hour: endTime.get('hour'),
-      minute: endTime.get('minute')
+    const endDateTime = moment(endDate).set({
+      hour: parsedEndTime.get('hour'),
+      minute: parsedEndTime.get('minute')
     });
 
-    const vm = new BannerViewModel();
-    vm.bannerType = banner.bannerType;
-    vm.title = banner.title;
-    vm.content = banner.content;
-    vm.startDate = start;
-    vm.endDate = end;
-    return vm;
+    return new BannerViewModel(bannerType, title, content, startDateTime, endDateTime);
   }
 }
