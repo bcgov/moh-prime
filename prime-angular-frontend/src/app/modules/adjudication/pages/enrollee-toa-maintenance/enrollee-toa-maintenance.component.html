@@ -1,4 +1,6 @@
-<app-page mode="full">
+<app-page mode="full"
+          [showToolbar]="true"
+          (back)="back()">
   <app-page-header>TOA Maintenance</app-page-header>
   <app-page-subheader *ngIf="!previewingToa">
     <ng-container appPageSubheaderTitle>View TOA</ng-container>
@@ -32,13 +34,6 @@
 
   <div *ngIf="previewingToa">
     <div class="row mb-4">
-      <button mat-icon-button
-              color="primary"
-              type="button"
-              matTooltip="Back"
-              (click)="back()">
-        <mat-icon>chevron_left</mat-icon>
-      </button>
       <h2 class="ml-3">{{ AgreementTypeNameMap[previewingToa.agreementType] }}</h2>
     </div>
     <h3>Preview:</h3>
