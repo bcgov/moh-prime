@@ -77,7 +77,7 @@
                                    [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #endDatePicker></mat-datepicker>
             <mat-error *ngIf="endDate.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="dateRange.hasError('isSameOrBefore')">
+            <mat-error *ngIf="!endDate.hasError('required') && dateRange.hasError('isSameOrBefore')">
               End Date must be equal or greater than Start Date.
             </mat-error>
           </mat-form-field>
