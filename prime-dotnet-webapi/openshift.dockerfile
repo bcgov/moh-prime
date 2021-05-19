@@ -47,14 +47,15 @@ COPY --from=build /opt/app-root/app/out/ /opt/app-root/app
 COPY --from=build /opt/app-root/app/Configuration/ /opt/app-root/app/Configuration/
 COPY --from=build /opt/app-root/app/entrypoint.sh /opt/app-root/app
 
-RUN yum update && \
-    yum install -yqq gpgv gnupg2 wget && \
-    echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' >  /etc/apt/sources.list.d/pgdg.list && \
-    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
-    yum update && \
-    yum install -yqq --no-install-recommends postgresql-client-10 net-tools moreutils && \
-    yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb && \
-    chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
+RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+    dnf -qy module disable postgresql && \
+    dnf install -y postgresql10
+
+RUN dnf update && \
+    dnf install -yqq gpgv gnupg2 wget && \
+    dnf install -yf libfontconfig1 libxrender1 libgdiplus xvfb
+
+RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
     chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
