@@ -29,7 +29,7 @@ export class SiteEmailNotificationListPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getEmailTemplates();
   }
 
