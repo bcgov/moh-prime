@@ -9,7 +9,6 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
   styleUrls: ['./enrollee-maintenance-page.component.scss']
 })
 export class EnrolleeMaintenancePageComponent implements OnInit {
-
   private routeUtils: RouteUtils;
 
   constructor(
@@ -23,7 +22,5 @@ export class EnrolleeMaintenancePageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../']);
   }
 
-  ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
