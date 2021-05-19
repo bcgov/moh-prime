@@ -131,7 +131,7 @@ objects:
                   name: keycloak
             env:
               - name: DOCUMENT_MANAGER_URL
-                value: ${SVC_NAME}${URL_STUB}/api/docman
+                value: https://${SVC_NAME}${URL_STUB}/api/docman
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -179,7 +179,7 @@ objects:
   apiVersion: route.openshift.io/v1
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
-    namespace: 9c33a9-dev
+    namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
