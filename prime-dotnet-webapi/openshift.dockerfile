@@ -66,9 +66,9 @@ RUN yum update -y && \
     yum install -yqq gpg gnupg2 wget
 # RUN yum install -yqq libfontconfig1 libxrender1 libgdiplus xvfb
 
-RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
-    /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
-    chmod +x entrypoint.sh && \
+# RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
+#     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version 
+RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /var/run/ && \
     chmod -R 777 /opt/app-root && \
