@@ -112,7 +112,6 @@ namespace Prime.Services.Rules
             }
 
             // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
-            //            if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
             if (_updatedProfile.SelfDeclarations.Any(sd => (sd.DocumentGuids != null && sd.DocumentGuids.Any()))
                 || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
             {
