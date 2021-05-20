@@ -35,7 +35,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
-        [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [HttpPost("{enrolleeId}/submissions", Name = nameof(Submit))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

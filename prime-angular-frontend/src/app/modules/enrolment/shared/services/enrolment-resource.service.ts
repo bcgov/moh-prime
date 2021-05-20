@@ -82,7 +82,7 @@ export class EnrolmentResource {
 
   public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {
     const { id } = enrolment;
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission`, this.enrolmentAdapterRequest(enrolment))
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submissions`, this.enrolmentAdapterRequest(enrolment))
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
