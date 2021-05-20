@@ -117,7 +117,7 @@ namespace Prime.Services
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = (await FetchNewestAgreementVersionOfTypeAsync(dto.NewestAssignedAgreement.Value)).Id,
+                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(dto.NewestAssignedAgreement.Value),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(dto.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -286,8 +286,8 @@ namespace Prime.Services
                 agreementVersionList.Add(await FetchNewestAgreementVersionOfTypeAsync(type));
             }
             return agreementVersionList.AsQueryable()
-            .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
-            .ToList();
+                .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
+                .ToList();
         }
 
         /// <summary>
@@ -304,6 +304,16 @@ namespace Prime.Services
             }
         }
 
+        private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
+        {
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .OrderByDescending(a => a.EffectiveDate)
+                .Where(a => a.AgreementType == type)
+                .Select(a => a.Id)
+                .FirstAsync();
+        }
+
         private async Task<string> GetOrganizationName(int organizationId)
         {
             return await _context.Organizations
@@ -315,10 +325,10 @@ namespace Prime.Services
         private async Task<AgreementVersion> FetchNewestAgreementVersionOfTypeAsync(AgreementType type)
         {
             return await _context.AgreementVersions
-            .AsNoTracking()
-            .Where(av => av.AgreementType == type)
-            .OrderByDescending(av => av.EffectiveDate)
-            .FirstOrDefaultAsync();
+                .AsNoTracking()
+                .Where(av => av.AgreementType == type)
+                .OrderByDescending(av => av.EffectiveDate)
+                .FirstOrDefaultAsync();
         }
     }
 }
