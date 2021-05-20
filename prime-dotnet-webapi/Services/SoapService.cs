@@ -90,11 +90,13 @@ namespace Prime.Services
                 throw new ArgumentNullException("IPC missing.");
             }
 
+            // Ignore CPN, IPC, and MPID respectively
             string ignoreOtherOidsExpression = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
             var result = new PlrProvider
             {
                 // Primary attributes for PRIME
                 Ipc = internalProviderCode,
+                Cpn = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.3']/@extension", documentRoot, messageId),
                 // At this point, IdentifierType as OID
                 IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@root", documentRoot, messageId),
                 CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@extension", documentRoot, messageId),
@@ -145,7 +147,7 @@ namespace Prime.Services
             string faxNumberData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'fax')]/@value", documentRoot, messageId);
             if (faxNumberData != null)
             {
-                string[] faxNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(faxNumberData));
+                string[] faxNumberParts = SplitTelecomNumber(RemoveHL7v3TelecomType(faxNumberData));
                 if (faxNumberParts.Length == 2)
                 {
                     result.FaxAreaCode = faxNumberParts[0];
@@ -170,7 +172,7 @@ namespace Prime.Services
             string telephoneNumData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'tel')]/@value", documentRoot, messageId);
             if (telephoneNumData != null)
             {
-                string[] telephoneNumberParts = SplitHL7v3TelecomNumber(RemoveHL7v3TelecomType(telephoneNumData));
+                string[] telephoneNumberParts = SplitTelecomNumber(RemoveHL7v3TelecomType(telephoneNumData));
                 if (telephoneNumberParts.Length == 2)
                 {
                     result.TelephoneAreaCode = telephoneNumberParts[0];
@@ -201,7 +203,7 @@ namespace Prime.Services
         /// <param name="telecomNumber">Expects a 10-digit string but works with other input</param>
         /// <returns>A 2-element array containing area code and local number, if input was a 10-digit string.
         ///     Otherwise, simply returns <c>telecomNumber</c> as the single element in the array</returns>
-        public static string[] SplitHL7v3TelecomNumber(string telecomNumber)
+        public static string[] SplitTelecomNumber(string telecomNumber)
         {
             var allDigitsRegex = new Regex("^[0-9]+$");
             if (telecomNumber != null && telecomNumber.Length == 10 && allDigitsRegex.IsMatch(telecomNumber))
