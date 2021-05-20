@@ -78,7 +78,6 @@ namespace Prime
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
-            services.AddScoped<IAgreementVersionService, AgreementVersionService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

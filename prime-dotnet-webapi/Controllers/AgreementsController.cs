@@ -16,13 +16,13 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AgreementVersionsController : ControllerBase
+    public class AgreementsController : ControllerBase
     {
-        private readonly IAgreementVersionService _agreementVersionService;
+        private readonly IAgreementService _agreementService;
 
-        public AgreementVersionsController(IAgreementVersionService agreementVersionService)
+        public AgreementsController(IAgreementService agreementService)
         {
-            _agreementVersionService = agreementVersionService;
+            _agreementService = agreementService;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
         {
-            var result = await _agreementVersionService.GetLatestEnrolleeAgreementVersionsAsync();
+            var result = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
             return Ok(ApiResponse.Result(result));
         }
     }

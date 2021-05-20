@@ -211,7 +211,7 @@ export class EnrolmentResource {
   // ---
 
   public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
-    return this.apiResource.get<AgreementVersion[]>('agreementversions/enrollee/latest')
+    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
       .pipe(
         map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
         tap((agreementVersion: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersion)),
