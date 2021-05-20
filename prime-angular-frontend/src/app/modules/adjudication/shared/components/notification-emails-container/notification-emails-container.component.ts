@@ -27,7 +27,7 @@ export class NotificationEmailsContainerComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.LOGIN_PAGE));
   }
 
-  public onView(id: number) {
+  public onView(id: number): void {
     this.routeUtils.routeRelativeTo([id]);
   }
 

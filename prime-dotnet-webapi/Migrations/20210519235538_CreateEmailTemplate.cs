@@ -1,11 +1,10 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
-    public partial class CreateEmailTemplateTableWithInitialData : Migration
+    public partial class CreateEmailTemplate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,6 +26,12 @@ namespace Prime.Migrations
                 {
                     table.PrimaryKey("PK_EmailTemplate", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EmailTemplate_EmailType",
+                table: "EmailTemplate",
+                column: "EmailType",
+                unique: true);
 
             migrationBuilder.InsertData(
             table: "EmailTemplate",

@@ -37,13 +37,15 @@ namespace Prime.Auth
         // User Roles
         public const string PrimeEnrollee = "prime_user";
         public const string PrimeSuperAdmin = "prime_super_admin";
-        public const string PrimeAdministrant = "prime_administrant";
         public const string ViewEnrollee = "enrollee_view";
         public const string TriageEnrollee = "enrollee_triage";
         public const string ApproveEnrollee = "enrollee_approve";
         public const string ManageEnrollee = "enrollee_elevated_management";
         public const string ViewSite = "site_view";
         public const string EditSite = "site_edit";
+
+        // Business value role that doesn't represent a permission
+        public const string PrimeAdministrant = "prime_administrant";
 
         // Service Account Roles
         public const string ExternalHpdidAccess = "external_hpdid_access";

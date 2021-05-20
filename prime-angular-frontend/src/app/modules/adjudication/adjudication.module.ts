@@ -60,10 +60,8 @@ import { NotificationEmailsContainerComponent } from './shared/components/notifi
 import { NotificationEmailViewComponent } from './shared/components/notification-email-view/notification-email-view.component';
 import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
-import { SiteEmailNotificationListPageComponent } from './pages/site-email-notification-list-page/site-email-notification-list-page.component';
-import { EnrolleeEmailNotificationListPageComponent } from './pages/enrollee-email-notification-list-page/enrollee-email-notification-list-page.component';
-import { EnrolleeEmailNotificationPageComponent } from './pages/enrollee-email-notification-page/enrollee-email-notification-page.component';
-import { SiteEmailNotificationPageComponent } from './pages/site-email-notification-page/site-email-notification-page.component';
+import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
+import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
 
 @NgModule({
   declarations: [
@@ -117,10 +115,8 @@ import { SiteEmailNotificationPageComponent } from './pages/site-email-notificat
     NotificationEmailViewComponent,
     EnrolleeMaintenancePageComponent,
     SiteMaintenancePageComponent,
-    SiteEmailNotificationListPageComponent,
-    EnrolleeEmailNotificationListPageComponent,
-    EnrolleeEmailNotificationPageComponent,
-    SiteEmailNotificationPageComponent
+    EmailNotificationListPageComponent,
+    EmailNotificationViewPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

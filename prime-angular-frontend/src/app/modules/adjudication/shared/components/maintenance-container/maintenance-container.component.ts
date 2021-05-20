@@ -22,11 +22,11 @@ export class MaintenanceContainerComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.LOGIN_PAGE));
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
+  public onRoute(routePath: string | (string | number)[]): void {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public getEmailSummary() {
+  public getEmailSummary(): { key: string, value: string }[] {
     return [
       {
         key: 'View the notification emails',

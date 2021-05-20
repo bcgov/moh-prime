@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210518180908_CreateEmailTemplateTableWithInitialData")]
-    partial class CreateEmailTemplateTableWithInitialData
+    [Migration("20210519235538_CreateEmailTemplate")]
+    partial class CreateEmailTemplate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -13570,6 +13570,9 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmailType")
+                        .IsUnique();
 
                     b.ToTable("EmailTemplate");
                 });

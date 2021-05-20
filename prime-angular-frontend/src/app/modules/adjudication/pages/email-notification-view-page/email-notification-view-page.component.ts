@@ -10,11 +10,11 @@ import { EmailTemplate } from '@adjudication/shared/models/email-template.model'
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
 
 @Component({
-  selector: 'app-site-email-notification-page',
-  templateUrl: './site-email-notification-page.component.html',
-  styleUrls: ['./site-email-notification-page.component.scss']
+  selector: 'app-email-notification-view-page',
+  templateUrl: './email-notification-view-page.component.html',
+  styleUrls: ['./email-notification-view-page.component.scss']
 })
-export class SiteEmailNotificationPageComponent implements OnInit {
+export class EmailNotificationViewPageComponent implements OnInit {
   public busy: Subscription;
   public template: EmailTemplate;
 
@@ -28,7 +28,7 @@ export class SiteEmailNotificationPageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.NOTIFICATION_EMAILS));
   }
 
-  public onBack() {
+  public onBack(): void {
     this.routeUtils.routeRelativeTo(['../']);
   }
 
@@ -37,6 +37,8 @@ export class SiteEmailNotificationPageComponent implements OnInit {
   }
 
   public getEmailTemplate() {
-    this.busy = this.emailTemplateResource.getEmailTemplate(this.route.snapshot.params.eid).subscribe(template => this.template = template);
+    //TODO: Future filter by url for either enrollee or site
+    this.busy = this.emailTemplateResource.getEmailTemplate(this.route.snapshot.params.eid)
+      .subscribe(template => this.template = template);
   }
 }

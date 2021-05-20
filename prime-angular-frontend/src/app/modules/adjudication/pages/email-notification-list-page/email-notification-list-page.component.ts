@@ -7,13 +7,13 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-enrollee-email-notification-page',
-  templateUrl: './enrollee-email-notification-page.component.html',
-  styleUrls: ['./enrollee-email-notification-page.component.scss']
+  selector: 'app-email-notification-list-page',
+  templateUrl: './email-notification-list-page.component.html',
+  styleUrls: ['./email-notification-list-page.component.scss']
 })
-export class EnrolleeEmailNotificationPageComponent implements OnInit {
+export class EmailNotificationListPageComponent implements OnInit {
+  public templates: EmailTemplate[];
   public busy: Subscription;
-  public template: EmailTemplate;
 
   private routeUtils: RouteUtils;
 
@@ -25,15 +25,17 @@ export class EnrolleeEmailNotificationPageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.NOTIFICATION_EMAILS));
   }
 
-  public onBack() {
-    this.routeUtils.routeRelativeTo(['../']);
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
   }
 
-  ngOnInit(): void {
-    this.getEmailTemplate();
+  public ngOnInit(): void {
+    this.getEmailTemplates();
   }
 
-  public getEmailTemplate() {
-    this.busy = this.emailTemplateResource.getEmailTemplate(this.route.snapshot.params.eid).subscribe(template => this.template = template);
+  private getEmailTemplates() {
+    //TODO: Future filter by url for either enrollee or site
+    this.busy = this.emailTemplateResource.getEmailTemplates()
+      .subscribe(templates => this.templates = templates);
   }
 }

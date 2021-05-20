@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
+using Prime.ViewModels.Emails;
 
 namespace Prime.Controllers
 {
@@ -16,10 +17,12 @@ namespace Prime.Controllers
     public class EmailsController : ControllerBase
     {
         private readonly IEmailService _emailService;
+        private readonly IEmailTemplateService _emailTemplateService;
 
-        public EmailsController(IEmailService emailService)
+        public EmailsController(IEmailService emailService, IEmailTemplateService emailTemplateService)
         {
             _emailService = emailService;
+            _emailTemplateService = emailTemplateService;
         }
 
         // POST: api/Emails/management/statuses
@@ -51,6 +54,39 @@ namespace Prime.Controllers
             await _emailService.SendEnrolleeRenewalEmails();
 
             return NoContent();
+        }
+
+        // Email Templates
+
+        // GET: api/emails/management/templates
+        /// <summary>
+        /// Get email templates
+        /// </summary>
+        [HttpGet("", Name = nameof(GetEmailTemplates))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateListViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEmailTemplates()
+        {
+            var templates = await _emailTemplateService.GetEmailTemplatesAsync();
+            return Ok(ApiResponse.Result(templates));
+        }
+
+        // GET: api/emails/management/templates/1
+        /// <summary>
+        /// Get email template by ID
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        [HttpGet("{emailTemplateId}", Name = nameof(GetEmailTemplate))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEmailTemplate(int emailTemplateId)
+        {
+            var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
+            return Ok(ApiResponse.Result(template));
         }
     }
 }

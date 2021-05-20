@@ -19,7 +19,7 @@ export class EmailTemplateResourceService {
   ) { }
 
   public getEmailTemplates(): Observable<EmailTemplate[]> {
-    return this.apiResource.get<EmailTemplate[]>(`email-templates`)
+    return this.apiResource.get<EmailTemplate[]>(`emails/management/templates`)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate[]>) => response.result),
         tap((templates: EmailTemplate[]) => this.logger.info('EMAIL_TEMPLATES', templates)),
@@ -32,7 +32,7 @@ export class EmailTemplateResourceService {
   }
 
   public getEmailTemplate(id: number): Observable<EmailTemplate> {
-    return this.apiResource.get<EmailTemplate>(`email-templates/${id}`)
+    return this.apiResource.get<EmailTemplate>(`emails/management/templates/${id}`)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate>) => response.result),
         tap((template: EmailTemplate) => this.logger.info('EMAIL_TEMPLATE', template)),

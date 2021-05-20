@@ -11549,6 +11549,9 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmailType")
+                        .IsUnique();
+
                     b.ToTable("EmailTemplate");
                 });
 
