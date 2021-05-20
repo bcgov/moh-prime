@@ -33,7 +33,9 @@ RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:Microso
 RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 RUN dotnet tool install --global dotnet-ef --version 5.0.6
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
-
+########################################
+###   Stage 2 - Runtime environment  ###
+########################################
 FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
@@ -45,15 +47,10 @@ ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
 ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
 ENV SUFFIX "${SUFFIX}"
 ENV DB_HOST "$DB_HOST"
-
-########################################
-###   Stage 2 - Runtime environment  ###
-########################################
-FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
-USER 0
+
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app /opt/app-root/app
 
