@@ -10,10 +10,10 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new CareSetting { Code = 1, Name = "Health Authority",                  CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new CareSetting { Code = 2, Name = "Private Community Health Practice", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new CareSetting { Code = 3, Name = "Community Pharmacy",                CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new CareSetting { Code = 4, Name = "Device Provider",                   CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new CareSetting { Code = 1, Name = "Health Authority"                  },
+                    new CareSetting { Code = 2, Name = "Private Community Health Practice" },
+                    new CareSetting { Code = 3, Name = "Community Pharmacy"                },
+                    new CareSetting { Code = 4, Name = "Device Provider"                   }
                 };
             }
         }

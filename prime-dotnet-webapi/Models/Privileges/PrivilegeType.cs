@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("PrivilegeTypeLookup")]
-    public class PrivilegeType : BaseAuditable, ILookup<int>
+    public class PrivilegeType : ILookup<int>
     {
         public readonly static int PHARMANET_TRANSACTIONS = 2;
 
