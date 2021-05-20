@@ -62,7 +62,7 @@ COPY --from=build /opt/app-root/app /opt/app-root/app
 RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
     yum install -y postgresql10
 
-RUN yum update && \
+RUN yum update -y && \
     yum install -yqq gpgv gnupg2 wget && \
     yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb
 
