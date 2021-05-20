@@ -15,6 +15,9 @@ namespace Prime.Models
         /// <summary>PLR's internal identifier, Internal Party Code.</summary>
         public string Ipc { get; set; }
 
+        /// <summary>"Common Party Number" which PLR uses to associate providers that are likely the same person, e.g. a person that is both a MD and pharmacist</summary>
+        public string Cpn { get; set; }
+
         /// <summary>The type of identifier that <c>CollegeId</c> represents.</summary>
         public string IdentifierType { get; set; }
 
