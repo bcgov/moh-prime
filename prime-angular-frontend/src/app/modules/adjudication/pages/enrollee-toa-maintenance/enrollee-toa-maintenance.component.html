@@ -1,4 +1,5 @@
 <app-page mode="full"
+          [busy]="busy"
           [showToolbar]="true"
           (back)="onBack()">
   <app-page-header>TOA Maintenance</app-page-header>
@@ -9,10 +10,10 @@
     </ng-container>
   </app-page-subheader>
 
-  <div class="row"
-       [hidden]="previewingToa">
-    <div class="d-flex mb-4 col-6"
-         *ngFor="let av of enrolleeAgreementVersions$ | async">
+  <div *ngIf="!previewingToa; else toaPreview"
+       class="row">
+    <div *ngFor="let av of enrolleeAgreementVersions"
+         class="d-flex mb-4 col-6">
       <mat-card class="w-100">
         <mat-card-header>
           <mat-card-title>
@@ -32,7 +33,7 @@
     </div>
   </div>
 
-  <div *ngIf="previewingToa">
+  <ng-template #toaPreview>
     <div class="row mb-4">
       <h2 class="ml-3">{{ AgreementTypeNameMap[previewingToa.agreementType] }}</h2>
     </div>
@@ -40,6 +41,6 @@
 
     <div class="access-term-wrapper"
          [innerHTML]="previewingToa.agreementContent"></div>
-  </div>
+  </ng-template>
 
 </app-page>

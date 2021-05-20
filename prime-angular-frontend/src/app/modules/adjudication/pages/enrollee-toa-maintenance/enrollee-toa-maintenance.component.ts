@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
@@ -17,7 +17,8 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
   styleUrls: ['./enrollee-toa-maintenance.component.scss']
 })
 export class EnrolleeToaMaintenanceComponent implements OnInit {
-  public enrolleeAgreementVersions$: Observable<AgreementVersion[]>;
+  public busy: Subscription;
+  public enrolleeAgreementVersions: AgreementVersion[];
   public AgreementTypeNameMap = AgreementTypeNameMap;
   public previewingToa: AgreementVersion;
 
@@ -36,12 +37,13 @@ export class EnrolleeToaMaintenanceComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.previewingToa 
+    this.previewingToa
       ? this.previewingToa = null
       : this.routeUtils.routeRelativeTo(['./']);
   }
 
   public ngOnInit(): void {
-    this.enrolleeAgreementVersions$ = this.enrolmentResource.getLatestAgreementVersions()
+    this.busy = this.enrolmentResource.getLatestAgreementVersions()
+      .subscribe((result) => this.enrolleeAgreementVersions = result);
   }
 }
