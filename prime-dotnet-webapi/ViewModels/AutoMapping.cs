@@ -82,7 +82,6 @@ public class AutoMapping : Profile
         CreateMap<Party, AuthorizedUserViewModel>();
 
         CreateMap<AgreementVersion, AgreementVersionViewModel>()
-            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp))
-            .ForMember(dest => dest.AgreementContent, opt => opt.MapFrom(src => src.Text));
+            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
     }
 }

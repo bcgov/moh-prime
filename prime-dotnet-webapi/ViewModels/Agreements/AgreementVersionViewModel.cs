@@ -8,6 +8,6 @@ namespace Prime.ViewModels
         public int Id { get; set; }
         public DateTimeOffset UpdatedDate { get; set; }
         public AgreementType AgreementType { get; set; }
-        public string AgreementContent { get; set; }
+        public string Text { get; set; }
     }
 }
