@@ -13,7 +13,6 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeApiServiceAccount)]
     public class EmailsController : ControllerBase
     {
         private readonly IEmailService _emailService;
@@ -31,6 +30,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="limit"></param>
         [HttpPost("management/statuses", Name = nameof(UpdateEmailLogStatuses))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
@@ -46,6 +46,7 @@ namespace Prime.Controllers
         /// Send enrollee renewal reminder emails
         /// </summary>
         [HttpPost("management/enrollees/renewal", Name = nameof(SendEnrolleeRenewalEmails))]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -62,8 +63,8 @@ namespace Prime.Controllers
         /// <summary>
         /// Get email templates
         /// </summary>
-        [HttpGet("", Name = nameof(GetEmailTemplates))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [HttpGet("management/templates", Name = nameof(GetEmailTemplates))]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateListViewModel>), StatusCodes.Status200OK)]
@@ -78,8 +79,8 @@ namespace Prime.Controllers
         /// Get email template by ID
         /// </summary>
         /// <param name="emailTemplateId"></param>
-        [HttpGet("{emailTemplateId}", Name = nameof(GetEmailTemplate))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [HttpGet("management/templates/{emailTemplateId}", Name = nameof(GetEmailTemplate))]
+        [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
