@@ -11,7 +11,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
-
 @Component({
   selector: 'app-enrollee-toa-maintenance',
   templateUrl: './enrollee-toa-maintenance.component.html',
@@ -23,7 +22,6 @@ export class EnrolleeToaMaintenanceComponent implements OnInit {
   public previewingToa: AgreementVersion;
 
   private routeUtils: RouteUtils;
-
 
   constructor(
     protected route: ActivatedRoute,
@@ -38,10 +36,9 @@ export class EnrolleeToaMaintenanceComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.previewingToa ?
-      this.previewingToa = null
-      :
-      this.routeUtils.routeRelativeTo(['./']);
+    this.previewingToa 
+      ? this.previewingToa = null
+      : this.routeUtils.routeRelativeTo(['./']);
   }
 
   public ngOnInit(): void {
