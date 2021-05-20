@@ -10,10 +10,10 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new Practice { Code = 1, Name = "Remote Practice",                                       CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new Practice { Code = 2, Name = "Reproductive Health - Sexually Transmitted Infections", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new Practice { Code = 3, Name = "Reproductive Health - Contraceptive Management",        CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new Practice { Code = 4, Name = "First Call",                                            CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new Practice { Code = 1, Name = "Remote Practice"                                       },
+                    new Practice { Code = 2, Name = "Reproductive Health - Sexually Transmitted Infections" },
+                    new Practice { Code = 3, Name = "Reproductive Health - Contraceptive Management"        },
+                    new Practice { Code = 4, Name = "First Call"                                            }
                 };
             }
         }
