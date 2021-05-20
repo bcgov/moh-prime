@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("SelfDeclarationTypeLookup")]
-    public class SelfDeclarationType : BaseAuditable
+    public class SelfDeclarationType
     {
         [Key]
         public int Code { get; set; }
