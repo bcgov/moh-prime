@@ -63,8 +63,8 @@ RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x
     yum install -y postgresql10
 
 RUN yum update -y && \
-    yum install -yqq gpgv gnupg2 wget && \
-    yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb
+    yum install -yqq gpg gnupg2 wget
+# RUN yum install -yqq libfontconfig1 libxrender1 libgdiplus xvfb
 
 RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
     /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
