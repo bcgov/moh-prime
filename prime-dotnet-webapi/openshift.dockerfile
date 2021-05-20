@@ -55,7 +55,7 @@ FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
-
+USER 0 
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app /opt/app-root/app
 
