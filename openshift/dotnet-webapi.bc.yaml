@@ -104,10 +104,10 @@ objects:
           name: latest
     resources:
       requests:
-        cpu: '1'
-        memory: 1Gi
-      limits:
         cpu: '2'
+        memory: 2Gi
+      limits:
+        cpu: '4'
         memory: 4Gi
     runPolicy: Serial
     status:
