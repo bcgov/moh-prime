@@ -5,18 +5,18 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
-
 @Component({
   selector: 'app-enrollee-maintenance',
   templateUrl: './enrollee-maintenance.component.html',
   styleUrls: ['./enrollee-maintenance.component.scss']
 })
 export class EnrolleeMaintenanceComponent implements OnInit {
+  public AdjudicationRoutes = AdjudicationRoutes;
+  
   private routeUtils: RouteUtils;
 
-  public AdjudicationRoutes = AdjudicationRoutes;
-
-  constructor(private route: ActivatedRoute,
+  constructor(
+    private route: ActivatedRoute,
     private router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
@@ -26,7 +26,5 @@ export class EnrolleeMaintenanceComponent implements OnInit {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
