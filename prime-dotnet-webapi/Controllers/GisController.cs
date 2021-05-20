@@ -175,7 +175,7 @@ namespace Prime.Controllers
 
             var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
-            if (result == true)
+            if (result)
             {
                 return Ok();
             }
