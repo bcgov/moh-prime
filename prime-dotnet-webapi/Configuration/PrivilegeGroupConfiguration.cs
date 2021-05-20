@@ -15,10 +15,10 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new PrivilegeGroup { Code = 1, PrivilegeTypeCode = 2, Name = "Submit and Access Claims", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new PrivilegeGroup { Code = 2, PrivilegeTypeCode = 2, Name = "Record Medical History",   CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new PrivilegeGroup { Code = 3, PrivilegeTypeCode = 2, Name = "Access Medical History",   CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new PrivilegeGroup { Code = 5, PrivilegeTypeCode = 1, Name = "RU That Can Have OBOs",    CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new PrivilegeGroup { Code = 1, PrivilegeTypeCode = 2, Name = "Submit and Access Claims" },
+                    new PrivilegeGroup { Code = 2, PrivilegeTypeCode = 2, Name = "Record Medical History"   },
+                    new PrivilegeGroup { Code = 3, PrivilegeTypeCode = 2, Name = "Access Medical History"   },
+                    new PrivilegeGroup { Code = 5, PrivilegeTypeCode = 1, Name = "RU That Can Have OBOs"    }
                 };
             }
         }
