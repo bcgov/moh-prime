@@ -1,8 +1,4 @@
-###################################
-### Stage 1 - Build environment ###
-###################################
-# FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-FROM registry.redhat.io/rhel8/dotnet-31 AS build
+FROM registry.access.redhat.com/ubi8/dotnet-50 AS build
 WORKDIR /opt/app-root/app
 ARG API_PORT 
 ARG ASPNETCORE_ENVIRONMENT
@@ -15,7 +11,7 @@ ARG DB_HOST
 
 ENV PATH="$PATH:/opt/rh/rh-dotnet31/root/usr/bin/:/opt/app-root/app/.dotnet/tools:/root/.dotnet/tools:/opt/app-root/.dotnet/tools"
 
-ENV API_PORT 8080
+ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
 ENV POSTGRESQL_PASSWORD "${POSTGRESQL_PASSWORD}"
 ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
@@ -36,8 +32,21 @@ RUN dotnet build "prime.csproj" -c Release -o /opt/app-root/app/out
 RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
 
 # Begin database migration setup
-RUN dotnet tool install --global dotnet-ef --version 3.1.1
+RUN dotnet publish -c Release -o /opt/app-root/app/out/ /p:MicrosoftNETPlatformLibrary=Microsoft.NETCore.App
+RUN dotnet tool install --global dotnet-ef --version 5.0.6
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
+
+FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
+USER 0
+ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
+ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
+ENV POSTGRESQL_PASSWORD "${POSTGRESQL_PASSWORD}"
+ENV POSTGRESQL_DATABASE "${POSTGRESQL_DATABASE}"
+ENV POSTGRESQL_ADMIN_PASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
+ENV POSTGRESQL_USER "${POSTGRESQL_USER}"
+ENV PGPASSWORD "${POSTGRESQL_ADMIN_PASSWORD}"
+ENV SUFFIX "${SUFFIX}"
+ENV DB_HOST "$DB_HOST"
 
 ########################################
 ###   Stage 2 - Runtime environment  ###
@@ -50,10 +59,21 @@ ENV API_PORT 8080
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app /opt/app-root/app
 
-# Install packages necessary for PRIME (incl. PostgreSQL client for waiting on DB, and wkhtmltopdf to render HTML into PDF)
-USER 0
-RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    dnf install -y postgresql10
+RUN yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
+    yum -qy module disable postgresql && \
+    yum install -y postgresql10
+
+RUN yum update && \
+    yum install -yqq gpgv gnupg2 wget && \
+    yum install -yf libfontconfig1 libxrender1 libgdiplus xvfb
+
+RUN chmod +x /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf && \
+    /opt/app-root/app/Resources/wkhtmltopdf/Linux/wkhtmltopdf --version && \
+    chmod +x entrypoint.sh && \
+    chmod 777 entrypoint.sh && \
+    chmod -R 777 /var/run/ && \
+    chmod -R 777 /opt/app-root && \
+    chmod -R 777 /opt/app-root/.*
 
 RUN chmod +x entrypoint.sh
 RUN chmod 777 entrypoint.sh

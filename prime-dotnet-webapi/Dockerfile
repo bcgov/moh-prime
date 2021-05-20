@@ -1,13 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:3.1
-ARG DB_HOST
-ARG PGPASSWORD
-ARG POSTGRESQL_ADMIN_PASSWORD
-ARG POSTGRESQL_USERNAME
-ARG POSTGRESQL_DATABASE
-ARG DB_CONNECTION_STRING
-ARG ASPNETCORE_HTTPS_PORT
-ARG ASPNETCORE_ENVIRONMENT
-ARG ASPNETCORE_URLS
+FROM mcr.microsoft.com/dotnet/sdk:5.0
 
 ENV DB_HOST ${DB_HOST}
 ENV PGPASSWORD ${POSTGRESQL_PASSWORD}
@@ -32,7 +23,7 @@ RUN apt-get update \
     && apt-get update && apt-get install -y apt-utils libgdiplus libc6-dev \
     && apt install -y procps
 
-RUN dotnet tool install --global dotnet-ef --version 3.1.14
+RUN dotnet tool install --global dotnet-ef --version 5.0.6
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
 ENV DOTNET_USE_POLLING_FILE_WATCHER 1
