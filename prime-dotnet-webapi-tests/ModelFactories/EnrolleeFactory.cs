@@ -100,6 +100,12 @@ namespace PrimeTests.ModelFactories
                             .ToList();
                     }
                 }
+
+                // An enrollee with certifications shouldn't have OboSites
+                if (x.Certifications != null && x.Certifications.Count > 0)
+                {
+                    x.OboSites = new List<OboSite>();
+                }
             });
         }
     }

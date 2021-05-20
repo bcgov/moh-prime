@@ -150,7 +150,12 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestAllowableChangesRule_Jobs()
         {
-            Enrollee enrollee = new EnrolleeFactory().Generate();
+            var factory = new EnrolleeFactory();
+            Enrollee enrollee = null;
+            do
+            {
+                enrollee = factory.Generate();
+            } while (enrollee.OboSites.Count < 1);
             EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
 
             // No changes should definitely pass Minor Update rule
