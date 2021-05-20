@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("BusinessEventTypeLookup")]
-    public sealed class BusinessEventType : BaseAuditable, ILookup<int>
+    public sealed class BusinessEventType : ILookup<int>
     {
         public const int STATUS_CHANGE_CODE = 1;
         public const int EMAIL_CODE = 2;
