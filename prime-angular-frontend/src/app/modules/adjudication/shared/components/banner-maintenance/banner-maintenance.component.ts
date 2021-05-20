@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ValidationErrors, Validators } from '@angular/forms';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -14,6 +14,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { Role } from '@auth/shared/enum/role.enum';
+import moment from 'moment';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -102,11 +103,19 @@ export class BannerMaintenanceComponent implements OnInit {
   }
 
   public get startDate(): FormControl {
-    return this.dateRange.controls['startDate'] as FormControl;
+    return this.dateRange.get('startDate') as FormControl;
+  }
+
+  public get startTime(): FormControl {
+    return this.dateRange.get('startTime') as FormControl;
   }
 
   public get endDate(): FormControl {
-    return this.dateRange.controls['endDate'] as FormControl;
+    return this.dateRange.get('endDate') as FormControl;
+  }
+
+  public get endTime(): FormControl {
+    return this.dateRange.get('endTime') as FormControl;
   }
 
   public onSubmit() {
@@ -151,7 +160,9 @@ export class BannerMaintenanceComponent implements OnInit {
   private patchForm(banner: Banner): void {
     this.form.patchValue(banner);
     this.startDate.setValue(banner.startDate);
+    this.startTime.setValue(banner.startTime);
     this.endDate.setValue(banner.endDate);
+    this.endTime.setValue(banner.endTime);
   }
 
   private get json(): Banner {
@@ -159,7 +170,9 @@ export class BannerMaintenanceComponent implements OnInit {
     return {
       ...banner,
       startDate: banner.dateRange.startDate,
-      endDate: banner.dateRange.endDate
+      startTime: banner.dateRange.startTime,
+      endDate: banner.dateRange.endDate,
+      endTime: banner.dateRange.endTime,
     };
   }
 
@@ -196,10 +209,36 @@ export class BannerMaintenanceComponent implements OnInit {
       dateRange: this.fb.group(
         {
           startDate: ['', [Validators.required]],
+          startTime: ['', [Validators.required]],
           endDate: ['', [Validators.required]],
+          endTime: ['', [Validators.required]],
         },
-        { validator: FormGroupValidators.isDateTimeSameOrBefore('startDate', 'endDate') })
+        { validator: this.isTimeValid })
     });
     this.isSameOrBeforeErrorStateMatcher = new IsSameOrBeforeErrorStateMatcher();
+  }
+
+  private isTimeValid(group: FormGroup): ValidationErrors | null {
+    const startDate = moment(group.get('startDate').value);
+    const startTime = moment(group.get('startTime').value, 'HHmm');
+    const endDate = moment(group.get('endDate').value);
+    const endTime = moment(group.get('endTime').value, 'HHmm');
+
+    const start = startDate.set({
+      hour: startTime.get('hour'),
+      minute: startTime.get('minute')
+    });
+    const end = endDate.set({
+      hour: endTime.get('hour'),
+      minute: endTime.get('minute')
+    });
+
+    if (!start || !end) {
+      return null;
+    }
+
+    return start.isSameOrBefore(end)
+      ? null
+      : { isSameOrBefore: true };
   }
 }
