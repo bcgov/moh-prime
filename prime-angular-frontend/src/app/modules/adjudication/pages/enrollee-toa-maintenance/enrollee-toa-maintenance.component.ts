@@ -37,7 +37,7 @@ export class EnrolleeToaMaintenanceComponent implements OnInit {
     this.previewingToa = agreementVersion;
   }
 
-  public back(): void {
+  public onBack(): void {
     this.previewingToa ?
       this.previewingToa = null
       :
