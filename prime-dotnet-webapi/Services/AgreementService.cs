@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
@@ -285,9 +283,7 @@ namespace Prime.Services
             {
                 agreementVersionList.Add(await FetchNewestAgreementVersionOfTypeAsync(type));
             }
-            return agreementVersionList.AsQueryable()
-                .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
-                .ToList();
+            return _mapper.Map<IEnumerable<AgreementVersionViewModel>>(agreementVersionList);
         }
 
         /// <summary>
