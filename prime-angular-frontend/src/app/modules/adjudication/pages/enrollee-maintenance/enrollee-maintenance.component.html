@@ -1,0 +1,31 @@
+<app-page mode="full">
+  <app-page-header>Maintenance</app-page-header>
+  <div class="row">
+    <div class="col-6">
+      <mat-card>
+        <mat-card-title class="d-flex align-items-center">
+          <div class="flex-grow-1">
+            TOA Maintenance
+          </div>
+          <div>
+            <button mat-icon-button
+                    [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item
+                      (click)="onRoute([AdjudicationRoutes.TOA])">
+                <mat-icon>preview</mat-icon>
+                <span>View existing TOA</span>
+              </button>
+            </mat-menu>
+          </div>
+        </mat-card-title>
+        <mat-card-content>
+          Edit an existing TOA or upload a new one.
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</app-page>

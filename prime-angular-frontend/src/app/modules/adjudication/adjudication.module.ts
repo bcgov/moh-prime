@@ -62,6 +62,8 @@ import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-p
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
+import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
+import { EnrolleeToaMaintenanceComponent } from './pages/enrollee-toa-maintenance/enrollee-toa-maintenance.component';
 
 @NgModule({
   declarations: [
@@ -116,7 +118,9 @@ import { EmailNotificationViewPageComponent } from './pages/email-notification-v
     EnrolleeMaintenancePageComponent,
     SiteMaintenancePageComponent,
     EmailNotificationListPageComponent,
-    EmailNotificationViewPageComponent
+    EmailNotificationViewPageComponent,
+    EnrolleeMaintenanceComponent,
+    EnrolleeToaMaintenanceComponent
   ],
   imports: [
     AdjudicationRoutingModule,

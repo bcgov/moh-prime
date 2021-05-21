@@ -1,7 +1,5 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
@@ -278,6 +276,16 @@ namespace Prime.Services
             return signedAgreement;
         }
 
+        public async Task<IEnumerable<AgreementVersionViewModel>> GetLatestEnrolleeAgreementVersionsAsync()
+        {
+            var agreementVersionList = new List<AgreementVersion>();
+            foreach (var type in AgreementTypeExtensions.EnrolleeAgreementTypes())
+            {
+                agreementVersionList.Add(await FetchNewestAgreementVersionOfTypeAsync(type));
+            }
+            return _mapper.Map<IEnumerable<AgreementVersionViewModel>>(agreementVersionList);
+        }
+
         /// <summary>
         /// Renders the HTML text of the Agreement for viewing on the frontend.
         /// </summary>
@@ -308,6 +316,15 @@ namespace Prime.Services
                 .Where(o => o.Id == organizationId)
                 .Select(o => o.Name)
                 .SingleAsync();
+        }
+
+        private async Task<AgreementVersion> FetchNewestAgreementVersionOfTypeAsync(AgreementType type)
+        {
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .Where(av => av.AgreementType == type)
+                .OrderByDescending(av => av.EffectiveDate)
+                .FirstOrDefaultAsync();
         }
     }
 }

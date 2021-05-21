@@ -84,5 +84,8 @@ public class AutoMapping : Profile
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
+
+        CreateMap<AgreementVersion, AgreementVersionViewModel>()
+            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
     }
 }
