@@ -55,8 +55,7 @@ WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app /opt/app-root/app
 
 RUN yum install -yqq https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm &&\
-    yum list postgresql* && \
-    yum install -yq postgresql10 postgresql 
+    yum install -yqq postgresql10.x86_64
     # yum install -yqq postgresql10 
 RUN yum install -yqq http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/xorg-x11-fonts-75dpi-7.5-19.el8.noarch.rpm && \
     yum install -yqq https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos8.x86_64.rpm
