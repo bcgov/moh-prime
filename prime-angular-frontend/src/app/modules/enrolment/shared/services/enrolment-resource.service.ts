@@ -214,10 +214,23 @@ export class EnrolmentResource {
     return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
       .pipe(
         map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
-        tap((agreementVersion: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersion)),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Agreement versions could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/enrollee/${agreementId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
           throw error;
         })
       );

@@ -26,13 +26,8 @@ export class MaintenanceContainerComponent implements OnInit {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public getEmailSummary(): { key: string, value: string }[] {
-    return [
-      {
-        key: 'View the notification emails',
-        value: ''
-      }
-    ];
+  public isEnrollee(): boolean {
+    return this.route.snapshot.data.filterBy === 'enrollee';
   }
 
   public ngOnInit(): void { }

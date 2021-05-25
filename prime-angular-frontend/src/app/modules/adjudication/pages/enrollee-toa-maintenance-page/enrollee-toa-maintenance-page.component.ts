@@ -13,10 +13,10 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 
 @Component({
   selector: 'app-enrollee-toa-maintenance',
-  templateUrl: './enrollee-toa-maintenance.component.html',
-  styleUrls: ['./enrollee-toa-maintenance.component.scss']
+  templateUrl: './enrollee-toa-maintenance-page.component.html',
+  styleUrls: ['./enrollee-toa-maintenance-page.component.scss']
 })
-export class EnrolleeToaMaintenanceComponent implements OnInit {
+export class EnrolleeToaMaintenancePageComponent implements OnInit {
   public busy: Subscription;
   public enrolleeAgreementVersions: AgreementVersion[];
   public AgreementTypeNameMap = AgreementTypeNameMap;

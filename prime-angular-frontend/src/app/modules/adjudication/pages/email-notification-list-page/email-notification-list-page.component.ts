@@ -26,7 +26,7 @@ export class EmailNotificationListPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
+    this.routeUtils.routeRelativeTo(['../']);
   }
 
   public ngOnInit(): void {

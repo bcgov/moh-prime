@@ -38,5 +38,20 @@ namespace Prime.Controllers
             var result = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
             return Ok(ApiResponse.Result(result));
         }
+
+        /// <summary>
+        /// Get an enrollee Agreement Version by id
+        /// </summary>
+        /// <param name="agreementId"></param>
+        [HttpGet("enrollee/{agreementId}", Name = nameof(GetEnrolleeAgreementVersionById))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeAgreementVersionById(int agreementId)
+        {
+            var result = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
+            return Ok(ApiResponse.Result(result));
+        }
     }
 }

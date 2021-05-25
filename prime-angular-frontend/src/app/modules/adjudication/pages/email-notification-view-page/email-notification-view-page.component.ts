@@ -29,7 +29,7 @@ export class EmailNotificationViewPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(['../']);
+    this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
   }
 
   public ngOnInit(): void {

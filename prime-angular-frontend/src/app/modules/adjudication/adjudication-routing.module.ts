@@ -35,6 +35,8 @@ import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site
 import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
+import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
+import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 
 const routes: Routes = [
   {
@@ -67,7 +69,7 @@ const routes: Routes = [
               {
                 path: '',
                 component: EnrolleeMaintenancePageComponent,
-                data: { title: 'Enrollee Maintenance' }
+                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
               },
               {
                 path: AdjudicationRoutes.NOTIFICATION_EMAILS,
@@ -84,6 +86,21 @@ const routes: Routes = [
                   },
                 ]
               },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeToaMaintenanceListPageComponent,
+                    data: { title: 'Enrollee TOA Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: EnrolleeToaMaintenanceViewPageComponent,
+                    data: { title: 'Enrollee TOA Maintenance' }
+                  },
+                ]
+              }
             ]
           },
           {
