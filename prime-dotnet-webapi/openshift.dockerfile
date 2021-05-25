@@ -36,7 +36,7 @@ RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/data
 ########################################
 ###   Stage 2 - Runtime environment  ###
 ########################################
-FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
+FROM AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
@@ -54,8 +54,10 @@ USER 0
 WORKDIR /opt/app-root/app
 COPY --from=build /opt/app-root/app /opt/app-root/app
 
-RUN yum install -yqq https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm &&\
-    yum install -yqq postgresql10.x86_64
+RUN yum install -yqq https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+RUN yum search postgresql
+RUN yum provides psql
+RUN yum install -yqq postgresql10
     # yum install -yqq postgresql10 
 RUN yum install -yqq http://mirror.centos.org/centos/8-stream/AppStream/x86_64/os/Packages/xorg-x11-fonts-75dpi-7.5-19.el8.noarch.rpm && \
     yum install -yqq https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos8.x86_64.rpm
