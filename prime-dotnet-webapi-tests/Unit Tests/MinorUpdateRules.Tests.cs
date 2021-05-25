@@ -151,7 +151,7 @@ namespace PrimeTests.UnitTests
         public async void TestAllowableChangesRule_Jobs()
         {
             // Request OBO enrollee
-            Enrollee enrollee = enrollee = new EnrolleeFactory().Generate("default,obo");
+            Enrollee enrollee = new EnrolleeFactory().Generate("default,obo");
             Assert.True(enrollee.Certifications.Count == 0);
             Assert.True(enrollee.OboSites.Count > 0);
             EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
