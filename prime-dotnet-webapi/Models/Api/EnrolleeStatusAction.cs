@@ -1,6 +1,6 @@
 namespace Prime.Models.Api
 {
-    public enum SubmissionAction
+    public enum EnrolleeStatusAction
     {
         Approve,
         AcceptToa,

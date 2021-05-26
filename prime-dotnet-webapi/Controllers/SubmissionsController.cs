@@ -31,7 +31,7 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-        // POST: api/enrollees/5/submission
+        // POST: api/enrollees/5/submissions
         /// <summary>
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
@@ -94,7 +94,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> ApproveSubmission(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.Approve);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.Approve);
         }
 
         // POST: api/enrollees/5/submission/accept-toa?documentGuid=12345-54321
@@ -113,7 +113,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> AcceptToa(int enrolleeId, [FromQuery] Guid? documentGuid = null)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.AcceptToa, documentGuid);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.AcceptToa, documentGuid);
         }
 
         // POST: api/enrollees/5/submission/decline-toa
@@ -130,7 +130,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeclineToa(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineToa);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.DeclineToa);
         }
 
         // POST: api/enrollees/5/submission/enable-editing
@@ -147,7 +147,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> EnableEditing(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.EnableEditing);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.EnableEditing);
         }
 
         // POST: api/enrollees/7/submission/cancel-toa
@@ -164,7 +164,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CancelToaAssignment(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.CancelToaAssignment);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.CancelToaAssignment);
         }
 
         // POST: api/enrollees/5/submission/lock-profile
@@ -181,7 +181,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> LockProfile(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.LockProfile);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.LockProfile);
         }
 
         // POST: api/enrollees/5/submission/decline-profile
@@ -198,7 +198,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeclineProfile(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineProfile);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.DeclineProfile);
         }
 
         // POST: api/enrollees/5/submission/rerun-rules
@@ -215,10 +215,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> RerunRules(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.RerunRules);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
-        private async Task<ActionResult> SubmissionActionInternal(int enrolleeId, SubmissionAction action, object additionalParameters = null)
+        private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -230,7 +230,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, action, additionalParameters);
+            var success = await _submissionService.PerformEnrolleeStatusActionAsync(enrolleeId, action, additionalParameters);
             if (!success)
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
