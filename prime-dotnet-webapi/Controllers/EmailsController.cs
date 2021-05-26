@@ -7,6 +7,7 @@ using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels.Emails;
+using System.Collections.Generic;
 
 namespace Prime.Controllers
 {
@@ -67,7 +68,7 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewEnrollee + "," + Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateListViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EmailTemplateListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEmailTemplates()
         {
             var templates = await _emailTemplateService.GetEmailTemplatesAsync();

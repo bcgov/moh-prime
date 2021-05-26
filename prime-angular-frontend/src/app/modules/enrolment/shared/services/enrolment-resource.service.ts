@@ -224,7 +224,7 @@ export class EnrolmentResource {
   }
 
   public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
-    return this.apiResource.get<AgreementVersion>(`agreements/enrollee/${agreementId}`)
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
       .pipe(
         map((response: ApiHttpResponse<AgreementVersion>) => response.result),
         tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),

@@ -39,17 +39,17 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(agreements));
         }
 
-        /// /api/agreements/enrollee/2
+        /// /api/agreements/2
         /// <summary>
         /// Get an enrollee Agreement Version by id
         /// </summary>
         /// <param name="agreementId"></param>
-        [HttpGet("enrollee/{agreementId}", Name = nameof(GetEnrolleeAgreementVersionById))]
+        [HttpGet("{agreementId}", Name = nameof(GetAgreementVersionById))]
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<AgreementVersionViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetEnrolleeAgreementVersionById(int agreementId)
+        [ProducesResponseType(typeof(ApiResultResponse<AgreementVersionListViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAgreementVersionById(int agreementId)
         {
             var agreement = await _agreementService.GetAgreementVersionById(agreementId);
             return Ok(ApiResponse.Result(agreement));

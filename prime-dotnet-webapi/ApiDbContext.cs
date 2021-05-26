@@ -177,10 +177,6 @@ namespace Prime
             modelBuilder.Entity<Admin>()
                 .HasIndex("UserId")
                 .IsUnique();
-
-            modelBuilder.Entity<EmailTemplate>()
-                .HasIndex("EmailType")
-                .IsUnique();
             #endregion
 
             #region Relationships
