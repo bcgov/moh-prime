@@ -147,36 +147,21 @@ namespace PrimeTests.UnitTests
             await AssertAllowableChanges(false, enrollee, profile);
         }
 
-        [Theory]
-        [InlineData(true, true)]
-        [InlineData(false, false)]
-        public async void TestAllowableChangesRule_Jobs(bool isObo, bool expected)
+        [Fact]
+        public async void TestAllowableChangesRule_Jobs()
         {
-            Enrollee enrollee = TestUtils.EnrolleeFaker.Generate();
-
-            if (isObo)
-            {
-                enrollee.Certifications.Clear();
-            }
-            else
-            {
-                enrollee.Certifications = new Certification[] { new Certification() };
-            }
-
-            // New job
+            // Request OBO enrollee
+            Enrollee enrollee = new EnrolleeFactory().Generate("default,obo");
+            Assert.True(enrollee.Certifications.Count == 0);
+            Assert.True(enrollee.OboSites.Count > 0);
             EnrolleeUpdateModel profile = enrollee.CopyToUpdateModel();
-            profile.Jobs.Add(new Job { Title = "Snake sweater knitter" });
-            await AssertAllowableChanges(expected, enrollee, profile);
 
-            // Edit job
-            profile = enrollee.CopyToUpdateModel();
-            profile.Jobs.First().Title = "Bespoke lifehack crafter";
-            await AssertAllowableChanges(expected, enrollee, profile);
+            // No changes should definitely pass Minor Update rule
+            await AssertAllowableChanges(true, enrollee, profile);
 
-            // Remove job
-            profile = enrollee.CopyToUpdateModel();
-            profile.Jobs = profile.Jobs.Skip(1).ToList();
-            await AssertAllowableChanges(expected, enrollee, profile);
+            // Changing a job title should still pass Minor Update rule
+            profile.OboSites.First().JobTitle = "BS Executive";
+            await AssertAllowableChanges(true, enrollee, profile);
         }
 
         [Fact]
