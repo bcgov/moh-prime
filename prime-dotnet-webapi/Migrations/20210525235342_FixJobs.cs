@@ -9,7 +9,7 @@ namespace Prime.Migrations
             // See PR#1209 for original version of this migration
             migrationBuilder.Sql(@"
                 update ""OboSite""
-                set ""JobTitle"" = (rec.""job_list"")
+                set ""JobTitle"" = rec.job_list
                 from (
                     select j.""EnrolleeId"", string_agg(j.""Title"" , ', ') AS job_list
                     FROM   ""Job"" j
