@@ -6,6 +6,7 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // See PR#1209 for original version of this migration
             migrationBuilder.Sql(@"
                 update ""OboSite""
                 set ""JobTitle"" = (rec.""job_list"")
