@@ -12,7 +12,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
@@ -83,7 +83,7 @@ export class AdjudicationResource {
       );
   }
 
-  public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
+  public enrolleeStatusAction(enrolleeId: number, action: EnrolleeStatusAction): Observable<HttpEnrollee> {
     return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
@@ -93,7 +93,7 @@ export class AdjudicationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment status could not be updated');
-          this.logger.error('[Adjudication] AdjudicationResource::submissionAction error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );

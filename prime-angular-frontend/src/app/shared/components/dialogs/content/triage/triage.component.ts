@@ -6,7 +6,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -66,12 +66,12 @@ export class TriageComponent implements OnInit {
   }
 
   public onEnableEditing() {
-    this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.ENABLE_EDITING)
+    this.adjudicationResource.enrolleeStatusAction(this.enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       .subscribe(() => this.reload.emit());
   }
 
   public onRerunRules() {
-    this.adjudicationResource.submissionAction(this.enrolleeId, SubmissionAction.RERUN_RULES)
+    this.adjudicationResource.enrolleeStatusAction(this.enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       .subscribe(() => this.reload.emit());
   }
 

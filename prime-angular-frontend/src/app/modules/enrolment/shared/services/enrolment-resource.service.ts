@@ -10,7 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -94,15 +94,15 @@ export class EnrolmentResource {
       );
   }
 
-  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = null): Observable<HttpEnrollee> {
+  public enrolleeStatusAction(id: number, action: EnrolleeStatusAction, documentGuid: string = null): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
     return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, {}, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Submission could not be completed.');
-          this.logger.error('[Enrolment] EnrolmentResource::submissionAction error has occurred: ', error);
+          this.toastService.openErrorToast('Action could not be completed.');
+          this.logger.error('[Enrolment] EnrolmentResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );
