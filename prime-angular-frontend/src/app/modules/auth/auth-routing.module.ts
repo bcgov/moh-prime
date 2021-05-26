@@ -50,6 +50,8 @@ const routes: Routes = [
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
+        // TODO may not be possible unless we can get some definitive roles
+        // TODO create a new GisAuthorizationRedirectGuard inside GisEnrolmentModule
         // canLoad: [AuthorizationRedirectGuard],
         loadChildren: () => import('@gis/shared/modules/gis-login/gis-login-page.module')
           .then(m => m.GisLoginPageModule)
