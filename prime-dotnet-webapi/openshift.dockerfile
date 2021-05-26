@@ -2,7 +2,7 @@
 ### Stage 1 - Build environment ###
 ###################################
 # FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build
-FROM registry.redhat.io/rhel8/dotnet-31 AS build
+FROM registry.access.redhat.com/ubi8/dotnet-31 AS build
 WORKDIR /opt/app-root/app
 ARG API_PORT 
 ARG ASPNETCORE_ENVIRONMENT
@@ -38,7 +38,10 @@ RUN dotnet publish "prime.csproj" -c Release -o /opt/app-root/app/out /p:Microso
 # Begin database migration setup
 RUN dotnet tool install --global dotnet-ef --version 3.1.1
 RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/databaseMigrations.sql
-
+#####################################
+### Stage 2 - Runtime environment ###
+#####################################
+FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 ENV KEYCLOAK_REALM_URL $KEYCLOAK_REALM_URL
 ENV MOH_KEYCLOAK_REALM_URL $MOH_KEYCLOAK_REALM_URL
 ENV API_PORT 8080
