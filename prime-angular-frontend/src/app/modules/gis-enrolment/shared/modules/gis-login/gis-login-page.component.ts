@@ -32,7 +32,7 @@ export class GisLoginPageComponent implements OnInit {
     const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
 
     this.authService.login({
-      idpHint: IdentityProviderEnum.BCSC,
+      idpHint: IdentityProviderEnum.PHSA,
       redirectUri
     });
   }
