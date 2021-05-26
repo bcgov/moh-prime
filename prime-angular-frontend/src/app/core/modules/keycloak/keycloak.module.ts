@@ -1,13 +1,11 @@
 import { NgModule, APP_INITIALIZER, Injector } from '@angular/core';
 
-import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule } from 'keycloak-angular';
 
 import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.service';
 
 function initializer(keycloakInitService: KeycloakInitService): () => Promise<void> {
-  return async (): Promise<void> => {
-    await keycloakInitService.load();
-  };
+  return async () => await keycloakInitService.load();
 }
 
 @NgModule({

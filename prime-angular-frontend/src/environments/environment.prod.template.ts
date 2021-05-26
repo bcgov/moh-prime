@@ -1,4 +1,6 @@
-export const environment = {
+import { AppEnvironment } from '@env/environment.default';
+
+export const environment: AppEnvironment = {
   production: true,
   environmentName: '$OC_APP',
   version: '1.0.0',
