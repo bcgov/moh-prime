@@ -35,10 +35,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
         {
-            var result = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
-            return Ok(ApiResponse.Result(result));
+            var agreements = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
+            return Ok(ApiResponse.Result(agreements));
         }
 
+        /// /api/agreements/enrollee/2
         /// <summary>
         /// Get an enrollee Agreement Version by id
         /// </summary>
@@ -47,11 +48,11 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionViewModel>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<AgreementVersionViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolleeAgreementVersionById(int agreementId)
         {
-            var result = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
-            return Ok(ApiResponse.Result(result));
+            var agreement = await _agreementService.GetAgreementVersionById(agreementId);
+            return Ok(ApiResponse.Result(agreement));
         }
     }
 }
