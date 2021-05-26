@@ -42,13 +42,13 @@ namespace PrimeTests.ModelFactories
 
             RuleFor(x => x.Addresses, (f, x) => new EnrolleeAddressFactory(x).Generate(1));
             RuleFor(x => x.EnrolmentStatuses, (f, x) => new EnrolmentStatusFactory(x).Generate(1, "default,inProgress"));
-            RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2).OrDefault(f, .75f, new List<Certification>()));
-            RuleFor(x => x.Jobs, (f, x) => x.Certifications.Any() ? new List<Job>() : new JobFactory(x).Generate(1));
+            RuleFor(x => x.Certifications, (f, x) => new CertificationFactory(x).GenerateBetween(1, 2));
             RuleFor(x => x.EnrolleeCareSettings, (f, x) => new EnrolleeCareSettingFactory(x).Generate(1));
             RuleFor(x => x.EnrolleeHealthAuthorities, (f, x) => new EnrolleeHealthAuthorityFactory(x).Generate(1));
             RuleFor(x => x.AccessAgreementNote, f => null);
             RuleFor(x => x.AdjudicatorNotes, (f, x) => new EnrolleeNoteFactory(x).GenerateBetween(1, 4).OrNull(f));
             RuleFor(x => x.AssignedPrivileges, f => null);
+            RuleFor(x => x.OboSites, f => new List<OboSite>());
             // TODO: create rule sets for these ignores?
             Ignore(x => x.Agreements);
             Ignore(x => x.Adjudicator);
@@ -60,7 +60,6 @@ namespace PrimeTests.ModelFactories
             Ignore(x => x.RemoteAccessSites);
             Ignore(x => x.RemoteAccessLocations);
             Ignore(x => x.EnrolleeAdjudicationDocuments);
-            Ignore(x => x.OboSites);
             Ignore(x => x.Submissions);
 
             RuleSet("status.submitted", (set) =>
@@ -82,6 +81,12 @@ namespace PrimeTests.ModelFactories
                 set.RuleFor(x => x.IsInsulinPumpProvider, f => f.Random.Bool());
             });
 
+            RuleSet("obo", (set) =>
+            {
+                set.RuleFor(x => x.Certifications, f => new List<Certification>());
+                set.RuleFor(x => x.OboSites, (f, x) => new OboSiteFactory(x).GenerateBetween(1, 4));
+            });
+
             FinishWith((f, x) =>
             {
                 x.ProfileCompleted = x.EnrolmentStatuses.Count > 1 ? true : f.Random.Bool();
@@ -100,6 +105,12 @@ namespace PrimeTests.ModelFactories
                             .Select(privilegeId => new AssignedPrivilegeFactory(x, privilegeId).Generate())
                             .ToList();
                     }
+                }
+
+                // An enrollee with certifications shouldn't have OboSites
+                if (x.Certifications != null && x.Certifications.Count > 0)
+                {
+                    x.OboSites = new List<OboSite>();
                 }
             });
         }

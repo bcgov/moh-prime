@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using Bogus;
+using Bogus.DataSets;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -16,7 +19,9 @@ namespace TestPrimeE2E
         [SetUp]
         public void TestSetup()
         {
-            _driver = new ChromeDriver();
+            ChromeOptions options = new ChromeOptions();
+            options.SetLoggingPreference(LogType.Browser, LogLevel.Severe);
+            _driver = new ChromeDriver(options);
             _driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(10);
         }
 
@@ -34,6 +39,19 @@ namespace TestPrimeE2E
         }
 
 
+        protected void LoginWithIdirAccount()
+        {
+            ClickButton("IDIR Login");
+            _driver.FindPatientlyById("user").SendKeys(TestParameters.IdirId);
+            _driver.FindPatientlyById("password").SendKeys(TestParameters.IdirPassword);
+            _driver.FindPatiently("//input[@name='btnSubmit']").Click();
+        }
+
+
+        /// <summary>
+        /// Where possible, use <c>FillFormField</c> instead, as a label is more likely to change
+        /// than an internal <c>formControlName</c>.
+        /// </summary>
         protected void TypeIntoField(string fieldId, string text)
         {
             var field = _driver.FindPatiently($"//input[@data-placeholder='{fieldId}']");
@@ -77,6 +95,116 @@ namespace TestPrimeE2E
             var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
             control.Clear();
             control.SendKeys(text);
+        }
+
+
+        protected void CheckLogThenScreenshot(string pageTitle)
+        {
+            // See https://stackoverflow.com/questions/36455533/c-sharp-selenium-access-browser-log
+            // The following works with Selenium.WebDriver version 4.0.0-beta2 but not the stable version 3.141.0
+            // System.Collections.Generic.List<LogEntry> logs = _driver.Manage().Logs.GetLog(LogType.Browser).ToList();
+            // foreach (LogEntry log in logs)
+            // {
+            //     Console.Error.WriteLine(log.Message);
+            // }
+            // if (logs.Count > 0)
+            // {
+            //     throw new Exception($"Received {logs.Count} error messages on the page '{pageTitle}'.");
+            // }
+
+            _driver.TakeScreenshot(String.Concat(pageTitle.Replace(' ', '_'), "_Completed"), TestParameters.ScreenshotsArchivePath);
+        }
+
+
+        /// <summary>
+        /// Due to the structure of most pages, this method can usually be used
+        /// to confirm the title of an Enrollment page.
+        /// </summary>
+        protected void VerifyEnrollmentPageTitle(string expectedTitle)
+        {
+            Assert.AreEqual(expectedTitle, _driver.FindPatiently("//h2[contains(@class, 'title')]").Text);
+        }
+
+
+        /// <summary>
+        /// Due to the structure of most pages, this method can usually be used
+        /// to confirm the title of an Admin page.
+        /// </summary>
+        protected void VerifyAdminPageTitle(string expectedTitle)
+        {
+            Assert.AreEqual(expectedTitle, _driver.FindPatiently("//h1[contains(@class, 'mb-4')]").Text);
+        }
+
+
+        protected string GetVancouverPhoneNum(Person aPerson)
+        {
+            // Vancouver-like phone number
+            return String.Concat("604", aPerson.Phone.Substring(3));
+        }
+
+
+        protected string GetCanadianPostalCode(Address anAddress)
+        {
+            return anAddress.ZipCode("?#? #?#");
+        }
+
+
+        protected IWebElement FindDropdownControl(string formControlName)
+        {
+            return _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}']");
+        }
+
+
+        /// <summary>
+        /// Credit:  https://stackoverflow.com/questions/2729752/converting-numbers-in-to-words-c-sharp
+        /// </summary>
+        protected string NumberToWords(int number)
+        {
+            if (number == 0)
+                return "zero";
+
+            if (number < 0)
+                return "minus " + NumberToWords(Math.Abs(number));
+
+            string words = "";
+
+            if ((number / 1000000) > 0)
+            {
+                words += NumberToWords(number / 1000000) + " million ";
+                number %= 1000000;
+            }
+
+            if ((number / 1000) > 0)
+            {
+                words += NumberToWords(number / 1000) + " thousand ";
+                number %= 1000;
+            }
+
+            if ((number / 100) > 0)
+            {
+                words += NumberToWords(number / 100) + " hundred ";
+                number %= 100;
+            }
+
+            if (number > 0)
+            {
+                if (words != "")
+                    words += "and ";
+
+                var unitsMap = new[] { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
+                var tensMap = new[] { "zero", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
+
+                if (number < 20)
+                    words += unitsMap[number];
+                else
+                {
+                    words += tensMap[number / 10];
+                    if ((number % 10) > 0)
+                        words += "-" + unitsMap[number % 10];
+                }
+            }
+
+            return words;
         }
     }
 }
