@@ -66,8 +66,7 @@ namespace Prime.Services.Rules
 
         public override Task<bool> ProcessRule(Enrollee enrollee)
         {
-            bool isObo = !enrollee.Certifications.Any();
-            var comparitor = InitComparitor(isObo);
+            var comparitor = InitComparitor();
 
             if (!comparitor.Compare(enrollee, _updatedProfile).AreEqual)
             {
@@ -78,12 +77,6 @@ namespace Prime.Services.Rules
             comparitor.Config.IgnoreObjectTypes = false;
 
             if (!CompareCollections(comparitor, enrollee.Certifications, _updatedProfile.Certifications))
-            {
-                return Task.FromResult(false);
-            }
-
-            if (!isObo // Only OBOs can change Job titles; if not an OBO, Jobs must be same
-                && !CompareCollections(comparitor, enrollee.Jobs, _updatedProfile.Jobs))
             {
                 return Task.FromResult(false);
             }
@@ -119,7 +112,7 @@ namespace Prime.Services.Rules
             }
 
             // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
-            if (_updatedProfile.SelfDeclarations.Any(sd => sd.DocumentGuids.Any())
+            if (_updatedProfile.SelfDeclarations.Any(sd => (sd.DocumentGuids != null && sd.DocumentGuids.Any()))
                 || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
             {
                 return Task.FromResult(false);
@@ -128,7 +121,7 @@ namespace Prime.Services.Rules
             return Task.FromResult(true);
         }
 
-        private static CompareLogic InitComparitor(bool isObo)
+        private static CompareLogic InitComparitor()
         {
             ComparisonConfig config = new ComparisonConfig
             {
@@ -143,10 +136,7 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Enrollee>(x => x.SmsPhone);
             config.IgnoreProperty<Enrollee>(x => x.Phone);
             config.IgnoreProperty<Enrollee>(x => x.PhoneExtension);
-            if (isObo)
-            {
-                config.IgnoreProperty<Enrollee>(x => x.Jobs);
-            }
+            config.IgnoreProperty<OboSite>(x => x.JobTitle);
 
             // Ignored fields on models due to the frontend not sending all keys/navigation properties
             config.IgnoreProperty<BaseAuditable>(x => x.CreatedUserId);
@@ -161,13 +151,15 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<Certification>(x => x.License);
             config.IgnoreProperty<Certification>(x => x.Practice);
 
-            config.IgnoreProperty<Job>(x => x.Id);
-            config.IgnoreProperty<Job>(x => x.Enrollee);
-            config.IgnoreProperty<Job>(x => x.EnrolleeId);
+            config.IgnoreProperty<OboSite>(x => x.Id);
+            config.IgnoreProperty<OboSite>(x => x.Enrollee);
+            config.IgnoreProperty<OboSite>(x => x.EnrolleeId);
+            config.IgnoreProperty<OboSite>(x => x.CareSetting);
+            config.IgnoreProperty<OboSite>(x => x.HealthAuthority);
 
-            config.IgnoreProperty<MailingAddress>(x => x.Id);
-            config.IgnoreProperty<MailingAddress>(x => x.Country);
-            config.IgnoreProperty<MailingAddress>(x => x.Province);
+            config.IgnoreProperty<Address>(x => x.Id);
+            config.IgnoreProperty<Address>(x => x.Country);
+            config.IgnoreProperty<Address>(x => x.Province);
 
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.Id);
             config.IgnoreProperty<EnrolleeCareSetting>(x => x.Enrollee);
@@ -191,6 +183,11 @@ namespace Prime.Services.Rules
             config.IgnoreProperty<SelfDeclaration>(x => x.Enrollee);
             config.IgnoreProperty<SelfDeclaration>(x => x.SelfDeclarationType);
             config.IgnoreProperty<SelfDeclaration>(x => x.DocumentGuids);
+
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.Id);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.EnrolleeId);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.Enrollee);
+            config.IgnoreProperty<EnrolleeHealthAuthority>(x => x.HealthAuthority);
 
             return new CompareLogic(config);
         }
