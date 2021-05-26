@@ -1,27 +1,12 @@
 import { NgModule, APP_INITIALIZER, Injector } from '@angular/core';
-import { Router } from '@angular/router';
 
-import { KeycloakAngularModule, KeycloakService, KeycloakOptions } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
-import { environment } from '@env/environment';
-import { ToastService } from '@core/services/toast.service';
-import { AuthRoutes } from '@auth/auth.routes';
+import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.service';
 
-function initializer(keycloak: KeycloakService, injector: Injector): () => Promise<void> {
+function initializer(keycloakInitService: KeycloakInitService): () => Promise<void> {
   return async (): Promise<void> => {
-    const authenticated = await keycloak.init((environment.keycloakConfig as KeycloakOptions));
-    keycloak.getKeycloakInstance().onTokenExpired = () => {
-      keycloak.updateToken()
-        .catch(() => {
-          injector.get(ToastService).openErrorToast('Your session has expired, you will need to re-authenticate');
-          injector.get(Router).navigateByUrl(AuthRoutes.MODULE_PATH);
-        });
-    };
-
-    if (authenticated) {
-      // Force refresh to begin expiry timer.
-      keycloak.updateToken(-1);
-    }
+    await keycloakInitService.load();
   };
 }
 
@@ -32,8 +17,8 @@ function initializer(keycloak: KeycloakService, injector: Injector): () => Promi
       provide: APP_INITIALIZER,
       useFactory: initializer,
       multi: true,
-      deps: [KeycloakService, Injector]
+      deps: [KeycloakInitService]
     }
   ]
 })
-export class KeycloakModule { }
+export class KeycloakModule {}
