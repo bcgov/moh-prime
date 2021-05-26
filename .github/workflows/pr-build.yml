@@ -61,13 +61,14 @@ jobs:
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg=$BUILD_LOGLEVEL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   build-backend:
     runs-on: ubuntu-20.04
     environment: Development
     env:
+      BUILD_LOGLEVEL: "2"
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
       IMAGE_TAGS: latest
@@ -100,6 +101,7 @@ jobs:
       - name: "Build, tag and push .NET web API image"
         id: build-image
         env:
+          BUILD_LOGLEVEL: "2"
           PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
           PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
           COMPOSE_DOCKER_CLI_BUILD: 1
@@ -119,13 +121,14 @@ jobs:
             --build-arg ASPNETCORE_URLS="http://+:8080" \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   build-frontend:
     runs-on: ubuntu-20.04
     environment: Development
     env:
+      BUILD_LOGLEVEL: "2"
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
       IMAGE_TAGS: latest
@@ -175,8 +178,8 @@ jobs:
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REGISTRY}}/${{secrets.OPENSHIFT_TOOLS_NAMESPACE}}/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
   apply-oc-template:
     runs-on: ubuntu-20.04
