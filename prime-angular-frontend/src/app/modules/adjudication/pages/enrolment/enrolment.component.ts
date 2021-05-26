@@ -61,10 +61,6 @@ export class EnrolmentComponent extends AbstractComponent implements OnInit {
       enrollee.certifications = [];
     }
 
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
-    }
-
     if (!enrollee.enrolleeCareSettings) {
       enrollee.enrolleeCareSettings = [];
     }

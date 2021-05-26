@@ -78,10 +78,6 @@ export class EnrolleeAccessTermEnrolmentComponent extends AbstractComponent impl
       enrollee.certifications = [];
     }
 
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
-    }
-
     if (!enrollee.enrolleeCareSettings) {
       enrollee.enrolleeCareSettings = [];
     }

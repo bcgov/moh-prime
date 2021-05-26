@@ -197,7 +197,6 @@ namespace Prime.Services
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                 .Include(e => e.RemoteAccessLocations)
@@ -223,7 +222,6 @@ namespace Prime.Services
             UpdateAddress(enrollee, updateModel.MailingAddress);
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
-            ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
@@ -535,7 +533,6 @@ namespace Prime.Services
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                .Include(e => e.Jobs)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
