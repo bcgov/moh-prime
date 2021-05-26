@@ -96,7 +96,7 @@ export class EnrolmentResource {
 
   public enrolleeStatusAction(id: number, action: EnrolleeStatusAction, documentGuid: string = null): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, {}, params)
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/status-actions/${action}`, {}, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
