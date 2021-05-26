@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MAT_PAGINATOR_DEFAULT_OPTIONS, MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
@@ -25,6 +25,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MomentDateAdapter, MatMomentDateModule } from '@angular/material-moment-adapter';
 import { MatSortModule } from '@angular/material/sort';
+import { MatTabsModule } from '@angular/material/tabs';
 
 export const APP_DATE_FORMAT = 'D MMM YYYY';
 export const APP_DATE_FORMATS = {
@@ -38,6 +39,11 @@ export const APP_DATE_FORMATS = {
     dateA11yLabel: APP_DATE_FORMAT,
     monthYearA11yLabel: 'MMM YYYY',
   }
+};
+const appPaginatorCustomOptions = {
+  pageSize: 100,
+  hidePageSize: true,
+  showFirstLastButtons: true
 };
 
 const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
@@ -70,6 +76,7 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
     MatToolbarModule,
     MatTooltipModule,
     MatPaginatorModule,
+    MatTabsModule,
     MatRadioModule
   ],
   providers: [
@@ -92,6 +99,10 @@ const matFormFieldCustomOptions: MatFormFieldDefaultOptions = {
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: matFormFieldCustomOptions
+    },
+    {
+      provide: MAT_PAGINATOR_DEFAULT_OPTIONS,
+      useValue: appPaginatorCustomOptions
     }
   ]
 })

@@ -1,6 +1,42 @@
 // NOTE: Shared styles are loaded from a separate file
+@import 'palette';
+@import 'bootstrap/bootstrap-imports';
 
 ul {
   list-style-position: inside;
   padding-left: 0;
+}
+
+h3 {
+  color: theme-palette(blue);
+  font-weight: normal;
+}
+
+.authentication-banner {
+  // TODO not a value from the theme palette
+  background-color: #D0E3EB;
+
+  .logins {
+    @include media-breakpoint-up(sm) {
+      padding: 0;
+    }
+
+    @include media-breakpoint-up(md) {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    & > div {
+      align-self: flex-end;
+      padding: 1.5rem 1rem;
+    }
+
+    h3 {
+      padding-bottom: .4rem;
+    }
+
+    button {
+      height: 3rem;
+    }
+  }
 }

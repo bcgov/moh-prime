@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
@@ -16,11 +16,6 @@ export interface IEnrolmentPage {
   formState: AbstractFormState<unknown>;
   /**
    * @description
-   * Instance of the form loaded from the form state.
-   */
-  form: AbstractControl;
-  /**
-   * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
@@ -36,6 +31,32 @@ export interface IEnrolmentPage {
  * @description
  * Class is used to provide a set of submission hooks and
  * functionality to pages used in enrolments.
+ *
+ * For example, outside of the boilerplate add getters for
+ * quickly accessing AbstractControls in controllers to
+ * reduce methods required in each controller.
+ *
+ * WARNING: Always use UntilDestroy in the controller to
+ * unsubscribe from valueChanges on getters when the component
+ * is destroyed. Not doing this will result in memory leaks, as
+ * well as, create issues that are difficult to trace.
+ *
+ * @example
+ * @UntilDestroy()
+ * @Component({
+ *   selector: 'app-example-page',
+ *   templateUrl: './example-page.component.html',
+ *   styleUrls: ['./example-page.component.scss']
+ * })
+ * export class ExamplePageComponent {
+ *   public initForm(): void {
+ *     this.formState.controlName.valueChanges
+ *       .pipe(
+ *         untilDestroyed(this),
+ *         ...
+ *       ).subscribe();
+ *   }
+ * }
  */
 // TODO make AbstractFormState generic on AbstractEnrolmentPage
 // export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
@@ -50,6 +71,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
    * Form instance of the component.
+   * @deprecated
+   * Use the formState to access the form
    */
   public form: FormGroup;
   /**
@@ -86,7 +109,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   protected canDeactivateWhitelist: string[];
 
-  constructor(
+  protected constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService
   ) { }
@@ -98,7 +121,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
-    if (this.checkValidity()) {
+    if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
@@ -113,7 +136,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   public canDeactivate(): Observable<boolean> | boolean {
     const data = 'unsaved';
-    return (this.form.dirty && !this.checkDeactivationIsAllowed())
+    return (this.formState.form.dirty && !this.checkDeactivationIsAllowed())
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
   }
@@ -153,8 +176,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * Check the validity of the form, as well as, perform
    * additional validation.
    */
-  protected checkValidity(): boolean {
-    return this.formUtilsService.checkValidity(this.form) && this.additionalValidityChecks(this.form.getRawValue());
+  protected checkValidity(form: FormGroup | FormArray): boolean {
+    return this.formUtilsService.checkValidity(form) && this.additionalValidityChecks(form.getRawValue());
   }
 
   /**
@@ -199,13 +222,13 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
    * Check that deactivation of the view is allowed in general
-   * or specifically gated on a set of whitelisted control names.
+   * or specifically gated on a set of allowed control names.
    */
   private checkDeactivationIsAllowed(): boolean {
     if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
-      return Object.keys(this.form.controls)
+      return Object.keys(this.formState.form.controls)
         .filter(key => !this.canDeactivateWhitelist.includes(key))
-        .every(key => !this.form.controls[key].dirty);
+        .every(key => !this.formState.form.controls[key].dirty);
     }
 
     return this.allowRoutingWhenDirty;

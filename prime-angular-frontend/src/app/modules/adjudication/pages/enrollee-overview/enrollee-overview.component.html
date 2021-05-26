@@ -3,12 +3,15 @@
 
   <app-page-header>Overview</app-page-header>
 
-  <app-enrollee-table *ngIf="busy.closed || dataSource.data.length"
-                      [dataSource]="dataSource"
+  <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
+                      [enrollees]="enrollees"
+                      [enrolleeNavigation]="enrolleeNavigation"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
-                      (route)="onRoute($event)"></app-enrollee-table>
+                      (route)="onRoute($event)"
+                      (navigateEnrollee)="onNavigateEnrollee($event)"
+                      (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
 
@@ -39,9 +42,9 @@
         </mat-card-content>
       </mat-card>
 
-      <app-adjudicator-actions *ngIf="dataSource?.data[0]"
+      <app-adjudicator-actions *ngIf="enrollees?.length"
                                class="float-right"
-                               [enrollee]="dataSource?.data[0]"
+                               [enrollee]="enrollees[0]"
                                (approve)="onApprove($event)"
                                (decline)="onDecline($event)"
                                (lock)="onLock($event)"
@@ -51,6 +54,7 @@
                                (assignToa)="onAssignToa($event)"
                                (enableEnrollee)="onEnableEnrollee($event)"
                                (enableEditing)="onEnableEditing($event)"
+                               (cancelToa)="onCancelToa($event)"
                                (rerunRules)="onRerunRules($event)"
                                (toggleManualAdj)="onToggleManualAdj($event)">
       </app-adjudicator-actions>

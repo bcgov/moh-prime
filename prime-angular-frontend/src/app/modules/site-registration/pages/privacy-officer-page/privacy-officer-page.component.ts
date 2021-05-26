@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Subject } from 'rxjs';
+
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -26,6 +28,7 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -43,13 +46,14 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
     }
-    this.form.patchValue(contact);
+    this.formState.form.patchValue(contact);
   }
 
   public onBack() {
@@ -63,14 +67,13 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.privacyOfficerFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): NoContent {
@@ -79,12 +82,16 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.TECHNICAL_SUPPORT;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.formSubmittingEvent.next();
   }
 }

@@ -14,6 +14,7 @@ using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
 using System.Security.Claims;
+using System.Linq.Expressions;
 
 namespace Prime.Services
 {
@@ -133,6 +134,23 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId)
+        {
+            var nextId = await _context.Enrollees
+                .Where(e => e.Id > enrolleeId)
+                .OrderBy(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            var previousId = await _context.Enrollees
+                .Where(e => e.Id < enrolleeId)
+                .OrderByDescending(e => e.Id)
+                .Select(e => e.Id)
+                .FirstOrDefaultAsync();
+
+            return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
+        }
+
         public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await GetBaseEnrolleeQuery()
@@ -179,7 +197,6 @@ namespace Prime.Services
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
-                .Include(e => e.Jobs)
                 .Include(e => e.EnrolleeRemoteUsers)
                 .Include(e => e.RemoteAccessSites)
                 .Include(e => e.RemoteAccessLocations)
@@ -205,7 +222,6 @@ namespace Prime.Services
             UpdateAddress(enrollee, updateModel.MailingAddress);
             UpdateAddress(enrollee, updateModel.VerifiedAddress);
             ReplaceExistingItems(enrollee.Certifications, updateModel.Certifications, enrolleeId);
-            ReplaceExistingItems(enrollee.Jobs, updateModel.Jobs, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeCareSettings, updateModel.EnrolleeCareSettings, enrolleeId);
             ReplaceExistingItems(enrollee.SelfDeclarations, updateModel.SelfDeclarations, enrolleeId);
             ReplaceExistingItems(enrollee.EnrolleeHealthAuthorities, updateModel.EnrolleeHealthAuthorities, enrolleeId);
@@ -416,10 +432,12 @@ namespace Prime.Services
                     {
                         Enrollee = dbEnrollee,
                         CareSettingCode = site.CareSettingCode,
+                        HealthAuthorityCode = site.HealthAuthorityCode,
                         PhysicalAddress = newAddress,
                         SiteName = site.SiteName,
                         PEC = site.PEC,
-                        FacilityName = site.FacilityName
+                        FacilityName = site.FacilityName,
+                        JobTitle = site.JobTitle
                     };
                     _context.Entry(newAddress).State = EntityState.Added;
                     _context.Entry(newSite).State = EntityState.Added;
@@ -515,7 +533,6 @@ namespace Prime.Services
                     .ThenInclude(ea => ea.Address)
                 .Include(e => e.Certifications)
                     .ThenInclude(c => c.License)
-                .Include(e => e.Jobs)
                 .Include(e => e.OboSites)
                     .ThenInclude(s => s.PhysicalAddress)
                 .Include(e => e.EnrolleeCareSettings)
@@ -901,6 +918,29 @@ namespace Prime.Services
             return await _context.EnrolleeNotes
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)
+        {
+            Expression<Func<Enrollee, bool>> predicate = bulkEmailType switch
+            {
+                BulkEmailType.CommunityPractice => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPractice),
+                BulkEmailType.CommunityPharmacy => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.CommunityPharmacy),
+                BulkEmailType.HealthAuthority => e => e.EnrolleeCareSettings.Any(cs => cs.CareSettingCode == (int)CareSettingType.HealthAuthority),
+                BulkEmailType.RequiresTOA => e => e.CurrentStatus.StatusCode == (int)StatusType.RequiresToa,
+                BulkEmailType.RuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.RegulatedUserTOA,
+                BulkEmailType.OboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.OboTOA,
+                BulkEmailType.PharmRuTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.CommunityPharmacistTOA,
+                BulkEmailType.PharmOboTOA => e => e.Agreements.OrderByDescending(a => a.AcceptedDate).FirstOrDefault().AgreementVersion.AgreementType == AgreementType.PharmacyOboTOA,
+                _ => null,
+            };
+
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(predicate)
+                .Select(e => e.Email)
+                .DecompileAsync()
                 .ToListAsync();
         }
     }

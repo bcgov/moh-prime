@@ -3,7 +3,8 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <app-contact-profile-form [title]="title"
-                            [form]="form"
+                            [form]="formState.form"
+                            [formSubmitting]="formSubmittingEvent"
                             (submit)="onSubmit()">
     <app-same-as selectFor="administratorPharmaNet"
                  (selected)="onSelect($event)"></app-same-as>
@@ -23,5 +24,4 @@
                    primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
-
 </app-page>

@@ -22,11 +22,11 @@ export class FormGroupValidators {
    * @description
    * Checks that at least one field has been chosen within a form group.
    */
-  public static atLeastOne(validator: ValidatorFn = Validators.required, whitelist: string[] = []): ValidatorFn {
+  public static atLeastOne(validator: ValidatorFn = Validators.required, allowlist: string[] = []): ValidatorFn {
     return (group: FormGroup): ValidationErrors | null => {
       const atLeastOne = group && group.controls &&
         Object.keys(group.controls)
-          .filter(key => whitelist.indexOf(key) !== -1)
+          .filter(key => allowlist.indexOf(key) !== -1)
           .some(key => validator(group.controls[key]) === null);
       return (atLeastOne) ? null : { atleastone: true };
     };
@@ -43,6 +43,32 @@ export class FormGroupValidators {
       if (!start || !end) { return null; }
       const valid = (start < end);
       return (valid) ? null : { lessthan: true };
+    };
+  }
+
+  /**
+   * @description
+   * Checks that the start key dateTime is before the end key value.
+   */
+  public static isDateTimeBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isBefore(end)) ? null : { isBefore: true };
+    };
+  }
+
+  /**
+   * @description
+   * Checks that the start key dateTime is same or before the end key value.
+   */
+  public static isDateTimeSameOrBefore(startKey: string, endKey: string): ValidatorFn {
+    return (group: FormGroup): ValidationErrors | null => {
+      const start = moment(group.controls[startKey].value);
+      const end = moment(group.controls[endKey].value);
+      if (!start || !end) { return null; }
+      return (start.isSameOrBefore(end)) ? null : { isSameOrBefore: true };
     };
   }
 

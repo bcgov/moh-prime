@@ -1,26 +1,34 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { PhsaEformsModule } from '@phsa/phsa-eforms.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SharedModule } from '@shared/shared.module';
 import { PhsaEformsProgressIndicatorComponent } from './phsa-eforms-progress-indicator.component';
 
 describe('PhsaEformsProgressIndicatorComponent', () => {
   let component: PhsaEformsProgressIndicatorComponent;
   let fixture: ComponentFixture<PhsaEformsProgressIndicatorComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach( async () => {
+    await TestBed.configureTestingModule({
       imports: [
-        HttpClientTestingModule,
+        SharedModule,
         RouterTestingModule,
-        PhsaEformsModule
+        HttpClientTestingModule
       ],
-      declarations: []
+      declarations: [PhsaEformsProgressIndicatorComponent],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(PhsaEformsProgressIndicatorComponent);

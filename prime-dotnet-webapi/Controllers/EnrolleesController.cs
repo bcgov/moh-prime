@@ -65,6 +65,21 @@ namespace Prime.Controllers
             }
         }
 
+        // GET: api/Enrollees/1/adjacent
+        /// <summary>
+        /// Gets adjacent next and previous enrollee IDs for a given enrolleeId
+        /// </summary>
+        [HttpGet("{enrolleeId}/adjacent", Name = nameof(GetAdjacentEnrolleeId))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeNavigation>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAdjacentEnrolleeId(int enrolleeId)
+        {
+            var result = await _enrolleeService.GetAdjacentEnrolleeIdAsync(enrolleeId);
+            return Ok(ApiResponse.Result(result));
+        }
+
         // GET: api/Enrollees/5
         /// <summary>
         /// Gets a specific Enrollee.
@@ -861,6 +876,22 @@ namespace Prime.Controllers
             await _enrolleeService.RemoveNotificationsAsync(enrolleeId);
 
             return Ok();
+        }
+
+        // GET: api/Enrollees/emails
+        /// <summary>
+        /// Gets all of the enrollee emails that match the type
+        /// </summary>
+        /// <param name="bulkEmailType"></param>
+        [HttpGet("emails", Name = nameof(GetEnrolleeEmails))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<string>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeEmails([FromQuery] BulkEmailType bulkEmailType)
+        {
+            var emails = await _enrolleeService.GetEnrolleeEmails(bulkEmailType);
+            return Ok(ApiResponse.Result(emails));
         }
     }
 }

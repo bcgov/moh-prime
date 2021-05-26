@@ -1,62 +1,49 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
 namespace Prime.Auth
 {
     public static class AuthenticationSetup
     {
-        public static void Initialize(
-            IServiceCollection services,
-            IConfiguration configuration,
-            IHostEnvironment environment)
+        public static void Initialize(IServiceCollection services)
         {
             services.ThrowIfNull(nameof(services));
-            configuration.ThrowIfNull(nameof(configuration));
-            environment.ThrowIfNull(nameof(environment));
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddAuthentication(options =>
+            services.AddAuthentication(Schemes.PrimeJwt)
+            .AddJwtBearer(Schemes.PrimeJwt, options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                if (environment.IsDevelopment())
-                {
-                    IdentityModelEventSource.ShowPII = true;
-                    options.RequireHttpsMetadata = false;
-                }
-
+                options.Authority = PrimeEnvironment.Keycloak.RealmUrl;
                 options.Audience = AuthConstants.Audience;
                 options.MetadataAddress = PrimeEnvironment.Keycloak.WellKnownConfig;
                 options.Events = new JwtBearerEvents
                 {
-                    OnAuthenticationFailed = c =>
-                    {
-                        c.NoResult();
-
-                        c.Response.StatusCode = 500;
-                        c.Response.ContentType = "text/plain";
-                        if (environment.IsDevelopment())
-                        {
-                            return c.Response.WriteAsync(c.Exception.ToString());
-                        }
-                        return c.Response.WriteAsync("An error occured processing your authentication.");
-                    },
                     OnTokenValidated = async context => await OnTokenValidatedAsync(context)
                 };
+            })
+            .AddJwtBearer(Schemes.MohJwt, options =>
+            {
+                options.Authority = PrimeEnvironment.MohKeycloak.RealmUrl;
+                options.Audience = AuthConstants.Audience;
+                options.MetadataAddress = PrimeEnvironment.MohKeycloak.WellKnownConfig;
+                options.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = async context => await OnTokenValidatedAsync(context)
+                };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder(Schemes.PrimeJwt)
+                    .RequireAuthenticatedUser()
+                    .Build();
             });
         }
 

@@ -52,12 +52,7 @@
         </ng-container>
         <ng-container *ngIf="isUnderReview(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props:
-                        {
-                          icon: 'notification_important',
-                          text: 'This site is waiting for approval and an assigned Site ID'
-                        }
-                      }">
+                      [ngTemplateOutletContext]="{ props: getUnderReviewSiteNotificationProperties(site) }">
         </ng-container>
         <ng-container *ngIf="isDeclined(site)"
                       [ngTemplateOutlet]="notification"
@@ -146,7 +141,7 @@
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              [disabled]="!site.completed || site.siteVendors[0]?.vendorCode === VendorEnum.CARECONNECT || site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
+              [disabled]="!site.completed || site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <span>View/Update Remote Practitioners</span>
       </button>

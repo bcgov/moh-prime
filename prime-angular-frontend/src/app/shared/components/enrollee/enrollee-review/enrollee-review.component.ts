@@ -83,14 +83,6 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.deviceProviderNumber);
   }
 
-  public get hasJob(): boolean {
-    return (this.enrolment && !!this.enrolment.jobs.length);
-  }
-
-  public get jobs(): Job[] {
-    return (this.hasJob) ? this.enrolment.jobs : [];
-  }
-
   public get oboSites(): OboSite[] {
     return this.enrolment.oboSites ? this.enrolment.oboSites : [];
   }
@@ -144,7 +136,7 @@ export class EnrolleeReviewComponent {
   }
 
   public getRemoteAccessSiteVendor(remoteAccessSiteId: number) {
-    const ras = this.remoteAccessSites.find((site => site.id == remoteAccessSiteId));
+    const ras = this.remoteAccessSites.find((site => site.id === remoteAccessSiteId));
     return ras.site.siteVendors?.length ? ras.site.siteVendors[0].vendorCode : null;
   }
 

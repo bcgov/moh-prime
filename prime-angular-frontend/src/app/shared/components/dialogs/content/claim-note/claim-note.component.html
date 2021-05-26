@@ -5,7 +5,7 @@
   </span>
 </h2>
 <mat-dialog-content>
-  <span>You can {{reassign ? "unclaim" : "claim"}} the {{type}} or assign to a colleague.</span>
+  <div class="mb-2">You can {{ reassign ? 'unclaim' : 'claim' }} the {{ type }} or assign to a colleague.</div>
 
   <form [formGroup]="form">
     <mat-form-field class="w-100">
@@ -24,16 +24,17 @@
             mat-flat-button
             color="primary"
             (click)="onDisclaim()"
-            class="mr-4">Unclaim {{type | capitalize}}</button>
+            class="mr-4">Unclaim {{ type | capitalize }}</button>
     <button *ngIf="!reassign"
             mat-flat-button
             color="primary"
             (click)="onClaim()"
-            class="mr-4">Claim {{type | capitalize}}</button>
+            class="mr-4">Claim {{ type | capitalize }}</button>
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu"
-            class="">Assign To...</button>
+            class="">Assign To...
+    </button>
   </div>
 
   <mat-menu #menu="matMenu">

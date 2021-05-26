@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -30,6 +30,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public formSubmittingEvent: Subject<void>;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -48,13 +49,14 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
     if (!contact.physicalAddress) {
       contact.physicalAddress = new Address();
     }
-    this.form.patchValue(contact);
+    this.formState.form.patchValue(contact);
   }
 
   public onBack() {
@@ -68,14 +70,13 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.technicalSupportFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
     this.siteFormStateService.setForm(this.site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected performSubmission(): Observable<boolean> {
@@ -95,7 +96,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
           // Mark the site as completed if an organization
           // agreement does not need to be signed
           (!needsOrgAgreement)
-            ? this.siteResource.updateCompleted(site.id)
+            ? this.siteResource.setSiteCompleted(site.id)
               .pipe(map(() => needsOrgAgreement))
             : of(needsOrgAgreement)
         )
@@ -103,12 +104,16 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (needsOrgAgreement)
       ? SiteRoutes.ORGANIZATION_AGREEMENT
       : SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(routePath);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.formSubmittingEvent.next();
   }
 }

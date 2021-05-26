@@ -1,0 +1,30 @@
+<app-page>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-progress-indicator message="Access request under review"></app-progress-indicator>
+
+  <div class="mb-5">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You have been approved as an Authorized User.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+  </app-page-subheader>
+
+  <p class="mb-5">
+    Continue to add sites to your Health Authority.
+  </p>
+
+  <div class="d-flex justify-content-end">
+    <button mat-flat-button
+            color="primary" (click)="onContinue()">Continue</button>
+  </div>
+
+</app-page>

@@ -1,13 +1,12 @@
+import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
 import { Address } from '@shared/models/address.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
-import { Party } from './party.model';
 import { Vendor } from './vendor.model';
 import { RemoteUser } from './remote-user.model';
 import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
-import { BusinessLicenceDocument } from './business-licence-document.model';
 import { SiteStatusType } from '../enum/site-status.enum';
 
 export interface Site {
@@ -20,9 +19,6 @@ export interface Site {
   careSettingCode: number;
   siteVendors: Vendor[];
   businessLicence: BusinessLicence;
-  businessLicenceDocuments: BusinessLicenceDocument[];
-  businessLicenceGuid: string;
-  deferredLicenceReason: string;
   doingBusinessAs: string;
   physicalAddressId?: number;
   physicalAddress: Address;
@@ -35,9 +31,11 @@ export interface Site {
   technicalSupportId?: number;
   technicalSupport: Contact;
   // States -----
+  // Indicates that a user has progressed through the entire enrolment, and
+  // reached the overview page switching them from wizard to spoking navigation
   completed: boolean;
-  approvedDate: string;
   submittedDate: string;
+  approvedDate: string;
   // Admin -----
   adjudicatorId: number;
   adjudicator: Admin;

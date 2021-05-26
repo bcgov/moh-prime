@@ -3,8 +3,13 @@ namespace Prime.Auth
     public static class AuthConstants
     {
         public const string Audience = "prime-web-api";
-
         public const string BCServicesCard = "bcsc";
+    }
+
+    public static class Schemes
+    {
+        public const string PrimeJwt = "PrimeJwt";
+        public const string MohJwt = "MohJwt";
     }
 
     public static class Claims

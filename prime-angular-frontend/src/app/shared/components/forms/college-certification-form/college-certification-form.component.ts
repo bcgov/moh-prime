@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
+import { startWith } from 'rxjs/operators';
+
 import moment from 'moment';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -79,6 +81,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   public get licenseCode(): FormControl {
     return this.form.get('licenseCode') as FormControl;
   }
+
   /**
    * @description
    * ID of a practitioner, but also known as prescriberId
@@ -145,8 +148,8 @@ export class CollegeCertificationFormComponent implements OnInit {
     if (this.condensed) {
       this.formUtilsService.setValidators(this.collegeCode, [Validators.required]);
     }
-    this.setCollegeCertification(this.collegeCode.value);
 
+    this.setCollegeCertification(this.collegeCode.value);
     this.collegeCode.valueChanges
       .subscribe((collegeCode: number) => {
         this.resetCollegeCertification();
@@ -154,36 +157,21 @@ export class CollegeCertificationFormComponent implements OnInit {
       });
 
     if (!this.condensed) {
+      const initialLicenceCode: number | null = +this.licenseCode?.value ?? null;
       this.licenseCode.valueChanges
+        // Allow for initialization of the licence code when
+        // the code already exists
+        .pipe(startWith(initialLicenceCode))
         .subscribe((licenseCode: number) => {
-          const prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
-          let isPrescribing = this.isPrescribing;
-
-          switch (prescriberIdType) {
-            case PrescriberIdTypeEnum.NA:
-              // Ensures validators are cleared and value reset to prevent
-              // values persisting through to submission
-              this.resetPractitionerIdStateAndValidators();
-              break;
-            case PrescriberIdTypeEnum.Optional:
-              // Maintain validators only if the value exists
-              if (!this.practitionerId.value) {
-                this.resetPractitionerIdStateAndValidators();
-              }
-              // Ensures that changes in licence code from mandatory
-              // to optional will show the input
-              isPrescribing = this.practitionerId.value;
-              break;
-            case PrescriberIdTypeEnum.Mandatory: break; // NOOP
+          if (licenseCode) {
+            this.setPractitionerInformation(licenseCode);
           }
-
-          this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
         });
+    } else {
+      const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
+      const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
+      this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
     }
-
-    const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
-    const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
-    this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
   }
 
   private setCollegeCertification(collegeCode: number): void {
@@ -210,10 +198,13 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private setCollegeCertificationValidators() {
     this.formUtilsService.setValidators(this.licenseCode, [Validators.required]);
-    this.formUtilsService.setValidators(this.licenseNumber, [
-      Validators.required,
-      FormControlValidators.alphanumeric
-    ]);
+    const licenseNumberValidators = [Validators.required];
+    if (this.collegeCode.value === CollegeLicenceClassEnum.CPSBC) {
+      licenseNumberValidators.push(FormControlValidators.numeric, FormControlValidators.requiredLength(5));
+    } else {
+      licenseNumberValidators.push(FormControlValidators.alphanumeric);
+    }
+    this.formUtilsService.setValidators(this.licenseNumber, licenseNumberValidators);
 
     if (!this.condensed) {
       this.formUtilsService.setValidators(this.renewalDate, [Validators.required]);
@@ -231,11 +222,42 @@ export class CollegeCertificationFormComponent implements OnInit {
     }
   }
 
+  private setPractitionerInformation(licenseCode: number) {
+    const prescriberIdType = this.prescriberIdTypeByLicenceCode(licenseCode);
+    let isPrescribing = this.isPrescribing;
+
+    switch (prescriberIdType) {
+      case PrescriberIdTypeEnum.NA:
+        // Ensures validators are cleared and value reset to prevent
+        // values persisting through to submission
+        this.resetPractitionerIdStateAndValidators();
+        break;
+      case PrescriberIdTypeEnum.Optional:
+        // Maintain validators only if the value exists
+        if (!this.practitionerId.value) {
+          this.resetPractitionerIdStateAndValidators();
+        }
+        // Ensures that changes in licence code from mandatory
+        // to optional will show the input
+        isPrescribing = this.practitionerId.value;
+        break;
+      case PrescriberIdTypeEnum.Mandatory:
+        break; // NOOP
+    }
+
+    this.setPractitionerIdStateAndValidators(prescriberIdType, isPrescribing);
+  }
+
   private setPractitionerIdStateAndValidators(prescriberIdType: PrescriberIdTypeEnum, isPrescribing: boolean) {
+    // Always set prescriber related values, but don't
+    // update the validations unless not condensed
     this.prescriberIdType = prescriberIdType;
     this.isPrescribing = isPrescribing;
 
-    if (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA)) {
+    if (
+      !this.condensed &&
+      (prescriberIdType === PrescriberIdTypeEnum.Mandatory || (isPrescribing && prescriberIdType !== PrescriberIdTypeEnum.NA))
+    ) {
       this.formUtilsService.setValidators(this.practitionerId, [
         Validators.required,
         FormControlValidators.numeric,
@@ -277,7 +299,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   private loadPractices(collegeCode: number) {
     this.filteredPractices = this.filterPractices(collegeCode);
     this.practiceCode.patchValue(this.practiceCode.value || null);
-    this.hasPractices = (this.filteredPractices.length) ? true : false;
+    this.hasPractices = !!this.filteredPractices.length;
   }
 
   private filterLicenses(collegeCode: number): LicenseConfig[] {

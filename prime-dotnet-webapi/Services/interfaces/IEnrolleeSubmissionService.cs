@@ -14,6 +14,6 @@ namespace Prime.Services
 
         Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime);
 
-        Task CreateEnrolleeSubmissionAsync(int enrolleeId);
+        Task CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true);
     }
 }

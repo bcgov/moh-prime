@@ -13,4 +13,16 @@ export class GisEnrolmentRoutes {
   public static routePath(route: string): string {
     return `/${ GisEnrolmentRoutes.MODULE_PATH }/${ route }`;
   }
+
+  // Use by the progress indicator to calculate percent completion
+  // of the enrolment process
+  public static initialEnrolmentRouteOrder(): string[] {
+    return [
+      GisEnrolmentRoutes.LDAP_USER_PAGE,
+      GisEnrolmentRoutes.LDAP_INFO_PAGE,
+      GisEnrolmentRoutes.ORG_INFO_PAGE,
+      GisEnrolmentRoutes.ENROLLEE_INFO_PAGE,
+      GisEnrolmentRoutes.SUBMISSION_CONFIRMATION
+    ];
+  }
 }

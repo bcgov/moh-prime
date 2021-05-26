@@ -67,7 +67,6 @@ namespace Prime.Services
                 case WebhookTopic.IssueCredential:
                     return await HandleIssueCredentialAsync(data);
                 case WebhookTopic.RevocationRegistry:
-                    _logger.LogInformation("Revocation Registry data: for {@JObject}", JsonConvert.SerializeObject(data));
                     return true;
                 case WebhookTopic.BasicMessage:
                     _logger.LogInformation("Basic Message data: for {@JObject}", JsonConvert.SerializeObject(data));
@@ -203,6 +202,7 @@ namespace Prime.Services
             switch (state)
             {
                 case CredentialExchangeState.OfferSent:
+                    return true;
                 case CredentialExchangeState.RequestReceived:
                     return true;
                 case CredentialExchangeState.CredentialIssued:

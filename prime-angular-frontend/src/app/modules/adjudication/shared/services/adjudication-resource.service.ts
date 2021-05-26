@@ -1,3 +1,4 @@
+import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
@@ -26,6 +27,7 @@ import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-even
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Injectable({
   providedIn: 'root'
@@ -62,6 +64,19 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdjacentEnrolleeId(enrolleeId: number): Observable<EnrolleeNavigation> {
+    return this.apiResource.get<EnrolleeNavigation>(`enrollees/${enrolleeId}/adjacent`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeNavigation>) => response.result),
+        tap((enrolleeNaviagation: EnrolleeNavigation) => this.logger.info('ENROLLEE_NAVIGATION', enrolleeNaviagation)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('EnrolleeNaviagation could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getAdjacentEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -121,6 +136,18 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public confirmSubmission(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/submissions/latest/confirm`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee submission could not be confirmed');
+          this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
       );
@@ -473,6 +500,20 @@ export class AdjudicationResource {
       );
   }
 
+  public getEnrolleeEmails(bulkEmailType: BulkEmailType): Observable<string[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ bulkEmailType });
+    return this.apiResource.get<string[]>('enrollees/emails', params)
+      .pipe(
+        map((response: ApiHttpResponse<string[]>) => response.result),
+        tap((enrollees: string[]) => this.logger.info('ENROLLEE_EMAILS', enrollees)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollees bulk emails could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeEmails error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
 
   // ---
   // Enrollee and Enrolment Adapters
@@ -487,10 +528,6 @@ export class AdjudicationResource {
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
-    }
-
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
     }
 
     if (!enrollee.enrolleeCareSettings) {

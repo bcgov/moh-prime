@@ -4,12 +4,11 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Address } from '@shared/models/address.model';
 import { Site } from '@registration/shared/models/site.model';
-import { ISiteService } from '@registration/shared/services/site.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
-export class MockSiteService implements ISiteService {
+export class MockSiteService {
   // tslint:disable-next-line: variable-name
-  private _site: BehaviorSubject<Site>;
+  private readonly _site: BehaviorSubject<Site>;
 
   constructor() {
     const siteId = faker.random.number();
@@ -45,14 +44,26 @@ export class MockSiteService implements ISiteService {
       careSettingCode: faker.random.number(),
       siteVendors: [],
       businessLicence: null,
-      businessLicenceDocuments: [],
-      businessLicenceGuid: faker.random.uuid(),
-      deferredLicenceReason: faker.random.words(),
       doingBusinessAs: faker.company.companyName(),
       physicalAddressId: faker.random.number(),
       physicalAddress: address,
       businessHours: null,
-      remoteUsers: null,
+      remoteUsers: [
+        {
+          id: faker.random.number(),
+          firstName: faker.name.firstName(),
+          lastName: faker.name.lastName(),
+          email: faker.internet.email(),
+          remoteUserCertifications: [
+            {
+              id: faker.random.number(),
+              collegeCode: faker.random.number(),
+              licenseNumber: faker.random.words(1),
+              licenseCode: faker.random.number(),
+            }
+          ]
+        }
+      ],
       administratorPharmaNetId: faker.random.number(),
       administratorPharmaNet: user,
       privacyOfficerId: faker.random.number(),

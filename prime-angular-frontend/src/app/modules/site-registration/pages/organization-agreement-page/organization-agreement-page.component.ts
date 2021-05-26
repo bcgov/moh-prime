@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
-import { FormControl } from '@angular/forms';
 
-import { EMPTY, of, noop } from 'rxjs';
+import { EMPTY, noop, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -18,6 +17,7 @@ import { BaseDocument } from '@shared/components/document-upload/document-upload
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
@@ -33,8 +33,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   public formState: OrganizationAgreementPageFormState;
   public routeUtils: RouteUtils;
   public agreementId: number;
-  public organizationAgreementContent: string;
-  public hasAcceptedAgreement: boolean;
+  public organizationAgreement: OrganizationAgreementViewModel;
   public hasDownloadedFile: boolean;
   public hasUploadedFile: boolean;
   public hasNoUploadError: boolean;
@@ -56,32 +55,36 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
   ) {
     super(dialog, formUtilsService);
 
-    this.organizationAgreementContent = null;
+    this.organizationAgreement = null;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
   }
 
-  public get organizationAgreementGuid(): FormControl {
-    return this.form.get('organizationAgreementGuid') as FormControl;
-  }
-
   public onDownload() {
-    this.organizationResource
-      .getOrganizationAgreement(this.route.snapshot.params.oid, this.agreementId, true)
-      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) => {
-        const blob = this.utilsService.base64ToBlob(agreementContent);
+    const agreementType = this.organizationAgreement.agreementType;
+    if (
+      AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT !== agreementType &&
+      AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT !== agreementType
+    ) {
+      return;
+    }
+
+    this.busy = this.organizationResource
+      .getOrganizationAgreementForSigning(this.route.snapshot.params.oid, agreementType)
+      .subscribe((organizationAgreement: string) => {
+        const blob = this.utilsService.base64ToBlob(organizationAgreement);
         this.utilsService.downloadDocument(blob, 'Organization-Agreement');
         this.hasDownloadedFile = true;
       });
   }
 
   public onUpload(document: BaseDocument) {
-    this.organizationAgreementGuid.patchValue(document.documentGuid);
+    this.formState.organizationAgreementGuid.patchValue(document.documentGuid);
     this.hasUploadedFile = true;
     this.hasNoUploadError = false;
   }
 
   public onRemoveDocument(documentGuid: string) {
-    this.organizationAgreementGuid.patchValue(null);
+    this.formState.organizationAgreementGuid.patchValue(null);
   }
 
   public showDefaultAgreement() {
@@ -100,7 +103,6 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
 
   protected createFormInstance() {
     this.formState = this.organizationFormStateService.organizationAgreementPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
@@ -122,8 +124,8 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
           this.organizationResource.getOrganizationAgreement(organization.id, agreementId)
         )
       )
-      .subscribe(({ agreementContent }: OrganizationAgreementViewModel) =>
-        this.organizationAgreementContent = agreementContent
+      .subscribe((organizationAgreement: OrganizationAgreementViewModel) =>
+        this.organizationAgreement = organizationAgreement
       );
   }
 
@@ -148,21 +150,21 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
             : EMPTY
         ),
         exhaustMap(() =>
-          (this.organizationAgreementGuid.value)
+          (this.formState.organizationAgreementGuid.value)
             ? this.organizationResource
-              .acceptOrganizationAgreement(organizationId, this.agreementId, this.organizationAgreementGuid.value)
+              .acceptOrganizationAgreement(organizationId, this.agreementId, this.formState.organizationAgreementGuid.value)
             : this.organizationResource
               .acceptOrganizationAgreement(organizationId, this.agreementId)
         ),
-        exhaustMap(() => this.siteResource.updateCompleted((this.route.snapshot.params.sid)))
+        exhaustMap(() => this.siteResource.setSiteCompleted((this.route.snapshot.params.sid)))
       );
   }
 
   protected afterSubmitIsSuccessful(): void {
     // Remove the org agreement GUID to prevent 404 already
-    // submitted if resubmited in the same session
-    this.organizationAgreementGuid.patchValue(null);
-    this.form.markAsPristine();
+    // submitted if resubmitted in the same session
+    this.formState.organizationAgreementGuid.patchValue(null);
+    this.formState.form.markAsPristine();
 
     this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }

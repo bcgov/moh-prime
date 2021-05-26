@@ -1,0 +1,143 @@
+<app-page-header>Create Banner</app-page-header>
+
+<form (ngSubmit)="onSubmit()"
+      [formGroup]="form"
+      novalidate>
+
+  <div class="row mb-4">
+    <div class="col-sm-12 col-lg-6 col-xl-5 pb-4">
+
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Title"
+               formControlName="title">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Location</mat-label>
+        <mat-select [formControl]="bannerLocationCode">
+          <mat-option [value]="locationCode">
+            {{ BannerLocationCode[locationCode] | replace: '_' : ' ' | capitalize }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-100">
+        <mat-label>Type</mat-label>
+        <mat-select [formControl]="bannerType">
+          <mat-option [value]="BannerType.INFO">
+            {{ BannerType[BannerType.INFO] | capitalize }}
+          </mat-option>
+          <mat-option [value]="BannerType.DANGER">
+            {{ BannerType[BannerType.DANGER] | capitalize }}
+          </mat-option>
+        </mat-select>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+
+
+      <div [formGroup]="dateRange"
+           class="row">
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Start Date</mat-label>
+            <input matInput
+                   [matDatepicker]="startDatePicker"
+                   formControlName="startDate">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Start Time</mat-label>
+            <input matInput
+                   mask="AB:CB"
+                   [patterns]="hoursTimePattern"
+                   formControlName="startTime"
+                   placeholder="00:00">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>End Date</mat-label>
+            <input matInput
+                   [matDatepicker]="endDatePicker"
+                   formControlName="endDate"
+                   [errorStateMatcher]="isSameOrBeforeErrorStateMatcher">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-error *ngIf="endDate.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="!endDate.hasError('required') && dateRange.hasError('isSameOrBefore')">
+              End Date must be equal or greater than Start Date.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>End Time</mat-label>
+            <input matInput
+                   mask="AB:CB"
+                   [patterns]="hoursTimePattern"
+                   formControlName="endTime"
+                   placeholder="00:00">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-12 col-lg-6 col-xl-7">
+
+      <editor class="mb-4"
+              [init]="editorConfig"
+              (onKeyUp)="onUpdate($event)"
+              (onChange)="onUpdate($event)"
+              formControlName="content">
+      </editor>
+
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-between mb-4">
+    <button mat-flat-button
+            type="button"
+            title="Delete Banner"
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            (click)="onDelete()">
+      <mat-icon class="red">delete</mat-icon>
+    </button>
+    <button mat-flat-button
+            [disabled]="!(Role.SUPER_ADMIN | inRole)"
+            color="primary">Publish Banner</button>
+  </div>
+
+</form>
+
+<h2 class="mb-2">Preview</h2>
+
+<div *ngIf="internalBanner"
+     class="row">
+  <div class="col-sm-12 col-md-9 col-xl-7">
+    <app-alert [type]="BannerType[this.internalBanner.bannerType]?.toLowerCase()">
+      <ng-container #alertTitle
+                    class="alert-title">
+        {{ internalBanner.title }}
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        <div [innerHTML]="internalBanner.content"></div>
+      </ng-container>
+    </app-alert>
+  </div>
+</div>

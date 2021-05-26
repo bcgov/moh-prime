@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
 
-import { EMPTY } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { EMPTY, noop, of } from 'rxjs';
+import {exhaustMap, map, pairwise, startWith, tap} from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -26,6 +27,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { CareSettingPageFormState } from './care-setting-page-form-state.class';
 
+@UntilDestroy()
 @Component({
   selector: 'app-care-setting-page',
   templateUrl: './care-setting-page.component.html',
@@ -41,7 +43,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   public vendorConfig: VendorConfig[];
   public filteredVendorConfig: VendorConfig[];
   public hasNoVendorError: boolean;
-  public vendorChangeDialogOptions: DialogOptions;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -62,33 +63,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.careSettingConfig = this.configService.careSettings;
     this.vendorConfig = this.configService.vendors;
     this.hasNoVendorError = false;
-    this.vendorChangeDialogOptions = {
-      title: 'Vendor Change',
-      message: 'CareConnect does not support remote access to PharmaNet, all the remote practitioners you have submitted in the application will be deleted and do not have permission to access PharmaNet remotely.'
-    };
     this.filteredVendorConfig = [];
-  }
-
-  public get careSettingCode(): FormControl {
-    return this.form.get('careSettingCode') as FormControl;
-  }
-
-  public get vendorCode(): FormControl {
-    return this.form.get('vendorCode') as FormControl;
-  }
-
-  public onVendorChange(change: MatRadioChange) {
-    this.hasNoVendorError = false;
-
-    if (change.value === VendorEnum.CARECONNECT && this.siteFormStateService.json.remoteUsers.length) {
-      const data: DialogOptions = {
-        icon: 'announcement',
-        ...this.vendorChangeDialogOptions,
-        actionText: 'Ok',
-        cancelHide: true
-      };
-      this.dialog.open(ConfirmDialogComponent, { data });
-    }
   }
 
   public enableCareSetting(careSettingCode: number): boolean {
@@ -113,28 +88,63 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.careSettingPageFormState;
-    this.form = this.formState.form;
   }
 
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
   }
 
   protected initForm() {
-    this.careSettingCode.valueChanges
+    this.formState.careSettingCode.valueChanges
       .pipe(
-        map((careSettingCode: number) =>
-          this.vendorConfig.filter(
-            (vendorConfig: VendorConfig) =>
-              vendorConfig.careSettingCode === careSettingCode
-          )
+        untilDestroyed(this),
+        startWith([null]),
+        pairwise(),
+        exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
+          const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
+
+          // Reset the deferred licence reason when changing from Community Pharmacist as
+          // no other care setting allows for deferment of the business licence upload
+          if (
+            prevCareSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST ||
+            !deferredLicenceReason.value ||
+            // When a document has been uploaded the business licence can no longer be updated
+            this.siteService.site?.businessLicence?.completed
+          ) {
+            return of(nextCareSettingCode); // No reset required
+          }
+
+          const { id, businessLicence, completed } = this.siteService.site;
+          businessLicence.deferredLicenceReason = null;
+          return this.siteResource.updateBusinessLicence(id, businessLicence)
+            .pipe(
+              // When not reset prevents interaction with specific controls on business licence
+              tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
+              exhaustMap(() => {
+                // Do nothing if not completed, but when site is marked as completed reset it
+                // to force user through the wizard to ensure a business licence is uploaded
+                if (!completed) {
+                  return of(noop());
+                }
+
+                return this.siteResource.removeSiteCompleted(id)
+                  // Will ensure that the user is routed to the next page, and not
+                  // overview if previously completed
+                  .pipe(tap(() => this.isCompleted = false));
+              }),
+              map(() => nextCareSettingCode)
+            );
+        }),
+        map((careSettingCode: CareSettingEnum) =>
+          this.vendorConfig.filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === careSettingCode)
         )
-      ).subscribe((vendors: VendorConfig[]) => {
+      )
+      .subscribe((vendors: VendorConfig[]) => {
         this.filteredVendorConfig = vendors;
-        this.vendorCode.patchValue(null);
+        this.formState.vendorCode.patchValue(null);
       });
 
     this.patchForm();
@@ -145,37 +155,18 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected onSubmitFormIsInvalid(): void {
-    if (!this.vendorCode.value) {
+    if (!this.formState.vendorCode.value) {
       this.hasNoVendorError = true;
     }
   }
 
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
-    const data: DialogOptions = {
-      ...this.vendorChangeDialogOptions,
-      actionType: 'warn',
-      actionText: 'Continue'
-    };
-    const update$ = this.siteResource.updateSite(payload);
-    return (payload.siteVendors[0].vendorCode === VendorEnum.CARECONNECT && payload.remoteUsers.length)
-      ? this.dialog.open(ConfirmDialogComponent, { data })
-        .afterClosed()
-        .pipe(
-          exhaustMap((result: boolean) => {
-            if (!result) {
-              return EMPTY;
-            }
-
-            payload.remoteUsers = [];
-            return update$;
-          })
-        )
-      : update$;
+    return this.siteResource.updateSite(payload);
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW

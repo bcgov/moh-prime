@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,7 +23,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { HoursOperationPageFormModel, HoursOperationPageFormState } from './hours-operation-page-form-state.class';
 
-export class BusinessDayHoursErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
+export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
     const invalidCtrl = super.isErrorState(control, form);
     // Apply custom validation from parent form group
@@ -45,7 +45,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   public isCompleted: boolean;
   public hasNoHours: boolean;
   public hasNoBusinessHoursError: boolean;
-  public busDayHoursErrStateMatcher: BusinessDayHoursErrorStateMatcher;
+  public lessThanErrorStateMatcher: LessThanErrorStateMatcher;
   public WeekDay = WeekDay;
   public SiteRoutes = SiteRoutes;
 
@@ -80,10 +80,6 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
   }
 
-  public get businessDays(): FormArray {
-    return this.form.get('businessDays') as FormArray;
-  }
-
   public hasDay(group: FormGroup): boolean {
     return group.get('startTime').value !== null;
   }
@@ -92,7 +88,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     return (
       group.get('startTime').value === this.business24Hours.startTime &&
       group.get('endTime').value === this.business24Hours.endTime
-    ) ? true : false;
+    );
   }
 
   public on24Hours(change: MatCheckboxChange, group: FormGroup): void {
@@ -130,8 +126,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
   protected createFormInstance() {
     this.formState = this.siteFormStateService.hoursOperationPageFormState;
-    this.form = this.formState.form;
-    this.busDayHoursErrStateMatcher = new BusinessDayHoursErrorStateMatcher();
+    this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
   protected patchForm(): void {
@@ -139,9 +134,9 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     this.isCompleted = site?.completed;
     // Force the site to be patched each time
     this.siteFormStateService.setForm(site, true);
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
-    this.businessDays.controls.forEach((group: FormGroup) => {
+    this.formState.businessDays.controls.forEach((group: FormGroup) => {
       if (this.is24Hours(group)) {
         this.allowEditingHours(group, false);
       }
@@ -163,19 +158,16 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.form.markAsPristine()));
+      .pipe(tap(() => this.formState.form.markAsPristine()));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
+    this.formState.form.markAsPristine();
 
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
 
-    if (
-      site.siteVendors[0].vendorCode === VendorEnum.CARECONNECT ||
-      site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST
-    ) {
+    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
       routePath = SiteRoutes.ADMINISTRATOR;
     } else if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;

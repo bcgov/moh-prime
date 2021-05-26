@@ -23,14 +23,35 @@
         <div class="col-12">
 
           <mat-form-field class="w-100">
+            <mat-label> 
+               <strong>{{ healthAuthorityName }}</strong> Health Authority Facility Name 
+            </mat-label>
             <input matInput
-                   placeholder="Health Authority Facility Name"
                    formControlName="facilityName">
             <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>
       </div>
+
+      <mat-form-field class="w-100 mb-3">
+        <input matInput
+               #input
+               type="text"
+               placeholder="Job Title"
+               formControlName="jobTitle"
+               [matAutocomplete]="auto"
+               (focus)="removeNone(input)">
+        <mat-autocomplete #auto="matAutocomplete"
+                          autoActiveFirstOption>
+          <mat-option *ngFor="let jobName of jobNames"
+                      [value]="jobName.name">
+            {{ jobName.name }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error>Required</mat-error>
+        <mat-hint>Provide the job title under which you need access to PharmaNet</mat-hint>
+      </mat-form-field>
 
       <app-address-form [form]="site.get('physicalAddress')"
                         [formControlNames]="formControlNames"

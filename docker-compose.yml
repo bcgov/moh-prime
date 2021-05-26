@@ -49,9 +49,71 @@ services:
     networks:
       - prime-net
 
-###############################################################################
-###                         API Frontend Definition                         ###
-###############################################################################
+####################### Verifiable Credential Agent Definition #######################
+  # agent:
+  #   image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+  #   environment:
+  #     ACAPY_LABEL: ${AGENT_NAME}
+  #     ACAPY_ENDPOINT: ${AGENT_ENDPOINT}
+  #     ACAPY_GENESIS_URL: ${LEDGER_URL}/genesis
+  #     ACAPY_WALLET_NAME: ${AGENT_WALLET_NAME}
+  #     ACAPY_WALLET_TYPE: "indy"
+  #     ACAPY_WALLET_KEY: ${AGENT_WALLET_ENCRYPTION_KEY}
+  #     ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
+  #     ACAPY_WALLET_STORAGE_TYPE: ${AGENT_WALLET_STORAGE_TYPE}
+  #     ACAPY_AUTO_PROVISION: "true"
+  #     ACAPY_WEBHOOK_URL: ${AGENT_WEBHOOK_URL}
+  #     ACAPY_LOG_LEVEL: ${AGENT_LOG_LEVEL}
+  #     ACAPY_AUTO_ACCEPT_INVITES: "true"
+  #     ACAPY_AUTO_ACCEPT_REQUESTS: "true"
+  #     ACAPY_AUTO_PING_CONNECTION: "true"
+  #     ACAPY_AUTO_RESPOND_MESSAGES: "true"
+  #     ACAPY_TAILS_SERVER_BASE_URL: ${TAILS_SERVER_URL}
+  #     AGENT_HTTP_IN_PORT: ${AGENT_HTTP_IN_PORT}
+  #     AGENT_WS_IN_PORT: ${AGENT_WS_IN_PORT}
+  #     AGENT_ADMIN_PORT: ${AGENT_ADMIN_PORT}
+  #     WALLET_HOST: ${WALLET_HOST}
+  #     WALLET_PORT: ${WALLET_PORT}
+  #     WALLET_USER: ${WALLET_USER}
+  #     WALLET_PASSWORD: ${WALLET_PASSWORD}
+  #   networks:
+  #     - primenet
+  #   ports:
+  #     - ${AGENT_HTTP_IN_PORT}:${AGENT_HTTP_IN_PORT}
+  #     - ${AGENT_WS_IN_PORT}:${AGENT_WS_IN_PORT}
+  #     - ${AGENT_ADMIN_PORT}:${AGENT_ADMIN_PORT}
+  #   depends_on:
+  #     - wallet
+  #   entrypoint: /bin/bash
+  #   command: [
+  #       "-c",
+  #       "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"ENDORSER\", \"alias\":\"${AGENT_WALLET_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+  #       sleep 5; \
+  #       aca-py start \
+  #       --inbound-transport http '0.0.0.0' ${AGENT_HTTP_IN_PORT} \
+  #       --inbound-transport ws '0.0.0.0' ${AGENT_WS_IN_PORT} \
+  #       --outbound-transport ws \
+  #       --outbound-transport http \
+  #       --wallet-storage-config '{\"url\":\"${WALLET_HOST}:${WALLET_PORT}\",\"max_connections\":5}' \
+  #       --wallet-storage-creds '{\"account\":\"${WALLET_USER}\",\"password\":\"${WALLET_PASSWORD}\",\"admin_account\":\"${WALLET_USER}\",\"admin_password\":\"${WALLET_PASSWORD}\"}' \
+  #       --admin '0.0.0.0' ${AGENT_ADMIN_PORT} \
+  #       --${AGENT_ADMIN_MODE}",
+  #     ]
+
+  ####################### Verifiable Credential Wallet Definition #######################
+  # wallet:
+  #   image: postgres:12-alpine
+  #   environment:
+  #     POSTGRES_USER: DB_USER
+  #     POSTGRES_PASSWORD: DB_PASSWORD
+  #   networks:
+  #     - primenet
+  #   ports:
+  #     - 5434:5432
+  #   volumes:
+  #     - wallet-data:/var/lib/postgresql/data
+
+####################### API Backend Definition #######################
   dotnet-webapi:
     container_name: prime-webapi-backend
     restart: always
@@ -68,6 +130,10 @@ services:
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
       DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    volumes:
+      - ./prime-dotnet-webapi/:/app
+      - prime-dotnet-webapi-bin:/app/bin
+      - prime-dotnet-webapi-obj:/app/obj
     ports:
       - "5000:8080"
       - "5001:5001"
@@ -75,6 +141,16 @@ services:
       - prime-net
     depends_on:
       - postgres
+    entrypoint: /bin/bash
+    command: [
+      "-c",
+      "echo Waiting for Database...;
+      sleep 15;
+      echo \"Running Database Migrations...\";
+      dotnet ef database update;
+      echo \"Starting API...\";
+      dotnet watch run --urls=http://+:8080"
+    ]
 
 ###############################################################################
 ###                         Web Frontend Definition                         ###
@@ -201,3 +277,6 @@ volumes:
   local_postgres_data:
   local_mongodb_data:
   db_backup_data:
+  wallet-data:
+  prime-dotnet-webapi-bin:
+  prime-dotnet-webapi-obj:
