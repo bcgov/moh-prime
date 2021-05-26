@@ -29,6 +29,8 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
+import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
+import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
 
 const routes: Routes = [
   {
@@ -136,7 +138,7 @@ const routes: Routes = [
             data: { title: 'Site Banner' }
           },
           {
-            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',
@@ -172,6 +174,26 @@ const routes: Routes = [
                 path: AdjudicationRoutes.EVENT_LOG,
                 component: SiteEventsComponent,
                 data: { title: 'Event Log' }
+              }
+            ]
+          },
+          {
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.AUTHORIZED_USERS}`,
+            children: [
+              {
+                path: '',
+                component: HealthAuthorityAuthorizedUsersPageComponent,
+                data: { title: 'Authorized Users' }
+              },
+              {
+                path: AdjudicationRoutes.CREATE_USER,
+                component: HealthAuthorityAuthorizedUserPageComponent,
+                data: { title: 'Authorized User' }
+              },
+              {
+                path: `:auid`,
+                component: HealthAuthorityAuthorizedUserPageComponent,
+                data: { title: 'Authorized User' }
               }
             ]
           }

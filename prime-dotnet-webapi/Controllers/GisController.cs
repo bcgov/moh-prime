@@ -44,7 +44,6 @@ namespace Prime.Controllers
             }
 
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
-
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
 
             return CreatedAtAction(
@@ -176,7 +175,7 @@ namespace Prime.Controllers
 
             var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
-            if (result == true)
+            if (result)
             {
                 return Ok();
             }

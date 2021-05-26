@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("StatusLookup")]
-    public sealed class Status : BaseAuditable, ILookup<int>, IEquatable<Status>
+    public sealed class Status : ILookup<int>, IEquatable<Status>
     {
         [Key]
         public int Code { get; set; }
