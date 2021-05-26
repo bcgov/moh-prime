@@ -324,15 +324,15 @@ namespace Prime.Controllers
         /// Confirm an Enrollee's most recent submission
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/submissions/latest/confirm", Name = nameof(ConfirmSubmission))]
+        [HttpPut("{enrolleeId}/submissions/latest/confirm", Name = nameof(ConfirmLatestSubmission))]
         [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> ConfirmSubmission(int enrolleeId)
+        public async Task<ActionResult> ConfirmLatestSubmission(int enrolleeId)
         {
-            await _submissionService.ConfirmSubmissionAsync(enrolleeId);
+            await _submissionService.ConfirmLatestSubmissionAsync(enrolleeId);
             return NoContent();
         }
 

@@ -137,7 +137,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task ConfirmSubmissionAsync(int enrolleeId)
+        public async Task ConfirmLatestSubmissionAsync(int enrolleeId)
         {
             var submission = await _context.Submissions
                 .Where(s => s.EnrolleeId == enrolleeId)
@@ -203,7 +203,7 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
             // Manually Approved submissions are automatically confirmed
-            await ConfirmSubmissionAsync(enrollee.Id);
+            await ConfirmLatestSubmissionAsync(enrollee.Id);
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
