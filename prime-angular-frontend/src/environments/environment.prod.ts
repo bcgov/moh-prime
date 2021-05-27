@@ -1,19 +1,19 @@
-import { AppEnvironment } from '@env/environment.default';
+import { AppEnvironment } from '@env/environment.model';
+import { environment as defaultEnvironment } from './environment.prod.template';
 
+/**
+ * @description
+ * Production environment populated with the default
+ * environment information and appropriate overrides.
+ *
+ * NOTE: This environment for local development from within
+ * a container, and not used within the deployment pipeline.
+ */
 export const environment: AppEnvironment = {
-  production: true,
+  ...defaultEnvironment,
   environmentName: 'local',
-  version: '1.0.0',
-  apiEndpoint: '/api/v1',
   loginRedirectUrl: 'http://localhost:4200',
   documentManagerUrl: 'http://localhost:6001',
-  prime: {
-    displayPhone: '1-844-39PRIME',
-    phone: '1-844-397-7463',
-    email: 'prime@gov.bc.ca',
-    supportEmail: 'primesupport@gov.bc.ca',
-  },
-  phoneNumbers: { director: '236-478-0282' },
   keycloakConfig: {
     config: {
       url: 'https://dev.oidc.gov.bc.ca/auth',
@@ -24,12 +24,5 @@ export const environment: AppEnvironment = {
       onLoad: 'check-sso'
     },
     bearerExcludedUrls: ['/provisioner-access/certificate']
-  },
-  mohKeycloakConfig: {
-    config: {
-      url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
-      realm: 'moh_applications',
-      clientId: 'PRIME-WEBAPP-ENROLLMENT'
-    }
   }
 };

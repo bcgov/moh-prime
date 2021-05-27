@@ -1,5 +1,14 @@
-import { AppEnvironment } from '@env/environment.default';
+import { AppEnvironment } from '@env/environment.model';
 
+/**
+ * @description
+ * Production environment defaults for replacement from
+ * within the OpenShift deployment pipeline.
+ *
+ * NOTE: Changes should be applied as high in the cascade
+ * of the environments to reduce duplication, and to prevent
+ * missing environment information during deployments.
+ */
 export const environment: AppEnvironment = {
   production: true,
   environmentName: '$OC_APP',
