@@ -199,7 +199,7 @@ jobs:
           PR_NUMBER: ${{steps.PR.outputs.number}}
         run: |
           echo PR_NUMBER=$PR_NUMBER
-          oc process -f infrastructure/prime-app-template.yml \
+          oc process -f infrastructure/prime-app-ephemeral-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
             -p DB_POD=postgres-db \
