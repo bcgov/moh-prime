@@ -29,7 +29,6 @@ import { SiteRegistrationNote } from '@shared/models/site-registration-note.mode
 import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -529,10 +528,6 @@ export class AdjudicationResource {
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
-    }
-
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
     }
 
     if (!enrollee.enrolleeCareSettings) {

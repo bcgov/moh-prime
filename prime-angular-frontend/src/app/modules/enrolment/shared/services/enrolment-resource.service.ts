@@ -357,10 +357,6 @@ export class EnrolmentResource {
       enrollee.certifications = [];
     }
 
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
-    }
-
     if (!enrollee.oboSites) {
       enrollee.oboSites = [];
     }
@@ -479,10 +475,6 @@ export class EnrolmentResource {
       .every((key: string) =>
         (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
       );
-  }
-
-  private removeIncompleteJobs(jobs: Job[]) {
-    return jobs.filter((job: Job) => (job.title !== ''));
   }
 
   private removeIncompleteCareSettings(careSettings: CareSetting[]) {

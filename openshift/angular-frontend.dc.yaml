@@ -170,22 +170,6 @@ objects:
       kind: Service
       name: "${NAME}${SUFFIX}"
 
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}-mutualauth"
-  spec:
-    # e.g. mutualauth.develop.pharmanetenrolment.gov.bc.ca can cause "No subject alternative DNS name matching mutualauth.develop.pharmanetenrolment.gov.bc.ca found."
-    host: "mutualauth-${VANITY_URL}"
-    port:
-      targetPort: "8890"
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: passthrough
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}"
-
 # Angular service (endpoint definition for internal routing to related pods)
 - apiVersion: v1
   kind: Service

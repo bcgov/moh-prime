@@ -38,8 +38,6 @@ namespace Prime.ViewModels
 
         public ICollection<Certification> Certifications { get; set; }
 
-        public ICollection<Job> Jobs { get; set; }
-
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
 
         public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }

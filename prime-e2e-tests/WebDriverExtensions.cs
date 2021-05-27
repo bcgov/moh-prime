@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using System.IO;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 
@@ -53,11 +54,12 @@ namespace TestPrimeE2E
         }
 
 
-        // TODO: Parameter to permit saving to alternate folder rather than working directory
-        public static void TakeScreenshot(this IWebDriver driver, string pageIdentifier)
+        public static void TakeScreenshot(this IWebDriver driver, string pageIdentifier, string archiveFolder = null)
         {
             Screenshot image = ((ITakesScreenshot)driver).GetScreenshot();
-            image.SaveAsFile($"{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}_{pageIdentifier}.png", ScreenshotImageFormat.Png);
+            // Save to archive folder if provided, otherwise save to working directory
+            archiveFolder = (archiveFolder != null ? $"{archiveFolder}{Path.DirectorySeparatorChar}" : "");
+            image.SaveAsFile($"{archiveFolder}{DateTime.Now.ToString("yyyyMMddHHmmss", DateTimeFormatInfo.InvariantInfo)}_{pageIdentifier}.png", ScreenshotImageFormat.Png);
         }
 
 

@@ -10,15 +10,15 @@ namespace Prime.Configuration
             get
             {
                 return new[] {
-                    new BusinessEventType { Code = 1, Name = "Status Change",      CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 2, Name = "Email",              CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 3, Name = "Note",               CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 4, Name = "Admin Claim",        CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 5, Name = "Enrollee",           CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 6, Name = "Site",               CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 7, Name = "Admin View",         CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 8, Name = "Organization",       CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE },
-                    new BusinessEventType { Code = 9, Name = "Pharmanet API Call", CreatedTimeStamp = SEEDING_DATE, UpdatedTimeStamp = SEEDING_DATE }
+                    new BusinessEventType { Code = 1, Name = "Status Change"      },
+                    new BusinessEventType { Code = 2, Name = "Email"              },
+                    new BusinessEventType { Code = 3, Name = "Note"               },
+                    new BusinessEventType { Code = 4, Name = "Admin Claim"        },
+                    new BusinessEventType { Code = 5, Name = "Enrollee"           },
+                    new BusinessEventType { Code = 6, Name = "Site"               },
+                    new BusinessEventType { Code = 7, Name = "Admin View"         },
+                    new BusinessEventType { Code = 8, Name = "Organization"       },
+                    new BusinessEventType { Code = 9, Name = "Pharmanet API Call" }
                 };
             }
         }

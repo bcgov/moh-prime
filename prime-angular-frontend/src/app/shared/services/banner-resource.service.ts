@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
-import { Banner } from '@shared/models/banner.model';
+import { Banner, BannerViewModel } from '@shared/models/banner.model';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -21,9 +22,9 @@ export class BannerResourceService {
   ) { }
 
   public createOrUpdateEnrolmentLandingBanner(banner: Banner): Observable<Banner> {
-    return this.apiResource.put<Banner>(`banners/enrolment-landing`, banner)
+    return this.apiResource.put<BannerViewModel>(`banners/enrolment-landing`, BannerViewModel.fromBanner(banner))
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap(() => this.toastService.openSuccessToast('Banner has been created/updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Banner could not be created/updated');
@@ -34,9 +35,9 @@ export class BannerResourceService {
   }
 
   public createOrUpdateSiteLandingBanner(banner: Banner): Observable<Banner> {
-    return this.apiResource.put<Banner>(`banners/site-landing`, banner)
+    return this.apiResource.put<BannerViewModel>(`banners/site-landing`, BannerViewModel.fromBanner(banner))
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap(() => this.toastService.openSuccessToast('Banner has been created/updated')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Banner could not be created/updated');
@@ -46,10 +47,10 @@ export class BannerResourceService {
       );
   }
 
-  public deleteEnrolmentLandingBanner(): Observable<Banner> {
-    return this.apiResource.delete<Banner>(`banners/enrolment-landing`)
+  public deleteEnrolmentLandingBanner(): NoContent {
+    return this.apiResource.delete<BannerViewModel>(`banners/enrolment-landing`)
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Enrolment Landing Banner has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment Landing Banner could not be deleted');
@@ -59,10 +60,10 @@ export class BannerResourceService {
       );
   }
 
-  public deleteSiteLandingBanner(): Observable<Banner> {
-    return this.apiResource.delete<Banner>(`banners/site-landing`)
+  public deleteSiteLandingBanner(): NoContent {
+    return this.apiResource.delete<BannerViewModel>(`banners/site-landing`)
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Site Landing Banner has been deleted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Site Landing Banner could not be deleted');
@@ -73,9 +74,9 @@ export class BannerResourceService {
   }
 
   public getEnrolmentLandingBanner(): Observable<Banner> {
-    return this.apiResource.get<Banner>(`banners/enrolment-landing`)
+    return this.apiResource.get<BannerViewModel>(`banners/enrolment-landing`)
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap((banner: Banner) => this.logger.info('ENROLMENT_LANDING_BANNER', banner)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Banner could not be retrieved');
@@ -86,9 +87,9 @@ export class BannerResourceService {
   }
 
   public getSiteLandingBanner(): Observable<Banner> {
-    return this.apiResource.get<Banner>(`banners/site-landing`)
+    return this.apiResource.get<BannerViewModel>(`banners/site-landing`)
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap((banner: Banner) => this.logger.info('SITE_LANDING_BANNER', banner)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Banner could not be retrieved');
@@ -100,9 +101,9 @@ export class BannerResourceService {
 
   public getActiveBannerByLocationCode(locationCode: BannerLocationCode): Observable<Banner> {
     const params = this.apiResourceUtilsService.makeHttpParams({ locationCode });
-    return this.apiResource.get<Banner>(`banners/active`, params)
+    return this.apiResource.get<BannerViewModel>(`banners/active`, params)
       .pipe(
-        map((response: ApiHttpResponse<Banner>) => response.result),
+        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap((banner: Banner) => this.logger.info('ACTIVE_BANNER', banner)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Banner could not be retrieved');

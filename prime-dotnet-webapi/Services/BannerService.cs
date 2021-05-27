@@ -14,116 +14,48 @@ namespace Prime.Services
     public class BannerService : BaseService, IBannerService
     {
         private readonly IMapper _mapper;
+
         public BannerService(
             ApiDbContext context,
-            IMapper mapper,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IMapper mapper)
             : base(context, httpContext)
         {
             _mapper = mapper;
         }
 
-        public async Task<BannerViewModel> CreateBannerAsync(Banner banner)
+        public async Task<BannerViewModel> GetBannerAsync(BannerLocationCode locationCode)
         {
-            _context.Banners.Add(banner);
-
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create banner.");
-            }
-
-            return _mapper.Map<BannerViewModel>(banner);
-        }
-
-        public async Task<BannerViewModel> GetBannerAsync(int bannerId)
-        {
-            return await _context.Banners
-            .Where(b => b.Id == bannerId)
-            .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
-        }
-
-        public async Task<BannerViewModel> GetBannerByLocationAsync(BannerLocationCode locationCode)
-        {
-            return await _context.Banners
-            .Where(b => b.BannerLocationCode == locationCode)
-            .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
-        }
-
-        public async Task<IEnumerable<BannerViewModel>> GetBannersAsync()
-        {
-            return await _context.Banners
-            .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
-            .ToListAsync();
-        }
-
-        public async Task<BannerDisplayViewModel> GetActiveBannerByLocationAsync(BannerLocationCode locationCode)
-        {
-            var currentDate = DateTime.Today;
             var banner = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
+                .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync();
+
+            if (banner != null)
+            {
+                // Banner time stamps are stored as UTC, but are materialized as DateTimeKind.Unspecified
+                // Once we upgrade our EF / Npgsql, we can use NodaTime instead
+                banner.StartTimestamp = DateTime.SpecifyKind(banner.StartTimestamp, DateTimeKind.Utc);
+                banner.EndTimestamp = DateTime.SpecifyKind(banner.EndTimestamp, DateTimeKind.Utc);
+            }
+
+            return banner;
+        }
+
+        public async Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode, DateTime atTime)
+        {
+            atTime = atTime.ToUniversalTime();
+            return await _context.Banners
+                .Where(b => b.BannerLocationCode == locationCode)
+                .Where(b => b.StartTimestamp <= atTime && atTime <= b.EndTimestamp)
                 .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
-            // Comparing of only the Date portion.
-            if (banner != null && currentDate.Date >= banner.StartDate.Date && currentDate.Date <= banner.EndDate.Date)
-            {
-                return banner;
-            }
-            return null;
         }
 
-        public async Task RemoveBannerAsync(int bannerId)
+        public async Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel bannerVM)
         {
             var banner = await _context.Banners
-                .SingleOrDefaultAsync(a => a.Id == bannerId);
-
-            if (banner == null)
-            {
-                return;
-            }
-
-            _context.Banners.Remove(banner);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task RemoveBannerByLocationAsync(BannerLocationCode locationCode)
-        {
-            var banner = await _context.Banners
-                            .SingleOrDefaultAsync(a => a.BannerLocationCode == locationCode);
-
-            if (banner == null)
-            {
-                return;
-            }
-
-            _context.Banners.Remove(banner);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<BannerViewModel> UpdateBannerAsync(int bannerId, BannerViewModel updateModel)
-        {
-            var banner = await _context.Banners
-                .SingleOrDefaultAsync(a => a.Id == bannerId);
-
-            _context.Entry(banner).CurrentValues.SetValues(updateModel); // reflection
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                return _mapper.Map<BannerViewModel>(banner);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return null;
-            }
-        }
-
-        public async Task<BannerViewModel> CreateOrUpdateBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel)
-        {
-            var banner = await _context.Banners
-                .SingleOrDefaultAsync(a => a.BannerLocationCode == locationCode);
+                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
 
             if (banner == null)
             {
@@ -134,7 +66,11 @@ namespace Prime.Services
                 _context.Banners.Add(banner);
             }
 
-            _context.Entry(banner).CurrentValues.SetValues(updateModel); // reflection
+            banner.BannerType = bannerVM.BannerType;
+            banner.Title = bannerVM.Title;
+            banner.Content = bannerVM.Content;
+            banner.StartTimestamp = bannerVM.StartTimestamp.ToUniversalTime();
+            banner.EndTimestamp = bannerVM.EndTimestamp.ToUniversalTime();
 
             try
             {
@@ -144,6 +80,18 @@ namespace Prime.Services
             catch (DbUpdateConcurrencyException)
             {
                 return null;
+            }
+        }
+
+        public async Task DeleteBannerAsync(BannerLocationCode locationCode)
+        {
+            var banner = await _context.Banners
+                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
+
+            if (banner != null)
+            {
+                _context.Banners.Remove(banner);
+                await _context.SaveChangesAsync();
             }
         }
     }
