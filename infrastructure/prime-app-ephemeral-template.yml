@@ -290,6 +290,8 @@ objects:
                   configMapKeyRef:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
+              - name: DOCUMENT_MANAGER_URL
+                value: https://${SVC_NAME}${URL_STUB}/api/docman
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
@@ -920,7 +922,13 @@ objects:
     ingress:
       - ports:
           - protocol: TCP
+            port: 25
+          - protocol: TCP
             port: 80
+          - protocol: TCP
+            port: 1025
+          - protocol: TCP
+            port: 3000
           - protocol: TCP
             port: 5001
           - protocol: TCP
@@ -929,6 +937,12 @@ objects:
             port: 6001
           - protocol: TCP
             port: 8080
+          - protocol: TCP
+            port: 8443
+          - protocol: TCP
+            port: 8888
+          - protocol: TCP
+            port: 8890
           - protocol: TCP
             port: 9191
     policyTypes:
