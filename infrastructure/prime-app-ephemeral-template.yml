@@ -522,9 +522,9 @@ objects:
               - containerPort: 9191
                 protocol: TCP
         volumes:
-          - name: '${NAME}${SUFFIX}-data'
+          - name: ${NAME}${SUFFIX}-data
             emptyDir: {}
-          - name: '${NAME}${SUFFIX}-run'
+          - name: ${NAME}${SUFFIX}-run
             emptyDir: {}
     triggers:
       - type: ConfigChange
