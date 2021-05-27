@@ -16,7 +16,7 @@ parameters:
   required: false
 - name: METABASE_IMAGE
   displayName: Metabase Docker Image
-  value: registry.hub.docker.com/metabase/metabase:v0.39.2
+  value: "metabase:v0.39.2"
   description: The metabase docker image to use
   required: true
 - description: Version of PostgreSQL image to be used (9.4, 9.5, 9.6 or latest).
@@ -118,7 +118,7 @@ objects:
     tags:
     - from:
         kind: DockerImage
-        name: ${METABASE_IMAGE}
+        name: metabase
       generation: 2
       name: latest
       referencePolicy:
@@ -288,7 +288,7 @@ objects:
       spec:
         containers:
         - name: ${METABASE_SERVICE_NAME}
-          image: ${METABASE_IMAGE}
+          image: metabase
           imagePullPolicy: Always
           env:
           - name: MB_DB_TYPE
