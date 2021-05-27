@@ -32,7 +32,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "Site Business Licence Uploaded",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.BusinessLicenceUpload, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.BusinessLicenceUpload, viewModel)
             );
         }
 
@@ -52,7 +52,7 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmails,
                 cc: cc,
                 subject: "New Access Request",
-                await _razorConverterService.RenderEmailTemplateToString(emailTemplateType, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(emailTemplateType, viewModel)
             );
         }
 
@@ -63,7 +63,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "PRIME Requires your Attention",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeStatusChange, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeStatusChange, viewModel)
             );
         }
 
@@ -74,7 +74,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "Remote Practitioner Notification",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserNotification, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserNotification, viewModel)
             );
         }
 
@@ -85,7 +85,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: new[] { MohEmail, PrimeSupportEmail },
                 subject: "Remote Practitioners Added",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserUpdatedNotification, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.RemoteUserUpdatedNotification, viewModel)
             );
         }
 
@@ -96,7 +96,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "Your PRIME Renewal Date Has Passed",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalPassed, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalPassed, viewModel)
             );
         }
 
@@ -107,7 +107,7 @@ namespace Prime.Services.EmailInternal
                 from: PrimeEmail,
                 to: recipientEmail,
                 subject: "PRIME Renewal Required",
-                await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
             );
         }
 
