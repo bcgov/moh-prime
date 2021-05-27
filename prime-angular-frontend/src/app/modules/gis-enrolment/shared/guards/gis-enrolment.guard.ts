@@ -31,26 +31,25 @@ export class GisEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    // TODO added to prevent usage until ready for production
-    return of(false);
-    // return this.authService.getUser$()
-    //   .pipe(
-    //     exhaustMap((user: BcscUser) =>
-    //       this.gisEnrolmentResource.getEnrolmentByUserId(user.userId)
-    //         .pipe(
-    //           exhaustMap((enrolment: GisEnrolment) =>
-    //             (enrolment)
-    //               ? of(enrolment)
-    //               : this.gisEnrolmentResource.createEnrolment(GisEnrolment.fromBcscUser(user))
-    //           ),
-    //           map((enrolment: GisEnrolment) => {
-    //             // Store the enrolment for access throughout registration, which
-    //             // will allows be the most up-to-date version
-    //             this.gisEnrolmentService.enrolment = enrolment;
-    //             return this.routeDestination(routePath, enrolment);
-    //           })
-    //         ))
-    //   );
+    return this.authService.getUser$()
+      .pipe(
+        exhaustMap((user: BcscUser) =>
+          this.gisEnrolmentResource.getEnrolmentByUserId(user.userId)
+            .pipe(
+              exhaustMap((enrolment: GisEnrolment) =>
+                (enrolment)
+                  ? of(enrolment)
+                  : this.gisEnrolmentResource.createEnrolment(GisEnrolment.fromBcscUser(user))
+              ),
+              map((enrolment: GisEnrolment) => {
+                // Store the enrolment for access throughout registration, which
+                // will allows be the most up-to-date version
+                this.gisEnrolmentService.enrolment = enrolment;
+                return this.routeDestination(routePath, enrolment);
+              })
+            )
+        )
+      );
   }
 
   /**

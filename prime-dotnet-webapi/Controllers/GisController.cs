@@ -2,14 +2,17 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Prime.Auth;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels.Parties;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = Schemes.MohJwt)]
     [Route("api/parties/[controller]")]
     [ApiController]
     public class GisController : ControllerBase
@@ -20,7 +23,7 @@ namespace Prime.Controllers
             _gisService = gisService;
         }
 
-        // POST: api/gis
+        // POST: api/parties/gis
         /// <summary>
         /// Creates a new Gis Enrolment
         /// </summary>
@@ -53,7 +56,7 @@ namespace Prime.Controllers
             );
         }
 
-        // PUT: api/Gis/5
+        // PUT: api/parties/gis/5
         /// <summary>
         /// Updates a specific Gis Enrolment.
         /// </summary>
@@ -94,7 +97,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // GET: api/Gis/5
+        // GET: api/parties/gis/5
         /// <summary>
         /// Gets a specific Gis Enrolment.
         /// </summary>
@@ -120,7 +123,7 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(gisEnrolment));
         }
 
-        // GET: api/Gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
+        // GET: api/parties/gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
         /// <summary>
         /// Gets a specific Gis Enrolment by userId
         /// </summary>
@@ -143,15 +146,11 @@ namespace Prime.Controllers
             {
                 return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
             }
-            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
-            {
-                return Forbid();
-            }
 
             return Ok(ApiResponse.Result(gisEnrolment));
         }
 
-        // POST: api/Gis/5/ldap/login
+        // POST: api/parties/gis/5/ldap/login
         /// <summary>
         /// Login to ldap using username and password
         /// </summary>
@@ -183,7 +182,7 @@ namespace Prime.Controllers
             return Unauthorized();
         }
 
-        // POST: api/Gis/5/submission
+        // POST: api/parties/gis/5/submission
         /// <summary>
         /// Submits the given Gis enrolment.
         /// </summary>
