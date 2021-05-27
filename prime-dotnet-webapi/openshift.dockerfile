@@ -1,4 +1,5 @@
-FROM registry.access.redhat.com/ubi8/dotnet-50 AS build
+# FROM registry.access.redhat.com/ubi8/dotnet-50 AS build
+FROM registry.access.redhat.com/ubi8/dotnet-31 AS build
 WORKDIR /opt/app-root/app
 ARG API_PORT
 ARG ASPNETCORE_ENVIRONMENT
@@ -36,7 +37,8 @@ RUN dotnet ef migrations script --idempotent --output /opt/app-root/app/out/data
 ########################################
 ###   Stage 2 - Runtime environment  ###
 ########################################
-FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
+# FROM registry.access.redhat.com/ubi8/dotnet-50-runtime AS runtime
+FROM registry.access.redhat.com/ubi8/dotnet-31-runtime AS runtime
 USER 0
 ENV PATH="$PATH:/opt/rh/rh-dotnet50/root/usr/bin/:/opt/app-root/.dotnet/tools:/root/.dotnet/tools"
 ENV ASPNETCORE_ENVIRONMENT "${ASPNETCORE_ENVIRONMENT}"
