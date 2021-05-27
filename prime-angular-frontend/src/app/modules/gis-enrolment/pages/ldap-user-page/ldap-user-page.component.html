@@ -52,6 +52,6 @@
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="false"
-                   [disableSave]="hasAttemptedSubmission && formState.ldapUser.value === false"
+                   [disableSave]="formState.ldapUser.value === false"
                    (save)="onSubmit()"></app-page-footer>
 </app-page>
