@@ -520,9 +520,10 @@ objects:
               - containerPort: 9191
                 protocol: TCP
         volumes:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
-            persistentVolumeClaim:
-              claimName: '${SVC_NAME}-${DOCMAN_POD}-backend-pvc'
+          - name: '${NAME}${SUFFIX}-data'
+            emptyDir: {}
+          - name: '${NAME}${SUFFIX}-run'
+            emptyDir: {}
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -782,8 +783,7 @@ objects:
         restartPolicy: Always
         volumes:
           - name: ${SVC_NAME}-${DB_POD}-data
-            persistentVolumeClaim:
-              claimName: ${SVC_NAME}-${DB_POD}-backend-pvc
+            emptyDir: {}
           - name: ${SVC_NAME}-${DB_POD}-run
             emptyDir: {}
   status: {}
