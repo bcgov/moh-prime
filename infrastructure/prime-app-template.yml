@@ -361,6 +361,8 @@ objects:
                   name: pharmanet-api-ssl-certs
               - secretRef:
                   name: verifiable-credential-secrets
+              - secretRef:
+                  name: mail-settings
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
@@ -946,5 +948,9 @@ objects:
             port: 8080
           - protocol: TCP
             port: 9191
+          - protocol: TCP
+            port: 1025
+          - protocol: TCP
+            port: 25
     policyTypes:
       - Ingress
