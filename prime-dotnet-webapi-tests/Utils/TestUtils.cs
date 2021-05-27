@@ -75,7 +75,6 @@ namespace PrimeTests.Utils
             .RuleFor(e => e.Certifications, f => CertificationFaker.Generate(2))
             .RuleFor(e => e.DeviceProviderNumber, TestUtils.RandomDeviceProviderNumber())
             .RuleFor(e => e.IsInsulinPumpProvider, f => f.Random.Bool())
-            .RuleFor(e => e.Jobs, f => JobFaker.Generate(2))
             .RuleFor(e => e.EnrolleeCareSettings, f => EnrolleeCareSettingFaker.Generate(2))
             .RuleFor(e => e.EnrolmentStatuses, f => EnrolmentStatusFaker.Generate(1))
             .RuleFor(e => e.IdentityAssuranceLevel, f => 3)
