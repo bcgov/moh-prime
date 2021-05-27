@@ -7,6 +7,8 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 
 import { Organization } from '@registration/shared/models/organization.model';
+import { SiteService } from '@registration/shared/services/site.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-site-information-form',
@@ -24,6 +26,7 @@ export class SiteInformationFormComponent implements OnInit {
   constructor(
     private organizationResource: OrganizationResource,
     private orgBookResource: OrgBookResource,
+    private siteService: SiteService,
   ) {
     this.doingBusinessAsNames = [];
     this.isNewSite = new FormControl(false);
@@ -35,6 +38,10 @@ export class SiteInformationFormComponent implements OnInit {
 
   public get pec(): FormControl {
     return this.form.get('pec') as FormControl;
+  }
+
+  public isCommunityPharmacy() {
+    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public ngOnInit(): void {
@@ -56,6 +63,10 @@ export class SiteInformationFormComponent implements OnInit {
           this.pec.enable();
         }
       });
+
+    if (this.isCommunityPharmacy()) {
+      this.pec.enable();
+    }
 
     this.isNewSite.setValue(this.pec.disabled);
   }
