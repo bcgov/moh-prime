@@ -816,23 +816,6 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-#   Document Manager (backend) Persistent Volume Claim
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: ${SVC_NAME}-${DB_POD}-backend-pvc
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
 
 ###########################################
 ###                Redis                ###

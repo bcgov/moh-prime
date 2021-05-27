@@ -816,7 +816,7 @@ objects:
     type: ClusterIP
   status:
     loadBalancer: {}
-#   Document Manager (backend) Persistent Volume Claim
+#   Database Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
