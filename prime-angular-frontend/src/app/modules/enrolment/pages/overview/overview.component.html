@@ -19,7 +19,7 @@
     </app-page-subheader>
   </div>
 
-  <button *ngIf="canRequestRemoteAccess() && currentStatus === EnrolmentStatus.EDITABLE"
+  <button *ngIf="canRequestRemoteAccess() && currentStatus === EnrolmentStatus.EDITABLE && enrolment.appliedDate"
           class="mb-4"
           mat-stroked-button
           color="primary"
