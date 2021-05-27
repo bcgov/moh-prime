@@ -515,7 +515,7 @@ objects:
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
-                name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+                name: ${SVC_NAME}-${DOCMAN_POD}-data
             ports:
               - containerPort: 6001
                 protocol: TCP
