@@ -3,7 +3,7 @@
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
   <form [formGroup]="form"
-        (ngOnSubmit)="onSubmit()"
+        (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
 
