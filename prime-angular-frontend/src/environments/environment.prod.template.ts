@@ -39,6 +39,9 @@ export const environment: AppEnvironment = {
       url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
       realm: 'moh_applications',
       clientId: 'PRIME-WEBAPP-ENROLLMENT'
+    },
+    initOptions: {
+      onLoad: 'check-sso'
     }
   }
 };
