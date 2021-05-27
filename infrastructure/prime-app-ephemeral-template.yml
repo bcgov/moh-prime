@@ -361,6 +361,8 @@ objects:
                   name: pharmanet-api-ssl-certs
               - secretRef:
                   name: verifiable-credential-secrets
+              - secretRef:
+                  name: mail-settings
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
