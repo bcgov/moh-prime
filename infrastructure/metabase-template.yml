@@ -283,7 +283,8 @@ objects:
       spec:
         containers:
         - name: ${METABASE_SERVICE_NAME}
-          image: ''
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/9c33a9-tools/metabase:latest
           imagePullPolicy: IfNotPresent
           env:
           - name: MB_DB_TYPE
