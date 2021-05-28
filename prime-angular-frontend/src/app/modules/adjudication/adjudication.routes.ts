@@ -15,6 +15,9 @@ export class AdjudicationRoutes {
   public static DOCUMENT_UPLOAD = 'documents';
   public static ENROLLEE_OVERVIEW = 'overview';
   public static BANNER = 'banner';
+  public static MAINTENANCE = 'maintenance';
+  public static NOTIFICATION_EMAILS = 'notification-emails';
+  public static TOA = 'toa';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';
