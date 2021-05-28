@@ -1,0 +1,6 @@
+<app-page [busy]="busy"
+          [showToolbar]="true"
+          (back)="onBack()">
+  <app-page-header>Notification Emails</app-page-header>
+  <app-notification-emails-container [emailTemplates]="templates"></app-notification-emails-container>
+</app-page>
