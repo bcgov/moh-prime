@@ -26,9 +26,11 @@ namespace SiteExcelToSql
         static void Main(string[] args)
         {
             string outputFileName = "output.sql"; // default output sql filename
+
             if (args.Length < 1)
             {
                 Console.WriteLine("Usage: command <site_excel.xlsx> <output.sql>");
+                return;
             }
             else if (args.Length == 2)
             {
