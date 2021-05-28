@@ -32,8 +32,8 @@
   </section>
 
   <section class="mb-4">
-    <div class="mb-3"
-         *ngIf="!isCommunityPharmacy()">
+    <div *ngIf="!isCommunityPharmacy()" 
+         class="mb-3">
       <mat-slide-toggle [formControl]="isNewSite"
                         color="primary">
         {{ (isNewSite.value)
