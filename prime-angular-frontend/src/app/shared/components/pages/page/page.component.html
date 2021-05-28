@@ -1,5 +1,16 @@
 <app-busy-overlay [busy]="busy">
 
+  <ng-container *ngIf="showToolbar">
+    <mat-toolbar>
+      <button mat-icon-button
+              (click)="onBack()"
+              type="button"
+              matTooltip="Back">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+    </mat-toolbar>
+  </ng-container>
+
   <div class="row">
     <div class="col-sm-12 offset-md-1"
          [ngClass]="{
