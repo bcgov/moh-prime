@@ -14,6 +14,15 @@ parameters:
   description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
   value: ""
   required: false
+- name: OC_NAMESPACE
+  displayName: OpenShift License Plate
+  description: Prepends your dev/test/prod URL
+  required: true
+  value: 9c33a9
+- name: OC_APP
+  displayName: Openshift Environment
+  description: dev/test/prod
+  required: true
 - description: Version of PostgreSQL image to be used (9.4, 9.5, 9.6 or latest).
   displayName: Version of PostgreSQL Image
   name: POSTGRESQL_VERSION
@@ -103,21 +112,21 @@ objects:
     resources:
       requests:
         storage: ${POSTGRESQL_VOLUME_CAPACITY}
-# - apiVersion: image.openshift.io/v1
-#   kind: ImageStream
-#   metadata:
-#     labels:
-#       app: ${APP_NAME}
-#     name: ${METABASE_SERVICE_NAME}
-#   spec:
-#     tags:
-#     - from:
-#         kind: DockerImage
-#         name: metabase
-#       generation: 2
-#       name: latest
-#       referencePolicy:
-#         type: Source
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${METABASE_SERVICE_NAME}
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: metabase
+      generation: 2
+      name: latest
+      referencePolicy:
+        type: Source
 - apiVersion: v1
   kind: Service
   metadata:
@@ -283,8 +292,7 @@ objects:
       spec:
         containers:
         - name: ${METABASE_SERVICE_NAME}
-          image: >-
-            image-registry.openshift-image-registry.svc:5000/9c33a9-tools/metabase:latest
+          image: ''
           imagePullPolicy: IfNotPresent
           env:
           - name: MB_DB_TYPE
@@ -348,7 +356,7 @@ objects:
         containerNames:
         - ${METABASE_SERVICE_NAME}
         from:
-          namespace: 9c33a9-tools
+          namespace: 9c33a9-dev
           kind: ImageStreamTag
           name: 'metabase:latest'
         lastTriggeredImage: ""

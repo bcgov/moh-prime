@@ -375,4 +375,5 @@ jobs:
         
           oc process -f infrastructure/metabase-template.yml \
             -p METABASE_ROUTE_HOST=demo-metabase-test.apps.silver.devops.gov.bc.ca \
+            -p OC_APP=${{secrets.OC_APP}} \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
