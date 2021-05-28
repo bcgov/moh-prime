@@ -1,14 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+
 import { Subscription } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
-
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteService } from '@registration/shared/services/site.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-site-information-form',
