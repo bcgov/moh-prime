@@ -37,6 +37,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
   @Output() public sendBulkEmail: EventEmitter<void>;
+  @Output() public maintenance: EventEmitter<void>;
   @Output() public navigateEnrollee: EventEmitter<number>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
@@ -64,6 +65,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.sendBulkEmail = new EventEmitter<void>();
+    this.maintenance = new EventEmitter<void>();
     this.navigateEnrollee = new EventEmitter<number>();
     this.columns = [
       'prefixes',

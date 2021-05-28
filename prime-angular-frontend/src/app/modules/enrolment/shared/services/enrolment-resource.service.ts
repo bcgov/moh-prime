@@ -18,6 +18,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
@@ -200,6 +201,36 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
+  // Agreement Versions
+  // ---
+
+  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
+    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
           throw error;
         })
       );
