@@ -5,7 +5,8 @@ DECLARE
 	DECLARE vFakeAddressID public."Address"."Id"%type;
 	DECLARE vOrganizationID public."Organization"."Id"%type;
 	DECLARE vSiteId public."Site"."Id"%type;
-	DECLARE vCreatorUUID uuid := '00000000-0000-0000-0000-000000000001';
+	DECLARE vCreatorUUID uuid := '00000000-0000-0000-0000-000000000000';
+	DECLARE vUserId uuid := '00000000-0000-0000-0000-000000000011';
 BEGIN
 	--Create Fake Signing Authority Address
 	INSERT INTO public."Address"
@@ -15,7 +16,7 @@ BEGIN
   --Create Fake Signing Authority
 	INSERT INTO public."Party"
 	("CreatedUserId", "CreatedTimeStamp", "UpdatedUserId", "UpdatedTimeStamp", "UserId", "HPDID", "FirstName", "LastName", "DateOfBirth", "JobRoleTitle", "Email", "Phone")
-	VALUES(vCreatorUUID, now(), vCreatorUUID, now(), vCreatorUUID, null, 'Norma', 'Mackenzie', '0001-01-01 00:00:00', 'Administrator of PharmaNet Onboarding', 'PrimeSupport@gov.bc.ca', '5551231234')
+	VALUES(vCreatorUUID, now(), vCreatorUUID, now(), vUserId, null, 'Norma', 'Mackenzie', '0001-01-01 00:00:00', 'Administrator of PharmaNet Onboarding', 'PrimeSupport@gov.bc.ca', '5551231234')
 	RETURNING "Id" INTO vSAPartyId;
 	--Party Address Relationship
 	INSERT INTO public."PartyAddress"
