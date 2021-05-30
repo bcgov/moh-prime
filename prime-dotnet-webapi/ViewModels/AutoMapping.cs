@@ -5,6 +5,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.DTOs.AgreementEngine;
 using Prime.ViewModels.Parties;
+using Prime.ViewModels.Emails;
 
 /**
  * Automapper Documentation
@@ -62,6 +63,9 @@ public class AutoMapping : Profile
         CreateMap<Banner, BannerDisplayViewModel>();
         CreateMap<Banner, BannerViewModel>();
 
+        CreateMap<EmailTemplate, EmailTemplateViewModel>();
+        CreateMap<EmailTemplate, EmailTemplateListViewModel>();
+
         CreateMap<GisEnrolment, GisViewModel>()
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Party.UserId))
             .ForMember(dest => dest.HPDID, opt => opt.MapFrom(src => src.Party.HPDID))
@@ -80,5 +84,11 @@ public class AutoMapping : Profile
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
+
+        // Agreement Version
+        CreateMap<AgreementVersion, AgreementVersionViewModel>()
+            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
+        CreateMap<AgreementVersion, AgreementVersionListViewModel>()
+            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
     }
 }

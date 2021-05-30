@@ -10,7 +10,8 @@
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">
+              scope="col"
+              class="prefix-header pl-0">
             <ng-container *ngIf="enrolleeNavigation">
               <button mat-icon-button
                       aria-label="next"
@@ -262,6 +263,11 @@
                 (click)="onSendBulkEmail()">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+          <mat-icon>build</mat-icon>
+          <span>Maintenance</span>
         </button>
       </mat-menu>
     </ng-template>
