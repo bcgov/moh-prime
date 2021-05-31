@@ -6,7 +6,7 @@
                             [form]="formState.form"
                             [formSubmitting]="formSubmittingEvent"
                             [showFax]="false"
-                            [showAddButton]="contacts?.length"
+                            [showAddButton]="!!contacts?.length"
                             [contacts]="contacts"
                             (submit)="onSubmit()">
     <app-same-as selectFor="administratorPharmaNet"

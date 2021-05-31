@@ -1,9 +1,9 @@
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 
-interface SiteInformationPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
+interface SiteInformationPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> {}
 
 export class SiteInformationPageFormState extends AbstractFormState<SiteInformationPageDataModel> {
   public constructor(
@@ -12,6 +12,18 @@ export class SiteInformationPageFormState extends AbstractFormState<SiteInformat
     super();
 
     this.buildForm();
+  }
+
+  public get doingBusinessAs(): FormControl {
+    return this.formInstance.get('doingBusinessAs') as FormControl;
+  }
+
+  public get pec(): FormControl {
+    return this.formInstance.get('pec') as FormControl;
+  }
+
+  public get securityGroup(): FormControl {
+    return this.formInstance.get('securityGroup') as FormControl;
   }
 
   public get json(): any {
@@ -32,14 +44,9 @@ export class SiteInformationPageFormState extends AbstractFormState<SiteInformat
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      doingBusinessAs: [
-        '',
-        [Validators.required]
-      ],
-      pec: [
-        null,
-        [Validators.required]
-      ]
+      doingBusinessAs: ['', [Validators.required]],
+      pec: [null, [Validators.required]],
+      securityGroup: [null, []]
     });
   }
 }
