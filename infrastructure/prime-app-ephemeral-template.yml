@@ -565,7 +565,7 @@ objects:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+    name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc5432
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     accessModes:
@@ -904,7 +904,7 @@ objects:
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
-              image-registry.openshift-image-registry.svc:5000/openshift/redis:5
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/redis:6
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
@@ -935,6 +935,8 @@ objects:
             port: 5432
           - protocol: TCP
             port: 6001
+          - protocol: TCP
+            port: 6379
           - protocol: TCP
             port: 8080
           - protocol: TCP
