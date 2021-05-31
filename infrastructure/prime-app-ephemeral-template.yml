@@ -650,10 +650,7 @@ objects:
                   name: redis
                   key: database-password
             - name: CACHE_REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: redis
-                  key: redis_port
+              value: "6379"
             - name: DB_HOST
               value: ${SVC_NAME}-${DB_POD}
             - name: DB_NAME
