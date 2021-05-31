@@ -910,6 +910,8 @@ objects:
                   secretKeyRef:
                     name: redis
                     key: database-password
+              - name: REDIS_PORT
+                value: "6379"
             securityContext:
               capabilities: {}
               privileged: false
