@@ -67,7 +67,7 @@ namespace SiteExcelToSql
                     while (reader.Read())
                     {
                         var pec = reader.GetString(0);
-                        var user = reader.PasseRemoteUser();
+                        var user = reader.ParseRemoteUser();
 
                         if (string.IsNullOrEmpty(pec))
                         {

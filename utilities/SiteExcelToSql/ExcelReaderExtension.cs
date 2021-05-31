@@ -120,7 +120,7 @@ namespace SiteExcelToSql
             return site;
         }
 
-        public static RemoteUser PasseRemoteUser(this IExcelDataReader reader)
+        public static RemoteUser ParseRemoteUser(this IExcelDataReader reader)
         {
             var user = new RemoteUser
             {
