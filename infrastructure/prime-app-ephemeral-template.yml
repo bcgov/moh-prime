@@ -907,7 +907,21 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/redis-6:latest
         restartPolicy: Always
         dnsPolicy: ClusterFirst
-
+        
+#   Redis Service
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${SVC_NAME}-${REDIS_POD}-cache
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+spec:
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  status:
+    loadBalancer: {}
 
 ###########################################
 ###           Network Policies          ###

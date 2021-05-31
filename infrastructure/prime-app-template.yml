@@ -578,6 +578,7 @@ objects:
     capacity:
       storage: 1Gi
 
+
 ###########################################
 ###     Document Manager (Migration)    ###
 ###########################################
@@ -925,7 +926,20 @@ objects:
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
-
+#   Redis Service
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${SVC_NAME}-${REDIS_POD}-cache
+  namespace: ${OC_NAMESPACE}-${OC_APP}
+spec:
+  ports:
+    - name: redis
+      protocol: TCP
+      port: 6379
+      targetPort: 6379
+  status:
+    loadBalancer: {}
 ###########################################
 ###           Network Policies          ###
 ###########################################
