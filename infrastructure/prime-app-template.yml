@@ -921,7 +921,7 @@ objects:
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
-              image-registry.openshift-image-registry.svc:5000/openshift/redis:6
+              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/redis-6:latest
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
