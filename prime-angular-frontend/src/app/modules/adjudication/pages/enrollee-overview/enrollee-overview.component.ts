@@ -15,6 +15,7 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
+import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -25,6 +26,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public enrollee: HttpEnrollee;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
+  public hideAdjudication: boolean;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -75,6 +77,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           this.enrollees = [enrollee.enrolleeView];
           this.enrolment = enrollee.enrolment;
           this.enrolleeNavigation = enrolleeNavigation;
+          // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
+          this.hideAdjudication = enrollee.enrollee.currentStatus.statusCode === EnrolmentStatus.EDITABLE
+            && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length;
         });
   }
 
