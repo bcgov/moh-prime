@@ -643,7 +643,7 @@ objects:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
-              value: redis
+              value: ${SVC_NAME}-${REDIS_POD}
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
