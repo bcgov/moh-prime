@@ -920,6 +920,8 @@ objects:
         protocol: TCP
         port: 6379
         targetPort: 6379
+    selector:
+      name: ${SVC_NAME}-${REDIS_POD}-cache
     status:
       loadBalancer: {}
         
