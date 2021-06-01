@@ -449,7 +449,7 @@ objects:
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
               - name: CACHE_REDIS_HOST
-                value: redis
+                value: ${SVC_NAME}-${REDIS_POD}
               - name: CACHE_REDIS_PASS
                 valueFrom:
                   secretKeyRef:
