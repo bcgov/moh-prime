@@ -45,7 +45,7 @@ namespace Prime.Controllers
             {
                 var body = await response.Content.ReadAsStringAsync();
                 _logger.LogError($"Error when contacting the Document Manger. StatusCode: {response.StatusCode}, Body: {body}");
-                return Problem("Error when contacting the Document Manager");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error when contacting the Document Manager");
             }
 
             HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
