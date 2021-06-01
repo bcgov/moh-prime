@@ -453,10 +453,7 @@ objects:
                     name: redis
                     key: database-password
               - name: CACHE_REDIS_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: redis
-                    key: redis_port
+                value: "6379"
               - name: DB_HOST
                 value: ${SVC_NAME}-${DB_POD}
               - name: DB_NAME
@@ -627,10 +624,7 @@ objects:
                   name: redis
                   key: database-password
             - name: CACHE_REDIS_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: redis
-                  key: redis_port
+              value: "6379"
             - name: DB_HOST
               value: ${SVC_NAME}-${DB_POD}
             - name: DB_NAME
@@ -954,34 +948,41 @@ objects:
     name: allow-internal-traffic
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
-    podSelector: {}
+    podSelector:
     ingress:
-      - ports:
-          - protocol: TCP
-            port: 25
-          - protocol: TCP
-            port: 80
-          - protocol: TCP
-            port: 1025
-          - protocol: TCP
-            port: 3000
-          - protocol: TCP
-            port: 5001
-          - protocol: TCP
-            port: 5432
-          - protocol: TCP
-            port: 6001
-          - protocol: TCP
-            port: 6379
-          - protocol: TCP
-            port: 8080
-          - protocol: TCP
-            port: 8443
-          - protocol: TCP
-            port: 8888
-          - protocol: TCP
-            port: 8890
-          - protocol: TCP
-            port: 9191
-    policyTypes:
-      - Ingress
+      - from:
+          - namespaceSelector:
+              matchLabels:
+                project: ${OC_NAMESPACE}-${OC_APP}
+          - podSelector: {}
+    # podSelector: {}
+    # ingress:
+    #   - ports:
+    #       - protocol: TCP
+    #         port: 25
+    #       - protocol: TCP
+    #         port: 80
+    #       - protocol: TCP
+    #         port: 1025
+    #       - protocol: TCP
+    #         port: 3000
+    #       - protocol: TCP
+    #         port: 5001
+    #       - protocol: TCP
+    #         port: 5432
+    #       - protocol: TCP
+    #         port: 6001
+    #       - protocol: TCP
+    #         port: 6379
+    #       - protocol: TCP
+    #         port: 8080
+    #       - protocol: TCP
+    #         port: 8443
+    #       - protocol: TCP
+    #         port: 8888
+    #       - protocol: TCP
+    #         port: 8890
+    #       - protocol: TCP
+    #         port: 9191
+    # policyTypes:
+    #   - Ingress
