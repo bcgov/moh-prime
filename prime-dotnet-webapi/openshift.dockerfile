@@ -53,7 +53,9 @@ COPY --from=build /opt/app-root/app /opt/app-root/app
 # Install packages necessary for PRIME (incl. PostgreSQL client for waiting on DB, and wkhtmltopdf to render HTML into PDF)
 USER 0
 RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
-    dnf install -y postgresql13
+    dnf install -y postgresql13 && \
+    dnf install -y https://extras.getpagespeed.com/redhat/8/x86_64/RPMS/wkhtmltopdf-0.12.5-1.el8.3.x86_64.rpm && \
+    dnf install -y wkhtmltopdf
 
 RUN chmod +x entrypoint.sh
 RUN chmod 777 entrypoint.sh
