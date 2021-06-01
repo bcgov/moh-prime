@@ -50,16 +50,12 @@ namespace Prime
             _context = context;
         }
 
-        public DbSet<Certification> Certifications { get; set; }
+        // Enrolle Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }
-        public DbSet<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
-        public DbSet<CareSetting> CareSettings { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
-        public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
-        public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
@@ -68,16 +64,13 @@ namespace Prime
         public DbSet<EnrolleeNote> EnrolleeNotes { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
-        public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<AgreementVersion> AgreementVersions { get; set; }
-        public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
-        public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -91,7 +84,6 @@ namespace Prime
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
-        public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
