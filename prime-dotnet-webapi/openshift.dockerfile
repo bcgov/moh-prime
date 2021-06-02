@@ -60,11 +60,11 @@ RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x
 #     dnf install -y ./wkhtmltox-0.12.6.centos8.x86_64.rpm && \ 
 #     dnf xorg-x11-fonts-75dpi wkhtmltox
 
-RUN chmod +x entrypoint.sh
-RUN chmod 777 entrypoint.sh
-# RUN chmod -R 777 /var/run/
-RUN chmod -R 777 /opt/app-root/app 
+RUN chmod +x entrypoint.sh && \
+    chmod 766 entrypoint.sh && \
+    chmod -R 766 /opt/app-root/app
 # RUN chmod -R 777 /app/.*
+USER default
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
