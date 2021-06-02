@@ -58,8 +58,7 @@ export class SiteInformationFormComponent implements OnInit {
         if (value) {
           this.pec.patchValue(null);
           this.pec.disable();
-        }
-        else {
+        } else {
           this.pec.enable();
         }
       });
