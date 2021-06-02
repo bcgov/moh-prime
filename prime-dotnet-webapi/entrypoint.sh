@@ -26,7 +26,7 @@ do
     sleep 3 ;
 done
 
-psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -a -f ./out/databaseMigrations.sql
+psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -a -f ./databaseMigrations.sql
 
 echo "Resting 5 seconds to let things settle down..."
 echo "Running .NET..."
