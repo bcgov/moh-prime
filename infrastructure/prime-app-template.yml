@@ -425,9 +425,6 @@ objects:
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}-cache"}]  
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -600,9 +597,6 @@ objects:
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}-backend"}]  
   spec:
     template:
       metadata:
@@ -623,7 +617,7 @@ objects:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
-              value: ${SVC_NAME}-${REDIS_POD}
+              value: redis
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
@@ -932,7 +926,7 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${SVC_NAME}-${REDIS_POD}
+    name: ${SVC_NAME}-${REDIS_POD}-cache
     namespace: ${OC_NAMESPACE}-${OC_APP}
   spec:
     ports:
@@ -961,3 +955,34 @@ objects:
               matchLabels:
                 project: ${OC_NAMESPACE}-${OC_APP}
           - podSelector: {}
+    # podSelector: {}
+    # ingress:
+    #   - ports:
+    #       - protocol: TCP
+    #         port: 25
+    #       - protocol: TCP
+    #         port: 80
+    #       - protocol: TCP
+    #         port: 1025
+    #       - protocol: TCP
+    #         port: 3000
+    #       - protocol: TCP
+    #         port: 5001
+    #       - protocol: TCP
+    #         port: 5432
+    #       - protocol: TCP
+    #         port: 6001
+    #       - protocol: TCP
+    #         port: 6379
+    #       - protocol: TCP
+    #         port: 8080
+    #       - protocol: TCP
+    #         port: 8443
+    #       - protocol: TCP
+    #         port: 8888
+    #       - protocol: TCP
+    #         port: 8890
+    #       - protocol: TCP
+    #         port: 9191
+    # policyTypes:
+    #   - Ingress
