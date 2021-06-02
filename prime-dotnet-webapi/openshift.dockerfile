@@ -62,8 +62,8 @@ RUN curl -L -o ./wkhtmltox-0.12.6.centos8.x86_64.rpm https://github.com/wkhtmlto
     dnf install -y wkhtmltox
 
 RUN chmod +x entrypoint.sh && \
-    chmod 766 entrypoint.sh && \
-    chmod -R 766 /opt/app-root/app
+    chmod 777 entrypoint.sh && \
+    chmod -R 777 /opt/app-root/app
 # RUN chmod -R 777 /app/.*
 USER default
 
