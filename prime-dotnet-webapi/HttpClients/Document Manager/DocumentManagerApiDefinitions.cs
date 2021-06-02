@@ -10,6 +10,7 @@ namespace Prime.HttpClients.DocumentManagerApiDefinitions
         public const string SignedOrgAgreements = "signed_org_agreements";
         public const string BusinessLicences = "business_licences";
         public const string SiteAdjudicationDocuments = "site_adjudication_document";
+        public const string IdentificationDocuments = "identification_document";
     }
 
     public class DownloadToken
