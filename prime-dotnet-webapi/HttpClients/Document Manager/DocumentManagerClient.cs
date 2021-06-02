@@ -27,10 +27,6 @@ namespace Prime.HttpClients
             return await _client.PostAsync("documents/uploads", content);
         }
 
-        /// <summary>
-        /// Moves a temporary file upload to its final destination and marks it as "submitted".
-        /// Returns the file's name if the operation was successful.
-        /// </summary>
         public async Task<string> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
         {
             var content = new FileMetadata(destinationFolder: destinationFolder).AsHttpContent();
