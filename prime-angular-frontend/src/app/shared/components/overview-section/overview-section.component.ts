@@ -1,24 +1,42 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-overview-section',
   templateUrl: './overview-section.component.html',
   styleUrls: ['./overview-section.component.scss']
 })
-export class OverviewSectionComponent implements OnInit {
+export class OverviewSectionComponent {
+  /**
+   * @description
+   * Title of the overview section.
+   */
   @Input() public title: string;
-  @Input() public tooltip: string;
-  @Input() public editRoute: string;
+  /**
+   * @description
+   * Display the edit icon for redirection.
+   */
   @Input() public showEditRedirect: boolean;
-  @Output() public route: EventEmitter<string>;
+  /**
+   * @description
+   * Route path for editing a section.
+   */
+  @Input() public editRoute: string | (string | number)[];
+  /**
+   * @description
+   * Route redirect tooltip.
+   */
+  @Input() public tooltip: string;
+  /**
+   * @description
+   * Route event emitter.
+   */
+  @Output() public route: EventEmitter<string | (string | number)[]>;
 
   constructor() {
-    this.route = new EventEmitter<string>();
+    this.route = new EventEmitter<string | (string | number)[]>();
   }
 
-  public ngOnInit(): void { }
-
-  public onRoute(routePath: string): void {
+  public onRoute(routePath: string | (string | number)[]): void {
     this.route.emit(routePath);
   }
 }
