@@ -10,7 +10,7 @@ export class SummaryCardComponent implements OnInit {
   @Input() public title: string;
   @Input() public menu: TemplateRef<any>;
   @Input() public menuOutletContext: { [key: string]: any } | null;
-  @Input() public properties: { [key: string]: string }[];
+  @Input() public properties: { key: string, value: string }[];
   @Input() public actionButtonTitle: string;
   @Input() public actionDisabled: boolean;
 

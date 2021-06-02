@@ -2,51 +2,55 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject } from 'rxjs';
-
-import { Contact } from '@lib/models/contact.model';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { VendorConfig } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { PrivacyOfficerPageFormState } from './privacy-officer-page-form-state.class';
+import { OrganizationAgreementPageFormState } from '@health-auth/pages/organization-agreement-page/organization-agreement-page-form-state.class';
 
 @Component({
-  selector: 'app-privacy-officer-page',
-  templateUrl: './privacy-officer-page.component.html',
-  styleUrls: ['./privacy-officer-page.component.scss']
+  selector: 'app-organization-agreement-page',
+  templateUrl: './organization-agreement-page.component.html',
+  styleUrls: ['./organization-agreement-page.component.scss']
 })
-export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: PrivacyOfficerPageFormState;
+export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: OrganizationAgreementPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
+  // TODO don't know what we're doing yet
+  public organizationAgreements: { guid: string, name: string }[];
+  public hasNoSelectionError: boolean;
   public isCompleted: boolean;
-  public formSubmittingEvent: Subject<void>;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
-
-  private site: HealthAuthSite;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private siteResource: HealthAuthSiteRegResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
 
-    this.title = route.snapshot.data.title;
+    this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.formSubmittingEvent = new Subject<void>();
+    // TODO don't know what we're doing yet
+    this.organizationAgreements = [
+      { guid: 'af06b812-2b46-40f7-8dc3-b4b3cef9cf61', name: 'Organization Agreement #1' },
+      { guid: 'af06b812-2b46-40f7-8dc3-b4b3cef9cf62', name: 'Organization Agreement #2' },
+      { guid: 'af06b812-2b46-40f7-8dc3-b4b3cef9cf63', name: 'Organization Agreement #3' },
+      { guid: 'af06b812-2b46-40f7-8dc3-b4b3cef9cf64', name: 'Organization Agreement #4' },
+      { guid: '00000000-0000-0000-0000-000000000000', name: 'No Organization Agreement' }
+    ];
   }
 
   // TODO remove this method add to allow routing between pages
@@ -61,34 +65,33 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
     }
   }
 
-  public onSelect(contact: Contact) {
-    if (!contact.physicalAddress) {
-      contact.physicalAddress = new Address();
-    }
-    this.formState.form.patchValue(contact);
-  }
-
   public onBack() {
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
-      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
-
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
   }
 
-  protected createFormInstance() {
-    this.formState = this.formStateService.privacyOfficerPageFormState;
+  protected onSubmitFormIsValid(): void {
+    this.hasNoSelectionError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (!this.formState.organizationAgreementGuid.value) {
+      this.hasNoSelectionError = true;
+    }
+  }
+
+  protected createFormInstance(): void {
+    this.formState = this.formStateService.orgAgreementPageFormState;
   }
 
   protected patchForm(): void {
-    this.site = this.siteService.site;
-    this.isCompleted = this.site?.completed;
-    this.formStateService.setForm(this.site, true);
+    const site = this.siteService.site;
+    this.isCompleted = site?.completed;
+    this.formStateService.setForm(site, true);
     this.formState.form.markAsPristine();
   }
 
@@ -102,12 +105,8 @@ export class PrivacyOfficerPageComponent extends AbstractEnrolmentPage implement
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT;
+      : HealthAuthSiteRegRoutes.VENDOR;
 
     this.routeUtils.routeRelativeTo(routePath);
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    this.formSubmittingEvent.next();
   }
 }
