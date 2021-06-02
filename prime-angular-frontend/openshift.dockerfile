@@ -1,5 +1,5 @@
 # Stage 1:  Build an Angular Docker Image
-FROM node:14 as build
+FROM docker-registry.default.svc:5000/dqszvc-tools/node:14 as build
 
 USER 0
 ENV NODE_ROOT /usr/src/app
@@ -32,7 +32,7 @@ RUN cat /usr/src/app/src/environments/environment.prod.ts && \
 
 
 # Stage 2:  Use the compiled app, ready for production with Nginx
-FROM nginx:1.18.0
+FROM docker-registry.default.svc:5000/dqszvc-tools/nginx:1.18.0
 
 RUN apt-get update && \
     apt-get install -y gettext-base && \
