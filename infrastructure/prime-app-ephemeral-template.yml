@@ -362,8 +362,6 @@ objects:
               - secretRef:
                   name: pharmanet-api-secrets
               - secretRef:
-                  name: pharmanet-api-ssl-certs
-              - secretRef:
                   name: verifiable-credential-secrets
             volumeMounts:
               - name: cert-volume
