@@ -1,33 +1,15 @@
 using System;
-using System.Net.Http;
-using System.Collections.Generic;
-using Prime.Extensions;
 
 namespace Prime.HttpClients.DocumentManagerApiDefinitions
 {
-    public class FileMetadata
+    public static class DestinationFolders
     {
-        private readonly Dictionary<string, string> _metadata;
-
-        public FileMetadata(string filename = null, string destinationFolder = null)
-        {
-            _metadata = new Dictionary<string, string>
-            {
-                { "filename", filename },
-                { "folder", destinationFolder }
-            }
-            .RemoveNullValues();
-        }
-
-        public HttpContent AsHttpContent()
-        {
-            return new FormUrlEncodedContent(_metadata);
-        }
-
-        public string AsQueryStringUrl(string baseUrl)
-        {
-            return _metadata.ToQueryStringUrl(baseUrl, false);
-        }
+        public const string SignedAgreements = "signed_agreements";
+        public const string SelfDeclarations = "self_declarations";
+        public const string EnrolleeAdjudicationDocuments = "enrollee_adjudication_document";
+        public const string SignedOrgAgreements = "signed_org_agreements";
+        public const string BusinessLicences = "business_licences";
+        public const string SiteAdjudicationDocuments = "site_adjudication_document";
     }
 
     public class DownloadToken
