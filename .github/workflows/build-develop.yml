@@ -9,25 +9,25 @@ name: Build PRIME from Develop Branch and Deploy to OpenShift Image Registry
 
 
 ##### Uncomment on merge to dev
-# on:
-#   push:
-#     branches:
-#       - develop
+on:
+  push:
+    branches:
+      - develop
 
-#   workflow_dispatch:
-#     branches:
-#       - develop
+  workflow_dispatch:
+    branches:
+      - develop
 #################################
 
 #################################
 ##### Comment out on merge to dev
-on:
-  push:
-  workflow_dispatch:
-  pull_request:
-    branches-ignore:
-      - 'develop'
-      
+# on:
+#   push:
+#   workflow_dispatch:
+#   pull_request:
+#     branches-ignore:
+#       - 'develop'
+
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
@@ -212,5 +212,5 @@ jobs:
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
           
           oc process -f infrastructure/metabase-template.yml \
-          -p OC_APP=${{secrets.OC_APP}} \
-          -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+            -p OC_APP=${{secrets.OC_APP}} \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
