@@ -151,7 +151,7 @@ export class EnrolmentGuard extends BaseGuard {
   private manageEditableRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     const hasNotCompletedProfile = !enrolment.profileCompleted;
 
-    const route = this.route(routePath);
+    const route = this.routePath(routePath);
     const redirectionRoute = (hasNotCompletedProfile)
       ? (identityProvider === IdentityProviderEnum.BCEID)
         ? EnrolmentRoutes.BCEID_DEMOGRAPHIC
@@ -198,7 +198,7 @@ export class EnrolmentGuard extends BaseGuard {
   }
 
   private manageRouting(routePath: string, defaultRoute: string, enrolment: Enrolment): boolean {
-    const route = this.route(routePath);
+    const route = this.routePath(routePath);
     // Allow access to an extended set of routes if the enrollee
     // has accepted at least one TOA
     const whiteListedRoutes = (!!enrolment.expiryDate)
@@ -224,7 +224,7 @@ export class EnrolmentGuard extends BaseGuard {
   private navigate(routePath: string, destinationPath: string): boolean {
     const enrolmentRoutePath = this.config.routes.enrolment;
 
-    if (routePath === `/${enrolmentRoutePath}/${destinationPath}`) {
+    if (routePath === `/${ enrolmentRoutePath }/${ destinationPath }`) {
       return true;
     } else {
       this.router.navigate([enrolmentRoutePath, destinationPath]);
@@ -245,7 +245,7 @@ export class EnrolmentGuard extends BaseGuard {
       ].includes(RouteUtils.currentRoutePath(routePath))
     ) {
       return routePath.replace(
-        new RegExp(`${EnrolmentRoutes.ACCESS_CODE}|${EnrolmentRoutes.ID_SUBMISSION}`),
+        new RegExp(`${ EnrolmentRoutes.ACCESS_CODE }|${ EnrolmentRoutes.ID_SUBMISSION }`),
         EnrolmentRoutes.OVERVIEW
       );
     }

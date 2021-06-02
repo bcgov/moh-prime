@@ -13,15 +13,15 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { HealthAuthCareSettingPageFormState } from './health-auth-care-setting-page-form-state.class';
+import { HealthAuthCareTypePageFormState } from './health-auth-care-type-page-form-state.class';
 
 @Component({
-  selector: 'app-health-auth-care-setting-page',
-  templateUrl: './health-auth-care-setting-page.component.html',
-  styleUrls: ['./health-auth-care-setting-page.component.scss']
+  selector: 'app-health-auth-care-type-page',
+  templateUrl: './health-auth-care-type-page.component.html',
+  styleUrls: ['./health-auth-care-type-page.component.scss']
 })
-export class HealthAuthCareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: HealthAuthCareSettingPageFormState;
+export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: HealthAuthCareTypePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public careSettingConfig: Config<number>[];
@@ -58,7 +58,7 @@ export class HealthAuthCareSettingPageComponent extends AbstractEnrolmentPage im
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.VENDOR);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_INFORMATION);
   }
 
   public ngOnInit(): void {
@@ -67,7 +67,7 @@ export class HealthAuthCareSettingPageComponent extends AbstractEnrolmentPage im
   }
 
   protected createFormInstance() {
-    this.formState = this.formStateService.healthAuthCareSettingPageFormState;
+    this.formState = this.formStateService.healthAuthCareTypePageFormState;
   }
 
   protected patchForm(): void {
@@ -87,7 +87,7 @@ export class HealthAuthCareSettingPageComponent extends AbstractEnrolmentPage im
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
+      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
 
     this.routeUtils.routeRelativeTo(routePath);
   }
