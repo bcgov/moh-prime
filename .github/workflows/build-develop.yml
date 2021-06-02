@@ -1,4 +1,4 @@
-# This workflow will build all of the necessary components for the PRIME 
+# This workflow will build all of the necessary components for the PRIME
 # application, with the respective images pushed and stored in the project's
 # tools namespace.
 #
@@ -28,7 +28,7 @@ on:
     branches-ignore:
       - 'develop'
 
-jobs:
+# jobs:
   # build-document-manager-backend:
   #   runs-on: ubuntu-20.04
   #   environment: Development
@@ -49,7 +49,7 @@ jobs:
 
   #     - name: "Login to RedHat container repository"
   #       uses: docker/login-action@v1
-  #       with: 
+  #       with:
   #         registry: ${{secrets.REDHAT_REGISTRY_URL}}
   #         username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
   #         password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -87,7 +87,7 @@ jobs:
 
   #     - name: "Login to RedHat container repository"
   #       uses: docker/login-action@v1
-  #       with: 
+  #       with:
   #         registry: ${{secrets.REDHAT_REGISTRY_URL}}
   #         username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
   #         password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -140,7 +140,7 @@ jobs:
 
   #     - name: "Login to RedHat container repository"
   #       uses: docker/login-action@v1
-  #       with: 
+  #       with:
   #         registry: ${{secrets.REDHAT_REGISTRY_URL}}
   #         username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
   #         password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -150,7 +150,7 @@ jobs:
   #       env:
   #         COMPOSE_DOCKER_CLI_BUILD: 1
   #         DOCKER_BUILDKIT: 1
-  #         REDIRECT_URL: "https://dev-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"       
+  #         REDIRECT_URL: "https://dev-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
   #       run: |
   #         docker-compose -f oc4-compose.yml build --force-rm --no-cache \
   #           --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -163,11 +163,11 @@ jobs:
   #           $SERVICE_NAME
   #         docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
   #         docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
-
+jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [build-document-manager-backend,build-frontend,build-backend]
+    # needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -207,10 +207,11 @@ jobs:
             -p MAILHOG_SERVICE_NAME=mailhog-server \
             -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-          
+
           oc process -f infrastructure/metabase-template.yml \
             -p OC_APP=${{secrets.OC_APP}} \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
   garbage-cleanup:
     runs-on: ubuntu-20.04
     environment: Development
@@ -231,9 +232,8 @@ jobs:
 
       - name: "Cleanup"
         id: cleanup
-        env: 
+        env:
           PROJECT_OWNER: bcgov
           PROJECT_NAME: moh-prime
         run: |
           ./devops/OC4/player.sh occleanup
-      
