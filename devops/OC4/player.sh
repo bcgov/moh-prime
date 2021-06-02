@@ -1,7 +1,7 @@
 #!/bin/bash
-source ./devops/OC4/bash/project.conf
-source ./devops/OC4/bash/functions.bash
-source ./devops/OC4/bash/tests.bash
+source ./devops/OC4/project.conf
+source ./devops/OC4/functions.bash
+# source ./devops/OC4/tests.bash
 
 case "$1" in
     build)
