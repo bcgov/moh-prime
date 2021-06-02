@@ -80,7 +80,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * NOTE: Only care about the second parameter to determine route
    * access, and assumes that all child routes are allowed.
    */
-  protected route(routePath: string): string {
+  protected routePath(routePath: string): string {
     return routePath.slice(1).split('/')[1];
   }
 

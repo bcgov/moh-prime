@@ -14,7 +14,8 @@ import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authori
 import { AuthorizedUserApprovedPageComponent } from '@health-auth/pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
-import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
+import { OrganizationAgreementPageComponent } from '@health-auth/pages/organization-agreement-page/organization-agreement-page.component';
+import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
 import { SiteAddressPageComponent } from '@health-auth/pages/site-address-page/site-address-page.component';
@@ -22,8 +23,6 @@ import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-
 import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
-import { PrivacyOfficerPageComponent } from '@health-auth/pages/privacy-officer-page/privacy-officer-page.component';
-import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
 
 const routes: Routes = [
@@ -86,7 +85,7 @@ const routes: Routes = [
       // Viewing and editing route for an existing and
       // approved authorized user
       {
-        path: `${HealthAuthSiteRegRoutes.AUTHORIZED_USER}/:auid`,
+        path: `${ HealthAuthSiteRegRoutes.AUTHORIZED_USER }/:auid`,
         component: AuthorizedUserPageComponent,
         canActivate: [AuthorizedUserGuard],
         canDeactivate: [CanDeactivateFormGuard],
@@ -95,9 +94,15 @@ const routes: Routes = [
       // Site registration and maintenance routes for administration
       // of health authority information
       {
-        path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid`,
+        path: `${ HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES }/:haid`,
         canActivate: [AuthorizedUserGuard],
         children: [
+          {
+            path: HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT,
+            component: OrganizationAgreementPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Organization Agreement' }
+          },
           {
             path: HealthAuthSiteRegRoutes.VENDOR,
             component: VendorPageComponent,
@@ -105,16 +110,16 @@ const routes: Routes = [
             data: { title: 'Vendor' }
           },
           {
-            path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING,
-            component: HealthAuthCareSettingPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Health Authority Care Setting' }
-          },
-          {
             path: HealthAuthSiteRegRoutes.SITE_INFORMATION,
             component: SiteInformationPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Site Information' }
+            data: { title: 'Site Details' }
+          },
+          {
+            path: HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE,
+            component: HealthAuthCareTypePageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Health Authority Care Type' }
           },
           {
             path: HealthAuthSiteRegRoutes.SITE_ADDRESS,
@@ -152,18 +157,6 @@ const routes: Routes = [
             data: { title: 'PharmaNet Administrator' }
           },
           {
-            path: HealthAuthSiteRegRoutes.PRIVACY_OFFICER,
-            component: PrivacyOfficerPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Privacy Officer' }
-          },
-          {
-            path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
-            component: TechnicalSupportPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Technical Support Contact' }
-          },
-          {
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
             component: OverviewPageComponent,
             data: { title: 'Information Review' }
@@ -183,4 +176,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class HealthAuthSiteRegRoutingModule { }
+export class HealthAuthSiteRegRoutingModule {}
