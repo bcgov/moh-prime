@@ -88,8 +88,8 @@ export class SiteManagementPageComponent implements OnInit {
     const routePath = (site.completed)
       // ? [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id] // Defaults to overview
       // : [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id, HealthAuthSiteRegRoutes.VENDOR];
-    ? HealthAuthSiteRegRoutes.VENDOR
-    : HealthAuthSiteRegRoutes.VENDOR;
+      ? HealthAuthSiteRegRoutes.VENDOR
+      : HealthAuthSiteRegRoutes.VENDOR;
     this.routeUtils.routeRelativeTo(routePath);
   }
 
@@ -114,7 +114,10 @@ export class SiteManagementPageComponent implements OnInit {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
+      {
+        key: 'Site Address',
+        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+      },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
@@ -185,7 +188,7 @@ export class SiteManagementPageComponent implements OnInit {
     // this.busy = this.siteResource.createSite(organizationId)
     //   .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
     this.routeUtils.routeRelativeTo([
-      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.VENDOR
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT
     ]);
   }
 }
