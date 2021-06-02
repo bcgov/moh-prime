@@ -64,8 +64,9 @@ RUN curl -L -o ./wkhtmltox-0.12.6.centos8.x86_64.rpm https://github.com/wkhtmlto
 RUN chmod +x entrypoint.sh && \
     chmod 777 entrypoint.sh && \
     chmod -R 777 /opt/app-root/app
+    # chown -R default:default /opt/app-root/app
 # RUN chmod -R 777 /app/.*
-USER default
+# USER default
 
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
