@@ -215,7 +215,7 @@ jobs:
   garbage-cleanup:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [apply-oc-template]
+    # needs: [apply-oc-template]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
