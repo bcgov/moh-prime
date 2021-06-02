@@ -55,10 +55,10 @@ USER 0
 RUN dnf install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm && \
     dnf install -y postgresql13 
 
-# RUN curl -L -o ./wkhtmltox-0.12.6.centos8.x86_64.rpm https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos8.x86_64.rpm && \
-#     dnf install -y http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/xorg-x11-fonts-75dpi-7.5-19.el8.noarch.rpm && \
-#     dnf install -y ./wkhtmltox-0.12.6.centos8.x86_64.rpm && \ 
-#     dnf xorg-x11-fonts-75dpi wkhtmltox
+RUN curl -L -o ./wkhtmltox-0.12.6.centos8.x86_64.rpm https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos8.x86_64.rpm && \
+    dnf install -y http://mirror.centos.org/centos/8/AppStream/x86_64/os/Packages/xorg-x11-fonts-75dpi-7.5-19.el8.noarch.rpm && \
+    dnf install -y ./wkhtmltox-0.12.6.centos8.x86_64.rpm && \ 
+    dnf xorg-x11-fonts-75dpi wkhtmltox
 
 RUN chmod +x entrypoint.sh && \
     chmod 766 entrypoint.sh && \
