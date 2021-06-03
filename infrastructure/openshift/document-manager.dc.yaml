@@ -1,0 +1,374 @@
+---
+apiVersion: v1
+kind: Template
+labels:
+  template: document-manager-template
+metadata:
+  name: document-manager-dc
+  creationTimestamp: null
+  description: >-
+    Main version of the deployment configuration template for PRIME's Document
+    Manager component. 
+    
+    WARNING: This configuration is used in deployments to all branches and 
+    environments apart for PR branches to develop. For the latter, please refer
+    to `document-manager-ephemeral.dc.yaml`.
+
+    The deployment utilizes a persistent volume claim to store all uploaded 
+    documents from users until the application is requested to retrieve them. 
+    A secondary pod, document-manager-${SUFFIX}-migrate, is also created to 
+    perform database migrations when any changes to the PostgreSQL database are
+    made. This occurs on every single deployment, regardless if there are 
+    changes to the database or not. Upon completion, the pod destroys itself.
+parameters:
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+    value: document-manager
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: false
+  - name: SOURCE_CONTEXT_DIR
+    value: document-manager
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: https://github.com/bcgov/moh-prime
+  - name: SOURCE_REPOSITORY_REF
+    required: false
+  - name: OC_NAMESPACE
+    required: true
+    value: 9c33a9
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: FLASK_ENV
+    value: "production"
+    required: true
+  - name: STORAGE_CLASS
+    value: netapp-block-standard
+    required: true
+  - name: STORAGE_MODE
+    value: ReadWriteOnce
+    required: true
+  - description: 'Volume space available for data, e.g. 512Mi, 2Gi.'
+    displayName: Volume Capacity
+    name: VOLUME_CAPACITY
+    required: true
+    value: 5Gi
+  - name: HTTP_PORT
+    value: "6001"
+    required: true
+  - name: VANITY_URL
+    required: true
+    value: "pharmanetenrolment.gov.bc.ca"
+objects:
+# PVC for Document Manager to persist data of documents stored. This is only
+# for deploys to develop, test, and master branches. PRs to develop do not 
+# utilize PVCs and rely on `document-manager-ephemeral.dc.yaml` for their
+# deployment strategy.
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: ${NAME}${SUFFIX}-pvc
+    name: ${NAME}${SUFFIX}-pvc
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: ${VOLUME_CAPACITY}
+  status: {}
+
+# Document Manager service (endpoint for internal routing to related pods)
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert --provider=openshift --build=deploy-config --build-repo=https://github.com/bcgov/moh-prime.git
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+    name: "${NAME}${SUFFIX}-backend"
+  spec:
+    ports:
+    - name: "6001"
+      port: 6001
+      targetPort: 6001
+    - name: "9191"
+      port: 9191
+      targetPort: 9191
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+  status:
+    loadBalancer: {}
+
+# Document Manager - Deployment Configuration
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      kompose.cmd: kompose convert --provider=openshift --build=deploy-config --build-repo=https://github.com/bcgov/moh-prime.git
+      kompose.version: 1.21.0 (992df58d8)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+    name: "${NAME}${SUFFIX}-backend"
+  spec:
+    replicas: 1
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}-backend"
+    strategy:
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: "${NAME}${SUFFIX}-backend"
+      spec:
+        containers:
+        - env:
+          # Redis related environment variables
+          - name: CACHE_REDIS_HOST
+            value: "redis${SUFFIX}"
+          - name: CACHE_REDIS_PASS
+            valueFrom:
+              secretKeyRef:
+                key: redis-password
+                name: "redis-secrets"
+          - name: CACHE_REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: redis-port
+                name: "redis"
+          
+          # PostgreSQL related environment variables
+          - name: DB_HOST
+            value: "postgresql${SUFFIX}"
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef: 
+                key: postgresql_database_name
+                name: "postgresql"
+          - name: DB_NAME_TEST
+            valueFrom:
+              configMapKeyRef:
+                key: postgresql_database_name_test
+                name: "postgresql"
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: postgresql_database_port
+                name: "postgresql"
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: postgresql_database_username
+                name: "postgresql-secrets"
+          
+          # Document Manager (incl. Flask) related environment variables
+          - name: DOCUMENT_MANAGER_URL
+            value: "https://${VANITY_URL}/api/docman/"
+          - name: FLASK_APP
+            valueFrom:
+              configMapKeyRef:
+                key: flask_app
+                name: "document-manager"
+          - name: FLASK_DEBUG
+            valueFrom:
+              configMapKeyRef:
+                key: flask_debug
+                name: "document-manager"
+          - name: FLASK_ENV
+            valueFrom:
+              configMapKeyRef:
+                key: flask_env
+                name: "document-manager"
+          - name: FLASK_RUN_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: flask_run_host
+                name: "document-manager"
+          - name: FLASK_RUN_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: flask_run_port
+                name: "document-manager"
+          
+          # JWT environment variable
+          - name: JWT_OIDC_WELL_KNOWN_CONFIG
+            valueFrom:
+              configMapKeyRef:
+                key: jwt_well_known_config
+                name: "keycloak"
+          
+          # PostgreSQL environment variable for database migration bash script
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgresql_database_admin_password
+                name: "postgresql-secrets"
+          image: " "
+          name: document-manager-backend
+          ports:
+          - containerPort: 6001
+          - containerPort: 9191
+          resources: {}
+          volumeMounts:
+          # Create directory and mount Document Manager app to it
+          - mountPath: /app/
+            name: ${NAME}${SUFFIX}-pvc
+        restartPolicy: Always
+        volumes:
+        # Attach Document Manager PVC to deployed pod
+        - name: ${NAME}${SUFFIX}-pvc
+          persistentVolumeClaim:
+            claimName: '${NAME}${SUFFIX}-pvc'
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - document-manager-backend
+        from:
+          kind: ImageStreamTag
+          name: "${NAME}${SUFFIX}:latest"
+      type: ImageChange
+  status: {}
+
+# Document Manager - Migration Pod Deployment
+# Runs Alembic to perform database migrations against the PostgreSQL database 
+# for all Document Manager related tables. This pod will run once PostgreSQL 
+# is verified to be open to query connections.
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.network/primenet: "true"
+      io.kompose.service: ${NAME}${SUFFIX}-migrate
+    name: ${NAME}${SUFFIX}-migrate
+  spec:
+    restartPolicy: Never
+    containers:
+    - command:
+        # Script force waits migration pod execution until PostgreSQL is verified to 
+        # be open to query connections.
+        - /opt/app-root/src/app.sh
+      args: 
+        - migrate
+      env:
+        # Redis related environment variables
+        - name: CACHE_REDIS_HOST
+          value: "redis${SUFFIX}"
+        - name: CACHE_REDIS_PASS
+          valueFrom:
+            secretKeyRef:
+              name: "redis-secrets"
+              key: redis-password              
+        - name: CACHE_REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: "redis"
+              key: redis-port
+
+        # PostgreSQL related environment variables
+        - name: DB_HOST
+          value: "postgresql${SUFFIX}"
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef: 
+              name: "postgresql"
+              key: postgresql_database_name              
+        - name: DB_NAME_TEST
+          valueFrom:
+            configMapKeyRef:
+              name: "postgresql"
+              key: postgresql_database_name_test              
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-secrets"
+              key: postgresql_database_admin_password              
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: "postgresql"
+              key: postgresql_database_port              
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-secrets"
+              key: postgresql_database_username              
+        
+        # Document Manager (incl. Flask) related environment variables
+        - name: DOCUMENT_MANAGER_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: "document-manager-secrets"
+              key: document_manager_client_secret              
+        - name: DOCUMENT_MANAGER_URL
+          value: "https://${VANITY_URL}/api/docman/"
+        - name: FLASK_APP
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_app              
+        - name: FLASK_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_debug              
+        - name: FLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_env              
+        - name: FLASK_RUN_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_run_host              
+        - name: FLASK_RUN_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: "document-manager"
+              key: flask_run_port              
+        
+        # Keycloak related environment variables
+        - name: JWT_OIDC_WELL_KNOWN_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: "keycloak"
+              key: jwt_well_known_config              
+        
+        # PostgreSQL environment variable for database migration bash script
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: "postgresql-secrets"
+              key: postgresql_database_admin_password              
+      image: image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-${OC_APP}/${NAME}${SUFFIX}:latest
+      name: ${NAME}${SUFFIX}-migrate
+      resources:
+        limits:
+          cpu: 500m
+          memory: 2Gi
+        requests:
+          cpu: 250m
+          memory: 1Gi
+  status: {}

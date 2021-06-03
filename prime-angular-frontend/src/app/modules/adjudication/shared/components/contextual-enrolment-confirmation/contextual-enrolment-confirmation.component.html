@@ -3,8 +3,7 @@
                      class="test"
                      [small]="true"
                      [outlined]="true"
-                     [advanced]="true"
-                     (opened)="onOpen()">
+                     [advanced]="true">
   <ng-container appContextualTitle>
     Confirm Enrolment
   </ng-container>
@@ -13,10 +12,10 @@
     <h2 class="h5 mb-3">
       Make sure you have checked the following things:
     </h2>
-    <mat-checkbox [formControl]="nameInDirectory"
-                  (click)="$event.stopPropagation()"> Name appears in the College directory </mat-checkbox>
-    <mat-checkbox [formControl]="phoneInBC"
-                  (click)="$event.stopPropagation()"> Phone number is in BC </mat-checkbox>
+    <ul>
+      <li>Name appears in the College directory</li>
+      <li>Phone number is in BC</li>
+    </ul>
   </ng-container>
 
   <div class="row justify-content-between">
@@ -24,8 +23,7 @@
 
       <button mat-stroked-button
               cdkFocusInitial
-              class="my-2 mr-2"
-              (click)="onClose()">Cancel</button>
+              class="my-2 mr-2">Cancel</button>
     </div>
     <div class="col pt-4">
       <div class="row">
@@ -40,7 +38,6 @@
 
         <button mat-flat-button
                 color="primary"
-                [disabled]="!hasConfirmed"
                 (click)="onConfirm()"
                 class="my-2 mr-1"> Confirm </button>
       </div>

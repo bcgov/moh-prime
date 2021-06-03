@@ -72,9 +72,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   public onBack() {
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.REMOTE_USERS
-      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
+    const routePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.REMOTE_USERS;
 
     this.routeUtils.routeRelativeTo(routePath);
   }
@@ -106,12 +106,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.markAsPristine();
-
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.PRIVACY_OFFICER
-      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
-
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
   }
 
   protected onSubmitFormIsInvalid(): void {

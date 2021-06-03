@@ -16,7 +16,6 @@ namespace Prime.ViewModels.Parties
         public string FirstName { get; set; }
         public string GivenNames { get; set; }
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string LdapUsername { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
@@ -50,7 +49,6 @@ namespace Prime.ViewModels.Parties
             party.FirstName = FirstName;
             party.LastName = LastName;
             party.GivenNames = GivenNames;
-            party.DateOfBirth = DateOfBirth;
 
             party.SetPartyTypes(PartyType.Gis);
 
@@ -63,8 +61,7 @@ namespace Prime.ViewModels.Parties
                 && HPDID == user.FindFirstValue(Claims.PreferredUsername)
                 && FirstName == user.FindFirstValue(Claims.GivenName)
                 && LastName == user.FindFirstValue(Claims.FamilyName)
-                && GivenNames == user.FindFirstValue(Claims.GivenNames)
-                && DateOfBirth == user.GetDateOfBirth();
+                && GivenNames == user.FindFirstValue(Claims.GivenNames);
         }
     }
 }

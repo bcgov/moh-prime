@@ -28,9 +28,6 @@ export class ContextualEnrolmentConfirmationComponent {
   public busy: Subscription;
   public status$: Observable<EnrolmentStatus>;
   public Role = Role;
-  public form: FormGroup;
-  public nameInDirectory: FormControl;
-  public phoneInBC: FormControl;
 
   constructor(
     private adjudicationResource: AdjudicationResource,
@@ -38,23 +35,11 @@ export class ContextualEnrolmentConfirmationComponent {
   ) {
     this.reload = new EventEmitter<void>();
     this.assigned = false;
-    this.nameInDirectory = new FormControl(false);
-    this.phoneInBC = new FormControl(false);
-  }
-
-  public get hasConfirmed(): boolean {
-    return this.nameInDirectory.value && this.phoneInBC.value;
-  }
-
-  public onOpen() {
-    this.clearCheckboxes();
   }
 
   public onConfirm() {
-    if (this.hasConfirmed) {
-      this.adjudicationResource.confirmSubmission(this.enrolleeId)
-        .subscribe(() => this.reload.emit());
-    }
+    this.adjudicationResource.confirmSubmission(this.enrolleeId)
+      .subscribe(() => this.reload.emit());
   }
 
   public onEscalate() {
@@ -71,16 +56,5 @@ export class ContextualEnrolmentConfirmationComponent {
           ? this.reload.emit()
           : noop
       );
-
-    this.clearCheckboxes();
-  }
-
-  public onClose() {
-    this.clearCheckboxes();
-  }
-
-  private clearCheckboxes() {
-    this.nameInDirectory.patchValue(false);
-    this.phoneInBC.patchValue(false);
   }
 }

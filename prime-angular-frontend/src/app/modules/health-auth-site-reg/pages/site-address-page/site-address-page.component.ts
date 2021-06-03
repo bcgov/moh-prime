@@ -65,7 +65,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_INFORMATION);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
   }
 
   public ngOnInit() {
