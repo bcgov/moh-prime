@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     branches:
       - test
-      
+
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
@@ -29,7 +29,7 @@ jobs:
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
-        with: 
+        with:
           registry: ${{secrets.REDHAT_REGISTRY_URL}}
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -50,7 +50,7 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
@@ -67,7 +67,7 @@ jobs:
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
-        with: 
+        with:
           registry: ${{secrets.REDHAT_REGISTRY_URL}}
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -83,7 +83,7 @@ jobs:
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
-            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+            --build-arg ASPNETCORE_ENVIRONMENT="Test" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
             --build-arg DB_CONNECTION_STRING="host=test-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg DB_HOST=test-postgres-db \
@@ -99,7 +99,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
@@ -120,7 +120,7 @@ jobs:
 
       - name: "Login to RedHat container repository"
         uses: docker/login-action@v1
-        with: 
+        with:
           registry: ${{secrets.REDHAT_REGISTRY_URL}}
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
@@ -130,7 +130,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://test-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://test-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -146,7 +146,7 @@ jobs:
 
   apply-oc-template:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -170,7 +170,7 @@ jobs:
         run: |
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
-            -p ASP_ENV=Development \
+            -p ASP_ENV=Test \
             -p DB_POD=postgres-db \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
@@ -190,5 +190,5 @@ jobs:
             -p MAILHOG_SERVICE_NAME=mailhog-server \
             -p OC_APP=${{secrets.OC_APP}} \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-          
+
           oc process -f infrastructure/metabase-template.yml -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
