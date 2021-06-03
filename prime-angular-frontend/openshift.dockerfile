@@ -44,6 +44,7 @@ RUN ng build --prod
 ### Stage 2 - Production environment ###
 ########################################
 FROM nginx:1.21.0-alpine
+USER 0
 RUN apt-get update && \
     apt-get install -y gettext-base && \
     mkdir -p /var/cache/nginx && \
