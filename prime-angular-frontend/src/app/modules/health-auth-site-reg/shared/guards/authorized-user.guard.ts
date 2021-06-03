@@ -36,7 +36,7 @@ export class AuthorizedUserGuard extends BaseGuard {
     super(authService, logger);
   }
 
-  protected checkAccess(routePath: string = null, params?: Params): Observable<boolean> | Promise<boolean> {
+  protected checkAccess(routePath: string, params?: Params): Observable<boolean> | Promise<boolean> {
     return this.authService.getUser$()
       .pipe(
         // Having no authorized user in the same redirection logic for the user as
@@ -142,7 +142,9 @@ export class AuthorizedUserGuard extends BaseGuard {
   private navigate(routePath: string, destinationSegments: string[]): boolean {
     const destinationPath = HealthAuthSiteRegRoutes.routePath(destinationSegments.join('/'));
 
-    if (routePath === destinationPath) {
+    // Route path may contain query parameters, which should be ignored
+    // during the check, but allowed to persist
+    if (routePath.split('?').shift() === destinationPath) {
       return true;
     } else {
       this.router.navigate([destinationPath]);

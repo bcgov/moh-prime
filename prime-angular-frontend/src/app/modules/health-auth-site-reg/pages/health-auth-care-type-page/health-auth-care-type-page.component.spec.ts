@@ -18,15 +18,15 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 
-import { HealthAuthCareSettingPageComponent } from './health-auth-care-setting-page.component';
+import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.component';
 
-describe('HealthAuthCareSettingPageComponent', () => {
-  let component: HealthAuthCareSettingPageComponent;
-  let fixture: ComponentFixture<HealthAuthCareSettingPageComponent>;
+describe('HealthAuthCareTypePageComponent', () => {
+  let component: HealthAuthCareTypePageComponent;
+  let fixture: ComponentFixture<HealthAuthCareTypePageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HealthAuthCareSettingPageComponent],
+      declarations: [HealthAuthCareTypePageComponent],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
@@ -59,7 +59,7 @@ describe('HealthAuthCareSettingPageComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HealthAuthCareSettingPageComponent);
+    fixture = TestBed.createComponent(HealthAuthCareTypePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
