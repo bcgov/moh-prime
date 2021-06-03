@@ -18,7 +18,7 @@ namespace Prime.HttpClients.DocumentManagerApiDefinitions
         public string Token { get; set; }
     }
 
-    public class DocumentResponse
+    public class DocumentGuidResponse
     {
         public Guid Document_guid { get; set; }
     }

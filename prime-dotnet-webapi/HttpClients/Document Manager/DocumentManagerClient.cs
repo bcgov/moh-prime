@@ -62,25 +62,20 @@ namespace Prime.HttpClients
             var content = new StreamContent(document);
 
             var response = await _client.PostAsync(url, content);
-            var documentResponse = await response.Content.ReadAsAsync<DocumentResponse>();
+            var documentResponse = await response.Content.ReadAsAsync<DocumentGuidResponse>();
 
             return documentResponse?.Document_guid ?? Guid.Empty;
         }
 
-        public async Task<HttpResponseMessage> GetFileResponseAsync(Guid documentGuid)
+        public async Task<HttpContent> GetDocumentAsync(Guid documentGuid)
         {
-            return await _client.GetAsync($"documents/{documentGuid}");
-        }
-
-        public async Task<byte[]> GetFileAsync(Guid documentGuid)
-        {
-            var response = await GetFileResponseAsync(documentGuid);
+            var response = await _client.GetAsync($"documents/{documentGuid}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            return await response.Content.ReadAsByteArrayAsync();
+            return response.Content;
         }
 
         private class FileMetadata
