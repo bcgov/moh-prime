@@ -1,5 +1,7 @@
-# Stage 1:  Build an Angular Docker Image
-FROM node:14 as build
+###################################
+### Stage 1 - Build environment ###
+###################################
+FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
 
 
 ## Everything should be proxied through nginx now, no separate url
@@ -43,35 +45,19 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM nginx:1.21.0-alpine
+FROM registry.access.redhat.com/ubi8/nginx-118
+ARG SVC_NAME
+ENV SVC_NAME ${SVC_NAME}
 USER 0
-RUN apt-get update && \
-    apt-get install -y gettext-base && \
-    mkdir -p /var/cache/nginx && \
-    mkdir -p /var/lib/nginx && \
-    mkdir -p /var/log/nginx && \
-    mkdir -p /var/cache/nginx/client_temp && \
-    touch /etc/nginx/conf.d/default.conf && \
-    chmod -R 777 /etc/nginx && \
-    chmod -R 777 /var/cache/nginx && \
-    chmod -R 777 /var/lib/nginx && \
-    chmod -R 777 /var/run && \
-    chmod -R 777 /var/lib && \
-    chmod -R 777 /var/log
+# COPY --from=build-deps /usr/src/app /opt/app-root/
 
-COPY --from=build /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
+# COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
+COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
+COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
+RUN sed s/\$SVC_NAME/$SVC_NAME/g /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
+    chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
 
-COPY nginx.conf /etc/nginx/
-COPY nginx.template.conf /etc/nginx/nginx.template.conf
-COPY entrypoint.sh /
-
-RUN chmod +x /entrypoint.sh && \
-    chmod 777 /entrypoint.sh && \
-    echo "Build completed."
-
-COPY ./entrypoint.sh /
-RUN chmod +x /entrypoint.sh
-
+USER 1001200000
 EXPOSE 80 8080 4200:8080
-
-CMD /entrypoint.sh
+CMD ["sh","-c","nginx -g 'daemon off;'"]
