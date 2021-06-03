@@ -1,5 +1,5 @@
 # Stage 1:  Build an Angular Docker Image
-FROM docker-registry.default.svc:5000/dqszvc-tools/node:14 as build
+FROM node:14 as build
 
 
 ## Everything should be proxied through nginx now, no separate url
