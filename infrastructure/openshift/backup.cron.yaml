@@ -1,0 +1,41 @@
+---
+  apiVersion: v1 
+  kind: Template
+  metadata:
+    creationTimestamp: null
+    generation: 1
+    labels:
+      provider: openshift
+      backup-pod-host: "true"
+      component: backup-pod
+    name: backup-pod 
+  objects:
+  - apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: backup
+    spec:
+      schedule: "*/5 * * * *"  
+      jobTemplate:             
+        spec:
+          template:
+            metadata:
+              labels:          
+                parent: "cronjobbackup"
+            spec:
+              containers:
+              - name: backup
+                image: "${NAMESPACE}/backup:latest"
+                command: ["/opt/backup.sh"]
+                volumeMounts:
+                - mountPath: /opt/backup
+                  name: backup-data
+              volumes:
+              - name: backup-data
+                persistentVolumeClaim:
+                  claimName: backup-data
+              restartPolicy: OnFailure 
+  parameters:
+  - description: Project name
+    name: NAMESPACE
+    value: 9c33a9-test

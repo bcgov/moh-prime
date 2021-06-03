@@ -12,7 +12,6 @@ namespace Prime.ViewModels.Parties
         public string FirstName { get; set; }
         public string GivenNames { get; set; }
         public string LastName { get; set; }
-        public DateTime DateOfBirth { get; set; }
         public string LdapUsername { get; set; }
         public DateTimeOffset? LdapLoginSuccessDate { get; set; }
         public string Email { get; set; }
