@@ -30,7 +30,7 @@ psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -a -f ./dat
 
 echo "Resting 5 seconds to let things settle down..."
 echo "Running .NET..."
-dotnet ./out/prime.dll -v 2>&1> $logfile &
+dotnet ./prime.dll -v 2>&1> $logfile &
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {
