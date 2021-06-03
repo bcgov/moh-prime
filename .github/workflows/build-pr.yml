@@ -38,8 +38,8 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Build, Document Manager image"
-        id: build-docman
+      - name: "Build, tag and push Document Manager image"
+        id: build-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
@@ -51,17 +51,6 @@ jobs:
             --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
-
-      - name: "Push Document Manager image"
-        id: push-docman
-        needs: build-docman
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          BUILD_LOGLEVEL: 2
-          PR_NUMBER: ${{steps.PR.outputs.number}}
-        run: |
-          echo PR_NUMBER=${PR_NUMBER}
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
@@ -96,8 +85,8 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
-      - name: "Build .NET web API image"
-        id: build-dotnet
+      - name: "Build, tag and push .NET web API image"
+        id: build-image
         env:
           PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
           PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
@@ -119,19 +108,6 @@ jobs:
             --build-arg POSTGRESQL_DATABASE=postgres \
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
-
-      - name: "Build, tag and push .NET web API image"
-        id: push-dotnet
-        needs: build-dotnet
-        env:
-          PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
-          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          PR_NUMBER: ${{steps.PR.outputs.number}}
-        run: |
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
 
@@ -171,7 +147,7 @@ jobs:
           filterOutClosed: true
 
       - name: "Build, tag & push Angular frontend image"
-        id: build-angular
+        id: build-image
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
@@ -188,18 +164,8 @@ jobs:
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-        
-      - name: "Tag & push Angular frontend image"
-        id: push-angular
-        needs: build-angular
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          PR_NUMBER: ${{steps.PR.outputs.number}}
-        run: |
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
-
 
   apply-oc-template:
     runs-on: ubuntu-20.04

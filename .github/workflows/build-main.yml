@@ -155,6 +155,7 @@ jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Production
+    needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -334,6 +335,7 @@ jobs:
   demo-oc-template:
     runs-on: ubuntu-20.04
     environment: Test
+    needs: [demo-document-manager-backend,demo-frontend,demo-backend]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
