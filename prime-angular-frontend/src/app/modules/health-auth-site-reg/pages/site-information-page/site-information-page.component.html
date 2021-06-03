@@ -7,7 +7,43 @@
         novalidate
         autocomplete="off">
 
-    <app-site-information-form [form]="formState.form"></app-site-information-form>
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide this site's information.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+          <app-doing-business-as-form-field label="Site Name (e.g. facility name, clinic name, or pharmacy name)"
+                                            [doingBusinessAs]="formState.doingBusinessAs"></app-doing-business-as-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="w-100">
+            <mat-label>Site ID</mat-label>
+            <input matInput
+                   [formControl]="formState.pec">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Security Group"
+                   [formControl]="formState.securityGroup">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </section>
 
   </form>
 
