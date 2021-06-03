@@ -1,7 +1,5 @@
-###################################
-### Stage 1 - Build environment ###
-###################################
-FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
+# Stage 1:  Build an Angular Docker Image
+FROM docker-registry.default.svc:5000/dqszvc-tools/node:14 as build
 
 
 ## Everything should be proxied through nginx now, no separate url
@@ -51,12 +49,8 @@ ENV SVC_NAME ${SVC_NAME}
 USER 0
 # COPY --from=build-deps /usr/src/app /opt/app-root/
 
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
-# COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
-COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
-COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
-RUN sed s/\$SVC_NAME/$SVC_NAME/g /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
-    chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
+# Stage 2:  Use the compiled app, ready for production with Nginx
+FROM docker-registry.default.svc:5000/dqszvc-tools/nginx:1.18.0
 
 USER 1001200000
 EXPOSE 80 8080 4200:8080

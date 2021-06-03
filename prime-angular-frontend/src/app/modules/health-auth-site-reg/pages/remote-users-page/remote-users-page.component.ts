@@ -11,11 +11,11 @@ import { exhaustMap } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+// TODO move to @lib/models
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-// TODO move to @lib/models
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';

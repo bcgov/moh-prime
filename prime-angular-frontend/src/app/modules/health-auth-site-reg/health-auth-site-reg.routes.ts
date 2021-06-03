@@ -14,15 +14,14 @@ export class HealthAuthSiteRegRoutes {
   public static SITE_MANAGEMENT = 'site-management';
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
+  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
   public static VENDOR = 'vendor';
-  public static HEALTH_AUTH_CARE_SETTING = 'health-auth-care-setting';
+  public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_INFORMATION = 'site-information';
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static REMOTE_USERS = 'remote-users';
   public static ADMINISTRATOR = 'site-administrator';
-  public static PRIVACY_OFFICER = 'privacy-officer';
-  public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_OVERVIEW = 'site-overview';
 
   public static routePath(route: string): string {
@@ -32,15 +31,14 @@ export class HealthAuthSiteRegRoutes {
   // Used to indicate the routes and order of registration for sites
   public static siteRegistrationRouteOrder(): string[] {
     return [
+      this.ORGANIZATION_AGREEMENT,
       this.VENDOR,
-      this.HEALTH_AUTH_CARE_SETTING,
       this.SITE_INFORMATION,
+      this.HEALTH_AUTH_CARE_TYPE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
-      this.ADMINISTRATOR,
-      this.PRIVACY_OFFICER,
-      this.TECHNICAL_SUPPORT
+      this.ADMINISTRATOR
     ];
   }
 }
