@@ -6,19 +6,12 @@
                             [form]="formState.form"
                             [formSubmitting]="formSubmittingEvent"
                             [showFax]="false"
-                            [showAddButton]="contacts?.length"
+                            [showAddButton]="!!contacts?.length"
                             [contacts]="contacts"
                             (submit)="onSubmit()">
-    <app-same-as selectFor="administratorPharmaNet"
-                 (selected)="onSelect($event)"></app-same-as>
-
     <ng-container appPageSubheader2Summary>
       Directly sets up individual PharmaNet access accounts at a site or has the authority to request accounts from the
       site's PharmaNet software vendor. May be the Signing Authority.
-    </ng-container>
-    <ng-container appPageSubheader2MoreInfo>
-      The PharmaNet Administrator could be the site's administrator, manager, HR lead, medical office assistant (MOA), a
-      practitioner, software vendor, etc.
     </ng-container>
   </app-contact-profile-form>
 

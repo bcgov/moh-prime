@@ -14,7 +14,7 @@
     </app-page-subheader2>
 
     <form [formGroup]="formState.form"
-          (ngOnSubmit)="onSubmit()"
+          (ngSubmit)="onSubmit()"
           novalidate
           autocomplete="off">
       <div class="row">
@@ -42,7 +42,8 @@
         <div class="col-12 text-right">
           <button mat-button
                   type="button"
-                  color="primary">Forgot your password?</button>
+                  color="primary">Forgot your password?
+          </button>
         </div>
       </div>
     </form>
