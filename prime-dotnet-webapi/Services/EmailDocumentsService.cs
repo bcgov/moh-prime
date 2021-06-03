@@ -179,34 +179,37 @@ namespace Prime.Services.EmailInternal
                 return null;
             }
 
-            byte[] fileData = null;
             if (agreementDto.SignedAgreement == null)
             {
                 var html = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, agreementDto.OrganizationName, agreementDto.AcceptedDate, true);
-                fileData = _pdfService.Generate(html);
+                return new Pdf("OrganizationAgreement.pdf", _pdfService.Generate(html));
             }
             else
             {
-                fileData = await _documentClient.GetFileAsync(agreementDto.SignedAgreement.DocumentGuid);
-                if (fileData == null)
-                {
-                    return await ApologyDocument(agreementDto.SignedAgreement.Filename);
-                }
-
-                if (!agreementDto.SignedAgreement.HasFileExtension("pdf"))
-                {
-                    var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File(agreementDto.SignedAgreement.Filename, fileData));
-                    fileData = _pdfService.Generate(html);
-                }
+                return await WetSignedAgreement(agreementDto.SignedAgreement);
             }
-
-            return new Pdf("OrganizationAgreement.pdf", fileData);
         }
 
-        private async Task<Pdf> ApologyDocument(string filename)
+        private async Task<Pdf> WetSignedAgreement(SignedAgreementDocument document)
         {
-            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.ApologyDocument, new File(filename, null));
-            return new Pdf("OrganizationAgreement.pdf", _pdfService.Generate(html));
+            var documentContent = await _documentClient.GetDocumentAsync(document.DocumentGuid);
+            if (documentContent == null)
+            {
+                var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.ApologyDocument, new File(document.Filename, null));
+                return new Pdf("OrganizationAgreement.pdf", _pdfService.Generate(html));
+            }
+
+            var file = await documentContent.ReadAsByteArrayAsync();
+
+            if (document.HasFileExtension("pdf"))
+            {
+                return new Pdf("OrganizationAgreement.pdf", file);
+            }
+            else
+            {
+                var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File(document.Filename, file));
+                return new Pdf("OrganizationAgreement.pdf", _pdfService.Generate(html));
+            }
         }
     }
 }
