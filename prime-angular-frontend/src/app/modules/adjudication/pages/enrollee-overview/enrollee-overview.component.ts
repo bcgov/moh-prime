@@ -26,7 +26,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public enrollee: HttpEnrollee;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
-  public hideAdjudication: boolean;
+  public showAdjudication: boolean;
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -78,8 +78,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           this.enrolment = enrollee.enrolment;
           this.enrolleeNavigation = enrolleeNavigation;
           // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
-          this.hideAdjudication = enrollee.enrollee.currentStatus.statusCode === EnrolmentStatus.EDITABLE
-            && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length;
+          this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatus.EDITABLE
+            && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);
         });
   }
 
