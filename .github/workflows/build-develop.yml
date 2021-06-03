@@ -235,6 +235,6 @@ jobs:
         env:
           PROJECT_OWNER: bcgov
           PROJECT_NAME: moh-prime
+          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
         run: |
-          ls
           ./devops/OC4/player.sh occleanup
