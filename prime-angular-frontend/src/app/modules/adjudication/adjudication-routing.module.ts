@@ -31,6 +31,7 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
+import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
@@ -265,6 +266,16 @@ const routes: Routes = [
                 path: `:auid`,
                 component: HealthAuthorityAuthorizedUserPageComponent,
                 data: { title: 'Authorized User' }
+              }
+            ]
+          },
+          {
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.ORGANIZATION_INFORMATION}`,
+            children: [
+              {
+                path: '',
+                component: HealthAuthorityOrganizationInformationPageComponent,
+                data: { title: 'Organization Information' }
               }
             ]
           }
