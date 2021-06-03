@@ -43,14 +43,13 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM registry.redhat.io/rhel8/nginx-118
+FROM registry.access.redhat.com/ubi8/nginx-118
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
-# COPY --from=build-deps /usr/src/app /opt/app-root/
+COPY --from=build-deps /usr/src/app /opt/app-root/
 
 # Stage 2:  Use the compiled app, ready for production with Nginx
-FROM docker-registry.default.svc:5000/dqszvc-tools/nginx:1.18.0
 
 USER 1001200000
 EXPOSE 80 8080 4200:8080
