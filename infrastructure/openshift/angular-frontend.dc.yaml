@@ -1,0 +1,226 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: angular-frontend-dc
+  description: >-
+    Deployment configuration template for PRIME's Angular frontend component.
+objects:
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: '${NAME}'
+      labels:
+        name: '${NAME}'
+        app: '${APP_NAME}'
+        role: '${ROLE}'
+        env: '${TAG_NAME}'
+    spec:
+      replicas: 1
+      selector:
+        name: '${NAME}'
+      strategy:
+        rollingParams:
+          intervalSeconds: 1
+          maxSurge: 25%
+          maxUnavailable: 25%
+          timeoutSeconds: 600
+          updatePeriodSeconds: 1
+        type: Rolling
+      template:
+        metadata:
+          name: '${NAME}'
+          labels:
+            name: '${NAME}'
+            app: '${APP_NAME}'
+            role: '${ROLE}'
+            env: '${TAG_NAME}'
+            deploymentconfig: '${NAME}'
+        spec:
+          volumes:
+          - name: vanity-tls-certs
+            secret:
+              defaultMode: 420
+              secretName: vanity-tls-certificate
+          containers:
+            - image: '${NAME}'
+              imagePullPolicy: Always
+              name: '${NAME}'
+              ports:
+                - containerPort: 8080
+                  protocol: TCP
+                - containerPort: 8443
+                  protocol: TCP
+                - containerPort: 8888
+                  protocol: TCP
+              env:
+                - name: SUFFIX
+                  value: "${SUFFIX}"
+                - name: REDIRECT_URL
+                  value: "${REDIRECT_URL}"
+                
+                # Document Manager related environment variables
+                - name: DOCUMENT_MANAGER_URL
+                  value: "https://${VANITY_URL}/api/docman"
+                
+                # Keycloak related environment variables
+                - name: KEYCLOAK_CLIENT_ID
+                  valueFrom:
+                    configMapKeyRef:
+                      name: "keycloak"
+                      key: keycloak_client_id
+                - name: KEYCLOAK_REALM
+                  valueFrom:
+                    configMapKeyRef:
+                      name: "keycloak"
+                      key: keycloak_realm
+                - name: KEYCLOAK_URL
+                  valueFrom:
+                    configMapKeyRef:
+                      name: "keycloak"
+                      key: keycloak_url
+              resources:
+                requests:
+                  cpu: 100m
+                  memory: 100Mi
+                limits:
+                  cpu: 500m
+                  memory: 1Gi
+              volumeMounts:
+                - name: vanity-tls-certs
+                  mountPath: /etc/nginx/certs
+                  readOnly: true
+                - name: '${NAME}${SUFFIX}-keycloak-config-volume'
+                  mountPath: '${KEYCLOAK_CONFIG_MOUNT_PATH}${KEYCLOAK_CONFIG_FILE_NAME}'
+                  subPath: '${KEYCLOAK_CONFIG_FILE_NAME}'
+              livenessProbe:
+                httpGet:
+                  path: /info
+                  port: 8443
+                  scheme: HTTPS
+                initialDelaySeconds: 30
+                timeoutSeconds: 600
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+              readinessProbe:
+                httpGet:
+                  path: /info
+                  port: 8443
+                  scheme: HTTPS
+                initialDelaySeconds: 10
+                timeoutSeconds: 300
+                periodSeconds: 10
+                successThreshold: 1
+                failureThreshold: 3
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+      test: false
+      triggers:
+        - type: ConfigChange
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${NAME}'
+            from:
+              kind: ImageStreamTag
+              namespace: '${IMAGE_NAMESPACE}'
+              name: '${NAME}:${TAG_NAME}'
+  
+  # Service definition
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: '${NAME}'
+      labels:
+        name: '${NAME}'
+        app: '${APP_NAME}'
+        role: '${ROLE}'
+        env: '${TAG_NAME}'
+    spec:
+      ports:
+        - name: 8080-tcp
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+        - name: 8443-tcp
+          port: 8443
+          protocol: TCP
+          targetPort: 8443
+        - name: 8888-tcp
+          port: 8888
+          protocol: TCP
+          targetPort: 8888
+      selector:
+        name: '${NAME}${SUFFIX}'
+      sessionAffinity: None
+      type: ClusterIP
+  
+  # Route definition
+  - kind: Route
+    apiVersion: v1
+    metadata:
+      name: '${NAME}'
+      labels:
+        name: '${NAME}'
+        app: '${APP_NAME}'
+        role: '${ROLE}'
+        env: '${TAG_NAME}'
+    spec:
+      host: '${APPLICATION_DOMAIN}'
+      port:
+        targetPort: 8080-tcp
+      tls:
+        insecureEdgeTerminationPolicy: Redirect
+        termination: edge
+      to:
+        kind: Service
+        name: '${NAME}'
+        weight: 100
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+- name: APP_NAME
+  displayName: App Name
+  description: App Name
+  required: true
+  value: "pims"
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: IMAGE_NAMESPACE
+  displayName: Image Namespace
+  description: The namespace where to get the above image name   
+  required: true
+  value: "9c33a9-tools"
+- name: VERSION
+  required: true
+- name: SOURCE_CONTEXT_DIR
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_APP
+  required: true
+- name: VANITY_URL
+  required: true
+  value: "pharmanetenrolment.gov.bc.ca"
+- name: HTTP_SCHEMA
+  required: true
+  value: "https"
+- name: HTTP_PORT
+  required: true
+  value: "8443"
+- name: TERMINATION_TYPE
+  required: true
+  value: "Passthrough"
+- name: REDIRECT_URL
+  required: true
+  value: "https://pharmanetenrolment.gov.bc.ca"

@@ -1,0 +1,62 @@
+# Role binding definitions for jenkins service account in tools namespace to
+# allow image pulls during build step from the tools namespace.
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: project-set:image-puller
+  namespace: 9c33a9-tools
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:image-puller
+subjects:
+  - kind: ServiceAccount
+    name: default
+    namespace: 9c33a9-dev
+  - kind: ServiceAccount
+    name: default
+    namespace: 9c33a9-test
+  - kind: ServiceAccount
+    name: default
+    namespace: 9c33a9-prod
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-image-puller
+  namespace: 9c33a9-tools
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:image-puller
+subjects:
+  - kind: ServiceAccount
+  name: builder
+  namespace: 9c33a9-dev
+  - kind: ServiceAccount
+  name: builder
+  namespace: 9c33a9-test
+  - kind: ServiceAccount
+  name: builder
+  namespace: 9c33a9-prod
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-deployer
+  namespace: 9c33a9-tools
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:deployer
+subjects:
+  - kind: ServiceAccount
+  name: deployer
+  namespace: 9c33a9-dev
+  - kind: ServiceAccount
+  name: deployer
+  namespace: 9c33a9-test
+  - kind: ServiceAccount
+  name: deployer
+  namespace: 9c33a9-prod

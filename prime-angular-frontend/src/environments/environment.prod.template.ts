@@ -13,9 +13,9 @@ export const environment: AppEnvironment = {
   production: true,
   environmentName: '$OC_APP',
   version: '1.0.0',
-  apiEndpoint: '/api/v1',
+  apiEndpoint: '$REDIRECT_URL/api/v1',
   loginRedirectUrl: '$REDIRECT_URL',
-  documentManagerUrl: '$DOCUMENT_MANAGER_URL',
+  documentManagerUrl: '$REDIRECT_URL/api/docman',
   prime: {
     displayPhone: '1-844-39PRIME',
     phone: '1-844-397-7463',
