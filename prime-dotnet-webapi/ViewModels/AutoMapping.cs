@@ -72,7 +72,6 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Party.FirstName))
             .ForMember(dest => dest.GivenNames, opt => opt.MapFrom(src => src.Party.GivenNames))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Party.LastName))
-            .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.Party.DateOfBirth))
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
 

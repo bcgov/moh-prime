@@ -1,4 +1,4 @@
-FROM docker-registry.default.svc:5000/dqszvc-tools/python-36-rhel7:1-36
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/python-36-rhel7:1-36
 
 # Install sonar-scanner
 RUN curl -sLo /tmp/sonar-scanner-cli.zip https://dl.bintray.com/sonarsource/SonarQube/org/sonarsource/scanner/cli/sonar-scanner-cli/3.2.0.1227/sonar-scanner-cli-3.2.0.1227-linux.zip && \

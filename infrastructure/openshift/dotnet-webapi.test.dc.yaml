@@ -1,0 +1,321 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: dotnet-webapi-test-dc
+  description: >-
+    Deployment configuration template for PRIME's .NET Core web API.
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: true
+- name: SOURCE_CONTEXT_DIR
+  required: true
+  value: prime-dotnet-webapi
+- name: SOURCE_REPOSITORY_URL
+  required: true
+  value: "https://github.com/bcgov/moh-prime"
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: OC_NAMESPACE
+  required: true
+- name: OC_APP
+  required: true
+- name: ASPNETCORE_ENVIRONMENT
+  value: Release
+- name: VANITY_URL
+  required: true
+  value: "pharmanetenrolment.gov.bc.ca"
+- name: HTTP_SCHEMA
+  required: true
+  value: "https"
+- name: HTTP_PORT
+  required: true
+  value: "8443"
+- name: TERMINATION_TYPE
+  required: true
+  value: "passthrough"
+objects:
+# .NET Web API - Deployment Configuration
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      kompose.cmd: >-
+        kompose convert --provider=openshift --build=build-config
+        --build-repo=https://github.com/bcgov/moh-prime.git
+        --build-branch=develop --deployment-config
+      kompose.version: 1.18.0 (06a2e56)
+    creationTimestamp: null
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    completionDeadlineSeconds: 1200
+    replicas: 1
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    strategy: null
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.service: "${NAME}${SUFFIX}"
+      spec:
+        containers:
+          - env:
+              # Explicit environment variables
+              - name: OC_APP
+                value: "${OC_APP}"
+              - name: SUFFIX
+                value: "${SUFFIX}"
+              - name: PATH
+                value: "/opt/rh/rh-dotnet22/root/usr/lib64/dotnet:/app/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+              - name: ASPNETCORE_ENVIRONMENT
+                value: ${ASPNETCORE_ENVIRONMENT}
+              - name: ASPNETCORE_HTTPS_PORT
+                value: "5001"
+              - name: ASPNETCORE_URLS
+                value: "http://+:8080"
+              - name: FRONTEND_URL
+                value: "${HTTP_SCHEMA}://${VANITY_URL}"
+              - name: BACKEND_URL
+                value: "https://${VANITY_URL}/api/v1/"
+              - name: DB_HOST
+                value: "postgresql${SUFFIX}"
+              
+              # Canada Post AddressComplete API related environment variables
+              - name: ADDRESS_AUTOCOMPLETE_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: address_autocomplete_api_key
+                    name: "canada-post-addresscomplete-secrets"
+              - name: ADDRESS_AUTOCOMPLETE_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: address_autocomplete_api_url
+                    name: "canada-post-addresscomplete"
+
+              # CHES (Common Hosted Email Service) related environment variables
+              - name: CHES_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_api_url
+                    name: "ches"
+              - name: CHES_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: ches_client_secret
+                    name: "ches-secrets"
+              - name: CHES_ENABLED
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_enabled
+                    name: "ches"
+              - name: CHES_TOKEN_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: ches_token_url
+                    name: "ches"
+
+              # Document Manager related environment variables
+              - name: DOCUMENT_MANAGER_CLIENT_ID
+                valueFrom:
+                  configMapKeyRef:
+                    key: document_manager_client_id
+                    name: "document-manager"
+              - name: DOCUMENT_MANAGER_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: document_manager_client_secret
+                    name: "document-manager-secrets"
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${VANITY_URL}/api/docman/"          
+
+              # Keycloak related environment variables
+              - name: JWT_WELL_KNOWN_CONFIG
+                valueFrom:
+                  configMapKeyRef:
+                    key: jwt_well_known_config
+                    name: "keycloak"
+              - name: KEYCLOAK_ADMINISTRATION_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    key: keycloak_administration_client_secret
+                    name: "keycloak-secrets"
+              - name: KEYCLOAK_ADMINISTRATION_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: keycloak_administration_url
+                    name: "keycloak"
+              - name: KEYCLOAK_TOKEN_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: keycloak_token_url
+                    name: "keycloak"
+
+              # Mail server environment variables
+              - name: MAIL_SERVER_PORT
+                valueFrom:
+                  configMapKeyRef:
+                    key: mail_server_port
+                    name: "mail-server"
+              - name: MAIL_SERVER_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: mail_server_url
+                    name: "mail-server"
+
+              # Metabase embedded dashboard environment variables
+              - name: METABASE_DASHBOARD_ID
+                valueFrom:
+                  configMapKeyRef:
+                    key: metabase_dashboard_id
+                    name: "metabase-embedded"
+              - name: METABASE_SECRET_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: metabase_secret_key
+                    name: "metabase-embedded-secrets"
+              - name: METABASE_SITE_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: metabase_site_url
+                    name: "metabase-embedded"
+
+              # Pharmanet API environment variables
+              - name: PHARMANET_API_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_api_password
+                    name: "pharmanet-api-secrets"
+              - name: PHARMANET_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: pharmanet_api_url
+                    name: "pharmanet-api"
+              - name: PHARMANET_API_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_api_username
+                    name: "pharmanet-api-secrets"
+              - name: PHARMANET_SSL_CERT_FILENAME
+                value: "/app/etc/certs/pharmanet-api-cert.pfx"
+              - name: PHARMANET_SSL_CERT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: pharmanet_ssl_cert_password
+                    name: "pharmanet-api-secrets"
+
+              # PostgreSQL related environment variables
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_admin_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_username
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: postgresql_database_admin_password
+                    name: "postgresql-secrets"
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    key: postgresql_database_name
+                    name: "postgresql"
+              
+              # Verifiable Credential related environment variables
+              - name: VERIFIABLE_CREDENTIAL_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: verifiable_credential_api_key
+                    name: "verifiable-credential-secrets"
+              - name: VERIFIABLE_CREDENTIAL_API_URL
+                valueFrom:
+                  configMapKeyRef:
+                    key: verifiable_credential_api_url
+                    name: "verifiable-credential"
+              - name: VERIFIABLE_CREDENTIAL_WEBHOOK_KEY
+                valueFrom:
+                  secretKeyRef:
+                    key: verifiable_credential_webhook_key
+                    name: "verifiable-credential-secrets"
+
+            image: " "
+            name: primeapi
+            ports:
+              - containerPort: 5000
+              - containerPort: 5001
+              - containerPort: 8080
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /api/healthcheck
+                port: 8080
+                scheme: "HTTP"
+              initialDelaySeconds: 30
+              periodSeconds: 30
+              successThreshold: 1
+              timeoutSeconds: 30
+            volumeMounts:
+              # Create directory for storing .NET Web API SSL certificate
+              - name: cert-volume
+                mountPath: /app/etc/certs
+                readOnly: true
+        volumes:
+          # Placement of .NET Web API SSL certificate
+          - name: cert-volume
+            secret:
+              secretName: ssl-certs
+        restartPolicy: Always
+    test: false
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - dotnet-api-test
+          from:
+            kind: ImageStreamTag
+            name: "${NAME}${SUFFIX}:latest"
+        type: ImageChange
+  status: {}
+
+# .NET Web API service (endpoint for internal routing to related pods)
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    labels:
+      io.kompose.service: "${NAME}${SUFFIX}"
+    name: "${NAME}${SUFFIX}"
+  spec:
+    ports:
+      - name: "8080"
+        port: 8080
+        targetPort: 8080
+      - name: "5000"
+        port: 5000
+        targetPort: 5000
+      - name: "5001"
+        port: 5001
+        targetPort: 5001
+    selector:
+      io.kompose.service: "${NAME}${SUFFIX}"

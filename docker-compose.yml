@@ -1,7 +1,9 @@
 version: "3"
 
 services:
-####################### PostgreSQL Database Definition #######################
+###############################################################################
+###                     PostgreSQL Database Definition                      ###
+###############################################################################
   postgres:
     restart: always
     container_name: primedb
@@ -15,12 +17,14 @@ services:
     volumes:
       - local_postgres_data:/var/lib/postgresql/data
     networks:
-      - primenet
+      - prime-net
 
-####################### MongoDB Definition #######################
+###############################################################################
+###                           MongoDB Definition                            ###
+###############################################################################
   mongo:
     restart: always
-    container_name: primemongodb
+    container_name: prime-mongodb
     image: mongo:3
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
@@ -30,18 +34,20 @@ services:
     volumes:
       - local_mongodb_data:/var/lib/mongodb/data
     networks:
-      - primenet
+      - prime-net
 
-####################### Redis Definition #######################
+###############################################################################
+###                            Redis Definition                             ###
+###############################################################################
   redis:
     image: redis:3.2-alpine
-    container_name: prime_cache
+    container_name: prime-redis
     restart: always
     command: redis-server --requirepass redis-password
     ports:
       - "6379:6379"
     networks:
-      - primenet
+      - prime-net
 
 ####################### Verifiable Credential Agent Definition #######################
   # agent:
@@ -109,12 +115,28 @@ services:
 
 ####################### API Backend Definition #######################
   dotnet-webapi:
-    container_name: primeapi
+    container_name: prime-webapi-backend
     restart: always
     build:
       context: prime-dotnet-webapi/
+      args:
+        DB_HOST: primedb
+        PGPASSWORD: postgres
+        POSTGRESQL_ADMIN_PASSWORD: postgres
+        POSTGRESQL_USERNAME: postgres
+        POSTGRESQL_DATABASE: postgres
+        DB_CONNECTION_STRING: "host=primedb;port=5432;database=postgres;username=postgres;password=postgres"
+        ASPNETCORE_HTTPS_PORT: "5001"
+        ASPNETCORE_ENVIRONMENT: "Development"
+        ASPNETCORE_URLS: "http://+:8080"
+        DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
     environment:
-      DB_CONNECTION_STRING: "host=postgres;port=5432;database=postgres;username=postgres;password=postgres"
+      DB_HOST: primedb
+      PGPASSWORD: postgres
+      POSTGRESQL_ADMIN_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_DATABASE: postgres
+      DB_CONNECTION_STRING: "host=primedb;port=5432;database=postgres;username=postgres;password=postgres"
       ASPNETCORE_HTTPS_PORT: "5001"
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_URLS: "http://+:8080"
@@ -127,7 +149,7 @@ services:
       - "5000:8080"
       - "5001:5001"
     networks:
-      - primenet
+      - prime-net
     depends_on:
       - postgres
     entrypoint: /bin/bash
@@ -141,12 +163,21 @@ services:
       dotnet watch run --urls=http://+:8080"
     ]
 
-####################### Web Frontend Definition #######################
+###############################################################################
+###                         Web Frontend Definition                         ###
+###############################################################################
   nginx-angular:
-    container_name: primeweb
+    container_name: prime-frontend
     build:
-         context: prime-angular-frontend/
-    command: "nginx -g 'daemon off;'"
+      context: ./prime-angular-frontend/
+      dockerfile: openshift.dockerfile
+      args:
+        KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+        KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+        KEYCLOAK_URL: ${KEYCLOAK_URL}
+        REDIRECT_URL: ${REDIRECT_URL}
+        JWT_WELL_KNOWN_CONFIG: ${JWT_WELL_KNOWN_CONFIG}
+    # command: "nginx -g 'daemon off;'"
     restart: always
     ports:
        - "8080:8080"
@@ -155,11 +186,13 @@ services:
        - "8080"
        - "4200"
     networks:
-      - primenet
+      - prime-net
     depends_on:
       - dotnet-webapi
 
-####################### Local SMTP Server Definition #######################
+###############################################################################
+###                      Local SMTP Server Definition                       ###
+###############################################################################
   mailhog:
     container_name: mailhog
     restart: always
@@ -169,9 +202,11 @@ services:
       - 1025:1025
       - 8025:8025 # Visit localhost:8025 to see the list of captured emails
     networks:
-      - primenet
+      - prime-net
 
-####################### Database Inspection Definition #######################
+###############################################################################
+###                     Database Inspection Definition                      ###
+###############################################################################
   schema-spy:
     container_name: schema-spy
     build:
@@ -183,9 +218,11 @@ services:
     depends_on:
       - postgres
     networks:
-      - primenet
+      - prime-net
 
-####################### Backup Definition #######################
+###############################################################################
+###                            Backup Definition                            ###
+###############################################################################
   backup:
     container_name: backup
     build:
@@ -200,9 +237,11 @@ services:
       - db_backup_data:/opt/backup
       - local_postgres_data:/var/lib/postgresql/data
     networks:
-      - primenet
+      - prime-net
 
-####################### Document Manager Definition #######################
+###############################################################################
+###                       Document Manager Definition                       ###
+###############################################################################
   document_manager_backend:
     restart: always
     container_name: document-manager-backend
@@ -218,7 +257,7 @@ services:
       - document_manager_migrate
     env_file: ./document-manager/backend/.env-local
     networks:
-      - primenet
+      - prime-net
 
   document_manager_migrate:
     restart: on-failure
@@ -233,14 +272,18 @@ services:
       - ./document-manager/backend/:/app/
     env_file: ./document-manager/backend/.env-local
     networks:
-      - primenet
+      - prime-net
 
-####################### Networks Definition #######################
+###############################################################################
+###                           Networks Definition                           ###
+###############################################################################
 networks:
-  primenet:
+  prime-net:
     driver: bridge
 
-####################### Volumes Definition #######################
+###############################################################################
+###                            Volumes Definition                           ###
+###############################################################################
 volumes:
   local_postgres_data:
   local_mongodb_data:
