@@ -40,7 +40,7 @@ import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-ma
 
 const routes: Routes = [
   {
-    path: AdjudicationRoutes.MODULE_PATH,
+    path: '',
     component: AdjudicationDashboardComponent,
     canActivate: [
       AuthenticationGuard,
@@ -209,7 +209,7 @@ const routes: Routes = [
             ]
           },
           {
-            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
+            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
             children: [
               {
                 path: '',
@@ -249,7 +249,7 @@ const routes: Routes = [
             ]
           },
           {
-            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.AUTHORIZED_USERS}`,
+            path: `${ AdjudicationRoutes.HEALTH_AUTHORITIES }/:haid/${ AdjudicationRoutes.AUTHORIZED_USERS }`,
             children: [
               {
                 path: '',
@@ -288,4 +288,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule { }
+export class AdjudicationRoutingModule {}
