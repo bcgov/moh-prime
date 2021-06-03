@@ -22,6 +22,7 @@ import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public site: HealthAuthSite;
+  public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
@@ -33,6 +34,7 @@ export class OverviewPageComponent implements OnInit {
     private siteResource: HealthAuthSiteRegResource,
     private siteService: HealthAuthSiteRegService
   ) {
+    this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.MODULE_PATH));
   }
 
@@ -61,12 +63,17 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeTo([
+      HealthAuthSiteRegRoutes.MODULE_PATH,
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    ]);
   }
 
   public nextRoute(): void {
-    // this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.SITE_MANAGEMENT]);
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_MANAGEMENT, {queryParams: { submitted: true }});
+    this.routeUtils.routeTo([
+      HealthAuthSiteRegRoutes.MODULE_PATH,
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    ], { queryParams: { submitted: true } });
   }
 
   public ngOnInit(): void {

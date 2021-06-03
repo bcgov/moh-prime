@@ -11,7 +11,7 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>{{ title }}</ng-container>
         <ng-container appPageSubheader2Summary>
-          Identify the type of care setting your site operates.
+          Identify the type of care provided at this site.
         </ng-container>
       </app-page-subheader2>
 
@@ -19,7 +19,7 @@
         <div class="col col-sm-10 py-3">
 
           <mat-form-field class="w-100">
-            <mat-label>Care Setting</mat-label>
+            <mat-label>Health authority care type</mat-label>
             <mat-select formControlName="careSettingCode">
               <mat-option *ngFor="let careSetting of careSettingConfig"
                           [value]="careSetting.code">
