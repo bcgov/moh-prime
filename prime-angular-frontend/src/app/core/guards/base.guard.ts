@@ -67,7 +67,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
       } catch (error) {
         const destination = (routePath) ? ` to ${ routePath } ` : ' ';
         const message = `Route access${ destination }has been denied`;
-        this.logger.error(message);
+        this.logger.warn(message);
         reject(`${ message }: ${ error }`);
       }
     });

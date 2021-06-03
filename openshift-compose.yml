@@ -1,0 +1,167 @@
+version: "3"
+
+services:
+####################### PostgreSQL Database Definition #######################
+  postgresql:
+    restart: always
+    container_name: prime-postgresql-db
+    image: postgres:10.6
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USERNAME: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - openshift
+
+####################### MongoDB Definition #######################
+  # mongo:
+  #   restart: always
+  #   container_name: primemongodb
+  #   image: mongo:3
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: prime
+  #   ports:
+  #     - 8081:8081
+  #   volumes:
+  #     - local_mongodb_data:/var/lib/mongodb/data
+  #   networks:
+  #     - primenet
+
+####################### Redis Definition #######################
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime_cache
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - openshift
+
+####################### API Backend Definition #######################
+  dotnet-webapi:
+    container_name: prime-webapi-backend
+    restart: always
+    build:
+      context: prime-dotnet-webapi/
+      dockerfile: openshift.dockerfile
+    environment:
+      DB_HOST: prime-postgresql-db
+      PGPASSWORD: postgres
+      POSTGRESQL_ADMIN_PASSWORD: postgres
+      POSTGRESQL_USERNAME: postgres
+      POSTGRESQL_DATABASE: postgres
+      DB_CONNECTION_STRING: "host=primedb;port=5432;database=postgres;username=postgres;password=postgres"
+      ASPNETCORE_HTTPS_PORT: "5001"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_URLS: "http://+:8080"
+      DOTNET_CLI_HOME: "/tmp/DOTNET_CLI_HOME"
+    ports:
+      - "5000:8080"
+      - "5001:5001"
+    networks:
+      - openshift
+    depends_on:
+      - postgresql
+
+####################### Web Frontend Definition #######################
+  nginx-angular:
+    container_name: prime-frontend
+    build:
+      context: prime-angular-frontend/
+      dockerfile: openshift.dockerfile
+      args:
+        KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+        KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+        KEYCLOAK_URL: ${KEYCLOAK_URL}
+        REDIRECT_URL: ${REDIRECT_URL}
+        JWT_WELL_KNOWN_CONFIG: ${JWT_WELL_KNOWN_CONFIG}
+    # command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+       - "8080:8080"
+       - "4200:8080"
+    expose:
+       - "8080"
+       - "4200"
+    networks:
+      - openshift
+    depends_on:
+      - dotnet-webapi
+
+####################### Local SMTP Server Definition #######################
+  # mailhog:
+  #   container_name: mailhog
+  #   restart: always
+  #   image: mailhog/mailhog:latest
+  #   ports:
+  #     - 25:1025
+  #     - 1025:1025
+  #     - 8025:8025 # Visit localhost:8025 to see the list of captured emails
+  #   networks:
+  #     - primenet
+
+####################### Database Inspection Definition #######################
+  # schema-spy:
+  #   container_name: schema-spy
+  #   build:
+  #     context: schemaspy/
+  #   image: openjdk:jre-alpine
+  #   ports:
+  #     - "8069:8069"
+  #     - "80:8069"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - primenet
+
+####################### Backup Definition #######################
+  # backup:
+  #   container_name: backup
+  #   build:
+  #     context: prime-database-backup
+  #   ports:
+  #     - 6432:5432
+  #     - 9081:8081
+  #   depends_on:
+  #     - postgres
+  #     - mongo
+  #   volumes:
+  #     - db_backup_data:/opt/backup
+  #     - local_postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - primenet
+
+####################### Document Manager Definition #######################
+  document-manager:
+    restart: always
+    container_name: prime-document-manager
+    build:
+      context: document-manager/backend
+      dockerfile: openshift.dockerfile
+      args:
+        BUILD_LOGLEVEL: ${BUILD_LOGLEVEL}
+    ports:
+      - 6001:6001
+    volumes:
+      - ./document-manager/backend/:/app/
+    depends_on:
+      - postgresql
+      # - redis
+    networks:
+      - openshift
+
+####################### Networks Definition #######################
+networks:
+  openshift:
+
+####################### Volumes Definition #######################
+volumes:
+  local_postgres_data:
+  local_mongodb_data:
+  db_backup_data:
