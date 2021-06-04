@@ -50,7 +50,7 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
@@ -99,7 +99,7 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
@@ -146,7 +146,7 @@ jobs:
 
   apply-oc-template:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
