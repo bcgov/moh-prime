@@ -27,7 +27,7 @@ parameters:
   displayName: Version of PostgreSQL Image
   name: POSTGRESQL_VERSION
   required: true
-  value: "9.6"
+  value: "9.6-el8"
 - name: POSTGRESQL_IMAGE_NAMESPACE
   displayName: PostgreSQL Image Namespace
   value: openshift
