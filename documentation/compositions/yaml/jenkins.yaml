@@ -9,10 +9,10 @@ metadata:
     template: jenkins-persistent-template
     template.openshift.io/template-instance-owner: 29e3deea-e783-11e9-8615-0050568348cc
   name: jenkins-prod
-  namespace: dqszvc-tools
+  namespace: 9c33a9-tools
   resourceVersion: '1074231876'
   selfLink: >-
-    /apis/apps.openshift.io/v1/namespaces/dqszvc-tools/deploymentconfigs/jenkins-prod
+    /apis/apps.openshift.io/v1/namespaces/9c33a9-tools/deploymentconfigs/jenkins-prod
   uid: 29f6e4b1-e783-11e9-8615-0050568348cc
 spec:
   replicas: 0
@@ -50,7 +50,7 @@ spec:
                 -XX:MaxMetaspaceSize=512m -Duser.timezone=America/Vancouver
                 -Dhudson.model.DirectoryBrowserSupport.CSP=
           image: >-
-            docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+            image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 30
@@ -115,7 +115,7 @@ spec:
           name: 'jenkins:2'
           namespace: openshift
         lastTriggeredImage: >-
-          docker-registry.default.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
+          image-registry.openshift-image-registry.svc:5000/openshift/jenkins@sha256:36f8501570cd2846cc93f34a53010f3971803876bf11362399267fcd0368feb2
       type: ImageChange
     - type: ConfigChange
 status:
