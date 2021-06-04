@@ -111,9 +111,9 @@ jobs:
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
-      JWT_WELL_KNOWN_CONFIG: "https://prod.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+      JWT_WELL_KNOWN_CONFIG: "https://oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
       KEYCLOAK_CLIENT_ID: "prime-application-prod"
-      KEYCLOAK_URL: "https://prod.oidc.gov.bc.ca/auth"
+      KEYCLOAK_URL: "https://oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
     steps:
       - name: "Checkout the repo"
