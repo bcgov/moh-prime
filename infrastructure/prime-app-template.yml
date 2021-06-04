@@ -478,6 +478,8 @@ objects:
                   secretKeyRef:
                     name: prime-postgresql-db
                     key: database-user
+              - name: DOCUMENT_MANAGER_URL
+                value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
@@ -503,7 +505,7 @@ objects:
                   configMapKeyRef:
                     name: document-manager
                     key: FLASK_RUN_PORT
-              - name: JWT_WELL_KNOWN_CONFIG
+              - name: JWT_OIDC_WELL_KNOWN_CONFIG
                 valueFrom:
                   configMapKeyRef:
                     name: keycloak
