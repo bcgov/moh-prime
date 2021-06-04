@@ -14,7 +14,7 @@
     </app-page-subheader2>
 
     <form [formGroup]="formState.form"
-          (ngOnSubmit)="onSubmit()"
+          (ngSubmit)="onSubmit()"
           novalidate
           autocomplete="off">
       <mat-radio-group aria-label="Are you an existing LDAP user?"
@@ -52,6 +52,6 @@
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="false"
-                   [disableSave]="hasAttemptedSubmission && formState.ldapUser.value === false"
+                   [disableSave]="formState.ldapUser.value === false"
                    (save)="onSubmit()"></app-page-footer>
 </app-page>

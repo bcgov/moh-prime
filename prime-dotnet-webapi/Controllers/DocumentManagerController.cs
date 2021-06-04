@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 using Prime.Auth;
 using Prime.Models.Api;
@@ -19,10 +20,12 @@ namespace Prime.Controllers
     public class DocumentManagerController : ControllerBase
     {
         private readonly IDocumentManagerClient _client;
+        private readonly ILogger _logger;
 
-        public DocumentManagerController(IDocumentManagerClient documentManagerClient)
+        public DocumentManagerController(IDocumentManagerClient documentManagerClient, ILogger<DocumentManagerController> logger)
         {
             _client = documentManagerClient;
+            _logger = logger;
         }
 
         // POST: api/Document
@@ -33,11 +36,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> InitializeFileUploadWithDocumentManager()
         {
+            var fileSize = Request.Headers["Upload-Length"].ToString();
             var metadata = Request.Headers["Upload-MetaData"].ToString();
             var filename = ParseFilenameFromMetadata(metadata);
-            var fileSize = Request.Headers["Upload-Length"].ToString();
 
             var response = await _client.InitializeUploadAsync(filename, fileSize);
+            if (!response.IsSuccessStatusCode)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+                _logger.LogError($"Error when contacting the Document Manger. StatusCode: {response.StatusCode}, Body: {body}");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error when contacting the Document Manager");
+            }
 
             HttpContext.Response.Headers.Add("Location", response.Headers.GetValues("Location").FirstOrDefault());
             return Ok();

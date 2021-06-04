@@ -1,0 +1,124 @@
+---
+apiVersion: v1
+kind: Template
+labels:
+  template: database-backup-template
+metadata:
+  name: database-backup-bc
+  creationTimestamp: null
+parameters:
+  - name: NAME
+    displayName: Name
+    description: A prefix appended to all objects
+    required: true
+    value: backup
+  - name: SUFFIX
+    displayName: Name Suffix
+    description: A suffix appended to all objects
+    required: false
+  - name: VERSION
+    required: false
+  - name: SOURCE_CONTEXT_DIR
+    value: prime-database-backup
+    required: true
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: https://github.com/bcgov/moh-prime
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+    value: 9c33a9
+  - name: OC_APP
+    required: true
+    value: dev
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --provider=openshift --build=build-config --build-repo=https://github.com/bcgov/moh-prime.git
+        kompose.version: 1.20.0 (f3d54d784)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: backup
+      name: backup
+    spec:
+      nodeSelector: null
+      output:
+        to:
+          kind: ImageStreamTag
+          name: backup:latest
+      postCommit: {}
+      resources: {}
+      runPolicy: Serial
+      source:
+        contextDir: "${SOURCE_CONTEXT_DIR}"
+        git:
+          ref: "${SOURCE_REPOSITORY_REF}"
+          uri: "${SOURCE_REPOSITORY_URL}"
+        type: Git
+      strategy:
+        dockerStrategy:
+          dockerfilePath: openshift.dockerfile
+          env:
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: "postgresql-secrets"
+                key: postgresql_database_username
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: "postgresql-secrets"
+                key: postgresql_database_admin_password                
+          - name: PGDATABASE
+            valueFrom:
+              configMapKeyRef:
+                name: "postgresql"
+                key: postgresql_database_name              
+          volumeMounts:
+          - mountPath: /opt/backup
+            name: backup-data
+          volumes:
+          - name: backup-data
+            persistentVolumeClaim:
+              claimName: backup-data
+        type: Docker
+      triggers:
+      - type: ConfigChange
+      - type: ImageChange
+    status:
+      lastVersion: 0
+  - apiVersion: v1
+    kind: PersistentVolumeClaim
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: backup-data
+      name: backup-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+    status: {}
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: backup
+      name: backup
+    spec:
+      tags:
+      - annotations: null
+        from:
+          kind: DockerImage
+          name: backup
+        generation: null
+        importPolicy: {}
+        name: latest
+    status:
+      dockerImageRepository: ""
