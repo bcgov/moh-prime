@@ -32,5 +32,8 @@ namespace Prime.Services
         Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
 
         Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid);
+
+        Task<IEnumerable<AgreementVersionListViewModel>> GetLatestEnrolleeAgreementVersionsAsync();
+        Task<AgreementVersionViewModel> GetAgreementVersionById(int agreementId);
     }
 }

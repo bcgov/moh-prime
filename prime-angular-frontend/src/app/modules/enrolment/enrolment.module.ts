@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { NgxProgressModule } from '@lib/modules/ngx-progress/ngx-progress.module';
-
 import { SharedModule } from '@shared/shared.module';
 
 import { EnrolmentRoutingModule } from './enrolment-routing.module';
@@ -16,6 +15,7 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
 import { JobComponent } from './pages/job/job.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
+import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { HealthAuthorityComponent } from './pages/health-authority/health-authority.component';
@@ -40,7 +40,6 @@ import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolmen
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
-import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site-form.component';
 
 @NgModule({

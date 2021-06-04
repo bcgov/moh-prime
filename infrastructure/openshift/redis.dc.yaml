@@ -1,0 +1,150 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: redis-dc
+  annotations:
+    openshift.io/display-name: Redis
+    description: >-
+      Redis in-memory data structure store, with persistent storage. For more
+      information about using this template, including OpenShift considerations,
+      see https://github.com/sclorg/redis-container/blob/master/3.2.
+
+
+      NOTE: You must have persistent volumes available in your cluster to use
+      this template.
+    iconClass: icon-redis
+    tags: 'database,redis'
+    openshift.io/long-description: >-
+      This template provides a standalone Redis server.  The data is stored in
+      memory.
+    openshift.io/provider-display-name: 'Red Hat, Inc.'
+    openshift.io/documentation-url: 'https://github.com/sclorg/redis-container/tree/master/3.2'
+    openshift.io/support-url: 'https://access.redhat.com'
+parameters:
+  - name: CPU_LIMIT
+    value: 500m
+  - name: MEMORY_LIMIT
+    value: 2Gi
+  - name: CPU_REQUEST
+    value: 200m
+  - name: MEMORY_REQUEST
+    value: 1.5Gi
+  - name: NAME
+    displayName: Object names
+    description: The name of the OpenShift objects.
+    value: redis
+    required: true
+  - name: REDIS_PASSWORD
+    displayName: Redis Connection Password
+    description: Password for the Redis connection user.
+    value: "prime"
+    required: true
+  - name: REDIS_VERSION
+    displayName: Version of Redis Image
+    description: Version of Redis image to be used (3.2 or latest).
+    value: '3.2'
+  - name: SUFFIX
+    required: false
+  - name: SOURCE_CONTEXT_DIR
+    required: false
+  - name: SOURCE_REPOSITORY_URL
+    required: true
+    value: https://github.com/bcgov/moh-prime
+  - name: SOURCE_REPOSITORY_REF
+    required: true
+  - name: OC_NAMESPACE
+    required: true
+    value: 9c33a9
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: VERSION
+    required: false
+objects:  
+  # Redis service (endpoint for internal routing to related pods)
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      annotations:
+        template.openshift.io/expose-uri: 'redis://{.spec.clusterIP}:{.spec.ports[?(.name=="redis")].port}'
+    spec:
+      ports:
+        - name: redis
+          protocol: TCP
+          port: 6379
+          targetPort: 6379
+          nodePort: 0
+      selector:
+        name: '${NAME}${SUFFIX}'
+      type: ClusterIP
+      sessionAffinity: None
+  
+  # Redis - Deployment configuration
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: '${NAME}${SUFFIX}'
+      annotations:
+        template.alpha.openshift.io/wait-for-ready: 'true'
+    spec:
+      strategy:
+        type: Recreate
+        maxSurge: 50%
+        maxUnavailable: 0
+      triggers:
+        - type: ImageChange
+          imageChangeParams:
+            automatic: true
+            containerNames:
+              - redis
+            from:
+              kind: ImageStreamTag
+              name: 'redis:${REDIS_VERSION}'
+              namespace: openshift
+            lastTriggeredImage: ''
+        - type: ConfigChange
+      replicas: 1
+      selector:
+        name: '${NAME}${SUFFIX}'
+      template:
+        metadata:
+          labels:
+            name: '${NAME}${SUFFIX}'
+        spec:
+          containers:
+            - name: redis
+              image: ' '
+              ports:
+                - containerPort: 6379
+                  protocol: TCP
+              readinessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 5
+                exec:
+                  command:
+                    - /bin/sh
+                    - '-i'
+                    - '-c'
+                    - >-
+                      test "$(redis-cli -h 127.0.0.1 -a $REDIS_PASSWORD ping)"
+                      == "PONG"
+              livenessProbe:
+                timeoutSeconds: 1
+                initialDelaySeconds: 30
+                tcpSocket:
+                  port: 6379
+              env:
+                - name: REDIS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: "redis-secrets"
+                      key: redis_password
+              resources: {}
+              terminationMessagePath: /dev/termination-log
+              imagePullPolicy: IfNotPresent
+              capabilities: {}
+          restartPolicy: Always
+          dnsPolicy: ClusterFirst
+

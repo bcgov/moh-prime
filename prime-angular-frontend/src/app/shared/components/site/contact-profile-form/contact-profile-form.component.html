@@ -29,7 +29,8 @@
                 <button class="float-right"
                         type="button"
                         mat-stroked-button
-                        (click)="updateContact(contact)">Update Information</button>
+                        (click)="updateContact(contact)">Update Information
+                </button>
               </div>
             </div>
           </mat-card-content>
@@ -144,28 +145,27 @@
 
       </div>
     </div>
-
-    <ng-container *ngIf="hasPhysicalAddress">
-
-      <section class="mb-3">
-        <app-page-subheader2>
-          <ng-container appPageSubheader2Title>Address</ng-container>
-        </app-page-subheader2>
-
-        <app-address-form [form]="physicalAddress"
-                          [showAddressFields]="showAddressFields"
-                          [showManualButton]="true"></app-address-form>
-      </section>
-
-    </ng-container>
-
-    <mat-slide-toggle #sameAddressSlideToggle
-                      class="mb-3"
-                      color="primary"
-                      [checked]="!hasPhysicalAddress"
-                      (change)="onPhysicalAddressChange($event)">
-      The {{ title }}'s mailing address is the same as the site’s address
-    </mat-slide-toggle>
   </section>
 
+  <mat-slide-toggle #sameAddressSlideToggle
+                    class="mb-4"
+                    color="primary"
+                    [checked]="!hasPhysicalAddress"
+                    (change)="onPhysicalAddressChange($event)">
+    The {{ title }}'s mailing address is the same as the site’s address
+  </mat-slide-toggle>
+
+  <ng-container *ngIf="hasPhysicalAddress">
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Address</ng-container>
+      </app-page-subheader2>
+
+      <app-address-form [form]="physicalAddress"
+                        [showAddressFields]="showAddressFields"
+                        [showManualButton]="true"></app-address-form>
+    </section>
+
+  </ng-container>
 </form>

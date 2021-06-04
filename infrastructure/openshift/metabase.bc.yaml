@@ -1,0 +1,55 @@
+---
+apiVersion: v1
+kind: Template
+labels:
+  template: metabase-postgresql-template
+metadata:
+  name: metabase
+  annotations:
+    openshift.io/display-name: "Metabase backed by PostgreSQL"
+    openshift.io/long-description: >
+      This template provides a Metabase instance backed by a standalone PostgreSQL
+      server. The database is stored on persistent storage.
+    description: >
+      This is a PostgreSQL backed Metabase (http://www.metabase.com/) deployment. Metabase is the
+      easy, open source way for everyone in your company to ask questions and learn from data.
+    iconClass: "pficon-trend-up"
+    tags: analytics,database,metabase
+parameters:
+  - name: OC_NAMESPACE
+    required: true
+    value: 9c33a9
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: SOURCE_CONTEXT_DIR
+    required: false
+  - name: SOURCE_REPOSITORY_REF
+    required: false
+  - name: SOURCE_REPOSITORY_URL
+    required: false
+  - name: APP_NAME
+    displayName: Metabase Service Name
+    value: "metabase"
+    required: true
+  - name: METABASE_IMAGE
+    displayName: Metabase Docker Image
+    value: registry.hub.docker.com/metabase/metabase:latest
+    description: The metabase docker image to use
+    required: true
+objects:
+  - apiVersion: image.openshift.io/v1
+    kind: ImageStream
+    metadata:
+      labels:
+        app: metabase
+      name: "${APP_NAME}"
+    spec:
+      tags:
+      - from:
+          kind: DockerImage
+          name: "${METABASE_IMAGE}"
+        generation: 2
+        name: latest
+        referencePolicy:
+          type: Source
