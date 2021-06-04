@@ -1,34 +1,36 @@
 #!/bin/bash
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
+
+if [ -n $(printenv database-name) ]
+then 
+export PGPASSWORD=$(printenv database-password)
+export POSTGRESQL_USERNAME=$(printenv database-user)
+export POSTGRESQL_DATABASE=$(printenv database-name)
+fi
+
 if [ -z "${DB_CONNECTION_STRING}" ]
 then
-export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USER};password=${POSTGRESQL_ADMIN_PASSWORD}"
+export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USERNAME};password=${PGPASSWORD}"
 fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
 export logfile=prime.logfile.out
 # Wait for database connection
-PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
-n=0
-until [[ $n -ge 5 || ($PG_IS_READY == *"$DB_HOST"* && $PG_IS_READY == *"accepting connections"*) ]]
+function PG_IS_READY() { 
+psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -t -c "select 'READY'" | awk '{print $1}'
+}
+
+until PG_IS_READY | grep -m 1 "READY";
 do
     echo "Waiting for the database ..." ;
     sleep 3 ;
-    PG_IS_READY=$(pg_isready -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE})
-    n=$[$n+1]
 done
-if [[ $n -ge 5 ]]
-then
-    echo "Failed to connect to database."
-    exit 1
-fi
 
-
-psql -h $DB_HOST -U ${POSTGRESQL_USER} -d ${POSTGRESQL_DATABASE} -a -f databaseMigrations.sql
+psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -a -f ./databaseMigrations.sql
 
 echo "Resting 5 seconds to let things settle down..."
 echo "Running .NET..."
-dotnet prime.dll -v 2>&1 | ts > $logfile &
+dotnet ./prime.dll -v 2>&1> $logfile &
 echo "Launched, waiting for connection to API internally..."
 
 function waitForIt() {

@@ -27,15 +27,14 @@ export class GisLoginPageComponent implements OnInit {
   }
 
   public onLogin() {
-    // TODO commented out to prevent usage until ready for production
     // Route to COLLECTION_NOTICE which determines the direction of routing
-    // const redirectRoute = GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.COLLECTION_NOTICE);
-    // const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectRoute = GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.COLLECTION_NOTICE);
+    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
 
-    // this.authService.login({
-    //   idpHint: IdentityProviderEnum.BCSC,
-    //   redirectUri
-    // });
+    this.authService.login({
+      idpHint: IdentityProviderEnum.PHSA,
+      redirectUri
+    });
   }
 
   public ngOnInit(): void { }
