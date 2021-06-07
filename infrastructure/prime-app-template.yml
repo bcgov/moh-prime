@@ -297,6 +297,8 @@ objects:
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-${DB_POD}
+              - name: OC_APP
+                value: ${OC_APP}
               - name: database-password
                 valueFrom:
                   secretKeyRef:
