@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime
 {
@@ -81,6 +82,7 @@ namespace Prime
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
+        public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
