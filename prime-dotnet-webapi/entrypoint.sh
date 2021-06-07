@@ -68,7 +68,7 @@ function pharmanetVerboseCheck() {
 }
 
 waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger &
-waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
+waitForIt localhost:${API_PORT}/api/lookups 200 2>&1 | logger
 
 echo -e "\nThe system is up."
 
