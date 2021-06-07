@@ -299,6 +299,8 @@ objects:
                 value: ${SVC_NAME}-${DB_POD}
               - name: OC_APP
                 value: ${OC_APP}
+              - name: FRONTEND_URL
+                value: https://${VANITY_URL}
               - name: database-password
                 valueFrom:
                   secretKeyRef:
