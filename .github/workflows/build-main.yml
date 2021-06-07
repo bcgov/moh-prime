@@ -182,7 +182,7 @@ jobs:
             -p DB_POD=postgres-db \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
-            -p FRONTEND_URL=prod \
+            -p VANITY_URL=pharmanetenrolment.gov.bc.ca \
             -p IMAGE_TAG=prod \
             -p SVC_NAME=prod \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
