@@ -356,7 +356,7 @@ objects:
         containerNames:
         - ${METABASE_SERVICE_NAME}
         from:
-          namespace: 9c33a9-dev
+          namespace: 9c33a9-tools
           kind: ImageStreamTag
           name: 'metabase:latest'
         lastTriggeredImage: ""
