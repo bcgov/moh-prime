@@ -10,6 +10,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
+import { GisAuthorizationRedirectGuard } from '@gis/shared/guards/gis-authorization-redirect.guard';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 const routes: Routes = [
@@ -50,9 +51,9 @@ const routes: Routes = [
       },
       {
         path: GisEnrolmentRoutes.LOGIN_PAGE,
-        // TODO uncomment when redirection is possible based on the token
-        // canLoad: [AuthorizationRedirectGuard],
-        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login.module').then(m => m.GisLoginModule)
+        canLoad: [GisAuthorizationRedirectGuard],
+        loadChildren: () => import('@gis/shared/modules/gis-login/gis-login-page.module')
+          .then(m => m.GisLoginPageModule)
       },
       {
         path: HealthAuthSiteRegRoutes.LOGIN_PAGE,
