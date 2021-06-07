@@ -97,7 +97,7 @@ objects:
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 1
+    replicas: 3
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
     strategy:
@@ -268,7 +268,7 @@ objects:
       app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 1
+    replicas: 3
     selector:
       name: ${SVC_NAME}-${API_POD}
     strategy:
