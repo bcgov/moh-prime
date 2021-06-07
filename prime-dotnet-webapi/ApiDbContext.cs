@@ -50,7 +50,7 @@ namespace Prime
             _context = context;
         }
 
-        // Enrolle Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
+        // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
