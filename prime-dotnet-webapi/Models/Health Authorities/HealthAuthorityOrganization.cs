@@ -12,7 +12,7 @@ namespace Prime.Models.HealthAuthorities
     public class HealthAuthorityOrganization : BaseAuditable
     {
         [Key]
-        public HealthAuthorityCode Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 
