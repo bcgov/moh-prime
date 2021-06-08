@@ -8,12 +8,14 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.ViewModels.Parties;
+using Prime.ViewModels.HealthAuthorities;
 
 namespace Prime.Services
 {
     public class HealthAuthorityService : BaseService, IHealthAuthorityService
     {
         private readonly IMapper _mapper;
+
         public HealthAuthorityService(
             ApiDbContext context,
             IMapper mapper,
@@ -23,8 +25,26 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        // TODO: AutoMapper configuration
+        public async Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync()
+        {
+            return await _context.HealthAuthorities
+                .AsNoTracking()
+                .ProjectTo<HealthAuthorityListViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id)
+        {
+            return await _context.HealthAuthorities
+                .AsNoTracking()
+                .ProjectTo<HealthAuthorityViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(ha => ha.Id == id);
+        }
+
         // This Controller is a temp fix for the time being before we most likely move HA's into organizations
         // To reduce bloat we just use one view model for the time being.
+        // TODO: review
         public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code)
         {
             return await _context.AuthorizedUsers

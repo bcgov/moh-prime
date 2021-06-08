@@ -29,6 +29,7 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
+import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
@@ -311,6 +312,16 @@ const routes: Routes = [
                     data: { title: 'Authorized User' }
                   }
                 ]
+              }
+            ]
+          },
+          {
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.ORGANIZATION_INFORMATION}`,
+            children: [
+              {
+                path: '',
+                component: HealthAuthorityOrganizationInformationPageComponent,
+                data: { title: 'Organization Information' }
               }
             ]
           }

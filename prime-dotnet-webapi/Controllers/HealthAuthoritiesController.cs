@@ -65,7 +65,7 @@ namespace Prime.Controllers
                 {
                     Name = x.Name,
                     CareTypes = Enumerable.Empty<string>(),
-                    Vendors = Enumerable.Empty<string>(),
+                    Vendors = Enumerable.Empty<Vendor>(),
                     TechnicalSupports = Enumerable.Empty<Contact>(),
                     PharmanetAdministrators = Enumerable.Empty<Contact>()
                 })
