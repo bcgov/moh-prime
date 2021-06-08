@@ -45,7 +45,7 @@
     "ngx-clipboard": "^14.0.1",
     "ngx-filepond": "^5.0.1",
     "ngx-mask": "^10.0.4",
-    "ngx-progressbar": "^6.0.3",
+    "ngx-progressbar": "^6.1.1",
     "popper.js": "^1.16.0",
     "rxjs": "~6.5.4",
     "smoothscroll-polyfill": "^0.4.4",
