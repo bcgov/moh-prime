@@ -20,11 +20,11 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-import { HealthAuthorityAuthorizedUsersPageComponent } from './health-authority-authorized-users-page.component';
+import { AuthorizedUsersPageComponent } from './authorized-users-page.component';
 
-describe('HealthAuthorityAuthorizedUsersPageComponent', () => {
-  let component: HealthAuthorityAuthorizedUsersPageComponent;
-  let fixture: ComponentFixture<HealthAuthorityAuthorizedUsersPageComponent>;
+describe('AuthorizedUsersPageComponent', () => {
+  let component: AuthorizedUsersPageComponent;
+  let fixture: ComponentFixture<AuthorizedUsersPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +62,7 @@ describe('HealthAuthorityAuthorizedUsersPageComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HealthAuthorityAuthorizedUsersPageComponent);
+    fixture = TestBed.createComponent(AuthorizedUsersPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

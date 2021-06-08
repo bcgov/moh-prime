@@ -20,11 +20,11 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 
-import { HealthAuthorityAuthorizedUserPageComponent } from './health-authority-authorized-user-page.component';
+import { AuthorizedUserPageComponent } from './authorized-user-page.component';
 
-describe('HealthAuthorityAuthorizedUserPageComponent', () => {
-  let component: HealthAuthorityAuthorizedUserPageComponent;
-  let fixture: ComponentFixture<HealthAuthorityAuthorizedUserPageComponent>;
+describe('AuthorizedUserPageComponent', () => {
+  let component: AuthorizedUserPageComponent;
+  let fixture: ComponentFixture<AuthorizedUserPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -62,7 +62,7 @@ describe('HealthAuthorityAuthorizedUserPageComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HealthAuthorityAuthorizedUserPageComponent);
+    fixture = TestBed.createComponent(AuthorizedUserPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

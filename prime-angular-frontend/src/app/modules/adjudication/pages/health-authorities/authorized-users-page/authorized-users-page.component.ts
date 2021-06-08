@@ -5,11 +5,11 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-health-authority-authorized-users-page',
-  templateUrl: './health-authority-authorized-users-page.component.html',
-  styleUrls: ['./health-authority-authorized-users-page.component.scss']
+  selector: 'app-authorized-users-page',
+  templateUrl: './authorized-users-page.component.html',
+  styleUrls: ['./authorized-users-page.component.scss']
 })
-export class HealthAuthorityAuthorizedUsersPageComponent implements OnInit {
+export class AuthorizedUsersPageComponent implements OnInit {
   public busy: Subscription;
 
   private routeUtils: RouteUtils;

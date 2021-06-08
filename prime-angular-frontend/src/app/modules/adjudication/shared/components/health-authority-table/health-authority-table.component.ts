@@ -1,9 +1,7 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { Subscription } from 'rxjs';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -49,7 +47,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public onRoute(haid: number) {
-    this.route.emit([AdjudicationRoutes.HEALTH_AUTHORITIES, haid, AdjudicationRoutes.AUTHORIZED_USERS]);
+    this.route.emit([AdjudicationRoutes.HEALTH_AUTHORITIES, haid, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]);
   }
 
   public ngOnInit(): void {

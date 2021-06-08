@@ -12,11 +12,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 @Component({
-  selector: 'app-ha-authorized-users-view',
-  templateUrl: './ha-authorized-users-view.component.html',
-  styleUrls: ['./ha-authorized-users-view.component.scss']
+  selector: 'app-health-auth-authorized-users-view',
+  templateUrl: './health-auth-authorized-users-view.component.html',
+  styleUrls: ['./health-auth-authorized-users-view.component.scss']
 })
-export class HaAuthorizedUsersViewComponent implements OnInit {
+export class HealthAuthAuthorizedUsersViewComponent implements OnInit {
   public busy: Subscription;
   public authorizedUsers: AuthorizedUser[];
 

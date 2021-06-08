@@ -1,9 +1,10 @@
-import { FacilityEnum } from '@shared/enums/facility.enum';
-import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { Contact } from '@lib/models/contact.model';
 
 export interface HealthAuthority {
-  id: number;
-  enrolleeId: number;
-  healthAuthorityCode: HealthAuthorityEnum;
-  facilityCode: FacilityEnum;
+  name: string;
+  careTypes: string[];
+  vendors: string[];
+  privacyOfficer: Contact;
+  technicalSupports: Contact[];
+  pharmanetAdministrators: Contact[];
 }

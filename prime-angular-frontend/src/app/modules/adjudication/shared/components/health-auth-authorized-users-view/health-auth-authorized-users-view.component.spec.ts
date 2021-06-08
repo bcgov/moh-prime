@@ -17,11 +17,11 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
-import { HaAuthorizedUsersViewComponent } from './ha-authorized-users-view.component';
+import { HealthAuthAuthorizedUsersViewComponent } from './health-auth-authorized-users-view.component';
 
 describe('HaAuthorizedUsersViewComponent', () => {
-  let component: HaAuthorizedUsersViewComponent;
-  let fixture: ComponentFixture<HaAuthorizedUsersViewComponent>;
+  let component: HealthAuthAuthorizedUsersViewComponent;
+  let fixture: ComponentFixture<HealthAuthAuthorizedUsersViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -58,7 +58,7 @@ describe('HaAuthorizedUsersViewComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HaAuthorizedUsersViewComponent);
+    fixture = TestBed.createComponent(HealthAuthAuthorizedUsersViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
