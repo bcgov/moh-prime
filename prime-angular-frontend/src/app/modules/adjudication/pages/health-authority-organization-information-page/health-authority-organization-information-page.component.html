@@ -1,0 +1,52 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Organization Information</app-page-header>
+
+  <div class="mb-4">
+    <app-health-authority-table (route)="onRoute($event)"></app-health-authority-table>
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          <mat-icon class="mr-2">business</mat-icon>
+          Organization Information
+        </ng-container>
+      </app-page-subheader>
+      <!--
+      <mat-card>
+        <mat-card-title>
+          Organization Name
+          <hr />
+        </mat-card-title>
+        <mat-card-content>
+          Health Authority
+        </mat-card-content>
+       </mat-card>
+      -->
+      <button mat-button
+              type="button"
+              color="primary"
+              (click)="addOrgInfo()">
+        <mat-icon>add</mat-icon>
+        Add Organization Information
+      </button>
+    </div>
+    <div class="col-6">
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>
+          <mat-icon class="mr-2">assignment</mat-icon>
+          Organization Agreements
+        </ng-container>
+      </app-page-subheader>
+      <button mat-button
+              type="button"
+              color="primary"
+              (click)="uploadOrgAgreement()">
+        <mat-icon>add</mat-icon>
+        Upload Organization Agreement
+      </button>
+    </div>
+  </div>
+</app-page>
