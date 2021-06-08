@@ -25,7 +25,8 @@
       <ng-container matColumnDef="referenceId">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Reference ID </th>
+            scope="col"> Reference ID
+        </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.code }} </td>
       </ng-container>
@@ -33,7 +34,8 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Organization Name </th>
+            scope="col"> Organization Name
+        </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.name | default: '' }} </td>
       </ng-container>
@@ -74,7 +76,7 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.AUTHORIZED_USERS])">
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
           <mat-icon>list</mat-icon>
           <span>View Authorized User</span>
         </button>
