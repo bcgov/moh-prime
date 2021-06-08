@@ -35,7 +35,7 @@
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
     <PackageReference Include="IdentityModel" Version="4.3.0" />
     <PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="3.0.0" />
-    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore" Version="0.28.0" />
+    <PackageReference Include="DelegateDecompiler.EntityFrameworkCore" Version="0.29.1" />
     <PackageReference Include="Flurl" Version="3.0.1" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
