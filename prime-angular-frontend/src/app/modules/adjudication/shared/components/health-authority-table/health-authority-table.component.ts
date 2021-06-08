@@ -34,7 +34,13 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.columns = [
       'prefixes',
       'referenceId',
-      'name',
+      'orgName',
+      'siteName',
+      'submissionDate',
+      'assignedTo',
+      'state',
+      'siteId',
+      'remoteUsers',
       'actions'
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
