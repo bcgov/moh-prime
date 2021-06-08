@@ -7,6 +7,9 @@ namespace Prime.Models.HealthAuthorities
 
     public class HealthAuthorityCareType : BaseAuditable
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         public HealthAuthority HealthAuthority { get; set; }
 
