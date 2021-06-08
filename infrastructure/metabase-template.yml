@@ -345,8 +345,6 @@ objects:
             timeoutSeconds: 3
         dnsPolicy: ClusterFirst
         restartPolicy: Always
-        serviceAccount: ${METABASE_SERVICE_NAME}
-        serviceAccountName: ${METABASE_SERVICE_NAME}
         terminationGracePeriodSeconds: 30
     triggers:
     - type: ConfigChange
