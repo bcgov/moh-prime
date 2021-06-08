@@ -9,7 +9,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockEnrolmentService } from 'test/mocks/mock-enrolment.service';
 
-import { JobComponent } from './job.component';
+import { OboSitesPageComponent } from './obo-sites-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -23,9 +23,9 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
-describe('JobComponent', () => {
-  let component: JobComponent;
-  let fixture: ComponentFixture<JobComponent>;
+describe('OboSitesPageComponent', () => {
+  let component: OboSitesPageComponent;
+  let fixture: ComponentFixture<OboSitesPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -68,7 +68,7 @@ describe('JobComponent', () => {
   }));
 
   beforeEach(inject([EnrolmentFormStateService], (enrolmentFormStateService: EnrolmentFormStateService) => {
-    fixture = TestBed.createComponent(JobComponent);
+    fixture = TestBed.createComponent(OboSitesPageComponent);
     component = fixture.componentInstance;
     // Add the bound FormGroup to the component
     component.form = enrolmentFormStateService.buildJobsForm();

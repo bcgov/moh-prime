@@ -20,11 +20,11 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
 @Component({
-  selector: 'app-job',
-  templateUrl: './job.component.html',
-  styleUrls: ['./job.component.scss']
+  selector: 'app-obo-sites-page',
+  templateUrl: './obo-sites-page.component.html',
+  styleUrls: ['./obo-sites-page.component.scss']
 })
-export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
+export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
@@ -166,6 +166,7 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   protected createFormInstance() {
     this.form = this.enrolmentFormStateService.jobsForm;
   }
+
   // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching

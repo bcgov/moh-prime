@@ -13,7 +13,7 @@ import { BceidDemographicComponent } from './pages/bceid-demographic/bceid-demog
 import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demographic.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
-import { JobComponent } from './pages/job/job.component';
+import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
@@ -53,7 +53,7 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     BcscDemographicComponent,
     RegulatoryComponent,
     DeviceProviderComponent,
-    JobComponent,
+    OboSitesPageComponent,
     RemoteAccessComponent,
     SelfDeclarationComponent,
     CareSettingComponent,
@@ -84,4 +84,4 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     ClipboardModule
   ]
 })
-export class EnrolmentModule { }
+export class EnrolmentModule {}
