@@ -15,7 +15,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class HealthAuthorityOrganizationInformationPageComponent implements OnInit {
   public busy: Subscription;
-  public
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   private routeUtils: RouteUtils;
 
@@ -31,15 +31,9 @@ export class HealthAuthorityOrganizationInformationPageComponent implements OnIn
     this.routeUtils.routeWithin(routePath);
   }
 
-  public addOrgInfo(): void {
-
+  public addOrgInfo() {
+    this.routeUtils.routeRelativeTo([AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES]);
   }
 
-  public uploadOrgAgreement(): void {
-
-  }
-
-  public ngOnInit(): void {
-
-  }
+  public ngOnInit(): void { }
 }
