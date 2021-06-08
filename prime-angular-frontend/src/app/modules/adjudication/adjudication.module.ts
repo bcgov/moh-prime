@@ -47,7 +47,7 @@ import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enroll
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
 import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
-import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
+import { HealthAuthOrgInfoPageComponent } from './pages/health-auth-org-info-page/health-auth-org-info-page.component';
 import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 import { MaintenanceContainerComponent } from './shared/components/maintenance-container/maintenance-container.component';
 import { NotificationEmailsContainerComponent } from './shared/components/notification-emails-container/notification-emails-container.component';
@@ -113,7 +113,7 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     SiteBannerPageComponent,
     BannerMaintenanceComponent,
     SiteRegistrationTabsComponent,
-    HealthAuthorityOrganizationInformationPageComponent,
+    HealthAuthOrgInfoPageComponent,
     ContextualEnrolmentConfirmationComponent,
     MaintenanceContainerComponent,
     NotificationEmailsContainerComponent,
@@ -135,7 +135,7 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     AuthorizedUserPageComponent,
     HealthAuthorityTableComponent,
     HealthAuthAuthorizedUsersViewComponent,
-    AuthorizedUserReviewComponent
+    AuthorizedUserReviewComponent,
   ],
   imports: [
     AdjudicationRoutingModule,

@@ -9,11 +9,11 @@ import { ConfigService } from '@config/config.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
-  selector: 'app-health-authority-organization-information-page',
-  templateUrl: './health-authority-organization-information-page.component.html',
-  styleUrls: ['./health-authority-organization-information-page.component.scss']
+  selector: 'app-health-auth-org-info-page',
+  templateUrl: './health-auth-org-info-page.component.html',
+  styleUrls: ['./health-auth-org-info-page.component.scss']
 })
-export class HealthAuthorityOrganizationInformationPageComponent implements OnInit {
+export class HealthAuthOrgInfoPageComponent implements OnInit {
   public busy: Subscription;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -23,7 +23,8 @@ export class HealthAuthorityOrganizationInformationPageComponent implements OnIn
     private configService: ConfigService,
     private activatedRoute: ActivatedRoute,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router
+  ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
@@ -32,7 +33,10 @@ export class HealthAuthorityOrganizationInformationPageComponent implements OnIn
   }
 
   public addOrgInfo() {
-    this.routeUtils.routeRelativeTo([AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES]);
+    this.routeUtils.routeRelativeTo(
+      [AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES],
+      { queryParams: { mode: 'wizard' } }
+    );
   }
 
   public ngOnInit(): void { }

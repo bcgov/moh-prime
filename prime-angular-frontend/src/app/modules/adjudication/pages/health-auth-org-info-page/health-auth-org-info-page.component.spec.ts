@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HealthAuthorityOrganizationInformationPageComponent } from './health-authority-organization-information-page.component';
+import { HealthAuthOrgInfoPageComponent } from './health-auth-org-info-page.component';
 
-describe('HealthAuthorityOrganizationInformationPageComponent', () => {
-  let component: HealthAuthorityOrganizationInformationPageComponent;
-  let fixture: ComponentFixture<HealthAuthorityOrganizationInformationPageComponent>;
+describe('HealthAuthOrgInfoPageComponent', () => {
+  let component: HealthAuthOrgInfoPageComponent;
+  let fixture: ComponentFixture<HealthAuthOrgInfoPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HealthAuthorityOrganizationInformationPageComponent ]
+      declarations: [HealthAuthOrgInfoPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HealthAuthorityOrganizationInformationPageComponent);
+    fixture = TestBed.createComponent(HealthAuthOrgInfoPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
