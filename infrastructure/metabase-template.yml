@@ -356,7 +356,7 @@ objects:
         containerNames:
         - ${METABASE_SERVICE_NAME}
         from:
-          namespace: 9c33a9-tools
+          namespace: 9c33a9-${OC_APP}
           kind: ImageStreamTag
           name: 'metabase:latest'
         lastTriggeredImage: ""
