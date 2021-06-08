@@ -60,8 +60,13 @@ objects:
         type: Git
       strategy:
         dockerStrategy:
+          from:
+            kind: DockerImage
+            name: 'public.ecr.aws/lts/postgres:latest'
           dockerfilePath: openshift.dockerfile
           env:
+          - name: TZ
+            value: PST8PDT
           - name: PGUSER
             valueFrom:
               secretKeyRef:
@@ -77,13 +82,7 @@ objects:
               configMapKeyRef:
                 name: "postgresql"
                 key: postgresql_database_name              
-          volumeMounts:
-          - mountPath: /opt/backup
-            name: backup-data
-          volumes:
-          - name: backup-data
-            persistentVolumeClaim:
-              claimName: backup-data
+          
         type: Docker
       triggers:
       - type: ConfigChange
