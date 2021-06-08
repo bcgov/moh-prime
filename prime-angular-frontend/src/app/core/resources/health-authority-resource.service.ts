@@ -12,11 +12,10 @@ import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 // TODO move to @lib/models
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
-
-// TODO move to @lib/models
-import { Organization } from '@registration/shared/models/organization.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +27,32 @@ export class HealthAuthorityResource {
     private toastService: ToastService,
     private logger: LoggerService
   ) { }
+
+  public getHealthAuthorities() {
+    return this.apiResource.get<HealthAuthorityList>(`health-authorities/`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthorityList>) => response.result),
+        tap((healthAuthorities: HealthAuthorityList) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authorities could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorities error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityById(healthAuthorityId) {
+    return this.apiResource.get<HealthAuthority>(`health-authorities/${healthAuthorityId}`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthority>) => response.result),
+        tap((healthAuthority: HealthAuthority) => this.logger.info('HEALTH_AUTHORITY', healthAuthority)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
     return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
