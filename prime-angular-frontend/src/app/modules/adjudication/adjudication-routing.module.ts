@@ -263,6 +263,11 @@ const routes: Routes = [
             path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid`,
             children: [
               {
+                path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
+                component: HealthAuthorityOrganizationInformationPageComponent,
+                data: { title: 'Organization Information' }
+              },
+              {
                 path: AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES,
                 component: HealthAuthCareTypesPageComponent,
                 data: { title: 'Health Authority Care Types' }
@@ -312,16 +317,11 @@ const routes: Routes = [
                     data: { title: 'Authorized User' }
                   }
                 ]
-              }
-            ]
-          },
-          {
-            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.ORGANIZATION_INFORMATION}`,
-            children: [
+              },
               {
                 path: '',
-                component: HealthAuthorityOrganizationInformationPageComponent,
-                data: { title: 'Organization Information' }
+                redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
+                pathMatch: 'full'
               }
             ]
           }

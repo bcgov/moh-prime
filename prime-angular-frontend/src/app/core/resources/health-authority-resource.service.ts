@@ -29,7 +29,7 @@ export class HealthAuthorityResource {
   ) { }
 
   public getHealthAuthorities() {
-    return this.apiResource.get<HealthAuthorityList>(`health-authorities/`)
+    return this.apiResource.get<HealthAuthorityList>(`health-authorities`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthorityList>) => response.result),
         tap((healthAuthorities: HealthAuthorityList) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
