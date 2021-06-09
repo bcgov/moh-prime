@@ -342,7 +342,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
-                    key: database-user
+                    key: database-name
               - name: database-user
                 valueFrom:
                   secretKeyRef:
@@ -675,7 +675,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${SVC_NAME}-postgres
-                  key: database-user
+                  key: database-name
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
