@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
