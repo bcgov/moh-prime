@@ -78,7 +78,13 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
 
         CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>();
-        CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>();
+        CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
+            .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)))
+            .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)))
+            .ForMember(dest => dest.TechnicalSupport, opt => opt.MapFrom(src => src.TechnicalSupports.SingleOrDefault().Contact))
+            .ForMember(dest => dest.PharmanetAdministrator, opt => opt.MapFrom(src => src.PharmanetAdministrators.SingleOrDefault().Contact));
+        CreateMap<Contact, ContactViewModel>();
+        CreateMap<Address, AddressViewModel>();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
