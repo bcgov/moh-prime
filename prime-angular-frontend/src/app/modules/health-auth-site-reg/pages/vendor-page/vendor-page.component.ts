@@ -8,7 +8,6 @@ import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';

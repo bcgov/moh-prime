@@ -30,7 +30,7 @@ export class AdministratorsPageComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private haResource: HealthAuthorityResource,
+    private healthAuthResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -59,6 +59,7 @@ export class AdministratorsPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {

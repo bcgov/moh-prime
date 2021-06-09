@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { ConfigService } from '@config/config.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -20,10 +19,8 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    private configService: ConfigService,
-    private activatedRoute: ActivatedRoute,
-    private route: ActivatedRoute,
-    private router: Router
+    route: ActivatedRoute,
+    router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
