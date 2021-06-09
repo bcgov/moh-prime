@@ -10,6 +10,8 @@ namespace Prime.Models.HealthAuthorities
         [Key]
         public int Id { get; set; }
 
+        public int HealthAuthorityOrganizationId { get; set; }
+
         [Required]
         public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
 

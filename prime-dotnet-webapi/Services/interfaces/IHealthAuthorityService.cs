@@ -14,5 +14,6 @@ namespace Prime.Services
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code);
         Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
         Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes);
+        Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendors);
     }
 }
