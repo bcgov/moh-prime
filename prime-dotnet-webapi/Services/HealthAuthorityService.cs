@@ -78,10 +78,35 @@ namespace Prime.Services
             var healthAuthorityCareTypes = new List<HealthAuthorityCareType>();
             foreach (var careType in careTypes)
             {
-                healthAuthorityCareTypes.Add(new HealthAuthorityCareType { HealthAuthorityOrganization = healthAuthority, CareType = careType });
+                healthAuthorityCareTypes.Add(new HealthAuthorityCareType { HealthAuthorityOrganizationId = healthAuthority.Id, CareType = careType });
             }
 
             healthAuthority.CareTypes = healthAuthorityCareTypes;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return InvalidId;
+            }
+
+            return healthAuthority.Id;
+        }
+
+        public async Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendors)
+        {
+            var healthAuthority = await _context.HealthAuthorities
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+
+            var healthAuthorityVendors = new List<HealthAuthorityVendor>();
+            foreach (var vendorCode in vendors)
+            {
+                healthAuthorityVendors.Add(new HealthAuthorityVendor { HealthAuthorityOrganizationId = healthAuthority.Id, VendorCode = vendorCode });
+            }
+
+            healthAuthority.Vendors = healthAuthorityVendors;
 
             try
             {

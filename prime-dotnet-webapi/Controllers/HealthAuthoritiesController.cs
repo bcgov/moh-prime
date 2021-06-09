@@ -127,6 +127,38 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/health-authorities/5/vendors
+        /// <summary>
+        /// Updates a specific Health authorities vendors.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="vendors"></param>
+        [HttpPut("{healthAuthorityId}/vendors", Name = nameof(UpdateVendors))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateVendors(int healthAuthorityId, int[] vendors)
+        {
+            if (vendors == null)
+            {
+                ModelState.AddModelError("HealthAuthorityVendors", "Health authority vendors cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+            }
+
+            var updatedHealthAuthorityId = await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors);
+            if (updatedHealthAuthorityId.IsInvalidId())
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the health authority vendors." });
+            }
+
+            return NoContent();
+        }
+
         // PUT: api/health-authorities/1/technical-supports
         /// <summary>
         /// Updates technical support contacts on a health authority
