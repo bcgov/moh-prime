@@ -8,18 +8,16 @@ import { Config } from '@config/config.model';
 import { Job } from '@enrolment/shared/models/job.model';
 
 @Component({
-  selector: 'app-job-form',
-  templateUrl: './job-form.component.html',
-  styleUrls: ['./job-form.component.scss']
+  selector: 'app-item-form',
+  templateUrl: './item-form.component.html',
+  styleUrls: ['./item-form.component.scss']
 })
-/**
- * @deprecated Due to moving Job Title to Obo Site (PRIME-1459)
- */
-export class JobFormComponent implements OnInit {
+export class ItemFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public index: number;
   @Input() public total: number;
-  @Input() public jobNames: BehaviorSubject<Config<number>[]>;
+  @Input() public options: BehaviorSubject<Config<number>[]>;
+  @Input() public inputLabel: string;
   @Input() public allowDefaultOption: boolean;
   @Input() public defaultOptionLabel: string;
   @Output() public remove: EventEmitter<number>;
@@ -29,7 +27,6 @@ export class JobFormComponent implements OnInit {
 
   constructor() {
     this.remove = new EventEmitter<number>();
-    this.allowDefaultOption = false;
     this.defaultOptionLabel = '';
     this.allowRemoveNone = true;
   }
@@ -55,7 +52,7 @@ export class JobFormComponent implements OnInit {
 
   private initAutoComplete() {
     return combineLatest([
-      this.jobNames // Initial jobs passed through bindings
+      this.options // Initial jobs passed through bindings
         .asObservable() // Prevent accidentally affecting parent observable
         .pipe(switchMap((jobNames: Config<number>[]) => {
           const copy = [...jobNames]; // Prevent changes by reference
@@ -74,28 +71,28 @@ export class JobFormComponent implements OnInit {
         startWith(''), // Trigger emission immediately!
       )
     ]).pipe(
-      map(([availableJobNames, currentJob]: [Config<number>[], Job]) => this.filterJobNames(availableJobNames, currentJob))
+      map(([availableJobNames, currentJob]: [Config<number>[], Job]) => this.filterOptions(availableJobNames, currentJob))
     );
   }
 
   /**
    * @description
-   * Auto-complete filtering of the available jobs.
+   * Auto-complete filtering of the available options.
    *
-   * @param availableJobNames to be filtered
-   * @param currentJob predicate for filtering
+   * @param availableOptions to be filtered
+   * @param currentOption predicate for filtering
    */
-  private filterJobNames(availableJobNames: Config<number>[], currentJob: Job): Config<number>[] {
-    // Default provide the entire list of jobs
-    let filteredJobNames = availableJobNames;
-    const currentJobTitle = (currentJob) ? currentJob.title.toLowerCase().trim() : '';
+  private filterOptions(availableOptions: Config<number>[], currentOption: Job): Config<number>[] {
+    // Default provide the entire list of items
+    let filteredOptions = availableOptions;
+    const currentJobTitle = (currentOption) ? currentOption.title.toLowerCase().trim() : '';
 
     // Apply auto-complete filtering
-    if (availableJobNames.length && currentJobTitle && currentJobTitle !== this.defaultOptionLabel.toLocaleLowerCase()) {
-      filteredJobNames = filteredJobNames
+    if (availableOptions.length && currentJobTitle && currentJobTitle !== this.defaultOptionLabel.toLocaleLowerCase()) {
+      filteredOptions = filteredOptions
         .filter((jobName: Config<number>) => jobName.name.toLowerCase().includes(currentJobTitle));
     }
 
-    return filteredJobNames;
+    return filteredOptions;
   }
 }
