@@ -59,7 +59,7 @@ namespace Prime.Controllers
                     Name = x.Name,
                     CareTypes = Enumerable.Empty<string>(),
                     VendorCodes = Enumerable.Empty<int>(),
-                    TechnicalSupport = new Contact,
+                    TechnicalSupport = new Contact(),
                     PharmanetAdministrator = new Contact()
                 })
                 .SingleOrDefault();
