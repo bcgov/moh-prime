@@ -71,25 +71,19 @@ namespace Prime.Services
 
         public async Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes)
         {
-            var healthAuthority = await _context.HealthAuthorities
-                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+            var oldCareTypes = await _context.HealthAuthorityCareTypes
+                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
+                .ToListAsync();
 
-            if (healthAuthority.CareTypes != null)
-            {
-                foreach (var careType in healthAuthority.CareTypes)
-                {
-                    _context.Remove(careType);
-                }
-            }
+            _context.HealthAuthorityCareTypes.RemoveRange(oldCareTypes);
 
-            if (careTypes.Length != 0)
+            var newCareTypes = careTypes.Select(careType => new HealthAuthorityCareType
             {
-                foreach (var careType in careTypes)
-                {
-                    var newCareType = new HealthAuthorityCareType { HealthAuthorityOrganizationId = healthAuthority.Id, CareType = careType };
-                    _context.Entry(newCareType).State = EntityState.Added;
-                }
-            }
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                CareType = careType
+            });
+
+            _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
 
             try
             {
@@ -100,30 +94,24 @@ namespace Prime.Services
                 return InvalidId;
             }
 
-            return healthAuthority.Id;
+            return healthAuthorityId;
         }
 
-        public async Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendors)
+        public async Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendorCodes)
         {
-            var healthAuthority = await _context.HealthAuthorities
-                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+            var oldVendors = await _context.HealthAuthorityVendors
+                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
+                .ToListAsync();
 
-            if (healthAuthority.Vendors != null)
-            {
-                foreach (var vendor in healthAuthority.Vendors)
-                {
-                    _context.Remove(vendor);
-                }
-            }
+            _context.HealthAuthorityVendors.RemoveRange(oldVendors);
 
-            if (vendors.Length != 0)
+            var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
             {
-                foreach (var vendor in vendors)
-                {
-                    var newVendor = new HealthAuthorityVendor { HealthAuthorityOrganizationId = healthAuthority.Id, VendorCode = vendor };
-                    _context.Entry(newVendor).State = EntityState.Added;
-                }
-            }
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                VendorCode = code
+            });
+
+            _context.HealthAuthorityVendors.AddRange(newVendors);
 
             try
             {
@@ -134,7 +122,7 @@ namespace Prime.Services
                 return InvalidId;
             }
 
-            return healthAuthority.Id;
+            return healthAuthorityId;
         }
 
         public async Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
