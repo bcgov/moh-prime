@@ -94,5 +94,14 @@ namespace Prime.Services
 
             return healthAuthority.Id;
         }
+
+        public async Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<HealthAuthorityContact> contacts) where T : HealthAuthorityContact, new()
+        {
+            var xref = contacts.Select(c => new T
+            {
+                HealthAuthorityOrganizationId = healthAuthorityOrganizationId,
+                ContactId = c.Id
+            });
+        }
     }
 }

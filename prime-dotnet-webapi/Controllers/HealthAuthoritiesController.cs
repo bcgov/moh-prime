@@ -10,6 +10,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.Models.HealthAuthorities;
 using Prime.Extensions;
 
 namespace Prime.Controllers
@@ -125,5 +126,23 @@ namespace Prime.Controllers
 
             return NoContent();
         }
+
+        // PUT: api/health-authorities/1/technical-supports
+        /// <summary>
+        /// Updates technical support contacts on a health authority
+        /// </summary>
+        /// <param name="healthAuthorityOrganizationId"></param>
+        /// <param name="contacts"></param>
+        [HttpPut("{healthAuthorityOrganizationId}/technical-supports", Name = nameof(UpdateTechnicalSupportContacts))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateTechnicalSupportContacts(int healthAuthorityOrganizationId, IEnumerable<HealthAuthorityContact> contacts)
+        {
+            await _healthAuthorityService.UpdateContacts<HealthAuthorityTechnicalSupport>(healthAuthorityOrganizationId, contacts);
+            return NoContent();
+        }
+
     }
 }
