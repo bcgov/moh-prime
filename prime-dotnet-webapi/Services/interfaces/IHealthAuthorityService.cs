@@ -8,9 +8,11 @@ namespace Prime.Services
 {
     public interface IHealthAuthorityService
     {
+        Task<bool> HealthAuthorityExistsAsync(int healthAuthorityId);
         Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync();
         Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id);
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code);
         Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
+        Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes);
     }
 }

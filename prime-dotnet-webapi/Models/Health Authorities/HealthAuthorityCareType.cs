@@ -11,7 +11,7 @@ namespace Prime.Models.HealthAuthorities
         public int Id { get; set; }
 
         [Required]
-        public HealthAuthority HealthAuthority { get; set; }
+        public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
 
         [Required]
         public string CareType { get; set; }

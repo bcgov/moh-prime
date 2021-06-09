@@ -10,6 +10,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.Extensions;
 
 namespace Prime.Controllers
 {
@@ -52,24 +53,14 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthorityById(int healthAuthorityId)
         {
-            var ha = new Configuration.HealthAuthorityConfiguration().SeedData
-                .Where(x => (int)x.Code == healthAuthorityId)
-                .Select(x => new HealthAuthorityViewModel
-                {
-                    Name = x.Name,
-                    CareTypes = Enumerable.Empty<string>(),
-                    VendorCodes = Enumerable.Empty<int>(),
-                    TechnicalSupport = new Contact(),
-                    PharmanetAdministrator = new Contact()
-                })
-                .SingleOrDefault();
+            var healthAuthority = await _healthAuthorityService.GetHealthAuthorityAsync(healthAuthorityId);
 
-            if (ha == null)
+            if (healthAuthority == null)
             {
                 return NotFound();
             }
 
-            return Ok(ApiResponse.Result(ha));
+            return Ok(ApiResponse.Result(healthAuthority));
         }
 
         // GET: api/health-authorities/5/authorized-users
@@ -101,6 +92,38 @@ namespace Prime.Controllers
         {
             var haIds = await _healthAuthorityService.GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
             return Ok(ApiResponse.Result(haIds));
+        }
+
+        // PUT: api/health-authorities/5/care-types
+        /// <summary>
+        /// Updates a specific Health authorities care types.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="careTypes"></param>
+        [HttpPut("{healthAuthorityId}/care-types", Name = nameof(UpdateCareTypes))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> UpdateCareTypes(int healthAuthorityId, string[] careTypes)
+        {
+            if (careTypes == null)
+            {
+                ModelState.AddModelError("HealthAuthorityCareType", "Health authority care types cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
+            }
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+            }
+
+            var updatedHealthAuthorityId = await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes);
+            if (updatedHealthAuthorityId.IsInvalidId())
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the health authority care types." });
+            }
+
+            return NoContent();
         }
     }
 }

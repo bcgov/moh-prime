@@ -9,8 +9,8 @@ namespace Prime.ViewModels.HealthAuthorities
         public string Name { get; set; }
         public IEnumerable<string> CareTypes { get; set; }
         public IEnumerable<int> VendorCodes { get; set; }
-        public Contact PrivacyOfficer { get; set; }
-        public Contact TechnicalSupport { get; set; }
-        public Contact PharmanetAdministrator { get; set; }
+        public ContactViewModel PrivacyOfficer { get; set; }
+        public ContactViewModel TechnicalSupport { get; set; }
+        public ContactViewModel PharmanetAdministrator { get; set; }
     }
 }
