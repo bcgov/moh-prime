@@ -9,6 +9,7 @@ using AutoMapper.QueryableExtensions;
 
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
@@ -23,6 +24,13 @@ namespace Prime.Services
             : base(context, httpContext)
         {
             _mapper = mapper;
+        }
+
+        public async Task<bool> HealthAuthorityExistsAsync(int healthAuthorityId)
+        {
+            return await _context.HealthAuthorities
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == healthAuthorityId);
         }
 
         // TODO: AutoMapper configuration
@@ -60,6 +68,31 @@ namespace Prime.Services
                 .Select(u => u.HealthAuthorityCode)
                 .Distinct()
                 .ToListAsync();
+        }
+
+        public async Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes)
+        {
+            var healthAuthority = await _context.HealthAuthorities
+                .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
+
+            var healthAuthorityCareTypes = new List<HealthAuthorityCareType>();
+            foreach (var careType in careTypes)
+            {
+                healthAuthorityCareTypes.Add(new HealthAuthorityCareType { HealthAuthorityOrganization = healthAuthority, CareType = careType });
+            }
+
+            healthAuthority.CareTypes = healthAuthorityCareTypes;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return InvalidId;
+            }
+
+            return healthAuthority.Id;
         }
     }
 }
