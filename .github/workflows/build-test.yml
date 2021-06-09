@@ -50,7 +50,7 @@ jobs:
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
@@ -99,13 +99,13 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
-      JWT_WELL_KNOWN_CONFIG: "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-      KEYCLOAK_CLIENT_ID: "prime-application-dev"
-      KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
+      JWT_WELL_KNOWN_CONFIG: "https://test.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+      KEYCLOAK_CLIENT_ID: "prime-application-test"
+      KEYCLOAK_URL: "https://test.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
     steps:
       - name: "Checkout the repo"
@@ -130,7 +130,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://test-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://test.pharmanetenrolment.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -146,7 +146,7 @@ jobs:
 
   apply-oc-template:
     runs-on: ubuntu-20.04
-    environment: Development
+    environment: Test
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -174,7 +174,7 @@ jobs:
             -p DB_POD=postgres-db \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
-            -p FRONTEND_URL=test \
+            -p VANITY_URL=test.pharmanetenrolment.gov.bc.ca \
             -p IMAGE_TAG=test \
             -p SVC_NAME=test \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
@@ -188,7 +188,9 @@ jobs:
 
           oc process -f infrastructure/mailhog-template.yml \
             -p MAILHOG_SERVICE_NAME=mailhog-server \
-            -p OC_APP=${{secrets.OC_APP}} \
+            -p APP_NAME=test \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
           
-          oc process -f infrastructure/metabase-template.yml -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+          oc process -f infrastructure/metabase-template.yml \
+            -p OC_APP=${{secrets.OC_APP}} \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
