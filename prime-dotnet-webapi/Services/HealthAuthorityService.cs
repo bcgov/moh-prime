@@ -75,13 +75,22 @@ namespace Prime.Services
             var healthAuthority = await _context.HealthAuthorities
                 .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
 
-            var healthAuthorityCareTypes = new List<HealthAuthorityCareType>();
-            foreach (var careType in careTypes)
+            if (healthAuthority.CareTypes != null)
             {
-                healthAuthorityCareTypes.Add(new HealthAuthorityCareType { HealthAuthorityOrganizationId = healthAuthority.Id, CareType = careType });
+                foreach (var careType in healthAuthority.CareTypes)
+                {
+                    _context.Remove(careType);
+                }
             }
 
-            healthAuthority.CareTypes = healthAuthorityCareTypes;
+            if (careTypes.Length != 0)
+            {
+                foreach (var careType in careTypes)
+                {
+                    var newCareType = new HealthAuthorityCareType { HealthAuthorityOrganizationId = healthAuthority.Id, CareType = careType };
+                    _context.Entry(newCareType).State = EntityState.Added;
+                }
+            }
 
             try
             {
@@ -100,13 +109,22 @@ namespace Prime.Services
             var healthAuthority = await _context.HealthAuthorities
                 .SingleOrDefaultAsync(ha => ha.Id == healthAuthorityId);
 
-            var healthAuthorityVendors = new List<HealthAuthorityVendor>();
-            foreach (var vendorCode in vendors)
+            if (healthAuthority.Vendors != null)
             {
-                healthAuthorityVendors.Add(new HealthAuthorityVendor { HealthAuthorityOrganizationId = healthAuthority.Id, VendorCode = vendorCode });
+                foreach (var vendor in healthAuthority.Vendors)
+                {
+                    _context.Remove(vendor);
+                }
             }
 
-            healthAuthority.Vendors = healthAuthorityVendors;
+            if (vendors.Length != 0)
+            {
+                foreach (var vendor in vendors)
+                {
+                    var newVendor = new HealthAuthorityVendor { HealthAuthorityOrganizationId = healthAuthority.Id, VendorCode = vendor };
+                    _context.Entry(newVendor).State = EntityState.Added;
+                }
+            }
 
             try
             {
