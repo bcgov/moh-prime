@@ -52,24 +52,14 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthorityById(int healthAuthorityId)
         {
-            var ha = new Configuration.HealthAuthorityConfiguration().SeedData
-                .Where(x => (int)x.Code == healthAuthorityId)
-                .Select(x => new HealthAuthorityViewModel
-                {
-                    Name = x.Name,
-                    CareTypes = Enumerable.Empty<string>(),
-                    VendorCodes = Enumerable.Empty<int>(),
-                    TechnicalSupport = new Contact(),
-                    PharmanetAdministrator = new Contact()
-                })
-                .SingleOrDefault();
+            var healthAuthority = await _healthAuthorityService.GetHealthAuthorityAsync(healthAuthorityId);
 
-            if (ha == null)
+            if (healthAuthority == null)
             {
                 return NotFound();
             }
 
-            return Ok(ApiResponse.Result(ha));
+            return Ok(ApiResponse.Result(healthAuthority));
         }
 
         // GET: api/health-authorities/5/authorized-users
