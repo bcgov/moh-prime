@@ -20,7 +20,9 @@ namespace Prime.Models.HealthAuthorities
 
         public ICollection<HealthAuthorityVendor> Vendors { get; set; }
 
-        public ICollection<HealthAuthorityPrivacyOfficer> PrivacyOffice { get; set; }
+        public int PrivacyOfficerId { get; set; }
+
+        public Contact PrivacyOfficer { get; set; }
 
         public ICollection<HealthAuthorityTechnicalSupport> TechnicalSupports { get; set; }
 

@@ -21,7 +21,6 @@ namespace Prime.Models.HealthAuthorities
         public Contact Contact { get; set; }
     }
 
-    public class HealthAuthorityPrivacyOfficer : HealthAuthorityContact { }
     public class HealthAuthorityTechnicalSupport : HealthAuthorityContact { }
     public class HealthAuthorityPharmanetAdministrator : HealthAuthorityContact { }
 }
