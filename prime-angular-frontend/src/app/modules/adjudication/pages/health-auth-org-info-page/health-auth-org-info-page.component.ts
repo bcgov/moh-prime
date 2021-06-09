@@ -35,7 +35,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   public addOrgInfo() {
     this.routeUtils.routeRelativeTo(
       [AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES],
-      { queryParams: { mode: 'wizard' } }
+      { queryParams: { initial: true } }
     );
   }
 

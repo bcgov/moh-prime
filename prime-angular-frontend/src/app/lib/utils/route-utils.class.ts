@@ -8,11 +8,13 @@ export class RouteUtils {
   constructor(
     route: ActivatedRoute,
     router: Router,
-    baseRoutePath: string
+    baseRoutePath: string | (string | number)[]
   ) {
     this.route = route;
     this.router = router;
-    this.baseRoutePath = baseRoutePath;
+    this.baseRoutePath = (Array.isArray(baseRoutePath))
+      ? baseRoutePath.join('/')
+      : baseRoutePath;
   }
 
   /**

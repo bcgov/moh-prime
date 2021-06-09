@@ -71,6 +71,7 @@ import { AuthorizedUserPageComponent } from './pages/health-authorities/authoriz
 import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { ItemFormComponent } from '@adjudication/shared/components/item-form/item-form.component';
 
 @NgModule({
   declarations: [
@@ -136,6 +137,7 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     HealthAuthorityTableComponent,
     HealthAuthAuthorizedUsersViewComponent,
     AuthorizedUserReviewComponent,
+    ItemFormComponent
   ],
   imports: [
     AdjudicationRoutingModule,

@@ -22,26 +22,39 @@ export class AdministratorsPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public form: FormGroup;
-  public routeUtils: RouteUtils;
+  public isInitialEntry: boolean;
   public contacts: Contact[];
   public formSubmittingEvent: Subject<void>;
+
+  private routeUtils: RouteUtils;
 
   constructor(
     private fb: FormBuilder,
     private haResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     router: Router
   ) {
     this.title = route.snapshot.data.title;
-    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.MODULE_PATH);
+    this.isInitialEntry = !!this.route.snapshot.queryParams.initial;
+    this.routeUtils = new RouteUtils(route, router, [
+      AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS),
+      AdjudicationRoutes.SITE_REGISTRATIONS,
+      AdjudicationRoutes.HEALTH_AUTHORITIES,
+      this.route.snapshot.params.haid
+    ]);
     this.formSubmittingEvent = new Subject<void>();
   }
 
-  public onBack(): void {
+  public onSubmit(): void {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      // TODO perform update and route to next page
+      this.nextRouteAfterSubmit();
+    }
   }
 
-  public onSubmit(): void {
+  public onBack(): void {
+    this.routeTo(AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS);
   }
 
   public ngOnInit(): void {
@@ -50,5 +63,20 @@ export class AdministratorsPageComponent implements OnInit {
 
   private createFormInstance() {
     this.form = new ContactFormState(this.fb, this.formUtilsService).form;
+  }
+
+  private initForm() {
+
+  }
+
+  private nextRouteAfterSubmit() {
+    this.routeTo();
+  }
+
+  private routeTo(routeSegment?: string) {
+    const routePath = (this.isInitialEntry && routeSegment)
+      ? routeSegment
+      : AdjudicationRoutes.ORGANIZATION_INFORMATION;
+    this.routeUtils.routeRelativeTo(routePath, { queryParamsHandling: 'preserve' });
   }
 }

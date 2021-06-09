@@ -1,1 +1,47 @@
-<p>vendors-page works!</p>
+<app-page [busy]="busy">
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <!-- TODO should this be hidden on subsequent updates -->
+  <app-progress-indicator *ngIf="isInitialEntry"
+                          [inProgress]="isInitialEntry"></app-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Health Authority Vendors</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Identify the Vendors associated with this Health Authority.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="vendors">
+
+          <!-- TODO free form autocomplete input -->
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="addVendor()">
+            <mat-icon>add</mat-icon>
+            Add Vendor
+          </button>
+
+        </div>
+      </div>
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEntry"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>
