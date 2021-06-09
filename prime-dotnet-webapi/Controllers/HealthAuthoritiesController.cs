@@ -102,6 +102,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="careTypes"></param>
         [HttpPut("{healthAuthorityId}/care-types", Name = nameof(UpdateCareTypes))]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -134,6 +135,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="vendors"></param>
         [HttpPut("{healthAuthorityId}/vendors", Name = nameof(UpdateVendors))]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -166,7 +168,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityOrganizationId"></param>
         /// <param name="contacts"></param>
         [HttpPut("{healthAuthorityOrganizationId}/technical-supports", Name = nameof(UpdateTechnicalSupportContacts))]
-        [Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -183,7 +185,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityOrganizationId"></param>
         /// <param name="contacts"></param>
         [HttpPut("{healthAuthorityOrganizationId}/pharmanet-administrators", Name = nameof(UpdatePharmanetAdministratorContacts))]
-        [Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
