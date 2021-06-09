@@ -838,8 +838,6 @@ objects:
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
                 name: ${SVC_NAME}-postgres-data
-              - mountPath: /var/run/postgresql
-                name: ${SVC_NAME}-postgres-run
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
