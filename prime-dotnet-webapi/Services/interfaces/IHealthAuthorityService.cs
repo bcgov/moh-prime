@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
@@ -15,5 +16,6 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
         Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes);
         Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendors);
+        Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new();
     }
 }

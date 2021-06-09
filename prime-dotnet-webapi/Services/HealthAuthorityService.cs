@@ -30,10 +30,9 @@ namespace Prime.Services
         {
             return await _context.HealthAuthorities
                 .AsNoTracking()
-                .AnyAsync(e => e.Id == healthAuthorityId);
+                .AnyAsync(ha => ha.Id == healthAuthorityId);
         }
 
-        // TODO: AutoMapper configuration
         public async Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync()
         {
             return await _context.HealthAuthorities
@@ -136,6 +135,31 @@ namespace Prime.Services
             }
 
             return healthAuthority.Id;
+        }
+
+        public async Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
+        {
+            var oldXrefs = await _context.HealthAuthorityContacts
+                .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityOrganizationId)
+                .OfType<T>()
+                .ToListAsync();
+
+            _context.Remove(oldXrefs);
+
+            var oldContacts = oldXrefs.Select(x => x.Contact);
+
+            _context.Remove(oldContacts);
+
+            var xref = contacts.Select(c => new T
+            {
+                HealthAuthorityOrganizationId = healthAuthorityOrganizationId,
+                ContactId = c.Id
+            });
+
+            _context.Add(contacts);
+            _context.Add(xref);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
