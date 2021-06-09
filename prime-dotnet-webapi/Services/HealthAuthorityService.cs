@@ -30,10 +30,9 @@ namespace Prime.Services
         {
             return await _context.HealthAuthorities
                 .AsNoTracking()
-                .AnyAsync(e => e.Id == healthAuthorityId);
+                .AnyAsync(ha => ha.Id == healthAuthorityId);
         }
 
-        // TODO: AutoMapper configuration
         public async Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync()
         {
             return await _context.HealthAuthorities

@@ -97,7 +97,7 @@ namespace Prime.Controllers
 
         // PUT: api/health-authorities/5/care-types
         /// <summary>
-        /// Updates a specific Health authorities care types.
+        /// Updates a specific Health Authority's care types.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="careTypes"></param>
