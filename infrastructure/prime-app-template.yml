@@ -132,8 +132,6 @@ objects:
         timeoutSeconds: 120 
         maxSurge: "20%" 
         maxUnavailable: "10%" 
-        pre: {} 
-        post: {}
     template:
       metadata:
         labels:
@@ -309,8 +307,6 @@ objects:
         timeoutSeconds: 120 
         maxSurge: "20%" 
         maxUnavailable: "10%" 
-        pre: {} 
-        post: {}
     template:
       metadata:
         labels:
@@ -480,8 +476,6 @@ objects:
         timeoutSeconds: 120 
         maxSurge: "20%" 
         maxUnavailable: "10%" 
-        pre: {} 
-        post: {}
     template:
       metadata:
         labels:
@@ -777,8 +771,6 @@ objects:
         timeoutSeconds: 120 
         maxSurge: "20%" 
         maxUnavailable: "10%" 
-        pre: {} 
-        post: {}
     template:
       metadata:
         labels:
@@ -929,8 +921,6 @@ objects:
         timeoutSeconds: 120 
         maxSurge: "20%" 
         maxUnavailable: "10%" 
-        pre: {} 
-        post: {}
       activeDeadlineSeconds: 21600
     template:
       metadata:
