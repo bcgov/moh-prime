@@ -837,7 +837,7 @@ objects:
       template.openshift.io/expose-username: '{.data[''database-user'']}'
     name: ${SVC_NAME}-postgres-database
     labels:
-      app.kubernetes.io/part-of: ${APP_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   stringData:
     database-name: prime-${SVC_NAME}
     database-password: ${POSTGRESQL_PASSWORD}

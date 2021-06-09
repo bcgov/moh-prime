@@ -882,7 +882,7 @@ objects:
     name: ${SVC_NAME}-postgres-data
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
-      app.kubernetes.io/part-of: ${APP_NAME}
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
       - ReadWriteOnce
