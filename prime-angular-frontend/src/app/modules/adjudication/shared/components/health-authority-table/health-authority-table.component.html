@@ -74,9 +74,14 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute(row.code)">
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.AUTHORIZED_USERS])">
           <mat-icon>list</mat-icon>
           <span>View Authorized User</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+          <mat-icon>location_city</mat-icon>
+          <span>Add Organization Information</span>
         </button>
       </mat-menu>
 
