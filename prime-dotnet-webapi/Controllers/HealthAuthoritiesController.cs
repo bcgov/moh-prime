@@ -36,14 +36,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthorityListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthorities()
         {
-            var ha = new Configuration.HealthAuthorityConfiguration().SeedData
-                .Select(x => new HealthAuthorityListViewModel
-                {
-                    Id = (int)x.Code,
-                    Name = x.Name
-                });
-
-            return Ok(ApiResponse.Result(ha));
+            return Ok(ApiResponse.Result(await _healthAuthorityService.GetHealthAuthoritiesAsync()));
         }
 
         // GET: api/health-authorities/5
@@ -65,9 +58,9 @@ namespace Prime.Controllers
                 {
                     Name = x.Name,
                     CareTypes = Enumerable.Empty<string>(),
-                    Vendors = Enumerable.Empty<Vendor>(),
-                    TechnicalSupports = Enumerable.Empty<Contact>(),
-                    PharmanetAdministrators = Enumerable.Empty<Contact>()
+                    VendorCodes = Enumerable.Empty<int>(),
+                    TechnicalSupport = new Contact,
+                    PharmanetAdministrator = new Contact()
                 })
                 .SingleOrDefault();
 

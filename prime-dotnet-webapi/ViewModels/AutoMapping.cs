@@ -2,10 +2,12 @@ using System.Linq;
 using AutoMapper;
 
 using Prime.Models;
-using Prime.ViewModels;
+using Prime.Models.HealthAuthorities;
 using Prime.DTOs.AgreementEngine;
-using Prime.ViewModels.Parties;
+using Prime.ViewModels;
 using Prime.ViewModels.Emails;
+using Prime.ViewModels.Parties;
+using Prime.ViewModels.HealthAuthorities;
 
 /**
  * Automapper Documentation
@@ -75,19 +77,21 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
 
-        // Don't copy over primary keys
-        CreateMap<PlrProvider, PlrProvider>()
-            .ForMember(dest => dest.Id, opt => opt.Ignore())
-            .ForMember(dest => dest.Ipc, opt => opt.Ignore());
+        CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>();
+        CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
 
-        // Agreement Version
         CreateMap<AgreementVersion, AgreementVersionViewModel>()
             .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
         CreateMap<AgreementVersion, AgreementVersionListViewModel>()
             .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
+
+        // Don't copy over primary keys
+        CreateMap<PlrProvider, PlrProvider>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.Ipc, opt => opt.Ignore());
     }
 }
