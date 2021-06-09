@@ -7,7 +7,6 @@ import { Subject, Subscription } from 'rxjs';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ContactFormState } from '@lib/classes/contact-form-state.class';
-
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
@@ -30,7 +29,7 @@ export class PrivacyOfficerPageComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private haResource: HealthAuthorityResource,
+    private healthAuthResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     router: Router
@@ -59,6 +58,7 @@ export class PrivacyOfficerPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.initForm();
   }
 
   private createFormInstance() {

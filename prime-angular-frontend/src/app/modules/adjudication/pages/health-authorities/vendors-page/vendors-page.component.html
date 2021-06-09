@@ -23,7 +23,32 @@
         <div class="col col-sm-10 py-3"
              formArrayName="vendors">
 
-          <!-- TODO free form autocomplete input -->
+          <ng-container *ngFor="let vendor of vendors.controls; let index = index;"
+                        [formGroupName]="index">
+
+            <app-form-icon-group [show]="vendors.controls.length > 1"
+                                 (event)="removeVendor(index)">
+              <mat-form-field class="w-100">
+                <input #input
+                       matInput
+                       type="text"
+                       placeholder="Vendor"
+                       formControlName="vendor"
+                       [matAutocomplete]="auto"
+                       (focus)="removeNone(input)">
+                <mat-autocomplete #auto="matAutocomplete"
+                                  autoActiveFirstOption>
+                  <mat-option *ngFor="let vendor of filteredVendors | async"
+                              [value]="vendor.name">
+                    {{ vendor.name }}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-error>Required</mat-error>
+                <mat-hint>Choose a vendor</mat-hint>
+              </mat-form-field>
+            </app-form-icon-group>
+
+          </ng-container>
 
           <button mat-button
                   type="button"

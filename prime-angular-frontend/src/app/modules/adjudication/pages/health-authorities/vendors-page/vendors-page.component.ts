@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
 
-import { Config } from '@config/config.model';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { Config, VendorConfig } from '@config/config.model';
+import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-vendors-page',
@@ -21,6 +24,7 @@ export class VendorsPageComponent implements OnInit {
   public form: FormGroup;
   public isInitialEntry: boolean;
   public filteredOptions: BehaviorSubject<Config<number>[]>;
+  public filteredVendors: BehaviorSubject<VendorConfig[]>;
   // TODO don't add these if not required for this component
   // public allowDefaultOption: boolean;
   // public defaultOptionLabel: string;
@@ -31,6 +35,7 @@ export class VendorsPageComponent implements OnInit {
     private fb: FormBuilder,
     private healthAuthResource: HealthAuthorityResource,
     private formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -42,6 +47,7 @@ export class VendorsPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
+    this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.configService.vendors);
   }
 
   public get vendors(): FormArray {
@@ -50,17 +56,24 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO perform update and route to next page
-      this.nextRouteAfterSubmit();
+      const vendorCodes: number[] = this.vendors.getRawValue().map(({ code }) => code);
+      this.healthAuthResource.updateVendors(this.route.snapshot.params.haid, vendorCodes)
+        .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
   public addVendor() {
-
+    this.vendors.push(this.fb.group({
+      vendor: ['', Validators.required]
+    }));
   }
 
-  public removeVendor(input: HTMLFormElement) {
+  public removeVendor(index: number) {
+    this.vendors.removeAt(index);
+  }
 
+  public removeNone(input: HTMLInputElement) {
+    // TODO likely not needed
   }
 
   public onBack() {
@@ -74,12 +87,12 @@ export class VendorsPageComponent implements OnInit {
 
   private createFormInstance() {
     this.form = this.fb.group({
-      vendors: this.fb.array([])
+      vendors: this.fb.array([], FormArrayValidators.atLeast(1))
     });
   }
 
   private initForm() {
-
+    this.addVendor();
   }
 
   private nextRouteAfterSubmit() {

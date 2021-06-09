@@ -54,6 +54,30 @@ export class HealthAuthorityResource {
       );
   }
 
+  public updateCareTypes(healthAuthorityId: number, careTypes: string[]): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/care-types`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority care types could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateCareTypes error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateVendors(healthAuthorityId: number, vendorCodes: number[]): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/vendors`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority vendors could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateVendors error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
     return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
       .pipe(

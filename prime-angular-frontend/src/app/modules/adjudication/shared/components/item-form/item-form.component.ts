@@ -56,7 +56,7 @@ export class ItemFormComponent implements OnInit {
         .asObservable() // Prevent accidentally affecting parent observable
         .pipe(switchMap((jobNames: Config<number>[]) => {
           const copy = [...jobNames]; // Prevent changes by reference
-          // Add the default option  when it doesn't exist
+          // Add the default option when it doesn't exist
           // to the list so it can be filtered out
           if (
             this.allowDefaultOption &&
