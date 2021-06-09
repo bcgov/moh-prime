@@ -75,7 +75,6 @@ namespace Prime
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
-        public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
         public DbSet<Party> Parties { get; set; }
         public DbSet<Site> Sites { get; set; }
         public DbSet<Contact> Contacts { get; set; }
@@ -89,6 +88,13 @@ namespace Prime
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
+        // Health Authorities
+        public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
+        public DbSet<HealthAuthorityCareType> HealthAuthorityCareTypes { get; set; }
+        public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
+        public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
+
+
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }
         public DbSet<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
@@ -101,7 +107,6 @@ namespace Prime
         public DbSet<SiteNotification> SiteNotifications { get; set; }
         public DbSet<AuthorizedUser> AuthorizedUsers { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
-        public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
 
