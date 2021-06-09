@@ -170,11 +170,27 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateTechnicalSupportContacts(int healthAuthorityOrganizationId, IEnumerable<HealthAuthorityContact> contacts)
+        public async Task<ActionResult> UpdateTechnicalSupportContacts(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts)
         {
             await _healthAuthorityService.UpdateContacts<HealthAuthorityTechnicalSupport>(healthAuthorityOrganizationId, contacts);
             return NoContent();
         }
 
+        // PUT: api/health-authorities/1/pharmanet-administrators
+        /// <summary>
+        /// Updates pharmanet administrator contacts on a health authority
+        /// </summary>
+        /// <param name="healthAuthorityOrganizationId"></param>
+        /// <param name="contacts"></param>
+        [HttpPut("{healthAuthorityOrganizationId}/pharmanet-administrators", Name = nameof(UpdatePharmanetAdministratorContacts))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdatePharmanetAdministratorContacts(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts)
+        {
+            await _healthAuthorityService.UpdateContacts<HealthAuthorityTechnicalSupport>(healthAuthorityOrganizationId, contacts);
+            return NoContent();
+        }
     }
 }
