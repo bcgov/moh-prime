@@ -92,12 +92,14 @@ namespace Prime.Services
         {
             var oldContacts = await _context.HealthAuthorityContacts
                 .Include(c => c.Contact)
+                .ThenInclude(c => c.PhysicalAddress)
                 .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
                 .OfType<T>()
                 .ToListAsync();
 
             _context.HealthAuthorityContacts.RemoveRange(oldContacts);
             _context.Contacts.RemoveRange(oldContacts.Select(x => x.Contact));
+            _context.Addresses.RemoveRange(oldContacts.Select(x => x.Contact).Select(c => c.PhysicalAddress));
 
             var newContacts = contacts.Select(contact => new T
             {
