@@ -425,7 +425,7 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${API_POD}
+      - name: "http"
         port: 8080
         targetPort: 8080
     selector:
@@ -494,10 +494,7 @@ objects:
                     name: ${SVC_NAME}-postgres
                     key: database-password
               - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgresql
-                    key: postgresql_database_port
+                value: "5432"
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
@@ -582,7 +579,7 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      - name: "${SVC_NAME}-${DOCMAN_POD}-backend"
         port: 6001
         targetPort: 6001
     selector:
@@ -861,7 +858,7 @@ objects:
         template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
-      - name: ${SVC_NAME}-postgres
+      - name: postgres
         nodePort: 0
         port: 5432
         protocol: TCP
