@@ -69,7 +69,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes)
+        public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
         {
             var oldCareTypes = await _context.HealthAuthorityCareTypes
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
@@ -88,7 +88,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateVendorsAsync(int healthAuthorityId, int[] vendorCodes)
+        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
             var oldVendors = await _context.HealthAuthorityVendors
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
