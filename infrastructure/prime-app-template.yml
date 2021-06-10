@@ -501,12 +501,12 @@ objects:
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: postgres
                     key: database-name
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: postgres
                     key: database-password
               - name: DB_PORT
                 valueFrom:
@@ -516,7 +516,7 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: postgres
                     key: database-user
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${VANITY_URL}/api/docman/"
