@@ -16,7 +16,7 @@
           <button *ngIf="flaggedHealthAuthorities?.includes(row.code)"
                   mat-icon-button
                   title="View Pending Authorized Users"
-                  (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+                  (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
             <mat-icon class="red-icon">admin_panel_settings</mat-icon>
           </button>
         </td>

@@ -30,7 +30,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   }
 
   public onRoute(routePath: string | (string | number)[]): void {
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeWithin(routePath);
   }
 
   public addOrgInfo() {
