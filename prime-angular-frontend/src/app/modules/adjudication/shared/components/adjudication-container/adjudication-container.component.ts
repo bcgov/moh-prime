@@ -74,8 +74,8 @@ export class AdjudicationContainerComponent implements OnInit {
     this.showSearchFilter = false;
   }
 
-  public onSearch(search: string | null): void {
-    this.routeUtils.updateQueryParams({ search });
+  public onSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch });
   }
 
   public onFilter(status: EnrolmentStatus | null): void {
