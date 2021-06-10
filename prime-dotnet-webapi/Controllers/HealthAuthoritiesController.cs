@@ -107,7 +107,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateCareTypes(int healthAuthorityId, string[] careTypes)
+        public async Task<IActionResult> UpdateCareTypes(int healthAuthorityId, IEnumerable<string> careTypes)
         {
             if (careTypes == null)
             {
@@ -136,7 +136,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateVendors(int healthAuthorityId, int[] vendors)
+        public async Task<IActionResult> UpdateVendors(int healthAuthorityId, IEnumerable<int> vendors)
         {
             if (vendors == null)
             {
