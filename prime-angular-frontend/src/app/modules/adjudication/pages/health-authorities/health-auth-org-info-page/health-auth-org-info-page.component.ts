@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
@@ -15,18 +17,20 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class HealthAuthOrgInfoPageComponent implements OnInit {
   public busy: Subscription;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public healthAuthority: HealthAuthority;
 
   private routeUtils: RouteUtils;
 
   constructor(
-    route: ActivatedRoute,
+    private healthAuthResource: HealthAuthorityResource,
+    private route: ActivatedRoute,
     router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
   public onRoute(routePath: string | (string | number)[]): void {
-    this.routeUtils.routeWithin(routePath);
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public addOrgInfo() {
@@ -36,5 +40,8 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
     );
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority);
+  }
 }

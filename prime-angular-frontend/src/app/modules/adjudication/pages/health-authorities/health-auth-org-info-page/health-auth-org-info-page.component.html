@@ -10,14 +10,102 @@
   <div class="row">
     <div class="col-6">
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>
-          <mat-icon class="mr-2">business</mat-icon>
-          Organization Information
-        </ng-container>
-      </app-page-subheader>
+      <div class="pb-3">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">business</mat-icon>
+            Organization Information
+          </ng-container>
+        </app-page-subheader>
+      </div>
 
-      <!-- TODO add organization overview information -->
+      <!-- TODO for demo and should use a generic overview that displays sections based on input bindings -->
+      <app-overview-section title="Health Authority Care Types"
+                            [showEditRedirect]="true"
+                            [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
+                            (route)="onRoute($event)">
+        <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
+          <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
+                                 title="Care Type">
+            {{ careType }}
+          </app-enrollee-property>
+        </ng-container>
+
+        <ng-template #noCareTypes>
+          <app-enrollee-property title="Care Type">
+            None
+          </app-enrollee-property>
+        </ng-template>
+      </app-overview-section>
+
+      <app-overview-section title="Health Authority Vendors"
+                            [showEditRedirect]="true"
+                            [editRoute]="AdjudicationRoutes.HEALTH_AUTH_VENDORS"
+                            (route)="onRoute($event)">
+        <ng-container *ngIf="healthAuthority?.vendorCodes.length; else noVendors">
+          <app-enrollee-property *ngFor="let vendorCode of healthAuthority.vendorCodes"
+                                 title="Vendor">
+            {{ vendorCode | configCode: 'vendors' }}
+          </app-enrollee-property>
+        </ng-container>
+
+        <ng-template #noVendors>
+          <app-enrollee-property title="Vendor">
+            None
+          </app-enrollee-property>
+        </ng-template>
+      </app-overview-section>
+
+      <app-overview-section title="Privacy Officer"
+                            [showEditRedirect]="true"
+                            [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER"
+                            (route)="onRoute($event)">
+        <ng-container *ngIf="healthAuthority?.privacyOfficers.length; else noPrivacyOfficers">
+          <ng-container *ngFor="let privacyOfficer of healthAuthority.privacyOfficers">
+            <app-party-review [party]="privacyOfficer"></app-party-review>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #noPrivacyOfficers>
+          <app-enrollee-property>
+            None
+          </app-enrollee-property>
+        </ng-template>
+      </app-overview-section>
+
+      <app-overview-section title="Technical Support Contacts"
+                            [showEditRedirect]="true"
+                            [editRoute]="AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS"
+                            (route)="onRoute($event)">
+        <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
+          <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
+            <app-party-review [party]="technicalSupport"></app-party-review>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #noTechnicalSupports>
+          <app-enrollee-property>
+            None
+          </app-enrollee-property>
+        </ng-template>
+      </app-overview-section>
+
+      <app-overview-section title="PharmaNet Administrators"
+                            [showEditRedirect]="true"
+                            [editRoute]="AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS"
+                            (route)="onRoute($event)">
+        <ng-container *ngIf="healthAuthority?.pharmanetAdministrators.length; else noPharmanetAdministrators">
+          <ng-container *ngFor="let pharmanetAdministrator of healthAuthority.pharmanetAdministrators">
+            <app-party-review [party]="pharmanetAdministrator"></app-party-review>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #noPharmanetAdministrators>
+          <app-enrollee-property>
+            None
+          </app-enrollee-property>
+        </ng-template>
+      </app-overview-section>
 
       <!-- TODO only show when there is no organization information -->
       <button mat-button

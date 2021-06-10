@@ -1,10 +1,7 @@
 <app-page [busy]="busy">
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
-  <!-- TODO should this be hidden on subsequent updates -->
-  <app-progress-indicator *ngIf="isInitialEntry"
-                          [inProgress]="isInitialEntry"></app-progress-indicator>
-
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <app-contact-profile-form [title]="title"
                             [form]="form"

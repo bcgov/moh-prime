@@ -2,9 +2,7 @@
 
   <app-page-header>PharmaNet Site Registration</app-page-header>
 
-  <!-- TODO should this be hidden on subsequent updates -->
-  <app-progress-indicator [noContent]="!isInitialEntry"
-                          [inProgress]="isInitialEntry"></app-progress-indicator>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
