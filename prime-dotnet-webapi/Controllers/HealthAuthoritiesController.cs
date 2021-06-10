@@ -153,7 +153,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // PUT: api/health-authorities/1/technical-supports
+        // PUT: api/health-authorities/1/privacy-officers
         /// <summary>
         /// Updates the Privacy Officer contacts on a Health Authority
         /// </summary>
