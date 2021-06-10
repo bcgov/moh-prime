@@ -18,6 +18,12 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   public busy: Subscription;
   public AdjudicationRoutes = AdjudicationRoutes;
   public healthAuthority: HealthAuthority;
+  /**
+   * @description
+   * An almost useless parameter indicating that the health authority
+   * has not yet entered their organization information.
+   */
+  public isInitial: boolean;
 
   private routeUtils: RouteUtils;
 
@@ -42,6 +48,15 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority);
+      .subscribe((healthAuthority: HealthAuthority) => {
+        this.healthAuthority = healthAuthority;
+        this.isInitial = !!(
+          healthAuthority?.careTypes.length &&
+          healthAuthority?.vendorCodes.length &&
+          healthAuthority?.privacyOfficers.length &&
+          healthAuthority?.technicalSupports.length &&
+          healthAuthority?.pharmanetAdministrators.length
+        );
+      });
   }
 }
