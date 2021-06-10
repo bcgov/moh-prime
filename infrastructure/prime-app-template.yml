@@ -338,26 +338,21 @@ objects:
                 value: ${OC_APP}
               - name: FRONTEND_URL
                 value: https://${VANITY_URL}
-              - name: database-password
+              - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: database-name
+              - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-name
-              - name: database-user
+              - name: DB_USER
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-user
-              - name: database-password
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
