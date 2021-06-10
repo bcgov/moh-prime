@@ -99,7 +99,7 @@ namespace Prime.Services
 
             _context.HealthAuthorityContacts.RemoveRange(oldContacts);
             _context.Contacts.RemoveRange(oldContacts.Select(x => x.Contact));
-            _context.Addresses.RemoveRange(oldContacts.Select(x => x.Contact).Select(c => c.PhysicalAddress));
+            _context.Addresses.RemoveRange(oldContacts.Select(x => x.Contact.PhysicalAddress));
 
             var newContacts = contacts.Select(contact => new T
             {
