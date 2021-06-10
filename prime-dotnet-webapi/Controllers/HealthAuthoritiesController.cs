@@ -166,7 +166,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePrivacyOfficerContacts(int healthAuthorityId, IEnumerable<Contact> contacts)
         {
-            await _healthAuthorityService.UpdateContacts<HealthAuthorityPrivacyOfficer>(healthAuthorityId, contacts);
+            await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, contacts);
             return NoContent();
         }
 
@@ -183,7 +183,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateTechnicalSupportContacts(int healthAuthorityId, IEnumerable<Contact> contacts)
         {
-            await _healthAuthorityService.UpdateContacts<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
+            await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
             return NoContent();
         }
 
@@ -200,7 +200,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePharmanetAdministratorContacts(int healthAuthorityId, IEnumerable<Contact> contacts)
         {
-            await _healthAuthorityService.UpdateContacts<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
+            await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
             return NoContent();
         }
     }

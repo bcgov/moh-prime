@@ -88,7 +88,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateContacts<T>(int healthAuthorityId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
                 .Include(c => c.Contact)
