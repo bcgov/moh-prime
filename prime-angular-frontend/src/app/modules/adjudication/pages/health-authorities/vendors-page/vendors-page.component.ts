@@ -5,6 +5,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
@@ -12,7 +13,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-vendors-page',
@@ -62,8 +62,6 @@ export class VendorsPageComponent implements OnInit {
   }
 
   public addVendor(vendor: VendorConfig = null) {
-    console.log('VENDOR', vendor);
-
     this.vendors.push(this.fb.group({
       vendor: [vendor ?? '', Validators.required]
     }));
@@ -101,7 +99,7 @@ export class VendorsPageComponent implements OnInit {
       .subscribe(({ vendorCodes }: HealthAuthority) =>
         (vendorCodes?.length)
           ? this.configService.vendors
-            .filter(v => vendorCodes.includes[v.code])
+            .filter(v => vendorCodes.includes(v.code as any))
             .map(v => this.addVendor(v))
           : this.addVendor()
       );

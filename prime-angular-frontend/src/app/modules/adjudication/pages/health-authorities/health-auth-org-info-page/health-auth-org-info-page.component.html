@@ -19,7 +19,7 @@
         </app-page-subheader>
       </div>
 
-      <!-- TODO for demo and should use a generic overview that displays sections based on input bindings -->
+      <!-- TODO for demo and should use a generic overview that filters sections based on input bindings -->
       <app-overview-section title="Health Authority Care Types"
                             [showEditRedirect]="true"
                             [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
@@ -32,7 +32,7 @@
         </ng-container>
 
         <ng-template #noCareTypes>
-          <app-enrollee-property title="Care Type">
+          <app-enrollee-property>
             None
           </app-enrollee-property>
         </ng-template>
@@ -50,7 +50,7 @@
         </ng-container>
 
         <ng-template #noVendors>
-          <app-enrollee-property title="Vendor">
+          <app-enrollee-property>
             None
           </app-enrollee-property>
         </ng-template>
@@ -62,6 +62,7 @@
                             (route)="onRoute($event)">
         <ng-container *ngIf="healthAuthority?.privacyOfficers.length; else noPrivacyOfficers">
           <ng-container *ngFor="let privacyOfficer of healthAuthority.privacyOfficers">
+            <!-- Only one privacy officer so omitted enrollee property -->
             <app-party-review [party]="privacyOfficer"></app-party-review>
           </ng-container>
         </ng-container>
@@ -79,7 +80,9 @@
                             (route)="onRoute($event)">
         <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
           <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
-            <app-party-review [party]="technicalSupport"></app-party-review>
+            <app-enrollee-property title="Technical Support">
+              <app-party-review [party]="technicalSupport"></app-party-review>
+            </app-enrollee-property>
           </ng-container>
         </ng-container>
 
@@ -96,7 +99,9 @@
                             (route)="onRoute($event)">
         <ng-container *ngIf="healthAuthority?.pharmanetAdministrators.length; else noPharmanetAdministrators">
           <ng-container *ngFor="let pharmanetAdministrator of healthAuthority.pharmanetAdministrators">
-            <app-party-review [party]="pharmanetAdministrator"></app-party-review>
+            <app-enrollee-property title="PharmaNet Administrator">
+              <app-party-review [party]="pharmanetAdministrator"></app-party-review>
+            </app-enrollee-property>
           </ng-container>
         </ng-container>
 
