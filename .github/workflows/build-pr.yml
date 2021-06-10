@@ -100,13 +100,13 @@ jobs:
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
-            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=$PRIME_DB_USER-$PR_NUMBER;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg DB_HOST=pr-$PR_NUMBER-postgres-db \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
-            --build-arg POSTGRESQL_DATABASE=postgres \
+            --build-arg POSTGRESQL_DATABASE=$PRIME_DB_USER-$PR_NUMBER \
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -211,6 +211,7 @@ jobs:
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
+            -p POSTGRESQL_USER=$PRIME_DB_USER \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
