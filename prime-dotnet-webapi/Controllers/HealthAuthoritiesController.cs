@@ -119,11 +119,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
             }
 
-            var updatedHealthAuthorityId = await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes);
-            if (updatedHealthAuthorityId.IsInvalidId())
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the health authority care types." });
-            }
+            await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes);
 
             return NoContent();
         }
@@ -152,11 +148,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
             }
 
-            var updatedHealthAuthorityId = await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors);
-            if (updatedHealthAuthorityId.IsInvalidId())
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not update the health authority vendors." });
-            }
+            await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors);
 
             return NoContent();
         }
