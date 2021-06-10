@@ -5,11 +5,13 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { Contact } from '@lib/models/contact.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 // TODO move to @lib/models
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
@@ -25,7 +27,8 @@ export class HealthAuthorityResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private capitalizePipe: CapitalizePipe
   ) { }
 
   public getHealthAuthorities() {
@@ -55,7 +58,7 @@ export class HealthAuthorityResource {
   }
 
   public updateCareTypes(healthAuthorityId: number, careTypes: string[]): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/care-types`)
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/care-types`, careTypes)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -67,7 +70,7 @@ export class HealthAuthorityResource {
   }
 
   public updateVendors(healthAuthorityId: number, vendorCodes: number[]): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/vendors`)
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/vendors`, vendorCodes)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -76,6 +79,19 @@ export class HealthAuthorityResource {
           throw error;
         })
       );
+  }
+
+  public updatePrivacyOfficer(healthAuthorityId: number, contact: Contact): NoContent {
+    // Only a single privacy officer, but creates parity with other contact endpoints
+    return this.updateContacts(healthAuthorityId, 'privacy-officers', [contact]);
+  }
+
+  public updateTechnicalSupports(healthAuthorityId: number, contacts: Contact[]): NoContent {
+    return this.updateContacts(healthAuthorityId, 'technical-supports', contacts);
+  }
+
+  public updatePharmanetAdministrators(healthAuthorityId: number, contacts: Contact[]): NoContent {
+    return this.updateContacts(healthAuthorityId, 'pharmanet-administrators', contacts);
   }
 
   public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
@@ -225,6 +241,22 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health Authority Codes could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCodesWithUnderReviewUsers error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  private updateContacts(
+    healthAuthorityId: number,
+    contactType: 'privacy-officers' | 'technical-supports' | 'pharmanet-administrators',
+    contact: Contact[]
+  ): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/${contactType}`, contact)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast(`Health authority ${contactType.replace('-', ' ')} could not be updated`);
+          this.logger.error(`[Core] HealthAuthorityResource::update${this.capitalizePipe.transform(contactType.replace('-', ' '), true)} error has occurred: `, error);
           throw error;
         })
       );

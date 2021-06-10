@@ -9,6 +9,7 @@ import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -25,9 +26,6 @@ export class VendorsPageComponent implements OnInit {
   public isInitialEntry: boolean;
   public filteredOptions: BehaviorSubject<Config<number>[]>;
   public filteredVendors: BehaviorSubject<VendorConfig[]>;
-  // TODO don't add these if not required for this component
-  // public allowDefaultOption: boolean;
-  // public defaultOptionLabel: string;
 
   private routeUtils: RouteUtils;
 
@@ -56,15 +54,16 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const vendorCodes: number[] = this.vendors.getRawValue().map(({ code }) => code);
+      console.log(this.form.value);
+      const vendorCodes: number[] = this.vendors.value.map(({ code }) => code);
       this.healthAuthResource.updateVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
-  public addVendor() {
+  public addVendor(vendor: string = null) {
     this.vendors.push(this.fb.group({
-      vendor: ['', Validators.required]
+      vendor: [vendor ?? '', Validators.required]
     }));
   }
 
@@ -80,6 +79,10 @@ export class VendorsPageComponent implements OnInit {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES);
   }
 
+  public displayWith(vendor: VendorConfig): string {
+    return (vendor) ? vendor.name : '';
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -92,7 +95,12 @@ export class VendorsPageComponent implements OnInit {
   }
 
   private initForm() {
-    this.addVendor();
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe(({ vendorCodes }: HealthAuthority) =>
+        (vendorCodes?.length)
+          ? vendorCodes.map(v => this.addVendor(v))
+          : this.addVendor()
+      );
   }
 
   private nextRouteAfterSubmit() {

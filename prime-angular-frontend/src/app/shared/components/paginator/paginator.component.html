@@ -4,7 +4,8 @@
 
     <mat-form-field class="input ml-2">
       <input matInput
-             [formControl]="form">
+             [formControl]="form"
+             (keydown.enter)="onChange()">
     </mat-form-field>
 
     <span>of <strong>{{ paginator.getNumberOfPages() }}</strong></span>

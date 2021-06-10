@@ -12,6 +12,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-administrators-page',
@@ -48,8 +49,9 @@ export class AdministratorsPageComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO perform update and route to next page
-      this.nextRouteAfterSubmit();
+      const pharmanetAdministrators: Contact[] = [this.form.value];
+      this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, pharmanetAdministrators)
+        .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
@@ -67,7 +69,12 @@ export class AdministratorsPageComponent implements OnInit {
   }
 
   private initForm() {
-
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe(({ pharmanetAdministrators }: HealthAuthority) => {
+        if (pharmanetAdministrators.length) {
+          this.form.patchValue(pharmanetAdministrators[0]);
+        }
+      });
   }
 
   private nextRouteAfterSubmit() {

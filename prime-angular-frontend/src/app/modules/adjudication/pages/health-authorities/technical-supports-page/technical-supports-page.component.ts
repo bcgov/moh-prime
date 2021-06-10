@@ -12,6 +12,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-technical-supports-page',
@@ -21,6 +22,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class TechnicalSupportsPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
+  public formState: ContactFormState;
   public form: FormGroup;
   public isInitialEntry: boolean;
   public contacts: Contact[];
@@ -48,8 +50,10 @@ export class TechnicalSupportsPageComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO perform update and route to next page
-      this.nextRouteAfterSubmit();
+      // TODO will be updated to be multiple contacts
+      const technicalSupports: Contact[] = [this.form.value];
+      this.healthAuthResource.updateTechnicalSupports(this.route.snapshot.params.haid, technicalSupports)
+        .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
@@ -63,11 +67,17 @@ export class TechnicalSupportsPageComponent implements OnInit {
   }
 
   private createFormInstance() {
-    this.form = new ContactFormState(this.fb, this.formUtilsService).form;
+    this.formState = new ContactFormState(this.fb, this.formUtilsService);
+    this.form = this.formState.form;
   }
 
   private initForm() {
-
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe(({ technicalSupports }: HealthAuthority) => {
+        if (technicalSupports.length) {
+          this.form.patchValue(technicalSupports[0]);
+        }
+      });
   }
 
   private nextRouteAfterSubmit() {

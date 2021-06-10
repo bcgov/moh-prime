@@ -9,6 +9,7 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -25,9 +26,6 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   public isInitialEntry: boolean;
   public filteredOptions: BehaviorSubject<Config<number>[]>;
   public filteredCareTypes: BehaviorSubject<Config<number>[]>;
-  // TODO don't add these if not required for this component
-  // public allowDefaultOption: boolean;
-  // public defaultOptionLabel: string;
 
   private routeUtils: RouteUtils;
 
@@ -56,15 +54,15 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const careTypes: string[] = this.careTypes.getRawValue().map(({ careType }) => careType);
+      const careTypes: string[] = this.careTypes.value.map(({ careType }) => careType);
       this.healthAuthResource.updateCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
-  public addCareType() {
+  public addCareType(caretype: string = null) {
     this.careTypes.push(this.fb.group({
-      careType: ['', Validators.required]
+      careType: [caretype ?? '', Validators.required]
     }));
   }
 
@@ -92,7 +90,12 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   }
 
   private initForm() {
-    this.addCareType();
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe(({ careTypes }: HealthAuthority) =>
+        (careTypes?.length)
+          ? careTypes.map(ct => this.addCareType(ct))
+          : this.addCareType()
+      );
   }
 
   private nextRouteAfterSubmit() {

@@ -11,6 +11,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-privacy-officer-page',
@@ -47,8 +48,8 @@ export class PrivacyOfficerPageComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      // TODO perform update and route to next page
-      this.nextRouteAfterSubmit();
+      this.healthAuthResource.updatePrivacyOfficer(this.route.snapshot.params.haid, this.form.value)
+        .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
@@ -66,7 +67,12 @@ export class PrivacyOfficerPageComponent implements OnInit {
   }
 
   private initForm() {
-
+    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .subscribe(({ privacyOfficers }: HealthAuthority) => {
+        if (privacyOfficers) {
+          this.form.patchValue(privacyOfficers);
+        }
+      });
   }
 
   private nextRouteAfterSubmit() {

@@ -13,7 +13,7 @@
     <section class="mb-3">
 
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Health Authority Vendors</ng-container>
+        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
         <ng-container appPageSubheaderSummary>
           Identify the Vendors associated with this Health Authority.
         </ng-container>
@@ -26,27 +26,32 @@
           <ng-container *ngFor="let vendor of vendors.controls; let index = index;"
                         [formGroupName]="index">
 
-            <app-form-icon-group [show]="vendors.controls.length > 1"
-                                 (event)="removeVendor(index)">
-              <mat-form-field class="w-100">
-                <input #input
-                       matInput
-                       type="text"
-                       placeholder="Vendor"
-                       formControlName="vendor"
-                       [matAutocomplete]="auto"
-                       (focus)="removeNone(input)">
-                <mat-autocomplete #auto="matAutocomplete"
-                                  autoActiveFirstOption>
-                  <mat-option *ngFor="let vendor of filteredVendors | async"
-                              [value]="vendor.name">
-                    {{ vendor.name }}
-                  </mat-option>
-                </mat-autocomplete>
-                <mat-error>Required</mat-error>
-                <mat-hint>Choose a vendor</mat-hint>
-              </mat-form-field>
-            </app-form-icon-group>
+            <div class="mb-3">
+
+              <app-form-icon-group [show]="vendors.controls.length > 1"
+                                   (event)="removeVendor(index)">
+                <mat-form-field class="w-100">
+                  <input #input
+                         matInput
+                         type="text"
+                         placeholder="Vendor"
+                         formControlName="vendor"
+                         [matAutocomplete]="auto"
+                         (focus)="removeNone(input)">
+                  <mat-autocomplete #auto="matAutocomplete"
+                                    autoActiveFirstOption
+                                    [displayWith]="displayWith">
+                    <mat-option *ngFor="let vendor of filteredVendors | async"
+                                [value]="vendor">
+                      {{ vendor.name }}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error>Required</mat-error>
+                  <mat-hint>Choose a vendor</mat-hint>
+                </mat-form-field>
+              </app-form-icon-group>
+
+            </div>
 
           </ng-container>
 
