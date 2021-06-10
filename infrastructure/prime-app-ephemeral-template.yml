@@ -468,7 +468,7 @@ objects:
               - name: DB_NAME
                 value: prime-${SVC_NAME}
               - name: DB_PASS
-                value: prime
+                value: prime-${SVC_NAME}
               - name: DB_PORT
                 value: "5432"
               - name: DB_USER
