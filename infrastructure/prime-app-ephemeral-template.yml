@@ -466,25 +466,13 @@ objects:
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
               - name: DB_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime
               - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgresql
-                    key: postgresql_database_port
+                value: "5432"
               - name: DB_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-user
+                value: prime
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
               - name: FLASK_ENV
@@ -518,10 +506,7 @@ objects:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
               - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime-${SVC_NAME}
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -642,25 +627,13 @@ objects:
             - name: DB_HOST
               value: ${SVC_NAME}-postgres
             - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-name
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-password
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql
-                  key: postgresql_database_port
+              value: prime-${SVC_NAME}
             - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-user
+              value: prime
+            - name: DB_PASS
+              value: prime-${SVC_NAME}
+            - name: DB_PORT
+              value: "5432"
             - name: FLASK_ENV
               valueFrom:
                 configMapKeyRef:
@@ -692,10 +665,7 @@ objects:
                   name: keycloak
                   key: JWT_WELL_KNOWN_CONFIG
             - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-password
+              value: prime-${SVC_NAME}
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -748,25 +718,13 @@ objects:
                 value: ${SVC_NAME}-postgres
               # PostgreSQL environment variables
               - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime
               - name: POSTGRESQL_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
-                    key: database-user
+                value: prime
               - name: POSTGRESQL_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime
               - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
