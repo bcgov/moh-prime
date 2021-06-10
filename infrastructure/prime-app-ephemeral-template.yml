@@ -284,8 +284,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
+        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]"]
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
