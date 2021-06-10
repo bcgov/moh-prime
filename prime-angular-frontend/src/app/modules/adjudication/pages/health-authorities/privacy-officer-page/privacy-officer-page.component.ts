@@ -69,8 +69,9 @@ export class PrivacyOfficerPageComponent implements OnInit {
   private initForm() {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ privacyOfficers }: HealthAuthority) => {
-        if (privacyOfficers) {
-          this.form.patchValue(privacyOfficers);
+        if (privacyOfficers.length) {
+          // Will only ever be a single privacy officer
+          this.form.patchValue(privacyOfficers[0]);
         }
       });
   }
