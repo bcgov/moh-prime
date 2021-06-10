@@ -722,7 +722,7 @@ objects:
               - name: POSTGRESQL_USER
                 value: prime
               - name: POSTGRESQL_PASSWORD
-                value: prime
+                value: prime-${SVC_NAME}
               - name: POSTGRESQL_DATABASE
                 value: prime-${SVC_NAME}
             image: >-
