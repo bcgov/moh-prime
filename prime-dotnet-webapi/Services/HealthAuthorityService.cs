@@ -105,7 +105,7 @@ namespace Prime.Services
                 Contact = contact
             });
 
-            _context.Add(newContacts);
+            _context.HealthAuthorityContacts.AddRange(newContacts);
 
             await _context.SaveChangesAsync();
         }
