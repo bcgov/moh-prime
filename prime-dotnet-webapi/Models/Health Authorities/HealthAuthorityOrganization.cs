@@ -1,10 +1,6 @@
-using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using DelegateDecompiler;
 
 namespace Prime.Models.HealthAuthorities
 {
@@ -20,9 +16,7 @@ namespace Prime.Models.HealthAuthorities
 
         public ICollection<HealthAuthorityVendor> Vendors { get; set; }
 
-        public int? PrivacyOfficerId { get; set; }
-
-        public Contact PrivacyOfficer { get; set; }
+        public ICollection<HealthAuthorityPrivacyOfficer> PrivacyOfficers { get; set; }
 
         public ICollection<HealthAuthorityTechnicalSupport> TechnicalSupports { get; set; }
 
