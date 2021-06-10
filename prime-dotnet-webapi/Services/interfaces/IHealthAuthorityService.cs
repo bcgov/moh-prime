@@ -1,9 +1,9 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
@@ -14,8 +14,8 @@ namespace Prime.Services
         Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id);
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code);
         Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
-        Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes);
-        Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendorCodes);
-        Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new();
+        Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
+        Task UpdateContactsAsync<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new();
+        Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
     }
 }

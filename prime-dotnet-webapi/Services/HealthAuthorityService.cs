@@ -1,12 +1,12 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Prime.Models;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
+using Prime.Models;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
@@ -19,8 +19,8 @@ namespace Prime.Services
 
         public HealthAuthorityService(
             ApiDbContext context,
-            IMapper mapper,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IMapper mapper)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -69,7 +69,7 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<int> UpdateCareTypesAsync(int healthAuthorityId, string[] careTypes)
+        public async Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes)
         {
             var oldCareTypes = await _context.HealthAuthorityCareTypes
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
@@ -85,19 +85,34 @@ namespace Prime.Services
 
             _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return InvalidId;
-            }
-
-            return healthAuthorityId;
+            await _context.SaveChangesAsync();
         }
 
-        public async Task<int> UpdateVendorsAsync(int healthAuthorityId, int[] vendorCodes)
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
+        {
+            var oldContacts = await _context.HealthAuthorityContacts
+                .Include(c => c.Contact)
+                .ThenInclude(c => c.PhysicalAddress)
+                .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
+                .OfType<T>()
+                .ToListAsync();
+
+            _context.HealthAuthorityContacts.RemoveRange(oldContacts);
+            _context.Contacts.RemoveRange(oldContacts.Select(x => x.Contact));
+            _context.Addresses.RemoveRange(oldContacts.Select(x => x.Contact.PhysicalAddress));
+
+            var newContacts = contacts.Select(contact => new T
+            {
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                Contact = contact
+            });
+
+            _context.HealthAuthorityContacts.AddRange(newContacts);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
         {
             var oldVendors = await _context.HealthAuthorityVendors
                 .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
@@ -112,40 +127,6 @@ namespace Prime.Services
             });
 
             _context.HealthAuthorityVendors.AddRange(newVendors);
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return InvalidId;
-            }
-
-            return healthAuthorityId;
-        }
-
-        public async Task UpdateContacts<T>(int healthAuthorityOrganizationId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
-        {
-            var oldXrefs = await _context.HealthAuthorityContacts
-                .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityOrganizationId)
-                .OfType<T>()
-                .ToListAsync();
-
-            _context.Remove(oldXrefs);
-
-            var oldContacts = oldXrefs.Select(x => x.Contact);
-
-            _context.Remove(oldContacts);
-
-            var xref = contacts.Select(c => new T
-            {
-                HealthAuthorityOrganizationId = healthAuthorityOrganizationId,
-                ContactId = c.Id
-            });
-
-            _context.Add(contacts);
-            _context.Add(xref);
 
             await _context.SaveChangesAsync();
         }
