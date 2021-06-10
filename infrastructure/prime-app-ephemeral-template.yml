@@ -168,7 +168,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
-  status: {}
+  
 #   Frontend Service
 - apiVersion: v1
   kind: Service
@@ -219,7 +219,7 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
-  status: {}
+  
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
@@ -408,7 +408,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  status: {}
+  
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -565,7 +565,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -725,7 +725,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 
 ###########################################
 ###         PostgreSQL Database         ###
@@ -825,7 +825,7 @@ objects:
         volumes:
           - name: ${SVC_NAME}-postgres-data
             emptyDir: {}
-  status: {}
+  
   
 #   PostgreSQL Secret
 - apiVersion: v1
