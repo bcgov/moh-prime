@@ -649,6 +649,7 @@ objects:
           name: ${SVC_NAME}-${DOCMAN_POD}-migration
       spec:
         restartPolicy: OnFailure
+        backoffLimit: 5
         containers:
         - name: ${SVC_NAME}-${DOCMAN_POD}-migration
           image: >-
@@ -728,17 +729,6 @@ objects:
                 secretKeyRef:
                   name: ${SVC_NAME}-postgres
                   key: database-password
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}-migration
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${IMAGE_TAG}'
 
 ###########################################
 ###         PostgreSQL Database         ###
