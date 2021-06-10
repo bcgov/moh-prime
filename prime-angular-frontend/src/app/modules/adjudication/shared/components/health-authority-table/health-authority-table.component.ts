@@ -21,7 +21,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   public columns: string[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
-  public haCode: HealthAuthorityEnum;
+  public healthAuthorityCode: HealthAuthorityEnum;
 
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
 
@@ -46,9 +46,9 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route = new EventEmitter<string | (string | number)[]>();
 
     this.dataSource = new MatTableDataSource<Config<number>>([]);
-    this.haCode = this.activatedRoute.snapshot.params.haid;
-    this.dataSource.data = (this.haCode)
-      ? this.configService.healthAuthorities?.filter(ha => ha.code === +this.haCode)
+    this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
+    this.dataSource.data = (this.healthAuthorityCode)
+      ? this.configService.healthAuthorities?.filter(ha => ha.code === +this.healthAuthorityCode)
       : this.configService.healthAuthorities?.sort((a, b) => a.code - b.code);
   }
 
