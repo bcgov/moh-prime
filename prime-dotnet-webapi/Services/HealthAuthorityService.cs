@@ -88,25 +88,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
-        {
-            var oldVendors = await _context.HealthAuthorityVendors
-                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
-                .ToListAsync();
-
-            _context.HealthAuthorityVendors.RemoveRange(oldVendors);
-
-            var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
-            {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = code
-            });
-
-            _context.HealthAuthorityVendors.AddRange(newVendors);
-
-            await _context.SaveChangesAsync();
-        }
-
         public async Task UpdateContacts<T>(int healthAuthorityId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
@@ -125,6 +106,25 @@ namespace Prime.Services
             });
 
             _context.Add(newContacts);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)
+        {
+            var oldVendors = await _context.HealthAuthorityVendors
+                .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
+                .ToListAsync();
+
+            _context.HealthAuthorityVendors.RemoveRange(oldVendors);
+
+            var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
+            {
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                VendorCode = code
+            });
+
+            _context.HealthAuthorityVendors.AddRange(newVendors);
 
             await _context.SaveChangesAsync();
         }
