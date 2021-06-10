@@ -57,6 +57,7 @@
           <button mat-button
                   type="button"
                   color="primary"
+                  [disabled]="!careTypes.controls?.length"
                   (click)="addCareType()">
             <mat-icon>add</mat-icon>
             Add Care Type

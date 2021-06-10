@@ -58,6 +58,7 @@
           <button mat-button
                   type="button"
                   color="primary"
+                  [disabled]="!vendors.controls?.length"
                   (click)="addVendor()">
             <mat-icon>add</mat-icon>
             Add Vendor

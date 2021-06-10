@@ -60,9 +60,9 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     }
   }
 
-  public addCareType(caretype: string = null) {
+  public addCareType(careType: string = null) {
     this.careTypes.push(this.fb.group({
-      careType: [caretype ?? '', Validators.required]
+      careType: [careType ?? '', Validators.required]
     }));
   }
 

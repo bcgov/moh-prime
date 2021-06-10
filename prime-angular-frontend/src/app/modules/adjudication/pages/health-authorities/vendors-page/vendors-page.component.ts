@@ -54,14 +54,16 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      console.log(this.form.value);
-      const vendorCodes: number[] = this.vendors.value.map(({ code }) => code);
+      console.log(this.vendors.value, this.vendors.value.map(({ vendor }) => vendor.code));
+      const vendorCodes: number[] = this.vendors.value.map(({ vendor }) => vendor.code);
       this.healthAuthResource.updateVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
   }
 
-  public addVendor(vendor: string = null) {
+  public addVendor(vendor: VendorConfig = null) {
+    console.log('VENDOR', vendor);
+
     this.vendors.push(this.fb.group({
       vendor: [vendor ?? '', Validators.required]
     }));
@@ -98,7 +100,9 @@ export class VendorsPageComponent implements OnInit {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendorCodes }: HealthAuthority) =>
         (vendorCodes?.length)
-          ? vendorCodes.map(v => this.addVendor(v))
+          ? this.configService.vendors
+            .filter(v => vendorCodes.includes[v.code])
+            .map(v => this.addVendor(v))
           : this.addVendor()
       );
   }
