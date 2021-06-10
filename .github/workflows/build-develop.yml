@@ -8,25 +8,25 @@
 name: Build PRIME from Develop Branch and Deploy to OpenShift Image Registry
 
 
-##### Uncomment on merge to dev
-on:
-  push:
-    branches:
-      - develop
-
-  workflow_dispatch:
-    branches:
-      - develop
-#################################
-
-#################################
-##### Comment out on merge to dev
+# ##### Uncomment on merge to dev
 # on:
 #   push:
+#     branches:
+#       - develop
+
 #   workflow_dispatch:
-#   pull_request:
-#     branches-ignore:
-#       - 'develop'
+#     branches:
+#       - develop
+# #################################
+
+################################
+#### Comment out on merge to dev
+on:
+  push:
+  workflow_dispatch:
+  pull_request:
+    branches-ignore:
+      - 'develop'
 
 jobs:
   build-document-manager-backend:
