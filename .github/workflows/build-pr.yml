@@ -211,7 +211,7 @@ jobs:
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
-            -p POSTGRESQL_USER=$PRIME_DB_USER \
+            -p POSTGRESQL_USER=${{secrets.PRIME_DB_USER}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
