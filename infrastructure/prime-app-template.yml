@@ -29,6 +29,11 @@ parameters:
   description: For naming the web/reverse proxy pod
   required: true
   value: frontend
+- name: FRONTEND_URL
+  displayName: Frontend URL
+  description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
+  required: true
+  value: frontend
 - name: VANITY_URL
   displayName: Vanity URL
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
