@@ -321,31 +321,14 @@ objects:
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
-              - name: database-password
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
               - name: database-name
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
               - name: database-user
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-user
+                value: prime
               - name: database-password
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime-${SVC_NAME}
               - name: POSTGRESQL_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
+                value: prime-${SVC_NAME}
             ports:
               - containerPort: 1025
                 protocol: TCP
