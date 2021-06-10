@@ -200,7 +200,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdatePharmanetAdministratorContacts(int healthAuthorityId, IEnumerable<Contact> contacts)
         {
-            await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityTechnicalSupport>(healthAuthorityId, contacts);
+            await _healthAuthorityService.UpdateContactsAsync<HealthAuthorityPharmanetAdministrator>(healthAuthorityId, contacts);
             return NoContent();
         }
     }
