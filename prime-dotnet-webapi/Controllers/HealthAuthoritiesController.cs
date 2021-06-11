@@ -76,7 +76,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AuthorizedUser>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAuthorizedUsersByHealthAuthority(HealthAuthorityCode healthAuthorityCode)
         {
-            var users = await _healthAuthorityService.GetAuthorizedUsersByHealthAuthorityAsync(healthAuthorityCode);
+            var users = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityCode);
             return Ok(ApiResponse.Result(users));
         }
 

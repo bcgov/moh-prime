@@ -54,10 +54,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(ha => ha.Id == id);
         }
 
+        // TODO: review this VM
         // This Controller is a temp fix for the time being before we most likely move HA's into organizations
         // To reduce bloat we just use one view model for the time being.
-        // TODO: review
-        public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code)
+        public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(HealthAuthorityCode code)
         {
             return await _context.AuthorizedUsers
                 .Where(u => u.HealthAuthorityCode == code)
