@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,6 @@ using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
-using Prime.Extensions;
 
 namespace Prime.Controllers
 {
