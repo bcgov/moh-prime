@@ -31,9 +31,7 @@ export class CollectionNoticeComponent implements OnInit {
       ? EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
-    if (this.enrolmentService.isInitialEnrolment) {
-      this.router.navigate([route], { relativeTo: this.route.parent });
-    }
+    this.router.navigate([route], { relativeTo: this.route.parent });
   }
 
   public ngOnInit(): void {
@@ -49,10 +47,7 @@ export class CollectionNoticeComponent implements OnInit {
         this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
         break;
       default: {
-        // Default redirect when completed, otherwise allow the view render
-        if (this.enrolmentService.isProfileComplete) {
-          this.router.navigate([EnrolmentRoutes.OVERVIEW], { relativeTo: this.route.parent });
-        }
+        // allow the view render
       }
     }
   }
