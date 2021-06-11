@@ -57,10 +57,10 @@ namespace Prime.Services
         // TODO: review this VM
         // This Controller is a temp fix for the time being before we most likely move HA's into organizations
         // To reduce bloat we just use one view model for the time being.
-        public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(HealthAuthorityCode code)
+        public async Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(int healthAuthorityId)
         {
             return await _context.AuthorizedUsers
-                .Where(u => u.HealthAuthorityCode == code)
+                .Where(u => u.HealthAuthorityCode == (HealthAuthorityCode)healthAuthorityId)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

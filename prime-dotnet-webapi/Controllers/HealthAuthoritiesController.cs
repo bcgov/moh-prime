@@ -66,17 +66,22 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/5/authorized-users
         /// <summary>
-        /// Get Authorized users for a health authority
+        /// Get the Authorized Users for a Health Authority
         /// </summary>
-        // <param name="healthAuthorityCode"></param>
-        [HttpGet("{healthAuthorityCode}/authorized-users", Name = nameof(GetAuthorizedUsersByHealthAuthority))]
+        // <param name="healthAuthorityId"></param>
+        [HttpGet("{healthAuthorityId}/authorized-users", Name = nameof(GetAuthorizedUsers))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AuthorizedUser>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAuthorizedUsersByHealthAuthority(HealthAuthorityCode healthAuthorityCode)
+        public async Task<ActionResult> GetAuthorizedUsers(int healthAuthorityId)
         {
-            var users = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityCode);
+            if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
+            {
+                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+            }
+
+            var users = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
             return Ok(ApiResponse.Result(users));
         }
 

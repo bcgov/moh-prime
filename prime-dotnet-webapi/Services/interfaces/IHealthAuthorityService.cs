@@ -11,10 +11,10 @@ namespace Prime.Services
     {
         Task<bool> HealthAuthorityExistsAsync(int healthAuthorityId);
         Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync();
-        Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id);
-        Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(HealthAuthorityCode code);
+        Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int healthAuthorityId);
+        Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(int healthAuthorityId);
         Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
-        Task UpdateContactsAsync<T>(int healthAuthorityOrganizationId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new();
+        Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new();
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
     }
 }
