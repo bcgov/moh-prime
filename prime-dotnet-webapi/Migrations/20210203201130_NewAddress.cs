@@ -110,7 +110,7 @@ namespace Prime.Migrations
                 FROM
                     ""Enrollee"" e
                 WHERE
-                    e.""MailingAddressId"" is not null
+                    e.""MailingAddressId"" is not null;
             ");
 
             migrationBuilder.Sql(@"
@@ -125,7 +125,7 @@ namespace Prime.Migrations
                 FROM
                     ""Enrollee"" e
                 WHERE
-                    e.""PhysicalAddressId"" is not null
+                    e.""PhysicalAddressId"" is not null;
             ");
 
             migrationBuilder.Sql(@"
@@ -140,7 +140,7 @@ namespace Prime.Migrations
                 FROM
                     ""Party"" p
                 WHERE
-                    p.""MailingAddressId"" is not null
+                    p.""MailingAddressId"" is not null;
             ");
 
             migrationBuilder.Sql(@"
@@ -155,7 +155,7 @@ namespace Prime.Migrations
                 FROM
                     ""Party"" p
                 WHERE
-                    p.""PhysicalAddressId"" is not null
+                    p.""PhysicalAddressId"" is not null;
             ");
 
             migrationBuilder.Sql(@"
