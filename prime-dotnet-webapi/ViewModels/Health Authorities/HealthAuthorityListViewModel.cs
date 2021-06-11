@@ -4,5 +4,6 @@ namespace Prime.ViewModels.HealthAuthorities
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public bool HasUnderReviewUsers { get; set; }
     }
 }
