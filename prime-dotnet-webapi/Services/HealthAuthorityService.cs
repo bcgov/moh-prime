@@ -88,23 +88,21 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<Contact> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
-                .Include(c => c.Contact)
-                .ThenInclude(c => c.PhysicalAddress)
                 .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
                 .OfType<T>()
+                .Select(c => c.Contact)
                 .ToListAsync();
 
-            _context.HealthAuthorityContacts.RemoveRange(oldContacts);
-            _context.Contacts.RemoveRange(oldContacts.Select(x => x.Contact));
-            _context.Addresses.RemoveRange(oldContacts.Select(x => x.Contact.PhysicalAddress));
+            // Should cascade into the HealthAuthorityContact XRef table
+            _context.Contacts.RemoveRange(oldContacts);
 
             var newContacts = contacts.Select(contact => new T
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                Contact = contact
+                Contact = _mapper.Map<Contact>(contact)
             });
 
             _context.HealthAuthorityContacts.AddRange(newContacts);

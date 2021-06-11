@@ -1,6 +1,6 @@
-namespace Prime.ViewModels
+namespace Prime.ViewModels.HealthAuthorities
 {
-    public class ContactViewModel
+    public class HealthAuthorityContactViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -9,6 +9,5 @@ namespace Prime.ViewModels
         public string Phone { get; set; }
         public string Fax { get; set; }
         public string SMSPhone { get; set; }
-        public AddressViewModel PhysicalAddress { get; set; }
     }
 }

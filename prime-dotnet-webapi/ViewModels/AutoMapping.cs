@@ -84,8 +84,8 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.PrivacyOfficers, opt => opt.MapFrom(src => src.PrivacyOfficers.Select(x => x.Contact)))
             .ForMember(dest => dest.TechnicalSupports, opt => opt.MapFrom(src => src.TechnicalSupports.Select(x => x.Contact)))
             .ForMember(dest => dest.PharmanetAdministrators, opt => opt.MapFrom(src => src.PharmanetAdministrators.Select(x => x.Contact)));
-        CreateMap<Contact, ContactViewModel>();
-        CreateMap<Address, AddressViewModel>();
+        CreateMap<Contact, HealthAuthorityContactViewModel>()
+            .ReverseMap();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
