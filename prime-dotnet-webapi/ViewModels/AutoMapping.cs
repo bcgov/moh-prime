@@ -77,7 +77,9 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Party.Email))
             .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Party.Phone));
 
-        CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>();
+        IQueryable<int> underReviewIds = null;
+        CreateMap<HealthAuthorityOrganization, HealthAuthorityListViewModel>()
+            .ForMember(dest => dest.HasUnderReviewUsers, opt => opt.MapFrom(src => underReviewIds.Contains(src.Id)));
         CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
             .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)))
             .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)))

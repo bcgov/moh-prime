@@ -13,7 +13,6 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync();
         Task<HealthAuthorityViewModel> GetHealthAuthorityAsync(int id);
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersByHealthAuthorityAsync(HealthAuthorityCode code);
-        Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
         Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
         Task UpdateContactsAsync<T>(int healthAuthorityOrganizationId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new();
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);

@@ -35,9 +35,14 @@ namespace Prime.Services
 
         public async Task<IEnumerable<HealthAuthorityListViewModel>> GetHealthAuthoritiesAsync()
         {
+            IQueryable<int> underReviewIds = _context.AuthorizedUsers
+                .Where(u => u.Status == AccessStatusType.UnderReview)
+                .Select(u => (int)u.HealthAuthorityCode)
+                .Distinct();
+
             return await _context.HealthAuthorities
                 .AsNoTracking()
-                .ProjectTo<HealthAuthorityListViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<HealthAuthorityListViewModel>(_mapper.ConfigurationProvider, new { underReviewIds })
                 .ToListAsync();
         }
 
@@ -57,15 +62,6 @@ namespace Prime.Services
             return await _context.AuthorizedUsers
                 .Where(u => u.HealthAuthorityCode == code)
                 .ProjectTo<AuthorizedUserViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<HealthAuthorityCode>> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync()
-        {
-            return await _context.AuthorizedUsers
-                .Where(u => u.Status == AccessStatusType.UnderReview)
-                .Select(u => u.HealthAuthorityCode)
-                .Distinct()
                 .ToListAsync();
         }
 
