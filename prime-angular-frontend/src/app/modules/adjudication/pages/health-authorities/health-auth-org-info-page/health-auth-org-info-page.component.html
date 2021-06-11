@@ -25,7 +25,7 @@
         <app-overview-section title="Health Authority Care Types"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
-                              (route)="onRoute($event)">
+                              (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
             <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
                                    title="Care Type">
@@ -43,7 +43,7 @@
         <app-overview-section title="Health Authority Vendors"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_VENDORS"
-                              (route)="onRoute($event)">
+                              (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.vendorCodes.length; else noVendors">
             <app-enrollee-property *ngFor="let vendorCode of healthAuthority.vendorCodes"
                                    title="Vendor">
@@ -61,7 +61,7 @@
         <app-overview-section title="Privacy Officer"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER"
-                              (route)="onRoute($event)">
+                              (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.privacyOfficers.length; else noPrivacyOfficers">
             <ng-container *ngFor="let privacyOfficer of healthAuthority.privacyOfficers">
               <!-- Only one privacy officer so omitted enrollee property -->
@@ -79,7 +79,7 @@
         <app-overview-section title="Technical Support Contacts"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS"
-                              (route)="onRoute($event)">
+                              (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
             <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
               <app-enrollee-property title="Technical Support">
@@ -98,7 +98,7 @@
         <app-overview-section title="PharmaNet Administrators"
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS"
-                              (route)="onRoute($event)">
+                              (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.pharmanetAdministrators.length; else noPharmanetAdministrators">
             <ng-container *ngFor="let pharmanetAdministrator of healthAuthority.pharmanetAdministrators">
               <app-enrollee-property title="PharmaNet Administrator">

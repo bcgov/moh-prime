@@ -39,6 +39,10 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
+  public onRouteRelative(routePath: string | (string | number)[]): void {
+    this.routeUtils.routeRelativeTo(routePath);
+  }
+
   public addOrgInfo() {
     this.routeUtils.routeRelativeTo(
       [AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES],
