@@ -2,11 +2,11 @@
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
-if [ -n $(printenv database-name) ]
+if [ -n $(printenv DB_PASS) ]
 then 
-export PGPASSWORD=$(printenv database-password)
-export POSTGRESQL_USERNAME=$(printenv database-user)
-export POSTGRESQL_DATABASE=$(printenv database-name)
+export PGPASSWORD=$(printenv DB_PASS)
+export POSTGRESQL_USERNAME=$(printenv DB_USER)
+export POSTGRESQL_DATABASE=$(printenv DB_NAME)
 fi
 
 if [ -z "${DB_CONNECTION_STRING}" ]
@@ -68,8 +68,8 @@ function pharmanetVerboseCheck() {
 }
 
 waitForIt localhost:${API_PORT}/api/enrollees 401 2>&1 | logger &
-waitForIt localhost:${API_PORT}/api/lookups 401 2>&1 | logger
+waitForIt localhost:${API_PORT}/api/lookups 200 2>&1 | logger
 
 echo -e "\nThe system is up."
 
-tail -f $logfile
+tail -f prime.logfile.out

@@ -34,6 +34,11 @@ parameters:
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
   required: true
   value: frontend
+- name: VANITY_URL
+  displayName: Vanity URL
+  description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
+  required: true
+  value: vanity
 - name: API_POD
   displayName: API Pod Name
   description: For the .NET API
@@ -49,6 +54,11 @@ parameters:
   description: For other pods to reference it
   required: true
   value: document-manager
+- name: DOCMAN_VOLUME_CAPACITY
+  displayName: Document Manager Persistent Volume Capacity
+  description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
+  required: true
+  value: 5Gi
 - name: DB_POD
   displayName: Database Pod
   description: Postgres database
@@ -73,6 +83,25 @@ parameters:
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
   value: ""
+- description: Maximum amount of memory the container can use.
+  displayName: Postgres Memory Limit
+  name: POSTGRES_MEMORY_LIMIT
+  required: true
+  value: 2Gi
+- description: The OpenShift Namespace where the PostgreSQL ImageStream resides.
+  displayName: PostgreSQL Namespace
+  name: POSTGRES_NAMESPACE
+  value: openshift
+- description: Version of PostgreSQL image to be used (10-el7, 10-el8, or latest).
+  displayName: Version of PostgreSQL Image
+  name: POSTGRESQL_VERSION
+  required: true
+  value: 10-el8
+- description: Volume space available for data, e.g. 512Mi, 2Gi.
+  displayName: Postgres Volume Capacity
+  name: POSTGRESQL_VOLUME_CAPACITY
+  required: true
+  value: 8Gi
 objects:
 ###########################################
 ###               Frontend              ###
@@ -97,13 +126,17 @@ objects:
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 1
+    replicas: 3
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
     strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1 
+        intervalSeconds: 1 
+        timeoutSeconds: 120 
+        maxSurge: "20%" 
+        maxUnavailable: "10%" 
     template:
       metadata:
         labels:
@@ -131,7 +164,7 @@ objects:
                   name: keycloak
             env:
               - name: DOCUMENT_MANAGER_URL
-                value: https://${SVC_NAME}${URL_STUB}/api/docman
+                value: https://${VANITY_URL}/api/docman
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -252,14 +285,14 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-${DB_POD}
+    app: ${SVC_NAME}-postgres
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DB_POD}"}]
+        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
         [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -268,13 +301,17 @@ objects:
       app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 1
+    replicas: 3
     selector:
       name: ${SVC_NAME}-${API_POD}
     strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1 
+        intervalSeconds: 1 
+        timeoutSeconds: 120 
+        maxSurge: "20%" 
+        maxUnavailable: "10%" 
     template:
       metadata:
         labels:
@@ -292,35 +329,34 @@ objects:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
-                value: https://${SVC_NAME}${URL_STUB}/api/docman
+                value: http://${SVC_NAME}-${DOCMAN_POD}:6001
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
-              - name: database-password
+                value: ${SVC_NAME}-postgres
+              - name: OC_APP
+                value: ${OC_APP}
+              - name: FRONTEND_URL
+                value: https://${VANITY_URL}
+              - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: database-name
+              - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
+                    key: database-name
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
                     key: database-user
-              - name: database-user
-                valueFrom:
-                  secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
-              - name: database-password
-                valueFrom:
-                  secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
             ports:
               - containerPort: 1025
@@ -389,7 +425,7 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-${DB_POD}
+    app: ${SVC_NAME}-postgres
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
@@ -433,9 +469,13 @@ objects:
     selector:
       name: ${SVC_NAME}-${DOCMAN_POD}-backend
     strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1 
+        intervalSeconds: 1 
+        timeoutSeconds: 120 
+        maxSurge: "20%" 
+        maxUnavailable: "10%" 
     template:
       metadata:
         labels:
@@ -457,16 +497,16 @@ objects:
               - name: CACHE_REDIS_PORT
                 value: "6379"
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
+                value: ${SVC_NAME}-postgres
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-name
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: DB_PORT
                 valueFrom:
@@ -476,10 +516,10 @@ objects:
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-user
               - name: DOCUMENT_MANAGER_URL
-                value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
+                value: "https://${VANITY_URL}/api/docman/"
               - name: FLASK_ENV
                 valueFrom:
                   configMapKeyRef:
@@ -513,7 +553,7 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
             volumeMounts:
             # Mount Document Manager to PVC
@@ -575,13 +615,7 @@ objects:
       - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
-
+        storage: ${DOCMAN_VOLUME_CAPACITY}
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -636,16 +670,16 @@ objects:
             - name: CACHE_REDIS_PORT
               value: "6379"
             - name: DB_HOST
-              value: ${SVC_NAME}-${DB_POD}
+              value: ${SVC_NAME}-postgres
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
-                  key: database-user
+                  name: ${SVC_NAME}-postgres
+                  key: database-name
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-password
             - name: DB_PORT
               valueFrom:
@@ -655,8 +689,10 @@ objects:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-user
+            - name: DOCUMENT_MANAGER_URL
+              value: "https://${VANITY_URL}/api/docman/"
             - name: FLASK_ENV
               valueFrom:
                 configMapKeyRef:
@@ -682,7 +718,7 @@ objects:
                 configMapKeyRef:
                   name: document-manager
                   key: FLASK_RUN_PORT
-            - name: JWT_WELL_KNOWN_CONFIG
+            - name: JWT_OIDC_WELL_KNOWN_CONFIG
               valueFrom:
                 configMapKeyRef:
                   name: keycloak
@@ -690,7 +726,7 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-password
     triggers:
       - type: ConfigChange
@@ -713,12 +749,12 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-${DB_POD}
+    app: ${SVC_NAME}-postgres
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DB_POD}
+    name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -726,120 +762,131 @@ objects:
   spec:
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DB_POD}
-    strategy: null
+      name: ${SVC_NAME}-postgres
+    strategy:
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1 
+        intervalSeconds: 1 
+        timeoutSeconds: 120 
+        maxSurge: "20%" 
+        maxUnavailable: "10%" 
     template:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DB_POD}
+          name: ${SVC_NAME}-postgres
       spec:
         containers:
           - capabilities: {}
             env:
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
+                value: ${SVC_NAME}-postgres
               # PostgreSQL environment variables
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db                    
+                    name: ${SVC_NAME}-postgres                    
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-name
             image: >-
-              image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
+              image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
             lifecycle:
               preStop:
                 exec:
                   command: ['pg_ctl', 'stop']
             livenessProbe:
-              initialDelaySeconds: 30
-              tcpSocket:
-                port: 5432
+              exec:
+                command:
+                - /usr/libexec/check-container
+                - --live
+              initialDelaySeconds: 120
+              timeoutSeconds: 10
+            readinessProbe:
+              exec:
+                command:
+                - /usr/libexec/check-container
+              initialDelaySeconds: 5
               timeoutSeconds: 1
-            name: ${SVC_NAME}-${DB_POD}
+            name: ${SVC_NAME}-postgres
             ports:
               - containerPort: 5432
                 protocol: TCP
                 name: postgresql
-            resources: {}
+            resources:
+              limits:
+                memory: ${POSTGRES_MEMORY_LIMIT}
             securityContext:
               capabilities: {}
               privileged: false
             terminationMessagePath: /dev/termination-log
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
-                name: ${SVC_NAME}-${DB_POD}-data
-              - mountPath: /var/run/postgresql
-                name: ${SVC_NAME}-${DB_POD}-run
+                name: ${SVC_NAME}-postgres-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-          - name: ${SVC_NAME}-${DB_POD}-data
+          - name: ${SVC_NAME}-postgres-data
             persistentVolumeClaim:
-              claimName: ${SVC_NAME}-${DB_POD}-backend-pvc
-          - name: ${SVC_NAME}-${DB_POD}-run
-            emptyDir: {}
+              claimName: ${SVC_NAME}-postgres-data
   status: {}
 #   PostgreSQL Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-${DB_POD}
+    app: ${SVC_NAME}-postgres
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DB_POD}
+    name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${DB_POD}
+      - name: ${SVC_NAME}-postgres
         nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
     selector:
-      name: ${SVC_NAME}-${DB_POD}
+      name: ${SVC_NAME}-postgres
     sessionAffinity: None
     type: ClusterIP
   status:
     loadBalancer: {}
+
 #   Database Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-${DB_POD}-backend-pvc
+    name: ${SVC_NAME}-postgres-data
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
       - ReadWriteOnce
     resources:
       requests:
-        storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
+        storage: ${POSTGRESQL_VOLUME_CAPACITY}
 
 ###########################################
 ###                Redis                ###
@@ -865,11 +912,13 @@ objects:
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
     strategy:
-      type: Recreate
-      maxSurge: 50%
-      maxUnavailable: 0
-      recreateParams:
-        timeoutSeconds: 600
+      type: Rolling
+      rollingParams:
+        updatePeriodSeconds: 1 
+        intervalSeconds: 1 
+        timeoutSeconds: 120 
+        maxSurge: "20%" 
+        maxUnavailable: "10%" 
       activeDeadlineSeconds: 21600
     template:
       metadata:
@@ -938,6 +987,8 @@ objects:
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
       - name: redis
