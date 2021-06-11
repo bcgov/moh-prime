@@ -5,7 +5,7 @@
     <mat-form-field class="input ml-2">
       <input matInput
              [formControl]="form"
-             (keydown.enter)="onChange()">
+             (keydown.enter)="onChange($event)">
     </mat-form-field>
 
     <span>of <strong>{{ paginator.getNumberOfPages() }}</strong></span>
@@ -15,7 +15,7 @@
             color="primary"
             matTooltip="Go to chosen page"
             [disabled]="disabled"
-            (click)="onChange()">
+            (click)="onChange($event)">
       <mat-icon>search</mat-icon>
     </button>
   </div>
