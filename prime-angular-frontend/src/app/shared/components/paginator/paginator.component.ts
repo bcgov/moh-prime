@@ -21,7 +21,6 @@ export class PaginatorComponent implements AfterContentInit {
    */
   @Input() public hidePaginator: boolean;
   @Output() public changed: EventEmitter<{ pageIndex: number }>;
-
   @ContentChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
   public form: FormControl;

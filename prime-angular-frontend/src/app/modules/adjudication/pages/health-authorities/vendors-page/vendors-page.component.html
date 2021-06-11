@@ -29,23 +29,14 @@
               <app-form-icon-group [show]="vendors.controls.length > 1"
                                    (event)="removeVendor(index)">
                 <mat-form-field class="w-100">
-                  <input #input
-                         matInput
-                         type="text"
-                         placeholder="Vendor"
-                         formControlName="vendor"
-                         [matAutocomplete]="auto"
-                         (focus)="removeNone(input)">
-                  <mat-autocomplete #auto="matAutocomplete"
-                                    autoActiveFirstOption
-                                    [displayWith]="displayWith">
+                  <mat-select placeholder="Vendor"
+                              formControlName="vendor">
+                    <mat-option></mat-option>
                     <mat-option *ngFor="let vendor of filteredVendors | async"
                                 [value]="vendor">
                       {{ vendor.name }}
                     </mat-option>
-                  </mat-autocomplete>
-                  <mat-error>Required</mat-error>
-                  <mat-hint>Choose a vendor</mat-hint>
+                  </mat-select>
                 </mat-form-field>
               </app-form-icon-group>
 

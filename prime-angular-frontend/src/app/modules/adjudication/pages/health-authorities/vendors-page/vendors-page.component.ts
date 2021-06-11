@@ -24,7 +24,6 @@ export class VendorsPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public filteredOptions: BehaviorSubject<Config<number>[]>;
   public filteredVendors: BehaviorSubject<VendorConfig[]>;
 
   private routeUtils: RouteUtils;
@@ -54,7 +53,6 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      console.log(this.vendors.value, this.vendors.value.map(({ vendor }) => vendor.code));
       const vendorCodes: number[] = this.vendors.value.map(({ vendor }) => vendor.code);
       this.healthAuthResource.updateVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
@@ -69,10 +67,6 @@ export class VendorsPageComponent implements OnInit {
 
   public removeVendor(index: number) {
     this.vendors.removeAt(index);
-  }
-
-  public removeNone(input: HTMLInputElement) {
-    // TODO likely not needed
   }
 
   public onBack() {
@@ -95,6 +89,11 @@ export class VendorsPageComponent implements OnInit {
   }
 
   private initForm() {
+    this.form.valueChanges
+      .subscribe(({ vendors }: { vendors: { vendor: string }[] }) =>
+        this.filteredVendors.next(this.filterVendors(vendors.map(ct => ct.vendor)))
+      );
+
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendorCodes }: HealthAuthority) =>
         (vendorCodes?.length)
@@ -107,6 +106,10 @@ export class VendorsPageComponent implements OnInit {
 
   private nextRouteAfterSubmit() {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER);
+  }
+
+  private filterVendors(vendors: string[]) {
+    return this.configService.vendors.filter(v => !vendors.includes(v.name));
   }
 
   private routeTo(routeSegment?: string) {

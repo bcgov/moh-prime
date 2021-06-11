@@ -34,8 +34,7 @@
                          type="text"
                          placeholder="Care Type"
                          formControlName="careType"
-                         [matAutocomplete]="auto"
-                         (focus)="removeNone(input)">
+                         [matAutocomplete]="auto">
                   <mat-autocomplete #auto="matAutocomplete"
                                     autoActiveFirstOption>
                     <mat-option *ngFor="let careType of filteredCareTypes | async"

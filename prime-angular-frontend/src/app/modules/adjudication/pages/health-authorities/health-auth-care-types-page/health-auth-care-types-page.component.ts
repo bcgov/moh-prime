@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
@@ -54,7 +55,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const careTypes: string[] = this.careTypes.value.map(({ careType }) => careType);
+      const careTypes: string[] = this.careTypes.value.map(({ careType }) => careType.trim());
       this.healthAuthResource.updateCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
@@ -68,10 +69,6 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public removeCareType(index: number) {
     this.careTypes.removeAt(index);
-  }
-
-  public removeNone(input: HTMLInputElement) {
-    // TODO likely not needed
   }
 
   public onBack() {
@@ -90,6 +87,11 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   }
 
   private initForm() {
+    this.form.valueChanges
+      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) =>
+        this.filteredCareTypes.next(this.filterCareTypes(careTypes.map(ct => ct.careType)))
+      );
+
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
         (careTypes?.length)
@@ -100,6 +102,10 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private nextRouteAfterSubmit() {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_VENDORS);
+  }
+
+  private filterCareTypes(careTypes: string[]) {
+    return this.configService.careTypes.filter(ct => !careTypes.includes(ct.name));
   }
 
   private routeTo(routeSegment?: string) {
