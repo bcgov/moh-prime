@@ -79,8 +79,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  public onSearch(search: string | null): void {
-    this.routeUtils.updateQueryParams({ search });
+  public onSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch });
   }
 
   public onFilter(status: any | null): void {
