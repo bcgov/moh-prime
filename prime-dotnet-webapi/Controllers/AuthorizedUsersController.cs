@@ -55,7 +55,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResult(authorizedUser);
+            return Ok(authorizedUser);
         }
 
         // GET: api/parties/authorized-users/5
@@ -80,7 +80,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResult(authorizedUser);
+            return Ok(authorizedUser);
         }
 
         // POST: api/parties/authorized-users
@@ -113,7 +113,7 @@ namespace Prime.Controllers
 
             var createdAuthorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(createdAuthorizedUserId);
 
-            return CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(GetAuthorizedUserById),
                 new { authorizedUserId = createdAuthorizedUserId },
                 createdAuthorizedUser

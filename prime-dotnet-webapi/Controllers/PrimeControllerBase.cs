@@ -14,7 +14,7 @@ namespace Prime.Controllers
         /// <param name="actionName"></param>
         /// <param name="routeValues"></param>
         /// <param name="value"></param>
-        public CreatedAtActionResult CreatedAtActionResult<T>(string actionName, object routeValues, [ActionResultObjectValue] T value)
+        public CreatedAtActionResult CreatedAtAction<T>(string actionName, object routeValues, [ActionResultObjectValue] T value)
         {
             return base.CreatedAtAction(actionName, routeValues, ApiResponse.Result(value));
         }
@@ -40,7 +40,7 @@ namespace Prime.Controllers
         /// Sends a StatusCodes.200OK response with an ApiResultResponse body wrapping the value.
         /// </summary>
         /// <param name="value"></param>
-        public OkObjectResult OkResult<T>([ActionResultObjectValue] T value)
+        public OkObjectResult Ok<T>([ActionResultObjectValue] T value)
         {
             return base.Ok(ApiResponse.Result(value));
         }

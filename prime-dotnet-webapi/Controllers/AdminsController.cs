@@ -51,12 +51,12 @@ namespace Prime.Controllers
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.UserIdExistsAsync(admin.UserId))
             {
-                return OkResult(admin);
+                return Ok(admin);
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
 
-            return CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(GetAdminById),
                 new { adminId = createdAdminId },
                 admin
@@ -74,7 +74,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
             var admins = await _adminService.GetAdminsAsync();
-            return OkResult(admins);
+            return Ok(admins);
         }
 
 
@@ -96,7 +96,7 @@ namespace Prime.Controllers
                 return NotFound($"Admin not found with id {adminId}");
             }
 
-            return OkResult(admin);
+            return Ok(admin);
         }
 
         // GET: api/Admins/embedded-metabase-url
@@ -111,7 +111,7 @@ namespace Prime.Controllers
         {
             var token = _metabaseService.BuildMetabaseEmbeddedString();
 
-            return OkResult(token);
+            return Ok(token);
         }
     }
 }

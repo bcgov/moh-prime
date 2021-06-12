@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return OkResult(agreements);
+            return Ok(agreements);
         }
 
         // GET: api/Enrollees/5/cards
@@ -122,7 +122,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return OkResult(enrolmentCards);
+            return Ok(enrolmentCards);
         }
 
         // GET: api/Enrollees/5/agreements/2
@@ -160,7 +160,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
 
-            return OkResult(agreement);
+            return Ok(agreement);
         }
 
         // GET: api/Enrollees/5/agreements/3/submission
@@ -204,7 +204,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
 
-            return OkResult(enrolleeSubmission);
+            return Ok(enrolleeSubmission);
         }
 
         // GET: api/Enrollees/5/agreements/2/signable
@@ -241,7 +241,7 @@ namespace Prime.Controllers
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Pdf, agreement);
             var download = _pdfService.Generate(html);
 
-            return OkResult(download);
+            return Ok(download);
         }
     }
 }

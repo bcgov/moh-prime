@@ -49,7 +49,7 @@ namespace Prime.Controllers
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
 
-            return CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(GetGisEnrolmentById),
                 new { gisId = createdGisId },
                 gisEnrolment
@@ -120,7 +120,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResult(gisEnrolment);
+            return Ok(gisEnrolment);
         }
 
         // GET: api/parties/gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -147,7 +147,7 @@ namespace Prime.Controllers
                 return NotFound($"Gis Enrolment not found for logged in user");
             }
 
-            return OkResult(gisEnrolment);
+            return Ok(gisEnrolment);
         }
 
         // POST: api/parties/gis/5/ldap/login
@@ -207,7 +207,7 @@ namespace Prime.Controllers
             await _gisService.SubmitApplicationAsync(gisId);
 
             gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
-            return OkResult(gisEnrolment);
+            return Ok(gisEnrolment);
         }
     }
 }

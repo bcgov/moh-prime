@@ -51,7 +51,7 @@ namespace Prime.Controllers
                 return NotFound($"Signing authority not found with id {userId}");
             }
 
-            return OkResult(signingAuthority);
+            return Ok(signingAuthority);
         }
 
         // GET: api/SigningAuthority/5
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return NotFound($"Signing authority not found with id {partyId}");
             }
 
-            return OkResult(signingAuthority);
+            return Ok(signingAuthority);
         }
 
         // POST: api/SigningAuthority
@@ -96,7 +96,7 @@ namespace Prime.Controllers
             var createdSigningAuthorityId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, User);
             var createdSigningAuthority = await _partyService.GetPartyAsync(createdSigningAuthorityId);
 
-            return CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(GetSigningAuthorityById),
                 new { partyId = createdSigningAuthorityId },
                 createdSigningAuthority
@@ -153,7 +153,7 @@ namespace Prime.Controllers
                 ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
                 : Enumerable.Empty<OrganizationListViewModel>();
 
-            return OkResult(organizations);
+            return Ok(organizations);
         }
     }
 }

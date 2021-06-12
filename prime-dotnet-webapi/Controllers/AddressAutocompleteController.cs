@@ -42,7 +42,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Find(searchTerm, lastId);
-            return OkResult(result);
+            return Ok(result);
         }
 
         // GET: api/AddressAutocomplete/retrieve
@@ -62,7 +62,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Retrieve(id);
-            return OkResult(result);
+            return Ok(result);
         }
     }
 }

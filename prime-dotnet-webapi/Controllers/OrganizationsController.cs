@@ -60,7 +60,7 @@ namespace Prime.Controllers
                 site.HasNotification = notifiedIds.Contains(site.Id);
             }
 
-            return OkResult(organizations);
+            return Ok(organizations);
         }
 
         // GET: api/Organizations/5
@@ -83,7 +83,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResult(organization);
+            return Ok(organization);
         }
 
         // POST: api/Organizations
@@ -106,7 +106,7 @@ namespace Prime.Controllers
             var createdOrganizationId = await _organizationService.CreateOrganizationAsync(createOrganization.PartyId);
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 
-            return CreatedAtActionResult(
+            return CreatedAtAction(
                 nameof(GetOrganizationById),
                 new { organizationId = createdOrganizationId },
                 createdOrganization
@@ -191,7 +191,7 @@ namespace Prime.Controllers
 
             await _organizationService.DeleteOrganizationAsync(organizationId);
 
-            return OkResult(organization);
+            return Ok(organization);
         }
 
         // GET: api/Organizations/5/agreements
@@ -208,7 +208,7 @@ namespace Prime.Controllers
         {
             var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
 
-            return OkResult(agreements);
+            return Ok(agreements);
         }
 
         // POST: api/Organizations/5/agreements/update
@@ -248,7 +248,7 @@ namespace Prime.Controllers
             }
             else
             {
-                return CreatedAtActionResult(
+                return CreatedAtAction(
                     nameof(GetOrganizationAgreement),
                     new { organizationId, agreementId = agreement.Id },
                     agreement
@@ -283,7 +283,7 @@ namespace Prime.Controllers
                 return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
             }
 
-            return OkResult(agreement);
+            return Ok(agreement);
         }
 
         // GET: api/Organizations/5/agreements/7/signable
@@ -313,7 +313,7 @@ namespace Prime.Controllers
 
             var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
 
-            return OkResult(pdf);
+            return Ok(pdf);
         }
 
         // PUT: api/Organizations/5/agreements/7
@@ -385,7 +385,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreementId);
 
-            return OkResult(token);
+            return Ok(token);
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Prime.Controllers
         {
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
-            return OkResult(lookupEntity);
+            return Ok(lookupEntity);
         }
 
         // POST /api/lookups/validate-licence
@@ -49,7 +49,7 @@ namespace Prime.Controllers
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
-            return OkResult(record);
+            return Ok(record);
         }
     }
 }

@@ -77,7 +77,7 @@ namespace Prime.Controllers
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return OkResult(enrollee);
+            return Ok(enrollee);
         }
 
         // POST: api/enrollees/5/submission/approve
@@ -238,7 +238,7 @@ namespace Prime.Controllers
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return OkResult(enrollee);
+            return Ok(enrollee);
         }
 
         // PUT: api/Enrollees/5/submissions/latest/type
@@ -284,7 +284,7 @@ namespace Prime.Controllers
 
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            return OkResult(updatedEnrollee);
+            return Ok(updatedEnrollee);
         }
 
         // PUT: api/enrollees/5/always-manual
