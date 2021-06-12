@@ -106,10 +106,10 @@ namespace Prime.Controllers
             var createdOrganizationId = await _organizationService.CreateOrganizationAsync(createOrganization.PartyId);
             var createdOrganization = await _organizationService.GetOrganizationAsync(createdOrganizationId);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetOrganizationById),
                 new { organizationId = createdOrganizationId },
-                ApiResponse.Result(createdOrganization)
+                createdOrganization
             );
         }
 
@@ -129,7 +129,7 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             // TODO: fix
@@ -155,7 +155,7 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             // TODO: fix
@@ -182,7 +182,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -229,7 +229,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -239,7 +239,7 @@ namespace Prime.Controllers
             var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, siteId);
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Site with ID {siteId} not found on Organization {organizationId}"));
+                return NotFound($"Site with ID {siteId} not found on Organization {organizationId}");
             }
 
             if (agreement.AcceptedDate.HasValue)
@@ -248,10 +248,10 @@ namespace Prime.Controllers
             }
             else
             {
-                return CreatedAtAction(
+                return CreatedAtActionResult(
                     nameof(GetOrganizationAgreement),
                     new { organizationId, agreementId = agreement.Id },
-                    ApiResponse.Result(agreement)
+                    agreement
                 );
             }
         }
@@ -274,13 +274,13 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             var agreement = await _agreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+                return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
             }
 
             return OkResult(agreement);
@@ -303,7 +303,7 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             if (agreementType.IsEnrolleeAgreement())
@@ -334,7 +334,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -372,7 +372,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -380,7 +380,7 @@ namespace Prime.Controllers
             }
             if (!organization.Agreements.Any(a => a.Id == agreementId))
             {
-                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+                return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
             }
 
             var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreementId);

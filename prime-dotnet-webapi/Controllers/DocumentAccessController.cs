@@ -69,7 +69,7 @@ namespace Prime.Controllers
 
             if (documentAccessToken == null)
             {
-                return NotFound(ApiResponse.Message($"No valid Document Access Token was found with id {accessTokenId}"));
+                return NotFound($"No valid Document Access Token was found with id {accessTokenId}");
             }
 
             await _documentAccessTokenService.DeleteDocumentAccessTokenAsync(accessTokenId);

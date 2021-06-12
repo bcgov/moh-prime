@@ -49,7 +49,7 @@ namespace Prime.Controllers
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
             if (certificate == null)
             {
-                return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
+                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
             }
 
             return OkResult(certificate);
@@ -114,10 +114,10 @@ namespace Prime.Controllers
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetEnrolmentCertificate),
                 new { accessTokenId = createdToken.Id },
-                ApiResponse.Result(createdToken)
+                createdToken
             );
         }
 
@@ -174,7 +174,7 @@ namespace Prime.Controllers
 
             if (response == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
+                return NotFound($"Enrollee not found with GPID {gpid}");
             }
 
             return OkResult(response);

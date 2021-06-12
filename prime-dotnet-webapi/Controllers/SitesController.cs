@@ -59,7 +59,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             var sites = await _siteService.GetSitesAsync(organizationId);
@@ -89,7 +89,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -114,17 +114,17 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetSiteById),
                 new { siteId = createdSiteId },
-                ApiResponse.Result(createdSite)
+                createdSite
             );
         }
 
@@ -144,7 +144,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -172,7 +172,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -200,7 +200,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -231,7 +231,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+                return NotFound($"Site not found with id {siteId}.");
             }
 
             Admin admin = (adjudicatorId.HasValue)
@@ -240,7 +240,7 @@ namespace Prime.Controllers
 
             if (admin == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+                return NotFound($"Admin not found with id {adjudicatorId.Value}.");
             }
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin.Id);
@@ -267,7 +267,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+                return NotFound($"Site not found with id {siteId}.");
             }
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
@@ -292,7 +292,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -318,7 +318,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -351,7 +351,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -390,7 +390,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -424,11 +424,11 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (site.BusinessLicence == null)
             {
-                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+                return NotFound($"Business Licence not found on site with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -477,11 +477,11 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (site.BusinessLicence == null)
             {
-                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+                return NotFound($"Business Licence not found on site with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -511,7 +511,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -540,7 +540,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
@@ -570,7 +570,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var documents = await _siteService.GetSiteAdjudicationDocumentsAsync(site.Id);
@@ -595,7 +595,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var token = await _documentService.GetDownloadTokenForSiteAdjudicationDocument(documentId);
@@ -626,7 +626,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -654,7 +654,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -662,7 +662,7 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence?.BusinessLicenceDocument == null)
             {
-                return NotFound(ApiResponse.Message($"No business licence document found for site with id {siteId}"));
+                return NotFound($"No business licence document found for site with id {siteId}");
             }
 
             var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId);
@@ -686,7 +686,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             await _emailService.SendRemoteUsersUpdatedAsync(site);
@@ -710,7 +710,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -741,7 +741,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -769,7 +769,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
@@ -796,7 +796,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var updatedSite = await _siteService.DeclineSite(siteId);
@@ -819,7 +819,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var updatedSite = await _siteService.EnableEditingSite(siteId);
@@ -844,7 +844,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (string.IsNullOrWhiteSpace(note))
             {
@@ -875,7 +875,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(site);
@@ -915,7 +915,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
@@ -939,7 +939,7 @@ namespace Prime.Controllers
             var document = await _siteService.GetSiteAdjudicationDocumentAsync(documentId);
             if (document == null)
             {
-                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+                return NotFound($"Document not found with id {documentId}");
             }
 
             await _siteService.DeleteSiteAdjudicationDocumentAsync(documentId);
@@ -965,12 +965,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null)
             {
-                return NotFound(ApiResponse.Message($"Site Registration Note not found with id {siteRegistrationNoteId}"));
+                return NotFound($"Site Registration Note not found with id {siteRegistrationNoteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -996,12 +996,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null || note.SiteNotification == null)
             {
-                return NotFound(ApiResponse.Message($"Site Registration Note with notification not found with id {siteRegistrationNoteId}"));
+                return NotFound($"Site Registration Note with notification not found with id {siteRegistrationNoteId}");
             }
 
             await _siteService.RemoveSiteNotificationAsync(note.SiteNotification.Id);
@@ -1025,7 +1025,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -1051,7 +1051,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             await _siteService.RemoveNotificationsAsync(siteId);

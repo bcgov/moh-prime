@@ -59,7 +59,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -92,7 +92,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -142,7 +142,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -152,7 +152,7 @@ namespace Prime.Controllers
             var agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
+                return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
             }
 
             if (User.IsAdministrant())
@@ -180,7 +180,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -190,13 +190,13 @@ namespace Prime.Controllers
             Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
             if (agreement == null || agreement.AcceptedDate == null)
             {
-                return NotFound(ApiResponse.Message($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}"));
+                return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
             }
 
             var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
             if (enrolleeSubmission == null)
             {
-                return NotFound(ApiResponse.Message($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
+                return NotFound($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}.");
             }
 
             if (User.IsAdministrant())
@@ -224,7 +224,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -235,7 +235,7 @@ namespace Prime.Controllers
 
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
+                return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
             }
 
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Pdf, agreement);

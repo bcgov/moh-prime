@@ -53,7 +53,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -223,7 +223,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -257,14 +257,14 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var assignedToaType = (agreementType == 0) ? null : (AgreementType?)agreementType;
 
             if (assignedToaType.HasValue && !Enum.IsDefined(typeof(AgreementType), agreementType))
             {
-                return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
+                return NotFound($"Agreement type not found with id {agreementType}.");
             }
 
             if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
@@ -341,7 +341,7 @@ namespace Prime.Controllers
             var enrolleeExists = await _enrolleeService.EnrolleeExistsAsync(enrolleeId);
             if (!enrolleeExists)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             // TODO business event

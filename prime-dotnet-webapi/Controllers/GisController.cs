@@ -49,10 +49,10 @@ namespace Prime.Controllers
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetGisEnrolmentById),
                 new { gisId = createdGisId },
-                ApiResponse.Result(gisEnrolment)
+                gisEnrolment
             );
         }
 
@@ -79,7 +79,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+                return NotFound($"Gis Enrolment not found with id {gisId}");
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -113,7 +113,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+                return NotFound($"Gis Enrolment not found with id {gisId}");
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -144,7 +144,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(userId);
             if (gisEnrolment == null)
             {
-                return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
+                return NotFound($"Gis Enrolment not found for logged in user");
             }
 
             return OkResult(gisEnrolment);
@@ -165,7 +165,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+                return NotFound($"Gis Enrolment not found with id {gisId}");
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -197,7 +197,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
+                return NotFound($"Gis Enrolment not found with id {gisId}");
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {

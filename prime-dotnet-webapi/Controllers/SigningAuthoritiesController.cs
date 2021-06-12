@@ -48,7 +48,7 @@ namespace Prime.Controllers
             var signingAuthority = await _partyService.GetPartyForUserIdAsync(userId, PartyType.SigningAuthority);
             if (signingAuthority == null)
             {
-                return NotFound(ApiResponse.Message($"Signing authority not found with id {userId}"));
+                return NotFound($"Signing authority not found with id {userId}");
             }
 
             return OkResult(signingAuthority);
@@ -70,7 +70,7 @@ namespace Prime.Controllers
             var signingAuthority = await _partyService.GetPartyAsync(partyId, PartyType.SigningAuthority);
             if (signingAuthority == null)
             {
-                return NotFound(ApiResponse.Message($"Signing authority not found with id {partyId}"));
+                return NotFound($"Signing authority not found with id {partyId}");
             }
 
             return OkResult(signingAuthority);
@@ -96,10 +96,10 @@ namespace Prime.Controllers
             var createdSigningAuthorityId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, User);
             var createdSigningAuthority = await _partyService.GetPartyAsync(createdSigningAuthorityId);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetSigningAuthorityById),
                 new { partyId = createdSigningAuthorityId },
-                ApiResponse.Result(createdSigningAuthority)
+                createdSigningAuthority
             );
         }
 
@@ -119,7 +119,7 @@ namespace Prime.Controllers
         {
             if (!await _partyService.PartyExistsAsync(partyId, PartyType.SigningAuthority))
             {
-                return NotFound(ApiResponse.Message($"SigningAuthority not found with id {partyId}"));
+                return NotFound($"SigningAuthority not found with id {partyId}");
             }
 
             await _partyService.CreateOrUpdatePartyAsync(updatedSigningAuthority, User);
@@ -145,7 +145,7 @@ namespace Prime.Controllers
 
             if (!await _partyService.PartyExistsForUserIdAsync(userId, PartyType.SigningAuthority))
             {
-                return NotFound(ApiResponse.Message($"SigningAuthority not found with user id {userId}"));
+                return NotFound($"SigningAuthority not found with user id {userId}");
             }
 
             var party = await _partyService.GetPartyForUserIdAsync(User.GetPrimeUserId());

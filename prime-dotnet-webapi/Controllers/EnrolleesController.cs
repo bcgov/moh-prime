@@ -96,7 +96,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdministrant());
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -170,10 +170,10 @@ namespace Prime.Controllers
                 await _enrolleeService.CreateIdentificationDocument(enrollee.Id, payload.IdentificationDocumentGuid.Value, filename);
             }
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetEnrolleeById),
                 new { enrolleeId = createdEnrolleeId },
-                ApiResponse.Result(enrollee)
+                enrollee
             );
         }
 
@@ -202,7 +202,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -246,7 +246,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
@@ -270,7 +270,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -298,7 +298,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
@@ -323,7 +323,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (string.IsNullOrWhiteSpace(note))
             {
@@ -341,10 +341,10 @@ namespace Prime.Controllers
                 await _enrolleeService.AddAdjudicatorNoteToReferenceIdAsync(enrollee.CurrentStatus.Id, createdAdjudicatorNote.Id);
             }
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(CreateAdjudicatorNote),
                 new { enrolleeId },
-                ApiResponse.Result(createdAdjudicatorNote)
+                createdAdjudicatorNote
             );
         }
 
@@ -364,17 +364,17 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var createdEnrolmentStatusReference = await _enrolleeService.CreateEnrolmentStatusReferenceAsync(enrollee.CurrentStatus.Id, admin.Id);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(CreateEnrolmentReference),
                 new { enrolleeId },
-                ApiResponse.Result(createdEnrolmentStatusReference)
+                createdEnrolmentStatusReference
             );
         }
 
@@ -397,7 +397,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             if (accessAgreementNote.EnrolleeId != 0 && enrolleeId != accessAgreementNote.EnrolleeId)
@@ -434,13 +434,13 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             var idir = await _adminService.GetAdminIdirAsync(adjudicatorId);
             if (idir == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
+                return NotFound($"Admin not found with id {adjudicatorId}.");
             }
 
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
@@ -464,7 +464,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId);
@@ -492,7 +492,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, businessEventTypeCodes);
@@ -518,7 +518,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -544,7 +544,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -573,7 +573,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -602,7 +602,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -632,7 +632,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -660,7 +660,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
@@ -689,7 +689,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
@@ -714,7 +714,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
@@ -738,7 +738,7 @@ namespace Prime.Controllers
             var document = await _enrolleeService.GetEnrolleeAdjudicationDocumentAsync(documentId);
             if (document == null)
             {
-                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+                return NotFound($"Document not found with id {documentId}");
             }
 
             await _enrolleeService.DeleteEnrolleeAdjudicationDocumentAsync(documentId);
@@ -762,7 +762,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
@@ -787,12 +787,12 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
             if (note == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+                return NotFound($"Enrollee note not found with id {adjudicatorNoteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -817,12 +817,12 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
             if (note == null || note.EnrolleeNotification == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee note with notification not found with id {adjudicatorNoteId}"));
+                return NotFound($"Enrollee note with notification not found with id {adjudicatorNoteId}");
             }
 
             await _enrolleeService.RemoveEnrolleeNotificationAsync(note.EnrolleeNotification.Id);
@@ -845,7 +845,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -870,7 +870,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             await _enrolleeService.RemoveNotificationsAsync(enrolleeId);

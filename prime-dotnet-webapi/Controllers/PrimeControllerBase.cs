@@ -9,6 +9,26 @@ namespace Prime.Controllers
     public class PrimeControllerBase : ControllerBase
     {
         /// <summary>
+        /// Sends a StatusCodes.Status201Created response with an ApiResultResponse body wrapping the value.
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="routeValues"></param>
+        /// <param name="value"></param>
+        public CreatedAtActionResult CreatedAtActionResult<T>(string actionName, object routeValues, [ActionResultObjectValue] T value)
+        {
+            return base.CreatedAtAction(actionName, routeValues, ApiResponse.Result(value));
+        }
+
+        /// <summary>
+        /// Sends a StatusCodes.404NotFound response with an ApiMessageResponse body.
+        /// </summary>
+        /// <param name="message"></param>
+        public NotFoundObjectResult NotFound(string message)
+        {
+            return base.NotFound(ApiResponse.Message(message));
+        }
+
+        /// <summary>
         /// The default ControllerBase.Ok(value) method. Please use OkResult(value) instead.
         /// </summary>
         public override OkObjectResult Ok([ActionResultObjectValue] object value)
@@ -17,7 +37,7 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Wraps the value in an ApiResultResponse object and returns a 200OK.
+        /// Sends a StatusCodes.200OK response with an ApiResultResponse body wrapping the value.
         /// </summary>
         /// <param name="value"></param>
         public OkObjectResult OkResult<T>([ActionResultObjectValue] T value)

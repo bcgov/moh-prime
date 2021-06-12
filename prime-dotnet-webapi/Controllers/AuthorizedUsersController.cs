@@ -48,7 +48,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {userId}"));
+                return NotFound($"Authorized user not found with id {userId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
@@ -73,7 +73,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
@@ -113,10 +113,10 @@ namespace Prime.Controllers
 
             var createdAuthorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(createdAuthorizedUserId);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetAuthorizedUserById),
                 new { authorizedUserId = createdAuthorizedUserId },
-                ApiResponse.Result(createdAuthorizedUser)
+                createdAuthorizedUser
             );
         }
 
@@ -147,7 +147,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
             }
 
             var updatedAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
@@ -175,7 +175,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
@@ -212,7 +212,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {

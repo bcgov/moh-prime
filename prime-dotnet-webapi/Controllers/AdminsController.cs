@@ -56,10 +56,10 @@ namespace Prime.Controllers
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
 
-            return CreatedAtAction(
+            return CreatedAtActionResult(
                 nameof(GetAdminById),
                 new { adminId = createdAdminId },
-                ApiResponse.Result(admin)
+                admin
             );
         }
 
@@ -93,7 +93,7 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(adminId);
             if (admin == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adminId}"));
+                return NotFound($"Admin not found with id {adminId}");
             }
 
             return OkResult(admin);
