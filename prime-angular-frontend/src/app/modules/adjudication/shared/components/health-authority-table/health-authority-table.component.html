@@ -13,22 +13,13 @@
         <td mat-cell
             *matCellDef="let row;"
             class="prefix">
-          <button *ngIf="flaggedHealthAuthorities?.includes(row.code)"
+          <button *ngIf="flaggedHealthAuthorities?.includes(row.id)"
                   mat-icon-button
                   title="View Pending Authorized Users"
-                  (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
+                  (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
             <mat-icon class="red-icon">admin_panel_settings</mat-icon>
           </button>
         </td>
-      </ng-container>
-
-      <ng-container matColumnDef="referenceId">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Reference ID
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.code }} </td>
       </ng-container>
 
       <ng-container matColumnDef="orgName">

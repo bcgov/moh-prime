@@ -31,11 +31,11 @@ export class HealthAuthorityResource {
     private capitalizePipe: CapitalizePipe
   ) { }
 
-  public getHealthAuthorities() {
-    return this.apiResource.get<HealthAuthorityList>(`health-authorities`)
+  public getHealthAuthorities(): Observable<HealthAuthorityList[]> {
+    return this.apiResource.get<HealthAuthorityList[]>(`health-authorities`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthorityList>) => response.result),
-        tap((healthAuthorities: HealthAuthorityList) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
+        map((response: ApiHttpResponse<HealthAuthorityList[]>) => response.result),
+        tap((healthAuthorities: HealthAuthorityList[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authorities could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorities error has occurred: ', error);
@@ -44,7 +44,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthorityById(healthAuthorityId) {
+  public getHealthAuthorityById(healthAuthorityId): Observable<HealthAuthority> {
     return this.apiResource.get<HealthAuthority>(`health-authorities/${healthAuthorityId}`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthority>) => response.result),
@@ -228,19 +228,6 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Authorized users could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getAuthorizedUsersByHealthAuthority error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getHealthAuthorityCodesWithUnderReviewUsers(): Observable<HealthAuthorityEnum[]> {
-    return this.apiResource.get<HealthAuthorityEnum[]>(`health-authorities/under-review`)
-      .pipe(
-        map((response: ApiHttpResponse<HealthAuthorityEnum[]>) => response.result),
-        tap((codes: HealthAuthorityEnum[]) => this.logger.info('HEALTH_AUTHORITY_CODES', codes)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health Authority Codes could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCodesWithUnderReviewUsers error has occurred: ', error);
           throw error;
         })
       );
