@@ -73,10 +73,6 @@ export class VendorsPageComponent implements OnInit {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES);
   }
 
-  public displayWith(vendor: VendorConfig): string {
-    return (vendor) ? vendor.name : '';
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();

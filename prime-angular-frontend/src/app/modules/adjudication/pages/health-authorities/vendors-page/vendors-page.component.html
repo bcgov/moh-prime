@@ -21,10 +21,10 @@
         <div class="col col-sm-10 py-3"
              formArrayName="vendors">
 
-          <ng-container *ngFor="let vendor of vendors.controls; let index = index;"
+          <ng-container *ngFor="let vendor of vendors.controls; let index = index; let last = last;"
                         [formGroupName]="index">
 
-            <div class="mb-3">
+            <div [class.mb-3]="!last">
 
               <app-form-icon-group [show]="vendors.controls.length > 1"
                                    (event)="removeVendor(index)">
