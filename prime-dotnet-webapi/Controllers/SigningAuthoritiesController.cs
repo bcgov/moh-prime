@@ -51,7 +51,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {userId}"));
             }
 
-            return OkResponse(signingAuthority);
+            return OkResult(signingAuthority);
         }
 
         // GET: api/SigningAuthority/5
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {partyId}"));
             }
 
-            return OkResponse(signingAuthority);
+            return OkResult(signingAuthority);
         }
 
         // POST: api/SigningAuthority
@@ -153,7 +153,7 @@ namespace Prime.Controllers
                 ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
                 : Enumerable.Empty<OrganizationListViewModel>();
 
-            return OkResponse(organizations);
+            return OkResult(organizations);
         }
     }
 }

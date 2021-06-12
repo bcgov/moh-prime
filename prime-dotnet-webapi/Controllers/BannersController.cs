@@ -37,7 +37,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> SetEnrolleeLandingBanner(BannerViewModel viewModel)
         {
             var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.EnrolmentLandingPage, viewModel);
-            return OkResponse(updatedBanner);
+            return OkResult(updatedBanner);
         }
 
         // PUT: api/banners/site-landing
@@ -53,7 +53,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> SetSiteLandingBanner(BannerViewModel viewModel)
         {
             var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage, viewModel);
-            return OkResponse(updatedBanner);
+            return OkResult(updatedBanner);
         }
 
         // GET: api/banners/enrolment-landing
@@ -68,7 +68,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEnrolleeLandingBanner()
         {
             var banner = await _bannerService.GetBannerAsync(BannerLocationCode.EnrolmentLandingPage);
-            return OkResponse(banner);
+            return OkResult(banner);
         }
 
         // GET: api/banners/site-landing
@@ -83,7 +83,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetSiteLandingBanner()
         {
             var banner = await _bannerService.GetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage);
-            return OkResponse(banner);
+            return OkResult(banner);
         }
 
         // DELETE: api/banners/enrolment-landing
@@ -128,7 +128,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetActiveBannerByLocationCode([FromQuery] BannerLocationCode locationCode)
         {
             var banner = await _bannerService.GetActiveBannerAsync(locationCode, DateTime.UtcNow);
-            return OkResponse(banner);
+            return OkResult(banner);
         }
     }
 }

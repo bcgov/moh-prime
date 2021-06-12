@@ -56,12 +56,12 @@ namespace Prime.Controllers
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
                 var result = enrollees.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
-                return OkResponse(result);
+                return OkResult(result);
             }
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                return OkResponse(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee });
+                return OkResult(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee });
             }
         }
 
@@ -77,7 +77,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAdjacentEnrolleeId(int enrolleeId)
         {
             var result = await _enrolleeService.GetAdjacentEnrolleeIdAsync(enrolleeId);
-            return OkResponse(result);
+            return OkResult(result);
         }
 
         // GET: api/Enrollees/5
@@ -108,7 +108,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
             }
 
-            return OkResponse(enrollee);
+            return OkResult(enrollee);
         }
 
         // POST: api/Enrollees
@@ -251,7 +251,7 @@ namespace Prime.Controllers
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
-            return OkResponse(enrollee);
+            return OkResult(enrollee);
         }
 
         // GET: api/Enrollees/5/statuses
@@ -279,7 +279,7 @@ namespace Prime.Controllers
 
             var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
 
-            return OkResponse(enrollees);
+            return OkResult(enrollees);
         }
 
         // GET: api/Enrollees/5/adjudicator-notes
@@ -303,7 +303,7 @@ namespace Prime.Controllers
 
             var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
 
-            return OkResponse(adjudicationNotes);
+            return OkResult(adjudicationNotes);
         }
 
         // POST: api/Enrollees/5/adjudicator-notes
@@ -415,7 +415,7 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, admin.Id, accessAgreementNote);
 
-            return OkResponse(updatedNote);
+            return OkResult(updatedNote);
         }
 
         // PUT: api/Enrollees/5/adjudicator?adjudicatorId=1
@@ -446,7 +446,7 @@ namespace Prime.Controllers
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
-            return OkResponse(idir);
+            return OkResult(idir);
         }
 
         // DELETE: api/Enrollees/5/adjudicator
@@ -497,7 +497,7 @@ namespace Prime.Controllers
 
             var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, businessEventTypeCodes);
 
-            return OkResponse(events);
+            return OkResult(events);
         }
 
         // POST: api/Enrollees/5/reminder
@@ -582,7 +582,7 @@ namespace Prime.Controllers
 
             var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationDocument);
 
-            return OkResponse(sdd);
+            return OkResult(sdd);
         }
 
         // GET: api/Enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
@@ -611,7 +611,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForSelfDeclarationDocument(selfDeclarationDocumentId);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
 
         // GET: api/Enrollees/{enrolleeId}/identification-document/{identificationDocumentId}
@@ -641,7 +641,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForIdentificationDocument(identificationDocumentId);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
 
         // POST: api/enrollees/5/adjudication-documents
@@ -671,7 +671,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            return OkResponse(document);
+            return OkResult(document);
         }
 
         // GET: api/enrollees/5/adjudication-documents
@@ -694,7 +694,7 @@ namespace Prime.Controllers
 
             var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
 
-            return OkResponse(documents);
+            return OkResult(documents);
         }
 
         // GET: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
@@ -719,7 +719,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
 
         // DELETE: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
@@ -743,7 +743,7 @@ namespace Prime.Controllers
 
             await _enrolleeService.DeleteEnrolleeAdjudicationDocumentAsync(documentId);
 
-            return OkResponse(document);
+            return OkResult(document);
         }
 
         // GET: api/Enrollees/{enrolleeId}/current-status
@@ -767,7 +767,7 @@ namespace Prime.Controllers
 
             var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
 
-            return OkResponse(status);
+            return OkResult(status);
         }
 
         // POST: api/Enrollees/5/adjudicator-notes/6/notification
@@ -798,7 +798,7 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var notification = await _enrolleeService.CreateEnrolleeNotificationAsync(note.Id, admin.Id, assigneeId);
 
-            return OkResponse(notification);
+            return OkResult(notification);
         }
 
         // DELETE: api/Enrollees/5/adjudicator-notes/6/notification
@@ -852,7 +852,7 @@ namespace Prime.Controllers
 
             var notes = await _enrolleeService.GetNotificationsAsync(enrolleeId, admin.Id);
 
-            return OkResponse(notes);
+            return OkResult(notes);
         }
 
         // Delete: api/Enrollees/5/notifications
@@ -891,7 +891,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEnrolleeEmails([FromQuery] BulkEmailType bulkEmailType)
         {
             var emails = await _enrolleeService.GetEnrolleeEmails(bulkEmailType);
-            return OkResponse(emails);
+            return OkResult(emails);
         }
     }
 }

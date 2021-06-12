@@ -79,7 +79,7 @@ namespace Prime.Controllers
         {
             var token = await _client.CreateDownloadTokenAsync(documentGuid);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
     }
 }

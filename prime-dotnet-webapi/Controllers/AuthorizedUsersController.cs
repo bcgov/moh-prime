@@ -55,7 +55,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResponse(authorizedUser);
+            return OkResult(authorizedUser);
         }
 
         // GET: api/parties/authorized-users/5
@@ -80,7 +80,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResponse(authorizedUser);
+            return OkResult(authorizedUser);
         }
 
         // POST: api/parties/authorized-users

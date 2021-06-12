@@ -66,11 +66,11 @@ namespace Prime.Controllers
 
             if (verbose)
             {
-                return OkResponse(sites);
+                return OkResult(sites);
             }
             else
             {
-                return OkResponse(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
+                return OkResult(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
             }
         }
 
@@ -96,7 +96,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResponse(site);
+            return OkResult(site);
         }
 
         // POST: api/Sites
@@ -247,7 +247,7 @@ namespace Prime.Controllers
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
 
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // DELETE: api/Site/5/adjudicator
@@ -274,7 +274,7 @@ namespace Prime.Controllers
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // DELETE: api/Sites/5
@@ -301,7 +301,7 @@ namespace Prime.Controllers
 
             await _siteService.DeleteSiteAsync(siteId);
 
-            return OkResponse(site);
+            return OkResult(site);
         }
 
         // POST: api/sites/5/submission
@@ -329,7 +329,7 @@ namespace Prime.Controllers
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
-            return OkResponse(site);
+            return OkResult(site);
         }
 
         // POST: api/sites/5/business-licence
@@ -369,7 +369,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            return OkResponse(licence);
+            return OkResult(licence);
         }
 
         // PUT: api/sites/5/business-licence
@@ -403,7 +403,7 @@ namespace Prime.Controllers
 
             var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
 
-            return OkResponse(licence);
+            return OkResult(licence);
         }
 
         // POST: api/sites/5/business-licence/document
@@ -458,7 +458,7 @@ namespace Prime.Controllers
                 await _emailService.SendBusinessLicenceUploadedAsync(site);
             }
 
-            return OkResponse(document);
+            return OkResult(document);
         }
 
         // DELETE: api/sites/5/business-licence/document
@@ -520,7 +520,7 @@ namespace Prime.Controllers
 
             var licence = await _siteService.GetBusinessLicenceAsync(site.Id);
 
-            return OkResponse(licence);
+            return OkResult(licence);
         }
 
         // POST: api/sites/5/adjudication-documents
@@ -551,7 +551,7 @@ namespace Prime.Controllers
                 return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
-            return OkResponse(document);
+            return OkResult(document);
         }
 
         // GET: api/sites/5/adjudication-documents
@@ -575,7 +575,7 @@ namespace Prime.Controllers
 
             var documents = await _siteService.GetSiteAdjudicationDocumentsAsync(site.Id);
 
-            return OkResponse(documents);
+            return OkResult(documents);
         }
 
         // GET: api/Sites/{siteId}/adjudication-documents/{documentId}
@@ -600,7 +600,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForSiteAdjudicationDocument(documentId);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
 
         // PUT: api/Sites/5/pec
@@ -636,7 +636,7 @@ namespace Prime.Controllers
 
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // Get: api/site/5/latest-business-licence
@@ -667,7 +667,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId);
 
-            return OkResponse(token);
+            return OkResult(token);
         }
 
         // POST: api/Sites/5/remote-users-email
@@ -777,7 +777,7 @@ namespace Prime.Controllers
             await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
             await _emailService.SendSiteApprovedHIBCAsync(site);
 
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // PUT: api/Sites/5/decline
@@ -800,7 +800,7 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.DeclineSite(siteId);
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // PUT: api/Sites/5/enable-editing
@@ -823,7 +823,7 @@ namespace Prime.Controllers
             }
 
             var updatedSite = await _siteService.EnableEditingSite(siteId);
-            return OkResponse(updatedSite);
+            return OkResult(updatedSite);
         }
 
         // POST: api/Sites/5/site-registration-notes
@@ -856,7 +856,7 @@ namespace Prime.Controllers
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
-            return OkResponse(createdSiteRegistrationNote);
+            return OkResult(createdSiteRegistrationNote);
         }
 
         // GET: api/Sites/5/site-registration-notes
@@ -880,7 +880,7 @@ namespace Prime.Controllers
 
             var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(site);
 
-            return OkResponse(siteRegistrationNotes);
+            return OkResult(siteRegistrationNotes);
         }
 
         // POST: api/Sites/remote-users
@@ -895,7 +895,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<RemoteAccessSearchViewModel>>> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certifications)
         {
             var info = await _siteService.GetRemoteUserInfoAsync(certifications);
-            return OkResponse(info);
+            return OkResult(info);
         }
 
         // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
@@ -920,7 +920,7 @@ namespace Prime.Controllers
 
             var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
 
-            return OkResponse(events);
+            return OkResult(events);
         }
 
         // DELETE: api/Sites/{siteId}/adjudication-documents/{documentId}
@@ -944,7 +944,7 @@ namespace Prime.Controllers
 
             await _siteService.DeleteSiteAdjudicationDocumentAsync(documentId);
 
-            return OkResponse(document);
+            return OkResult(document);
         }
 
         // POST: api/sites/5/site-registration-notes/6/notification
@@ -976,7 +976,7 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
 
-            return OkResponse(notification);
+            return OkResult(notification);
         }
 
         // DELETE: api/Enrollees/5/site-registration-notes/6/notification
@@ -1032,7 +1032,7 @@ namespace Prime.Controllers
 
             var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
 
-            return OkResponse(notes);
+            return OkResult(notes);
         }
 
         // Delete: api/sites/5/notifications

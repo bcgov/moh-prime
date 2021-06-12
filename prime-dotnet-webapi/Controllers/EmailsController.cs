@@ -39,7 +39,7 @@ namespace Prime.Controllers
         {
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return OkResponse($"Updated {limit} of {total}.");
+            return OkResult($"Updated {limit} of {total}.");
         }
 
         // POST: api/Emails/management/enrollees/renewal
@@ -72,7 +72,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplates()
         {
             var templates = await _emailTemplateService.GetEmailTemplatesAsync();
-            return OkResponse(templates);
+            return OkResult(templates);
         }
 
         // GET: api/emails/management/templates/1
@@ -88,7 +88,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplate(int emailTemplateId)
         {
             var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
-            return OkResponse(template);
+            return OkResult(template);
         }
     }
 }

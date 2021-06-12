@@ -52,7 +52,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
             }
 
-            return OkResponse(certificate);
+            return OkResult(certificate);
         }
 
         // GET: api/provisioner-access/token
@@ -68,7 +68,7 @@ namespace Prime.Controllers
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
-            return OkResponse(tokens);
+            return OkResult(tokens);
         }
 
         // POST: api/provisioner-access/send-link/1
@@ -133,7 +133,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
 
-            return OkResponse(enrollee?.GPID);
+            return OkResult(enrollee?.GPID);
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
@@ -149,7 +149,7 @@ namespace Prime.Controllers
         {
             var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
-            return OkResponse(result);
+            return OkResult(result);
         }
 
         // POST: api/provisioner-access/gpids/123456789/validate
@@ -177,7 +177,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
             }
 
-            return OkResponse(response);
+            return OkResult(response);
         }
     }
 }

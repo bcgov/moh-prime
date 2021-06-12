@@ -37,7 +37,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAuthorizedUsersByHealthAuthority(HealthAuthorityCode healthAuthorityCode)
         {
             var users = await _healthAuthorityService.GetAuthorizedUsersByHealthAuthorityAsync(healthAuthorityCode);
-            return OkResponse(users);
+            return OkResult(users);
         }
 
         // GET: api/health-authorities/under-review
@@ -52,7 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsers()
         {
             var haIds = await _healthAuthorityService.GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
-            return OkResponse(haIds);
+            return OkResult(haIds);
         }
     }
 }

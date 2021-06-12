@@ -120,7 +120,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return OkResponse(gisEnrolment);
+            return OkResult(gisEnrolment);
         }
 
         // GET: api/parties/gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -147,7 +147,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
             }
 
-            return OkResponse(gisEnrolment);
+            return OkResult(gisEnrolment);
         }
 
         // POST: api/parties/gis/5/ldap/login
@@ -207,7 +207,7 @@ namespace Prime.Controllers
             await _gisService.SubmitApplicationAsync(gisId);
 
             gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
-            return OkResponse(gisEnrolment);
+            return OkResult(gisEnrolment);
         }
     }
 }

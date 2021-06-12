@@ -36,7 +36,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
         {
             var agreements = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
-            return OkResponse(agreements);
+            return OkResult(agreements);
         }
 
         /// /api/agreements/2
@@ -52,7 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAgreementVersionById(int agreementId)
         {
             var agreement = await _agreementService.GetAgreementVersionById(agreementId);
-            return OkResponse(agreement);
+            return OkResult(agreement);
         }
     }
 }

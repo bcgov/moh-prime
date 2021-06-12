@@ -20,7 +20,7 @@ namespace Prime.Controllers
         /// Wraps the value in an ApiResultResponse object and returns a 200OK.
         /// </summary>
         /// <param name="value"></param>
-        public OkObjectResult OkResponse([ActionResultObjectValue] object value)
+        public OkObjectResult OkResult([ActionResultObjectValue] object value)
         {
             return base.Ok(value);
         }

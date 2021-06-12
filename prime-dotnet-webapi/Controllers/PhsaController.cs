@@ -82,7 +82,7 @@ namespace Prime.Controllers
         {
             var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: email);
 
-            return OkResponse(partyTypes);
+            return OkResult(partyTypes);
         }
     }
 }
