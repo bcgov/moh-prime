@@ -20,9 +20,9 @@ namespace Prime.Controllers
         /// Wraps the value in an ApiResultResponse object and returns a 200OK.
         /// </summary>
         /// <param name="value"></param>
-        public OkObjectResult OkResult([ActionResultObjectValue] object value)
+        public OkObjectResult OkResult<T>([ActionResultObjectValue] T value)
         {
-            return base.Ok(value);
+            return base.Ok(ApiResponse.Result(value));
         }
     }
 }
