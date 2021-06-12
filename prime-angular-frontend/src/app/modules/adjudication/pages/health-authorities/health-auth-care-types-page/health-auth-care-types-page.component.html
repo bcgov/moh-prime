@@ -21,10 +21,10 @@
         <div class="col col-sm-10 py-3"
              formArrayName="careTypes">
 
-          <ng-container *ngFor="let careType of careTypes.controls; let index = index;"
+          <ng-container *ngFor="let careType of careTypes.controls; let index = index; let last = last;"
                         [formGroupName]="index">
 
-            <div class="mb-3">
+            <div [class.mb-3]="!last">
 
               <app-form-icon-group [show]="careTypes.controls.length > 1"
                                    (event)="removeCareType(index)">
