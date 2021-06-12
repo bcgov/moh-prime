@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Authorize(AuthenticationSchemes = Schemes.MohJwt)]
     [Route("api/parties/[controller]")]
     [ApiController]
-    public class GisController : ControllerBase
+    public class GisController : PrimeControllerBase
     {
         private readonly IGisService _gisService;
         public GisController(IGisService gisService)
@@ -120,7 +120,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(gisEnrolment));
+            return OkResponse(gisEnrolment);
         }
 
         // GET: api/parties/gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -147,7 +147,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
             }
 
-            return Ok(ApiResponse.Result(gisEnrolment));
+            return OkResponse(gisEnrolment);
         }
 
         // POST: api/parties/gis/5/ldap/login
@@ -207,7 +207,7 @@ namespace Prime.Controllers
             await _gisService.SubmitApplicationAsync(gisId);
 
             gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
-            return Ok(ApiResponse.Result(gisEnrolment));
+            return OkResponse(gisEnrolment);
         }
     }
 }

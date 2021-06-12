@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeAdministrant)]
-    public class AdminsController : ControllerBase
+    public class AdminsController : PrimeControllerBase
     {
         private readonly IAdminService _adminService;
         private readonly IMetabaseService _metabaseService;
@@ -51,7 +51,7 @@ namespace Prime.Controllers
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.UserIdExistsAsync(admin.UserId))
             {
-                return Ok(ApiResponse.Result(admin));
+                return OkResponse(admin);
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
@@ -74,7 +74,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
             var admins = await _adminService.GetAdminsAsync();
-            return Ok(ApiResponse.Result(admins));
+            return OkResponse(admins);
         }
 
 
@@ -96,7 +96,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Admin not found with id {adminId}"));
             }
 
-            return Ok(ApiResponse.Result(admin));
+            return OkResponse(admin);
         }
 
         // GET: api/Admins/embedded-metabase-url
@@ -111,7 +111,7 @@ namespace Prime.Controllers
         {
             var token = _metabaseService.BuildMetabaseEmbeddedString();
 
-            return Ok(ApiResponse.Result(token));
+            return OkResponse(token);
         }
     }
 }

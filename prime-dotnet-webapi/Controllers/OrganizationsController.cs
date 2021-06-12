@@ -18,7 +18,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class OrganizationsController : ControllerBase
+    public class OrganizationsController : PrimeControllerBase
     {
         private readonly IOrganizationService _organizationService;
 
@@ -60,7 +60,7 @@ namespace Prime.Controllers
                 site.HasNotification = notifiedIds.Contains(site.Id);
             }
 
-            return Ok(ApiResponse.Result(organizations));
+            return OkResponse(organizations);
         }
 
         // GET: api/Organizations/5
@@ -83,7 +83,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(organization));
+            return OkResponse(organization);
         }
 
         // POST: api/Organizations
@@ -191,7 +191,7 @@ namespace Prime.Controllers
 
             await _organizationService.DeleteOrganizationAsync(organizationId);
 
-            return Ok(ApiResponse.Result(organization));
+            return OkResponse(organization);
         }
 
         // GET: api/Organizations/5/agreements
@@ -208,7 +208,7 @@ namespace Prime.Controllers
         {
             var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
 
-            return Ok(ApiResponse.Result(agreements));
+            return OkResponse(agreements);
         }
 
         // POST: api/Organizations/5/agreements/update
@@ -283,7 +283,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
             }
 
-            return Ok(ApiResponse.Result(agreement));
+            return OkResponse(agreement);
         }
 
         // GET: api/Organizations/5/agreements/7/signable
@@ -313,7 +313,7 @@ namespace Prime.Controllers
 
             var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
 
-            return Ok(ApiResponse.Result(pdf));
+            return OkResponse(pdf);
         }
 
         // PUT: api/Organizations/5/agreements/7
@@ -385,7 +385,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreementId);
 
-            return Ok(ApiResponse.Result(token));
+            return OkResponse(token);
         }
     }
 }

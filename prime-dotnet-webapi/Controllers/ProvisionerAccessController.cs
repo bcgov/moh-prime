@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/provisioner-access")]
     [ApiController]
-    public class ProvisionerAccessController : ControllerBase
+    public class ProvisionerAccessController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
@@ -52,7 +52,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
             }
 
-            return Ok(ApiResponse.Result(certificate));
+            return OkResponse(certificate);
         }
 
         // GET: api/provisioner-access/token
@@ -68,7 +68,7 @@ namespace Prime.Controllers
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(ApiResponse.Result(tokens));
+            return OkResponse(tokens);
         }
 
         // POST: api/provisioner-access/send-link/1
@@ -133,7 +133,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
 
-            return Ok(ApiResponse.Result(enrollee?.GPID));
+            return OkResponse(enrollee?.GPID);
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
@@ -149,7 +149,7 @@ namespace Prime.Controllers
         {
             var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
-            return Ok(ApiResponse.Result(result));
+            return OkResponse(result);
         }
 
         // POST: api/provisioner-access/gpids/123456789/validate
@@ -177,7 +177,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
             }
 
-            return Ok(ApiResponse.Result(response));
+            return OkResponse(response);
         }
     }
 }

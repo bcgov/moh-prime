@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/document")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
-    public class DocumentManagerController : ControllerBase
+    public class DocumentManagerController : PrimeControllerBase
     {
         private readonly IDocumentManagerClient _client;
         private readonly ILogger _logger;
@@ -79,7 +79,7 @@ namespace Prime.Controllers
         {
             var token = await _client.CreateDownloadTokenAsync(documentGuid);
 
-            return Ok(ApiResponse.Result(token));
+            return OkResponse(token);
         }
     }
 }

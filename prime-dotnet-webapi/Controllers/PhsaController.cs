@@ -18,7 +18,7 @@ namespace Prime.Controllers
     [Route("api/parties/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee)]
-    public class PhsaController : ControllerBase
+    public class PhsaController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
         private readonly IKeycloakAdministrationClient _keycloakClient;
@@ -82,7 +82,7 @@ namespace Prime.Controllers
         {
             var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: email);
 
-            return Ok(ApiResponse.Result(partyTypes));
+            return OkResponse(partyTypes);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/document-access")]
     [ApiController]
-    public class DocumentAccessController : ControllerBase
+    public class DocumentAccessController : PrimeControllerBase
     {
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentManagerClient;

@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    public class SubmissionsController : ControllerBase
+    public class SubmissionsController : PrimeControllerBase
     {
         private readonly ISubmissionService _submissionService;
         private readonly IEnrolleeService _enrolleeService;
@@ -77,7 +77,7 @@ namespace Prime.Controllers
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return Ok(ApiResponse.Result(enrollee));
+            return OkResponse(enrollee);
         }
 
         // POST: api/enrollees/5/submission/approve
@@ -238,7 +238,7 @@ namespace Prime.Controllers
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return Ok(ApiResponse.Result(enrollee));
+            return OkResponse(enrollee);
         }
 
         // PUT: api/Enrollees/5/submissions/latest/type
@@ -284,7 +284,7 @@ namespace Prime.Controllers
 
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(updatedEnrollee));
+            return OkResponse(updatedEnrollee);
         }
 
         // PUT: api/enrollees/5/always-manual

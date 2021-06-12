@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
-    public class AddressAutocompleteController : ControllerBase
+    public class AddressAutocompleteController : PrimeControllerBase
     {
         private readonly IAddressAutocompleteClient _addressAutocompleteClient;
 
@@ -42,7 +42,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Find(searchTerm, lastId);
-            return Ok(ApiResponse.Result(result));
+            return OkResponse(result);
         }
 
         // GET: api/AddressAutocomplete/retrieve
@@ -62,7 +62,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Retrieve(id);
-            return Ok(ApiResponse.Result(result));
+            return OkResponse(result);
         }
     }
 }

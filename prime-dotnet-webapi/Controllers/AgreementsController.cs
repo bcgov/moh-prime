@@ -16,7 +16,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AgreementsController : ControllerBase
+    public class AgreementsController : PrimeControllerBase
     {
         private readonly IAgreementService _agreementService;
 
@@ -36,7 +36,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
         {
             var agreements = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
-            return Ok(ApiResponse.Result(agreements));
+            return OkResponse(agreements);
         }
 
         /// /api/agreements/2
@@ -52,7 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAgreementVersionById(int agreementId)
         {
             var agreement = await _agreementService.GetAgreementVersionById(agreementId);
-            return Ok(ApiResponse.Result(agreement));
+            return OkResponse(agreement);
         }
     }
 }

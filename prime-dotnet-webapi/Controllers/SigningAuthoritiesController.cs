@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Route("api/parties/signing-authorities")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class SigningAuthorityController : ControllerBase
+    public class SigningAuthorityController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
         private readonly IOrganizationService _organizationService;
@@ -51,7 +51,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {userId}"));
             }
 
-            return Ok(ApiResponse.Result(signingAuthority));
+            return OkResponse(signingAuthority);
         }
 
         // GET: api/SigningAuthority/5
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return NotFound(ApiResponse.Message($"Signing authority not found with id {partyId}"));
             }
 
-            return Ok(ApiResponse.Result(signingAuthority));
+            return OkResponse(signingAuthority);
         }
 
         // POST: api/SigningAuthority
@@ -153,7 +153,7 @@ namespace Prime.Controllers
                 ? await _organizationService.GetOrganizationsByPartyIdAsync(party.Id)
                 : Enumerable.Empty<OrganizationListViewModel>();
 
-            return Ok(ApiResponse.Result(organizations));
+            return OkResponse(organizations);
         }
     }
 }

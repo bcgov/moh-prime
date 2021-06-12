@@ -20,7 +20,7 @@ namespace Prime.Controllers
     [Route("api/parties/authorized-users")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class AuthorizedUsersController : ControllerBase
+    public class AuthorizedUsersController : PrimeControllerBase
     {
         private readonly IAuthorizedUserService _authorizedUserService;
         private readonly IOrganizationService _organizationService;
@@ -55,7 +55,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(authorizedUser));
+            return OkResponse(authorizedUser);
         }
 
         // GET: api/parties/authorized-users/5
@@ -80,7 +80,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(authorizedUser));
+            return OkResponse(authorizedUser);
         }
 
         // POST: api/parties/authorized-users

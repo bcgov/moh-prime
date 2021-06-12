@@ -11,7 +11,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class WebhooksController : ControllerBase
+    public class WebhooksController : PrimeControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
 

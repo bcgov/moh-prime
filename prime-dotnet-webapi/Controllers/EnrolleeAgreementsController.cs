@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/enrollees")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
-    public class EnrolleeAgreementsController : ControllerBase
+    public class EnrolleeAgreementsController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return Ok(ApiResponse.Result(agreements));
+            return OkResponse(agreements);
         }
 
         // GET: api/Enrollees/5/cards
@@ -122,7 +122,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return Ok(ApiResponse.Result(enrolmentCards));
+            return OkResponse(enrolmentCards);
         }
 
         // GET: api/Enrollees/5/agreements/2
@@ -160,7 +160,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
 
-            return Ok(ApiResponse.Result(agreement));
+            return OkResponse(agreement);
         }
 
         // GET: api/Enrollees/5/agreements/3/submission
@@ -204,7 +204,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
 
-            return Ok(ApiResponse.Result(enrolleeSubmission));
+            return OkResponse(enrolleeSubmission);
         }
 
         // GET: api/Enrollees/5/agreements/2/signable
@@ -241,7 +241,7 @@ namespace Prime.Controllers
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Pdf, agreement);
             var download = _pdfService.Generate(html);
 
-            return Ok(ApiResponse.Result(download));
+            return OkResponse(download);
         }
     }
 }
