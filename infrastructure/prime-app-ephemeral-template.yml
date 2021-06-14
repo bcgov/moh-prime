@@ -346,7 +346,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
-                    key: database-password
+                    key: admin-password
             ports:
               - containerPort: 1025
                 protocol: TCP
