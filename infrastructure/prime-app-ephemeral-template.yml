@@ -596,11 +596,6 @@ objects:
     resources:
       requests:
         storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -867,8 +862,6 @@ objects:
       name: ${SVC_NAME}-postgres
     sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 
 ###########################################
 ###                Redis                ###
@@ -975,5 +968,3 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
-    status:
-      loadBalancer: {}
