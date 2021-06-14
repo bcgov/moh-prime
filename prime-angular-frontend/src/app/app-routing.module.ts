@@ -53,7 +53,7 @@ const routes: Routes = [
     path: AppRoutes.MAINTENANCE,
     component: MaintenanceComponent,
     data: {
-      title: 'Under Scheduled Maintenace'
+      title: 'Under Scheduled Maintenance'
     }
   },
   {
