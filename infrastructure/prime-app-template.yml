@@ -976,21 +976,3 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
-  
-
-###########################################
-###           Network Policies          ###
-###########################################
-- apiVersion: networking.k8s.io/v1
-  kind: NetworkPolicy
-  metadata:
-    name: allow-internal-traffic
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-  spec:
-    podSelector:
-    ingress:
-      - from:
-          - namespaceSelector:
-              matchLabels:
-                project: ${OC_NAMESPACE}-${OC_APP}
-          - podSelector: {}
