@@ -67,6 +67,7 @@ import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrol
 import { EnrolleeToaMaintenancePageComponent } from './pages/enrollee-toa-maintenance-page/enrollee-toa-maintenance-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
+import { PaperEnrolmentDemographicComponent } from './pages/paper-enrolment-pages/paper-enrolment-demographic/paper-enrolment-demographic.component';
 
 @NgModule({
   declarations: [
@@ -126,7 +127,8 @@ import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-ma
     EnrolleeMaintenanceComponent,
     EnrolleeToaMaintenancePageComponent,
     EnrolleeToaMaintenanceListPageComponent,
-    EnrolleeToaMaintenanceViewPageComponent
+    EnrolleeToaMaintenanceViewPageComponent,
+    PaperEnrolmentDemographicComponent
   ],
   imports: [
     AdjudicationRoutingModule,

@@ -38,6 +38,8 @@ import { EmailNotificationListPageComponent } from './pages/email-notification-l
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { PaperEnrolmentDemographicComponent } from './pages/paper-enrolment-pages/paper-enrolment-demographic/paper-enrolment-demographic.component';
 
 const routes: Routes = [
   {
@@ -278,7 +280,17 @@ const routes: Routes = [
                 data: { title: 'Organization Information' }
               }
             ]
-          }
+          },
+          {
+            path: AdjudicationRoutes.PAPER_ENROLMENT,
+            children: [
+              {
+                path: EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+                component: PaperEnrolmentDemographicComponent,
+                data: { title: 'PRIME Enrolment' }
+              },
+            ]
+          },
         ]
       },
       {

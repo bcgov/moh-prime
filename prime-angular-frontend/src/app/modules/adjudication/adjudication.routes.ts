@@ -16,6 +16,7 @@ export class AdjudicationRoutes {
   public static ENROLLEE_OVERVIEW = 'overview';
   public static BANNER = 'banner';
   public static MAINTENANCE = 'maintenance';
+  public static PAPER_ENROLMENT = 'paper-enrolment';
   public static NOTIFICATION_EMAILS = 'notification-emails';
   public static TOA = 'toa';
 
