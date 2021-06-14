@@ -43,7 +43,7 @@ export class ItemFormComponent implements OnInit {
     this.filteredJobNames = this.initAutoComplete();
   }
 
-  public removeNone(input: HTMLFormElement) {
+  public removeNone(input: HTMLInputElement) {
     if (this.allowRemoveNone && input.value === this.defaultOptionLabel) {
       input.value = '';
       this.allowRemoveNone = false;

@@ -53,7 +53,7 @@ export class VendorsPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const vendorCodes: number[] = this.vendors.value.map(({ vendor }) => vendor.code);
+      const vendorCodes = [...new Set(this.vendors.value.map(({ vendor }) => vendor.code) as number[])];
       this.healthAuthResource.updateVendors(this.route.snapshot.params.haid, vendorCodes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }

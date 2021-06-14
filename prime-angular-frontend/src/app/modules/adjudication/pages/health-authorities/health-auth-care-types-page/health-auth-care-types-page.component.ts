@@ -55,9 +55,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   public onSubmit() {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const careTypes = [
-        ...new Set(this.careTypes.value.map(({ careType }) => careType.trim()) as string[])
-      ];
+      const careTypes = [...new Set(this.careTypes.value.map(({ careType }) => careType.trim()) as string[])];
       this.healthAuthResource.updateCareTypes(this.route.snapshot.params.haid, careTypes)
         .subscribe(() => this.nextRouteAfterSubmit());
     }
