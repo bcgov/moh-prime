@@ -65,7 +65,7 @@ parameters:
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
-  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  value: ".pharmanetenrolment.gov.bc.ca"
   required: false
 - name: HPR_URL
   displayName: Health Practicioner URL
@@ -157,6 +157,15 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
+            volumeMounts:
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+        volumes:
+        - name: vanity-tls-certs
+          secret:
+            secretName: vanity-tls-certificate
+            defaultMode: 420
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -216,7 +225,7 @@ objects:
     port:
       targetPort: http
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
   
@@ -241,7 +250,7 @@ objects:
     port:
       targetPort: 8888
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Allow
     wildcardPolicy: None
 #   Frontend Route (Mutual Authentication)
