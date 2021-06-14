@@ -37,7 +37,7 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the relevant role(s).
         /// </summary>
         [HttpPost(Name = nameof(CreatePhsaParty))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]

@@ -28,7 +28,7 @@ namespace Prime.Controllers
         /// Creates a new Gis Enrolment
         /// </summary>
         [HttpPost(Name = nameof(CreateGisParty))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status201Created)]
@@ -61,7 +61,7 @@ namespace Prime.Controllers
         /// <param name="gisId"></param>
         /// <param name="changeModel"></param>
         [HttpPut("{gisId}", Name = nameof(UpdateGisEnrollee))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -99,7 +99,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="gisId"></param>
         [HttpGet("{gisId}", Name = nameof(GetGisEnrolmentById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -125,7 +125,7 @@ namespace Prime.Controllers
         /// </summary>
         /// /// <param name="userId"></param>
         [HttpGet("{userId:guid}", Name = nameof(GetGisEnrolmentByUserId))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -153,7 +153,7 @@ namespace Prime.Controllers
         /// <param name="gisId"></param>
         /// <param name="payload"></param>
         [HttpPost("{gisId}/ldap/login", Name = nameof(LdapLogin))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> LdapLogin(int gisId, LdapLoginPayload payload)
@@ -183,7 +183,7 @@ namespace Prime.Controllers
         /// Submits the given Gis enrolment.
         /// </summary>
         [HttpPost("{gisId}/submission", Name = nameof(SubmitGis))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

@@ -88,7 +88,7 @@ namespace Prime.Controllers
         /// Creates a new AuthorizedUser.
         /// </summary>
         [HttpPost(Name = nameof(CreateAuthorizedUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status201Created)]
@@ -161,7 +161,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpPost("{authorizedUserId}/activate", Name = nameof(ActivateAuthorizedUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

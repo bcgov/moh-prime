@@ -37,7 +37,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -84,7 +84,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/approve", Name = nameof(ApproveSubmission))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -103,7 +103,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         [HttpPost("{enrolleeId}/submission/accept-toa", Name = nameof(AcceptToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -120,7 +120,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/decline-toa", Name = nameof(DeclineToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -137,7 +137,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/enable-editing", Name = nameof(EnableEditing))]
         [Authorize(Roles = Roles.TriageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -154,7 +154,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/cancel-toa", Name = nameof(CancelToaAssignment))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -171,7 +171,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/lock-profile", Name = nameof(LockProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -188,7 +188,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/decline-profile", Name = nameof(DeclineProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -205,7 +205,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/submission/rerun-rules", Name = nameof(RerunRules))]
         [Authorize(Roles = Roles.TriageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

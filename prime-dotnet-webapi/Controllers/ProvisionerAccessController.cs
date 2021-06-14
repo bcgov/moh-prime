@@ -80,7 +80,7 @@ namespace Prime.Controllers
         /// <param name="providedEmails"></param>
         [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
@@ -163,7 +163,7 @@ namespace Prime.Controllers
         {
             if (parameters == null)
             {
-                return BadRequest(ApiResponse.Message($"Must supply validation parameters"));
+                return BadRequest($"Must supply validation parameters");
             }
 
             var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);

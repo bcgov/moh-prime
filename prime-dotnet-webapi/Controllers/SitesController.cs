@@ -340,7 +340,7 @@ namespace Prime.Controllers
         /// <param name="businessLicence"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -359,7 +359,7 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence != null)
             {
-                return Conflict(ApiResponse.Message($"Business Licence exists for site with id {siteId}"));
+                return Conflict($"Business Licence exists for site with id {siteId}");
             }
 
             var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
@@ -378,7 +378,7 @@ namespace Prime.Controllers
         /// <param name="businessLicence"></param>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/business-licence", Name = nameof(UpdateBusinessLicence))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -397,7 +397,7 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence.BusinessLicenceDocument != null)
             {
-                return Conflict(ApiResponse.Message($"Business licence already uploaded, update not allowed."));
+                return Conflict($"Business licence already uploaded, update not allowed.");
             }
 
             var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
@@ -412,7 +412,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence/document", Name = nameof(CreateBusinessLicenceDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -435,7 +435,7 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence.BusinessLicenceDocument != null && site.SubmittedDate != null)
             {
-                return Conflict(new ApiMessageResponse($"Business Licence Document exists for submitted site with id {siteId}"));
+                return Conflict($"Business Licence Document exists for submitted site with id {siteId}");
             }
 
             var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(site.BusinessLicence.Id, documentGuid);
@@ -465,7 +465,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/business-licence/document", Name = nameof(RemoveBusinessLicenceDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -487,7 +487,7 @@ namespace Prime.Controllers
             }
             if (site.SubmittedDate != null)
             {
-                return Conflict(ApiResponse.Message($"Unable to remove document once site has been submitted"));
+                return Conflict($"Unable to remove document once site has been submitted");
             }
 
             await _siteService.DeleteBusinessLicenceDocumentAsync(siteId);
@@ -529,7 +529,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/adjudication-documents", Name = nameof(CreateSiteAdjudicationDocument))]
         [Authorize(Roles = Roles.EditSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -558,7 +558,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -583,7 +583,7 @@ namespace Prime.Controllers
         /// <param name="documentId"></param>
         [HttpGet("{siteId}/adjudication-documents/{documentId}", Name = nameof(GetSiteAdjudicationDocument))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
@@ -607,7 +607,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pecCode"></param>
         [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -672,7 +672,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/remote-users-email", Name = nameof(SendRemoteUsersEmail))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -695,7 +695,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(SendRemoteUsersEmailAdmin))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -726,7 +726,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="remoteUsers"></param>
         [HttpPost("{siteId}/remote-users-email-user", Name = nameof(SendRemoteUsersEmailUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -830,7 +830,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         [HttpPost("{siteId}/site-registration-notes", Name = nameof(CreateSiteRegistrationNote))]
         [Authorize(Roles = Roles.EditSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

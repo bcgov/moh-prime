@@ -31,7 +31,7 @@ namespace Prime.Controllers
         /// Creates a new Admin.
         /// </summary>
         [HttpPost(Name = nameof(CreateAdmin))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
@@ -67,7 +67,7 @@ namespace Prime.Controllers
         /// Gets all the admins.
         /// </summary>
         [HttpGet(Name = nameof(GetAdmins))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()

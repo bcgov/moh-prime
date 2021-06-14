@@ -69,7 +69,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpGet("{organizationId}", Name = nameof(GetOrganizationById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -91,7 +91,7 @@ namespace Prime.Controllers
         /// Creates a new Organization.
         /// </summary>
         [HttpPost(Name = nameof(CreateOrganization))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
@@ -119,7 +119,7 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// <param name="updatedOrganization"></param>
         [HttpPut("{organizationId}", Name = nameof(UpdateOrganization))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -145,7 +145,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpPut("{organizationId}/completed", Name = nameof(UpdateOrganizationCompleted))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -264,7 +264,7 @@ namespace Prime.Controllers
         /// <param name="agreementId"></param>
         /// <param name="asPdf"></param>
         [HttpGet("{organizationId}/agreements/{agreementId}", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -293,7 +293,7 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// <param name="agreementType"></param>
         [HttpGet("{organizationId}/signable", Name = nameof(GetSignableOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -307,7 +307,7 @@ namespace Prime.Controllers
 
             if (agreementType.IsEnrolleeAgreement())
             {
-                return BadRequest(ApiResponse.Message($"Agreement with type {agreementType} not allowed"));
+                return BadRequest($"Agreement with type {agreementType} not allowed");
             }
 
             var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
@@ -323,7 +323,7 @@ namespace Prime.Controllers
         /// <param name="agreementId"></param>
         /// <param name="organizationAgreementGuid"></param>
         [HttpPut("{organizationId}/agreements/{agreementId}", Name = nameof(AcceptOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

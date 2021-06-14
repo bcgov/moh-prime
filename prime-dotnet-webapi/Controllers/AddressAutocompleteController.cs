@@ -32,7 +32,7 @@ namespace Prime.Controllers
         /// <param name="searchTerm"></param>
         /// <param name="lastId"></param>
         [HttpGet("find", Name = nameof(Find))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteFindResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Find([FromQuery] string searchTerm, [FromQuery] string lastId = null)
@@ -52,7 +52,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("retrieve", Name = nameof(Retrieve))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteRetrieveResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Retrieve([FromQuery] string id)

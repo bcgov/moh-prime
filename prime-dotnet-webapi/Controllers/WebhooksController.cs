@@ -29,7 +29,7 @@ namespace Prime.Controllers
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
         [HttpPost("{apiKey}/topic/{topic}", Name = nameof(Webhook))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
