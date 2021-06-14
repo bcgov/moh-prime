@@ -29,14 +29,6 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// The default ControllerBase.Ok(value) method. Please use OkResult(value) instead.
-        /// </summary>
-        public override OkObjectResult Ok([ActionResultObjectValue] object value)
-        {
-            return base.Ok(value);
-        }
-
-        /// <summary>
         /// Sends a StatusCodes.200OK response with an ApiResultResponse body wrapping the value.
         /// </summary>
         /// <param name="value"></param>
