@@ -44,7 +44,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthorityById(healthAuthorityId): Observable<HealthAuthority> {
+  public getHealthAuthorityById(healthAuthorityId: number): Observable<HealthAuthority> {
     return this.apiResource.get<HealthAuthority>(`health-authorities/${healthAuthorityId}`)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthority>) => response.result),

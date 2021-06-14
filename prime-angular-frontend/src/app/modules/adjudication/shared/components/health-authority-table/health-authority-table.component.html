@@ -121,12 +121,12 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
           <mat-icon>business</mat-icon>
           <span>Add Organization Information</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.code, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
           <mat-icon>admin_panel_settings</mat-icon>
           <span>View Authorized Users</span>
         </button>
