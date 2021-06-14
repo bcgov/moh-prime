@@ -28,7 +28,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   public formState: VendorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public vendorCodes: Observable<string[]>;
+  public vendorCodes: Observable<number[]>;
   public isCompleted: boolean;
   public hasNoVendorError: boolean;
 

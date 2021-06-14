@@ -10,7 +10,7 @@ import { KeycloakService } from 'keycloak-angular';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { ItemFormComponent } from './item-form.component';
+import { OptionsFormComponent } from './options-form.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { SharedModule } from '@shared/shared.module';
@@ -18,9 +18,9 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 
-describe('JobFormComponent', () => {
-  let component: ItemFormComponent;
-  let fixture: ComponentFixture<ItemFormComponent>;
+describe('OptionsFormComponent', () => {
+  let component: OptionsFormComponent;
+  let fixture: ComponentFixture<OptionsFormComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
@@ -56,7 +56,7 @@ describe('JobFormComponent', () => {
   beforeEach(inject(
     [EnrolmentFormStateService, ConfigService],
     (enrolmentFormStateService: EnrolmentFormStateService, configService: ConfigService) => {
-      fixture = TestBed.createComponent(ItemFormComponent);
+      fixture = TestBed.createComponent(OptionsFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
       // component.form = enrolmentFormStateService.buildJobForm();
@@ -64,10 +64,4 @@ describe('JobFormComponent', () => {
       fixture.detectChanges();
     }
   ));
-
-  // Deprecated Component
-  //
-  // it('should create', () => {
-  //   expect(component).toBeTruthy();
-  // });
 });

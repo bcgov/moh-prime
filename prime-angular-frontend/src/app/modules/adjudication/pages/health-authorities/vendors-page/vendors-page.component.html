@@ -21,24 +21,36 @@
         <div class="col col-sm-10 py-3"
              formArrayName="vendors">
 
-          <ng-container *ngFor="let vendor of vendors.controls; let index = index; let last = last;"
-                        [formGroupName]="index">
+          <ng-container *ngFor="let vendor of vendors.controls; let index = index; let last = last;">
 
             <div [class.mb-3]="!last">
 
-              <app-form-icon-group [show]="vendors.controls.length > 1"
-                                   (event)="removeVendor(index)">
-                <mat-form-field class="w-100">
-                  <mat-select placeholder="Vendor"
-                              formControlName="vendor">
-                    <mat-option></mat-option>
-                    <mat-option *ngFor="let vendor of filteredVendors | async"
-                                [value]="vendor">
-                      {{ vendor.name }}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </app-form-icon-group>
+              <!--              <app-form-icon-group [show]="vendors.controls.length > 1"-->
+              <!--                                   (event)="removeVendor(index)">-->
+              <!--                <mat-form-field class="w-100">-->
+              <!--                  <mat-select placeholder="Vendor"-->
+              <!--                              formControlName="vendor">-->
+              <!--                    <mat-option></mat-option>-->
+              <!--                    <mat-option *ngFor="let vendor of filteredVendors | async"-->
+              <!--                                [value]="vendor">-->
+              <!--                      {{ vendor.name }}-->
+              <!--                    </mat-option>-->
+              <!--                  </mat-select>-->
+              <!--                </mat-form-field>-->
+              <!--              </app-form-icon-group>-->
+
+              <pre>
+                {{ vendor.value | json }}
+              </pre>
+
+              <!--              <app-options-form [form]="vendor"-->
+              <!--                                [index]="index"-->
+              <!--                                [availableOptions]="filteredVendors"-->
+              <!--                                selectLabel="Vendor"-->
+              <!--                                controlName="vendor"-->
+              <!--                                optionLabel="name"-->
+              <!--                                [allowRemoval]="!!vendors.controls.length"-->
+              <!--                                (remove)="removeVendor($event)"></app-options-form>-->
 
             </div>
 

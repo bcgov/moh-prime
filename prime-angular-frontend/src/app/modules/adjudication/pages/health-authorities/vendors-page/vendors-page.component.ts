@@ -6,7 +6,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { Config, VendorConfig } from '@config/config.model';
+import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -24,6 +24,7 @@ export class VendorsPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
+  public vendorConfig: VendorConfig[];
   public filteredVendors: BehaviorSubject<VendorConfig[]>;
 
   private routeUtils: RouteUtils;
@@ -44,6 +45,7 @@ export class VendorsPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
+    this.vendorConfig = this.configService.vendors;
     this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.configService.vendors);
   }
 
@@ -69,6 +71,10 @@ export class VendorsPageComponent implements OnInit {
     this.vendors.removeAt(index);
   }
 
+  public filterVendors(vendors: VendorConfig[], vendorCode: number) {
+    return vendors.filter((vendor: VendorConfig) => vendor.code === vendorCode);
+  }
+
   public onBack() {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES);
   }
@@ -85,16 +91,16 @@ export class VendorsPageComponent implements OnInit {
   }
 
   private initForm() {
-    this.form.valueChanges
-      .subscribe(({ vendors }: { vendors: { vendor: string }[] }) =>
-        this.filteredVendors.next(this.filterVendors(vendors.map(ct => ct.vendor)))
-      );
+    // this.form.valueChanges
+    //   .subscribe(({ vendors }: { vendors: { vendor: string }[] }) =>
+    //     this.filteredVendors.next(this.filterVendors(vendors.map(ct => ct.vendor)))
+    //   );
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendorCodes }: HealthAuthority) =>
         (vendorCodes?.length)
           ? this.configService.vendors
-            .filter(v => vendorCodes.includes(v.code as any))
+            .filter(v => vendorCodes.includes(v.code))
             .map(v => this.addVendor(v))
           : this.addVendor()
       );
@@ -104,9 +110,9 @@ export class VendorsPageComponent implements OnInit {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER);
   }
 
-  private filterVendors(vendors: string[]) {
-    return this.configService.vendors.filter(v => !vendors.includes(v.name));
-  }
+  // private filterVendors(vendors: string[]) {
+  //   return this.configService.vendors.filter(v => !vendors.includes(v.name));
+  // }
 
   private routeTo(routeSegment?: string) {
     const routePath = (this.isInitialEntry && routeSegment)
