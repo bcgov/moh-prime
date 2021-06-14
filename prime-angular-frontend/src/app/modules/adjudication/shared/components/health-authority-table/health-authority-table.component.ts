@@ -48,8 +48,8 @@ export class HealthAuthorityTableComponent implements OnInit {
       : this.configService.healthAuthorities?.sort((a, b) => a.code - b.code);
   }
 
-  public onRoute(haid: number) {
-    this.route.emit([AdjudicationRoutes.HEALTH_AUTHORITIES, haid, AdjudicationRoutes.AUTHORIZED_USERS]);
+  public onRoute(routePath: string | (string | number)[]) {
+    this.route.emit(routePath);
   }
 
   public ngOnInit(): void {

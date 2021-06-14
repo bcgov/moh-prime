@@ -17,11 +17,6 @@ namespace Prime.Configuration
             builder
                 .HasIndex(e => e.HPDID)
                 .IsUnique();
-
-            builder
-                .HasOne<Admin>(e => e.Adjudicator)
-                .WithMany(a => a.Enrollees)
-                .HasForeignKey(a => a.AdjudicatorId);
         }
     }
 }

@@ -92,6 +92,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }).subscribe(({ organization, site }) => {
       this.organization = organization;
       this.site = site;
+      this.form.get('pec').setValue(site.pec);
     });
   }
 

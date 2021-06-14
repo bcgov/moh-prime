@@ -108,7 +108,7 @@ objects:
     labels:
       app: mailhog
       service: ${MAILHOG_SERVICE_NAME}
-      app.kubernetes.io/part-of: prime
+      app.kubernetes.io/part-of: ${APP_NAME}
   spec:
     replicas: 1
     selector:
