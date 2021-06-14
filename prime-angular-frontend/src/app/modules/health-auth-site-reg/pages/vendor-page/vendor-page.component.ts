@@ -2,12 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
@@ -24,7 +28,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   public formState: VendorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public vendorConfig: VendorConfig[];
+  public vendorCodes: Observable<string[]>;
   public isCompleted: boolean;
   public hasNoVendorError: boolean;
 
@@ -33,6 +37,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private siteResource: HealthAuthSiteRegResource,
+    private healthAuthResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     private route: ActivatedRoute,
@@ -42,10 +47,6 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    // TODO when there are known vendors refactor to load the list added by admin, and remove reverse
-    this.vendorConfig = this.configService.vendors
-      .filter(v => [2, 4, 13].includes(v.code))
-      .reverse();
     this.hasNoVendorError = false;
   }
 
@@ -85,6 +86,9 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected patchForm(): void {
+    this.vendorCodes = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .pipe(map((healthAuthority: HealthAuthority) => healthAuthority.vendorCodes));
+
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.formStateService.setForm(site, true);
