@@ -89,8 +89,7 @@ namespace Prime.Controllers
         {
             if (signingAuthority == null)
             {
-                ModelState.AddModelError("SigningAuthority", "SigningAuthority can not be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("SigningAuthority can not be null.");
             }
 
             var createdSigningAuthorityId = await _partyService.CreateOrUpdatePartyAsync(signingAuthority, User);

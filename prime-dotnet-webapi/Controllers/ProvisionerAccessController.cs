@@ -89,25 +89,21 @@ namespace Prime.Controllers
             var emails = Email.ParseCommaSeparatedEmails(providedEmails);
             if (!emails.Any())
             {
-                ModelState.AddModelError("Emails", "The email(s) provided are not valid.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The email(s) provided are not valid.");
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
             if (enrollee == null)
             {
-                ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("No enrollee exists for this User Id.");
             }
             if (enrollee.ExpiryDate == null)
             {
-                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The enrollee for this User Id is not in a finished state.");
             }
             if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
             {
-                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
             var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
 

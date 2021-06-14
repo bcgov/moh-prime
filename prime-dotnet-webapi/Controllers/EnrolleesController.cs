@@ -51,6 +51,8 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
+            return BadRequest(ApiResponse.Message("an error"));
+
             if (User.IsAdministrant())
             {
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
@@ -124,14 +126,12 @@ namespace Prime.Controllers
         {
             if (payload?.Enrollee == null)
             {
-                ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
             if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
-                ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
             }
 
             var createModel = payload.Enrollee;
@@ -139,8 +139,7 @@ namespace Prime.Controllers
 
             if (!createModel.Validate(User))
             {
-                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             string filename = null;
@@ -151,14 +150,12 @@ namespace Prime.Controllers
                     filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, "identification_document");
                     if (string.IsNullOrWhiteSpace(filename))
                     {
-                        ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
-                        return BadRequest(ApiResponse.BadRequest(ModelState));
+                        return BadRequest("Identification document could not be created; network error or upload is already submitted");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
-                    return BadRequest(ApiResponse.BadRequest(ModelState));
+                    return BadRequest("Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
                 }
             }
 
@@ -195,8 +192,7 @@ namespace Prime.Controllers
         {
             if (enrollee == null)
             {
-                ModelState.AddModelError("Enrollee", "Profile update model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Profile update model cannot be null.");
             }
 
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -213,15 +209,13 @@ namespace Prime.Controllers
 
             if (!enrollee.Validate(User))
             {
-                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             // If the enrollee is not in the status of 'Editable', it cannot be updated
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee can not be updated when the current status is not 'Editable'.");
             }
 
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
@@ -327,8 +321,7 @@ namespace Prime.Controllers
             }
             if (string.IsNullOrWhiteSpace(note))
             {
-                ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Adjudicator notes can't be null or empty.");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -402,14 +395,12 @@ namespace Prime.Controllers
 
             if (accessAgreementNote.EnrolleeId != 0 && enrolleeId != accessAgreementNote.EnrolleeId)
             {
-                ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee Id does not match with the payload.");
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Access agreement notes can not be updated when the current status is 'Editable'.");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -667,8 +658,7 @@ namespace Prime.Controllers
             var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
             if (document == null)
             {
-                ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee Adjudication Document could not be created; network error or upload is already submitted");
             }
 
             return Ok(document);

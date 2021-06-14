@@ -9,6 +9,15 @@ namespace Prime.Controllers
     public class PrimeControllerBase : ControllerBase
     {
         /// <summary>
+        /// Sends a StatusCodes.400BadRequest response with an ApiMessageResponse body.
+        /// </summary>
+        /// <param name="message"></param>
+        public BadRequestObjectResult BadRequest(string message)
+        {
+            return base.BadRequest(ApiResponse.Message(message));
+        }
+
+        /// <summary>
         /// Sends a StatusCodes.Status201Created response with an ApiResultResponse body wrapping the value.
         /// </summary>
         /// <param name="actionName"></param>

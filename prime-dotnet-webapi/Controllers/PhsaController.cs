@@ -45,16 +45,14 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create the Party, the passed in model cannot be null.");
             }
 
             var validPartyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: changeModel.Email);
 
             if (!changeModel.Validate(validPartyTypes))
             {
-                ModelState.AddModelError("Party", "Validation failed: Email and Phone Number are required, and at least one Pre-Approved PHSA Party Type must be specified.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Validation failed: Email and Phone Number are required, and at least one Pre-Approved PHSA Party Type must be specified.");
             }
 
             if ((await _partyService.CreateOrUpdatePartyAsync(changeModel, User)).IsInvalidId())

@@ -96,13 +96,11 @@ namespace Prime.Controllers
         {
             if (authorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUser", "Could not create AuthorizedUser, the passed in model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create AuthorizedUser, the passed in model cannot be null.");
             }
             if (!authorizedUser.Validate(User))
             {
-                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             var createdAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(authorizedUser, User);
@@ -135,13 +133,11 @@ namespace Prime.Controllers
         {
             if (updatedAuthorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUser", "Authorized user update model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Authorized user update model cannot be null.");
             }
             if (!updatedAuthorizedUser.Validate(User))
             {
-                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
@@ -187,8 +183,7 @@ namespace Prime.Controllers
             }
             if (authorizedUser.Status != AccessStatusType.Approved)
             {
-                ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {nameof(AccessStatusType.Active)}");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest($"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {nameof(AccessStatusType.Active)}");
             }
 
             await _authorizedUserService.ActivateAuthorizedUser(authorizedUserId);

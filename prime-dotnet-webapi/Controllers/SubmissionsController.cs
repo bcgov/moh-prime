@@ -46,8 +46,7 @@ namespace Prime.Controllers
         {
             if (updatedProfile == null)
             {
-                ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("New profile cannot be null.");
             }
 
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -64,14 +63,12 @@ namespace Prime.Controllers
 
             if (!updatedProfile.Validate(User))
             {
-                ModelState.AddModelError("EnrolleeUpdateModel", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Application can not be submitted when the current status is not 'Active'.");
             }
 
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
@@ -233,8 +230,7 @@ namespace Prime.Controllers
             var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, action, additionalParameters);
             if (!success)
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Action could not be performed.");
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -269,14 +265,12 @@ namespace Prime.Controllers
 
             if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
             {
-                ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Agreement type must be a TOA.");
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is not 'Under Review'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Assigned agreement type can not be updated when the current status is not 'Under Review'.");
             }
 
             await _enrolleeService.AssignToaAgreementType(enrolleeId, assignedToaType);

@@ -36,14 +36,12 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create the Party, the passed in model cannot be null.");
             }
 
             if (!changeModel.Validate(User))
             {
-                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
@@ -72,8 +70,7 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                ModelState.AddModelError("GisEnrolment", "Profile update model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Profile update model cannot be null.");
             }
 
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
@@ -88,8 +85,7 @@ namespace Prime.Controllers
 
             if (!changeModel.Validate(User))
             {
-                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);

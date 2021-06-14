@@ -99,8 +99,7 @@ namespace Prime.Controllers
         {
             if (!await _partyService.PartyExistsAsync(createOrganization.PartyId, PartyType.SigningAuthority))
             {
-                ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in SigningAuthority does not exist.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create an organization, the passed in SigningAuthority does not exist.");
             }
 
             var createdOrganizationId = await _organizationService.CreateOrganizationAsync(createOrganization.PartyId);
@@ -346,8 +345,7 @@ namespace Prime.Controllers
                 var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, organizationAgreementGuid.Value);
                 if (signedAgreement == null)
                 {
-                    ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
-                    return BadRequest(ApiResponse.BadRequest(ModelState));
+                    return BadRequest("Signed Organization Agreement could not be created; network error or upload is already submitted");
                 }
             }
 
