@@ -155,6 +155,15 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${VANITY_URL}/api/docman
+            volumeMounts:
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+        volumes:
+        - name: vanity-tls-certs
+          secret:
+            secretName: vanity-tls-certificate
+            defaultMode: 420
     triggers:
       - type: ConfigChange
       - type: ImageChange
