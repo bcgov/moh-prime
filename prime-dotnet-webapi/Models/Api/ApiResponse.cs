@@ -16,11 +16,6 @@ namespace Prime.Models.Api
         {
             return new ApiMessageResponse(message);
         }
-
-        public static ApiBadRequestResponse BadRequest(ModelStateDictionary modelState)
-        {
-            return new ApiBadRequestResponse(modelState);
-        }
     }
 
     public class ApiResultResponse<T>
@@ -40,23 +35,6 @@ namespace Prime.Models.Api
         public ApiMessageResponse(string message)
         {
             Message = message;
-        }
-    }
-
-    public class ApiBadRequestResponse
-    {
-        public IEnumerable<string> Errors { get; }
-
-        public ApiBadRequestResponse(ModelStateDictionary modelState)
-        {
-            if (modelState == null || modelState.IsValid)
-            {
-                throw new ArgumentException("ModelState must have errors", nameof(modelState));
-            }
-
-            Errors = modelState
-                .SelectMany(x => x.Value.Errors)
-                .Select(x => x.ErrorMessage);
         }
     }
 }

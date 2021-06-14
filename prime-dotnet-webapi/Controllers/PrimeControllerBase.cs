@@ -9,12 +9,21 @@ namespace Prime.Controllers
     public class PrimeControllerBase : ControllerBase
     {
         /// <summary>
-        /// Sends a StatusCodes.400BadRequest response with an ApiMessageResponse body.
+        /// Sends a StatusCodes.Status400BadRequest response with an ApiMessageResponse body.
         /// </summary>
         /// <param name="message"></param>
         public BadRequestObjectResult BadRequest(string message)
         {
             return base.BadRequest(ApiResponse.Message(message));
+        }
+
+        /// <summary>
+        /// Sends a StatusCodes.Status409Conflict response with an ApiMessageResponse body.
+        /// </summary>
+        /// <param name="message"></param>
+        public ConflictObjectResult Conflict(string message)
+        {
+            return base.Conflict(new ApiMessageResponse(message));
         }
 
         /// <summary>
@@ -29,7 +38,7 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Sends a StatusCodes.404NotFound response with an ApiMessageResponse body.
+        /// Sends a StatusCodes.Status404NotFound response with an ApiMessageResponse body.
         /// </summary>
         /// <param name="message"></param>
         public NotFoundObjectResult NotFound(string message)
@@ -38,7 +47,7 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Sends a StatusCodes.200OK response with an ApiResultResponse body wrapping the value.
+        /// Sends a StatusCodes.Status200OK response with an ApiResultResponse body wrapping the value.
         /// </summary>
         /// <param name="value"></param>
         public OkObjectResult Ok<T>([ActionResultObjectValue] T value)
