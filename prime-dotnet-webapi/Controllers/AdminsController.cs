@@ -66,8 +66,8 @@ namespace Prime.Controllers
         /// Gets all the admins.
         /// </summary>
         [HttpGet(Name = nameof(GetAdmins))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
