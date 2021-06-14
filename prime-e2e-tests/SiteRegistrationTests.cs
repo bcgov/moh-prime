@@ -14,7 +14,7 @@ namespace TestPrimeE2E.SiteRegistration
         private Name _name = new Name();
         private Company _company = new Company();
         private Address _address = new Address();
-        
+
         [SetUp]
         public void Init()
         {
@@ -28,7 +28,7 @@ namespace TestPrimeE2E.SiteRegistration
         [TearDown]
         public void CleanUp()
         {
-            _driver.Quit();
+            //            _driver.Quit();
         }
 
         [Test]
@@ -40,10 +40,12 @@ namespace TestPrimeE2E.SiteRegistration
             ClickButton("Next");
 
             // check if org information is already registered,
-            if (_driver.FindPatiently("//h1[@class='mb-4']").Text == "Site Management") {
+            if (_driver.FindPatiently("//h1[@class='mb-4']").Text == "Site Management")
+            {
                 ClickButton("Add Site");
             }
-            else {
+            else
+            {
                 //Signing Authority Information
                 Assert.AreEqual("PharmaNet Site Registration", _driver.FindPatiently("//h1[@class='mb-4']").Text);
                 Assert.AreEqual("Signing Authority Information", _driver.FindPatiently("//h2[@class='title']").Text);
@@ -64,11 +66,12 @@ namespace TestPrimeE2E.SiteRegistration
 
             //Care setting
             // choose private community health practice
-            SelectDropdownItem("careSettingCode", "Private Community Health Practice");
+            SelectDropdownItem("careSettingCode", "Community Pharmacy");
             // pick vendor
-            _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'CareConnect')]]").Click();
+            _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'BDM')]]").Click();
             _driver.TakeScreenshot("Care_Setting");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("//mat-radio-button[label/div[contains(text(), 'WinRx')]]", 2, Keys.Enter);
 
             //site business licence
             _driver.FindPatiently("//input[@type='file']").SendKeys(TestParameters.BusinessLicencePath);
@@ -88,33 +91,38 @@ namespace TestPrimeE2E.SiteRegistration
             postal.Clear();
             postal.SendKeys(_address.ZipCode("?#? #?#"));
             _driver.TakeScreenshot("Site_Address");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("//input[@formcontrolname='postal']", 2, Keys.Enter);
 
             //hours of operation
             _driver.FindPatiently("//mat-slide-toggle").Click();
             _driver.TakeScreenshot("Hours_of_Operation");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("(//mat-slide-toggle)[7]", 2, Keys.Enter);
 
             //pharmanet administrator
-            FillContactForm();
+            FillContactProfileForm();
             _driver.TakeScreenshot("Pharmanet_Administrator");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("//input[@formcontrolname='postal']", 2, Keys.Enter);
 
             var wait = new WebDriverWait(_driver, TimeSpan.FromSeconds(30));
 
             //Privacy officer
             wait.Until(ExpectedConditions.ElementExists(
                 By.XPath("//h2[@class='title' and contains(text(),'Privacy Officer')]")));
-            FillContactForm();
+            FillContactProfileForm();
             _driver.TakeScreenshot("Privacy_Officer");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("//input[@formcontrolname='postal']", 2, Keys.Enter);
 
             //technical support contact
             wait.Until(ExpectedConditions.ElementExists(
                 By.XPath("//h2[@class='title' and contains(text(),'Technical Support Contact')]")));
-            FillContactForm();
+            FillContactProfileForm();
             _driver.TakeScreenshot("Technical_Support_Contact");
-            ClickButton("Save and Continue");
+            // Need to tab over and click "Save and Continue" button
+            _driver.TabAndInteract("//input[@formcontrolname='postal']", 2, Keys.Enter);
 
             // wait until page load complete
             wait.Until(d => d.Url.EndsWith("organization-agreement") || d.Url.EndsWith("site-review"));
@@ -123,11 +131,12 @@ namespace TestPrimeE2E.SiteRegistration
             //organization agreement
             if (_driver.Url.EndsWith("organization-agreement"))
             {
-                // tick checkbox
-                _driver.TabAndInteract("//mat-slide-toggle", 5, Keys.Space);
+                // Cannot interact with checkbox directly and tabbing from slider to do it does not seem to tick off the checkbox
+                // so tab from email link instead
+                _driver.TabAndInteract("//a[@href='mailto:PRIMESupport@gov.bc.ca']", 3, Keys.Space);
                 _driver.TakeScreenshot("Organization_Agreement");
                 // click accept button
-                _driver.TabAndInteract("//mat-slide-toggle", 7, Keys.Enter);
+                _driver.TabAndInteract("//a[@href='mailto:PRIMESupport@gov.bc.ca']", 5, Keys.Enter);
                 // confirm
                 _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Accept Organization Agreement')]]").Click();
                 //there are more buttons when first creating the organization
@@ -148,7 +157,7 @@ namespace TestPrimeE2E.SiteRegistration
             _driver.TakeScreenshot(_driver.Url.EndsWith("organizations") ? "Site_Management" : "Submitted");
         }
 
-        private void FillContactForm()
+        private void FillContactProfileForm()
         {
             FillFormField("firstName", _name.FirstName());
             FillFormField("lastName", _name.LastName());
@@ -157,6 +166,18 @@ namespace TestPrimeE2E.SiteRegistration
             FillFormField("phone", "5555555555");
             FillFormField("fax", "5555555555");
             FillFormField("smsPhone", "5555555555");
+
+            // Need to tab over and click "Add address manually" button
+            _driver.TabAndInteract("//input[@formcontrolname='smsPhone']", 4, Keys.Enter);
+            // Need to tab over and activate Country drop-down
+            _driver.TabAndInteract("//input[@formcontrolname='smsPhone']", 4, Keys.Enter);
+            // Tab over and activate Province drop-down, selecting first item in Country drop-down in the process
+            _driver.TabAndInteract("//input[@formcontrolname='smsPhone']", 5, Keys.Enter);
+            // Tab over, selecting first item in Province drop-down in the process
+            _driver.TabAndInteract("//input[@formcontrolname='smsPhone']", 5, Keys.Enter);
+            FillFormField("street", _address.StreetAddress());
+            FillFormField("city", _address.City());
+            FillFormField("postal", GetCanadianPostalCode(_address));
         }
     }
 }
