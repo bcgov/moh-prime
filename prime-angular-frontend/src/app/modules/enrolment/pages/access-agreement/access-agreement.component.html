@@ -44,13 +44,17 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
     </app-page-subheader>
-
-    <p>
+    <p *ngIf="!enrolment.expiryDate; else renewal">
       You have been approved for PharmaNet access, and to complete your enrolment,
       you must accept the PharmaNet User Terms of Access. These terms are specific
       to the type of access you have been granted.
     </p>
-
+    <ng-template #renewal>
+      <p>
+        Your renewal has been processed. To complete your renewal, you must accept thePharmaNet User Terms of Access.
+        These terms are specific to the type of accessyou have been granted.
+      </p>
+    </ng-template>
     <p>
       Read the PharmaNet User Terms of Access carefully, as you must comply with them at all times in relation
       to your use of PharmaNet. You are encouraged to print or save a copy of the PharmaNet User Terms of Access or
