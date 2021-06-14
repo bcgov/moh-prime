@@ -14,7 +14,7 @@ namespace Prime.Controllers
         /// <param name="message"></param>
         public BadRequestObjectResult BadRequest(string message)
         {
-            return base.BadRequest(ApiResponse.Message(message));
+            return base.BadRequest(new ApiMessageResponse(message));
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Prime.Controllers
         /// <param name="value"></param>
         public CreatedAtActionResult CreatedAtAction<T>(string actionName, object routeValues, [ActionResultObjectValue] T value)
         {
-            return base.CreatedAtAction(actionName, routeValues, ApiResponse.Result(value));
+            return base.CreatedAtAction(actionName, routeValues, new ApiResultResponse<T>(value));
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Prime.Controllers
         /// <param name="message"></param>
         public NotFoundObjectResult NotFound(string message)
         {
-            return base.NotFound(ApiResponse.Message(message));
+            return base.NotFound(new ApiMessageResponse(message));
         }
 
         /// <summary>
@@ -52,7 +52,27 @@ namespace Prime.Controllers
         /// <param name="value"></param>
         public OkObjectResult Ok<T>([ActionResultObjectValue] T value)
         {
-            return base.Ok(ApiResponse.Result(value));
+            return base.Ok(new ApiResultResponse<T>(value));
+        }
+    }
+
+    public class ApiResultResponse<T>
+    {
+        public T Result { get; }
+
+        public ApiResultResponse(T result)
+        {
+            Result = result;
+        }
+    }
+
+    public class ApiMessageResponse
+    {
+        public string Message { get; }
+
+        public ApiMessageResponse(string message)
+        {
+            Message = message;
         }
     }
 }
