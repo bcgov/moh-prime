@@ -106,11 +106,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
@@ -182,11 +177,6 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -233,14 +223,11 @@ objects:
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata: 
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${HPR_URL}
     to:
@@ -257,14 +244,11 @@ objects:
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${MAUTH_URL}
     to:
@@ -285,11 +269,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${API_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
@@ -422,11 +401,6 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -447,11 +421,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -576,11 +545,6 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-backend
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -599,6 +563,8 @@ objects:
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
       - ReadWriteOnce
@@ -616,11 +582,6 @@ objects:
 - apiVersion: batch/v1
   kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -735,11 +696,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -847,18 +803,13 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-      annotations: 
-        template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    annotations: 
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
       - name: postgres
@@ -878,11 +829,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${REDIS_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -968,6 +914,8 @@ objects:
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
       - name: redis

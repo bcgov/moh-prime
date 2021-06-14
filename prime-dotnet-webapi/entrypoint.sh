@@ -3,7 +3,7 @@ echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
 if [ -n $(printenv DB_PASS) ]
-then 
+then
 export PGPASSWORD=$(printenv DB_PASS)
 export POSTGRESQL_USERNAME=$(printenv DB_USER)
 export POSTGRESQL_DATABASE=$(printenv DB_NAME)
@@ -16,7 +16,7 @@ fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
 export logfile=prime.logfile.out
 # Wait for database connection
-function PG_IS_READY() { 
+function PG_IS_READY() {
 psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -t -c "select 'READY'" | awk '{print $1}'
 }
 
@@ -26,6 +26,7 @@ do
     sleep 3 ;
 done
 
+Xeethoh1zaepe1Dahyaich4a
 psql -h $DB_HOST -U ${POSTGRESQL_USERNAME} -d ${POSTGRESQL_DATABASE} -a -f ./databaseMigrations.sql
 
 echo "Resting 5 seconds to let things settle down..."

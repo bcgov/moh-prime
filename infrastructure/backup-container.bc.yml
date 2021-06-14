@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: Template
+labels:
+  template: database-backup-template
+metadata:
+  creationTimestamp: null
+  name: database-backup-dc
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+  value: backup
+- name: SUFFIX
+  displayName: Name Suffix
+  description: A suffix appended to all objects
+  required: false
+- name: VERSION
+  required: false
+- name: SOURCE_CONTEXT_DIR
+  value: prime-database-backup
+  required: true
+- name: SOURCE_REPOSITORY_URL
+  required: true
+  value: https://github.com/bcgov/moh-prime
+- name: SOURCE_REPOSITORY_REF
+  required: true
+- name: LICENSE_PLATE
+  required: true
+  value: 9c33a9
+- name: OC_APP
+  required: true
+  value: dev
+- name: POSTGRESQL_HOST
+  required: true
+  value: postgresql
+- name: METABASE_HOST
+  required: true
+  value: metabase-database
+objects:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      io.kompose.service: backup
+    name: backup
+  spec:
+    replicas: 1
+    selector:
+      io.kompose.service: backup
+    strategy:
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          io.kompose.network/primenet: "true"
+          io.kompose.service: backup
+      spec:
+        containers:
+          - env:
+              # Metabase related environment variables
+              - name: METABASE_HOST
+                value: ${METABASE_HOST}
+              - name: METABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-password
+              - name: METABASE_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-name                    
+              - name: METABASE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-user
+
+              # PostgreSQL related environment variables
+              - name: PGHOST
+                value: ${POSTGRESQL_HOST}
+              - name: PGUSERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "postgresql-secrets"
+                    key: postgresql_database_username
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: "postgresql-secrets"
+                    key: postgresql_database_admin_password
+              - name: PGDATABASE
+                valueFrom:
+                  configMapKeyRef:
+                    name: "postgresql"
+                    key: postgresql_database_name                 
+            image: ' '
+            name: backup
+            ports:
+              - containerPort: 5432
+            resources: {}
+            volumeMounts:
+              - mountPath: /opt/backup
+                name: backup-data
+              - mountPath: /var/run
+                name: backup-run
+        restartPolicy: Always
+        volumes:
+        - name: backup-data
+          persistentVolumeClaim:
+            claimName: backup-data
+        - name: backup-run
+          emptyDir: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - backup
+        from:
+          kind: ImageStreamTag
+          name: backup:latest
+          namespace: 9c33a9-tools
+      type: ImageChange
+  status: {}

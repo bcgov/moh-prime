@@ -1,0 +1,130 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: database-backup-dc
+labels:
+  template: database-backup-template
+parameters:
+- name: NAME
+  displayName: Name
+  description: A prefix appended to all objects
+  required: true
+  value: backup
+- name: SVC_NAME
+  displayName: Name
+  description: A name appended to all objects
+  required: true
+  value: prime
+- name: DB_POD
+  required: true
+  value: postgresql-db
+- name: METABASE_HOST
+  required: true
+  value: metabase-database
+- name: DATA_VOLUME_CAPACITY
+  displayName: Metabase Data Volume Capacity
+  description: Volume space available for Metabase data e.g. 512Mi, 1Gi, 2Gi.
+  required: true
+  value: 1Gi
+objects:
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app.kubernetes.io/part-of: utilities
+      app.kubernetes.io/component: backup-container
+    name: ${NAME}
+  spec:
+    replicas: 1
+    selector:
+      app.kubernetes.io/instance: backup-container
+    strategy:
+      resources: {}
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app.kubernetes.io/instance: backup-container
+      spec:
+        containers:
+          - env:
+              # Metabase related environment variables
+              - name: METABASE_HOST
+                value: ${METABASE_HOST}
+              - name: METABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-password
+              - name: METABASE_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-name                    
+              - name: METABASE_USERNAME
+                valueFrom:
+                  secretKeyRef:
+                    name: "metabase-database"
+                    key: database-user
+
+              # PostgreSQL related environment variables
+              - name: PGHOST
+                value: ${SVC_NAME}-{DB_POD}
+              - name: PGUSERNAME
+                valueFrom:
+                secretKeyRef:
+                  name: prime-postgresql-db
+                  key: database-user
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                secretKeyRef:
+                  name: prime-postgresql-db
+                  key: database-password
+              - name: PGDATABASE
+                valueFrom:
+                secretKeyRef:
+                  name: prime-postgresql-db
+                  key: database-name             
+            image: ' '
+            name: backup
+            ports:
+              - containerPort: 5432
+            resources: {}
+            volumeMounts:
+              - mountPath: /opt/backup
+                name: backup-data
+              - mountPath: /var/run
+                name: backup-run
+        restartPolicy: Always
+        volumes:
+        - name: backup-data
+          persistentVolumeClaim:
+            claimName: backup-data
+        - name: backup-run
+          emptyDir: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - backup
+        from:
+          kind: ImageStreamTag
+          name: backup:latest
+          namespace: 9c33a9-tools
+      type: ImageChange
+  status: {}
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+    name: backup-data
+    labels:
+      app.kubernetes.io/part-of: utilities
+      app.kubernetes.io/component: backup-container
+  spec:
+    resources:
+      requests:
+        storage: ${DATA_VOLUME_CAPACITY}
+    storageClassName: netapp-file-backup
