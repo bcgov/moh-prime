@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { UtilsService } from '@core/services/utils.service';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
@@ -26,6 +27,7 @@ export class PaginatorComponent implements AfterContentInit {
   public form: FormControl;
 
   constructor(
+    private utilService: UtilsService,
     private fb: FormBuilder
   ) { }
 
@@ -60,7 +62,10 @@ export class PaginatorComponent implements AfterContentInit {
     ]);
 
     this.paginator.page
-      .subscribe((event: PageEvent) => this.form.patchValue(event.pageIndex + 1));
+      .subscribe((event: PageEvent) => {
+        this.form.patchValue(event.pageIndex + 1);
+        this.utilService.scrollTop();
+      });
   }
 
   /**

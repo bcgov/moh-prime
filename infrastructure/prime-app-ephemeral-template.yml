@@ -277,7 +277,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-postgres
+    app: ${SVC_NAME}-${API_POD}
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
@@ -346,7 +346,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
-                    key: database-password
+                    key: admin-password
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -620,7 +620,7 @@ objects:
       app.openshift.io/runtime: python
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
   spec:
     template:
       metadata:
@@ -817,8 +817,7 @@ objects:
         volumes:
           - name: ${SVC_NAME}-postgres-data
             emptyDir: {}
-  
-  
+
 #   PostgreSQL Secret
 - apiVersion: v1
   kind: Secret
