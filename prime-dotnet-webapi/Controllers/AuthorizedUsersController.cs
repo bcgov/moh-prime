@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +9,6 @@ using Prime.Extensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
-using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers

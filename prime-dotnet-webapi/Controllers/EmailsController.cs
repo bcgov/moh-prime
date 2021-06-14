@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Services;
-using Prime.Models.Api;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
 

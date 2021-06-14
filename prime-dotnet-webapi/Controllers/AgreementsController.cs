@@ -5,11 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Services;
-using Prime.Models.Api;
 using Prime.ViewModels;
-using Prime.Services.Razor;
 
 namespace Prime.Controllers
 {

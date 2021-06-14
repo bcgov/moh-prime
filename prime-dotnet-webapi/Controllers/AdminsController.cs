@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 
 namespace Prime.Controllers

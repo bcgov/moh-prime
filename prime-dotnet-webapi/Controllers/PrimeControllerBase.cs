@@ -1,8 +1,5 @@
-using System;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Prime.Models.Api;
 
 namespace Prime.Controllers
 {

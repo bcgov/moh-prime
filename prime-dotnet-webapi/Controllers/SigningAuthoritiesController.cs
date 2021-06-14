@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;

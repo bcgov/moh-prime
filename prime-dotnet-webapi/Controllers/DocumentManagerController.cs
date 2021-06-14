@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using Prime.Auth;
-using Prime.Models.Api;
 using Prime.HttpClients;
 
 namespace Prime.Controllers
