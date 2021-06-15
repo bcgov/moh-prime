@@ -310,6 +310,8 @@ objects:
                 value: ${SVC_NAME}-postgres
               - name: OC_APP
                 value: ${OC_APP}
+              - name: BACKEND_URL
+                value: https://${VANITY_URL}/api/v1/
               - name: FRONTEND_URL
                 value: https://${VANITY_URL}
               - name: DB_PASS
@@ -374,6 +376,8 @@ objects:
                   name: pharmanet-api-secrets
               - secretRef:
                   name: verifiable-credential-secrets
+              - secretRef:
+                  name: plr-integration-thumbprint
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs

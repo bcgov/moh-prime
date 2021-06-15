@@ -310,6 +310,10 @@ objects:
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
+              - name: BACKEND_URL
+                value: https://${SVC_NAME}${URL_STUB}/api/v1/
+              - name: FRONTEND_URL
+                value: https://${SVC_NAME}${URL_STUB}
               - name: database-password
                 valueFrom:
                   secretKeyRef:
@@ -377,6 +381,8 @@ objects:
                   name: pharmanet-api-secrets
               - secretRef:
                   name: verifiable-credential-secrets
+              - secretRef:
+                  name: plr-integration-thumbprint
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
