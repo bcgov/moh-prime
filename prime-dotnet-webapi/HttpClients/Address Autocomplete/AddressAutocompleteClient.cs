@@ -3,9 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-
-using Prime.Extensions;
+using Flurl;
 
 namespace Prime.HttpClients
 {
@@ -21,7 +19,6 @@ namespace Prime.HttpClients
             ILogger<AddressAutocompleteClient> logger,
             AddressAutocompleteClientCredentials credentials)
         {
-            // Auth header and api-key are injected in Startup.cs
             _client = client;
             _logger = logger;
             _credentials = credentials;
@@ -29,13 +26,12 @@ namespace Prime.HttpClients
 
         public async Task<IEnumerable<AddressAutocompleteFindResponse>> Find(string searchTerm, string lastId)
         {
-            var url = new Dictionary<string, string>()
+            var url = "Find/v2.10/json3ex.ws".SetQueryParams(new
             {
-                { "Key", _credentials.ApiKey },
-                { "SearchTerm", searchTerm },
-                { "LastId", lastId }
-            }
-            .ToQueryStringUrl("Find/v2.10/json3ex.ws");
+                Key = _credentials.ApiKey,
+                SearchTerm = searchTerm,
+                LastId = lastId,
+            });
 
             HttpResponseMessage response = null;
             try
@@ -54,19 +50,17 @@ namespace Prime.HttpClients
                 throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Find");
             }
 
-            string body = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteFindResponse>>(body).Items;
+            var body = await response.Content.ReadAsAsync<ApiResponse<AddressAutocompleteFindResponse>>();
+            return body?.Items;
         }
 
-        public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string Id)
+        public async Task<IEnumerable<AddressAutocompleteRetrieveResponse>> Retrieve(string id)
         {
-            var url = new Dictionary<string, string>()
+            var url = "Retrieve/v2.11/json3ex.ws".SetQueryParams(new
             {
-                { "Key", _credentials.ApiKey },
-                { "Id", Id }
-            }
-            .ToQueryStringUrl("Retrieve/v2.11/json3ex.ws");
+                Key = _credentials.ApiKey,
+                Id = id,
+            });
 
             HttpResponseMessage response = null;
             try
@@ -85,9 +79,8 @@ namespace Prime.HttpClients
                 throw new AddressAutocompleteApiException($"Error code {response.StatusCode} was provided when calling AddressAutocompleteClient::Retrieve");
             }
 
-            string body = await response.Content.ReadAsStringAsync();
-
-            return JsonConvert.DeserializeObject<ApiResponse<AddressAutocompleteRetrieveResponse>>(body).Items;
+            var body = await response.Content.ReadAsAsync<ApiResponse<AddressAutocompleteRetrieveResponse>>();
+            return body?.Items;
         }
 
         private class ApiResponse<T>
