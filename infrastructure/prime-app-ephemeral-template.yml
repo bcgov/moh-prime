@@ -65,7 +65,7 @@ parameters:
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
-  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  value: ".pharmanetenrolment.gov.bc.ca"
   required: false
 - name: HPR_URL
   displayName: Health Practicioner URL
@@ -106,11 +106,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
@@ -157,6 +152,15 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
+            volumeMounts:
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+        volumes:
+        - name: vanity-tls-certs
+          secret:
+            secretName: vanity-tls-certificate
+            defaultMode: 420
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -173,11 +177,6 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -216,7 +215,7 @@ objects:
     port:
       targetPort: http
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
   
@@ -224,14 +223,11 @@ objects:
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata: 
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${HPR_URL}
     to:
@@ -241,21 +237,18 @@ objects:
     port:
       targetPort: 8888
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Allow
     wildcardPolicy: None
 #   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${MAUTH_URL}
     to:
@@ -276,11 +269,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${API_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
@@ -413,11 +401,6 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -438,13 +421,8 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -456,7 +434,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -465,10 +443,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}-backend
+          name: ${SVC_NAME}-${DOCMAN_POD}
       spec:
         containers:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-backend
+          - name: ${SVC_NAME}-${DOCMAN_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
@@ -557,7 +535,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}-backend
+            - ${SVC_NAME}-${DOCMAN_POD}
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -567,29 +545,26 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: "${SVC_NAME}-${DOCMAN_POD}-backend"
+      - name: "${SVC_NAME}-${DOCMAN_POD}"
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}
 #   Document Manager (backend) Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
       - ReadWriteOnce
@@ -607,11 +582,6 @@ objects:
 - apiVersion: batch/v1
   kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -726,11 +696,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -838,18 +803,13 @@ objects:
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-postgres
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-      annotations: 
-        template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+    annotations: 
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
       - name: postgres
@@ -869,11 +829,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${REDIS_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -959,6 +914,8 @@ objects:
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
       - name: redis
