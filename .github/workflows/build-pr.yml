@@ -1,11 +1,16 @@
 name: Build PR
 on:
   push:
-    branches-ignore: [develop]
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
   workflow_dispatch:
   pull_request:
     branches-ignore:
       - 'develop'
+      - 'test'
+      - 'master'
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04

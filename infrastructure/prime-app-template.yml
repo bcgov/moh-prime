@@ -748,6 +748,11 @@ objects:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-name
+              - name: POSTGRESQL_ADMIN_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: admin-password
             image: >-
               image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
@@ -811,7 +816,6 @@ objects:
     sessionAffinity: None
     type: ClusterIP
   
-
 #   Database Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
