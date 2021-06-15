@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Controllers
 {
@@ -148,7 +149,7 @@ namespace Prime.Controllers
             {
                 if (payload.IdentificationDocumentGuid.HasValue)
                 {
-                    filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, "identification_document");
+                    filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, DestinationFolders.IdentificationDocuments);
                     if (string.IsNullOrWhiteSpace(filename))
                     {
                         ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
