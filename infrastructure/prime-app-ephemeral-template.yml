@@ -598,6 +598,7 @@ objects:
       app.openshift.io/connects-to: >-
         [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
   spec:
+    ttlSecondsAfterFinished: 100
     template:
       metadata:
         labels:
