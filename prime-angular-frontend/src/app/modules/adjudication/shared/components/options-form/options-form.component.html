@@ -1,32 +1,37 @@
 <ng-container [formGroup]="form">
 
   <mat-form-field class="w-100">
-    <mat-select [placeholder]="selectLabel"
-                [formControlName]="controlName">
-      <mat-option></mat-option>
-      <mat-option *ngFor="let option of filteredOptions | async"
-                  [value]="option">
-        {{ option[optionLabel] }}
-      </mat-option>
-    </mat-select>
 
-    <!-- TODO replicate with mat-input and mat-autocomplete -->
-    <!--      <input matInput-->
-    <!--             #input-->
-    <!--             type="text"-->
-    <!--             [placeholder]="inputLabel"-->
-    <!--             formControlName="vendor"-->
-    <!--             [matAutocomplete]="auto">-->
-    <!--      <mat-autocomplete #auto="matAutocomplete"-->
-    <!--                        autoActiveFirstOption>-->
-    <!--        <mat-option *ngFor="let vendor of filteredOptions | async"-->
-    <!--                    [value]="vendor">-->
-    <!--          {{ vendor.name }}-->
-    <!--        </mat-option>-->
-    <!--      </mat-autocomplete>-->
+    <ng-container *ngIf="selectOrAutocomplete === 'autocomplete'; else select">
+      <input matInput
+             #input
+             type="text"
+             [placeholder]="fieldLabel"
+             [formControlName]="controlName"
+             [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete"
+                        [displayWith]="displayWith.bind(this)"
+                        autoActiveFirstOption>
+        <mat-option *ngFor="let option of filteredOptions | async"
+                    [value]="option">
+          {{ option[optionLabel] }}
+        </mat-option>
+      </mat-autocomplete>
+    </ng-container>
+
+    <ng-template #select>
+      <mat-select [placeholder]="fieldLabel"
+                  [formControlName]="controlName">
+        <mat-option></mat-option>
+        <mat-option *ngFor="let option of filteredOptions | async"
+                    [value]="option">
+          {{ option[optionLabel] }}
+        </mat-option>
+      </mat-select>
+    </ng-template>
 
     <mat-error>Required</mat-error>
-    <!-- <mat-hint></mat-hint>-->
+    <mat-hint *ngIf="fieldHint">{{ fieldHint }}</mat-hint>
   </mat-form-field>
 
 </ng-container>

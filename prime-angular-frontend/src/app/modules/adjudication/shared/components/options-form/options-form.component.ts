@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
-import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -20,14 +20,14 @@ export class OptionsFormComponent implements OnInit {
   @Input() public form: FormGroup;
   /**
    * @description
-   * Index of the current FormGroup within the FormArray.
+   * Form field label.
    */
-  @Input() public index: number;
+  @Input() public fieldLabel: string;
   /**
    * @description
-   * Form input label.
+   * Form field hint.
    */
-  @Input() public selectLabel: string;
+  @Input() public fieldHint: string;
   /**
    * @description
    * FormGroup control name.
@@ -35,26 +35,48 @@ export class OptionsFormComponent implements OnInit {
   @Input() public controlName: string;
   /**
    * @description
+   * Key for accessing the option display value.
+   * NOTE: Only used with autocomplete.
+   */
+  @Input() public optionLabel: string;
+  /**
+   * @description
    * Set of available select options.
    */
   @Input() public availableOptions: BehaviorSubject<any[]>;
   /**
    * @description
-   * Key for accessing the option display value.
+   * Whether to use select (default) or autocomplete.
    */
-  @Input() public optionLabel: string;
+  @Input() public selectOrAutocomplete: 'select' | 'autocomplete';
   /**
    * @description
    * List of options that includes the selected option.
    */
   public filteredOptions: Observable<any[]>;
 
-  constructor() {}
+  constructor() {
+    this.selectOrAutocomplete = 'select';
+  }
+
+  /**
+   * @description
+   * Show the appropriate selected value in the autocomplete
+   * input field.
+   */
+  public displayWith(option: any) {
+    return option && option[this.optionLabel] ? option[this.optionLabel] : '';
+  }
 
   public ngOnInit() {
     this.filteredOptions = this.valueChanges();
   }
 
+  /**
+   * @description
+   * Listen to changes in available options and the form field, and
+   * provide the resulting set of options.
+   */
   private valueChanges(): Observable<any[]> {
     return combineLatest([
       // Prevent accidentally affecting parent observable
@@ -67,11 +89,18 @@ export class OptionsFormComponent implements OnInit {
         availableOptions = (Array.isArray(availableOptions))
           ? availableOptions
           : [];
-        // Add in the currently selected option that would be
+
+        if (this.selectOrAutocomplete === 'select') {
+          // Add in the currently selected option that would be filtered
+          // out of the available options so it can be displayed
+          return (currentOption[this.controlName])
+            ? [currentOption[this.controlName], ...availableOptions]
+            : availableOptions;
+        }
+
+        // Otherwise, autocomplete will already have the value
         // filtered out of the available options
-        return (currentOption[this.controlName])
-          ? [currentOption[this.controlName], ...availableOptions]
-          : availableOptions;
+        return availableOptions;
       })
     );
   }
