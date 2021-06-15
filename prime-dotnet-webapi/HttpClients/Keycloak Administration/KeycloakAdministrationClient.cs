@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
+using Prime.Auth;
+using Prime.Models;
 using Prime.ViewModels.Parties;
 using Prime.HttpClients.KeycloakApiDefinitions;
-using Prime.Models;
-using Prime.Auth;
 
 namespace Prime.HttpClients
 {
