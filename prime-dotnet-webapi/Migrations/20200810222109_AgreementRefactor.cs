@@ -80,57 +80,85 @@ namespace Prime.Migrations
                 nullable: false,
                 defaultValue: "");
 
+            // Rename and re-link Agreement
+            migrationBuilder.AddPrimaryKey(
+                name: "PK_Agreement",
+                table: "UserClause",
+                column: "Id");
+
+            migrationBuilder.RenameTable(
+                name: "UserClause",
+                newName: "Agreement");
+
+            migrationBuilder.RenameColumn(
+                name: "UserClauseId",
+                table: "AccessTerm",
+                newName: "AgreementId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AccessTerm_AgreementId",
+                table: "AccessTerm",
+                column: "AgreementId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_AccessTerm_Agreement_AgreementId",
+                table: "AccessTerm",
+                column: "AgreementId",
+                principalTable: "Agreement",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
             migrationBuilder.UpdateData(
-               table: "UserClause",
+               table: "Agreement",
                keyColumn: "Id",
                keyValue: 1,
                columns: new[] { "Discriminator" },
                values: new object[] { "OboAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 3,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "OboAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 5,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "OboAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 7,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "OboAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 2,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "RegulatedUserAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 4,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "RegulatedUserAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 6,
                 columns: new[] { "Discriminator" },
                 values: new object[] { "RegulatedUserAgreement" });
 
             migrationBuilder.UpdateData(
-                table: "UserClause",
+                table: "Agreement",
                 keyColumn: "Id",
                 keyValue: 8,
                 columns: new[] { "Discriminator" },
@@ -138,7 +166,7 @@ namespace Prime.Migrations
 
             #region Insert new Community Pharmacy Agreement
             migrationBuilder.InsertData(
-                table: "UserClause",
+                table: "Agreement",
                 columns: new[] { "Id", "CreatedTimeStamp", "CreatedUserId", "Discriminator", "EffectiveDate", "Text", "UpdatedTimeStamp", "UpdatedUserId" },
                 values: new object[] { 9, new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000"), "CommunityPharmacistAgreement", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), @"<h1>PHARMANET COMMUNITY PHARMACIST TERMS OF ACCESS</h1>
 
@@ -858,35 +886,6 @@ namespace Prime.Migrations
 </ol>
 ", new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)), new Guid("00000000-0000-0000-0000-000000000000") });
             #endregion
-
-            // Rename and re-link Agreement
-            migrationBuilder.AddPrimaryKey(
-                name: "PK_Agreement",
-                table: "UserClause",
-                column: "Id");
-
-            migrationBuilder.RenameTable(
-                name: "UserClause",
-                newName: "Agreement");
-
-            migrationBuilder.RenameColumn(
-                name: "UserClauseId",
-                table: "AccessTerm",
-                newName: "AgreementId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AccessTerm_AgreementId",
-                table: "AccessTerm",
-                column: "AgreementId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_AccessTerm_Agreement_AgreementId",
-                table: "AccessTerm",
-                column: "AgreementId",
-                principalTable: "Agreement",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
-
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
