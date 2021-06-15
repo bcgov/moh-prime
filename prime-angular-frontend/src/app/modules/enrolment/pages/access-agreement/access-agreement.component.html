@@ -44,7 +44,7 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Next Steps</ng-container>
     </app-page-subheader>
-    <p *ngIf="isInitialEnrolment else renewal">
+    <p *ngIf="isInitialEnrolment; else renewal">
       You have been approved for PharmaNet access, and to complete your enrolment,
       you must accept the PharmaNet User Terms of Access. These terms are specific
       to the type of access you have been granted.

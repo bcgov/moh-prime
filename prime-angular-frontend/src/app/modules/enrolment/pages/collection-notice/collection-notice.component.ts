@@ -46,9 +46,6 @@ export class CollectionNoticeComponent implements OnInit {
       case EnrolmentStatus.REQUIRES_TOA:
         this.router.navigate([EnrolmentRoutes.PENDING_ACCESS_TERM], { relativeTo: this.route.parent });
         break;
-      default: {
-        // allow the view render
-      }
     }
   }
 }

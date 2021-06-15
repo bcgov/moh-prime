@@ -64,8 +64,6 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
-    const navigation = this.router.getCurrentNavigation();
-    this.isRenewal = navigation ? navigation.extras.state?.isRenewal : false;
   }
 
   public get enrollee() {
@@ -198,6 +196,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.isRenewal = this.route.snapshot.queryParams?.isRenewal === 'true';
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {
