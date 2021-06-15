@@ -1,12 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
 import { BehaviorSubject, Observable, combineLatest, of } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-import { VendorConfig } from '@config/config.model';
 
 @UntilDestroy()
 @Component({
