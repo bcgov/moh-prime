@@ -44,14 +44,14 @@ namespace Prime.Controllers
                 return NotFound();
             }
 
-            var response = await _documentManagerClient.GetFileResponseAsync(documentAccessToken.DocumentGuid);
-            if (response == null)
+            var content = await _documentManagerClient.GetDocumentAsync(documentAccessToken.DocumentGuid);
+            if (content == null)
             {
                 return NotFound();
             }
 
-            Response.Headers.Add("Content-Disposition", response.Content.Headers.ContentDisposition.ToString());
-            return File(await response.Content.ReadAsStreamAsync(), "application/octet-stream");
+            Response.Headers.Add("Content-Disposition", content.Headers.ContentDisposition.ToString());
+            return File(await content.ReadAsStreamAsync(), "application/octet-stream");
         }
 
         // DELETE: api/document-access/{accessTokenId}
