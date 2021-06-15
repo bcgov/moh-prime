@@ -238,7 +238,7 @@ objects:
       targetPort: 8888
     tls:
       termination: passthrough
-      insecureEdgeTerminationPolicy: Allow
+      insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
 #   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
