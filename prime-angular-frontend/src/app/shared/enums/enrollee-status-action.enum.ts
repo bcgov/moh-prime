@@ -1,4 +1,4 @@
-export enum SubmissionAction {
+export enum EnrolleeStatusAction {
   APPROVE = 'approve',
   ACCEPT_TOA = 'accept-toa',
   DECLINE_TOA = 'decline-toa',
