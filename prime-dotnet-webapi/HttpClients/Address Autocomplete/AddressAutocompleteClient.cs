@@ -19,7 +19,8 @@ namespace Prime.HttpClients
             ILogger<AddressAutocompleteClient> logger,
             AddressAutocompleteClientCredentials credentials)
         {
-            _client = client;
+            // Base Url is set in Startup.cs
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger;
             _credentials = credentials;
         }

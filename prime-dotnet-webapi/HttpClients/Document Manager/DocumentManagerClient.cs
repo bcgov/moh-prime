@@ -16,6 +16,7 @@ namespace Prime.HttpClients
 
         public DocumentManagerClient(HttpClient httpClient)
         {
+            // Credentials and Base Url are set in Startup.cs
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 

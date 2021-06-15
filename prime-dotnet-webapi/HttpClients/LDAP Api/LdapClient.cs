@@ -16,8 +16,8 @@ namespace Prime.HttpClients
             ILogger<LdapClient> logger)
             : base(PropertySerialization.CamelCase)
         {
-            // Auth header and api-key are injected in Startup.cs
-            _client = client;
+            // Base Url is set in Startup.cs
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger;
         }
 
