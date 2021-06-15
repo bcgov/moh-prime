@@ -1,0 +1,57 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <ng-container *ngFor="let user of authorizedUsers; let i = index;">
+      <div class="col-md-6 col-sm-12">
+        <app-summary-card icon="account_circle"
+                          [title]="user | fullname"
+                          [properties]="getUserProperties(user)"
+                          actionButtonTitle="View Submission"
+                          [actionDisabled]="false"
+                          (action)="onView(user.id)">
+          <ng-container *ngIf="isApproved(user)"
+                        [ngTemplateOutlet]="success_notification"
+                        [ngTemplateOutletContext]="{ props:
+                            {
+                              icon: 'verified',
+                              text: 'This Authorized User is approved'
+                            }
+                          }">
+          </ng-container>
+          <ng-container *ngIf="isUnderReview(user)"
+                        [ngTemplateOutlet]="notification"
+                        [ngTemplateOutletContext]="{ props:
+                        {
+                          icon: 'notification_important',
+                          text: 'This Authorized User is waiting for approval'
+                        }
+                      }">
+          </ng-container>
+        </app-summary-card>
+      </div>
+    </ng-container>
+  </div>
+
+  <p *ngIf="!authorizedUsers?.length"
+     class="px-4 py-2 text-muted">
+    No Authorized Users Found
+  </p>
+
+  <ng-template #notification
+               let-props="props">
+    <div class="d-flex align-items-center mt-2">
+      <mat-icon class="mr-2"
+                color="warn">{{ props.icon }}</mat-icon>
+      <span class="text-red">{{ props.text }}</span>
+    </div>
+  </ng-template>
+
+  <ng-template #success_notification
+               let-props="props">
+    <div class="d-flex align-self-center mt-2">
+      <mat-icon class="mr-2 green-icon">{{ props.icon }}</mat-icon>
+      <span class="text-green">{{ props.text }}</span>
+    </div>
+  </ng-template>
+
+</div>

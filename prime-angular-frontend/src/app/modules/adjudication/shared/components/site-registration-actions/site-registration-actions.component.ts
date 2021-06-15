@@ -4,6 +4,8 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { UtilsService } from '@core/services/utils.service';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+
 @Component({
   selector: 'app-site-registration-actions',
   templateUrl: './site-registration-actions.component.html',
@@ -15,8 +17,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public decline: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
+  @Output() public enableEditing: EventEmitter<number>;
 
   public Role = Role;
+  public SiteStatusType = SiteStatusType;
 
   constructor(
     private permissionService: PermissionService,
@@ -26,6 +30,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.approve = new EventEmitter<number>();
     this.decline = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
+    this.enableEditing = new EventEmitter<number>();
   }
 
   public onApprove(): void {
@@ -59,6 +64,12 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
+  }
+
+  public onEnableEditing(): void {
+    if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
+      this.enableEditing.emit(this.siteRegistration.siteId);
+    }
   }
 
   public ngOnInit(): void { }

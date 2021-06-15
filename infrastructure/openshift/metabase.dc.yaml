@@ -1,0 +1,172 @@
+---
+apiVersion: v1
+kind: Template
+metadata:
+  name: metabase-dc
+  creationTimestamp:
+  description: >-
+    This is a PostgreSQL backed Metabase (http://www.metabase.com/) deployment. Metabase is the
+    easy, open source way for everyone in your company to ask questions and learn from data.
+  openshift.io/long-description: >-
+      This template provides a Metabase instance backed by a standalone PostgreSQL
+      server. The database is stored on persistent storage.
+parameters:
+  - name: OC_NAMESPACE
+    required: true
+    value: 9c33a9
+  - name: OC_APP
+    required: true
+    value: dev
+  - name: SOURCE_CONTEXT_DIR
+    required: false
+  - name: SOURCE_REPOSITORY_REF
+    required: false
+  - name: SOURCE_REPOSITORY_URL
+    required: false
+  - name: APP_NAME
+    displayName: Metabase Service Name
+    value: metabase
+    required: true
+  - name: CONTAINER_VERSION
+    value: v0.35.3
+objects:
+- apiVersion: v1
+  kind: ServiceAccount
+  metadata:
+    name: ${APP_NAME}
+    labels:
+      app: metabase
+      service: ${APP_NAME}
+  type: Opaque
+
+# Metabase service (endpoint for internal routing to related pods)
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: http://{.spec.clusterIP}:{.spec.ports[?(.name=="${APP_NAME}")].port}
+    name: ${APP_NAME}
+    labels:
+      app: metabase
+      service: ${APP_NAME}
+  spec:
+    ports:
+    - name: ${APP_NAME}
+      port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: metabase
+      deploymentconfig: ${APP_NAME}
+    sessionAffinity: None
+    type: ClusterIP
+
+# Metabase route definition to direct external traffic to frontend component
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: "${APP_NAME}"
+    labels:
+      app: metabase
+      service: "${APP_NAME}"
+  spec:
+    host: "${APP_NAME}-${OC_NAMESPACE}-${OC_APP}.pathfinder.gov.bc.ca"
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${APP_NAME}
+
+# Metabase - Deployment Configuration
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${APP_NAME}
+    labels:
+      app: metabase
+      service: ${APP_NAME}
+  spec:
+    replicas: 1
+    selector:
+      app: metabase
+      deploymentconfig: ${APP_NAME}
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: metabase
+          service: ${APP_NAME}
+          deploymentconfig: ${APP_NAME}
+          template: metabase
+      spec:
+        containers:
+        - name: ${APP_NAME}
+          image: ${METABASE_IMAGE}
+          imagePullPolicy: Always
+          env:
+          - name: MB_DB_TYPE
+            value: postgres
+          - name: MB_DB_HOST
+            value: postgresql
+          - name: MB_DB_PORT
+            value: "5432"
+          - name: MB_DB_DBNAME
+            value: ${POSTGRESQL_DATABASE}
+          - name: MB_DB_USER
+            valueFrom:
+              secretKeyRef:
+                key: database-user
+                name: 'postgresql-secret'
+          - name: MB_DB_PASS
+            valueFrom:
+              secretKeyRef:
+                key: database-admin-password
+                name: 'postgresql-secret'
+          command:
+            - java
+          args:
+            - '-Xmx300m'
+            - '-Xss512k'
+            - '-Dfile.encoding=UTF-8'
+            - '-Dlogfile.path=target/log'
+            - '-XX:+CMSClassUnloadingEnabled'
+            - '-XX:+UseConcMarkSweepGC'
+            - '-server'
+            - '-jar'
+            - '/app/metabase.jar'
+          ports:
+          - containerPort: 3000
+            name: ${APP_NAME}
+            protocol: TCP
+          terminationMessagePath: /dev/termination-log
+          livenessProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 240
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            timeoutSeconds: 3
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        serviceAccount: ${APP_NAME}
+        serviceAccountName: ${APP_NAME}
+        terminationGracePeriodSeconds: 30
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${APP_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${APP_NAME}:${CONTAINER_VERSION}
+        lastTriggeredImage: ""

@@ -13,10 +13,6 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "stopAtEntry": false,
-      // "serverReadyAction": {
-      //   "action": "openExternally",
-      //   "pattern": "^\\s*Now listening on:\\s+(https?://\\S+)"
-      // },
       "env": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
@@ -28,7 +24,31 @@
       "name": ".NET Core Attach",
       "type": "coreclr",
       "request": "attach",
-      "processId": "${command:pickProcess}"
+      "processId": "${command:pickRemoteProcess}",
+      "pipeTransport": {
+        "pipeProgram": "docker",
+        "pipeArgs": [
+          "exec",
+          "-i",
+          "primeapi"
+        ],
+        "debuggerPath": "/vsdbg/vsdbg",
+        "pipeCwd": "${workspaceRoot}",
+        "quoteArgs": false
+      },
+      "sourceFileMap": {
+        "/app": "${workspaceRoot}"
+      }
+    },
+    {
+      "name": "Docker .NET Core Launch",
+      "type": "docker",
+      "request": "launch",
+      "preLaunchTask": "docker-run: debug",
+      "netCore": {
+        "appProject": "${workspaceFolder}/prime.csproj"
+      },
+      "containerName": "primeapi"
     }
   ]
 }

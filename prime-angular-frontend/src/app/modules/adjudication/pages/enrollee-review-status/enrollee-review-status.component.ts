@@ -22,15 +22,14 @@ export class EnrolleeReviewStatusComponent implements OnInit {
   }
 
   public onAction() {
-    this.getEnrolleeById();
+    this.getEnrolleeById(this.route.snapshot.params.id);
   }
 
   public ngOnInit(): void {
-    this.getEnrolleeById();
+    this.route.params.subscribe((params) => this.getEnrolleeById(params.id));
   }
 
-  private getEnrolleeById() {
-    const enrolleeId = this.route.snapshot.params.id;
+  private getEnrolleeById(enrolleeId: number) {
     this.adjudicationResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
   }

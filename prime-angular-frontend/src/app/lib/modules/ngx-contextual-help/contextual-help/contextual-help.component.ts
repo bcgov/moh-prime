@@ -16,6 +16,7 @@ export class ContextualHelpComponent {
   @Input() public icon: string;
   @Input() public menuIconColor: ThemePalette;
   @Input() public small: boolean;
+  @Input() public outlined: boolean;
   @Input() public advanced: boolean;
   @Input() public titleIcon: string;
   @Output() public opened: EventEmitter<void>;
@@ -31,6 +32,7 @@ export class ContextualHelpComponent {
     this.icon = 'info';
     this.menuIconColor = 'primary';
     this.small = false;
+    this.outlined = false;
     this.advanced = false;
     this.opened = new EventEmitter<void>();
   }

@@ -171,7 +171,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
   /**
    * @description
-   * Remove jobs and obo sites from the enrolment as enrollees can not have
+   * Remove obo sites/jobs from the enrolment as enrollees can not have
    * certificate(s), as well as, job(s).
    */
   private removeJobs() {
@@ -179,9 +179,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
 
     if (this.certifications.length) {
       const form = this.enrolmentFormStateService.jobsForm;
-      const jobs = form.get('jobs') as FormArray;
       const oboSites = form.get('oboSites') as FormArray;
-      jobs.clear();
       oboSites.clear();
     }
   }

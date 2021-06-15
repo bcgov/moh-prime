@@ -23,7 +23,11 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Organization } from '@registration/shared/models/organization.model';
 import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { SiteRegistrationListViewModel, SiteListViewModelPartial } from '@registration/shared/models/site-registration.model';
+import {
+  SiteRegistrationListViewModel,
+  SiteListViewModelPartial,
+  OrganizationSearchListViewModel
+} from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import {
   AssignAction,
@@ -75,8 +79,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  public onSearch(search: string | null): void {
-    this.routeUtils.updateQueryParams({ search });
+  public onSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch });
   }
 
   public onFilter(status: any | null): void {
@@ -150,8 +154,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-            this.siteResource.removeSiteAdjudicator(siteId),
-            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -259,6 +263,11 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe();
   }
 
+  public onEnableEditing(siteId: number) {
+    this.busy = this.siteResource.enableEditingSite(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -275,7 +284,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  private getDataset(queryParams: { search?: string, status?: number }): void {
+  private getDataset(queryParams: { textSearch?: string }): void {
     const { oid, sid } = this.route.snapshot.params;
     const request$ = (oid)
       ? combineLatest([
@@ -295,8 +304,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<Organization[]> {
-    return this.organizationResource.getOrganizations()
+  private getOrganizations(queryParams: { textSearch?: string }): Observable<OrganizationSearchListViewModel[]> {
+    return this.organizationResource.getOrganizations(queryParams)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
@@ -371,14 +380,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  private toSiteRegistrations(organizations: Organization[]): SiteRegistrationListViewModel[] {
-    const siteRegistrations = organizations.reduce((registrations, ovm) => {
+  private toSiteRegistrations(results: OrganizationSearchListViewModel[]): SiteRegistrationListViewModel[] {
+    const siteRegistrations = results.reduce((registrations, result) => {
+      const { matchOn, organization: ovm } = result;
       const { id: organizationId, sites, ...organization } = ovm;
       const registration = sites.map((svm: SiteListViewModel, index: number) => {
         const { id: siteId, doingBusinessAs, ...site } = svm;
         return (!index)
-          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site }
-          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site };
+          ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
+          : { organizationId, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn };
       });
       registrations.push(registration);
       return registrations;

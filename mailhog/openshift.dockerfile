@@ -1,5 +1,4 @@
-#FROM docker-registry.default.svc:5000/dqszvc-tools/jenkins-slave-base-centos7
-FROM docker-registry.default.svc:5000/dqszvc-tools/openjdk:8-jdk
+FROM image-registry.openshift-image-registry.svc:5000/9c33a9-tools/openjdk:8-jdk
 ARG VERSION=3.35
 ARG user=jenkins
 ARG group=jenkins

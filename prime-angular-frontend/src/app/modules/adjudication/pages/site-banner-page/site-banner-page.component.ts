@@ -25,7 +25,7 @@ export class SiteBannerPageComponent implements OnInit {
 
   public onSave(banner: Banner): void {
     this.busy = this.bannerResource.createOrUpdateSiteLandingBanner(banner)
-      .subscribe((banner: Banner) => this.banner = banner);
+      .subscribe((newOrUpdatedBanner: Banner) => this.banner = newOrUpdatedBanner);
   }
 
   public onDelete(): void {

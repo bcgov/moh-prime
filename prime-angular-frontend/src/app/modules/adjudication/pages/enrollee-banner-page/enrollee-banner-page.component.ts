@@ -24,11 +24,13 @@ export class EnrolleeBannerPageComponent implements OnInit {
   }
 
   public onSave(banner: Banner): void {
-    this.busy = this.bannerResource.createOrUpdateEnrolmentLandingBanner(banner).subscribe((banner: Banner) => this.banner = banner);
+    this.busy = this.bannerResource.createOrUpdateEnrolmentLandingBanner(banner)
+      .subscribe((newOrUpdatedBanner: Banner) => this.banner = newOrUpdatedBanner);
   }
 
   public onDelete(): void {
-    this.busy = this.bannerResource.deleteEnrolmentLandingBanner().subscribe(() => this.banner = null);
+    this.busy = this.bannerResource.deleteEnrolmentLandingBanner()
+      .subscribe(() => this.banner = null);
   }
 
   public ngOnInit(): void {
@@ -36,6 +38,7 @@ export class EnrolleeBannerPageComponent implements OnInit {
   }
 
   private getBanner(): void {
-    this.busy = this.bannerResource.getEnrolmentLandingBanner().subscribe((banner: Banner) => this.banner = banner);
+    this.busy = this.bannerResource.getEnrolmentLandingBanner()
+      .subscribe((banner: Banner) => this.banner = banner);
   }
 }

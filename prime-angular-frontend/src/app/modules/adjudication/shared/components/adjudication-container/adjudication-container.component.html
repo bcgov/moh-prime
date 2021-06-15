@@ -12,11 +12,13 @@
 
   <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
                       [enrollees]="enrollees"
+                      [enrolleeNavigation]="enrolleeNavigation"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
                       (refresh)="onRefresh()"
+                      (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <ng-container *ngIf="content">
@@ -44,8 +46,7 @@
                                  (enableEditing)="onEnableEditing($event)"
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"
-                                 (reload)="onRefresh()"
-                                 (sendBulkEmail)="onSendBulkEmail()"></app-adjudicator-actions>
+                                 (reload)="onRefresh()"></app-adjudicator-actions>
 
       </div>
     </div>

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models
 {
     [Table("Privilege")]
-    public class Privilege : BaseAuditable
+    public class Privilege
     {
         [Key]
         public int Id { get; set; }

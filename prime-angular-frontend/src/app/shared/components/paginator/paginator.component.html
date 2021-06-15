@@ -1,0 +1,23 @@
+<div class="pagination-container" [hidden]="hidePaginator || !paginator.getNumberOfPages()">
+  <div>
+    <span>Current page:</span>
+
+    <mat-form-field class="input ml-2">
+      <input matInput
+             [formControl]="form">
+    </mat-form-field>
+
+    <span>of <strong>{{ paginator.getNumberOfPages() }}</strong></span>
+
+    <button mat-icon-button
+            class="ml-3"
+            color="primary"
+            matTooltip="Go to chosen page"
+            [disabled]="disabled"
+            (click)="onChange()">
+      <mat-icon>search</mat-icon>
+    </button>
+  </div>
+
+  <ng-content select="mat-paginator"></ng-content>
+</div>

@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,12 +13,14 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @UntilDestroy()
 @Component({
@@ -27,12 +30,15 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Input() public enrollees: EnrolleeListViewModel[];
+  @Input() public enrolleeNavigation: EnrolleeNavigation;
   @Output() public notify: EventEmitter<number>;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
   @Output() public sendBulkEmail: EventEmitter<void>;
+  @Output() public maintenance: EventEmitter<void>;
+  @Output() public navigateEnrollee: EventEmitter<number>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
@@ -59,6 +65,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.sendBulkEmail = new EventEmitter<void>();
+    this.maintenance = new EventEmitter<void>();
+    this.navigateEnrollee = new EventEmitter<number>();
     this.columns = [
       'prefixes',
       'displayId',
@@ -149,6 +157,10 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     }
   }
 
+  public navigateToEnrollee(enrolleeId: number): void {
+    this.navigateEnrollee.emit(enrolleeId);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
@@ -156,11 +168,11 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     // Paginator must exist within the DOM, but does not
     // have to be visible based on the size of the dataset
-    this.hidePaginator = this.paginator.pageSize > this.enrollees.length;
+    this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
     this.dataSource.data = this.enrollees;
   }
 
-  private createFormInstance() {
+  private createFormInstance(): void {
     this.form = this.fb.group({
       appliedDateRangeStart: ['', []],
       appliedDateRangeEnd: ['', []],
@@ -170,7 +182,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     });
   }
 
-  private initForm() {
+  private initForm(): void {
     this.form.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe(value => this.dataSource.filter = value);

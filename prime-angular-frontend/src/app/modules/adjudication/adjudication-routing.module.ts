@@ -29,6 +29,15 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
+import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
+import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
+import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
+import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
+import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
+import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
+import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
+import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
+import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 
 const routes: Routes = [
   {
@@ -54,6 +63,46 @@ const routes: Routes = [
             path: AdjudicationRoutes.BANNER,
             component: EnrolleeBannerPageComponent,
             data: { title: 'Enrollee Banner' }
+          },
+          {
+            path: AdjudicationRoutes.MAINTENANCE,
+            children: [
+              {
+                path: '',
+                component: EnrolleeMaintenancePageComponent,
+                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
+              },
+              {
+                path: AdjudicationRoutes.NOTIFICATION_EMAILS,
+                children: [
+                  {
+                    path: '',
+                    component: EmailNotificationListPageComponent,
+                    data: { title: 'Enrollee Notification Emails' }
+                  },
+                  {
+                    path: ':eid',
+                    component: EmailNotificationViewPageComponent,
+                    data: { title: 'Enrollee Notification Email' }
+                  },
+                ]
+              },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: EnrolleeToaMaintenanceListPageComponent,
+                    data: { title: 'Enrollee TOA Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: EnrolleeToaMaintenanceViewPageComponent,
+                    data: { title: 'Enrollee TOA Maintenance' }
+                  },
+                ]
+              }
+            ]
           },
           {
             path: ':id',
@@ -136,7 +185,32 @@ const routes: Routes = [
             data: { title: 'Site Banner' }
           },
           {
-            path: `:oid/${ AdjudicationRoutes.SITE_REGISTRATION }/:sid`,
+            path: AdjudicationRoutes.MAINTENANCE,
+            children: [
+              {
+                path: '',
+                component: SiteMaintenancePageComponent,
+                data: { title: 'Site Maintenance' }
+              },
+              {
+                path: AdjudicationRoutes.NOTIFICATION_EMAILS,
+                children: [
+                  {
+                    path: '',
+                    component: EmailNotificationListPageComponent,
+                    data: { title: 'Site Notification Emails' }
+                  },
+                  {
+                    path: ':eid',
+                    component: EmailNotificationViewPageComponent,
+                    data: { title: 'Site Notification Email' }
+                  },
+                ]
+              },
+            ]
+          },
+          {
+            path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
                 path: '',
@@ -172,6 +246,36 @@ const routes: Routes = [
                 path: AdjudicationRoutes.EVENT_LOG,
                 component: SiteEventsComponent,
                 data: { title: 'Event Log' }
+              }
+            ]
+          },
+          {
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.AUTHORIZED_USERS}`,
+            children: [
+              {
+                path: '',
+                component: HealthAuthorityAuthorizedUsersPageComponent,
+                data: { title: 'Authorized Users' }
+              },
+              {
+                path: AdjudicationRoutes.CREATE_USER,
+                component: HealthAuthorityAuthorizedUserPageComponent,
+                data: { title: 'Authorized User' }
+              },
+              {
+                path: `:auid`,
+                component: HealthAuthorityAuthorizedUserPageComponent,
+                data: { title: 'Authorized User' }
+              }
+            ]
+          },
+          {
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.ORGANIZATION_INFORMATION}`,
+            children: [
+              {
+                path: '',
+                component: HealthAuthorityOrganizationInformationPageComponent,
+                data: { title: 'Organization Information' }
               }
             ]
           }

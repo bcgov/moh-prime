@@ -10,20 +10,45 @@
         <ng-container matColumnDef="prefixes">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col">&nbsp;</th>
+              scope="col"
+              class="prefix-header pl-0">
+            <ng-container *ngIf="enrolleeNavigation">
+              <button mat-icon-button
+                      aria-label="next"
+                      matTooltip="next"
+                      [disabled]="!enrolleeNavigation?.nextId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.nextId)">
+                <mat-icon>arrow_downward</mat-icon>
+              </button>
+              <button mat-icon-button
+                      aria-label="previous"
+                      matTooltip="previous"
+                      [disabled]="!enrolleeNavigation?.previousId"
+                      (click)="navigateToEnrollee(enrolleeNavigation.previousId)">
+                <mat-icon>arrow_upward</mat-icon>
+              </button>
+            </ng-container>
+          </th>
           <td mat-cell
               *matCellDef="let row;">
-            <div class="flex-container flex-wrap d-flex">
+            <div class="d-flex flex-wrap triage-container">
+
               <app-triage *ngIf="row.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
                           class="align-self-start"
                           [enrolleeId]="row.id"
                           [assigned]="(row.adjudicatorIdir)"
                           (reload)="onReload()"></app-triage>
 
+              <app-contextual-enrolment-confirmation *ngIf="row.requiresConfirmation"
+                                                     class="align-self-start"
+                                                     [enrolleeId]="row.id"
+                                                     (reload)="onReload()"></app-contextual-enrolment-confirmation>
+
               <app-contextual-enrollee-notification *ngIf="row.hasNotification"
                                                     class="align-self-end"
                                                     [enrolleeId]="row.id"
                                                     (removed)="onReload()"></app-contextual-enrollee-notification>
+
             </div>
           </td>
         </ng-container>
@@ -32,7 +57,8 @@
           <th mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              scope="col"> Reference ID </th>
+              scope="col"> Reference ID
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.displayId }} </td>
         </ng-container>
@@ -40,7 +66,8 @@
         <ng-container matColumnDef="name">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Enrollee Name </th>
+              scope="col"> Enrollee Name
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row | fullname }} </td>
         </ng-container>
@@ -48,7 +75,8 @@
         <ng-container matColumnDef="givenNames">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Given Names </th>
+              scope="col"> Given Names
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.givenNames | default }} </td>
         </ng-container>
@@ -73,7 +101,8 @@
                                    *ngIf="hasAppliedDateRange">
               <mat-icon matDatepickerToggleIcon
                         matTooltip="Clear date range"
-                        (click)="clearAppliedDateRange()">clear</mat-icon>
+                        (click)="clearAppliedDateRange()">clear
+              </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #appliedDatePicker></mat-date-range-picker>
           </th>
@@ -101,7 +130,8 @@
                                    *ngIf="hasRenewalDateRange">
               <mat-icon matDatepickerToggleIcon
                         matTooltip="Clear date range"
-                        (click)="clearRenewalDateRange()">clear</mat-icon>
+                        (click)="clearRenewalDateRange()">clear
+              </mat-icon>
             </mat-datepicker-toggle>
             <mat-date-range-picker #renewalDatePicker></mat-date-range-picker>
           </th>
@@ -112,7 +142,8 @@
         <ng-container matColumnDef="currentTOA">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Current ToA </th>
+              scope="col"> Current ToA
+          </th>
           <td mat-cell
               *matCellDef="let row;">
             <mat-chip-list [selectable]="false">
@@ -124,22 +155,37 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> State </th>
+              scope="col"> State
+          </th>
           <td mat-cell
               *matCellDef="let row;"
               class="status"
               [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
-            {{ row.currentStatusCode | configCode: 'statuses' | default }}
-            <mat-icon *ngIf="row.alwaysManual"
-                      matTooltip="Enrollee flagged for manual adjudication"
-                      matTooltipPosition="after">flag</mat-icon>
+
+            <div class="d-flex align-items-center">
+              <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
+              <mat-icon *ngIf="row.currentStatusCode === EnrolmentStatus.EDITABLE"
+                        matTooltip="Submission editable"
+                        matTooltipPosition="after">lock_open
+              </mat-icon>
+              <mat-icon *ngIf="row.alwaysManual"
+                        matTooltip="Enrollee flagged for manual adjudication"
+                        matTooltipPosition="after">flag
+              </mat-icon>
+              <mat-icon *ngIf="row.confirmed"
+                        class="material-icons-outlined"
+                        matTooltip="Submission confirmed"
+                        matTooltipPosition="after">verified
+              </mat-icon>
+            </div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="remoteAccess">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Remote Access </th>
+              scope="col"> Remote Access
+          </th>
           <td mat-cell
               *matCellDef="let row;">
             <mat-chip-list [selectable]="false">
@@ -167,7 +213,8 @@
         <ng-container matColumnDef="careSetting">
           <th mat-header-cell
               *matHeaderCellDef
-              scope="col"> Care Setting </th>
+              scope="col"> Care Setting
+          </th>
           <td mat-cell
               *matCellDef="let row;"> {{ row.careSettingCodes | careSetting: 'abbr' | join | default }} </td>
         </ng-container>
@@ -193,9 +240,9 @@
             *matRowDef="let row; columns: columns;"></tr>
       </table>
 
-      <div [hidden]="hidePaginator">
+      <app-paginator [hidePaginator]="hidePaginator">
         <mat-paginator></mat-paginator>
-      </div>
+      </app-paginator>
     </form>
 
     <p *ngIf="!dataSource?.data.length"
@@ -220,6 +267,11 @@
                 (click)="onSendBulkEmail()">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+          <mat-icon>build</mat-icon>
+          <span>Maintenance</span>
         </button>
       </mat-menu>
     </ng-template>

@@ -18,6 +18,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
@@ -206,6 +207,36 @@ export class EnrolmentResource {
   }
 
   // ---
+  // Agreement Versions
+  // ---
+
+  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
+    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
   // Self Declaration Documents
   // ---
 
@@ -357,10 +388,6 @@ export class EnrolmentResource {
       enrollee.certifications = [];
     }
 
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
-    }
-
     if (!enrollee.oboSites) {
       enrollee.oboSites = [];
     }
@@ -443,7 +470,6 @@ export class EnrolmentResource {
     });
 
     enrolment.certifications = this.removeIncompleteCollegeCertifications(enrolment.certifications);
-    enrolment.jobs = this.removeIncompleteJobs(enrolment.jobs);
     enrolment.careSettings = this.removeIncompleteCareSettings(enrolment.careSettings);
 
     return this.enrolleeAdapter(enrolment);
@@ -474,16 +500,12 @@ export class EnrolmentResource {
   }
 
   private collegeCertificationIsIncomplete(certification: CollegeCertification): boolean {
-    const whitelist = ['practiceCode', 'practitionerId'];
+    const allowlist = ['practiceCode', 'practitionerId'];
 
     return Object.keys(certification)
       .every((key: string) =>
-        (!whitelist.includes(key) && !certification[key]) ? certification[key] : true
+        (!allowlist.includes(key) && !certification[key]) ? certification[key] : true
       );
-  }
-
-  private removeIncompleteJobs(jobs: Job[]) {
-    return jobs.filter((job: Job) => (job.title !== ''));
   }
 
   private removeIncompleteCareSettings(careSettings: CareSetting[]) {

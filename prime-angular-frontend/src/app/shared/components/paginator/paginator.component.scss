@@ -1,0 +1,29 @@
+@import 'palette';
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > div {
+    // Match mat-paginator color
+    color: rgba(black, .5);
+    padding-top: .5rem;
+    white-space: nowrap;
+
+    span {
+      // Reduce size to match mat-paginator
+      font-size: 12px;
+    }
+
+    .input {
+      // Allow for a reasonable width with some future proofing
+      width: 6ch;
+    }
+
+    button {
+      // Provide a background so the button appears more prominent
+      background-color: rgba(theme-palette(blue), .1);
+    }
+  }
+}

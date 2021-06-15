@@ -5,10 +5,12 @@
 
   <app-enrollee-table *ngIf="busy.closed || enrollees?.length"
                       [enrollees]="enrollees"
+                      [enrolleeNavigation]="enrolleeNavigation"
                       (notify)="onNotify($event)"
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
+                      (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
@@ -31,14 +33,16 @@
       </mat-card>
     </div>
     <div class="col-6">
-      <h2>Adjudication</h2>
-      <mat-card id="adjudicationCard">
-        <mat-card-content>
-          <app-review-status-content [enrollee]="enrollee"
-                                     [hideStatusHistory]="true">
-          </app-review-status-content>
-        </mat-card-content>
-      </mat-card>
+      <ng-container *ngIf="showAdjudication">
+        <h2>Adjudication</h2>
+        <mat-card id="adjudicationCard">
+          <mat-card-content>
+            <app-review-status-content [enrollee]="enrollee"
+                                       [hideStatusHistory]="true">
+            </app-review-status-content>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
 
       <app-adjudicator-actions *ngIf="enrollees?.length"
                                class="float-right"
@@ -52,6 +56,7 @@
                                (assignToa)="onAssignToa($event)"
                                (enableEnrollee)="onEnableEnrollee($event)"
                                (enableEditing)="onEnableEditing($event)"
+                               (cancelToa)="onCancelToa($event)"
                                (rerunRules)="onRerunRules($event)"
                                (toggleManualAdj)="onToggleManualAdj($event)">
       </app-adjudicator-actions>

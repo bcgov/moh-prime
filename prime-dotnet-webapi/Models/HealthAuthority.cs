@@ -5,7 +5,7 @@ namespace Prime.Models
 {
 
     [Table("HealthAuthorityLookup")]
-    public class HealthAuthority: BaseAuditable, ILookup<HealthAuthorityCode>
+    public class HealthAuthority : ILookup<HealthAuthorityCode>
     {
         [Key]
         public HealthAuthorityCode Code { get; set; }

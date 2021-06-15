@@ -59,13 +59,15 @@ describe('JobFormComponent', () => {
       fixture = TestBed.createComponent(JobFormComponent);
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
-      component.form = enrolmentFormStateService.buildJobForm();
+      // component.form = enrolmentFormStateService.buildJobForm();
       component.jobNames = new BehaviorSubject(configService.jobNames);
       fixture.detectChanges();
     }
   ));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  // Deprecated Component
+  //
+  // it('should create', () => {
+  //   expect(component).toBeTruthy();
+  // });
 });

@@ -8,6 +8,7 @@ namespace Prime.Models.Api
         EnableEditing,
         LockProfile,
         DeclineProfile,
-        RerunRules
+        RerunRules,
+        CancelToaAssignment
     }
 }

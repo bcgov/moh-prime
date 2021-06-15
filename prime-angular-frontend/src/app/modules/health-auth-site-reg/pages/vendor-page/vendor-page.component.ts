@@ -43,8 +43,10 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    // TODO when there are known vendors then uncomment filter
-    this.vendorConfig = this.configService.vendors; // .filter(v => v.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+    // TODO when there are known vendors refactor to load the list added by admin, and remove reverse
+    this.vendorConfig = this.configService.vendors
+      .filter(v => [2, 4, 13].includes(v.code))
+      .reverse();
     this.hasNoVendorError = false;
   }
 
@@ -61,7 +63,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   public onBack() {
-    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.SITE_MANAGEMENT]);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT);
   }
 
   public ngOnInit(): void {
@@ -100,7 +102,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING;
+      : HealthAuthSiteRegRoutes.SITE_INFORMATION;
 
     this.routeUtils.routeRelativeTo(routePath);
   }

@@ -11,14 +11,15 @@ import { exhaustMap } from 'rxjs/operators';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+// TODO move to @lib/models
+import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 
 @UntilDestroy()
@@ -40,11 +41,11 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private siteService: SiteService,
     private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService
+    private siteFormStateService: SiteFormStateService,
+    private route: ActivatedRoute,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
@@ -104,7 +105,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     // to the remote users that need to be persisted
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
     // Remove query param from URL without refreshing
-    this.router.navigate([], { queryParams: { fromRemoteUser: null } });
+    this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     this.siteFormStateService.setForm(site, !fromRemoteUser);
     this.formState.form.markAsPristine();
   }

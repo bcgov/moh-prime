@@ -32,7 +32,7 @@ namespace PlrIntakeUtility
             provider.StatusReasonCode = reader.GetString(GetIndex("O"));
             provider.StatusStartDate = TryGetDateTime(reader, "P");
             provider.StatusExpiryDate = TryGetDateTime(reader, "Q");
-            provider.Expertise = reader.GetString(GetIndex("R"));
+            provider.Expertise = GetMultipleElements(reader.GetString(GetIndex("R")));
             provider.Languages = reader.GetString(GetIndex("S"));
 
             provider.Address1Line1 = reader.GetString(GetIndex("T"));
@@ -53,7 +53,7 @@ namespace PlrIntakeUtility
             provider.PostalCode2 = reader.GetString(GetIndex("AH"));
             provider.Address2StartDate = TryGetDateTime(reader, "AI");
 
-            provider.Credentials = reader.GetString(GetIndex("AJ"));
+            provider.Credentials = GetMultipleElements(reader.GetString(GetIndex("AJ")));
 
             provider.TelephoneAreaCode = reader.GetString(GetIndex("AK"));
             provider.TelephoneNumber = reader.GetString(GetIndex("AL"));
@@ -72,6 +72,21 @@ namespace PlrIntakeUtility
         {
             // If cell is empty, `reader.GetDateTime` will cause a `System.NullReferenceException: Object reference not set to an instance of an object.`
             return (reader.IsDBNull(GetIndex(columnId)) ? DateTime.MinValue : reader.GetDateTime(GetIndex(columnId)));
+        }
+
+
+        /// <param name="aValue">A pipe-delimited string</param>
+        /// <returns>Array containing parsed elements or <c>null</c> if given input is <c>null</c>.</returns>
+        private string[] GetMultipleElements(string aValue)
+        {
+            if (aValue != null)
+            {
+                return aValue.Split('|');
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>

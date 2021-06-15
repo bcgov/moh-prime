@@ -32,6 +32,13 @@
       <mat-icon>error_outline</mat-icon>
       <span>Enrolment Escalation</span>
     </button>
+    <button mat-menu-item
+            [disabled]="!(Role.EDIT_SITE | inRole)"
+            *ngIf="siteRegistration.status === SiteStatusType.UNDER_REVIEW || siteRegistration.status === SiteStatusType.APPROVED"
+            (click)="onEnableEditing()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Enable Editing</span>
+    </button>
 
     <mat-divider></mat-divider>
 

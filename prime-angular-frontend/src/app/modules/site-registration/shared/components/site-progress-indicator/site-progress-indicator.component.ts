@@ -30,9 +30,8 @@ export class SiteProgressIndicatorComponent implements OnInit, IProgressIndicato
   ) {
     this.currentRoute = RouteUtils.currentRoutePath(this.router.url);
 
-    // TODO PRIME-1131 (trap)
     // Possible route pathways within site registration
-    const routePaths = (!organizationService.organization.hasAcceptedAgreement)
+    const routePaths = (!organizationService.organization?.hasAcceptedAgreement)
       // Combine organization and site routes, which includes
       // the organization agreement
       ? [SiteRoutes.initialRegistrationRouteOrder()]

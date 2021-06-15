@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder, AbstractControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
@@ -16,7 +13,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
-import { Job } from '@enrolment/shared/models/job.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
@@ -30,7 +26,6 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 })
 export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
   public jobNames: Config<number>[];
-  public filteredJobNames: BehaviorSubject<Config<number>[]>;
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
 
@@ -66,13 +61,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     );
 
     this.jobNames = this.configService.jobNames;
-    this.filteredJobNames = new BehaviorSubject<Config<number>[]>(this.jobNames);
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
-  }
-
-  public get jobs(): FormArray {
-    return this.form.get('jobs') as FormArray;
   }
 
   public get oboSites(): FormArray {
@@ -87,8 +77,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     return this.form.get('communityPharmacySites') as FormArray;
   }
 
-  public get healthAuthoritySites(): FormArray {
-    return this.form.get('healthAuthoritySites') as FormArray;
+  public get healthAuthoritySites(): FormGroup {
+    return this.form.get('healthAuthoritySites') as FormGroup;
   }
 
   public get careSettings() {
@@ -97,6 +87,15 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
       careSettings = this.enrolmentFormStateService.careSettingsForm.get('careSettings').value;
     }
     return careSettings;
+  }
+
+  public get hasHealthAuthoritySites(): boolean {
+    return Object.keys(this.healthAuthoritySites.controls).length > 0;
+  }
+
+  public healthAuthoritySitesAsControls(healthAuthorityCode: number): AbstractControl[] {
+    const sites = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+    return sites?.controls;
   }
 
   public oboSitesByCareSetting(careSettingCode: number): FormArray {
@@ -111,45 +110,28 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     return sites as FormArray;
   }
 
-  public addJob(value: string = '') {
-    const defaultValue = (value)
-      ? value : (this.allowDefaultOption)
-        ? this.defaultOptionLabel : '';
-    const job = this.enrolmentFormStateService.buildJobForm(defaultValue);
-    this.jobs.push(job);
-  }
-
-  public removeJob(index: number) {
-    this.jobs.removeAt(index);
-  }
-
-  public addOboSite(careSettingCode: number) {
+  public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
     const site = this.enrolmentFormStateService.buildOboSiteForm();
     site.get('careSettingCode').patchValue(careSettingCode);
+    site.get('healthAuthorityCode').patchValue(healthAuthorityCode);
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        const siteName = site.get('siteName') as FormControl;
-        this.formUtilsService.setValidators(siteName, [Validators.required]);
-        this.communityHealthSites.push(site);
+        this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         break;
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        const siteName = site.get('siteName') as FormControl;
-        this.formUtilsService.setValidators(siteName, [Validators.required]);
-        this.communityPharmacySites.push(site);
+        this.enrolmentFormStateService.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const facilityName = site.get('facilityName') as FormControl;
-        this.formUtilsService.setValidators(facilityName, [Validators.required]);
-        this.healthAuthoritySites.push(site);
+        this.enrolmentFormStateService.addHealthAuthorityOboSite(site, this.healthAuthoritySites, healthAuthorityCode);
         break;
       }
     }
   }
 
-  public removeOboSite(index: number, careSettingCode: number) {
+  public removeOboSite(index: number, careSettingCode: number, healthAuthorityCode?: number) {
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         this.communityHealthSites.removeAt(index);
@@ -160,7 +142,8 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        this.healthAuthoritySites.removeAt(index);
+        const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+        sitesOfHealthAuthority.removeAt(index);
         break;
       }
     }
@@ -170,21 +153,12 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.routeTo(EnrolmentRoutes.REGULATORY);
   }
 
-  public canDeactivate(): Observable<boolean> | boolean {
-    const canDeactivate = super.canDeactivate();
-
-    return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap((result: boolean) => this.removeIncompleteJobs(result)))
-      : canDeactivate;
-  }
-
   public ngOnInit() {
     this.createFormInstance();
     this.initForm();
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteJobs(true);
     this.removeIncompleteOboSites(true);
     this.removeCareSettingSites();
   }
@@ -195,9 +169,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
   // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching
-    this.form.valueChanges
-      .subscribe(({ jobs }: { jobs: Job[] }) => this.filterJobNames(jobs));
-
     this.patchForm().subscribe(() => {
       // Add at least one site for each careSetting selected by enrollee
       this.careSettings?.forEach((careSetting) => {
@@ -217,20 +188,16 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
-            if (!this.healthAuthoritySites.length) {
-              this.addOboSite(careSetting.careSettingCode);
-            }
+            this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
+              const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
+              if (!sitesOfHealthAuthority) {
+                this.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
+              }
+            });
             break;
           }
         }
       });
-
-      // Always have at least one job ready for
-      // the enrollee to fill out
-      if (!this.jobs.length) {
-        this.addJob();
-      }
     });
   }
 
@@ -242,8 +209,11 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.oboSites.clear();
     this.communityHealthSites.controls.forEach((site) => this.oboSites.push(site));
     this.communityPharmacySites.controls.forEach((site) => this.oboSites.push(site));
-    this.healthAuthoritySites.controls.forEach((site) => this.oboSites.push(site));
-
+    Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
+      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+      sitesOfHealthAuthority.controls.forEach((site) =>
+        this.oboSites.push(site));
+    });
     this.removeCareSettingSites();
   }
 
@@ -254,39 +224,6 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);
-  }
-
-  private filterJobNames(jobs: Job[]) {
-    // All the currently chosen jobs
-    const selectedJobNames = jobs.map((j: Job) => j.title);
-    // Filter the list of possible jobs using the selected jobs
-    const filteredJobNames = this.jobNames
-      .filter((c: Config<number>) => !selectedJobNames.includes(c.name));
-
-    this.filteredJobNames.next(filteredJobNames);
-  }
-
-  /**
-   * @description
-   * Removes incomplete jobs from the list in preparation
-   * for submission, and allows for an empty list of jobs.
-   */
-  private removeIncompleteJobs(noEmptyJob: boolean = false) {
-    this.jobs.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('title').value;
-
-        // Remove when empty, default option, or group is invalid
-        if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.removeJob(index);
-        }
-      });
-
-    // Always have a single job available, and it prevents
-    // the page from jumping too much when routing
-    if (!noEmptyJob && !this.jobs.controls.length) {
-      this.addJob();
-    }
   }
 
   /**
@@ -329,7 +266,10 @@ export class JobComponent extends BaseEnrolmentProfilePage implements OnInit, On
     this.communityHealthSites.updateValueAndValidity();
     this.communityPharmacySites.clearValidators();
     this.communityPharmacySites.updateValueAndValidity();
-    this.healthAuthoritySites.clearValidators();
-    this.healthAuthoritySites.updateValueAndValidity();
+    Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
+      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+      sitesOfHealthAuthority.clearValidators();
+      sitesOfHealthAuthority.updateValueAndValidity();
+    });
   }
 }

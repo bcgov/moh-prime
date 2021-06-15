@@ -15,9 +15,44 @@
       </ng-container>
     </app-page-subheader2>
 
-    <ng-content select="app-same-as"></ng-content>
+    <ul class="list-unstyled mb-4 ml-3">
+      <li *ngFor="let contact of contacts; index as i;">
+        <mat-card>
+          <mat-card-title>
+            <mat-icon color="primary">account_circle</mat-icon>
+            {{ title }} #{{ i + 1 }} {{ contact.firstName }} {{ contact.lastName }}
+          </mat-card-title>
+          <mat-card-content>
+            <div class="row">
+              <div class="col">Job title: <span>{{ contact.jobRoleTitle }}</span></div>
+              <div class="col">
+                <button class="float-right"
+                        type="button"
+                        mat-stroked-button
+                        (click)="updateContact(contact)">Update Information
+                </button>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </li>
+    </ul>
 
-    <div class="row">
+    <button *ngIf="showAddButton"
+            mat-button
+            type="button"
+            class="mb-4"
+            color="primary"
+            (click)="addContact()">
+      <mat-icon>add</mat-icon>
+      Add {{ title }}
+    </button>
+
+    <ng-content *ngIf="showFormFields"
+                select="app-same-as"></ng-content>
+
+    <div class="row"
+         *ngIf="showFormFields">
       <div class="col-12">
 
         <mat-form-field class="w-100">
@@ -51,7 +86,8 @@
     </div>
   </section>
 
-  <section class="mb-3">
+  <section *ngIf="showFormFields"
+           class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }} Contact Information</ng-container>
     </app-page-subheader2>
@@ -81,7 +117,8 @@
         </mat-form-field>
 
       </div>
-      <div class="col-12">
+      <div *ngIf="showFax"
+           class="col-12">
 
         <mat-form-field class="w-100">
           <input matInput
@@ -108,14 +145,15 @@
 
       </div>
     </div>
-
-    <mat-slide-toggle class="mb-3"
-                      color="primary"
-                      [checked]="hasPhysicalAddress"
-                      (change)="onPhysicalAddressChange($event)">
-      The {{ title }}'s mailing address is different from this site’s address
-    </mat-slide-toggle>
   </section>
+
+  <mat-slide-toggle #sameAddressSlideToggle
+                    class="mb-4"
+                    color="primary"
+                    [checked]="!hasPhysicalAddress"
+                    (change)="onPhysicalAddressChange($event)">
+    The {{ title }}'s mailing address is the same as the site’s address
+  </mat-slide-toggle>
 
   <ng-container *ngIf="hasPhysicalAddress">
 
@@ -124,9 +162,10 @@
         <ng-container appPageSubheader2Title>Address</ng-container>
       </app-page-subheader2>
 
-      <app-address-form [form]="physicalAddress"></app-address-form>
+      <app-address-form [form]="physicalAddress"
+                        [showAddressFields]="showAddressFields"
+                        [showManualButton]="true"></app-address-form>
     </section>
 
   </ng-container>
-
 </form>

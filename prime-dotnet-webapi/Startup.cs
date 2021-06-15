@@ -29,6 +29,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using System.Threading.Tasks;
 
 namespace Prime
 {
@@ -74,6 +75,10 @@ namespace Prime
             services.AddScoped<ISoapService, SoapService>();
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IGisService, GisService>();
+            services.AddScoped<IPlrProviderService, PlrProviderService>();
+            services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+            services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -204,7 +209,7 @@ namespace Prime
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
             if (env.IsDevelopment())
             {
@@ -258,6 +263,11 @@ namespace Prime
                 endpoints.MapControllers();
                 endpoints.MapHealthChecks("/health");
             });
+
+            if (PrimeEnvironment.IsLocal)
+            {
+                lifetime.ApplicationStarted.Register(OnApplicationStartedAsync(app.ApplicationServices.GetRequiredService<IVerifiableCredentialClient>()).Wait);
+            }
         }
 
         protected virtual void ConfigureHealthCheck(IApplicationBuilder app)
@@ -327,6 +337,34 @@ namespace Prime
                     }
                 };
             });
+        }
+
+        private async Task<Action> OnApplicationStartedAsync(IVerifiableCredentialClient _verifiableCredentialClient)
+        {
+            try
+            {
+                var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
+
+                if (issuerDid != null)
+                {
+                    var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
+                    if (schemaId == null)
+                    {
+                        schemaId = await _verifiableCredentialClient.CreateSchemaAsync();
+                    }
+
+                    var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
+                    if (credentialDefinitionId == null)
+                    {
+                        await _verifiableCredentialClient.CreateCredentialDefinitionAsync(schemaId);
+                    }
+                }
+            }
+            catch
+            {
+                // Agent not setup
+            }
+            return null;
         }
     }
 }

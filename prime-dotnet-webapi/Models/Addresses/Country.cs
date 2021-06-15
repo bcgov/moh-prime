@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Prime.Models
 {
     [Table("CountryLookup")]
-    public class Country : BaseAuditable, ILookup<string>
+    public class Country : ILookup<string>
     {
         public const string CANADA = "CA";
 

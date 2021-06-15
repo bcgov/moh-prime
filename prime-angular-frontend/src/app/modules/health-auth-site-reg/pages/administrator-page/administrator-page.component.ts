@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
+import { Subject } from 'rxjs';
+
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -29,6 +31,8 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public SiteRoutes = HealthAuthSiteRegRoutes;
+  public contacts: Contact[];
+  public formSubmittingEvent: Subject<void>;
 
   private site: HealthAuthSite;
 
@@ -45,6 +49,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    this.formSubmittingEvent = new Subject<void>();
   }
 
   // TODO remove this method add to allow routing between pages
@@ -67,9 +72,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   public onBack() {
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.REMOTE_USERS
-      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
+    const routePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.REMOTE_USERS;
 
     this.routeUtils.routeRelativeTo(routePath);
   }
@@ -77,6 +82,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
+
+    // TODO: pass in the administrator array of the site
+    // currently site model only supports single administrator
+    this.contacts = [];
   }
 
   protected createFormInstance() {
@@ -97,11 +106,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.markAsPristine();
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
+  }
 
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.PRIVACY_OFFICER
-      : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
-
-    this.routeUtils.routeRelativeTo(routePath);
+  protected onSubmitFormIsInvalid(): void {
+    this.formSubmittingEvent.next();
   }
 }

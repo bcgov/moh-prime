@@ -1,0 +1,240 @@
+# This workflow will build all of the necessary components for the PRIME
+# application, with the respective images pushed and stored in the project's
+# tools namespace.
+#
+# Images are then deployed to the respective OpenShift namespace via the
+# prime-app-template.yml in the infrastructure folder.
+
+name: Build PRIME from Develop Branch and Deploy to OpenShift Image Registry
+
+
+# ##### Uncomment on merge to dev
+on:
+  push:
+    branches:
+      - develop
+
+  workflow_dispatch:
+    branches:
+      - develop
+# #################################
+
+################################
+#### Comment out on merge to dev
+# on:
+#   push:
+#   workflow_dispatch:
+#   pull_request:
+#     branches-ignore:
+#       - 'develop'
+
+jobs:
+  build-document-manager-backend:
+    runs-on: ubuntu-20.04
+    environment: Development
+    env:
+      BUILD_LOGLEVEL: "2"
+      SERVICE_NAME: document-manager
+      CONTAINER_NAME: prime-document-manager
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Login to RedHat container repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.REDHAT_REGISTRY_URL}}
+          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
+          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
+
+      - name: "Build, tag and push Document Manager image"
+        id: build-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          BUILD_LOGLEVEL: 2
+        run: |
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+            --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
+            --build-arg SVC_NAME="dev" \
+            $SERVICE_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+
+  build-backend:
+    runs-on: ubuntu-20.04
+    environment: Development
+    env:
+      SERVICE_NAME: dotnet-webapi
+      CONTAINER_NAME: prime-webapi-backend
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Login to RedHat container repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.REDHAT_REGISTRY_URL}}
+          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
+          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
+
+      - name: "Build, tag and push .NET web API image"
+        id: build-image
+        env:
+          PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
+          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+
+        run: |
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+            --build-arg ASPNETCORE_URLS="http://+:8080" \
+            --build-arg DB_CONNECTION_STRING="host=dev-postgres-db;port=5432;database=prime-dev;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_HOST=dev-postgres-db \
+            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+            --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
+            --build-arg POSTGRESQL_DATABASE=prime-dev \
+            --build-arg SVC_NAME="dev" \
+            $SERVICE_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+
+  build-frontend:
+    runs-on: ubuntu-20.04
+    environment: Development
+    env:
+      SERVICE_NAME: nginx-angular
+      CONTAINER_NAME: prime-frontend
+      JWT_WELL_KNOWN_CONFIG: "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+      KEYCLOAK_CLIENT_ID: "prime-application-dev"
+      KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
+      KEYCLOAK_REALM: "v4mbqqas"
+    steps:
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Login to RedHat container repository"
+        uses: docker/login-action@v1
+        with:
+          registry: ${{secrets.REDHAT_REGISTRY_URL}}
+          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
+          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
+
+      - name: "Build, tag & push Angular frontend image"
+        id: build-image
+        env:
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+          REDIRECT_URL: "https://dev-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+        run: |
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+            --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
+            --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
+            --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
+            --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+            --build-arg OC_APP=${{secrets.OC_APP}} \
+            --build-arg SVC_NAME="dev" \
+            --build-arg REDIRECT_URL=$REDIRECT_URL \
+            $SERVICE_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+
+  apply-oc-template:
+    runs-on: ubuntu-20.04
+    environment: Development
+    needs: [build-document-manager-backend,build-frontend,build-backend]
+    steps:
+      - name: "Use the OpenShift template"
+        uses: actions/checkout@v2
+
+      - name: Install OC
+        uses: redhat-actions/oc-installer@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+
+      - name: "Process template"
+        id: oc
+        run: |
+          oc process -f infrastructure/prime-app-template.yml \
+            -p API_POD=webapi \
+            -p ASP_ENV=Development \
+            -p DB_POD=postgres-db \
+            -p DOCMAN_POD=document-manager \
+            -p FRONTEND_POD=frontend \
+            -p FRONTEND_URL=dev \
+            -p IMAGE_TAG=dev \
+            -p SVC_NAME=dev \
+            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
+            -p OC_APP=${{secrets.OC_APP}} \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -p REDIS_POD=redis \
+            -p WEB_PORT=8080 \
+            -p HPR_URL=dev-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -p MAUTH_URL=dev-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+          oc process -f infrastructure/mailhog-template.yml \
+            -p MAILHOG_SERVICE_NAME=mailhog-server \
+            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+          oc process -f infrastructure/metabase-template.yml \
+            -p OC_APP=${{secrets.OC_APP}} \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+  garbage-cleanup:
+    runs-on: ubuntu-20.04
+    environment: Development
+    needs: [apply-oc-template]
+    steps:
+      - name: "Use the OpenShift template"
+        uses: actions/checkout@v2
+
+      - name: Install OC
+        uses: redhat-actions/oc-installer@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+
+      - name: "Cleanup"
+        id: cleanup
+        env:
+          PROJECT_OWNER: bcgov
+          PROJECT_NAME: moh-prime
+          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
+        run: |
+          ./devops/OC4/player.sh occleanup

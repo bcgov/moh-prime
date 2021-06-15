@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Prime.Models
 {
     [Table("PrivilegeGroupLookup")]
-    public class PrivilegeGroup : BaseAuditable, ILookup<int>
+    public class PrivilegeGroup : ILookup<int>
     {
         public readonly static int USER_TYPE = 4;
         public readonly static int CAN_HAVE_OBOS = 5;

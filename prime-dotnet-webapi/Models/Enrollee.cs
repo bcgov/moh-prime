@@ -63,8 +63,6 @@ namespace Prime.Models
 
         public ICollection<Certification> Certifications { get; set; }
 
-        public ICollection<Job> Jobs { get; set; }
-
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
         public string DeviceProviderNumber { get; set; }

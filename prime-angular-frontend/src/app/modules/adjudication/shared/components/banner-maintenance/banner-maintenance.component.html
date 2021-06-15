@@ -41,31 +41,59 @@
       <div [formGroup]="dateRange"
            class="row">
 
-        <mat-form-field class="col-sm-12 col-md-6">
-          <mat-label>Start Date</mat-label>
-          <input matInput
-                 [matDatepicker]="startDatePicker"
-                 formControlName="startDate">
-          <mat-datepicker-toggle matSuffix
-                                 [for]="startDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #startDatePicker></mat-datepicker>
-          <mat-error>Required</mat-error>
-        </mat-form-field>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Start Date</mat-label>
+            <input matInput
+                   [matDatepicker]="startDatePicker"
+                   formControlName="startDate">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
 
-        <mat-form-field class="col-sm-12 col-md-6">
-          <mat-label>End Date</mat-label>
-          <input matInput
-                 [matDatepicker]="endDatePicker"
-                 formControlName="endDate"
-                 [errorStateMatcher]="isSameOrBeforeErrorStateMatcher">
-          <mat-datepicker-toggle matSuffix
-                                 [for]="endDatePicker"></mat-datepicker-toggle>
-          <mat-datepicker #endDatePicker></mat-datepicker>
-          <mat-error>Required</mat-error>
-          <mat-error *ngIf="dateRange.hasError('isSameOrBefore')">
-            End Date must be equal or greater than Start Date.
-          </mat-error>
-        </mat-form-field>
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>Start Time</mat-label>
+            <input matInput
+                   mask="AB:CB"
+                   [patterns]="hoursTimePattern"
+                   formControlName="startTime"
+                   placeholder="00:00">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>End Date</mat-label>
+            <input matInput
+                   [matDatepicker]="endDatePicker"
+                   formControlName="endDate"
+                   [errorStateMatcher]="isSameOrBeforeErrorStateMatcher">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <mat-error *ngIf="endDate.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="!endDate.hasError('required') && dateRange.hasError('isSameOrBefore')">
+              End Date must be equal or greater than Start Date.
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col-sm-12 col-md-6">
+          <mat-form-field class="w-100">
+            <mat-label>End Time</mat-label>
+            <input matInput
+                   mask="AB:CB"
+                   [patterns]="hoursTimePattern"
+                   formControlName="endTime"
+                   placeholder="00:00">
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
       </div>
 
     </div>

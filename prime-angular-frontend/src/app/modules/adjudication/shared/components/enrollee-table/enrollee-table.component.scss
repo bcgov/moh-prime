@@ -8,7 +8,7 @@ mat-date-range-input {
   width: 1px;
 }
 
-.flex-container {
+.triage-container {
   height: 48px;
   width: 24px;
   padding-top: 3px;
@@ -17,4 +17,8 @@ mat-date-range-input {
 
 .blueIcon {
   color: blue;
+}
+
+.prefix-header {
+  min-width: 6.5rem;
 }

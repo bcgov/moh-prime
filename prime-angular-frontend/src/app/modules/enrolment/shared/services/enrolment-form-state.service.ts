@@ -3,12 +3,14 @@ import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormCon
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -104,7 +106,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       : this.bcscDemographicFormState.json;
     const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
-    const { jobs, oboSites } = this.jobsForm.getRawValue();
+    const { oboSites } = this.jobsForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.convertCareSettingFormToJson(id);
@@ -120,7 +122,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       },
       certifications,
       ...deviceProvider,
-      jobs,
       oboSites,
       ...careSettings,
       enrolleeRemoteUsers,
@@ -168,14 +169,36 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   /**
    * @description
-   * Check for the requirement of at least one certification, or one job.
+   * Check for the requirement of at least one certification, or one obo site/job.
    */
   public hasCertificateOrJob(): boolean {
-    const jobs = this.jobsForm.get('jobs') as FormArray;
+    const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    let hasOboSiteForEveryHA = true;
+    // Using `for` loop rather than `every()` method for ease of debugging
+    for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
+      const checkbox = enrolleeHealthAuthorities.controls[i];
+      // For every selected Health Authority ...
+      if (checkbox.value === true) {
+        let foundMatchingHAOboSite = false;
+        // ... there must be at least one Obo Site for that Health Authority
+        for (let j = 0; j < oboSites.controls.length; j++) {
+          const oboSiteForm = oboSites.controls[j] as FormGroup;
+          if (oboSiteForm.controls.healthAuthorityCode.value === this.configService.healthAuthorities[i].code) {
+            foundMatchingHAOboSite = true;
+            break;
+          }
+        }
+        if (!foundMatchingHAOboSite) {
+          hasOboSiteForEveryHA = false;
+          break;
+        }
+      }
+    }
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
-    return jobs.length || (certifications.length && certifications.value[0].licenseNumber);
+    return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
   }
 
   /**
@@ -238,26 +261,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
 
-    if (enrolment.jobs.length) {
-      const jobs = this.jobsForm.get('jobs') as FormArray;
-      jobs.clear();
-      enrolment.jobs.forEach((j: Job) => {
-        const job = this.buildJobForm();
-        job.patchValue(j);
-        jobs.push(job);
-      });
-    }
-
-    if (enrolment.oboSites.length && enrolment.jobs.length) {
+    if (enrolment.oboSites.length) {
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
       const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
       const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
-      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormArray;
+      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
 
       oboSites.clear();
       communityHealthSites.clear();
       communityPharmacySites.clear();
-      healthAuthoritySites.clear();
+      Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
 
       enrolment.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
@@ -266,21 +279,15 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
         switch (s.careSettingCode) {
           case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            const siteName = site.get('siteName') as FormControl;
-            this.formUtilsService.setValidators(siteName, [Validators.required]);
-            communityHealthSites.push(site);
+            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
             break;
           }
           case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            const siteName = site.get('siteName') as FormControl;
-            this.formUtilsService.setValidators(siteName, [Validators.required]);
-            communityPharmacySites.push(site);
+            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            const facilityName = site.get('facilityName') as FormControl;
-            this.formUtilsService.setValidators(facilityName, [Validators.required]);
-            healthAuthoritySites.push(site);
+            this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
             break;
           }
         }
@@ -452,25 +459,20 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public buildJobsForm(): FormGroup {
     return this.fb.group({
-      jobs: this.fb.array([]),
       oboSites: this.fb.array([]),
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
-      healthAuthoritySites: this.fb.array([])
-    });
-  }
-
-  public buildJobForm(value: string = null): FormGroup {
-    return this.fb.group({
-      title: [value, [Validators.required]]
+      healthAuthoritySites: this.fb.group({})
     });
   }
 
   public buildOboSiteForm(): FormGroup {
     return this.fb.group({
       careSettingCode: [null, []],
+      healthAuthorityCode: [null, []],
       siteName: [null, []],
       facilityName: [null, []],
+      jobTitle: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
         areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
         exclude: ['street2'],
@@ -586,6 +588,49 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         '',
         []
       ]
+    });
+  }
+
+  public addNonHealthAuthorityOboSite(siteForm: FormGroup, siteFormList: FormArray) {
+    const siteName = siteForm.get('siteName') as FormControl;
+    this.formUtilsService.setValidators(siteName, [Validators.required]);
+    siteFormList.push(siteForm);
+  }
+
+  /**
+   * @param haSiteForm - aka Health Authority Facility Form
+   * @param healthAuthoritySites - a FormArray where each element, representing a Health Authority where the enrollee
+   * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
+   * at, in that Health Authority
+   */
+  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
+    const facilityName = haSiteForm.get('facilityName') as FormControl;
+    this.formUtilsService.setValidators(facilityName, [Validators.required]);
+    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
+    if (!sitesOfHealthAuthority) {
+      sitesOfHealthAuthority = this.fb.array([]);
+      sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
+      healthAuthoritySites.setControl(String(healthAuthorityCode), sitesOfHealthAuthority);
+    }
+    sitesOfHealthAuthority.push(haSiteForm);
+  }
+
+  public removeUnselectedHAOboSites() {
+    // Obo Sites need to be removed from two different collections
+    const oboSites = this.jobsForm.get('oboSites') as FormArray;
+    const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
+    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
+    this.configService.healthAuthorities.forEach((healthAuthority, index) => {
+      if (!enrolleeHealthAuthorities.at(index).value) {
+        for (let i = oboSites.controls.length - 1; i >= 0; i--) {
+          const oboSiteForm = oboSites.controls[i] as FormGroup;
+          if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
+            oboSites.removeAt(i);
+          }
+        }
+        healthAuthoritySites.removeControl(String(healthAuthority.code));
+      }
     });
   }
 

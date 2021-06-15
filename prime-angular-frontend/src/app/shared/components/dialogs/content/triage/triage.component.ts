@@ -95,8 +95,7 @@ export class TriageComponent implements OnInit {
       });
   }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   private getCurrentStatus() {
     this.status$ = this.enrolmentResource.getCurrentStatus(this.enrolleeId);

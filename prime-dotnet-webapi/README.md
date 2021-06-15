@@ -127,4 +127,10 @@ pm.environment.set('userId', uuid.v4());
 pm.environment.set('hpdid', `${Date.now()}555555${Date.now()}`);
 ```
 
+## Debugging API Container Using vsdbg
+
+- Start the **dotnet-webapi (primeapi)** container using `docker-compose up --build`, or if you're using the VC agent `./manage start`
+- In VSCode, navigate to Run and Debug (`Ctrl+Shift+D`), and choose the `.Net Core Attach` option from the dropdown located at top left of VSCode
+- Start the Debugger, and choose the `prime` process from the dropdown menu that appears in VSCode
+- Add breakpoints to the code and start debugging
 

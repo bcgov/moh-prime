@@ -22,7 +22,7 @@ export class PhsaEformsLoginPageComponent implements OnInit {
     private authService: AuthService,
   ) {
     this.title = route.snapshot.data.title;
-    this.loginLabel = 'Logon with BCSC';
+    this.loginLabel = 'Log in with mobile BC Services Card';
   }
 
   public onLogin() {

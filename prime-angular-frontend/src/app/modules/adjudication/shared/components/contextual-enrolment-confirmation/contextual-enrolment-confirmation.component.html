@@ -1,0 +1,47 @@
+<app-contextual-help icon="rule_folder"
+                     titleIcon="speed"
+                     class="test"
+                     [small]="true"
+                     [outlined]="true"
+                     [advanced]="true">
+  <ng-container appContextualTitle>
+    Confirm Enrolment
+  </ng-container>
+
+  <ng-container appContextualContent>
+    <h2 class="h5 mb-3">
+      Make sure you have checked the following things:
+    </h2>
+    <ul>
+      <li>Name appears in the College directory</li>
+      <li>Phone number is in BC</li>
+    </ul>
+  </ng-container>
+
+  <div class="row justify-content-between">
+    <div class="col pt-4">
+
+      <button mat-stroked-button
+              cdkFocusInitial
+              class="my-2 mr-2">Cancel</button>
+    </div>
+    <div class="col pt-4">
+      <div class="row">
+
+        <button mat-flat-button
+                color="primary"
+                class="my-2 mr-1"
+                [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || assigned)"
+                (click)="onEscalate()">
+          Escalate
+        </button>
+
+        <button mat-flat-button
+                color="primary"
+                (click)="onConfirm()"
+                class="my-2 mr-1"> Confirm </button>
+      </div>
+    </div>
+  </div>
+
+</app-contextual-help>

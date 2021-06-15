@@ -57,30 +57,33 @@ namespace Prime.Services
         public async Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
         {
             return await _context.Submissions
-            .Where(epv => epv.EnrolleeId == enrolleeId)
-            .Where(epv => epv.CreatedDate < dateTime)
-            .OrderByDescending(epv => epv.CreatedDate)
-            .FirstOrDefaultAsync();
+                .Where(epv => epv.EnrolleeId == enrolleeId)
+                .Where(epv => epv.CreatedDate < dateTime)
+                .OrderByDescending(epv => epv.CreatedDate)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task CreateEnrolleeSubmissionAsync(int enrolleeId)
+        public async Task CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true)
         {
             var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
-            var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
 
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
                 ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
-                AgreementType = AgreementEngine.DetermineAgreementType(agreementDto),
                 RequestedRemoteAccess = enrollee.EnrolleeRemoteUsers.Any(),
                 CreatedDate = DateTimeOffset.Now
             };
+
+            if (assignAgreement)
+            {
+                var agreementDto = _mapper.Map<AgreementEngineDto>(enrollee);
+                enrolleeSubmission.AgreementType = AgreementEngine.DetermineAgreementType(agreementDto);
+            }
 
             _context.Submissions.Add(enrolleeSubmission);
 
             await _context.SaveChangesAsync();
         }
-
     }
 }

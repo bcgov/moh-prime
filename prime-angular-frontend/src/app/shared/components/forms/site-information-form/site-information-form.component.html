@@ -32,27 +32,36 @@
   </section>
 
   <section class="mb-4">
-    <app-page-subheader2>
-      <ng-container appPageSubheader2Title>Site ID</ng-container>
-      <ng-container appPageSubheader2Summary>
-        Provide the sites ID or PEC Code.<br>
-        If this is a new site you will receive your Site ID upon approval.
-      </ng-container>
-    </app-page-subheader2>
-    <ng-container>
-      <mat-form-field>
-        <mat-label>Site ID</mat-label>
-        <input matInput
-               formControlName="pec" />
-        <mat-error *ngIf="pec.hasError('required')">
-          Required
-        </mat-error>
-      </mat-form-field>
-      <div>
-        <mat-checkbox [formControl]="isNewSite">
-          This is a new site
-        </mat-checkbox>
-      </div>
+    <div *ngIf="!isCommunityPharmacy()"
+         class="mb-3">
+      <mat-slide-toggle [formControl]="isNewSite"
+                        color="primary">
+        {{ (isNewSite.value)
+        ? 'This is a new Site without a Site ID'
+        : 'This is not a new Site and it has a PEC Code assigned' }}
+      </mat-slide-toggle>
+    </div>
+    <ng-container *ngIf="isNewSite.value && !isCommunityPharmacy(); else notNewSite">
+      If this is a new Site you will receive your Site ID upon approval.
     </ng-container>
+    <ng-template #notNewSite>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Site ID</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide the sites ID{{ isCommunityPharmacy() ? '.' : ' or PEC Code. This is a 3-letter code. For example, JZY'
+          }}
+        </ng-container>
+      </app-page-subheader2>
+      <ng-container>
+        <mat-form-field>
+          <mat-label>Site ID</mat-label>
+          <input matInput
+                 formControlName="pec" />
+          <mat-error *ngIf="pec.hasError('required')">
+            Required
+          </mat-error>
+        </mat-form-field>
+      </ng-container>
+    </ng-template>
   </section>
 </ng-container>

@@ -18,9 +18,6 @@ const routes: Routes = [
   {
     path: '',
     component: GisDashboardComponent,
-    canLoad: [
-      AuthenticationGuard
-    ],
     canActivate: [
       AuthenticationGuard
     ],

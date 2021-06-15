@@ -109,7 +109,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    */
   protected canDeactivateWhitelist: string[];
 
-  constructor(
+  protected constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService
   ) { }
@@ -222,7 +222,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
    * Check that deactivation of the view is allowed in general
-   * or specifically gated on a set of whitelisted control names.
+   * or specifically gated on a set of allowed control names.
    */
   private checkDeactivationIsAllowed(): boolean {
     if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {

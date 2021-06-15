@@ -53,8 +53,7 @@
         </app-page-subheader2>
 
         <mat-radio-group class="radio-group"
-                         formControlName="vendorCode"
-                         (change)="onVendorChange($event)">
+                         formControlName="vendorCode">
           <mat-radio-button *ngFor="let vendor of filteredVendorConfig"
                             class="radio-button"
                             [value]="vendor.code">

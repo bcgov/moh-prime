@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Prime.Models;
 
@@ -17,5 +18,38 @@ namespace Prime.ViewModels
         public bool Completed { get; set; }
         public bool HasAcceptedAgreement { get; set; }
         public bool HasSubmittedSite { get; set; }
+
+        public IEnumerable<string> MatchedOn(string textSearch)
+        {
+            var matchedOn = new List<string>();
+            if (textSearch == null)
+            {
+                return matchedOn;
+            }
+
+            textSearch = textSearch.ToLower();
+
+            if (DisplayId.ToString().ToLower().Contains(textSearch))
+            {
+                matchedOn.Add(nameof(DisplayId));
+            }
+
+            if (Name != null && Name.ToLower().Contains(textSearch))
+            {
+                matchedOn.Add(nameof(Name));
+            }
+
+            if (Sites.Any(s => s.DoingBusinessAs != null && s.DoingBusinessAs.ToLower().Contains(textSearch)))
+            {
+                matchedOn.Add(nameof(Site.DoingBusinessAs));
+            }
+
+            if (Sites.Any(s => s.PEC != null && s.PEC.ToLower().Contains(textSearch)))
+            {
+                matchedOn.Add(nameof(Site.PEC));
+            }
+
+            return matchedOn;
+        }
     }
 }

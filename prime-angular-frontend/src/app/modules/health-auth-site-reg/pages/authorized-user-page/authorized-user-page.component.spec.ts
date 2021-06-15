@@ -75,8 +75,6 @@ describe('AuthorizedUserPageComponent', () => {
       fixture = TestBed.createComponent(AuthorizedUserPageComponent);
       component = fixture.componentInstance;
       organizationFormStateService.setForm(organizationService.organization);
-      // Add the bound FormGroup to the component
-      component.formState = healthAuthSiteRegFormStateService.authorizedUserFormState;
       fixture.detectChanges();
     })
   );

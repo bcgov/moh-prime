@@ -1,0 +1,9 @@
+/**
+  * TODO: Deprecation notice, https://github.com/angular/angular/issues/27614
+  * :ng-deep has been deprecated but still no solution to replace it.
+  * This is here to allow the styling to propagate to the dynamic innerHTML
+  */
+::ng-deep .mat-tab-body-content {
+  overflow: visible !important;
+  padding-top: 1rem;
+}

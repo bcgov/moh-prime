@@ -18,7 +18,7 @@ import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-pr
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { Job } from '@enrolment/shared/models/job.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-health-authority',
@@ -105,12 +105,12 @@ export class HealthAuthorityComponent extends BaseEnrolmentProfilePage implement
   }
 
   protected nextRouteAfterSubmit() {
-    const jobs = this.enrolmentFormStateService.jobsForm.get('jobs').value as Job[];
+    const oboSites = this.enrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
 
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.REGULATORY;
-    } else if (jobs.length) {
+    } else if (oboSites?.length) {
       nextRoutePath = EnrolmentRoutes.JOB;
     }
 

@@ -9,7 +9,6 @@ import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.mode
  * Service is considered a source of truth and should be set
  * directly from a HTTP response.
  */
-// TODO copy of SiteService and should be a shared service or have an abstract class
 @Injectable({
   providedIn: 'root'
 })

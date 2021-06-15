@@ -28,7 +28,6 @@ export interface HttpEnrollee extends Enrollee {
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  jobs: Job[];
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
@@ -79,7 +78,6 @@ export interface Enrolment {
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  jobs: Job[];
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
@@ -128,4 +126,6 @@ export interface EnrolleeListViewModel {
   remoteAccess: boolean;
   careSettingCodes: number[];
   hasNotification: boolean;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }

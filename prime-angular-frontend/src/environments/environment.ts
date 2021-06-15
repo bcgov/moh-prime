@@ -2,30 +2,18 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-export const environment = {
+import { AppEnvironment } from '@env/environment.model';
+import { environment as defaultEnvironment } from '@env/environment.prod';
+
+/**
+ * @description
+ * Development environment populated with the default and
+ * production environment with appropriate overrides.
+ */
+export const environment: AppEnvironment = {
+  ...defaultEnvironment,
   production: false,
-  version: '1.0.0',
-  apiEndpoint: 'http://localhost:5000/api',
-  loginRedirectUrl: 'http://localhost:4200',
-  documentManagerUrl: 'http://localhost:6001',
-  prime: {
-    displayPhone: '1-844-39PRIME',
-    phone: '1-844-397-7463',
-    email: 'prime@gov.bc.ca',
-    supportEmail: 'PRIMESupport@gov.bc.ca'
-  },
-  phoneNumbers: { director: '236-478-0282' },
-  keycloakConfig: {
-    config: {
-      url: 'https://dev.oidc.gov.bc.ca/auth',
-      realm: 'v4mbqqas',
-      clientId: 'prime-application-local'
-    },
-    initOptions: {
-      onLoad: 'check-sso'
-    },
-    bearerExcludedUrls: ['/provisioner-access/certificate']
-  }
+  apiEndpoint: 'http://localhost:5000/api'
 };
 
 /*

@@ -8,8 +8,10 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
+import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
+export type environmentName = 'prod' | 'test' | 'dev' | 'local';
 
 export class AppConfig {
   apiEndpoint: string;
@@ -24,6 +26,7 @@ export class AppConfig {
   phoneNumbers: {
     director: string;
   };
+  environmentName: environmentName;
   routes: {
     denied: string;
     maintenance: string;
@@ -32,6 +35,7 @@ export class AppConfig {
     adjudication: string;
     site: string;
     phsa: string;
+    gis: string;
   };
 }
 
@@ -48,6 +52,7 @@ export const APP_DI_CONFIG: AppConfig = {
   phoneNumbers: {
     director: environment.phoneNumbers.director
   },
+  environmentName: environment.environmentName as environmentName,
   routes: {
     denied: AppRoutes.DENIED,
     maintenance: AppRoutes.MAINTENANCE,
@@ -55,7 +60,8 @@ export const APP_DI_CONFIG: AppConfig = {
     enrolment: EnrolmentRoutes.MODULE_PATH,
     adjudication: AdjudicationRoutes.MODULE_PATH,
     site: SiteRoutes.MODULE_PATH,
-    phsa: PhsaEformsRoutes.MODULE_PATH
+    phsa: PhsaEformsRoutes.MODULE_PATH,
+    gis: GisEnrolmentRoutes.MODULE_PATH
   }
 };
 
@@ -65,4 +71,4 @@ export const APP_DI_CONFIG: AppConfig = {
     useValue: APP_DI_CONFIG
   }]
 })
-export class AppConfigModule { }
+export class AppConfigModule {}

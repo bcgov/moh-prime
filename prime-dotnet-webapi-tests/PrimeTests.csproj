@@ -38,4 +38,9 @@
     <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-openid-config.json" />
     <EmbeddedResource Include=".\Utils\Auth\well-known\microsoft-wellknown-keys.json" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update=".\Integration\PRPM_IN301030CA - missing message id.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Update=".\Integration\PRPM_IN301030CA - missing IPC.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Update=".\README.md" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

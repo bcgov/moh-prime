@@ -4,6 +4,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 
 using Prime.Infrastructure;
+using Prime.Models;
 
 namespace Prime
 {
@@ -25,6 +26,12 @@ namespace Prime
         public static TextSearchQuery<T> SearchCollections<T>(this IQueryable<T> source, params Expression<Func<T, IEnumerable<string>>>[] collectionSelectors)
         {
             return new TextSearchQuery<T>(source, null, collectionSelectors);
+        }
+
+        public static IQueryable<Party> WithPartyType(this IQueryable<Party> source, PartyType withType)
+        {
+            return source.Where(party => party.PartyEnrolments
+                .Any(pe => pe.PartyType == withType));
         }
     }
 }

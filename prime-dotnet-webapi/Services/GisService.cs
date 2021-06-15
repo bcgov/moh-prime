@@ -53,7 +53,7 @@ namespace Prime.Services
             if (currentGisEnrolment == null)
             {
                 var currentParty = await _context.Parties
-                .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
+                    .SingleOrDefaultAsync(p => p.UserId == user.GetPrimeUserId());
 
                 if (currentParty == null)
                 {

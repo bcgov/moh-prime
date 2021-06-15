@@ -5,7 +5,6 @@
            [dataSource]="dataSource"
            class="w-100">
 
-
       <ng-container matColumnDef="prefixes">
         <th mat-header-cell
             *matHeaderCellDef
@@ -155,6 +154,11 @@
           <mat-icon>bookmark</mat-icon>
           <span>Create Banner</span>
         </button>
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+          <mat-icon>build</mat-icon>
+          <span>Maintenance</span>
+        </button>
       </mat-menu>
     </ng-template>
 
@@ -193,14 +197,14 @@
                 [disabled]="!(Role.EDIT_SITE | inRole)"
                 (click)="onAssign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Assign Enrolment</span>
+          <span>Assign Registration</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
                 [disabled]="!(Role.EDIT_SITE | inRole)"
                 (click)="onReassign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Reassign Enrolment</span>
+          <span>Reassign Registration</span>
         </button>
 
       </mat-menu>

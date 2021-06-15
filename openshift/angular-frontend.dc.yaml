@@ -113,11 +113,18 @@ objects:
             - mountPath: /etc/nginx/certs
               name: vanity-tls-certs
               readOnly: true
+            - mountPath: /etc/nginx/certs/plr
+              name: plr-integration-volume
+              readOnly: true
         volumes:
           - name: vanity-tls-certs
             secret:
               defaultMode: 420
               secretName: vanity-tls-certificate
+          - name: plr-integration-volume
+            secret:
+              defaultMode: 420
+              secretName: plr-integration
     test: false
     triggers:
       - type: ConfigChange
@@ -159,21 +166,6 @@ objects:
     tls:
         insecureEdgeTerminationPolicy: Allow
         termination: edge
-    to:
-      kind: Service
-      name: "${NAME}${SUFFIX}"
-
-- apiVersion: v1
-  kind: Route
-  metadata:
-    name: "${NAME}${SUFFIX}-mutualauth"
-  spec:
-    host: "mutualauth.${VANITY_URL}"
-    port:
-      targetPort: "8890"
-    tls:
-      insecureEdgeTerminationPolicy: Redirect
-      termination: passthrough
     to:
       kind: Service
       name: "${NAME}${SUFFIX}"

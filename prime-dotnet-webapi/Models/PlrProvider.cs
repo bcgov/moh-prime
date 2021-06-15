@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -48,7 +49,7 @@ namespace Prime.Models
 
         public DateTime StatusExpiryDate { get; set; }
 
-        public string Expertise { get; set; }
+        public ICollection<string> Expertise { get; set; }
 
         public string Languages { get; set; }
 
@@ -84,7 +85,7 @@ namespace Prime.Models
 
         public DateTime Address2StartDate { get; set; }
 
-        public string Credentials { get; set; }
+        public ICollection<string> Credentials { get; set; }
 
         public string TelephoneAreaCode { get; set; }
 

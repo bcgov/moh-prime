@@ -10,8 +10,11 @@ import { SiteProgressIndicatorComponent } from '@health-auth/shared/components/s
 
 import { CollectionNoticePageComponent } from '@health-auth/pages/collection-notice-page/collection-notice-page.component';
 import { AuthorizedUserPageComponent } from '@health-auth/pages/authorized-user-page/authorized-user-page.component';
+import { AuthorizedUserNextStepsPageComponent } from './pages/authorized-user-next-steps-page/authorized-user-next-steps-page.component';
+import { AuthorizedUserApprovedPageComponent } from './pages/authorized-user-approved-page/authorized-user-approved-page.component';
+import { AuthorizedUserDeclinedPageComponent } from './pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
-import { HealthAuthCareSettingPageComponent } from '@health-auth/pages/health-auth-care-setting-page/health-auth-care-setting-page.component';
+import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
 import { SiteAddressPageComponent } from '@health-auth/pages/site-address-page/site-address-page.component';
@@ -19,9 +22,8 @@ import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-
 import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
-import { PrivacyOfficerPageComponent } from '@health-auth/pages/privacy-officer-page/privacy-officer-page.component';
-import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
+import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 
 @NgModule({
   declarations: [
@@ -29,17 +31,19 @@ import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview
     SiteProgressIndicatorComponent,
     CollectionNoticePageComponent,
     AuthorizedUserPageComponent,
+    AuthorizedUserNextStepsPageComponent,
+    AuthorizedUserApprovedPageComponent,
+    AuthorizedUserDeclinedPageComponent,
     SiteManagementPageComponent,
-    HealthAuthCareSettingPageComponent,
+    OrganizationAgreementPageComponent,
     VendorPageComponent,
     SiteInformationPageComponent,
+    HealthAuthCareTypePageComponent,
     SiteAddressPageComponent,
     HoursOperationPageComponent,
     RemoteUsersPageComponent,
     RemoteUserPageComponent,
     AdministratorPageComponent,
-    PrivacyOfficerPageComponent,
-    TechnicalSupportPageComponent,
     OverviewPageComponent
   ],
   imports: [
