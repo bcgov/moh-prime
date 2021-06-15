@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.ViewModels.Agreements;
 using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Services.Razor;
 
 namespace Prime.Services
@@ -256,7 +258,7 @@ namespace Prime.Services
 
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_agreements");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedAgreements);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;

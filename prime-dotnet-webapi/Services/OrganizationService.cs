@@ -4,15 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
+
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.HttpClients;
-using Prime.ViewModels.Parties;
-using System.Security.Claims;
-using AutoMapper.QueryableExtensions;
-using AutoMapper;
-using Prime.Models.Api;
-using DelegateDecompiler.EntityFrameworkCore;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
@@ -238,7 +238,7 @@ namespace Prime.Services
 
         public async Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_org_agreements");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedOrgAgreements);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
