@@ -65,7 +65,7 @@ parameters:
 - name: URL_STUB
   displayName: URL Stub
   description: Appended to all URLs, used in PRs
-  value: "-9c33a9-dev.apps.silver.devops.gov.bc.ca"
+  value: ".pharmanetenrolment.gov.bc.ca"
   required: false
 - name: HPR_URL
   displayName: Health Practicioner URL
@@ -73,6 +73,31 @@ parameters:
 - name: MAUTH_URL
   displayName: MUTUAL_AUTHENTICATION URL
   value: ""
+- description: Maximum amount of memory the container can use.
+  displayName: Postgres Memory Limit
+  name: POSTGRES_MEMORY_LIMIT
+  required: true
+  value: 512Mi
+- description: The OpenShift Namespace where the PostgreSQL ImageStream resides.
+  displayName: PostgreSQL Namespace
+  name: POSTGRES_NAMESPACE
+  value: openshift
+- description: Username for PostgreSQL user that will be used for accessing the database.
+  displayName: PostgreSQL Connection Username
+  name: POSTGRESQL_USER
+  value: prime-user
+  required: true
+- description: Password for the PostgreSQL connection user.
+  displayName: PostgreSQL Connection Password
+  name: POSTGRESQL_PASSWORD
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression
+  required: true
+- description: Version of PostgreSQL image to be used (10-el7, 10-el8, or latest).
+  displayName: Version of PostgreSQL Image
+  name: POSTGRESQL_VERSION
+  required: true
+  value: 10-el8
 objects:
 ###########################################
 ###               Frontend              ###
@@ -81,11 +106,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
@@ -132,6 +152,15 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
+            volumeMounts:
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+        volumes:
+        - name: vanity-tls-certs
+          secret:
+            secretName: vanity-tls-certificate
+            defaultMode: 420
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -143,16 +172,11 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
-  status: {}
+  
 #   Frontend Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -191,22 +215,19 @@ objects:
     port:
       targetPort: http
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
-  status: {}
+  
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata: 
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${HPR_URL}
     to:
@@ -216,21 +237,18 @@ objects:
     port:
       targetPort: 8888
     tls:
-      termination: edge
+      termination: passthrough
       insecureEdgeTerminationPolicy: Allow
     wildcardPolicy: None
 #   Frontend Route (Mutual Authentication)
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${FRONTEND_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     host: ${MAUTH_URL}
     to:
@@ -251,15 +269,10 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DB_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DB_POD}"}]
+        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
         [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -292,36 +305,36 @@ objects:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
-                value: https://${SVC_NAME}${URL_STUB}/api/docman
+                value: http://${SVC_NAME}-${DOCMAN_POD}:6001
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
+                value: ${SVC_NAME}-postgres
               - name: database-password
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: database-name
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-user
+                    name: ${SVC_NAME}-postgres
+                    key: database-name
               - name: database-user
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-user
               - name: database-password
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_ADMIN_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
-                    key: database-password
+                    name: ${SVC_NAME}-postgres
+                    key: admin-password
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -383,16 +396,11 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  status: {}
+  
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DB_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -400,7 +408,7 @@ objects:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${API_POD}
+      - name: "http"
         port: 8080
         targetPort: 8080
     selector:
@@ -413,13 +421,8 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -431,7 +434,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -440,10 +443,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}-backend
+          name: ${SVC_NAME}-${DOCMAN_POD}
       spec:
         containers:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-backend
+          - name: ${SVC_NAME}-${DOCMAN_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
@@ -457,26 +460,23 @@ objects:
               - name: CACHE_REDIS_PORT
                 value: "6379"
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
+                value: ${SVC_NAME}-postgres
               - name: DB_NAME
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-name
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: DB_PORT
-                valueFrom:
-                  configMapKeyRef:
-                    name: postgresql
-                    key: postgresql_database_port
+                value: "5432"
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-user
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
@@ -513,7 +513,7 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
             volumeMounts:
             # Mount Document Manager to PVC
@@ -535,50 +535,42 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}-backend
+            - ${SVC_NAME}-${DOCMAN_POD}
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend
+    name: ${SVC_NAME}-${DOCMAN_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      - name: "${SVC_NAME}-${DOCMAN_POD}"
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}-backend
+      name: ${SVC_NAME}-${DOCMAN_POD}
 #   Document Manager (backend) Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-backend-pvc
+    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     accessModes:
       - ReadWriteOnce
     resources:
       requests:
         storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -590,11 +582,6 @@ objects:
 - apiVersion: batch/v1
   kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DOCMAN_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${DOCMAN_POD}-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -603,7 +590,7 @@ objects:
       app.openshift.io/runtime: python
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
   spec:
     template:
       metadata:
@@ -633,16 +620,16 @@ objects:
             - name: CACHE_REDIS_PORT
               value: "6379"
             - name: DB_HOST
-              value: ${SVC_NAME}-${DB_POD}
+              value: ${SVC_NAME}-postgres
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
-                  key: database-user
+                  name: ${SVC_NAME}-postgres
+                  key: database-name
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-password
             - name: DB_PORT
               valueFrom:
@@ -652,7 +639,7 @@ objects:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-user
             - name: FLASK_ENV
               valueFrom:
@@ -687,7 +674,7 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: prime-postgresql-db
+                  name: ${SVC_NAME}-postgres
                   key: database-password
     triggers:
       - type: ConfigChange
@@ -700,7 +687,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 
 ###########################################
 ###         PostgreSQL Database         ###
@@ -709,116 +696,131 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DB_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DB_POD}
+    name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    annotations:
+      template.alpha.openshift.io/wait-for-ready: "true"
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: postgresql
   spec:
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DB_POD}
-    strategy: null
+      name: ${SVC_NAME}-postgres
+    strategy:
+      type: Recreate
     template:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DB_POD}
+          name: ${SVC_NAME}-postgres
       spec:
         containers:
           - capabilities: {}
             env:
               - name: DB_HOST
-                value: ${SVC_NAME}-${DB_POD}
+                value: ${SVC_NAME}-postgres
               # PostgreSQL environment variables
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db                    
+                    name: ${SVC_NAME}-postgres                    
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
-                    name: prime-postgresql-db
+                    name: ${SVC_NAME}-postgres
                     key: database-name
             image: >-
-              image-registry.openshift-image-registry.svc:5000/openshift/postgresql:10
+              image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
             lifecycle:
               preStop:
                 exec:
                   command: ['pg_ctl', 'stop']
             livenessProbe:
-              initialDelaySeconds: 30
-              tcpSocket:
-                port: 5432
+              exec:
+                command:
+                - /usr/libexec/check-container
+                - --live
+              initialDelaySeconds: 120
+              timeoutSeconds: 10
+            readinessProbe:
+              exec:
+                command:
+                - /usr/libexec/check-container
+              initialDelaySeconds: 5
               timeoutSeconds: 1
-            name: ${SVC_NAME}-${DB_POD}
+            name: ${SVC_NAME}-postgres
             ports:
               - containerPort: 5432
                 protocol: TCP
                 name: postgresql
-            resources: {}
+            resources:
+              limits:
+                memory: ${POSTGRES_MEMORY_LIMIT}
             securityContext:
               capabilities: {}
               privileged: false
             terminationMessagePath: /dev/termination-log
             volumeMounts:
               - mountPath: /var/lib/pgsql/data
-                name: ${SVC_NAME}-${DB_POD}-data
-              - mountPath: /var/run/postgresql
-                name: ${SVC_NAME}-${DB_POD}-run
+                name: ${SVC_NAME}-postgres-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         volumes:
-          - name: ${SVC_NAME}-${DB_POD}-data
+          - name: ${SVC_NAME}-postgres-data
             emptyDir: {}
-          - name: ${SVC_NAME}-${DB_POD}-run
-            emptyDir: {}
-  status: {}
+
+#   PostgreSQL Secret
+- apiVersion: v1
+  kind: Secret
+  metadata:
+    annotations:
+      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
+      template.openshift.io/expose-password: '{.data[''database-password'']}'
+      template.openshift.io/expose-username: '{.data[''database-user'']}'
+    name: ${SVC_NAME}-postgres-database
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  stringData:
+    database-name: prime-${SVC_NAME}
+    database-password: ${POSTGRESQL_PASSWORD}
+    database-user: prime-user
+
 #   PostgreSQL Service
 - apiVersion: v1
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${DB_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
-    name: ${SVC_NAME}-${DB_POD}
+    name: ${SVC_NAME}-postgres
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
+    annotations: 
+      template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
-      - name: ${SVC_NAME}-${DB_POD}
+      - name: postgres
         nodePort: 0
         port: 5432
         protocol: TCP
         targetPort: 5432
     selector:
-      name: ${SVC_NAME}-${DB_POD}
+      name: ${SVC_NAME}-postgres
     sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 
 ###########################################
 ###                Redis                ###
@@ -827,11 +829,6 @@ objects:
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  labels:
-    app: ${SVC_NAME}-${REDIS_POD}
-    app.kubernetes.io/component: ${SVC_NAME}
-    app.kubernetes.io/instance: ${SVC_NAME}
-    app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -917,6 +914,8 @@ objects:
   metadata:
     name: ${SVC_NAME}-${REDIS_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
       - name: redis
@@ -925,22 +924,3 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
-    status:
-      loadBalancer: {}
-
-###########################################
-###           Network Policies          ###
-###########################################
-- apiVersion: networking.k8s.io/v1
-  kind: NetworkPolicy
-  metadata:
-    name: allow-internal-traffic
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-  spec:
-    podSelector:
-    ingress:
-      - from:
-          - namespaceSelector:
-              matchLabels:
-                project: ${OC_NAMESPACE}-${OC_APP}
-          - podSelector: {}
