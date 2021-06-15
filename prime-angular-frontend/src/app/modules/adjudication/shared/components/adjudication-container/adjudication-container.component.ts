@@ -455,8 +455,8 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ search, status }: { search?: string, status?: number }) {
-    return this.adjudicationResource.getEnrollees(search, status)
+  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: number }) {
+    return this.adjudicationResource.getEnrollees(textSearch, status)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

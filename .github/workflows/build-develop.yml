@@ -150,7 +150,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://dev-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+          REDIRECT_URL: "https://develop.pharmanetenrolment.gov.bc.ca"
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -194,6 +194,7 @@ jobs:
             -p FRONTEND_URL=dev \
             -p IMAGE_TAG=dev \
             -p SVC_NAME=dev \
+            -p VANITY_URL=develop.pharmanetenrolment.gov.bc.ca \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
@@ -203,14 +204,14 @@ jobs:
             -p MAUTH_URL=dev-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
 
-          oc process -f infrastructure/mailhog-template.yml \
-            -p MAILHOG_SERVICE_NAME=mailhog-server \
-            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+#          oc process -f infrastructure/mailhog-template.yml \
+#            -p MAILHOG_SERVICE_NAME=mailhog-server \
+#            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
+#            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
 
-          oc process -f infrastructure/metabase-template.yml \
-            -p OC_APP=${{secrets.OC_APP}} \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+#          oc process -f infrastructure/metabase-template.yml \
+#            -p OC_APP=${{secrets.OC_APP}} \
+#            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
 
   garbage-cleanup:
     runs-on: ubuntu-20.04
