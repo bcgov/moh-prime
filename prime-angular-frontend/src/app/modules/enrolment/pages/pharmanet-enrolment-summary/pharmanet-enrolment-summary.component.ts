@@ -36,6 +36,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
+  public isRenewal: boolean;
 
   public careSettingConfigs: {
     setting: string,
@@ -63,6 +64,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
+    this.isRenewal = this.router.getCurrentNavigation().extras.state?.isRenewal;
   }
 
   public get enrollee() {
