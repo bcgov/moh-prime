@@ -24,7 +24,6 @@ export class VendorsPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public vendorConfig: VendorConfig[];
   public filteredVendors: BehaviorSubject<VendorConfig[]>;
 
   private routeUtils: RouteUtils;
@@ -45,7 +44,6 @@ export class VendorsPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.vendorConfig = this.configService.vendors;
     this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.configService.vendors);
   }
 
@@ -69,10 +67,6 @@ export class VendorsPageComponent implements OnInit {
 
   public removeVendor(index: number) {
     this.vendors.removeAt(index);
-  }
-
-  public filterVendors(availableVendors: VendorConfig[], currentVendor: VendorConfig) {
-    return availableVendors.filter((vendor: VendorConfig) => vendor.code === currentVendor.code);
   }
 
   public onBack() {
