@@ -23,17 +23,15 @@ namespace Prime.HttpClients
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
-            var content = new FileMetadata(filename: filename).AsHttpContent();
+            var content = new FileMetadata(filename: filename)
+                .AsHttpContent();
             return await _client.PostAsync("documents/uploads", content);
         }
 
-        /// <summary>
-        /// Moves a temporary file upload to its final destination and marks it as "submitted".
-        /// Returns the file's name if the operation was successful.
-        /// </summary>
         public async Task<string> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
         {
-            var content = new FileMetadata(destinationFolder: destinationFolder).AsHttpContent();
+            var content = new FileMetadata(destinationFolder: destinationFolder)
+                .AsHttpContent();
             var response = await _client.PostAsync($"documents/uploads/{documentGuid}/submit", content);
 
             if (!response.IsSuccessStatusCode)
@@ -59,29 +57,50 @@ namespace Prime.HttpClients
 
         public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
         {
-            var url = new FileMetadata(filename, destinationFolder).AsQueryStringUrl("documents");
+            var url = new FileMetadata(filename, destinationFolder)
+                .AsQueryStringUrl("documents");
             var content = new StreamContent(document);
 
             var response = await _client.PostAsync(url, content);
-            var documentResponse = await response.Content.ReadAsAsync<DocumentResponse>();
+            var documentResponse = await response.Content.ReadAsAsync<DocumentGuidResponse>();
 
             return documentResponse?.Document_guid ?? Guid.Empty;
         }
 
-        public async Task<HttpResponseMessage> GetFileResponseAsync(Guid documentGuid)
+        public async Task<HttpContent> GetDocumentAsync(Guid documentGuid)
         {
-            return await _client.GetAsync($"documents/{documentGuid}");
-        }
-
-        public async Task<byte[]> GetFileAsync(Guid documentGuid)
-        {
-            var response = await GetFileResponseAsync(documentGuid);
+            var response = await _client.GetAsync($"documents/{documentGuid}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            return await response.Content.ReadAsByteArrayAsync();
+            return response.Content;
+        }
+
+        private class FileMetadata
+        {
+            private readonly Dictionary<string, string> _metadata;
+
+            public FileMetadata(string filename = null, string destinationFolder = null)
+            {
+                _metadata = new Dictionary<string, string>
+                {
+                    { "filename", filename },
+                    { "folder", destinationFolder }
+                }
+                .RemoveNullValues();
+            }
+
+            public HttpContent AsHttpContent()
+            {
+                return new FormUrlEncodedContent(_metadata);
+            }
+
+            public string AsQueryStringUrl(string baseUrl)
+            {
+                return _metadata.ToQueryStringUrl(baseUrl, false);
+            }
         }
     }
 }
