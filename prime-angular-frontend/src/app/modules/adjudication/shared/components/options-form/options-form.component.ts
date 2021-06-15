@@ -47,28 +47,11 @@ export class OptionsFormComponent implements OnInit {
   @Input() public optionLabel: string;
   /**
    * @description
-   * Allow removal of the FormGroup from the FormArray.
-   */
-  @Input() public allowRemoval: boolean;
-  /**
-   * @description
-   * Remove control event emitter.
-   */
-  @Output() public remove: EventEmitter<number>;
-
-  /**
-   * @description
    * List of options that includes the selected option.
    */
   public filteredOptions: Observable<any[]>;
 
-  constructor() {
-    this.remove = new EventEmitter<number>();
-  }
-
-  public removeControl(index: number) {
-    this.remove.emit(index);
-  }
+  constructor() {}
 
   public ngOnInit() {
     this.filteredOptions = this.valueChanges();

@@ -26,15 +26,15 @@
 
             <div [class.mb-3]="!last">
 
-              <app-options-form [form]="vendor"
-                                [index]="index"
-                                selectLabel="Vendor"
-                                controlName="vendor"
-                                [availableOptions]="filteredVendors"
-                                optionLabel="name"
-                                optionValue="code"
-                                [allowRemoval]="vendors.controls.length > 1"
-                                (remove)="removeVendor($event)"></app-options-form>
+              <app-form-icon-group [show]="vendors.controls.length > 1"
+                                   (event)="removeVendor(index)">
+                <app-options-form [form]="vendor"
+                                  [index]="index"
+                                  selectLabel="Vendor"
+                                  controlName="vendor"
+                                  [availableOptions]="filteredVendors"
+                                  optionLabel="name"></app-options-form>
+              </app-form-icon-group>
 
             </div>
 

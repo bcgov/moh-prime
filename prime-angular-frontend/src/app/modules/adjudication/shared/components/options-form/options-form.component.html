@@ -1,35 +1,32 @@
 <ng-container [formGroup]="form">
 
-  <app-form-icon-group [show]="allowRemoval"
-                       (event)="removeControl(index)">
-    <mat-form-field class="w-100">
-      <mat-select [placeholder]="selectLabel"
-                  [formControlName]="controlName">
-        <mat-option></mat-option>
-        <mat-option *ngFor="let option of filteredOptions | async"
-                    [value]="option">
-          {{ option[optionLabel] }}
-        </mat-option>
-      </mat-select>
+  <mat-form-field class="w-100">
+    <mat-select [placeholder]="selectLabel"
+                [formControlName]="controlName">
+      <mat-option></mat-option>
+      <mat-option *ngFor="let option of filteredOptions | async"
+                  [value]="option">
+        {{ option[optionLabel] }}
+      </mat-option>
+    </mat-select>
 
-      <!-- TODO replicate with mat-input and mat-autocomplete -->
-      <!--      <input matInput-->
-      <!--             #input-->
-      <!--             type="text"-->
-      <!--             [placeholder]="inputLabel"-->
-      <!--             formControlName="vendor"-->
-      <!--             [matAutocomplete]="auto">-->
-      <!--      <mat-autocomplete #auto="matAutocomplete"-->
-      <!--                        autoActiveFirstOption>-->
-      <!--        <mat-option *ngFor="let vendor of filteredOptions | async"-->
-      <!--                    [value]="vendor">-->
-      <!--          {{ vendor.name }}-->
-      <!--        </mat-option>-->
-      <!--      </mat-autocomplete>-->
+    <!-- TODO replicate with mat-input and mat-autocomplete -->
+    <!--      <input matInput-->
+    <!--             #input-->
+    <!--             type="text"-->
+    <!--             [placeholder]="inputLabel"-->
+    <!--             formControlName="vendor"-->
+    <!--             [matAutocomplete]="auto">-->
+    <!--      <mat-autocomplete #auto="matAutocomplete"-->
+    <!--                        autoActiveFirstOption>-->
+    <!--        <mat-option *ngFor="let vendor of filteredOptions | async"-->
+    <!--                    [value]="vendor">-->
+    <!--          {{ vendor.name }}-->
+    <!--        </mat-option>-->
+    <!--      </mat-autocomplete>-->
 
-      <mat-error>Required</mat-error>
-      <!-- <mat-hint></mat-hint>-->
-    </mat-form-field>
-  </app-form-icon-group>
+    <mat-error>Required</mat-error>
+    <!-- <mat-hint></mat-hint>-->
+  </mat-form-field>
 
 </ng-container>
