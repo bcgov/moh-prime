@@ -32,7 +32,8 @@
         <h3 *ngIf="enrolment?.expiryDate"
             class="text-green mt-2">Renew Enrolment by {{ enrolment?.expiryDate | formatDate }}</h3>
       </ng-container>
-      <ng-template #renewalSummary>
+      <ng-template #renewalSummary
+                   appPageSubheaderSummary>
         Review the information below to ensure it is current and accurate. Inaccurate information may result in a delay
         in your renewal for PharmaNet access. If any information below requires updating, use the pencil icon to
         navigate to the appropriate editing screen.
