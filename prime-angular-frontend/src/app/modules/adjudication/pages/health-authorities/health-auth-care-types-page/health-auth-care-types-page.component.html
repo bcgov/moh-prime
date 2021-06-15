@@ -18,37 +18,26 @@
       </app-page-subheader>
 
       <div class="row">
-        <div class="col col-sm-10 py-3"
-             formArrayName="careTypes">
+        <div class="col col-sm-10 py-3">
 
-          <ng-container *ngFor="let careType of careTypes.controls; let index = index; let last = last;"
-                        [formGroupName]="index">
+          <ng-container formArrayName="careTypes">
+            <ng-container *ngFor="let careType of careTypes.controls; let index = index; let last = last;"
+                          [formGroupName]="index">
 
-            <div [class.mb-3]="!last">
+              <div [class.mb-3]="!last">
 
-              <app-form-icon-group [show]="careTypes.controls.length > 1"
-                                   (event)="removeCareType(index)">
-                <mat-form-field class="w-100">
-                  <input #input
-                         matInput
-                         type="text"
-                         placeholder="Care Type"
-                         formControlName="careType"
-                         [matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete"
-                                    autoActiveFirstOption>
-                    <mat-option *ngFor="let careType of filteredCareTypes | async"
-                                [value]="careType.name">
-                      {{ careType.name }}
-                    </mat-option>
-                  </mat-autocomplete>
-                  <mat-error>Required</mat-error>
-                  <mat-hint>Choose or type a care type</mat-hint>
-                </mat-form-field>
-              </app-form-icon-group>
+                <app-form-icon-group [show]="careTypes.controls.length > 1"
+                                     (event)="removeCareType(index)">
+                  <app-options-form [form]="careType"
+                                    fieldLabel="Care Type"
+                                    controlName="careType"
+                                    selectOrAutocomplete="autocomplete"
+                                    [availableOptions]="filteredCareTypes"></app-options-form>
+                </app-form-icon-group>
 
-            </div>
+              </div>
 
+            </ng-container>
           </ng-container>
 
           <button mat-button

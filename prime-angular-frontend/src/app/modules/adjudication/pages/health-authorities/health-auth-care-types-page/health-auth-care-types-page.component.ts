@@ -25,8 +25,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
   public title: string;
   public form: FormGroup;
   public isInitialEntry: boolean;
-  public filteredOptions: BehaviorSubject<Config<number>[]>;
-  public filteredCareTypes: BehaviorSubject<Config<number>[]>;
+  public filteredCareTypes: BehaviorSubject<string[]>;
 
   private routeUtils: RouteUtils;
 
@@ -46,7 +45,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.filteredCareTypes = new BehaviorSubject<Config<number>[]>(this.configService.careTypes);
+    this.filteredCareTypes = new BehaviorSubject<string[]>(this.configService.careTypes.map(ct => ct.name));
   }
 
   public get careTypes(): FormArray {
@@ -61,7 +60,7 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
     }
   }
 
-  public addCareType(careType: string = null) {
+  public addCareType(careType: string = '') {
     this.careTypes.push(this.fb.group({
       careType: [careType ?? '', Validators.required]
     }));
@@ -88,9 +87,11 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private initForm() {
     this.form.valueChanges
-      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) =>
-        this.filteredCareTypes.next(this.filterCareTypes(careTypes.map(ct => ct.careType)))
-      );
+      .subscribe(({ careTypes }: { careTypes: { careType: string }[] }) => {
+        const selectedCareTypes = careTypes.map(ct => ct.careType);
+        const filteredCareTypes = this.configService.careTypes.filter(ct => !selectedCareTypes.includes(ct.name)).map(ct => ct.name);
+        this.filteredCareTypes.next(filteredCareTypes);
+      });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ careTypes }: HealthAuthority) =>
@@ -102,10 +103,6 @@ export class HealthAuthCareTypesPageComponent implements OnInit {
 
   private nextRouteAfterSubmit() {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_VENDORS);
-  }
-
-  private filterCareTypes(careTypes: string[]) {
-    return this.configService.careTypes.filter(ct => !careTypes.includes(ct.name));
   }
 
   private routeTo(routeSegment?: string) {

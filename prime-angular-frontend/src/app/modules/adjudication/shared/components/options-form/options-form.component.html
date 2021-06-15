@@ -13,7 +13,7 @@
                         autoActiveFirstOption>
         <mat-option *ngFor="let option of filteredOptions | async"
                     [value]="option">
-          {{ option[optionLabel] }}
+          {{ (optionLabel) ? option[optionLabel] : option }}
         </mat-option>
       </mat-autocomplete>
     </ng-container>
@@ -24,7 +24,7 @@
         <mat-option></mat-option>
         <mat-option *ngFor="let option of filteredOptions | async"
                     [value]="option">
-          {{ option[optionLabel] }}
+          {{ (optionLabel) ? option[optionLabel] : option }}
         </mat-option>
       </mat-select>
     </ng-template>

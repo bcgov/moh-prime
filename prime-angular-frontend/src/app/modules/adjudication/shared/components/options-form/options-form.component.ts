@@ -36,7 +36,9 @@ export class OptionsFormComponent implements OnInit {
   /**
    * @description
    * Key for accessing the option display value.
-   * NOTE: Only used with autocomplete.
+   *
+   * NOTE: Only used with autocomplete, and if omitted the
+   * value is considered to be a primitive data type.
    */
   @Input() public optionLabel: string;
   /**
@@ -65,7 +67,13 @@ export class OptionsFormComponent implements OnInit {
    * input field.
    */
   public displayWith(option: any) {
-    return option && option[this.optionLabel] ? option[this.optionLabel] : '';
+    if (!option) {
+      return '';
+    }
+
+    return (this.optionLabel && option[this.optionLabel])
+      ? option[this.optionLabel]
+      : option;
   }
 
   public ngOnInit() {
