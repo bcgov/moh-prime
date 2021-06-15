@@ -64,7 +64,8 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.showHealthAuthority = true;
     this.form = this.buildVendorEmailGroup();
     this.careSettingConfigs = [];
-    this.isRenewal = this.router.getCurrentNavigation().extras.state?.isRenewal;
+    const navigation = this.router.getCurrentNavigation();
+    this.isRenewal = navigation ? navigation.extras.state?.isRenewal : false;
   }
 
   public get enrollee() {
