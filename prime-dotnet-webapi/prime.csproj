@@ -38,7 +38,7 @@
     <PackageReference Include="DelegateDecompiler.EntityFrameworkCore" Version="0.28.0" />
     <PackageReference Include="Flurl" Version="3.0.1" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.10.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
