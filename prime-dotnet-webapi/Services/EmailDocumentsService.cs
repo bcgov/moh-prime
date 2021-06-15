@@ -187,11 +187,13 @@ namespace Prime.Services.EmailInternal
             }
             else
             {
-                fileData = await _documentClient.GetFileAsync(agreementDto.SignedAgreement.DocumentGuid);
-                if (fileData == null)
+                var content = await _documentClient.GetDocumentAsync(agreementDto.SignedAgreement.DocumentGuid);
+                if (content == null)
                 {
                     return await ApologyDocument(agreementDto.SignedAgreement.Filename);
                 }
+
+                fileData = await content.ReadAsByteArrayAsync();
 
                 if (!agreementDto.SignedAgreement.HasFileExtension("pdf"))
                 {
