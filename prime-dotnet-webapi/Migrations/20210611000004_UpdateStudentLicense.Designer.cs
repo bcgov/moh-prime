@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210611000004_UpdateStudentLicense")]
+    partial class UpdateStudentLicense
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -12335,221 +12337,6 @@ namespace Prime.Migrations
                     b.ToTable("GisEnrolment");
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.CareType", b =>
-                {
-                    b.Property<int>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("CareTypeLookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = 1,
-                            Name = "Ambulatory Care"
-                        },
-                        new
-                        {
-                            Code = 2,
-                            Name = "Acute Care"
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CareType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.ToTable("HealthAuthorityCareType");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HealthAuthorityOrganization");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Northern Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Interior Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Vancouver Coastal Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Island Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Fraser Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Provincial Health Services Authority",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("VendorCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.HasIndex("VendorCode");
-
-                    b.ToTable("HealthAuthorityVendor");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
                 {
                     b.Property<int>("Code")
@@ -15721,41 +15508,6 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityPharmanetAdministrator");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId")
-                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId1");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityPrivacyOfficer");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId")
-                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId2");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityTechnicalSupport");
-                });
-
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -16171,39 +15923,6 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("CareTypes")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
-                {
-                    b.HasOne("Prime.Models.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("Vendors")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Vendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
@@ -16532,35 +16251,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
                         .WithMany()
                         .HasForeignKey("CareSettingCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("PharmanetAdministrators")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("PrivacyOfficers")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("TechnicalSupports")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

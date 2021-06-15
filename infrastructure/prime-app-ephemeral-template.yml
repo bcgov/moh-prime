@@ -168,7 +168,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
-  status: {}
+  
 #   Frontend Service
 - apiVersion: v1
   kind: Service
@@ -219,7 +219,7 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
-  status: {}
+  
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
@@ -277,14 +277,15 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   labels:
-    app: ${SVC_NAME}-postgres
+    app: ${SVC_NAME}-${API_POD}
     app.kubernetes.io/component: ${SVC_NAME}
     app.kubernetes.io/instance: ${SVC_NAME}
     app.kubernetes.io/part-of: ${SVC_NAME}
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
+        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
     name: ${SVC_NAME}-${API_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -321,14 +322,31 @@ objects:
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
-              - name: DB_NAME
-                value: prime-${SVC_NAME}
-              - name: DB_USER
-                value: prime
-              - name: DB_PASS
-                value: prime-${SVC_NAME}
+              - name: database-password
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
+              - name: database-name
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-name
+              - name: database-user
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-user
+              - name: database-password
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
               - name: POSTGRESQL_ADMIN_PASSWORD
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: admin-password
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -390,7 +408,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  status: {}
+  
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -466,13 +484,22 @@ objects:
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               - name: DB_NAME
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-name
               - name: DB_PASS
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
               - name: DB_PORT
                 value: "5432"
               - name: DB_USER
-                value: prime
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-user
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
               - name: FLASK_ENV
@@ -506,7 +533,10 @@ objects:
                     name: keycloak
                     key: JWT_WELL_KNOWN_CONFIG
               - name: PGPASSWORD
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -532,7 +562,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -566,11 +596,6 @@ objects:
     resources:
       requests:
         storage: 1Gi
-  status:
-    accessModes:
-      - ReadWriteOnce
-    capacity:
-      storage: 1Gi
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -595,7 +620,7 @@ objects:
       app.openshift.io/runtime: python
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
   spec:
     template:
       metadata:
@@ -627,13 +652,25 @@ objects:
             - name: DB_HOST
               value: ${SVC_NAME}-postgres
             - name: DB_NAME
-              value: prime-${SVC_NAME}
-            - name: DB_USER
-              value: prime
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-postgres
+                  key: database-name
             - name: DB_PASS
-              value: prime-${SVC_NAME}
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-postgres
+                  key: database-password
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                configMapKeyRef:
+                  name: postgresql
+                  key: postgresql_database_port
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-postgres
+                  key: database-user
             - name: FLASK_ENV
               valueFrom:
                 configMapKeyRef:
@@ -665,7 +702,10 @@ objects:
                   name: keycloak
                   key: JWT_WELL_KNOWN_CONFIG
             - name: PGPASSWORD
-              value: prime-${SVC_NAME}
+              valueFrom:
+                secretKeyRef:
+                  name: ${SVC_NAME}-postgres
+                  key: database-password
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -677,7 +717,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  status: {}
+  
 
 ###########################################
 ###         PostgreSQL Database         ###
@@ -718,13 +758,25 @@ objects:
                 value: ${SVC_NAME}-postgres
               # PostgreSQL environment variables
               - name: PGPASSWORD
-                value: prime
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
               - name: POSTGRESQL_USER
-                value: prime
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres                    
+                    key: database-user
               - name: POSTGRESQL_PASSWORD
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-password
               - name: POSTGRESQL_DATABASE
-                value: prime-${SVC_NAME}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres
+                    key: database-name
             image: >-
               image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
@@ -765,8 +817,7 @@ objects:
         volumes:
           - name: ${SVC_NAME}-postgres-data
             emptyDir: {}
-  status: {}
-  
+
 #   PostgreSQL Secret
 - apiVersion: v1
   kind: Secret
@@ -797,8 +848,8 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-      # annotations: 
-      #   template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
+      annotations: 
+        template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
       - name: postgres
@@ -810,8 +861,6 @@ objects:
       name: ${SVC_NAME}-postgres
     sessionAffinity: None
     type: ClusterIP
-  status:
-    loadBalancer: {}
 
 ###########################################
 ###                Redis                ###
@@ -918,5 +967,3 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
-    status:
-      loadBalancer: {}

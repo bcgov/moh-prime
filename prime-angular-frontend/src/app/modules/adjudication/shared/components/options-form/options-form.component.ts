@@ -27,24 +27,24 @@ export class OptionsFormComponent implements OnInit {
   @Input() public index: number;
   /**
    * @description
-   * Set of available select options.
-   */
-  @Input() public availableOptions: BehaviorSubject<any[]>;
-  /**
-   * @description
    * Form input label.
    */
   @Input() public selectLabel: string;
   /**
    * @description
-   * Key for accessing the option
-   */
-  @Input() public optionLabel: string;
-  /**
-   * @description
    * FormGroup control name.
    */
   @Input() public controlName: string;
+  /**
+   * @description
+   * Set of available select options.
+   */
+  @Input() public availableOptions: BehaviorSubject<any[]>;
+  /**
+   * @description
+   * Key for accessing the option display value.
+   */
+  @Input() public optionLabel: string;
   /**
    * @description
    * Allow removal of the FormGroup from the FormArray.
@@ -56,6 +56,10 @@ export class OptionsFormComponent implements OnInit {
    */
   @Output() public remove: EventEmitter<number>;
 
+  /**
+   * @description
+   * List of options that includes the selected option.
+   */
   public filteredOptions: Observable<any[]>;
 
   constructor() {
@@ -67,36 +71,27 @@ export class OptionsFormComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.filteredOptions = this.initialize();
+    this.filteredOptions = this.valueChanges();
   }
 
-  private initialize() {
+  private valueChanges(): Observable<any[]> {
     return combineLatest([
-      this.availableOptions.asObservable(), // Prevent accidentally affecting parent observable
-      this.form.valueChanges.pipe(startWith('')) // Trigger emission immediately!
+      // Prevent accidentally affecting parent observable
+      this.availableOptions.asObservable(),
+      // Trigger emission immediately!
+      this.form.valueChanges.pipe(startWith((this.form.value ?? null) as object))
     ]).pipe(
       untilDestroyed(this),
-      map(([availableOptions, currentOption]: [any[], any]) =>
-        this.filterOptions(availableOptions, currentOption)
-      )
+      map(([availableOptions, currentOption]: [any[], any | null]) => {
+        availableOptions = (Array.isArray(availableOptions))
+          ? availableOptions
+          : [];
+        // Add in the currently selected option that would be
+        // filtered out of the available options
+        return (currentOption[this.controlName])
+          ? [currentOption[this.controlName], ...availableOptions]
+          : availableOptions;
+      })
     );
-  }
-
-  /**
-   * @description
-   * Filtering of the available options.
-   */
-  private filterOptions(availableVendors: VendorConfig[], { vendorCode }: { vendorCode: number }): VendorConfig[] {
-    // Default provide the entire list
-    let filteredVendors = availableVendors;
-
-    if (availableVendors.length) {
-      filteredVendors = filteredVendors.filter(
-        // TODO make this a passed predicate for reuse
-        (vendor: VendorConfig) => vendor.code === vendorCode
-      );
-    }
-
-    return filteredVendors;
   }
 }

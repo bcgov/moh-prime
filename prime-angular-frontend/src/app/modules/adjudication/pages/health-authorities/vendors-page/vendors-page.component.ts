@@ -63,7 +63,7 @@ export class VendorsPageComponent implements OnInit {
 
   public addVendor(vendor: VendorConfig = null) {
     this.vendors.push(this.fb.group({
-      vendor: [vendor ?? '', Validators.required]
+      vendor: [vendor ?? null, Validators.required]
     }));
   }
 
@@ -71,8 +71,8 @@ export class VendorsPageComponent implements OnInit {
     this.vendors.removeAt(index);
   }
 
-  public filterVendors(vendors: VendorConfig[], vendorCode: number) {
-    return vendors.filter((vendor: VendorConfig) => vendor.code === vendorCode);
+  public filterVendors(availableVendors: VendorConfig[], currentVendor: VendorConfig) {
+    return availableVendors.filter((vendor: VendorConfig) => vendor.code === currentVendor.code);
   }
 
   public onBack() {
@@ -91,10 +91,13 @@ export class VendorsPageComponent implements OnInit {
   }
 
   private initForm() {
-    // this.form.valueChanges
-    //   .subscribe(({ vendors }: { vendors: { vendor: string }[] }) =>
-    //     this.filteredVendors.next(this.filterVendors(vendors.map(ct => ct.vendor)))
-    //   );
+    this.form.valueChanges
+      .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
+        const selectedVendorCodes = vendors.map(ct => ct.vendor?.code);
+        // Filter out the selected vendors to avoid visual duplicates
+        const filteredVendors = this.configService.vendors.filter(v => !selectedVendorCodes.includes(v.code));
+        this.filteredVendors.next(filteredVendors);
+      });
 
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe(({ vendorCodes }: HealthAuthority) =>
@@ -109,10 +112,6 @@ export class VendorsPageComponent implements OnInit {
   private nextRouteAfterSubmit() {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER);
   }
-
-  // private filterVendors(vendors: string[]) {
-  //   return this.configService.vendors.filter(v => !vendors.includes(v.name));
-  // }
 
   private routeTo(routeSegment?: string) {
     const routePath = (this.isInitialEntry && routeSegment)
