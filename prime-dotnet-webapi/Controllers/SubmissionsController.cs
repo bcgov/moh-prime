@@ -31,11 +31,11 @@ namespace Prime.Controllers
             _businessEventService = businessEventService;
         }
 
-        // POST: api/enrollees/5/submission
+        // POST: api/enrollees/5/submissions
         /// <summary>
         /// Submits the given enrollee through Auto/manual adjudication.
         /// </summary>
-        [HttpPost("{enrolleeId}/submission", Name = nameof(Submit))]
+        [HttpPost("{enrolleeId}/submissions", Name = nameof(Submit))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -80,12 +80,12 @@ namespace Prime.Controllers
             return Ok(ApiResponse.Result(enrollee));
         }
 
-        // POST: api/enrollees/5/submission/approve
+        // POST: api/enrollees/5/status-actions/approve
         /// <summary>
         /// Approves the current submission for an Enrolle.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/approve", Name = nameof(ApproveSubmission))]
+        [HttpPost("{enrolleeId}/status-actions/approve", Name = nameof(ApproveSubmission))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -94,17 +94,17 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> ApproveSubmission(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.Approve);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.Approve);
         }
 
-        // POST: api/enrollees/5/submission/accept-toa?documentGuid=12345-54321
+        // POST: api/enrollees/5/status-actions/accept-toa?documentGuid=12345-54321
         /// <summary>
         /// Accepts the current TOA for an Enrolle.
         /// Document GUID of a collaborating ID document is required for users with Identity Assurance less than three.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="documentGuid"></param>
-        [HttpPost("{enrolleeId}/submission/accept-toa", Name = nameof(AcceptToa))]
+        [HttpPost("{enrolleeId}/status-actions/accept-toa", Name = nameof(AcceptToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -113,15 +113,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> AcceptToa(int enrolleeId, [FromQuery] Guid? documentGuid = null)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.AcceptToa, documentGuid);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.AcceptToa, documentGuid);
         }
 
-        // POST: api/enrollees/5/submission/decline-toa
+        // POST: api/enrollees/5/status-actions/decline-toa
         /// <summary>
         /// Declines the current TOA for an Enrolle.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/decline-toa", Name = nameof(DeclineToa))]
+        [HttpPost("{enrolleeId}/status-actions/decline-toa", Name = nameof(DeclineToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -130,15 +130,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeclineToa(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineToa);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.DeclineToa);
         }
 
-        // POST: api/enrollees/5/submission/enable-editing
+        // POST: api/enrollees/5/status-actions/enable-editing
         /// <summary>
         /// Puts the Enrolle back into an editable state.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/enable-editing", Name = nameof(EnableEditing))]
+        [HttpPost("{enrolleeId}/status-actions/enable-editing", Name = nameof(EnableEditing))]
         [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -147,15 +147,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> EnableEditing(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.EnableEditing);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.EnableEditing);
         }
 
-        // POST: api/enrollees/7/submission/cancel-toa
+        // POST: api/enrollees/7/status-actions/cancel-toa
         /// <summary>
         /// Puts the Enrolle back into Under Review from Requires TOA.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/cancel-toa", Name = nameof(CancelToaAssignment))]
+        [HttpPost("{enrolleeId}/status-actions/cancel-toa", Name = nameof(CancelToaAssignment))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -164,15 +164,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CancelToaAssignment(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.CancelToaAssignment);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.CancelToaAssignment);
         }
 
-        // POST: api/enrollees/5/submission/lock-profile
+        // POST: api/enrollees/5/status-actions/lock-profile
         /// <summary>
         /// Locks the Enrolle's profile.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/lock-profile", Name = nameof(LockProfile))]
+        [HttpPost("{enrolleeId}/status-actions/lock-profile", Name = nameof(LockProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -181,15 +181,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> LockProfile(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.LockProfile);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.LockProfile);
         }
 
-        // POST: api/enrollees/5/submission/decline-profile
+        // POST: api/enrollees/5/status-actions/decline-profile
         /// <summary>
         /// Declines the Enrolle's profile, expiring their credentials and Terms of Access.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/decline-profile", Name = nameof(DeclineProfile))]
+        [HttpPost("{enrolleeId}/status-actions/decline-profile", Name = nameof(DeclineProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -198,15 +198,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeclineProfile(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.DeclineProfile);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.DeclineProfile);
         }
 
-        // POST: api/enrollees/5/submission/rerun-rules
+        // POST: api/enrollees/5/status-actions/rerun-rules
         /// <summary>
         /// Re-runs the automatic adjudication rules for an Enrollee under review.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPost("{enrolleeId}/submission/rerun-rules", Name = nameof(RerunRules))]
+        [HttpPost("{enrolleeId}/status-actions/rerun-rules", Name = nameof(RerunRules))]
         [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -215,10 +215,10 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> RerunRules(int enrolleeId)
         {
-            return await SubmissionActionInternal(enrolleeId, SubmissionAction.RerunRules);
+            return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
-        private async Task<ActionResult> SubmissionActionInternal(int enrolleeId, SubmissionAction action, object additionalParameters = null)
+        private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -230,7 +230,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var success = await _submissionService.PerformSubmissionActionAsync(enrolleeId, action, additionalParameters);
+            var success = await _submissionService.PerformEnrolleeStatusActionAsync(enrolleeId, action, additionalParameters);
             if (!success)
             {
                 ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
@@ -324,15 +324,15 @@ namespace Prime.Controllers
         /// Confirm an Enrollee's most recent submission
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/submissions/latest/confirm", Name = nameof(ConfirmSubmission))]
+        [HttpPut("{enrolleeId}/submissions/latest/confirm", Name = nameof(ConfirmLatestSubmission))]
         [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> ConfirmSubmission(int enrolleeId)
+        public async Task<ActionResult> ConfirmLatestSubmission(int enrolleeId)
         {
-            await _submissionService.ConfirmSubmissionAsync(enrolleeId);
+            await _submissionService.ConfirmLatestSubmissionAsync(enrolleeId);
             return NoContent();
         }
 

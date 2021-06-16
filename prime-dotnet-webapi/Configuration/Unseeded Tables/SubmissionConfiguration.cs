@@ -11,11 +11,6 @@ namespace Prime.Configuration
         public void Configure(EntityTypeBuilder<Submission> builder)
         {
             builder
-                .HasOne(epf => epf.Enrollee)
-                .WithMany(e => e.Submissions)
-                .HasForeignKey(epf => epf.EnrolleeId);
-
-            builder
                 .Property(epf => epf.ProfileSnapshot)
                 .HasColumnType("json")
                 .HasConversion(

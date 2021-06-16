@@ -87,30 +87,6 @@ objects:
                     name: "metabase-database-credentials"
                     key: username
 
-              # MongoDB related environment variables
-              - name: MONGO_HOST
-                value: ${MONGO_HOST}
-              - name: MONGO_USER
-                valueFrom:
-                  secretKeyRef:
-                    name: "mongodb-secrets"
-                    key: mongodb_database_username
-              - name: MONGO_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: "mongodb-secrets"
-                    key: mongodb_database_password
-              - name: MONGO_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: "mongodb-secrets"
-                    key: mongodb_database_admin_password
-              - name: MONGO_DATABASE
-                valueFrom:
-                  configMapKeyRef:
-                    name: "mongodb"
-                    key: mongodb_database_name
-
               # PostgreSQL related environment variables
               - name: PGHOST
                 value: ${POSTGRESQL_HOST}
@@ -157,5 +133,6 @@ objects:
         from:
           kind: ImageStreamTag
           name: backup:latest
+          namespace: 9c33a9-tools
       type: ImageChange
   status: {}

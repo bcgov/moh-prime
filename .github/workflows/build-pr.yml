@@ -1,11 +1,16 @@
 name: Build PR
 on:
   push:
-    branches-ignore: [develop]
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
   workflow_dispatch:
   pull_request:
     branches-ignore:
       - 'develop'
+      - 'test'
+      - 'master'
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
@@ -100,13 +105,13 @@ jobs:
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
-            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_CONNECTION_STRING="host=pr-$PR_NUMBER-postgres-db;port=5432;database=$PRIME_DB_USER-$PR_NUMBER;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
             --build-arg DB_HOST=pr-$PR_NUMBER-postgres-db \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
-            --build-arg POSTGRESQL_DATABASE=postgres \
+            --build-arg POSTGRESQL_DATABASE=$PRIME_DB_USER-$PR_NUMBER \
             --build-arg SVC_NAME="pr-$PR_NUMBER" \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:pr-$PR_NUMBER
@@ -171,6 +176,7 @@ jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Development
+    needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -211,7 +217,35 @@ jobs:
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
-            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -p POSTGRESQL_USER=${{secrets.PRIME_DB_USER}} \
+            -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+
+  garbage-cleanup:
+    runs-on: ubuntu-20.04
+    environment: Development
+    needs: [apply-oc-template]
+    steps:
+      - name: "Use the OpenShift template"
+        uses: actions/checkout@v2
+
+      - name: Install OC
+        uses: redhat-actions/oc-installer@v1
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+
+      - name: "Cleanup"
+        id: cleanup
+        env:
+          PROJECT_OWNER: bcgov
+          PROJECT_NAME: moh-prime
+          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
+        run: |
+          ./devops/OC4/player.sh occleanup

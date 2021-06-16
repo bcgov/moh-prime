@@ -53,6 +53,7 @@ import { SiteRegistrationTabsComponent } from './shared/components/site-registra
 import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
 import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorized-users-view/ha-authorized-users-view.component';
 import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
+import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
 import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 import { MaintenanceContainerComponent } from './shared/components/maintenance-container/maintenance-container.component';
@@ -112,6 +113,7 @@ import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-ma
     HealthAuthorityAuthorizedUserPageComponent,
     HaAuthorizedUsersViewComponent,
     HealthAuthorityAuthorizedUsersPageComponent,
+    HealthAuthorityOrganizationInformationPageComponent,
     AuthorizedUserReviewComponent,
     ContextualEnrolmentConfirmationComponent,
     MaintenanceContainerComponent,
