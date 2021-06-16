@@ -36,6 +36,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
+  public isRenewal: boolean;
 
   public careSettingConfigs: {
     setting: string,
@@ -195,6 +196,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.isRenewal = this.route.snapshot.queryParams?.isRenewal === 'true';
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {
