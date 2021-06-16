@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.IO;
+using Flurl;
 
 namespace Prime.Models
 {
@@ -11,12 +11,13 @@ namespace Prime.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
         public Guid DocumentGuid { get; set; }
 
         [NotMapped]
         public string DownloadUrl
         {
-            get => Path.Join(PrimeEnvironment.BackendUrl, "document-access", Id.ToString());
+            get => Url.Combine(PrimeEnvironment.BackendUrl, "document-access", Id.ToString());
         }
     }
 }
