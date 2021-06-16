@@ -69,8 +69,8 @@ namespace Prime.Services
             {
                 ProvisionerId = organization.SigningAuthorityId,
                 OrganizationId = organization.Id,
-                Status = SiteStatusType.UnderReview
             };
+            site.AddStatus(SiteStatusType.UnderReview);
 
             _context.Sites.Add(site);
 
@@ -326,9 +326,9 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site.Status != SiteStatusType.Approved)
+            if (site.CurrentStatus.StatusType != SiteStatusType.Approved)
             {
-                site.Status = SiteStatusType.Approved;
+                site.AddStatus(SiteStatusType.Approved);
                 site.ApprovedDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
@@ -341,7 +341,7 @@ namespace Prime.Services
         public async Task<Site> DeclineSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.Status = SiteStatusType.Declined;
+            site.AddStatus(SiteStatusType.Declined);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
 
@@ -719,7 +719,8 @@ namespace Prime.Services
                     .ThenInclude(r => r.RemoteUserCertifications)
                 .Include(s => s.BusinessLicence)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .Include(s => s.Adjudicator);
+                .Include(s => s.Adjudicator)
+                .Include(s => s.SiteStatuses);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-
+using DelegateDecompiler;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -50,7 +50,7 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
-        public SiteStatusType Status { get; set; }
+        public ICollection<SiteStatus> SiteStatuses { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
@@ -83,6 +83,32 @@ namespace Prime.Models
                 .Where(h => atTime == null || h.IsOpen(atTime.Value))
                 .Select(b => b.Day)
                 .Distinct();
+        }
+
+        public SiteStatus AddStatus(SiteStatusType siteStatusType)
+        {
+            var newStatus = SiteStatus.FromType(siteStatusType, Id);
+
+            if (SiteStatuses == null)
+            {
+                SiteStatuses = new List<SiteStatus>();
+            }
+            SiteStatuses.Add(newStatus);
+
+            return newStatus;
+        }
+
+        /// <summary>
+        /// Gets the most recent Status of the Site.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public SiteStatus CurrentStatus
+        {
+            get => SiteStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
+                .FirstOrDefault();
         }
     }
 }
