@@ -208,7 +208,7 @@ namespace Prime.Services
             var allDigitsRegex = new Regex("^[0-9]+$");
             if (telecomNumber != null && telecomNumber.Length == 10 && allDigitsRegex.IsMatch(telecomNumber))
             {
-                return new string[] { telecomNumber.Substring(0, 3), telecomNumber.Substring(3) };
+                return new string[] { telecomNumber[0..3], telecomNumber[3..] };
             }
             else
             {
