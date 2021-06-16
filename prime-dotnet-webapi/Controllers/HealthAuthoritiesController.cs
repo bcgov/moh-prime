@@ -16,7 +16,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/health-authorities")]
     [ApiController]
-    public class HealthAuthoritiesController : ControllerBase
+    public class HealthAuthoritiesController : PrimeControllerBase
     {
         private readonly IHealthAuthorityService _healthAuthorityService;
 
