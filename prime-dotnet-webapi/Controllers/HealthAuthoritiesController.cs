@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
 using Prime.Auth;
-using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
-using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
+using Prime.ViewModels.Parties;
+using Prime.ViewModels.HealthAuthorities;
 
 namespace Prime.Controllers
 {
@@ -36,7 +35,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthorityListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthorities()
         {
-            return Ok(ApiResponse.Result(await _healthAuthorityService.GetHealthAuthoritiesAsync()));
+            return Ok(await _healthAuthorityService.GetHealthAuthoritiesAsync());
         }
 
         // GET: api/health-authorities/5
@@ -52,13 +51,12 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetHealthAuthorityById(int healthAuthorityId)
         {
             var healthAuthority = await _healthAuthorityService.GetHealthAuthorityAsync(healthAuthorityId);
-
             if (healthAuthority == null)
             {
                 return NotFound();
             }
 
-            return Ok(ApiResponse.Result(healthAuthority));
+            return Ok(healthAuthority);
         }
 
         // GET: api/health-authorities/5/authorized-users
@@ -70,16 +68,17 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AuthorizedUser>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AuthorizedUserViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetAuthorizedUsers(int healthAuthorityId)
         {
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
-                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
             var users = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
-            return Ok(ApiResponse.Result(users));
+            return Ok(users);
         }
 
         // PUT: api/health-authorities/5/care-types
@@ -90,6 +89,7 @@ namespace Prime.Controllers
         /// <param name="careTypes"></param>
         [HttpPut("{healthAuthorityId}/care-types", Name = nameof(UpdateCareTypes))]
         [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -98,12 +98,11 @@ namespace Prime.Controllers
         {
             if (careTypes == null)
             {
-                ModelState.AddModelError("HealthAuthorityCareType", "Health authority care types cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Health authority care types cannot be null.");
             }
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
-                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
             await _healthAuthorityService.UpdateCareTypesAsync(healthAuthorityId, careTypes);
@@ -119,6 +118,7 @@ namespace Prime.Controllers
         /// <param name="vendors"></param>
         [HttpPut("{healthAuthorityId}/vendors", Name = nameof(UpdateVendors))]
         [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -127,12 +127,11 @@ namespace Prime.Controllers
         {
             if (vendors == null)
             {
-                ModelState.AddModelError("HealthAuthorityVendors", "Health authority vendors cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Health authority vendors cannot be null.");
             }
             if (!await _healthAuthorityService.HealthAuthorityExistsAsync(healthAuthorityId))
             {
-                return NotFound(ApiResponse.Message($"Health Authority not found with id {healthAuthorityId}"));
+                return NotFound($"Health Authority not found with id {healthAuthorityId}");
             }
 
             await _healthAuthorityService.UpdateVendorsAsync(healthAuthorityId, vendors);
