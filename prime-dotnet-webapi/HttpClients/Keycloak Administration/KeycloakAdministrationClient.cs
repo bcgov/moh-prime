@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
+using Prime.Auth;
+using Prime.Models;
 using Prime.ViewModels.Parties;
 using Prime.HttpClients.KeycloakApiDefinitions;
-using Prime.Models;
-using Prime.Auth;
 
 namespace Prime.HttpClients
 {
@@ -22,6 +22,7 @@ namespace Prime.HttpClients
             ILogger<KeycloakAdministrationClient> logger)
             : base(PropertySerialization.CamelCase)
         {
+            // Credentials and Base Url are set in Startup.cs
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger;
         }
