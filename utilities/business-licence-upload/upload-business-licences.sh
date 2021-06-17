@@ -14,8 +14,9 @@ else
   exit 1
 fi
 
+output="${OUTPUT_FILENAME}"
 # Create new file (or replace) in working directory
-printf 'PEC,Filename,Document GUID\n' > output.csv
+printf 'PEC,Filename,Document GUID\n' > "${output}"
 
 num_files=0
 num_upload_errors=0
@@ -30,7 +31,7 @@ do
 
   url_encoded_filename=$(python -c "import urllib.parse, sys; print(urllib.parse.quote(sys.argv[1]))" "${filename_only}")
 
-  doc_guid=$(curl -X POST --data-binary "@${file}" -H "Authorization: Bearer ${token}" -s "${DOCMAN_DOCUMENTS_URL}?folder=paper_form_business_licences&filename=${url_encoded_filename}" | python get_doc_guid.py)
+  doc_guid=$(curl -X POST --data-binary "@${file}" -H "Authorization: Bearer ${token}" -s "${DOCMAN_DOCUMENTS_URL}?folder=${DOCMAN_DEST_DIR}&filename=${url_encoded_filename}" | python get_doc_guid.py)
   if [ $? -eq 0 ]; then
     echo -e ${doc_guid}
     # Expect files to be named like "PEC - Business License.pdf"
@@ -39,7 +40,7 @@ do
       ((num_filename_format_errors++))
     else
       # Append to output file
-      printf "${pec},${filename_only},${doc_guid}\n" >> output.csv
+      printf "${pec},${filename_only},${doc_guid}\n" >> "${output}"
     fi
   else
     echo -e "WARNING:  ${file} failed to upload to Document Manager."
