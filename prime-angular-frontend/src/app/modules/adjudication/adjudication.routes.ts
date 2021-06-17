@@ -33,6 +33,8 @@ export class AdjudicationRoutes {
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
 
+  public static DEMOGRAPHIC = 'demographic';
+
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {

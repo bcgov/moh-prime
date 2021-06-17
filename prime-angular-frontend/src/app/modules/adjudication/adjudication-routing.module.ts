@@ -285,7 +285,7 @@ const routes: Routes = [
             path: AdjudicationRoutes.PAPER_ENROLMENT,
             children: [
               {
-                path: EnrolmentRoutes.BCSC_DEMOGRAPHIC,
+                path: AdjudicationRoutes.DEMOGRAPHIC,
                 component: PaperEnrolmentDemographicComponent,
                 data: { title: 'PRIME Enrolment' }
               },
