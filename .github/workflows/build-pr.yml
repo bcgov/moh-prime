@@ -1,11 +1,16 @@
 name: Build PR
 on:
   push:
-    branches-ignore: [develop]
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
   workflow_dispatch:
   pull_request:
     branches-ignore:
       - 'develop'
+      - 'test'
+      - 'master'
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
@@ -213,7 +218,7 @@ jobs:
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
             -p POSTGRESQL_USER=${{secrets.PRIME_DB_USER}} \
-            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -

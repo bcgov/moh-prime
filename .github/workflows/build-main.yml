@@ -138,7 +138,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://prod-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca"       
+          REDIRECT_URL: "https://pharmanetenrolment.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -179,7 +179,7 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres-db \
+            -p DB_POD=postgres \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
             -p VANITY_URL=pharmanetenrolment.gov.bc.ca \
