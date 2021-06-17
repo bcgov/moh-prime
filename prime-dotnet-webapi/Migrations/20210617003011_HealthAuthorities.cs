@@ -135,6 +135,38 @@ namespace Prime.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PrivacyOffice",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    HealthAuthorityOrganizationId = table.Column<int>(nullable: false),
+                    Phone = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    PhysicalAddressId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PrivacyOffice", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PrivacyOffice_HealthAuthorityOrganization_HealthAuthorityOr~",
+                        column: x => x.HealthAuthorityOrganizationId,
+                        principalTable: "HealthAuthorityOrganization",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PrivacyOffice_Address_PhysicalAddressId",
+                        column: x => x.PhysicalAddressId,
+                        principalTable: "Address",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "CareTypeLookup",
                 columns: new[] { "Code", "Name" },
@@ -191,6 +223,17 @@ namespace Prime.Migrations
                 name: "IX_HealthAuthorityVendor_VendorCode",
                 table: "HealthAuthorityVendor",
                 column: "VendorCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrivacyOffice_HealthAuthorityOrganizationId",
+                table: "PrivacyOffice",
+                column: "HealthAuthorityOrganizationId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrivacyOffice_PhysicalAddressId",
+                table: "PrivacyOffice",
+                column: "PhysicalAddressId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -206,6 +249,9 @@ namespace Prime.Migrations
 
             migrationBuilder.DropTable(
                 name: "HealthAuthorityVendor");
+
+            migrationBuilder.DropTable(
+                name: "PrivacyOffice");
 
             migrationBuilder.DropTable(
                 name: "HealthAuthorityOrganization");

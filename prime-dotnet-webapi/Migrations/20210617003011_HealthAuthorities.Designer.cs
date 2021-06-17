@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210610014534_HealthAuthorities")]
+    [Migration("20210617003011_HealthAuthorities")]
     partial class HealthAuthorities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -12552,6 +12552,47 @@ namespace Prime.Migrations
                     b.ToTable("HealthAuthorityVendor");
                 });
 
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityOrganizationId")
+                        .IsUnique();
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.ToTable("PrivacyOffice");
+                });
+
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
                 {
                     b.Property<int>("Code")
@@ -13070,7 +13111,7 @@ namespace Prime.Migrations
                             Name = "Educational - Medical Student",
                             NamedInImReg = false,
                             Prefix = "91",
-                            Validate = true,
+                            Validate = false,
                             Weight = 18
                         },
                         new
@@ -16204,6 +16245,19 @@ namespace Prime.Migrations
                         .HasForeignKey("VendorCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithOne("PrivacyOffice")
+                        .HasForeignKey("Prime.Models.HealthAuthorities.PrivacyOffice", "HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
                 });
 
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
