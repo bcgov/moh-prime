@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -11,7 +12,7 @@ using LinqKit;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
-using System.Security.Claims;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
@@ -448,7 +449,7 @@ namespace Prime.Services
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
             }
 
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.BusinessLicences);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -480,7 +481,7 @@ namespace Prime.Services
 
         private async Task<BusinessLicenceDocument> CreateBusinessLicenceDocument(Guid documentGuid)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.BusinessLicences);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -585,7 +586,7 @@ namespace Prime.Services
 
         public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "site_adjudication_document");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SiteAdjudicationDocuments);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;

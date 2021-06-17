@@ -12853,7 +12853,7 @@ namespace Prime.Migrations
                             Name = "Educational - Medical Student",
                             NamedInImReg = false,
                             Prefix = "91",
-                            Validate = true,
+                            Validate = false,
                             Weight = 18
                         },
                         new

@@ -50,16 +50,12 @@ namespace Prime
             _context = context;
         }
 
-        public DbSet<Certification> Certifications { get; set; }
+        // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }
-        public DbSet<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
-        public DbSet<CareSetting> CareSettings { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<EnrolmentStatus> EnrolmentStatuses { get; set; }
-        public DbSet<EnrolmentStatusReason> EnrolmentStatusReasons { get; set; }
-        public DbSet<Status> Statuses { get; set; }
         public DbSet<EnrolmentCertificateAccessToken> EnrolmentCertificateAccessTokens { get; set; }
         public DbSet<Privilege> Privileges { get; set; }
         public DbSet<DefaultPrivilege> DefaultPrivileges { get; set; }
@@ -68,16 +64,13 @@ namespace Prime
         public DbSet<EnrolleeNote> EnrolleeNotes { get; set; }
         public DbSet<EmailLog> EmailLogs { get; set; }
         public DbSet<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
-        public DbSet<AccessAgreementNote> AccessAgreementNotes { get; set; }
 
         public DbSet<Agreement> Agreements { get; set; }
         public DbSet<AgreementVersion> AgreementVersions { get; set; }
-        public DbSet<LimitsConditionsClause> LimitsConditionsClauses { get; set; }
 
         public DbSet<BusinessEvent> BusinessEvents { get; set; }
         public DbSet<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
         public DbSet<RemoteAccessSite> RemoteAccessSites { get; set; }
-        public DbSet<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         // Site Registration
         public DbSet<Organization> Organizations { get; set; }
@@ -91,7 +84,6 @@ namespace Prime
         public DbSet<BusinessLicenceDocument> BusinessLicenceDocuments { get; set; }
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
-        public DbSet<SelfDeclaration> SelfDeclarations { get; set; }
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
 
@@ -163,108 +155,8 @@ namespace Prime
         {
             base.OnModelCreating(modelBuilder);
 
-            #region Discriminators
-            modelBuilder.Entity<Address>()
-                .HasDiscriminator<AddressType>("AddressType")
-                .HasValue<PhysicalAddress>(AddressType.Physical)
-                .HasValue<MailingAddress>(AddressType.Mailing)
-                .HasValue<VerifiedAddress>(AddressType.Verified);
-            #endregion
-
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApiDbContext).Assembly);
-
-            #region Indexes
-            modelBuilder.Entity<Admin>()
-                .HasIndex("UserId")
-                .IsUnique();
-            #endregion
-
-            #region Relationships
-            modelBuilder.Entity<EnrolmentStatus>()
-                .HasOne(es => es.Enrollee)
-                .WithMany(e => e.EnrolmentStatuses)
-                .HasForeignKey(es => es.EnrolleeId);
-            modelBuilder.Entity<EnrolmentStatus>()
-                .HasOne(es => es.Status)
-                .WithMany(s => s.EnrolmentStatuses)
-                .HasForeignKey(es => es.StatusCode);
-
-            modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasOne(esr => esr.EnrolmentStatus)
-                .WithMany(es => es.EnrolmentStatusReasons)
-                .HasForeignKey(esr => esr.EnrolmentStatusId);
-            modelBuilder.Entity<EnrolmentStatusReason>()
-                .HasOne(esr => esr.StatusReason)
-                .WithMany(sr => sr.EnrolmentStatusReasons)
-                .HasForeignKey(esr => esr.StatusReasonCode);
-
-            modelBuilder.Entity<EnrolleeNote>()
-                .HasOne(an => an.Enrollee)
-                .WithMany(e => e.AdjudicatorNotes)
-                .HasForeignKey(an => an.EnrolleeId);
-
-            modelBuilder.Entity<EnrolleeCredential>()
-                .HasOne(ec => ec.Enrollee)
-                .WithMany(e => e.EnrolleeCredentials)
-                .HasForeignKey(ec => ec.EnrolleeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Agreement>()
-                .HasOne(toa => toa.Enrollee)
-                .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.EnrolleeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Agreement>()
-                .HasOne(toa => toa.Organization)
-                .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.OrganizationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Agreement>()
-                .HasOne(toa => toa.Party)
-                .WithMany(e => e.Agreements)
-                .HasForeignKey(toa => toa.PartyId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Agreement>()
-                .HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey",
-                    @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
-
-            modelBuilder.Entity<BusinessEvent>()
-                .HasOne(be => be.BusinessEventType)
-                .WithMany(t => t.BusinessEvents)
-                .HasForeignKey(be => be.BusinessEventTypeCode);
-
-            // Site Registration
-            modelBuilder.Entity<Site>()
-                .HasOne(l => l.Organization)
-                .WithMany(o => o.Sites)
-                .HasForeignKey(l => l.OrganizationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<RemoteUser>()
-                .HasOne(ru => ru.Site)
-                .WithMany(s => s.RemoteUsers)
-                .HasForeignKey(ru => ru.SiteId);
-
-            modelBuilder.Entity<RemoteAccessLocation>()
-                .HasOne(ral => ral.Enrollee)
-                .WithMany(e => e.RemoteAccessLocations)
-                .HasForeignKey(ral => ral.EnrolleeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<RemoteAccessSite>()
-                .HasOne(ras => ras.Enrollee)
-                .WithMany(e => e.RemoteAccessSites)
-                .HasForeignKey(ras => ras.EnrolleeId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            #endregion
         }
-
 
         // Uncomment for DB logging
         // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

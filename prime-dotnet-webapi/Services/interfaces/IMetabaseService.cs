@@ -4,6 +4,6 @@ namespace Prime.Services
 {
     public interface IMetabaseService
     {
-        string BuildMetabaseEmbeddedString();
+        string BuildMetabaseEmbeddedUrl();
     }
 }

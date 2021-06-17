@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Services;
-using Prime.Models.Api;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
 
@@ -14,7 +13,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailsController : ControllerBase
+    public class EmailsController : PrimeControllerBase
     {
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
@@ -39,7 +38,7 @@ namespace Prime.Controllers
         {
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return Ok(ApiResponse.Result($"Updated {limit} of {total}."));
+            return Ok($"Updated {limit} of {total}.");
         }
 
         // POST: api/Emails/management/enrollees/renewal
@@ -72,7 +71,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplates()
         {
             var templates = await _emailTemplateService.GetEmailTemplatesAsync();
-            return Ok(ApiResponse.Result(templates));
+            return Ok(templates);
         }
 
         // GET: api/emails/management/templates/1
@@ -88,7 +87,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplate(int emailTemplateId)
         {
             var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
-            return Ok(ApiResponse.Result(template));
+            return Ok(template);
         }
     }
 }

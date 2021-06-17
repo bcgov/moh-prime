@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -20,34 +18,35 @@ namespace Prime.Services
         {
             return await _context.DocumentAccessTokens
                 .AsNoTracking()
-                .SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
+                .SingleOrDefaultAsync(d => d.Id == documentAccessTokenId);
         }
 
         public async Task<DocumentAccessToken> CreateDocumentAccessTokenAsync(Guid documentGuid)
         {
-            var documentAccessToken = new DocumentAccessToken { DocumentGuid = documentGuid };
-            _context.Add(documentAccessToken);
+            var token = new DocumentAccessToken
+            {
+                DocumentGuid = documentGuid
+            };
 
+            _context.Add(token);
             if (await _context.SaveChangesAsync() < 1)
             {
                 throw new InvalidOperationException("Could not create Document Access Token.");
             }
 
-            return documentAccessToken;
+            return token;
         }
 
         public async Task DeleteDocumentAccessTokenAsync(Guid documentAccessTokenId)
         {
-            var documentAccessToken = await _context.DocumentAccessTokens
-                .SingleOrDefaultAsync(e => e.Id == documentAccessTokenId);
+            var token = await _context.DocumentAccessTokens
+                .SingleOrDefaultAsync(d => d.Id == documentAccessTokenId);
 
-            if (documentAccessToken == null)
+            if (token != null)
             {
-                return;
+                _context.DocumentAccessTokens.Remove(token);
+                await _context.SaveChangesAsync();
             }
-
-            _context.DocumentAccessTokens.Remove(documentAccessToken);
-            await _context.SaveChangesAsync();
         }
     }
 }
