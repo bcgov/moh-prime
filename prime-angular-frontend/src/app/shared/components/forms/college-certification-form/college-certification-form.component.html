@@ -35,7 +35,23 @@
                       [ngTemplateOutlet]="collegeLicences"></ng-container>
       </div>
 
-      <ng-container *ngIf="collegeCode.value">
+      <div class="col-sm-12">
+        <ng-container *ngIf="!condensed && collegeCode.value && collegeCode.value === CollegeLicenceClassEnum.BCCNM">
+          <mat-form-field class="w-100">
+            <mat-label>Nurse Category</mat-label>
+            <mat-select formControlName="nurseCategory">
+              <mat-option *ngFor="let group of nurseGroups"
+                          [value]="group.code">
+                {{ group.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="nurseCategory.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </ng-container>
+      </div>
+
+      <ng-container
+                    *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
         <div *ngIf="filteredLicenses?.length > 1"
              class="col-sm-12 pl-5">
 
