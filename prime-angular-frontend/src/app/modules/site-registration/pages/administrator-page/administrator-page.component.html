@@ -4,7 +4,8 @@
 
   <app-contact-profile-form [title]="title"
                             [form]="formState.form"
-                            [formSubmitting]="formSubmittingEvent"
+                            [showFax]="true"
+                            [showAddressFields]="showAddressFields"
                             (submit)="onSubmit()">
     <app-same-as selectFor="administratorPharmaNet"
                  (selected)="onSelect($event)"></app-same-as>
