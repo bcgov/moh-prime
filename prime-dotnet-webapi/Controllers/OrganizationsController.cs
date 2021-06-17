@@ -18,7 +18,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class OrganizationsController : ControllerBase
+    public class OrganizationsController : PrimeControllerBase
     {
         private readonly IOrganizationService _organizationService;
 
@@ -60,7 +60,7 @@ namespace Prime.Controllers
                 site.HasNotification = notifiedIds.Contains(site.Id);
             }
 
-            return Ok(ApiResponse.Result(organizations));
+            return Ok(organizations);
         }
 
         // GET: api/Organizations/5
@@ -69,10 +69,8 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpGet("{organizationId}", Name = nameof(GetOrganizationById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
         public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId)
         {
@@ -83,7 +81,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(organization));
+            return Ok(organization);
         }
 
         // POST: api/Organizations
@@ -91,7 +89,7 @@ namespace Prime.Controllers
         /// Creates a new Organization.
         /// </summary>
         [HttpPost(Name = nameof(CreateOrganization))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
@@ -99,8 +97,7 @@ namespace Prime.Controllers
         {
             if (!await _partyService.PartyExistsAsync(createOrganization.PartyId, PartyType.SigningAuthority))
             {
-                ModelState.AddModelError("SigningAuthority", "Could not create an organization, the passed in SigningAuthority does not exist.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create an organization, the passed in SigningAuthority does not exist.");
             }
 
             var createdOrganizationId = await _organizationService.CreateOrganizationAsync(createOrganization.PartyId);
@@ -109,7 +106,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetOrganizationById),
                 new { organizationId = createdOrganizationId },
-                ApiResponse.Result(createdOrganization)
+                createdOrganization
             );
         }
 
@@ -120,7 +117,7 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// <param name="updatedOrganization"></param>
         [HttpPut("{organizationId}", Name = nameof(UpdateOrganization))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -129,7 +126,7 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             // TODO: fix
@@ -146,7 +143,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpPut("{organizationId}/completed", Name = nameof(UpdateOrganizationCompleted))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -155,7 +152,7 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             // TODO: fix
@@ -182,7 +179,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -191,7 +188,7 @@ namespace Prime.Controllers
 
             await _organizationService.DeleteOrganizationAsync(organizationId);
 
-            return Ok(ApiResponse.Result(organization));
+            return Ok(organization);
         }
 
         // GET: api/Organizations/5/agreements
@@ -208,7 +205,7 @@ namespace Prime.Controllers
         {
             var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
 
-            return Ok(ApiResponse.Result(agreements));
+            return Ok(agreements);
         }
 
         // POST: api/Organizations/5/agreements/update
@@ -229,7 +226,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -239,7 +236,7 @@ namespace Prime.Controllers
             var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, siteId);
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Site with ID {siteId} not found on Organization {organizationId}"));
+                return NotFound($"Site with ID {siteId} not found on Organization {organizationId}");
             }
 
             if (agreement.AcceptedDate.HasValue)
@@ -251,7 +248,7 @@ namespace Prime.Controllers
                 return CreatedAtAction(
                     nameof(GetOrganizationAgreement),
                     new { organizationId, agreementId = agreement.Id },
-                    ApiResponse.Result(agreement)
+                    agreement
                 );
             }
         }
@@ -265,7 +262,7 @@ namespace Prime.Controllers
         /// <param name="agreementId"></param>
         /// <param name="asPdf"></param>
         [HttpGet("{organizationId}/agreements/{agreementId}", Name = nameof(GetOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -274,16 +271,16 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             var agreement = await _agreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
             if (agreement == null)
             {
-                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+                return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
             }
 
-            return Ok(ApiResponse.Result(agreement));
+            return Ok(agreement);
         }
 
         // GET: api/Organizations/5/agreements/7/signable
@@ -294,7 +291,7 @@ namespace Prime.Controllers
         /// <param name="organizationId"></param>
         /// <param name="agreementType"></param>
         [HttpGet("{organizationId}/signable", Name = nameof(GetSignableOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -303,17 +300,17 @@ namespace Prime.Controllers
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             if (agreementType.IsEnrolleeAgreement())
             {
-                return BadRequest(ApiResponse.Message($"Agreement with type {agreementType} not allowed"));
+                return BadRequest($"Agreement with type {agreementType} not allowed");
             }
 
             var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
 
-            return Ok(ApiResponse.Result(pdf));
+            return Ok(pdf);
         }
 
         // PUT: api/Organizations/5/agreements/7
@@ -324,7 +321,7 @@ namespace Prime.Controllers
         /// <param name="agreementId"></param>
         /// <param name="organizationAgreementGuid"></param>
         [HttpPut("{organizationId}/agreements/{agreementId}", Name = nameof(AcceptOrganizationAgreement))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -334,7 +331,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -346,8 +343,7 @@ namespace Prime.Controllers
                 var signedAgreement = await _organizationService.AddSignedAgreementAsync(organizationId, agreementId, organizationAgreementGuid.Value);
                 if (signedAgreement == null)
                 {
-                    ModelState.AddModelError(nameof(organizationAgreementGuid), "Signed Organization Agreement could not be created; network error or upload is already submitted");
-                    return BadRequest(ApiResponse.BadRequest(ModelState));
+                    return BadRequest("Signed Organization Agreement could not be created; network error or upload is already submitted");
                 }
             }
 
@@ -372,7 +368,7 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
             if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
             {
@@ -380,12 +376,12 @@ namespace Prime.Controllers
             }
             if (!organization.Agreements.Any(a => a.Id == agreementId))
             {
-                return NotFound(ApiResponse.Message($"Agreement with ID {agreementId} not found on Organization {organizationId}"));
+                return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
             }
 
             var token = await _documentService.GetDownloadTokenForSignedAgreementDocument(agreementId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
     }
 }
