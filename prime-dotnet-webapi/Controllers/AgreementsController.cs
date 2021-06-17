@@ -5,15 +5,18 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models;
 using Prime.Services;
+using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.Services.Razor;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class AgreementsController : PrimeControllerBase
+    public class AgreementsController : ControllerBase
     {
         private readonly IAgreementService _agreementService;
 
@@ -33,7 +36,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
         {
             var agreements = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
-            return Ok(agreements);
+            return Ok(ApiResponse.Result(agreements));
         }
 
         /// /api/agreements/2
@@ -49,7 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAgreementVersionById(int agreementId)
         {
             var agreement = await _agreementService.GetAgreementVersionById(agreementId);
-            return Ok(agreement);
+            return Ok(ApiResponse.Result(agreement));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Authorize(AuthenticationSchemes = Schemes.MohJwt)]
     [Route("api/parties/[controller]")]
     [ApiController]
-    public class GisController : PrimeControllerBase
+    public class GisController : ControllerBase
     {
         private readonly IGisService _gisService;
         public GisController(IGisService gisService)
@@ -28,7 +28,7 @@ namespace Prime.Controllers
         /// Creates a new Gis Enrolment
         /// </summary>
         [HttpPost(Name = nameof(CreateGisParty))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status201Created)]
@@ -36,12 +36,14 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                return BadRequest("Could not create the Party, the passed in model cannot be null.");
+                ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!changeModel.Validate(User))
             {
-                return BadRequest("One or more Properties did not match the information on the card.");
+                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
@@ -50,7 +52,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetGisEnrolmentById),
                 new { gisId = createdGisId },
-                gisEnrolment
+                ApiResponse.Result(gisEnrolment)
             );
         }
 
@@ -61,7 +63,7 @@ namespace Prime.Controllers
         /// <param name="gisId"></param>
         /// <param name="changeModel"></param>
         [HttpPut("{gisId}", Name = nameof(UpdateGisEnrollee))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -70,13 +72,14 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                return BadRequest("Profile update model cannot be null.");
+                ModelState.AddModelError("GisEnrolment", "Profile update model cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound($"Gis Enrolment not found with id {gisId}");
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -85,7 +88,8 @@ namespace Prime.Controllers
 
             if (!changeModel.Validate(User))
             {
-                return BadRequest("One or more Properties did not match the information on the card.");
+                ModelState.AddModelError("GisEnrolment", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
@@ -99,7 +103,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="gisId"></param>
         [HttpGet("{gisId}", Name = nameof(GetGisEnrolmentById))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -109,14 +113,14 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound($"Gis Enrolment not found with id {gisId}");
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            return Ok(gisEnrolment);
+            return Ok(ApiResponse.Result(gisEnrolment));
         }
 
         // GET: api/parties/gis/5fdd17a6-1797-47a4-97b7-5b27949dd614
@@ -125,7 +129,7 @@ namespace Prime.Controllers
         /// </summary>
         /// /// <param name="userId"></param>
         [HttpGet("{userId:guid}", Name = nameof(GetGisEnrolmentByUserId))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -140,10 +144,10 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(userId);
             if (gisEnrolment == null)
             {
-                return NotFound($"Gis Enrolment not found for logged in user");
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found for logged in user"));
             }
 
-            return Ok(gisEnrolment);
+            return Ok(ApiResponse.Result(gisEnrolment));
         }
 
         // POST: api/parties/gis/5/ldap/login
@@ -153,7 +157,7 @@ namespace Prime.Controllers
         /// <param name="gisId"></param>
         /// <param name="payload"></param>
         [HttpPost("{gisId}/ldap/login", Name = nameof(LdapLogin))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> LdapLogin(int gisId, LdapLoginPayload payload)
@@ -161,7 +165,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound($"Gis Enrolment not found with id {gisId}");
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -183,7 +187,7 @@ namespace Prime.Controllers
         /// Submits the given Gis enrolment.
         /// </summary>
         [HttpPost("{gisId}/submission", Name = nameof(SubmitGis))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -193,7 +197,7 @@ namespace Prime.Controllers
             var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
             if (gisEnrolment == null)
             {
-                return NotFound($"Gis Enrolment not found with id {gisId}");
+                return NotFound(ApiResponse.Message($"Gis Enrolment not found with id {gisId}"));
             }
             if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
@@ -203,7 +207,7 @@ namespace Prime.Controllers
             await _gisService.SubmitApplicationAsync(gisId);
 
             gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
-            return Ok(gisEnrolment);
+            return Ok(ApiResponse.Result(gisEnrolment));
         }
     }
 }

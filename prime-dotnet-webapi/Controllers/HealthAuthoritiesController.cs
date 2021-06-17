@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/health-authorities")]
     [ApiController]
-    public class HealthAuthoritiesController : PrimeControllerBase
+    public class HealthAuthoritiesController : ControllerBase
     {
         private readonly IHealthAuthorityService _healthAuthorityService;
 
@@ -37,7 +37,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAuthorizedUsersByHealthAuthority(HealthAuthorityCode healthAuthorityCode)
         {
             var users = await _healthAuthorityService.GetAuthorizedUsersByHealthAuthorityAsync(healthAuthorityCode);
-            return Ok(users);
+            return Ok(ApiResponse.Result(users));
         }
 
         // GET: api/health-authorities/under-review
@@ -52,7 +52,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetHealthAuthorityCodesWithUnderReviewAuthorizedUsers()
         {
             var haIds = await _healthAuthorityService.GetHealthAuthorityCodesWithUnderReviewAuthorizedUsersAsync();
-            return Ok(haIds);
+            return Ok(ApiResponse.Result(haIds));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class BannersController : PrimeControllerBase
+    public class BannersController : ControllerBase
     {
         private readonly IBannerService _bannerService;
 
@@ -37,7 +37,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> SetEnrolleeLandingBanner(BannerViewModel viewModel)
         {
             var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.EnrolmentLandingPage, viewModel);
-            return Ok(updatedBanner);
+            return Ok(ApiResponse.Result(updatedBanner));
         }
 
         // PUT: api/banners/site-landing
@@ -53,7 +53,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> SetSiteLandingBanner(BannerViewModel viewModel)
         {
             var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage, viewModel);
-            return Ok(updatedBanner);
+            return Ok(ApiResponse.Result(updatedBanner));
         }
 
         // GET: api/banners/enrolment-landing
@@ -68,7 +68,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEnrolleeLandingBanner()
         {
             var banner = await _bannerService.GetBannerAsync(BannerLocationCode.EnrolmentLandingPage);
-            return Ok(banner);
+            return Ok(ApiResponse.Result(banner));
         }
 
         // GET: api/banners/site-landing
@@ -83,7 +83,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetSiteLandingBanner()
         {
             var banner = await _bannerService.GetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage);
-            return Ok(banner);
+            return Ok(ApiResponse.Result(banner));
         }
 
         // DELETE: api/banners/enrolment-landing
@@ -128,7 +128,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetActiveBannerByLocationCode([FromQuery] BannerLocationCode locationCode)
         {
             var banner = await _bannerService.GetActiveBannerAsync(locationCode, DateTime.UtcNow);
-            return Ok(banner);
+            return Ok(ApiResponse.Result(banner));
         }
     }
 }

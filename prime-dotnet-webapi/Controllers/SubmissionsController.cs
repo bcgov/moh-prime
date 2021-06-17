@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    public class SubmissionsController : PrimeControllerBase
+    public class SubmissionsController : ControllerBase
     {
         private readonly ISubmissionService _submissionService;
         private readonly IEnrolleeService _enrolleeService;
@@ -37,7 +37,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("{enrolleeId}/submissions", Name = nameof(Submit))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -46,13 +46,14 @@ namespace Prime.Controllers
         {
             if (updatedProfile == null)
             {
-                return BadRequest("New profile cannot be null.");
+                ModelState.AddModelError("EnrolleeUpdateModel", "New profile cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -63,18 +64,20 @@ namespace Prime.Controllers
 
             if (!updatedProfile.Validate(User))
             {
-                return BadRequest("One or more Properties did not match the information on the card.");
+                ModelState.AddModelError("EnrolleeUpdateModel", "One or more Properties did not match the information on the card.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                return BadRequest("Application can not be submitted when the current status is not 'Active'.");
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Application can not be submitted when the current status is not 'Active'.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _submissionService.SubmitApplicationAsync(enrolleeId, updatedProfile);
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return Ok(enrollee);
+            return Ok(ApiResponse.Result(enrollee));
         }
 
         // POST: api/enrollees/5/status-actions/approve
@@ -84,7 +87,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/approve", Name = nameof(ApproveSubmission))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -103,7 +106,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         [HttpPost("{enrolleeId}/status-actions/accept-toa", Name = nameof(AcceptToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -120,7 +123,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/decline-toa", Name = nameof(DeclineToa))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -137,7 +140,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/enable-editing", Name = nameof(EnableEditing))]
         [Authorize(Roles = Roles.TriageEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -154,7 +157,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/cancel-toa", Name = nameof(CancelToaAssignment))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -171,7 +174,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/lock-profile", Name = nameof(LockProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -188,7 +191,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/decline-profile", Name = nameof(DeclineProfile))]
         [Authorize(Roles = Roles.ManageEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -205,7 +208,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-actions/rerun-rules", Name = nameof(RerunRules))]
         [Authorize(Roles = Roles.TriageEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -220,7 +223,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -230,11 +233,12 @@ namespace Prime.Controllers
             var success = await _submissionService.PerformEnrolleeStatusActionAsync(enrolleeId, action, additionalParameters);
             if (!success)
             {
-                return BadRequest("Action could not be performed.");
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Action could not be performed.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-            return Ok(enrollee);
+            return Ok(ApiResponse.Result(enrollee));
         }
 
         // PUT: api/Enrollees/5/submissions/latest/type
@@ -253,24 +257,26 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
 
             var assignedToaType = (agreementType == 0) ? null : (AgreementType?)agreementType;
 
             if (assignedToaType.HasValue && !Enum.IsDefined(typeof(AgreementType), agreementType))
             {
-                return NotFound($"Agreement type not found with id {agreementType}.");
+                return NotFound(ApiResponse.Message($"Agreement type not found with id {agreementType}."));
             }
 
             if (assignedToaType.HasValue && !agreementType.IsEnrolleeAgreement())
             {
-                return BadRequest("Agreement type must be a TOA.");
+                ModelState.AddModelError("AgreementType", "Agreement type must be a TOA.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                return BadRequest("Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+                ModelState.AddModelError("Enrollee.CurrentStatus", "Assigned agreement type can not be updated when the current status is not 'Under Review'.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
 
             await _enrolleeService.AssignToaAgreementType(enrolleeId, assignedToaType);
@@ -278,7 +284,7 @@ namespace Prime.Controllers
 
             var updatedEnrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
-            return Ok(updatedEnrollee);
+            return Ok(ApiResponse.Result(updatedEnrollee));
         }
 
         // PUT: api/enrollees/5/always-manual
@@ -335,7 +341,7 @@ namespace Prime.Controllers
             var enrolleeExists = await _enrolleeService.EnrolleeExistsAsync(enrolleeId);
             if (!enrolleeExists)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}.");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
             }
 
             // TODO business event

@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/enrollees")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
-    public class EnrolleeAgreementsController : PrimeControllerBase
+    public class EnrolleeAgreementsController : ControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAgreementService _agreementService;
@@ -59,7 +59,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return Ok(agreements);
+            return Ok(ApiResponse.Result(agreements));
         }
 
         // GET: api/Enrollees/5/cards
@@ -92,7 +92,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -122,7 +122,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing PRIME History");
             }
 
-            return Ok(enrolmentCards);
+            return Ok(ApiResponse.Result(enrolmentCards));
         }
 
         // GET: api/Enrollees/5/agreements/2
@@ -132,7 +132,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
         [HttpGet("{enrolleeId}/agreements/{agreementId}", Name = nameof(GetAgreement))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -142,7 +142,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -152,7 +152,7 @@ namespace Prime.Controllers
             var agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
             if (agreement == null)
             {
-                return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
             if (User.IsAdministrant())
@@ -160,7 +160,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Agreement");
             }
 
-            return Ok(agreement);
+            return Ok(ApiResponse.Result(agreement));
         }
 
         // GET: api/Enrollees/5/agreements/3/submission
@@ -170,7 +170,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
         [HttpGet("{enrolleeId}/agreements/{agreementId}/submission", Name = nameof(GetSubmissionForAgreement))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -180,7 +180,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -190,13 +190,13 @@ namespace Prime.Controllers
             Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
             if (agreement == null || agreement.AcceptedDate == null)
             {
-                return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}"));
             }
 
             var enrolleeSubmission = await _enrolleeSubmissionService.GetEnrolleeSubmissionBeforeDateAsync(enrolleeId, agreement.AcceptedDate.Value);
             if (enrolleeSubmission == null)
             {
-                return NotFound($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}.");
+                return NotFound(ApiResponse.Message($"No enrolment submissions were found for Agreement with id {agreementId} for enrollee with id {enrolleeId}."));
             }
 
             if (User.IsAdministrant())
@@ -204,7 +204,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing Enrolment in PRIME History");
             }
 
-            return Ok(enrolleeSubmission);
+            return Ok(ApiResponse.Result(enrolleeSubmission));
         }
 
         // GET: api/Enrollees/5/agreements/2/signable
@@ -214,7 +214,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="agreementId"></param>
         [HttpGet("{enrolleeId}/agreements/{agreementId}/signable", Name = nameof(GetAccessTermSignable))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -224,7 +224,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
             }
             if (!record.AccessableBy(User))
             {
@@ -235,13 +235,13 @@ namespace Prime.Controllers
 
             if (agreement == null)
             {
-                return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
+                return NotFound(ApiResponse.Message($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}"));
             }
 
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Pdf, agreement);
             var download = _pdfService.Generate(html);
 
-            return Ok(download);
+            return Ok(ApiResponse.Result(download));
         }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models.Api;
 using Prime.HttpClients;
 using static Prime.HttpClients.AddressAutocompleteClient;
 
@@ -14,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
-    public class AddressAutocompleteController : PrimeControllerBase
+    public class AddressAutocompleteController : ControllerBase
     {
         private readonly IAddressAutocompleteClient _addressAutocompleteClient;
 
@@ -31,7 +32,7 @@ namespace Prime.Controllers
         /// <param name="searchTerm"></param>
         /// <param name="lastId"></param>
         [HttpGet("find", Name = nameof(Find))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteFindResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Find([FromQuery] string searchTerm, [FromQuery] string lastId = null)
@@ -41,7 +42,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Find(searchTerm, lastId);
-            return Ok(result);
+            return Ok(ApiResponse.Result(result));
         }
 
         // GET: api/AddressAutocomplete/retrieve
@@ -51,7 +52,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpGet("retrieve", Name = nameof(Retrieve))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AddressAutocompleteRetrieveResponse>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> Retrieve([FromQuery] string id)
@@ -61,7 +62,7 @@ namespace Prime.Controllers
                 return BadRequest();
             }
             var result = await _addressAutocompleteClient.Retrieve(id);
-            return Ok(result);
+            return Ok(ApiResponse.Result(result));
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 using Prime.Auth;
+using Prime.Models.Api;
 using Prime.HttpClients;
 
 namespace Prime.Controllers
@@ -16,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/document")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
-    public class DocumentManagerController : PrimeControllerBase
+    public class DocumentManagerController : ControllerBase
     {
         private readonly IDocumentManagerClient _client;
         private readonly ILogger _logger;
@@ -78,7 +79,7 @@ namespace Prime.Controllers
         {
             var token = await _client.CreateDownloadTokenAsync(documentGuid);
 
-            return Ok(token);
+            return Ok(ApiResponse.Result(token));
         }
     }
 }

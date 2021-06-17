@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.HttpClients;
 
@@ -13,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/document-access")]
     [ApiController]
-    public class DocumentAccessController : PrimeControllerBase
+    public class DocumentAccessController : ControllerBase
     {
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentManagerClient;
@@ -68,7 +69,7 @@ namespace Prime.Controllers
 
             if (documentAccessToken == null)
             {
-                return NotFound($"No valid Document Access Token was found with id {accessTokenId}");
+                return NotFound(ApiResponse.Message($"No valid Document Access Token was found with id {accessTokenId}"));
             }
 
             await _documentAccessTokenService.DeleteDocumentAccessTokenAsync(accessTokenId);

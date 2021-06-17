@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
+using Prime.Models.Api;
 using Prime.Services;
 
 namespace Prime.Controllers
@@ -10,7 +11,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class WebhooksController : PrimeControllerBase
+    public class WebhooksController : ControllerBase
     {
         private readonly IVerifiableCredentialService _verifiableCredentialsService;
 
@@ -28,7 +29,7 @@ namespace Prime.Controllers
         /// <param name="data"></param>
         // Webhooks explained "In Soviet Russia API call you!" - Jason Aitchison 2020
         [HttpPost("{apiKey}/topic/{topic}", Name = nameof(Webhook))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 
 namespace Prime.Controllers
@@ -14,7 +15,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeAdministrant)]
-    public class AdminsController : PrimeControllerBase
+    public class AdminsController : ControllerBase
     {
         private readonly IAdminService _adminService;
         private readonly IMetabaseService _metabaseService;
@@ -30,7 +31,7 @@ namespace Prime.Controllers
         /// Creates a new Admin.
         /// </summary>
         [HttpPost(Name = nameof(CreateAdmin))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
@@ -39,7 +40,8 @@ namespace Prime.Controllers
         {
             if (admin == null)
             {
-                return BadRequest("Could not create an admin, the passed in Admin cannot be null.");
+                ModelState.AddModelError("Admin", "Could not create an admin, the passed in Admin cannot be null.");
+                return BadRequest(ApiResponse.BadRequest(ModelState));
             }
             if (!admin.PermissionsRecord().MatchesUserIdOf(User))
             {
@@ -49,7 +51,7 @@ namespace Prime.Controllers
             // Check to see if this userId is already an admin, if so, reject creating another
             if (await _adminService.UserIdExistsAsync(admin.UserId))
             {
-                return Ok(admin);
+                return Ok(ApiResponse.Result(admin));
             }
 
             var createdAdminId = await _adminService.CreateAdminAsync(admin);
@@ -57,7 +59,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetAdminById),
                 new { adminId = createdAdminId },
-                admin
+                ApiResponse.Result(admin)
             );
         }
 
@@ -66,13 +68,13 @@ namespace Prime.Controllers
         /// Gets all the admins.
         /// </summary>
         [HttpGet(Name = nameof(GetAdmins))]
+        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
         {
             var admins = await _adminService.GetAdminsAsync();
-            return Ok(admins);
+            return Ok(ApiResponse.Result(admins));
         }
 
 
@@ -91,10 +93,10 @@ namespace Prime.Controllers
             var admin = await _adminService.GetAdminAsync(adminId);
             if (admin == null)
             {
-                return NotFound($"Admin not found with id {adminId}");
+                return NotFound(ApiResponse.Message($"Admin not found with id {adminId}"));
             }
 
-            return Ok(admin);
+            return Ok(ApiResponse.Result(admin));
         }
 
         // GET: api/Admins/embedded-metabase-url
@@ -107,7 +109,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public ActionResult GetMetabaseEmbeddedString()
         {
-            return Ok(_metabaseService.BuildMetabaseEmbeddedUrl());
+            return Ok(ApiResponse.Result(_metabaseService.BuildMetabaseEmbeddedUrl()));
         }
     }
 }
