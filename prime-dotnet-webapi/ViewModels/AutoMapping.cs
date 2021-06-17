@@ -83,10 +83,11 @@ public class AutoMapping : Profile
         CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
             .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)))
             .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)))
-            .ForMember(dest => dest.PrivacyOfficers, opt => opt.MapFrom(src => src.PrivacyOfficers.Select(x => x.Contact)))
             .ForMember(dest => dest.TechnicalSupports, opt => opt.MapFrom(src => src.TechnicalSupports.Select(x => x.Contact)))
             .ForMember(dest => dest.PharmanetAdministrators, opt => opt.MapFrom(src => src.PharmanetAdministrators.Select(x => x.Contact)));
-        CreateMap<Contact, HealthAuthorityContactViewModel>()
+        CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
+            .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()));
+        CreateMap<Contact, PrivacyOfficerViewModel>()
             .ReverseMap();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
@@ -97,6 +98,11 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
         CreateMap<AgreementVersion, AgreementVersionListViewModel>()
             .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
+
+        CreateMap<Contact, ContactViewModel>()
+            .ReverseMap();
+        CreateMap<Address, AddressViewModel>()
+            .ReverseMap();
 
         // Don't copy over primary keys
         CreateMap<PlrProvider, PlrProvider>()

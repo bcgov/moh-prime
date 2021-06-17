@@ -7,6 +7,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
@@ -84,7 +85,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
                 .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
