@@ -21,9 +21,9 @@
           <mat-form-field class="w-100">
             <mat-label>Health authority care type</mat-label>
             <mat-select formControlName="careSettingCode">
-              <mat-option *ngFor="let careSetting of careSettingConfig"
-                          [value]="careSetting.code">
-                {{ careSetting.name }}
+              <mat-option *ngFor="let careType of careTypes | async"
+                          [value]="careType">
+                {{ careType }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="formState.careSettingCode.hasError('required')">
