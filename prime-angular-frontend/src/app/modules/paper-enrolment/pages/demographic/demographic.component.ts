@@ -1,0 +1,232 @@
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+
+import { from, Observable, of, pipe } from 'rxjs';
+import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+
+import { ToastService } from '@core/services/toast.service';
+import { LoggerService } from '@core/services/logger.service';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { Enrollee } from '@shared/models/enrollee.model';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { Address, optionalAddressLineItems } from '@shared/models/address.model';
+
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { DemographicFormState } from './demographic-form-state.class';
+import { PaperEnrolmentFormStateService } from '../../services/paper-enrolment-form-state.service';
+import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
+
+@Component({
+  selector: 'app-demographic',
+  templateUrl: './demographic.component.html',
+  styleUrls: ['./demographic.component.scss']
+})
+export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
+  public form: FormGroup;
+  public formState: DemographicFormState;
+  public enrolment: Enrolment;
+
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected dialog: MatDialog,
+    protected enrolmentService: EnrolmentService,
+    protected enrolmentResource: EnrolmentResource,
+    protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
+    protected toastService: ToastService,
+    protected logger: LoggerService,
+    protected utilService: UtilsService,
+    protected formUtilsService: FormUtilsService,
+    protected authService: AuthService
+  ) {
+    super(
+      route,
+      router
+    );
+  }
+
+  public get firstName(): FormControl {
+    return this.form.get('firstName') as FormControl;
+  }
+
+  public get middleName(): FormControl {
+    return this.form.get('middleName') as FormControl;
+  }
+
+  public get lastName(): FormControl {
+    return this.form.get('lastName') as FormControl;
+  }
+
+  public get dateOfBirth(): FormControl {
+    return this.form.get('dateOfBirth') as FormControl;
+  }
+
+  public get physicalAddress(): FormGroup {
+    return this.form.get('physicalAddress') as FormGroup;
+  }
+
+  public onSubmit(): void {
+    if (this.formUtilsService.checkValidity(this.form)) {
+      this.handleSubmission();
+    } else {
+      this.utilService.scrollToErrorSection();
+    }
+  }
+
+  public ngOnInit(): void {
+    this.createFormInstance();
+    this.patchForm()
+      .subscribe(() => this.initForm());
+  }
+
+  private createFormInstance(): void {
+    this.formState = this.paperEnrolmentFormStateService.demographicFormState;
+    this.form = this.formState.form;
+  }
+
+  private initForm(): void {
+    this.setAddressValidator(this.physicalAddress);
+  }
+
+  /**
+   * @description
+   * Patch the form with enrollee information.
+   */
+  private patchForm(): Observable<any> {
+    // Will be null if enrolment has not been created
+    const enrolment = this.enrolmentService.enrolment;
+    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.isProfileComplete = this.enrolmentService.isProfileComplete;
+
+    // Attempt to patch the form if not already patched, and ensure the
+    // identity provider information is always populated from the claim
+    return this.authService.getUser$()
+      .pipe(
+        // TODO add idenity provider check to fork for BCeID
+        exhaustMap((bcscUser: BcscUser) => {
+          // An enrolment won't exist until after the first submission, and
+          // patching the form state should occur in that initial view
+          if (enrolment) {
+            // Existing enrolments should have the identity provider
+            // information populated directly from the claim, which
+            // will be patched directly into the form state
+            const { firstName, lastName, givenNames } = bcscUser;
+            const verifiedAddress = bcscUser.verifiedAddress ?? new Address();
+            enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames, verifiedAddress };
+          }
+
+          // Store a local copy of the enrolment for views
+          this.enrolment = enrolment;
+
+          // Store a local copy of the enrolment for views, but the
+          // enrolment is also piped through to view for chaining
+          return of([bcscUser, enrolment]);
+        }),
+        exhaustMap(([bcscUser, updatedEnrolment]: [BcscUser, Enrolment]) => {
+          return from(this.paperEnrolmentFormStateService.setForm(updatedEnrolment))
+            .pipe(map(() => [bcscUser, updatedEnrolment]));
+        })
+      );
+  }
+
+  private handleSubmission() {
+    // Update using the form which could contain changes, and ensure identity
+    // provider information was not altered by repopulating in the payload
+    this.busy = this.authService.getUser$()
+      .pipe(
+        // TODO add idenity provider check to fork for BCeID
+        map(({ firstName, lastName, givenNames }: BcscUser) => {
+          const enrolment = this.paperEnrolmentFormStateService.json;
+          enrolment.enrollee = { ...enrolment.enrollee, firstName, lastName, givenNames };
+          return enrolment;
+        }),
+        exhaustMap((enrolment: Enrolment) => this.performHttpRequest(enrolment))
+      )
+      .subscribe();
+  }
+
+  private performHttpRequest(enrolment: Enrolment): Observable<void> {
+    if (!enrolment.id) {
+      return this.getUser$()
+        .pipe(
+          map((enrollee: Enrollee) => {
+            const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
+            const { userId, ...demographic } = enrolment.enrollee;
+            return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+          }),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
+          // Populate the new enrolment within the form state by force patching
+          tap((newEnrolment: Enrolment) => this.paperEnrolmentFormStateService.setForm(newEnrolment, true)),
+          this.handleResponse()
+        );
+    } else {
+      return this.enrolmentResource.updateEnrollee(enrolment)
+        .pipe(this.handleResponse());
+    }
+  }
+
+  /**
+   * @description
+   * Generic handler for the HTTP response. By default this covers update, and can
+   * also be used for create actions, or extended for any response.
+   */
+  private handleResponse() {
+    return pipe(
+      map(() => {
+        this.toastService.openSuccessToast('Enrolment information has been saved');
+        this.form.markAsPristine();
+
+        this.nextRouteAfterSubmit();
+      }),
+      catchError((error: any) => {
+        this.toastService.openErrorToast('Enrolment information could not be saved');
+        this.logger.error('[Enrolment] Submission error has occurred: ', error);
+
+        throw error;
+      })
+    );
+  }
+
+  private nextRouteAfterSubmit(): void {
+    let nextRoutePath: string;
+    if (!this.isProfileComplete) {
+      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
+    }
+
+    this.routeTo(nextRoutePath);
+  }
+
+  private setAddressValidator(addressLine: FormGroup): void {
+    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+  }
+
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            userId,
+            hpdid,
+            firstName,
+            lastName,
+            givenNames,
+            dateOfBirth,
+            verifiedAddress,
+            phone: null,
+            email: null
+          } as Enrollee;
+        })
+      );
+  }
+}

@@ -1,0 +1,27 @@
+import { NgModule } from '@angular/core';
+
+import { EditorModule } from '@tinymce/tinymce-angular';
+
+import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
+
+import { SharedModule } from '@shared/shared.module';
+
+import { DemographicComponent } from '@paper-enrolment/pages/demographic/demographic.component';
+import { PaperEnrolmentProgressIndicatorComponent } from '@paper-enrolment/shared/components/paper-enrolment-progress-indicator/paper-enrolment-progress-indicator.component';
+import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
+import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+
+@NgModule({
+  declarations: [
+    DemographicComponent,
+    PaperEnrolmentDashboardComponent,
+    PaperEnrolmentProgressIndicatorComponent
+  ],
+  imports: [
+    PaperEnrolmentRoutingModule,
+    SharedModule,
+    DashboardModule,
+    EditorModule
+  ]
+})
+export class PaperEnrolmentModule { }

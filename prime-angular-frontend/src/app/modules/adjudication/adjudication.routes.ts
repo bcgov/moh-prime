@@ -16,7 +16,6 @@ export class AdjudicationRoutes {
   public static ENROLLEE_OVERVIEW = 'overview';
   public static BANNER = 'banner';
   public static MAINTENANCE = 'maintenance';
-  public static PAPER_ENROLMENT = 'paper-enrolment';
   public static NOTIFICATION_EMAILS = 'notification-emails';
   public static TOA = 'toa';
 
@@ -32,8 +31,6 @@ export class AdjudicationRoutes {
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
-
-  public static DEMOGRAPHIC = 'demographic';
 
   public static METABASE_REPORTS = 'metabase-reports';
 

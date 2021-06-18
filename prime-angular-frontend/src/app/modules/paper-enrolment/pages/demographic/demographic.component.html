@@ -1,0 +1,91 @@
+<app-page [busy]="busy">
+  <app-page-header>PRIME Profile</app-page-header>
+  <app-paper-enrolment-progress-indicator [inProgress]="isInitialEnrolment"></app-paper-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
+
+        <ng-container appPageSubheader2Summary>
+          Provide this information.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="First Name"
+                   formControlName="firstName">
+            <mat-error *ngIf="firstName.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Middle Name"
+                   formControlName="middleName">
+          </mat-form-field>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Last Name"
+                   formControlName="lastName">
+            <mat-error *ngIf="lastName.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col"></div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Date of Birth"
+                   formControlName="dateOfBirth">
+            <mat-error *ngIf="dateOfBirth.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col"></div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Address Information</ng-container>
+        <ng-container appPageSubheader2Summary>Provide the enrollee's address.</ng-container>
+      </app-page-subheader2>
+
+      <app-address-form [form]="physicalAddress"
+                        [showManualButton]="true"
+                        [showAddressFields]="false"></app-address-form>
+
+    </section>
+
+    <app-contact-information-form [form]="form"></app-contact-information-form>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                   [hasSecondaryAction]="isProfileComplete"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-page>
