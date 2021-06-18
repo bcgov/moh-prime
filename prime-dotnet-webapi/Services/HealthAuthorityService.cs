@@ -123,6 +123,7 @@ namespace Prime.Services
                 _mapper.Map(privacyOffice, existing);
             }
 
+            // Implicit call to _context.SaveChanges()
             await UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, new ContactViewModel[] { privacyOffice.PrivacyOfficer });
         }
 

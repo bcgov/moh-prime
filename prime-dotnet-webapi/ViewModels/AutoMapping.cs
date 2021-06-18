@@ -88,7 +88,6 @@ public class AutoMapping : Profile
         CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
             .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()));
         CreateMap<Contact, PrivacyOfficerViewModel>();
-        CreateMap<PrivacyOfficerViewModel, ContactViewModel>();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
