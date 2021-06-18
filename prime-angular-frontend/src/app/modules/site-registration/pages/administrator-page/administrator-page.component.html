@@ -5,8 +5,7 @@
   <app-contact-profile-form [title]="title"
                             [form]="formState.form"
                             [showFax]="true"
-                            [showAddressFields]="showAddressFields"
-                            (submit)="onSubmit()">
+                            [showAddressFields]="showAddressFields">
     <app-same-as selectFor="administratorPharmaNet"
                  (selected)="onSelect($event)"></app-same-as>
 
@@ -18,11 +17,11 @@
       The PharmaNet Administrator could be the site's administrator, manager, HR lead, medical office assistant (MOA), a
       practitioner, software vendor, etc.
     </ng-container>
-  </app-contact-profile-form>
 
-  <app-page-footer [isInitialEnrolment]="!isCompleted"
-                   [hasSecondaryAction]="true"
-                   primaryActionLabel="Save and Continue"
-                   (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
+    <app-page-footer [isInitialEnrolment]="!isCompleted"
+                     [hasSecondaryAction]="true"
+                     primaryActionLabel="Save and Continue"
+                     (save)="onSubmit()"
+                     (back)="onBack()"></app-page-footer>
+  </app-contact-profile-form>
 </app-page>

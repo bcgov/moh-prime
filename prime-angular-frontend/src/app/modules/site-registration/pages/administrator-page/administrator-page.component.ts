@@ -81,10 +81,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     this.formState.form.markAsPristine();
   }
 
-  protected onSubmitFormIsInvalid(): void {
-    this.showAddressFields = true;
-  }
-
   protected performSubmission(): NoContent {
     const payload = this.siteFormStateService.json;
     return this.siteResource.updateSite(payload);

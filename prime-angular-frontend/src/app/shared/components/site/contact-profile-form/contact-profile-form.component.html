@@ -111,18 +111,15 @@
     </div>
   </section>
 
-  {{ toggleAddress | json }}
-
   <div class="mb-4">
     <mat-slide-toggle #slider
                       color="primary"
-                      [checked]="toggleAddress"
-                      (change)="onPhysicalAddressChange($event)">
+                      (change)="onAddressChange($event)">
       The {{ title }}'s mailing address is the same as the site’s address
     </mat-slide-toggle>
   </div>
 
-  <ng-container *ngIf="slider.checked">
+  <ng-container *ngIf="!slider.checked">
 
     <section class="mb-3">
       <app-page-subheader2>
@@ -135,5 +132,7 @@
     </section>
 
   </ng-container>
+
+  <ng-content select="app-page-footer"></ng-content>
 
 </form>
