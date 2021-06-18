@@ -87,8 +87,8 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.PharmanetAdministrators, opt => opt.MapFrom(src => src.PharmanetAdministrators.Select(x => x.Contact)));
         CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
             .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()));
-        CreateMap<Contact, PrivacyOfficerViewModel>()
-            .ReverseMap();
+        CreateMap<Contact, PrivacyOfficerViewModel>();
+        CreateMap<PrivacyOfficerViewModel, ContactViewModel>();
 
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
@@ -101,8 +101,10 @@ public class AutoMapping : Profile
 
         CreateMap<Contact, ContactViewModel>()
             .ReverseMap();
-        CreateMap<Address, AddressViewModel>()
-            .ReverseMap();
+        CreateMap<Address, AddressViewModel>();
+        CreateMap<AddressViewModel, PhysicalAddress>();
+        CreateMap<AddressViewModel, MailingAddress>();
+        CreateMap<AddressViewModel, VerifiedAddress>();
 
         // Don't copy over primary keys
         CreateMap<PlrProvider, PlrProvider>()

@@ -140,6 +140,23 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/health-authorities/1/privacy-office
+        /// <summary>
+        /// Updates the Privacy Office on a Health Authority
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="privacyOffice"></param>
+        [HttpPut("{healthAuthorityId}/privacy-office", Name = nameof(UpdatePrivacyOffice))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdatePrivacyOffice(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice)
+        {
+            await _healthAuthorityService.UpdatePrivacyOfficeAsync(healthAuthorityId, privacyOffice);
+            return NoContent();
+        }
+
         // PUT: api/health-authorities/1/privacy-officers
         /// <summary>
         /// Updates the Privacy Officer contacts on a Health Authority

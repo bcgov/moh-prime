@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
+
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
@@ -15,6 +16,7 @@ namespace Prime.Services
         Task<IEnumerable<AuthorizedUserViewModel>> GetAuthorizedUsersAsync(int healthAuthorityId);
         Task UpdateCareTypesAsync(int healthAuthorityId, IEnumerable<string> careTypes);
         Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new();
+        Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice);
         Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes);
     }
 }
