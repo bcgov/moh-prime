@@ -327,7 +327,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site.CurrentStatus.StatusType != SiteStatusType.Approved)
+            if (site.Status != SiteStatusType.Approved)
             {
                 site.AddStatus(SiteStatusType.Approved);
                 site.ApprovedDate = DateTimeOffset.Now;
