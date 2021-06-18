@@ -112,6 +112,7 @@ namespace Prime.Services
         public async Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice)
         {
             var existing = await _context.PrivacyOffices
+                .Include(po => po.PhysicalAddress)
                 .SingleOrDefaultAsync(po => po.HealthAuthorityOrganizationId == healthAuthorityId);
 
             if (existing == null)
