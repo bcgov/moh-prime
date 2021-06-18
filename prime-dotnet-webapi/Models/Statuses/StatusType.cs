@@ -11,8 +11,9 @@ namespace Prime.Models
 
     public enum SiteStatusType
     {
-        UnderReview = 1,
-        Approved = 2,
-        Declined = 3
+        Active = 1,
+        InReview = 2,
+        Approved = 3,
+        Locked = 4
     }
 }
