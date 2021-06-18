@@ -156,10 +156,25 @@ objects:
             - name: vanity-tls-certs
               readOnly: true
               mountPath: /etc/nginx/certs
+            - name: plr-integration-volume
+              readOnly: true
+              mountPath: /etc/nginx/certs/plr
+            - name: nginx-config
+              readOnly: true
+              mountPath: /etc/nginx/conf.d/prime.conf
+              subPath: prime.conf
         volumes:
         - name: vanity-tls-certs
           secret:
             secretName: vanity-tls-certificate
+            defaultMode: 420
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+            defaultMode: 420
+        - name: plr-integration-volume
+          secret:
+            secretName: plr-integration
             defaultMode: 420
     triggers:
       - type: ConfigChange
@@ -198,59 +213,58 @@ objects:
         targetPort: 8890
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
-#   Frontend Route (Web)
-- kind: Route
-  apiVersion: route.openshift.io/v1
+#   Ingress
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
-    host: ${SVC_NAME}${URL_STUB}
-    to:
-      kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
-      weight: 100
-    port:
-      targetPort: http
     tls:
-      termination: passthrough
-      insecureEdgeTerminationPolicy: Redirect
-    wildcardPolicy: None
-  
-#   Frontend Route (Health Practitioner Registration)
+      - hosts:
+        - '${SVC_NAME}.pharmanetenrolment.gov.bc.ca'
+        - '${SVC_NAME}-hpr.pharmanetenrolment.gov.bc.ca'
+        secretName: pharmanetenrolment-tls
+    rules:
+      - host: '${SVC_NAME}.pharmanetenrolment.gov.bc.ca'
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: ${SVC_NAME}-frontend
+                  port:
+                    number: 8080
+            - path: /api/docman/
+              pathType: Prefix
+              backend:
+                service:
+                  name: ${SVC_NAME}-document-manager
+                  port:
+                    number: 6001
+      - host: '${SVC_NAME}-hpr.pharmanetenrolment.gov.bc.ca'
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: ${SVC_NAME}-frontend
+                  port:
+                    number: 8888
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata: 
-    name: ${SVC_NAME}-${FRONTEND_POD}-hpr
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  spec:
-    host: ${HPR_URL}
-    to:
-      kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
-      weight: 100
-    port:
-      targetPort: 8888
-    tls:
-      termination: passthrough
-      insecureEdgeTerminationPolicy: Redirect
-    wildcardPolicy: None
-#   Frontend Route (Mutual Authentication)
-- apiVersion: route.openshift.io/v1
-  kind: Route
-  namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}-mutualauth
+    name: ${SVC_NAME}-mutualauth
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
-    host: ${MAUTH_URL}
+    host: ${SVC_NAME}-mutualauth${URL_STUB}
     to:
       kind: Service
       name: ${SVC_NAME}-${FRONTEND_POD}
