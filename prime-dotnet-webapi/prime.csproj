@@ -39,6 +39,7 @@
     <PackageReference Include="Flurl" Version="3.0.1" />
     <PackageReference Include="RazorEngine.NetCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="10.2.3" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Configuration\Resources\com-pharm-terms-v1.html" />
