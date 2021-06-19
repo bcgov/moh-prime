@@ -2,22 +2,25 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <app-contact-profile-form [title]="title"
-                            [form]="formState.form"
-                            [showFax]="true">
-    <app-same-as selectFor="privacyOfficer"
-                 (selected)="onSelect($event)"></app-same-as>
+  <form [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
+    <app-contact-profile-form [title]="title"
+                              [form]="formState.form">
+      <app-same-as selectFor="privacyOfficer"
+                   (selected)="onSelect($event)"></app-same-as>
 
-    <ng-container appPageSubheader2Summary>
-      Ensures the site adheres to the requirements of applicable privacy and security legislation and responds on the
-      site’s behalf to privacy and information management concerns. May also be the Signing Authority and/or PharmaNet
-      Administrator.
-    </ng-container>
+      <ng-container appPageSubheader2Summary>
+        Ensures the site adheres to the requirements of applicable privacy and security legislation and responds on the
+        site’s behalf to privacy and information management concerns. May also be the Signing Authority and/or PharmaNet
+        Administrator.
+      </ng-container>
 
-    <app-page-footer [isInitialEnrolment]="!isCompleted"
-                     [hasSecondaryAction]="true"
-                     primaryActionLabel="Save and Continue"
-                     (save)="onSubmit()"
-                     (back)="onBack()"></app-page-footer>
-  </app-contact-profile-form>
+      <app-page-footer [isInitialEnrolment]="!isCompleted"
+                       [hasSecondaryAction]="true"
+                       primaryActionLabel="Save and Continue"
+                       (save)="onSubmit()"
+                       (back)="onBack()"></app-page-footer>
+    </app-contact-profile-form>
+  </form>
 </app-page>
