@@ -39,7 +39,7 @@ import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-ma
 
 import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
 import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
-import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { PrivacyOfficePageComponent } from './pages/health-authorities/privacy-office-page/privacy-office-page.component';
 import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
@@ -279,8 +279,8 @@ const routes: Routes = [
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER,
-                component: PrivacyOfficerPageComponent,
-                data: { title: 'Privacy Officer' }
+                component: PrivacyOfficePageComponent,
+                data: { title: 'Privacy Office' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,

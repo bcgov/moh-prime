@@ -1,40 +1,46 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { ContactFormState } from '@lib/classes/contact-form-state.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import {
+  PrivacyOfficePageFormState
+} from '@adjudication/pages/health-authorities/privacy-office-page/privacy-office-page-form-state.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-privacy-officer-page',
-  templateUrl: './privacy-officer-page.component.html',
-  styleUrls: ['./privacy-officer-page.component.scss']
+  templateUrl: './privacy-office-page.component.html',
+  styleUrls: ['./privacy-office-page.component.scss']
 })
-export class PrivacyOfficerPageComponent implements OnInit {
+export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;
   public title: string;
-  public form: FormGroup;
+  public formState: PrivacyOfficePageFormState;
   public isInitialEntry: boolean;
-  public contacts: Contact[];
-  public formSubmittingEvent: Subject<void>;
+  public showAddressFields: boolean;
 
   private routeUtils: RouteUtils;
 
   constructor(
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthResource: HealthAuthorityResource,
-    private formUtilsService: FormUtilsService,
     private route: ActivatedRoute,
     router: Router
   ) {
+    super(dialog, formUtilsService);
+
     this.title = route.snapshot.data.title;
     this.isInitialEntry = !!route.snapshot.queryParams.initial;
     this.routeUtils = new RouteUtils(route, router, [
@@ -43,14 +49,6 @@ export class PrivacyOfficerPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.formSubmittingEvent = new Subject<void>();
-  }
-
-  public onSubmit(): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      this.healthAuthResource.updatePrivacyOfficer(this.route.snapshot.params.haid, this.form.value)
-        .subscribe(() => this.nextRouteAfterSubmit());
-    }
   }
 
   public onBack(): void {
@@ -59,24 +57,33 @@ export class PrivacyOfficerPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.initForm();
+    this.patchForm();
   }
 
-  private createFormInstance() {
-    this.form = new ContactFormState(this.fb, this.formUtilsService).form;
+  protected createFormInstance() {
+    this.formState = new PrivacyOfficePageFormState(this.fb, this.formUtilsService);
   }
 
-  private initForm() {
+  protected patchForm(): void {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ privacyOfficers }: HealthAuthority) => {
-        if (privacyOfficers.length) {
+      .subscribe(({ privacyOfficer }: HealthAuthority) => {
+        if (privacyOfficer) {
           // Will only ever be a single privacy officer
-          this.form.patchValue(privacyOfficers[0]);
+          this.formState.form.patchValue(privacyOfficer);
         }
       });
   }
 
-  private nextRouteAfterSubmit() {
+  protected performSubmission(): Observable<unknown> {
+    return this.healthAuthResource
+      .updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.form.value);
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    this.showAddressFields = true;
+  }
+
+  protected afterSubmitIsSuccessful(_): void {
     this.routeTo(AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS);
   }
 

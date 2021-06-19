@@ -36,9 +36,9 @@ export class ContactProfileFormComponent implements OnInit, AfterViewInit, After
   @Input() public form: FormGroup;
   /**
    * @description
-   * Show the optional fax field.
+   * List of fields that should be excluded.
    */
-  @Input() public showFax: boolean;
+  @Input() public excludeList: ('fax' | 'jobRoleTitle' | 'physicalAddress')[];
   /**
    * @description
    * Pass control of the address line fields being
@@ -163,9 +163,10 @@ export class ContactProfileFormComponent implements OnInit, AfterViewInit, After
    * Expand the visibility of the address fields
    * beyond autocomplete.
    */
-  // TODO should this or can it collapse
   private expandAddressFields() {
-    this.showAddressFields = true;
+    if (!this.excludeList.includes('physicalAddress')) {
+      this.showAddressFields = true;
+    }
   }
 
   /**
@@ -174,9 +175,11 @@ export class ContactProfileFormComponent implements OnInit, AfterViewInit, After
    * toggle being checked or not.
    */
   private toggleAddressValidators(address: FormGroup, blacklist: string[] = ['id', 'street2']) {
-    (this.toggle.checked)
-      ? this.formUtilsService.resetAndClearValidators(address)
-      : this.formUtilsService.setValidators(address, [Validators.required], blacklist);
+    if (this.toggle) {
+      (this.toggle.checked)
+        ? this.formUtilsService.resetAndClearValidators(address)
+        : this.formUtilsService.setValidators(address, [Validators.required], blacklist);
+    }
   }
 }
 
