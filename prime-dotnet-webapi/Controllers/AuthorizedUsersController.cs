@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -11,7 +9,6 @@ using Prime.Extensions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
-using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Controllers
@@ -20,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/parties/authorized-users")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class AuthorizedUsersController : ControllerBase
+    public class AuthorizedUsersController : PrimeControllerBase
     {
         private readonly IAuthorizedUserService _authorizedUserService;
         private readonly IOrganizationService _organizationService;
@@ -48,14 +45,14 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserForUserIdAsync(userId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {userId}"));
+                return NotFound($"Authorized user not found with id {userId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(authorizedUser));
+            return Ok(authorizedUser);
         }
 
         // GET: api/parties/authorized-users/5
@@ -73,14 +70,14 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(authorizedUser));
+            return Ok(authorizedUser);
         }
 
         // POST: api/parties/authorized-users
@@ -88,7 +85,7 @@ namespace Prime.Controllers
         /// Creates a new AuthorizedUser.
         /// </summary>
         [HttpPost(Name = nameof(CreateAuthorizedUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<AuthorizedUserViewModel>), StatusCodes.Status201Created)]
@@ -96,13 +93,11 @@ namespace Prime.Controllers
         {
             if (authorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUser", "Could not create AuthorizedUser, the passed in model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create AuthorizedUser, the passed in model cannot be null.");
             }
             if (!authorizedUser.Validate(User))
             {
-                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             var createdAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(authorizedUser, User);
@@ -116,7 +111,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetAuthorizedUserById),
                 new { authorizedUserId = createdAuthorizedUserId },
-                ApiResponse.Result(createdAuthorizedUser)
+                createdAuthorizedUser
             );
         }
 
@@ -135,19 +130,17 @@ namespace Prime.Controllers
         {
             if (updatedAuthorizedUser == null)
             {
-                ModelState.AddModelError("AuthorizedUser", "Authorized user update model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Authorized user update model cannot be null.");
             }
             if (!updatedAuthorizedUser.Validate(User))
             {
-                ModelState.AddModelError("AuthorizedUser", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"Authorized user not found with id {authorizedUserId}"));
+                return NotFound($"Authorized user not found with id {authorizedUserId}");
             }
 
             var updatedAuthorizedUserId = await _authorizedUserService.CreateOrUpdateAuthorizedUserAsync(updatedAuthorizedUser, User);
@@ -165,7 +158,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="authorizedUserId"></param>
         [HttpPost("{authorizedUserId}/activate", Name = nameof(ActivateAuthorizedUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -175,7 +168,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {
@@ -187,8 +180,7 @@ namespace Prime.Controllers
             }
             if (authorizedUser.Status != AccessStatusType.Approved)
             {
-                ModelState.AddModelError("AuthorizedUser", $"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {nameof(AccessStatusType.Active)}");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest($"Status cannot be changed from {Enum.GetName(typeof(AccessStatusType), authorizedUser.Status)} to {nameof(AccessStatusType.Active)}");
             }
 
             await _authorizedUserService.ActivateAuthorizedUser(authorizedUserId);
@@ -212,7 +204,7 @@ namespace Prime.Controllers
             var authorizedUser = await _authorizedUserService.GetAuthorizedUserAsync(authorizedUserId);
             if (authorizedUser == null)
             {
-                return NotFound(ApiResponse.Message($"AuthorizedUser not found with id {authorizedUserId}"));
+                return NotFound($"AuthorizedUser not found with id {authorizedUserId}");
             }
             if (!authorizedUser.PermissionsRecord().AccessableBy(User))
             {

@@ -7,6 +7,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
@@ -84,9 +85,10 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<HealthAuthorityContactViewModel> contacts) where T : HealthAuthorityContact, new()
+        public async Task UpdateContactsAsync<T>(int healthAuthorityId, IEnumerable<ContactViewModel> contacts) where T : HealthAuthorityContact, new()
         {
             var oldContacts = await _context.HealthAuthorityContacts
+                .Include(c => c.Contact.PhysicalAddress)
                 .Where(c => c.HealthAuthorityOrganizationId == healthAuthorityId)
                 .OfType<T>()
                 .Select(c => c.Contact)
@@ -94,6 +96,7 @@ namespace Prime.Services
 
             // Should cascade into the HealthAuthorityContact XRef table
             _context.Contacts.RemoveRange(oldContacts);
+            _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
             var newContacts = contacts.Select(contact => new T
             {
@@ -104,6 +107,25 @@ namespace Prime.Services
             _context.HealthAuthorityContacts.AddRange(newContacts);
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePrivacyOfficeAsync(int healthAuthorityId, PrivacyOfficeViewModel privacyOffice)
+        {
+            var existing = await _context.PrivacyOffices
+                .Include(po => po.PhysicalAddress)
+                .SingleOrDefaultAsync(po => po.HealthAuthorityOrganizationId == healthAuthorityId);
+
+            if (existing == null)
+            {
+                _context.PrivacyOffices.Add(_mapper.Map<PrivacyOffice>(privacyOffice));
+            }
+            else
+            {
+                _mapper.Map(privacyOffice, existing);
+            }
+
+            // Implicit call to _context.SaveChanges()
+            await UpdateContactsAsync<HealthAuthorityPrivacyOfficer>(healthAuthorityId, new ContactViewModel[] { privacyOffice.PrivacyOfficer });
         }
 
         public async Task UpdateVendorsAsync(int healthAuthorityId, IEnumerable<int> vendorCodes)

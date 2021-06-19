@@ -13,6 +13,7 @@ using Prime.Models;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using System.Security.Claims;
 using System.Linq.Expressions;
 
@@ -458,7 +459,7 @@ namespace Prime.Services
             {
                 foreach (var documentGuid in declaration.DocumentGuids)
                 {
-                    var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "self_declarations");
+                    var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SelfDeclarations);
                     if (string.IsNullOrWhiteSpace(filename))
                     {
                         throw new InvalidOperationException($"Could not find a document upload with GUID {documentGuid}");
@@ -851,7 +852,7 @@ namespace Prime.Services
 
         public async Task<EnrolleeAdjudicationDocument> AddEnrolleeAdjudicationDocumentAsync(int enrolleeId, Guid documentGuid, int adminId)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "enrollee_adjudication_document");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
