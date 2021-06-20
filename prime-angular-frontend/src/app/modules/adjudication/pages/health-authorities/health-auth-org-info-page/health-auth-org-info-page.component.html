@@ -62,14 +62,11 @@
                               [showEditRedirect]="true"
                               [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER"
                               (route)="onRouteRelative($event)">
-          <ng-container *ngIf="healthAuthority?.privacyOfficers.length; else noPrivacyOfficers">
-            <ng-container *ngFor="let privacyOfficer of healthAuthority.privacyOfficers">
-              <!-- Only one privacy officer so omitted enrollee property -->
-              <app-party-review [party]="privacyOfficer"></app-party-review>
-            </ng-container>
+          <ng-container *ngIf="healthAuthority?.privacyOfficer.email; else noPrivacyOfficer">
+            <app-party-review [party]="healthAuthority.privacyOfficer"></app-party-review>
           </ng-container>
 
-          <ng-template #noPrivacyOfficers>
+          <ng-template #noPrivacyOfficer>
             <app-enrollee-property>
               None
             </app-enrollee-property>
