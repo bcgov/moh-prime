@@ -3,7 +3,8 @@
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <app-contact-profile-form [title]="title"
-                            [form]="form">
+                            [form]="form"
+                            [excludeList]="['fax']">
     <ng-container appPageSubheader2Summary>
       Directly sets up individual PharmaNet access accounts at a site or has the authority to request accounts from the
       site's PharmaNet software vendor. May be the Signing Authority.
