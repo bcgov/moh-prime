@@ -102,6 +102,8 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
 import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
 import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
 import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
+import { CardListComponent } from '@shared/components/card-list/card-list.component';
+import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
 
 @NgModule({
   declarations: [
@@ -186,7 +188,9 @@ import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fiel
     BannerComponent,
     SendBulkEmailComponent,
     PaginatorComponent,
-    DoingBusinessAsFormFieldComponent
+    DoingBusinessAsFormFieldComponent,
+    CardListComponent,
+    OptionsFormComponent
   ],
   imports: [
     CommonModule,
@@ -277,7 +281,9 @@ import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fiel
     SummaryCardComponent,
     BannerComponent,
     PaginatorComponent,
-    DoingBusinessAsFormFieldComponent
+    DoingBusinessAsFormFieldComponent,
+    CardListComponent,
+    OptionsFormComponent
   ],
   providers: [
     FullnamePipe,
@@ -286,4 +292,4 @@ import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fiel
     CapitalizePipe
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

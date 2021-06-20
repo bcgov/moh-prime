@@ -1,0 +1,31 @@
+<ng-container *ngFor="let item of items; let index = index; let last = last">
+
+  <app-summary-card [icon]="item.icon"
+                    [title]="item.title"
+                    [menu]="itemMenu"
+                    [properties]="item.properties"
+                    [actionButtonTitle]="item.action.title"
+                    [actionDisabled]="item.action.disabled"
+                    (action)="onEdit(index)"
+                    (remove)="onRemove(index)"></app-summary-card>
+
+  <ng-template #itemMenu
+               let-item="item">
+    <button type="button"
+            mat-icon-button
+            color="primary"
+            matTooltip="Remove {{ itemTypeLabel }}"
+            (click)="onRemove(index)">
+      <mat-icon>close</mat-icon>
+    </button>
+  </ng-template>
+</ng-container>
+
+<button mat-button
+        type="button"
+        color="primary"
+        class="mb-3"
+        (click)="onAdd()">
+  <mat-icon class="add-icon">add</mat-icon>
+  Add {{ itemTypeLabel }}
+</button>

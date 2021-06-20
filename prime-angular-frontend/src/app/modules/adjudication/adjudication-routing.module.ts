@@ -285,12 +285,12 @@ const routes: Routes = [
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
                 component: TechnicalSupportsPageComponent,
-                data: { title: 'Technical Support Contacts' }
+                data: { title: 'Technical Support Contact(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,
                 component: AdministratorsPageComponent,
-                data: { title: 'Administrator Contacts' }
+                data: { title: 'PharmaNet Administrator(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS,
