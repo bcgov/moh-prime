@@ -24,17 +24,35 @@ export class AdjudicationRoutes {
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
   public static SITE_REGISTRATION = 'site-registration';
 
-  public static HEALTH_AUTHORITIES = 'health-authorities';
-  public static AUTHORIZED_USERS = 'authorized-users';
-  public static CREATE_USER = 'create-user';
-
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
 
+  public static HEALTH_AUTHORITIES = 'health-authorities';
+  public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';
+  public static HEALTH_AUTH_VENDORS = 'vendors';
+  public static HEALTH_AUTH_PRIVACY_OFFICER = 'privacy-officer';
+  public static HEALTH_AUTH_TECHNICAL_SUPPORTS = 'technical-supports';
+  public static HEALTH_AUTH_ADMINISTRATORS = 'administrators';
+
+  public static HEALTH_AUTH_AUTHORIZED_USERS = 'authorized-users';
+  public static HEALTH_AUTH_AUTHORIZED_USER = 'authorized-user';
+
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
+    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
+  }
+
+  // Used to indicate the routes and order for register health
+  // authority organization information
+  public static healthAuthorityOrgInfoRouteOrder(): string[] {
+    return [
+      this.HEALTH_AUTH_CARE_TYPES,
+      this.HEALTH_AUTH_VENDORS,
+      this.HEALTH_AUTH_PRIVACY_OFFICER,
+      this.HEALTH_AUTH_TECHNICAL_SUPPORTS,
+      this.HEALTH_AUTH_ADMINISTRATORS
+    ];
   }
 }

@@ -21,7 +21,6 @@ export class PaginatorComponent implements AfterContentInit {
    */
   @Input() public hidePaginator: boolean;
   @Output() public changed: EventEmitter<{ pageIndex: number }>;
-
   @ContentChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
   public form: FormControl;
@@ -36,7 +35,8 @@ export class PaginatorComponent implements AfterContentInit {
     return value < 1 || value > this.paginator.getNumberOfPages();
   }
 
-  public onChange(): void {
+  public onChange(event): void {
+    event.preventDefault();
     // Zero index the form value for comparison
     const value = +this.form.value - 1;
     if (value !== this.paginator.pageIndex && value <= this.paginator.getNumberOfPages()) {

@@ -24,6 +24,7 @@ using AutoMapper;
 using Newtonsoft.Json;
 using Wkhtmltopdf.NetCore;
 using IdentityModel.Client;
+using FluentValidation.AspNetCore;
 
 using Prime.Auth;
 using Prime.Services;
@@ -31,6 +32,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
+using Prime.ViewModels.HealthAuthorities;
 
 namespace Prime
 {
@@ -86,6 +88,7 @@ namespace Prime
             ConfigureClients(services);
 
             services.AddControllers()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
