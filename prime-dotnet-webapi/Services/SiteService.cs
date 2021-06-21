@@ -355,6 +355,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.SubmittedDate = null;
+            site.AddStatus(SiteStatusType.Active);
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");

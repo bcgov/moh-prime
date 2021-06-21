@@ -1,5 +1,4 @@
 using Prime.Models;
-using Prime.Models.Api;
 
 namespace Prime.Engines
 {
