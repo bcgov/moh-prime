@@ -2,11 +2,11 @@ namespace Prime.Models.Api
 {
     public enum SiteStatusAction
     {
-        Submit,
-        Approve,
-        Decline,
-        Unapprove,
-        Undecline,
-        RequestChange
+        Submit = 1,
+        Approve = 2,
+        Decline = 3,
+        Unapprove = 4,
+        Undecline = 5,
+        RequestChange = 6
     }
 }
