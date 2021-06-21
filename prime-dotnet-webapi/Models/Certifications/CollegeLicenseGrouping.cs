@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
-    [Table("CollegeLicenseGrouping")]
-    public class CollegeLicenseGrouping
+    [Table("CollegeLicenseGroupingLookup")]
+    public class CollegeLicenseGrouping : ILookup<int>
     {
         [Key]
         public int Code { get; set; }

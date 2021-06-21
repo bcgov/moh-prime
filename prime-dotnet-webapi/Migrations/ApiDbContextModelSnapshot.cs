@@ -9488,7 +9488,7 @@ namespace Prime.Migrations
 
                     b.HasKey("Code");
 
-                    b.ToTable("CollegeLicenseGrouping");
+                    b.ToTable("CollegeLicenseGroupingLookup");
 
                     b.HasData(
                         new

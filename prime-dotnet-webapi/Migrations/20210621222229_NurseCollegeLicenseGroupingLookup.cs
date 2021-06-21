@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class NurseCollegeLicenseGrouping : Migration
+    public partial class NurseCollegeLicenseGroupingLookup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace Prime.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "CollegeLicenseGrouping",
+                name: "CollegeLicenseGroupingLookup",
                 columns: table => new
                 {
                     Code = table.Column<int>(nullable: false)
@@ -23,11 +23,11 @@ namespace Prime.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CollegeLicenseGrouping", x => x.Code);
+                    table.PrimaryKey("PK_CollegeLicenseGroupingLookup", x => x.Code);
                 });
 
             migrationBuilder.InsertData(
-                table: "CollegeLicenseGrouping",
+                table: "CollegeLicenseGroupingLookup",
                 columns: new[] { "Code", "Name", "Weight" },
                 values: new object[,]
                 {
@@ -261,10 +261,10 @@ namespace Prime.Migrations
                 column: "CollegeLicenseGroupingCode");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_CollegeLicense_CollegeLicenseGrouping_CollegeLicenseGroupin~",
+                name: "FK_CollegeLicense_CollegeLicenseGroupingLookup_CollegeLicenseG~",
                 table: "CollegeLicense",
                 column: "CollegeLicenseGroupingCode",
-                principalTable: "CollegeLicenseGrouping",
+                principalTable: "CollegeLicenseGroupingLookup",
                 principalColumn: "Code",
                 onDelete: ReferentialAction.Restrict);
         }
@@ -272,11 +272,11 @@ namespace Prime.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_CollegeLicense_CollegeLicenseGrouping_CollegeLicenseGroupin~",
+                name: "FK_CollegeLicense_CollegeLicenseGroupingLookup_CollegeLicenseG~",
                 table: "CollegeLicense");
 
             migrationBuilder.DropTable(
-                name: "CollegeLicenseGrouping");
+                name: "CollegeLicenseGroupingLookup");
 
             migrationBuilder.DropIndex(
                 name: "IX_CollegeLicense_CollegeLicenseGroupingCode",
