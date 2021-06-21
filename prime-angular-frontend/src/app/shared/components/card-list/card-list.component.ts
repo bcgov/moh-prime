@@ -9,7 +9,7 @@ export interface CardListItem {
   }[];
   action: {
     title: string;
-    disabled: boolean;
+    disabled?: boolean;
   };
 }
 
