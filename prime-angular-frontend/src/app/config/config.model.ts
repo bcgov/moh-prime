@@ -51,7 +51,7 @@ export interface CollegeLicenseConfig {
   collegeLicenseGroupingCode: number;
 }
 
-export interface CollegeLicenseGroupingConfig {
+export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {
   code: number;
   name: string;
   weight: number;

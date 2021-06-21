@@ -36,7 +36,7 @@
       </div>
 
       <div class="col-sm-12">
-        <ng-container *ngIf="!condensed && collegeCode.value && collegeCode.value === CollegeLicenceClassEnum.BCCNM">
+        <ng-container *ngIf="!condensed && collegeCode?.value === CollegeLicenceClassEnum.BCCNM">
           <mat-form-field class="w-100">
             <mat-label>Nurse Category</mat-label>
             <mat-select formControlName="nurseCategory">
