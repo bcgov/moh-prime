@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
@@ -14,8 +15,6 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import {
   PrivacyOfficePageFormState
 } from '@adjudication/pages/health-authorities/privacy-office-page/privacy-office-page-form-state.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-privacy-officer-page',
@@ -66,17 +65,17 @@ export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements
 
   protected patchForm(): void {
     this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ privacyOfficer }: HealthAuthority) => {
-        if (privacyOfficer) {
-          // Will only ever be a single privacy officer
-          this.formState.form.patchValue(privacyOfficer);
+      .subscribe(({ privacyOffice }: HealthAuthority) => {
+        if (privacyOffice) {
+          this.formState.patchValue(privacyOffice);
+          this.showAddressFields = true;
         }
       });
   }
 
   protected performSubmission(): Observable<unknown> {
     return this.healthAuthResource
-      .updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.form.value);
+      .updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.json);
   }
 
   protected onSubmitFormIsInvalid(): void {

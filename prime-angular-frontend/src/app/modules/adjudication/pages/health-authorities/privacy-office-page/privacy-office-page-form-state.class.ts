@@ -1,10 +1,12 @@
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Contact } from '@lib/models/contact.model';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
-export class PrivacyOfficePageFormState extends AbstractFormState<Contact> {
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { FormUtilsService } from '@core/services/form-utils.service';
+
+import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
+
+export class PrivacyOfficePageFormState extends AbstractFormState<PrivacyOffice> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -30,20 +32,20 @@ export class PrivacyOfficePageFormState extends AbstractFormState<Contact> {
     return this.formInstance.get('privacyOfficer') as FormGroup;
   }
 
-  public get json(): Contact {
+  public get json(): PrivacyOffice {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formUtilsService.toPersonJson(this.formInstance.getRawValue());
+    return this.formInstance.value;
   }
 
-  public patchValue(model: Contact): void {
+  public patchValue(model: PrivacyOffice): void {
     if (!model) {
       return;
     }
 
-    this.formUtilsService.toPersonFormModel([this.formInstance, model]);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(disabled: boolean = false): void {

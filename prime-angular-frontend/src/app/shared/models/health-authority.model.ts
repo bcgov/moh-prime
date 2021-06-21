@@ -5,7 +5,7 @@ export interface HealthAuthority {
   name: string;
   careTypes: string[];
   vendorCodes: number[];
-  privacyOfficer: PrivacyOffice;
+  privacyOffice: PrivacyOffice;
   technicalSupports: Contact[];
   pharmanetAdministrators: Contact[];
 }
