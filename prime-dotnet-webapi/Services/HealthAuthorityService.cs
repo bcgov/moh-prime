@@ -117,7 +117,9 @@ namespace Prime.Services
 
             if (existing == null)
             {
-                _context.PrivacyOffices.Add(_mapper.Map<PrivacyOffice>(privacyOffice));
+                var newOffice = _mapper.Map<PrivacyOffice>(privacyOffice);
+                newOffice.HealthAuthorityOrganizationId = healthAuthorityId;
+                _context.PrivacyOffices.Add(newOffice);
             }
             else
             {
