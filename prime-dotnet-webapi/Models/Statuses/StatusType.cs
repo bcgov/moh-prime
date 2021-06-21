@@ -9,11 +9,11 @@ namespace Prime.Models
         Declined = 5,
     }
 
-    public enum SiteStatusType
-    {
-        Active = 1,
-        InReview = 2,
-        Approved = 3,
-        Locked = 4
-    }
+    // public enum SiteStatusType
+    // {
+    //     Active = 1,
+    //     InReview = 2,
+    //     Approved = 3,
+    //     Locked = 4
+    // }
 }

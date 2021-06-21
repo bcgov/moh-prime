@@ -10,18 +10,18 @@ namespace Prime.Engines
             return (fromStatus, toStatus) switch
             {
                 // Submit
-                (SiteStatusType.Active, SiteStatusType.UnderReview) => true,
+                (SiteStatusType.Active, SiteStatusType.InReview) => true,
                 // Reject
-                (SiteStatusType.Active, SiteStatusType.Declined) => true,
-                (SiteStatusType.UnderReview, SiteStatusType.Declined) => true,
+                (SiteStatusType.Active, SiteStatusType.Locked) => true,
+                (SiteStatusType.InReview, SiteStatusType.Locked) => true,
                 // Changes requested
-                (SiteStatusType.UnderReview, SiteStatusType.Active) => true,
+                (SiteStatusType.InReview, SiteStatusType.Active) => true,
                 // Approve
-                (SiteStatusType.UnderReview, SiteStatusType.Approved) => true,
+                (SiteStatusType.InReview, SiteStatusType.Approved) => true,
                 // Unapprove for changes
                 (SiteStatusType.Approved, SiteStatusType.Active) => true,
                 // Unreject
-                (SiteStatusType.Declined, SiteStatusType.UnderReview) => true,
+                (SiteStatusType.Locked, SiteStatusType.InReview) => true,
 
                 _ => false
             };
