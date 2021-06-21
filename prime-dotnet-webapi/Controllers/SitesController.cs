@@ -831,7 +831,7 @@ namespace Prime.Controllers
                 return NotFound($"Site not found with id {siteId}");
             }
             var action = SiteStatusAction.NA;
-            // Only allow enable editing for the following current site status: Review & Approved
+            // Only allow enable editing for the following current site status: InReview & Approved
             switch (site.Status)
             {
                 case SiteStatusType.InReview:
