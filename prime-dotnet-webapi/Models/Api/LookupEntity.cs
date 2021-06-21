@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime.Models.Api
 {
@@ -16,6 +17,7 @@ namespace Prime.Models.Api
         public List<Vendor> Vendors { get; set; }
         public List<HealthAuthority> HealthAuthorities { get; set; }
         public List<Facility> Facilities { get; set; }
+        public List<CareType> CareTypes { get; set; }
         public List<CollegeLicenseGrouping> CollegeLicenseGroupings { get; set; }
     }
 }

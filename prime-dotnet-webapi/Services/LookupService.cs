@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
@@ -61,6 +62,9 @@ namespace Prime.Services
                 CollegeLicenseGroupings = await _context.Set<CollegeLicenseGrouping>()
                     .AsNoTracking()
                     .ToListAsync()
+                CareTypes = await _context.Set<CareType>()
+                    .AsNoTracking()
+                    .ToListAsync(),
             };
         }
     }

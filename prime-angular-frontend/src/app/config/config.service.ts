@@ -101,6 +101,11 @@ export class ConfigService implements IConfigService {
       .sort(this.utilsService.sortByKey<CollegeLicenseGroupingConfig>('weight'));
   }
 
+  public get careTypes(): Config<number>[] {
+    return [...this.configuration.careTypes]
+      .sort(this.utilsService.sortByKey<Config<number>>('name'));
+  }
+
   /**
    * @description
    * Load the runtime configuration.

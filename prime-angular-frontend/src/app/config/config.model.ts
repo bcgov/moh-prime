@@ -13,6 +13,7 @@ export interface Configuration {
   vendors: VendorConfig[];
   healthAuthorities: Config<number>[];
   facilities: Config<number>[];
+  careTypes: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
 }
 
