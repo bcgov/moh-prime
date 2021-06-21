@@ -18,10 +18,9 @@ import { BcscDemographicComponent } from './pages/bcsc-demographic/bcsc-demograp
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 // TODO Temporary removal of device provider for Community Practice
 // import { DeviceProviderComponent } from './pages/device-provider/device-provider.component';
-import { JobComponent } from './pages/job/job.component';
+import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationComponent } from './pages/self-declaration/self-declaration.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { HealthAuthorityComponent } from './pages/health-authority/health-authority.component';
 import { SubmissionConfirmationComponent } from './pages/submission-confirmation/submission-confirmation.component';
 import { AccessAgreementComponent } from './pages/access-agreement/access-agreement.component';
 import { CollectionNoticeComponent } from './pages/collection-notice/collection-notice.component';
@@ -106,12 +105,6 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.HEALTH_AUTHORITY,
-        component: HealthAuthorityComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
         path: EnrolmentRoutes.REGULATORY,
         component: RegulatoryComponent,
         canDeactivate: [CanDeactivateFormGuard],
@@ -119,7 +112,7 @@ const routes: Routes = [
       },
       {
         path: EnrolmentRoutes.JOB,
-        component: JobComponent,
+        component: OboSitesPageComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },
@@ -227,4 +220,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EnrolmentRoutingModule { }
+export class EnrolmentRoutingModule {}

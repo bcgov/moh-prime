@@ -22,11 +22,8 @@ export class OboSiteFormComponent implements OnInit {
   @Output() public remove: EventEmitter<number>;
 
   public formControlNames: string[];
-
-  public CareSettingEnum = CareSettingEnum;
-
   public allowRemoveNone: boolean;
-
+  public CareSettingEnum = CareSettingEnum;
 
   constructor() {
     this.remove = new EventEmitter<number>();

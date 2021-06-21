@@ -64,17 +64,19 @@
 <app-overview-section title="Health Authority"
                       [showEditRedirect]="false">
   <app-enrollee-property title="Health Authority">
-    {{ healthAuthorities[user?.healthAuthorityCode]?.name | default }}
+    {{ user?.healthAuthorityCode | configCode: 'healthAuthorities' | default }}
   </app-enrollee-property>
 </app-overview-section>
 
 <div class="d-flex justify-content-between mb-4">
   <button mat-stroked-button
+          type="button"
           [disabled]="!(Role.SUPER_ADMIN | inRole)"
-          (click)="onBack()"
-          type="button">Back</button>
+          (click)="onBack()">Back
+  </button>
   <button mat-flat-button
+          color="primary"
           [disabled]="!(Role.SUPER_ADMIN | inRole) || user?.status === AccessStatusEnum.APPROVED"
-          (click)="onApprove()"
-          color="primary">Approve Authorized User</button>
+          (click)="onApprove()">Approve Authorized User
+  </button>
 </div>

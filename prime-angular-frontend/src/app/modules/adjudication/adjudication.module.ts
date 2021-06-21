@@ -25,9 +25,7 @@ import { AdjudicationDashboardComponent } from './shared/components/adjudication
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
-import {
-  ReviewStatusContentComponent
-} from './shared/components/review-status-content/review-status-content.component';
+import { ReviewStatusContentComponent } from './shared/components/review-status-content/review-status-content.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
@@ -48,13 +46,8 @@ import { ContextualSiteNotificationComponent } from './shared/components/context
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
-import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
-import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
-import { HaAuthorizedUsersViewComponent } from './shared/components/ha-authorized-users-view/ha-authorized-users-view.component';
-import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
-import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
-import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { HealthAuthOrgInfoPageComponent } from './pages/health-authorities/health-auth-org-info-page/health-auth-org-info-page.component';
 import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
 import { MaintenanceContainerComponent } from './shared/components/maintenance-container/maintenance-container.component';
 import { NotificationEmailsContainerComponent } from './shared/components/notification-emails-container/notification-emails-container.component';
@@ -67,6 +60,18 @@ import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrol
 import { EnrolleeToaMaintenancePageComponent } from './pages/enrollee-toa-maintenance-page/enrollee-toa-maintenance-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
+
+import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
+import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
+import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
+import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
+import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
+import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
+import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
+import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { OptionsFormComponent } from '@adjudication/shared/components/options-form/options-form.component';
 
 @NgModule({
   declarations: [
@@ -108,13 +113,8 @@ import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-ma
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
     BannerMaintenanceComponent,
-    HealthAuthorityTableComponent,
     SiteRegistrationTabsComponent,
-    HealthAuthorityAuthorizedUserPageComponent,
-    HaAuthorizedUsersViewComponent,
-    HealthAuthorityAuthorizedUsersPageComponent,
-    HealthAuthorityOrganizationInformationPageComponent,
-    AuthorizedUserReviewComponent,
+    HealthAuthOrgInfoPageComponent,
     ContextualEnrolmentConfirmationComponent,
     MaintenanceContainerComponent,
     NotificationEmailsContainerComponent,
@@ -126,7 +126,18 @@ import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-ma
     EnrolleeMaintenanceComponent,
     EnrolleeToaMaintenancePageComponent,
     EnrolleeToaMaintenanceListPageComponent,
-    EnrolleeToaMaintenanceViewPageComponent
+    EnrolleeToaMaintenanceViewPageComponent,
+    HealthAuthCareTypesPageComponent,
+    VendorsPageComponent,
+    PrivacyOfficerPageComponent,
+    TechnicalSupportsPageComponent,
+    AdministratorsPageComponent,
+    AuthorizedUsersPageComponent,
+    AuthorizedUserPageComponent,
+    HealthAuthorityTableComponent,
+    HealthAuthAuthorizedUsersViewComponent,
+    AuthorizedUserReviewComponent,
+    OptionsFormComponent
   ],
   imports: [
     AdjudicationRoutingModule,
@@ -135,4 +146,4 @@ import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-ma
     EditorModule
   ]
 })
-export class AdjudicationModule { }
+export class AdjudicationModule {}
