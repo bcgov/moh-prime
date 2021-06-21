@@ -61,7 +61,7 @@ namespace Prime.Services
                     .ToListAsync(),
                 CollegeLicenseGroupings = await _context.Set<CollegeLicenseGrouping>()
                     .AsNoTracking()
-                    .ToListAsync()
+                    .ToListAsync(),
                 CareTypes = await _context.Set<CareType>()
                     .AsNoTracking()
                     .ToListAsync(),
