@@ -58,7 +58,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
           healthAuthority?.careTypes.length &&
           healthAuthority?.vendorCodes.length &&
           // Check one of the required fields
-          healthAuthority?.privacyOfficer.email &&
+          healthAuthority?.privacyOfficer?.email &&
           healthAuthority?.technicalSupports.length &&
           healthAuthority?.pharmanetAdministrators.length
         );
