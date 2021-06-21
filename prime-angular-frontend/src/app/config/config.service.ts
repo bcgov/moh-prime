@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, VendorConfig } from '@config/config.model';
+import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig } from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -94,6 +94,11 @@ export class ConfigService implements IConfigService {
   public get facilities(): Config<number>[] {
     return [...this.configuration.facilities]
       .sort(this.utilsService.sortByKey<Config<number>>('name'));
+  }
+
+  public get collegeLicenseGroupings(): CollegeLicenseGroupingConfig[] {
+    return [...this.configuration.collegeLicenseGroupings]
+      .sort(this.utilsService.sortByKey<CollegeLicenseGroupingConfig>('weight'));
   }
 
   public get careTypes(): Config<number>[] {
