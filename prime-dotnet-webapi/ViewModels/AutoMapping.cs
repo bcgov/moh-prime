@@ -94,10 +94,8 @@ public class AutoMapping : Profile
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
 
-        CreateMap<AgreementVersion, AgreementVersionViewModel>()
-            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
-        CreateMap<AgreementVersion, AgreementVersionListViewModel>()
-            .ForMember(dest => dest.UpdatedDate, opt => opt.MapFrom(src => src.UpdatedTimeStamp));
+        CreateMap<AgreementVersion, AgreementVersionViewModel>();
+        CreateMap<AgreementVersion, AgreementVersionListViewModel>();
 
         CreateMap<Contact, ContactViewModel>()
             .ReverseMap();
