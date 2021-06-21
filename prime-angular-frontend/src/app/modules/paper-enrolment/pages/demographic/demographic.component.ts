@@ -18,11 +18,14 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { DemographicFormState } from './demographic-form-state.class';
-import { PaperEnrolmentFormStateService } from '../../services/paper-enrolment-form-state.service';
+import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
+import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import moment from 'moment';
+import { MINIMUM_AGE } from '@lib/constants';
+import { PaperEnrolleeUser } from '@auth/shared/models/paper-enrollee-user.model';
 
 @Component({
   selector: 'app-demographic',
@@ -33,13 +36,14 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   public form: FormGroup;
   public formState: DemographicFormState;
   public enrolment: Enrolment;
+  public maxDateOfBirth: moment.Moment;
 
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    protected enrolmentService: EnrolmentService,
-    protected enrolmentResource: EnrolmentResource,
+    protected paperEnrolmentService: PaperEnrolmentService,
+    protected paperEnrolmentResource: PaperEnrolmentResource,
     protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
@@ -51,6 +55,9 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
       route,
       router
     );
+
+    // Must be 18 years of age or older
+    this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
   }
 
   public get firstName(): FormControl {
@@ -93,7 +100,13 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   private initForm(): void {
-    this.setAddressValidator(this.physicalAddress);
+    if (!this.paperEnrolmentService.enrolment) {
+      this.getUser$()
+        .subscribe((enrollee: Enrollee) => {
+          this.dateOfBirth.enable();
+          this.form.patchValue(enrollee);
+        });
+    }
   }
 
   /**
@@ -102,9 +115,9 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
    */
   private patchForm(): Observable<any> {
     // Will be null if enrolment has not been created
-    const enrolment = this.enrolmentService.enrolment;
-    this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
-    this.isProfileComplete = this.enrolmentService.isProfileComplete;
+    const enrolment = this.paperEnrolmentService.enrolment;
+    this.isInitialEnrolment = this.paperEnrolmentService.isInitialEnrolment;
+    this.isProfileComplete = this.paperEnrolmentService.isProfileComplete;
 
     // Attempt to patch the form if not already patched, and ensure the
     // identity provider information is always populated from the claim
@@ -154,21 +167,28 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   private performHttpRequest(enrolment: Enrolment): Observable<void> {
-    if (!enrolment.id) {
-      return this.getUser$()
+    const enrollee = this.form.getRawValue();
+    // BCeID has to match BCSC for submission, which requires givenNames
+    const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
+
+    if (!enrolment.id && this.isInitialEnrolment) {
+      const payload = {
+        enrollee: { ...enrollee, givenNames }
+      };
+      return this.paperEnrolmentResource.createEnrollee(payload)
         .pipe(
-          map((enrollee: Enrollee) => {
-            const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
-            const { userId, ...demographic } = enrolment.enrollee;
-            return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+          // Merge the enrolment with generated keys
+          map((newEnrolment: Enrolment) => {
+            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
+            return newEnrolment;
           }),
-          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
-          // Populate the new enrolment within the form state by force patching
+          // Populate generated keys within the form state
           tap((newEnrolment: Enrolment) => this.paperEnrolmentFormStateService.setForm(newEnrolment, true)),
           this.handleResponse()
         );
     } else {
-      return this.enrolmentResource.updateEnrollee(enrolment)
+      enrolment.enrollee.givenNames = givenNames;
+      return this.paperEnrolmentResource.updateEnrollee(enrolment)
         .pipe(this.handleResponse());
     }
   }
@@ -211,20 +231,14 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   private getUser$(): Observable<Enrollee> {
     return this.authService.getUser$()
       .pipe(
-        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+        map(({ firstName, lastName, email = null }: PaperEnrolleeUser) => {
           // Enforced the enrollee type instead of using Partial<Enrollee>
           // to avoid creating constructors and partials for every model
           return {
             // Providing only the minimum required fields for creating an enrollee
-            userId,
-            hpdid,
             firstName,
             lastName,
-            givenNames,
-            dateOfBirth,
-            verifiedAddress,
-            phone: null,
-            email: null
+            email
           } as Enrollee;
         })
       );
