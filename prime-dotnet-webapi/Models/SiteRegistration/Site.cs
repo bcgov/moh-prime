@@ -103,12 +103,14 @@ namespace Prime.Models
         /// </summary>
         [NotMapped]
         [Computed]
-        public SiteStatus CurrentStatus
+        public SiteStatusType Status
         {
-            get => SiteStatuses
+            get => (SiteStatuses != null ?
+                SiteStatuses
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id)
-                .FirstOrDefault();
+                .FirstOrDefault().StatusType :
+                SiteStatusType.Active);
         }
     }
 }

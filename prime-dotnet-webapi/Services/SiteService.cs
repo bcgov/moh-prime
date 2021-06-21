@@ -71,7 +71,7 @@ namespace Prime.Services
                 ProvisionerId = organization.SigningAuthorityId,
                 OrganizationId = organization.Id,
             };
-            site.AddStatus(SiteStatusType.UnderReview);
+            site.AddStatus(SiteStatusType.Active);
 
             _context.Sites.Add(site);
 
@@ -327,7 +327,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site.CurrentStatus.StatusType != SiteStatusType.Approved)
+            if (site.Status != SiteStatusType.Approved)
             {
                 site.AddStatus(SiteStatusType.Approved);
                 site.ApprovedDate = DateTimeOffset.Now;
@@ -342,7 +342,7 @@ namespace Prime.Services
         public async Task<Site> DeclineSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.AddStatus(SiteStatusType.Declined);
+            site.AddStatus(SiteStatusType.Locked);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
 
@@ -378,6 +378,7 @@ namespace Prime.Services
         {
             var site = await GetSiteAsync(siteId);
             site.SubmittedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.InReview);
             _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
