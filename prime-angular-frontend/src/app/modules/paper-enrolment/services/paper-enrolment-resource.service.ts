@@ -37,17 +37,16 @@ export class PaperEnrolmentResource {
     private logger: LoggerService
   ) { }
 
-  public enrollee(): Observable<Enrolment> {
-    return this.apiResource.get<HttpEnrollee[]>('enrollees')
+  public getEnrolleeById(enrolleeId: number): Observable<Enrolment> {
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees) => this.logger.info('ENROLLEE', enrollees[0])),
-        map((enrollees) =>
-          // Only a single enrollee will be provided
-          (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((enrollee) =>
+          this.enrolleeAdapterResponse(enrollee)
         ),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::enrollee error has occurred: ', error);
           throw error;
         })
       );

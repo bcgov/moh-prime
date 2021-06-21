@@ -5,6 +5,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { DemographicComponent } from '@paper-enrolment/pages/demographic/demographic.component';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+import { PaperEnrolmentGuard } from './shared/guards/paper-enrolment.guard';
 
 const routes: Routes = [
   {
@@ -12,15 +13,23 @@ const routes: Routes = [
     component: PaperEnrolmentDashboardComponent,
     children: [
       {
-        path: PaperEnrolmentRoutes.DEMOGRAPHIC,
-        component: DemographicComponent,
-        canDeactivate: [CanDeactivateFormGuard],
-        data: { title: 'PRIME Enrolment' }
-      },
-      {
-        path: '', // Equivalent to `/` and alias for default view
-        redirectTo: PaperEnrolmentRoutes.DEMOGRAPHIC,
-        pathMatch: 'full'
+        // During initial registration the ID will be set to
+        // zero indicating the organization does not exist
+        path: ':eid',
+        canActivateChild: [PaperEnrolmentGuard],
+        children: [
+          {
+            path: PaperEnrolmentRoutes.DEMOGRAPHIC,
+            component: DemographicComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Enrolment' }
+          },
+          {
+            path: '', // Equivalent to `/` and alias for default view
+            redirectTo: PaperEnrolmentRoutes.DEMOGRAPHIC,
+            pathMatch: 'full'
+          }
+        ]
       }
     ]
   }

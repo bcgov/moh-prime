@@ -39,6 +39,11 @@ export class PaperEnrolmentService implements IEnrolmentService {
     return this._enrolment.value;
   }
 
+  public set enrolment(enrolment: Enrolment) {
+    // Store a copy to prevent updates by reference
+    this._enrolment.next({ ...enrolment });
+  }
+
   public get isInitialEnrolment(): boolean {
     return !this.enrolment || (this.enrolment && !this.enrolment.expiryDate);
   }
