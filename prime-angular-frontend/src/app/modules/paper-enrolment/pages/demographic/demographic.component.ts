@@ -3,19 +3,16 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { from, Observable, of, pipe } from 'rxjs';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { optionalAddressLineItems } from '@shared/models/address.model';
 
-
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { DemographicFormState } from './demographic-form-state.class';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
@@ -23,7 +20,8 @@ import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import moment from 'moment';
 import { MINIMUM_AGE } from '@lib/constants';
-import { PaperEnrolleeUser } from '@auth/shared/models/paper-enrollee-user.model';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 @Component({
   selector: 'app-demographic',
@@ -35,6 +33,7 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   public formState: DemographicFormState;
   public enrolment: Enrolment;
   public maxDateOfBirth: moment.Moment;
+  public routeUtils: RouteUtils;
 
   constructor(
     protected route: ActivatedRoute,
@@ -47,7 +46,6 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    // protected authService: AuthService
   ) {
     super(
       route,
@@ -56,6 +54,8 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
 
     // Must be 18 years of age or older
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
+
+    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
   public get firstName(): FormControl {
@@ -79,11 +79,13 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      this.handleSubmission();
-    } else {
-      this.utilService.scrollToErrorSection();
-    }
+    this.nextRouteAfterSubmit();
+
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   this.handleSubmission();
+    // } else {
+    //   this.utilService.scrollToErrorSection();
+    // }
   }
 
   public ngOnInit(): void {
@@ -130,7 +132,10 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
             return newEnrolment;
           }),
           // Populate generated keys within the form state
-          tap((newEnrolment: Enrolment) => this.paperEnrolmentFormStateService.setForm(newEnrolment, true)),
+          tap((newEnrolment: Enrolment) => {
+            this.paperEnrolmentFormStateService.setForm(newEnrolment, true);
+            this.enrolment = newEnrolment;
+          }),
           this.handleResponse()
         );
     } else {
@@ -163,12 +168,8 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   private nextRouteAfterSubmit(): void {
-    let nextRoutePath: string;
-    if (!this.isProfileComplete) {
-      nextRoutePath = EnrolmentRoutes.CARE_SETTING;
-    }
-
-    this.routeTo(nextRoutePath);
+    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.CARE_SETTING]);
+    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
   private setAddressValidator(addressLine: FormGroup): void {

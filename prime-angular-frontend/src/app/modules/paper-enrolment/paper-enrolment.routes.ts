@@ -3,6 +3,9 @@ export class PaperEnrolmentRoutes {
   public static MODULE_PATH = 'paper-enrolment';
 
   public static DEMOGRAPHIC = 'demographic';
+  public static CARE_SETTING = 'care-setting';
+  public static REGULATORY = 'regulatory';
+  public static JOB = 'job';
 
   public static routePath(route: string): string {
     return `/${PaperEnrolmentRoutes.MODULE_PATH}/${route}`;
@@ -10,7 +13,8 @@ export class PaperEnrolmentRoutes {
 
   public static routeOrder(): string[] {
     return [
-      PaperEnrolmentRoutes.DEMOGRAPHIC
+      PaperEnrolmentRoutes.DEMOGRAPHIC,
+      PaperEnrolmentRoutes.CARE_SETTING
     ];
   }
 }

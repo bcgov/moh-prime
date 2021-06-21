@@ -10,12 +10,14 @@ import { DemographicComponent } from '@paper-enrolment/pages/demographic/demogra
 import { PaperEnrolmentProgressIndicatorComponent } from '@paper-enrolment/shared/components/paper-enrolment-progress-indicator/paper-enrolment-progress-indicator.component';
 import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 
 @NgModule({
   declarations: [
     DemographicComponent,
     PaperEnrolmentDashboardComponent,
-    PaperEnrolmentProgressIndicatorComponent
+    PaperEnrolmentProgressIndicatorComponent,
+    CareSettingComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,

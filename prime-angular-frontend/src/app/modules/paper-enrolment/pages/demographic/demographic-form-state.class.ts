@@ -35,7 +35,6 @@ export class DemographicFormState extends AbstractFormState<Enrollee> {
     this.formInstance.patchValue(enrollee);
   }
 
-  // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     this.formInstance = this.fb.group({
       firstName: [null, [Validators.required]],

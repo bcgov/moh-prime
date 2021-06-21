@@ -23,6 +23,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { DemographicFormState } from '@paper-enrolment/pages/demographic/demographic-form-state.class';
+import { CareSettingFormState } from '@paper-enrolment/pages/care-setting/care-setting-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -30,13 +31,12 @@ import { DemographicFormState } from '@paper-enrolment/pages/demographic/demogra
 export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enrolment> {
   public accessForm: FormGroup;
   public demographicFormState: DemographicFormState;
+  public careSettingFormState: CareSettingFormState;
   public regulatoryFormState: RegulatoryFormState;
   public jobsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
-  public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
-  private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
   private userId: string;
 
@@ -67,11 +67,6 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       return;
     }
 
-    // Must delay loading of the identity provider otherwise race
-    // conditions occur when views initialize and the form instances
-    // are not necessarily available
-    this.identityProvider = await this.authService.identityProvider();
-
     // Store required enrolment identifiers not captured in forms
     this.enrolleeId = enrolment?.id;
     this.userId = enrolment?.enrollee.userId;
@@ -89,7 +84,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     const profile = this.demographicFormState.json;
     const certifications = this.regulatoryFormState.json;
     const { oboSites } = this.jobsForm.getRawValue();
-    const careSettings = this.convertCareSettingFormToJson(id);
+    const careSettings = this.careSettingFormState.convertCareSettingFormToJson(id);
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
@@ -114,10 +109,10 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
   public get forms(): AbstractControl[] {
     return [
       this.demographicFormState.form,
+      this.careSettingFormState.form,
       this.regulatoryFormState.form,
       this.jobsForm,
       this.selfDeclarationForm,
-      this.careSettingsForm,
     ];
   }
 
@@ -136,7 +131,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
   public hasCertificateOrJob(): boolean {
     const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    const enrolleeHealthAuthorities = this.careSettingFormState.form.get('enrolleeHealthAuthorities') as FormArray;
     let hasOboSiteForEveryHA = true;
     // Using `for` loop rather than `every()` method for ease of debugging
     for (let i = 0; i < enrolleeHealthAuthorities.controls.length; i++) {
@@ -170,10 +165,10 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
    */
   protected buildForms() {
     this.demographicFormState = new DemographicFormState(this.fb, this.formUtilsService);
+    this.careSettingFormState = new CareSettingFormState(this.fb, this.formUtilsService, this.configService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
-    this.careSettingsForm = this.buildCareSettingsForm();
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -188,17 +183,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
 
     this.demographicFormState.patchValue(enrolment.enrollee);
 
-    if (enrolment.careSettings.length) {
-      const careSettings = this.careSettingsForm.get('careSettings') as FormArray;
-      careSettings.clear();
-      enrolment.careSettings.forEach((s: CareSetting) => {
-        const careSetting = this.buildCareSettingForm();
-        careSetting.patchValue(s);
-        careSettings.push(careSetting);
-      });
-    }
-
-    this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
+    this.careSettingFormState.patchValue(enrolment);
 
     if (enrolment.oboSites.length) {
       const oboSites = this.jobsForm.get('oboSites') as FormArray;
@@ -300,25 +285,6 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       }, []);
   }
 
-  private convertCareSettingFormToJson(enrolleeId: number): any {
-    // Variable names must match keys for FormArrays in the FormGroup to get values
-    // tslint:disable-next-line:prefer-const
-    let { careSettings, enrolleeHealthAuthorities } = this.careSettingsForm.getRawValue();
-
-    // Any checked HA is converted into an enrollee health authority object literal,
-    // which is used to create the payload to back-end
-    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
-      if (checked) {
-        selectedHealthAuthorities.push({
-          enrolleeId,
-          healthAuthorityCode: this.configService.healthAuthorities[i].code
-        });
-      }
-      return selectedHealthAuthorities;
-    }, []);
-    return { careSettings, enrolleeHealthAuthorities };
-  }
-
   /**
    * Form Builders and Helpers
    */
@@ -406,30 +372,6 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     });
   }
 
-  private buildCareSettingsForm(): FormGroup {
-    return this.fb.group({
-      careSettings: this.fb.array([]),
-      enrolleeHealthAuthorities: this.fb.array([])
-    });
-  }
-
-  public buildCareSettingForm(code: number = null): FormGroup {
-    return this.fb.group({
-      careSettingCode: [code, [Validators.required]]
-    });
-  }
-
-  public buildEnrolleeHealthAuthorityFormControl(checkState: boolean): FormControl {
-    return this.fb.control(checkState);
-  }
-
-  public removeHealthAuthorities() {
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.controls.forEach(checkbox => {
-      checkbox.setValue(false);
-    });
-  }
-
   private buildSelfDeclarationForm(): FormGroup {
     return this.fb.group({
       hasConviction: [null, [FormControlValidators.requiredBoolean]],
@@ -484,7 +426,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     // Obo Sites need to be removed from two different collections
     const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
-    const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
+    const enrolleeHealthAuthorities = this.careSettingFormState.form.get('enrolleeHealthAuthorities') as FormArray;
     // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!enrolleeHealthAuthorities.at(index).value) {
