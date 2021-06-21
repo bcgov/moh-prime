@@ -17,7 +17,7 @@ namespace Prime.HttpClients
             : base(PropertySerialization.CamelCase)
         {
             // Auth header and cert are injected in Startup.cs
-            _client = client;
+            _client = client ?? throw new ArgumentNullException(nameof(client));
         }
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)

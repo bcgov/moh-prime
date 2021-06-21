@@ -11,7 +11,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [AllowAnonymous]
-    public class HealthcheckController : ControllerBase
+    public class HealthcheckController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
 
