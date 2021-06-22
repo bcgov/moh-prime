@@ -1,28 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
-using Prime.Auth;
 using Prime.Models;
 using Prime.Engines;
-using Prime.ViewModels;
-using Prime.Models.Api;
-using Prime.HttpClients;
-using Prime.HttpClients.DocumentManagerApiDefinitions;
-using System.Security.Claims;
-using System.Linq.Expressions;
 using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
     public class EnrolleePaperSubmissionService : BaseService, IEnrolleePaperSubmissionService
     {
+        private const string PaperGpidPrefix = "NOBCSC";
+
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
 
@@ -37,13 +29,29 @@ namespace Prime.Services
             _businessEventService = businessEventService;
         }
 
+        public async Task<bool> PaperSubmissionExistsAsync(int enrolleeId)
+        {
+            var gpid = await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.GPID)
+                .SingleOrDefaultAsync();
+
+            if (gpid == null)
+            {
+                return false;
+            }
+
+            return gpid.StartsWith(PaperGpidPrefix);
+        }
+
         public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel createModel)
         {
             createModel.ThrowIfNull(nameof(createModel));
 
             var enrollee = _mapper.Map<Enrollee>(createModel);
             enrollee.UserId = Guid.NewGuid();
-            enrollee.GPID = Gpid.NewGpid("NOBCSC");
+            enrollee.GPID = Gpid.NewGpid(PaperGpidPrefix);
 
             _context.Enrollees.Add(enrollee);
             await _context.SaveChangesAsync();
