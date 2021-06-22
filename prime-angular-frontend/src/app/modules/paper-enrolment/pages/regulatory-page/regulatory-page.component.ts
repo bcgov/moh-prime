@@ -2,32 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { pipe } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { pipe } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
-import { RegulatoryPaperEnrolmentFormState } from './regulatory-paper-enrolment-form-state.class';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { RegulatoryPageFormState } from './regulatory-page-form-state.class';
 
 @Component({
-  selector: 'app-regulatory',
-  templateUrl: './regulatory.component.html',
-  styleUrls: ['./regulatory.component.scss']
+  selector: 'app-regulatory-page',
+  templateUrl: './regulatory-page.component.html',
+  styleUrls: ['./regulatory-page.component.scss']
 })
-export class RegulatoryComponent extends AbstractEnrolmentPage implements OnInit {
+export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public form: FormGroup;
-  public formState: RegulatoryPaperEnrolmentFormState;
+  public formState: RegulatoryPageFormState;
   public enrolment: Enrolment;
   public routeUtils: RouteUtils;
 

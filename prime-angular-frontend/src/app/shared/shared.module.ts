@@ -279,7 +279,8 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     SummaryCardComponent,
     BannerComponent,
     PaginatorComponent,
-    DoingBusinessAsFormFieldComponent
+    DoingBusinessAsFormFieldComponent,
+    OboSiteFormComponent
   ],
   providers: [
     FullnamePipe,

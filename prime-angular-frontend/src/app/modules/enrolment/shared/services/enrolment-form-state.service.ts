@@ -28,7 +28,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
-import { RegulatoryPaperEnrolmentFormState } from '@paper-enrolment/pages/regulatory/regulatory-paper-enrolment-form-state.class';
+import { RegulatoryPageFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public identityDocumentForm: FormGroup;
   public bceidDemographicFormState: BceidDemographicFormState;
   public bcscDemographicFormState: BcscDemographicFormState;
-  public regulatoryFormState: RegulatoryPaperEnrolmentFormState;
+  public regulatoryFormState: RegulatoryPageFormState;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public remoteAccessForm: FormGroup;
@@ -209,7 +209,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
-    this.regulatoryFormState = new RegulatoryPaperEnrolmentFormState(this.fb);
+    this.regulatoryFormState = new RegulatoryPageFormState(this.fb);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();

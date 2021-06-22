@@ -9,9 +9,9 @@ import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enro
 import { PaperEnrolmentProgressIndicatorComponent } from './shared/components/paper-enrolment-progress-indicator/paper-enrolment-progress-indicator.component';
 
 import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
-import { DemographicComponent } from './pages/demographic/demographic.component';
-import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
+import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
+import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 
@@ -19,9 +19,9 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
   declarations: [
     PaperEnrolmentDashboardComponent,
     PaperEnrolmentProgressIndicatorComponent,
-    DemographicComponent,
-    CareSettingComponent,
-    RegulatoryComponent,
+    DemographicPageComponent,
+    CareSettingPageComponent,
+    RegulatoryPageComponent,
     OboSitesPageComponent,
     SelfDeclarationPageComponent
   ],

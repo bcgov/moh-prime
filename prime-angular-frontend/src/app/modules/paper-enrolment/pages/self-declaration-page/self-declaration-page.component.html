@@ -2,8 +2,7 @@
 
   <app-page-header>PRIME Enrolment</app-page-header>
 
-  <app-paper-progress-indicator *ngIf="isInitialEnrolment"
-                                [inProgress]="isInitialEnrolment"></app-paper-progress-indicator>
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"

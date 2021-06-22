@@ -7,9 +7,9 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentGuard } from '@paper-enrolment/shared/guards/paper-enrolment.guard';
 import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
 
-import { DemographicComponent } from './pages/demographic/demographic.component';
-import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
+import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
+import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 
 const routes: Routes = [
@@ -25,19 +25,19 @@ const routes: Routes = [
         children: [
           {
             path: PaperEnrolmentRoutes.DEMOGRAPHIC,
-            component: DemographicComponent,
+            component: DemographicPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },
           {
             path: PaperEnrolmentRoutes.CARE_SETTING,
-            component: CareSettingComponent,
+            component: CareSettingPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },
           {
             path: PaperEnrolmentRoutes.REGULATORY,
-            component: RegulatoryComponent,
+            component: RegulatoryPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },
