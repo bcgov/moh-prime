@@ -12,7 +12,7 @@ using Prime.ViewModels.PaperEnrollees;
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/enrollees/paper-submissions")]
+    [Route("api/enrollees")]
     [ApiController]
     // [Authorize(Roles = Roles.TriageEnrollee)]
     [AllowAnonymous]
@@ -32,7 +32,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Creates a new Enrollee Paper Submission.
         /// </summary>
-        [HttpPost(Name = nameof(CreateEnrolleePaperSubmission))]
+        [HttpPost("paper-submissions", Name = nameof(CreateEnrolleePaperSubmission))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -48,6 +48,76 @@ namespace Prime.Controllers
                 new { enrolleeId = createdEnrolleeId },
                 enrollee
             );
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/care-settings
+        /// <summary>
+        /// Updates a Paper Submission's Care Settings.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/care-settings", Name = nameof(UpdateEnrolleePaperSubmissionCareSettings))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCareSettings(int enrolleeId)
+        {
+            return Ok("Care Setting Success!");
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/certifications
+        /// <summary>
+        /// Updates a Paper Submission's Certifications.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/certifications", Name = nameof(UpdateEnrolleePaperSubmissionCertifications))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId)
+        {
+            return Ok("Certification Success!");
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/demographics
+        /// <summary>
+        /// Updates a Paper Submission's demographic information.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/demographics", Name = nameof(UpdateEnrolleePaperSubmissionDemographics))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDemographics(int enrolleeId)
+        {
+            return Ok("Demographic Success!");
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/obo-sites
+        /// <summary>
+        /// Updates a Paper Submission's OBO Sites.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/obo-sites", Name = nameof(UpdateEnrolleePaperSubmissionOboSites))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionOboSites(int enrolleeId)
+        {
+            return Ok("OBO Site Success!");
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/self-declarations
+        /// <summary>
+        /// Updates a Paper Submission's Self Declaration information.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/self-declarations", Name = nameof(UpdateEnrolleePaperSubmissionSelfDeclarations))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId)
+        {
+            return Ok("Self Declaration Success!");
         }
     }
 }
