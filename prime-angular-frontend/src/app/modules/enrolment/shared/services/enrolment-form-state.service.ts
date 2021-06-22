@@ -26,9 +26,9 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 
-import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
+import { RegulatoryPaperEnrolmentFormState } from '@paper-enrolment/pages/regulatory/regulatory-paper-enrolment-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +38,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public identityDocumentForm: FormGroup;
   public bceidDemographicFormState: BceidDemographicFormState;
   public bcscDemographicFormState: BcscDemographicFormState;
-  public regulatoryFormState: RegulatoryFormState;
+  public regulatoryFormState: RegulatoryPaperEnrolmentFormState;
   public deviceProviderForm: FormGroup;
   public jobsForm: FormGroup;
   public remoteAccessForm: FormGroup;
@@ -209,7 +209,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
-    this.regulatoryFormState = new RegulatoryFormState(this.fb);
+    this.regulatoryFormState = new RegulatoryPaperEnrolmentFormState(this.fb);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();

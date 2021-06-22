@@ -6,6 +6,7 @@ export class PaperEnrolmentRoutes {
   public static CARE_SETTING = 'care-setting';
   public static REGULATORY = 'regulatory';
   public static JOB = 'job';
+  public static SELF_DECLARATION = 'self-declaration';
 
   public static routePath(route: string): string {
     return `/${PaperEnrolmentRoutes.MODULE_PATH}/${route}`;
@@ -15,7 +16,9 @@ export class PaperEnrolmentRoutes {
     return [
       PaperEnrolmentRoutes.DEMOGRAPHIC,
       PaperEnrolmentRoutes.CARE_SETTING,
-      PaperEnrolmentRoutes.REGULATORY
+      PaperEnrolmentRoutes.REGULATORY,
+      PaperEnrolmentRoutes.JOB,
+      PaperEnrolmentRoutes.SELF_DECLARATION
     ];
   }
 }

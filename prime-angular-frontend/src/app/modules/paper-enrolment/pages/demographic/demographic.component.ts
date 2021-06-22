@@ -114,11 +114,6 @@ export class DemographicComponent extends AbstractEnrolmentPage implements OnIni
     }
   }
 
-  /**
-   * @description
-   * Generic handler for the HTTP response. By default this covers update, and can
-   * also be used for create actions, or extended for any response.
-   */
   private handleResponse() {
     return pipe(
       map(() => {
