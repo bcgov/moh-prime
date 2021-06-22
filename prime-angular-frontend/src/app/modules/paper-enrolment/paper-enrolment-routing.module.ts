@@ -11,6 +11,7 @@ import { DemographicPageComponent } from './pages/demographic-page/demographic-p
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 const routes: Routes = [
   {
@@ -44,6 +45,12 @@ const routes: Routes = [
           {
             path: PaperEnrolmentRoutes.SELF_DECLARATION,
             component: SelfDeclarationPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
+            path: PaperEnrolmentRoutes.OVERVIEW,
+            component: OverviewPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },

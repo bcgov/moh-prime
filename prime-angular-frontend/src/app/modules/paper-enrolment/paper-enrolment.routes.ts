@@ -7,6 +7,7 @@ export class PaperEnrolmentRoutes {
   public static REGULATORY = 'regulatory';
   public static OBO_SITES = 'obo-sites';
   public static SELF_DECLARATION = 'self-declaration';
+  public static OVERVIEW = 'overview';
 
   public static routePath(route: string): string {
     return `/${PaperEnrolmentRoutes.MODULE_PATH}/${route}`;

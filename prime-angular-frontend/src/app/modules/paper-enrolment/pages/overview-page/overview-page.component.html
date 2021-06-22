@@ -1,0 +1,111 @@
+<app-page [busy]="busy">
+
+  <app-page-header>PRIME Profile</app-page-header>
+
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+
+  <div class="mb-5">
+    <app-alert *ngIf="!isInitialEnrolment"
+               type="info"
+               icon="error_outline"
+               class="mb-4">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Your enrolment requires renewal.
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        Renew your enrolment by {{ enrolment?.expiryDate | formatDate | default }} to maintain your access to PharmaNet.
+      </ng-container>
+    </app-alert>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Renew Enrolment' }}
+      </ng-container>
+      <ng-container *ngIf="isInitialEnrolment; else renewalSummary"
+                    appPageSubheaderSummary>
+        Review all the information to ensure it is accurate. You will not be approved if information is incorrect. If
+        you need to edit your information, use the pencil icon to navigate to that section.
+        <h3 *ngIf="enrolment?.expiryDate"
+            class="text-green mt-2">Renew Enrolment by {{ enrolment?.expiryDate | formatDate }}</h3>
+      </ng-container>
+      <ng-template #renewalSummary
+                   appPageSubheaderSummary>
+        Review the information below to ensure it is current and accurate. Inaccurate information may result in a delay
+        in your renewal for PharmaNet access. If any information below requires updating, use the pencil icon to
+        navigate to the appropriate editing screen.
+      </ng-template>
+    </app-page-subheader>
+  </div>
+
+  <button *ngIf="canRequestRemoteAccess() && currentStatus === EnrolmentStatus.EDITABLE && enrolment.appliedDate"
+          class="mb-4"
+          mat-stroked-button
+          color="primary"
+          (click)="routeTo(EnrolmentRoutes.REMOTE_ACCESS)">
+    <mat-icon class="mt-1 mr-1">notification_important</mat-icon>
+    Request Remote Access
+  </button>
+
+  <app-alert *ngIf="enrolment && !hasRegOrJob()"
+             type="danger"
+             icon="warning">
+    <ng-container #alertContent
+                  class="alert-content">
+      Your enrolment contains an error that will need to be updated before submission.
+    </ng-container>
+  </app-alert>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
+
+    <button *ngIf="identityProvider === IdentityProviderEnum.BCEID"
+            mat-icon-button
+            matTooltip="Edit Demographic"
+            (click)="routeTo(demographicRoutePath)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <app-enrollee-review *ngIf="enrolment"
+                       [showEditRedirect]="currentStatus === EnrolmentStatus.EDITABLE"
+                       [enrolment]="enrolment"
+                       (route)="routeTo($event)"></app-enrollee-review>
+
+  <div class="footer mb-4">
+    <app-alert *ngIf="enrolment && currentStatus !== EnrolmentStatus.EDITABLE"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        Your enrolment has already been submitted for adjudication and cannot be edited. If you have questions please
+        contact us at
+        <app-prime-phone></app-prime-phone>
+        or
+        <app-prime-support-email></app-prime-support-email>
+        .
+      </ng-container>
+    </app-alert>
+
+    <mat-checkbox #accept
+                  [disabled]="currentStatus !== EnrolmentStatus.EDITABLE">
+      <div class="pl-3">
+        I certify that all information provided is true and complete. I understand it is an offence under the
+        Pharmaceutical Services Act to knowingly provide false or misleading information.
+      </div>
+    </mat-checkbox>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col text-right">
+
+      <button mat-flat-button
+              color="primary"
+              [disabled]="!accept.checked || !hasRegOrJob()"
+              (click)="onSubmit()">Submit Enrolment
+      </button>
+
+    </div>
+  </div>
+
+</app-page>
