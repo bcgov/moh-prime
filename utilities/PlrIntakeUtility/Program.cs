@@ -22,7 +22,7 @@ namespace PlrIntakeUtility
             // See https://github.com/ExcelDataReader/ExcelDataReader#important-note-on-net-core
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            Log.Information($"Started loading at {DateTime.Now}");
+            Log.Information($"Started loading {args[0]} at {DateTime.Now}");
             try
             {
                 ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);

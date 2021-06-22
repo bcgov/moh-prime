@@ -91,49 +91,38 @@ namespace Prime.Services
             }
 
             // Ignore CPN, IPC, and MPID respectively
-            string ignoreOtherOidsExpression = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
-            var result = new PlrProvider
-            {
-                // Primary attributes for PRIME
-                Ipc = internalProviderCode,
-                Cpn = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.3']/@extension", documentRoot, messageId),
-                // At this point, IdentifierType as OID
-                IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@root", documentRoot, messageId),
-                CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{ignoreOtherOidsExpression}]/@extension", documentRoot, messageId),
-                ProviderRoleType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId),
-                FirstName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[1]", documentRoot, messageId),
-                SecondName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[2]", documentRoot, messageId),
-                ThirdName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[3]", documentRoot, messageId),
-                LastName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:family", documentRoot, messageId),
-                DateOfBirth = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:birthTime/@value", documentRoot, messageId)),
-                StatusCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/@code", documentRoot, messageId),
-                StatusReasonCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:subjectOf2/{Prefix}:roleActivation/{Prefix}:reasonCode/@code", documentRoot, messageId),
-                ConditionCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:code/@code", documentRoot, messageId),
+            const string nonCollegeIdXPathExpr = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
+            const string postalWorkplaceUseExpr = "@use='PST WP'";
+            var result = new PlrProvider();
+            // Not using C# object initializer syntax due to complexity
 
-                // Secondary attributes for PRIME
-                Address1Line1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:streetAddressLine[1]", documentRoot, messageId),
-                Address1Line2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:streetAddressLine[2]", documentRoot, messageId),
-                Address1Line3 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:streetAddressLine[3]", documentRoot, messageId),
-                City1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:city", documentRoot, messageId),
-                Province1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:state", documentRoot, messageId),
-                Country1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:country", documentRoot, messageId),
-                PostalCode1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:postalCode", documentRoot, messageId),
-                Address1StartDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[1]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId)),
+            // Primary attributes for PRIME
+            result.Ipc = internalProviderCode;
+            // At this point, IdentifierType as OID
+            result.IdentifierType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{nonCollegeIdXPathExpr}]/@root", documentRoot, messageId);
+            result.CollegeId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[{nonCollegeIdXPathExpr}]/@extension", documentRoot, messageId);
+            result.ProviderRoleType = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:code/@code", documentRoot, messageId);
+            result.FirstName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[1]", documentRoot, messageId);
+            result.SecondName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[2]", documentRoot, messageId);
+            result.ThirdName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:given[3]", documentRoot, messageId);
+            result.LastName = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:family", documentRoot, messageId);
+            result.DateOfBirth = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:birthTime/@value", documentRoot, messageId));
+            result.StatusCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/@code", documentRoot, messageId);
+            result.StatusReasonCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:subjectOf2/{Prefix}:roleActivation/{Prefix}:reasonCode/@code", documentRoot, messageId);
+            result.ConditionCode = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:code/@code", documentRoot, messageId);
+            result.ConditionStartDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:effectiveTime/{Prefix}:low/@value", documentRoot, messageId));
+            result.ConditionEndDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:responsibleFor/{Prefix}:privilege/{Prefix}:effectiveTime/{Prefix}:high/@value", documentRoot, messageId));
 
-                Address2Line1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:streetAddressLine[1]", documentRoot, messageId),
-                Address2Line2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:streetAddressLine[2]", documentRoot, messageId),
-                Address2Line3 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:streetAddressLine[3]", documentRoot, messageId),
-                City2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:city", documentRoot, messageId),
-                Province2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:state", documentRoot, messageId),
-                Country2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:country", documentRoot, messageId),
-                PostalCode2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:postalCode", documentRoot, messageId)
-            };
-
-            var dateValue = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[2]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId);
-            if (dateValue != null)
-            {
-                result.Address2StartDate = ParseHL7v3DateTime(dateValue);
-            }
+            // Secondary attributes for PRIME
+            result.Cpn = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.3']/@extension", documentRoot, messageId);
+            result.Address1Line1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:streetAddressLine[1]", documentRoot, messageId);
+            result.Address1Line2 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:streetAddressLine[2]", documentRoot, messageId);
+            result.Address1Line3 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:streetAddressLine[3]", documentRoot, messageId);
+            result.City1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:city", documentRoot, messageId);
+            result.Province1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:state", documentRoot, messageId);
+            result.Country1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:country", documentRoot, messageId);
+            result.PostalCode1 = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:postalCode", documentRoot, messageId);
+            result.Address1StartDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:addr[{postalWorkplaceUseExpr}]/{Prefix}:useablePeriod/{Prefix}:low/@value", documentRoot, messageId));
 
             // According to PLR team, Credentials will have a `reference` child node (i.e. designation text) ...
             result.Credentials = ReadMultiNodeData($"//{Prefix}:healthCareProvider/{Prefix}:relatedTo/{Prefix}:qualifiedEntity/{Prefix}:code[{Prefix}:originalText/{Prefix}:reference]/@code", documentRoot, messageId);
@@ -159,15 +148,10 @@ namespace Prime.Services
                 }
             }
             result.Gender = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:administrativeGenderCode/@code", documentRoot, messageId);
-            // result.Languages  // TODO: Verify with Vinder
             result.MspId = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:id[@root='2.16.840.1.113883.3.40.2.11']/@extension", documentRoot, messageId);
             result.NamePrefix = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:prefix", documentRoot, messageId);
             result.StatusStartDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/{Prefix}:validTime/{Prefix}:low/@value", documentRoot, messageId));
-            dateValue = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/{Prefix}:validTime/{Prefix}:high/@value", documentRoot, messageId);
-            if (dateValue != null)
-            {
-                result.StatusExpiryDate = ParseHL7v3DateTime(dateValue);
-            }
+            result.StatusExpiryDate = ParseHL7v3DateTime(ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:statusCode/{Prefix}:validTime/{Prefix}:high/@value", documentRoot, messageId));
             result.Suffix = ReadNodeData($"//{Prefix}:healthCarePrincipalPerson/{Prefix}:name[@use='L']/{Prefix}:suffix", documentRoot, messageId);
             string telephoneNumData = ReadNodeData($"//{Prefix}:healthCareProvider/{Prefix}:telecom[@use='WP' and starts-with(@value, 'tel')]/@value", documentRoot, messageId);
             if (telephoneNumData != null)
@@ -186,9 +170,16 @@ namespace Prime.Services
             return result;
         }
 
-        public static DateTime ParseHL7v3DateTime(string dateString)
+        public static DateTime? ParseHL7v3DateTime(string dateString)
         {
-            return DateTime.ParseExact(dateString, "yyyyMMddHHmmss", CultureInfo.InvariantCulture);
+            if (dateString != null)
+            {
+                return DateTime.TryParseExact(dateString, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out var date) ? date : (DateTime?)null;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public static string RemoveHL7v3TelecomType(string telecomValue)

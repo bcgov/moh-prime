@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,16 +13,18 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-using AutoMapper;
-using IdentityModel.Client;
-using Newtonsoft.Json;
+using Flurl;
 using Serilog;
-using Wkhtmltopdf.NetCore;
 using SoapCore;
+using AutoMapper;
+using Newtonsoft.Json;
+using Wkhtmltopdf.NetCore;
+using IdentityModel.Client;
+using FluentValidation.AspNetCore;
 
 using Prime.Auth;
 using Prime.Services;
@@ -29,7 +32,7 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
-using System.Threading.Tasks;
+using Prime.ViewModels.HealthAuthorities;
 
 namespace Prime
 {
@@ -85,6 +88,7 @@ namespace Prime
             ConfigureClients(services);
 
             services.AddControllers()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
@@ -136,7 +140,7 @@ namespace Prime
             .AddTransient<BearerTokenHandler<ChesClientCredentials>>()
             .AddSingleton(new ChesClientCredentials
             {
-                Address = $"{PrimeEnvironment.ChesApi.TokenUrl}/token",
+                Address = Url.Combine(PrimeEnvironment.ChesApi.TokenUrl, "token"),
                 ClientId = PrimeEnvironment.ChesApi.ClientId,
                 ClientSecret = PrimeEnvironment.ChesApi.ClientSecret
             })

@@ -16,62 +16,56 @@ namespace PlrIntakeUtility
         {
             PlrProvider provider = new PlrProvider();
             provider.Ipc = reader.GetString(GetIndex("A"));
-            provider.IdentifierType = reader.GetString(GetIndex("B"));
-            provider.CollegeId = reader.GetString(GetIndex("C"));
-            provider.ProviderRoleType = reader.GetString(GetIndex("D"));
-            provider.MspId = reader.GetString(GetIndex("E"));
-            provider.NamePrefix = reader.GetString(GetIndex("F"));
-            provider.FirstName = reader.GetString(GetIndex("G"));
-            provider.SecondName = reader.GetString(GetIndex("H"));
-            provider.ThirdName = reader.GetString(GetIndex("I"));
-            provider.LastName = reader.GetString(GetIndex("J"));
-            provider.Suffix = reader.GetString(GetIndex("K"));
-            provider.Gender = reader.GetString(GetIndex("L"));
-            provider.DateOfBirth = TryGetDateTime(reader, "M");
-            provider.StatusCode = reader.GetString(GetIndex("N"));
-            provider.StatusReasonCode = reader.GetString(GetIndex("O"));
-            provider.StatusStartDate = TryGetDateTime(reader, "P");
-            provider.StatusExpiryDate = TryGetDateTime(reader, "Q");
-            provider.Expertise = GetMultipleElements(reader.GetString(GetIndex("R")));
-            provider.Languages = reader.GetString(GetIndex("S"));
+            provider.Cpn = reader.GetString(GetIndex("B"));
+            provider.IdentifierType = reader.GetString(GetIndex("C"));
+            provider.CollegeId = reader.GetString(GetIndex("D"));
+            provider.ProviderRoleType = reader.GetString(GetIndex("E"));
+            provider.MspId = reader.GetString(GetIndex("F"));
+            provider.NamePrefix = reader.GetString(GetIndex("G"));
+            provider.FirstName = reader.GetString(GetIndex("H"));
+            provider.SecondName = reader.GetString(GetIndex("I"));
+            provider.ThirdName = reader.GetString(GetIndex("J"));
+            provider.LastName = reader.GetString(GetIndex("K"));
+            provider.Suffix = reader.GetString(GetIndex("L"));
+            provider.Gender = reader.GetString(GetIndex("M"));
+            provider.DateOfBirth = TryGetDateTime(reader, "N");
+            provider.StatusCode = reader.GetString(GetIndex("O"));
+            provider.StatusReasonCode = reader.GetString(GetIndex("P"));
+            provider.StatusStartDate = TryGetDateTime(reader, "Q");
+            provider.StatusExpiryDate = TryGetDateTime(reader, "R");
+            provider.Expertise = GetMultipleElements(reader.GetString(GetIndex("S")));
+            // PRIME not collecting Languages
+            // provider.Languages = reader.GetString(GetIndex("T"));
 
-            provider.Address1Line1 = reader.GetString(GetIndex("T"));
-            provider.Address1Line2 = reader.GetString(GetIndex("U"));
-            provider.Address1Line3 = reader.GetString(GetIndex("V"));
-            provider.City1 = reader.GetString(GetIndex("W"));
-            provider.Province1 = reader.GetString(GetIndex("X"));
-            provider.Country1 = reader.GetString(GetIndex("Y"));
-            provider.PostalCode1 = reader.GetString(GetIndex("Z"));
-            provider.Address1StartDate = TryGetDateTime(reader, "AA");
+            provider.Address1Line1 = reader.GetString(GetIndex("U"));
+            provider.Address1Line2 = reader.GetString(GetIndex("V"));
+            provider.Address1Line3 = reader.GetString(GetIndex("W"));
+            provider.City1 = reader.GetString(GetIndex("X"));
+            provider.Province1 = reader.GetString(GetIndex("Y"));
+            provider.Country1 = reader.GetString(GetIndex("Z"));
+            provider.PostalCode1 = reader.GetString(GetIndex("AA"));
+            provider.Address1StartDate = TryGetDateTime(reader, "AB");
 
-            provider.Address2Line1 = reader.GetString(GetIndex("AB"));
-            provider.Address2Line2 = reader.GetString(GetIndex("AC"));
-            provider.Address2Line3 = reader.GetString(GetIndex("AD"));
-            provider.City2 = reader.GetString(GetIndex("AE"));
-            provider.Province2 = reader.GetString(GetIndex("AF"));
-            provider.Country2 = reader.GetString(GetIndex("AG"));
-            provider.PostalCode2 = reader.GetString(GetIndex("AH"));
-            provider.Address2StartDate = TryGetDateTime(reader, "AI");
-
-            provider.Credentials = GetMultipleElements(reader.GetString(GetIndex("AJ")));
-
-            provider.TelephoneAreaCode = reader.GetString(GetIndex("AK"));
-            provider.TelephoneNumber = reader.GetString(GetIndex("AL"));
-            provider.FaxAreaCode = reader.GetString(GetIndex("AM"));
-            provider.FaxNumber = reader.GetString(GetIndex("AN"));
-            provider.Email = reader.GetString(GetIndex("AO"));
-            provider.ConditionCode = reader.GetString(GetIndex("AP"));
+            provider.Credentials = GetMultipleElements(reader.GetString(GetIndex("AC")));
+            provider.TelephoneAreaCode = reader.GetString(GetIndex("AD"));
+            provider.TelephoneNumber = reader.GetString(GetIndex("AE"));
+            provider.FaxAreaCode = reader.GetString(GetIndex("AF"));
+            provider.FaxNumber = reader.GetString(GetIndex("AG"));
+            provider.Email = reader.GetString(GetIndex("AH"));
+            provider.ConditionCode = reader.GetString(GetIndex("AI"));
+            provider.ConditionStartDate = TryGetDateTime(reader, "AJ");
+            provider.ConditionEndDate = TryGetDateTime(reader, "AK");
 
             return provider;
         }
 
         /// <summary>
-        /// Returns DateTime representing cell value, or `DateTime.MinValue` if cell is empty
+        /// Returns DateTime representing cell value, or `null` if cell is empty
         /// </summary>
-        private DateTime TryGetDateTime(IExcelDataReader reader, string columnId)
+        private DateTime? TryGetDateTime(IExcelDataReader reader, string columnId)
         {
             // If cell is empty, `reader.GetDateTime` will cause a `System.NullReferenceException: Object reference not set to an instance of an object.`
-            return (reader.IsDBNull(GetIndex(columnId)) ? DateTime.MinValue : reader.GetDateTime(GetIndex(columnId)));
+            return (reader.IsDBNull(GetIndex(columnId)) ? (DateTime?)null : reader.GetDateTime(GetIndex(columnId)));
         }
 
 

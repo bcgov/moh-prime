@@ -19,7 +19,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
-    public class EnrolleesController : ControllerBase
+    public class EnrolleesController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IAdminService _adminService;
@@ -46,7 +46,7 @@ namespace Prime.Controllers
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
@@ -57,12 +57,12 @@ namespace Prime.Controllers
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
                 var result = enrollees.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
-                return Ok(ApiResponse.Result(result));
+                return Ok(result);
             }
             else
             {
                 var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
-                return Ok(ApiResponse.Result(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee }));
+                return Ok(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee });
             }
         }
 
@@ -78,7 +78,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetAdjacentEnrolleeId(int enrolleeId)
         {
             var result = await _enrolleeService.GetAdjacentEnrolleeIdAsync(enrolleeId);
-            return Ok(ApiResponse.Result(result));
+            return Ok(result);
         }
 
         // GET: api/Enrollees/5
@@ -87,7 +87,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -97,7 +97,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdministrant());
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -109,7 +109,7 @@ namespace Prime.Controllers
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
             }
 
-            return Ok(ApiResponse.Result(enrollee));
+            return Ok(enrollee);
         }
 
         // POST: api/Enrollees
@@ -117,7 +117,7 @@ namespace Prime.Controllers
         /// Creates a new Enrollee.
         /// </summary>
         [HttpPost(Name = nameof(CreateEnrollee))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status201Created)]
@@ -125,14 +125,12 @@ namespace Prime.Controllers
         {
             if (payload?.Enrollee == null)
             {
-                ModelState.AddModelError("Enrollee", "Could not create an enrollee, the passed in Enrollee cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create an enrollee, the passed in Enrollee cannot be null.");
             }
 
             if (await _enrolleeService.UserIdExistsAsync(User.GetPrimeUserId()))
             {
-                ModelState.AddModelError("Enrollee.UserId", "An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("An enrollee already exists for this User Id, only one enrollee is allowed per User Id.");
             }
 
             var createModel = payload.Enrollee;
@@ -140,8 +138,7 @@ namespace Prime.Controllers
 
             if (!createModel.Validate(User))
             {
-                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             string filename = null;
@@ -152,14 +149,12 @@ namespace Prime.Controllers
                     filename = await _documentService.FinalizeDocumentUpload(payload.IdentificationDocumentGuid.Value, DestinationFolders.IdentificationDocuments);
                     if (string.IsNullOrWhiteSpace(filename))
                     {
-                        ModelState.AddModelError("documentGuid", "Identification document could not be created; network error or upload is already submitted");
-                        return BadRequest(ApiResponse.BadRequest(ModelState));
+                        return BadRequest("Identification document could not be created; network error or upload is already submitted");
                     }
                 }
                 else
                 {
-                    ModelState.AddModelError("documentGuid", "Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
-                    return BadRequest(ApiResponse.BadRequest(ModelState));
+                    return BadRequest("Identification Document Guid was not supplied with request; Cannot create enrollee without identification.");
                 }
             }
 
@@ -174,7 +169,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetEnrolleeById),
                 new { enrolleeId = createdEnrolleeId },
-                ApiResponse.Result(enrollee)
+                enrollee
             );
         }
 
@@ -187,7 +182,7 @@ namespace Prime.Controllers
         /// <param name="beenThroughTheWizard"></param>
         [HttpPut("{enrolleeId}", Name = nameof(UpdateEnrollee))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -196,14 +191,13 @@ namespace Prime.Controllers
         {
             if (enrollee == null)
             {
-                ModelState.AddModelError("Enrollee", "Profile update model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Profile update model cannot be null.");
             }
 
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -214,15 +208,13 @@ namespace Prime.Controllers
 
             if (!enrollee.Validate(User))
             {
-                ModelState.AddModelError("Enrollee", "One or more Properties did not match the information on the card.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("One or more Properties did not match the information on the card.");
             }
 
             // If the enrollee is not in the status of 'Editable', it cannot be updated
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.Editable))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Enrollee can not be updated when the current status is not 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee can not be updated when the current status is not 'Editable'.");
             }
 
             await _enrolleeService.UpdateEnrolleeAsync(enrolleeId, enrollee, beenThroughTheWizard);
@@ -247,12 +239,12 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(enrollee));
+            return Ok(enrollee);
         }
 
         // GET: api/Enrollees/5/statuses
@@ -261,7 +253,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -271,7 +263,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -280,7 +272,7 @@ namespace Prime.Controllers
 
             var enrollees = await _enrolleeService.GetEnrolmentStatusesAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(enrollees));
+            return Ok(enrollees);
         }
 
         // GET: api/Enrollees/5/adjudicator-notes
@@ -299,12 +291,12 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var adjudicationNotes = await _enrolleeService.GetEnrolleeAdjudicatorNotesAsync(enrollee.Id);
 
-            return Ok(ApiResponse.Result(adjudicationNotes));
+            return Ok(adjudicationNotes);
         }
 
         // POST: api/Enrollees/5/adjudicator-notes
@@ -324,12 +316,11 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (string.IsNullOrWhiteSpace(note))
             {
-                ModelState.AddModelError("note", "Adjudicator notes can't be null or empty.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Adjudicator notes can't be null or empty.");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -345,7 +336,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(CreateAdjudicatorNote),
                 new { enrolleeId },
-                ApiResponse.Result(createdAdjudicatorNote)
+                createdAdjudicatorNote
             );
         }
 
@@ -356,7 +347,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/status-reference", Name = nameof(CreateEnrolmentReference))]
         [Authorize(Roles = Roles.TriageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -365,7 +356,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
 
@@ -375,7 +366,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(CreateEnrolmentReference),
                 new { enrolleeId },
-                ApiResponse.Result(createdEnrolmentStatusReference)
+                createdEnrolmentStatusReference
             );
         }
 
@@ -387,7 +378,7 @@ namespace Prime.Controllers
         /// <param name="accessAgreementNote"></param>
         [HttpPut("{enrolleeId}/access-agreement-notes", Name = nameof(UpdateAccessAgreementNote))]
         [Authorize(Roles = Roles.ManageEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -398,25 +389,23 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             if (accessAgreementNote.EnrolleeId != 0 && enrolleeId != accessAgreementNote.EnrolleeId)
             {
-                ModelState.AddModelError("AccessAgreementNote.EnrolleeId", "Enrollee Id does not match with the payload.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee Id does not match with the payload.");
             }
 
             if (!await _enrolleeService.IsEnrolleeInStatusAsync(enrolleeId, StatusType.UnderReview))
             {
-                ModelState.AddModelError("Enrollee.CurrentStatus", "Access agreement notes can not be updated when the current status is 'Editable'.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Access agreement notes can not be updated when the current status is 'Editable'.");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var updatedNote = await _enrolleeService.UpdateEnrolleeNoteAsync(enrolleeId, admin.Id, accessAgreementNote);
 
-            return Ok(ApiResponse.Result(updatedNote));
+            return Ok(updatedNote);
         }
 
         // PUT: api/Enrollees/5/adjudicator?adjudicatorId=1
@@ -435,19 +424,19 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             var idir = await _adminService.GetAdminIdirAsync(adjudicatorId);
             if (idir == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId}."));
+                return NotFound($"Admin not found with id {adjudicatorId}.");
             }
 
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId, adjudicatorId);
             await _businessEventService.CreateAdminActionEventAsync(enrolleeId, "Admin claimed enrollee");
 
-            return Ok(ApiResponse.Result(idir));
+            return Ok(idir);
         }
 
         // DELETE: api/Enrollees/5/adjudicator
@@ -465,7 +454,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}."));
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
             }
 
             await _enrolleeService.UpdateEnrolleeAdjudicator(enrolleeId);
@@ -482,7 +471,7 @@ namespace Prime.Controllers
         /// <param name="businessEventTypeCodes"></param>
         [HttpGet("{enrolleeId}/events", Name = nameof(GetEnrolleeBusinessEvents))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -493,12 +482,12 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var events = await _enrolleeService.GetEnrolleeBusinessEventsAsync(enrolleeId, businessEventTypeCodes);
 
-            return Ok(ApiResponse.Result(events));
+            return Ok(events);
         }
 
         // POST: api/Enrollees/5/reminder
@@ -508,7 +497,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/reminder", Name = nameof(SendEnrolleeReminderEmail))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -519,7 +508,7 @@ namespace Prime.Controllers
 
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -545,7 +534,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
@@ -564,7 +553,7 @@ namespace Prime.Controllers
         /// <param name="selfDeclarationDocument"></param>
         [HttpPost("{enrolleeId}/self-declaration-document", Name = nameof(CreateSelfDeclarationDocument))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -574,7 +563,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.MatchesUserIdOf(User))
             {
@@ -583,7 +572,7 @@ namespace Prime.Controllers
 
             var sdd = await _enrolleeService.AddSelfDeclarationDocumentAsync(enrolleeId, selfDeclarationDocument);
 
-            return Ok(ApiResponse.Result(sdd));
+            return Ok(sdd);
         }
 
         // GET: api/Enrollees/{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}
@@ -593,7 +582,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         /// <param name="selfDeclarationDocumentId"></param>
         [HttpGet("{enrolleeId}/self-declaration-document/{selfDeclarationDocumentId}", Name = nameof(GetSelfDeclarationDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -603,7 +592,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -612,7 +601,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForSelfDeclarationDocument(selfDeclarationDocumentId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
 
         // GET: api/Enrollees/{enrolleeId}/identification-document/{identificationDocumentId}
@@ -623,7 +612,7 @@ namespace Prime.Controllers
         /// <param name="identificationDocumentId"></param>
         [HttpGet("{enrolleeId}/identification-document/{identificationDocumentId}", Name = nameof(GetIdentificationDocument))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -633,7 +622,7 @@ namespace Prime.Controllers
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             if (!record.AccessableBy(User))
             {
@@ -642,7 +631,7 @@ namespace Prime.Controllers
 
             var token = await _documentService.GetDownloadTokenForIdentificationDocument(identificationDocumentId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
 
         // POST: api/enrollees/5/adjudication-documents
@@ -653,7 +642,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpPost("{enrolleeId}/adjudication-documents", Name = nameof(CreateEnrolleeAdjudicationDocument))]
         [Authorize(Roles = Roles.ApproveEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -661,18 +650,17 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var document = await _enrolleeService.AddEnrolleeAdjudicationDocumentAsync(enrolleeId, documentGuid, admin.Id);
             if (document == null)
             {
-                ModelState.AddModelError("documentGuid", "Enrollee Adjudication Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Enrollee Adjudication Document could not be created; network error or upload is already submitted");
             }
 
-            return Ok(ApiResponse.Result(document));
+            return Ok(document);
         }
 
         // GET: api/enrollees/5/adjudication-documents
@@ -682,7 +670,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents", Name = nameof(GetEnrolleeAdjudicationDocuments))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -690,12 +678,12 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(documents));
+            return Ok(documents);
         }
 
         // GET: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
@@ -706,7 +694,7 @@ namespace Prime.Controllers
         /// <param name="documentId"></param>
         [HttpGet("{enrolleeId}/adjudication-documents/{documentId}", Name = nameof(GetEnrolleeAdjudicationDocument))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
@@ -715,12 +703,12 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var token = await _documentService.GetDownloadTokenForEnrolleeAdjudicationDocument(documentId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
 
         // DELETE: api/Enrollees/{enrolleeId}/adjudication-documents/{documentId}
@@ -739,12 +727,12 @@ namespace Prime.Controllers
             var document = await _enrolleeService.GetEnrolleeAdjudicationDocumentAsync(documentId);
             if (document == null)
             {
-                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+                return NotFound($"Document not found with id {documentId}");
             }
 
             await _enrolleeService.DeleteEnrolleeAdjudicationDocumentAsync(documentId);
 
-            return Ok(ApiResponse.Result(document));
+            return Ok(document);
         }
 
         // GET: api/Enrollees/{enrolleeId}/current-status
@@ -754,7 +742,7 @@ namespace Prime.Controllers
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/current-status", Name = nameof(GetEnrolleeCurrentStatus))]
         [Authorize(Roles = Roles.ViewEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentStatus>), StatusCodes.Status200OK)]
@@ -763,12 +751,12 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (enrollee == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var status = await _enrolleeService.GetEnrolleeCurrentStatusAsync(enrolleeId);
 
-            return Ok(ApiResponse.Result(status));
+            return Ok(status);
         }
 
         // POST: api/Enrollees/5/adjudicator-notes/6/notification
@@ -788,18 +776,18 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
             if (note == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee note not found with id {adjudicatorNoteId}"));
+                return NotFound($"Enrollee note not found with id {adjudicatorNoteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var notification = await _enrolleeService.CreateEnrolleeNotificationAsync(note.Id, admin.Id, assigneeId);
 
-            return Ok(ApiResponse.Result(notification));
+            return Ok(notification);
         }
 
         // DELETE: api/Enrollees/5/adjudicator-notes/6/notification
@@ -818,12 +806,12 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
             var note = await _enrolleeService.GetEnrolleeAdjudicatorNoteAsync(enrolleeId, adjudicatorNoteId);
             if (note == null || note.EnrolleeNotification == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee note with notification not found with id {adjudicatorNoteId}"));
+                return NotFound($"Enrollee note with notification not found with id {adjudicatorNoteId}");
             }
 
             await _enrolleeService.RemoveEnrolleeNotificationAsync(note.EnrolleeNotification.Id);
@@ -846,14 +834,14 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var notes = await _enrolleeService.GetNotificationsAsync(enrolleeId, admin.Id);
 
-            return Ok(ApiResponse.Result(notes));
+            return Ok(notes);
         }
 
         // Delete: api/Enrollees/5/notifications
@@ -871,7 +859,7 @@ namespace Prime.Controllers
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with id {enrolleeId}"));
+                return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
             await _enrolleeService.RemoveNotificationsAsync(enrolleeId);
@@ -892,7 +880,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEnrolleeEmails([FromQuery] BulkEmailType bulkEmailType)
         {
             var emails = await _enrolleeService.GetEnrolleeEmails(bulkEmailType);
-            return Ok(ApiResponse.Result(emails));
+            return Ok(emails);
         }
     }
 }

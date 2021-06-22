@@ -29,9 +29,7 @@ import { EnrolleeOverviewComponent } from './pages/enrollee-overview/enrollee-ov
 import { SiteOverviewComponent } from './pages/site-overview/site-overview.component';
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
-import { HealthAuthorityAuthorizedUserPageComponent } from './pages/health-authority-authorized-user-page/health-authority-authorized-user-page.component';
-import { HealthAuthorityAuthorizedUsersPageComponent } from './pages/health-authority-authorized-users-page/health-authority-authorized-users-page.component';
-import { HealthAuthorityOrganizationInformationPageComponent } from './pages/health-authority-organization-information-page/health-authority-organization-information-page.component';
+import { HealthAuthOrgInfoPageComponent } from './pages/health-authorities/health-auth-org-info-page/health-auth-org-info-page.component';
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
@@ -39,9 +37,17 @@ import { EmailNotificationViewPageComponent } from './pages/email-notification-v
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 
+import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
+import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
+import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
+import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
+import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
+import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+
 const routes: Routes = [
   {
-    path: AdjudicationRoutes.MODULE_PATH,
+    path: '',
     component: AdjudicationDashboardComponent,
     canActivate: [
       AuthenticationGuard,
@@ -210,6 +216,8 @@ const routes: Routes = [
             ]
           },
           {
+            // Site registrations is synonymous with organization with regards
+            // to Community Pharmacy and Practice
             path: `:oid/${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
             children: [
               {
@@ -250,32 +258,70 @@ const routes: Routes = [
             ]
           },
           {
-            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.AUTHORIZED_USERS}`,
+            // TODO split out from under site registration into own module and lazy load, but
+            //      requires reworking of the page specific routing to use absolute paths
+            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid`,
             children: [
               {
-                path: '',
-                component: HealthAuthorityAuthorizedUsersPageComponent,
-                data: { title: 'Authorized Users' }
-              },
-              {
-                path: AdjudicationRoutes.CREATE_USER,
-                component: HealthAuthorityAuthorizedUserPageComponent,
-                data: { title: 'Authorized User' }
-              },
-              {
-                path: `:auid`,
-                component: HealthAuthorityAuthorizedUserPageComponent,
-                data: { title: 'Authorized User' }
-              }
-            ]
-          },
-          {
-            path: `${AdjudicationRoutes.HEALTH_AUTHORITIES}/:haid/${AdjudicationRoutes.ORGANIZATION_INFORMATION}`,
-            children: [
-              {
-                path: '',
-                component: HealthAuthorityOrganizationInformationPageComponent,
+                path: AdjudicationRoutes.ORGANIZATION_INFORMATION,
+                component: HealthAuthOrgInfoPageComponent,
                 data: { title: 'Organization Information' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES,
+                component: HealthAuthCareTypesPageComponent,
+                data: { title: 'Health Authority Care Types' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_VENDORS,
+                component: VendorsPageComponent,
+                data: { title: 'Vendors' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER,
+                component: PrivacyOfficerPageComponent,
+                data: { title: 'Privacy Officer' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
+                component: TechnicalSupportsPageComponent,
+                data: { title: 'Technical Support Contacts' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,
+                component: AdministratorsPageComponent,
+                data: { title: 'Administrator Contacts' }
+              },
+              {
+                path: AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS,
+                children: [
+                  {
+                    path: '',
+                    component: AuthorizedUsersPageComponent,
+                    data: { title: 'Authorized Users' }
+                  },
+                  // TODO combine the last two routes into a single route passing /0 for create users
+                  // {
+                  //   path: `${ AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USER }/:auid`,
+                  //   component: AuthorizedUserPageComponent,
+                  //   data: { title: 'Authorized User' }
+                  // }
+                  {
+                    path: AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USER,
+                    component: AuthorizedUserPageComponent,
+                    data: { title: 'Authorized User' }
+                  },
+                  {
+                    path: `:auid`,
+                    component: AuthorizedUserPageComponent,
+                    data: { title: 'Authorized User' }
+                  }
+                ]
+              },
+              {
+                path: '',
+                redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
+                pathMatch: 'full'
               }
             ]
           }
@@ -299,4 +345,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule { }
+export class AdjudicationRoutingModule {}

@@ -9,7 +9,6 @@ import { AppConfigModule } from './app-config.module';
 import { AppComponent } from './app.component';
 
 import { RootRoutesModule } from '@lib/modules/root-routes/root-routes.module';
-import { AdjudicationModule } from '@adjudication/adjudication.module';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
 
@@ -22,10 +21,9 @@ import { SiteRegistrationModule } from '@registration/site-registration.module';
     AppConfigModule,
     RootRoutesModule,
     EnrolmentModule, // TODO lazy load this module
-    AdjudicationModule, // TODO lazy load this module
     SiteRegistrationModule, // TODO lazy load this module
     AppRoutingModule // WARNING: MUST be the last routing module imported!!!
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

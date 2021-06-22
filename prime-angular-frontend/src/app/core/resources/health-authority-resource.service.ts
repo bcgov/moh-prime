@@ -5,18 +5,19 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { Contact } from '@lib/models/contact.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 // TODO move to @lib/models
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
-
-// TODO move to @lib/models
-import { Organization } from '@registration/shared/models/organization.model';
-import { RemoteUser } from '@registration/shared/models/remote-user.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { Organization } from '@registration/shared/models/organization.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +27,72 @@ export class HealthAuthorityResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private capitalizePipe: CapitalizePipe
   ) { }
+
+  public getHealthAuthorities(): Observable<HealthAuthorityList[]> {
+    return this.apiResource.get<HealthAuthorityList[]>(`health-authorities`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthorityList[]>) => response.result),
+        tap((healthAuthorities: HealthAuthorityList[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authorities could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorities error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthorityById(healthAuthorityId: number): Observable<HealthAuthority> {
+    return this.apiResource.get<HealthAuthority>(`health-authorities/${healthAuthorityId}`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthority>) => response.result),
+        tap((healthAuthority: HealthAuthority) => this.logger.info('HEALTH_AUTHORITY', healthAuthority)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateCareTypes(healthAuthorityId: number, careTypes: string[]): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/care-types`, careTypes)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority care types could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateCareTypes error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateVendors(healthAuthorityId: number, vendorCodes: number[]): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/vendors`, vendorCodes)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority vendors could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateVendors error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updatePrivacyOfficer(healthAuthorityId: number, contact: Contact): NoContent {
+    // Only a single privacy officer, but creates parity with other contact endpoints
+    return this.updateContacts(healthAuthorityId, 'privacy-officers', [contact]);
+  }
+
+  public updateTechnicalSupports(healthAuthorityId: number, contacts: Contact[]): NoContent {
+    return this.updateContacts(healthAuthorityId, 'technical-supports', contacts);
+  }
+
+  public updatePharmanetAdministrators(healthAuthorityId: number, contacts: Contact[]): NoContent {
+    return this.updateContacts(healthAuthorityId, 'pharmanet-administrators', contacts);
+  }
 
   public getAuthorizedUserByUserId(userId: string): Observable<AuthorizedUser | null> {
     return this.apiResource.get<AuthorizedUser>(`parties/authorized-users/${userId}`)
@@ -168,14 +233,17 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthorityCodesWithUnderReviewUsers(): Observable<HealthAuthorityEnum[]> {
-    return this.apiResource.get<HealthAuthorityEnum[]>(`health-authorities/under-review`)
+  private updateContacts(
+    healthAuthorityId: number,
+    contactType: 'privacy-officers' | 'technical-supports' | 'pharmanet-administrators',
+    contact: Contact[]
+  ): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/${contactType}`, contact)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthorityEnum[]>) => response.result),
-        tap((code: HealthAuthorityEnum[]) => this.logger.info('HA_CODES', code)),
+        NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Health Authority Codes could not be retrieved');
-          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorityCodesWithUnderReviewUsers error has occurred: ', error);
+          this.toastService.openErrorToast(`Health authority ${contactType.replace('-', ' ')} could not be updated`);
+          this.logger.error(`[Core] HealthAuthorityResource::update${this.capitalizePipe.transform(contactType.replace('-', ' '), true)} error has occurred: `, error);
           throw error;
         })
       );
