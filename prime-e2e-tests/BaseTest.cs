@@ -15,6 +15,8 @@ namespace TestPrimeE2E
     {
         protected IWebDriver _driver;
 
+        private Faker faker = new Faker();
+
 
         [SetUp]
         public void TestSetup()
@@ -154,6 +156,12 @@ namespace TestPrimeE2E
         protected string GetCanadianPostalCode(Address anAddress)
         {
             return anAddress.ZipCode("?#? #?#");
+        }
+
+
+        protected string GeneratePecLikeString()
+        {
+            return faker.Random.String2(3).ToUpper();
         }
 
 
