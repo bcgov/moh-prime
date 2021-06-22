@@ -1,7 +1,7 @@
 using System;
 using Prime.Models;
 
-namespace Prime.ViewModels
+namespace Prime.ViewModels.PaperEnrollee
 {
     public class PaperEnrolleeDemographicViewModel
     {
