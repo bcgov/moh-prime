@@ -15,6 +15,9 @@ namespace Prime.Models
         /// <summary>PLR's internal identifier, Internal Party Code.</summary>
         public string Ipc { get; set; }
 
+        /// <summary>A physical person in multiple roles will have a common CPN (PLR's Common Party Number) for each PLR record representing that role, e.g. a person who is both a MD and Pharmacist</summary>
+        public string Cpn { get; set; }
+
         /// <summary>The type of identifier that <c>CollegeId</c> represents.</summary>
         public string IdentifierType { get; set; }
 
@@ -39,19 +42,17 @@ namespace Prime.Models
 
         public string Gender { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         public string StatusCode { get; set; }
 
         public string StatusReasonCode { get; set; }
 
-        public DateTime StatusStartDate { get; set; }
+        public DateTime? StatusStartDate { get; set; }
 
-        public DateTime StatusExpiryDate { get; set; }
+        public DateTime? StatusExpiryDate { get; set; }
 
         public ICollection<string> Expertise { get; set; }
-
-        public string Languages { get; set; }
 
         public string Address1Line1 { get; set; }
 
@@ -67,23 +68,7 @@ namespace Prime.Models
 
         public string PostalCode1 { get; set; }
 
-        public DateTime Address1StartDate { get; set; }
-
-        public string Address2Line1 { get; set; }
-
-        public string Address2Line2 { get; set; }
-
-        public string Address2Line3 { get; set; }
-
-        public string City2 { get; set; }
-
-        public string Province2 { get; set; }
-
-        public string Country2 { get; set; }
-
-        public string PostalCode2 { get; set; }
-
-        public DateTime Address2StartDate { get; set; }
+        public DateTime? Address1StartDate { get; set; }
 
         public ICollection<string> Credentials { get; set; }
 
@@ -98,5 +83,9 @@ namespace Prime.Models
         public string Email { get; set; }
 
         public string ConditionCode { get; set; }
+
+        public DateTime? ConditionStartDate { get; set; }
+
+        public DateTime? ConditionEndDate { get; set; }
     }
 }
