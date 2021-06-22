@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -15,6 +15,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import {
   PrivacyOfficePageFormState
 } from '@adjudication/pages/health-authorities/privacy-office-page/privacy-office-page-form-state.class';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
   selector: 'app-privacy-officer-page',
@@ -22,7 +23,6 @@ import {
   styleUrls: ['./privacy-office-page.component.scss']
 })
 export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements OnInit {
-  public busy: Subscription;
   public title: string;
   public formState: PrivacyOfficePageFormState;
   public isInitialEntry: boolean;
@@ -73,9 +73,8 @@ export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements
       });
   }
 
-  protected performSubmission(): Observable<unknown> {
-    return this.healthAuthResource
-      .updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.json);
+  protected performSubmission(): NoContent {
+    return this.healthAuthResource.updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.json);
   }
 
   protected onSubmitFormIsInvalid(): void {

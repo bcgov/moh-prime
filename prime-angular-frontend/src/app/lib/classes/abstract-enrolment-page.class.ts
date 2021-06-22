@@ -156,11 +156,14 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * method, but also useful if invoked from within the initForm method
    * when listeners need to be setup before and after patching the form.
    *
+   * @param model optional parameter to reduce the rigidity of invoking
+   * the method in case a member variable is not available.
+   *
    * @returns unknown to allow for flexibility when implemented, which
    * is can be useful as an observable when the sequence during patching
    * is asynchronous, but otherwise should be void
    */
-  protected abstract patchForm(): unknown;
+  protected abstract patchForm(model?: unknown): unknown;
 
   /**
    * @description

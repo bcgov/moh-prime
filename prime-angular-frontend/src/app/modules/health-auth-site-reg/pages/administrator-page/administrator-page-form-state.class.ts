@@ -1,8 +1,8 @@
+import { FormBuilder } from '@angular/forms';
+
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Contact } from '@lib/models/contact.model';
-import { FormBuilder, Validators } from '@angular/forms';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 export class AdministratorPageFormState extends AbstractFormState<Contact[]> {
