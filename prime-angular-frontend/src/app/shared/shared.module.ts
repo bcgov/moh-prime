@@ -102,6 +102,7 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
 import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
 import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
 import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
+import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.component';
 
 @NgModule({
   declarations: [
@@ -186,7 +187,8 @@ import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fiel
     BannerComponent,
     SendBulkEmailComponent,
     PaginatorComponent,
-    DoingBusinessAsFormFieldComponent
+    DoingBusinessAsFormFieldComponent,
+    OboSiteFormComponent
   ],
   imports: [
     CommonModule,

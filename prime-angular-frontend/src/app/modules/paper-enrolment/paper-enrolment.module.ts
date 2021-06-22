@@ -12,6 +12,7 @@ import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { OboSitesComponent } from './pages/obo-sites/obo-sites.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
     PaperEnrolmentDashboardComponent,
     PaperEnrolmentProgressIndicatorComponent,
     CareSettingComponent,
-    RegulatoryComponent
+    RegulatoryComponent,
+    OboSitesComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,

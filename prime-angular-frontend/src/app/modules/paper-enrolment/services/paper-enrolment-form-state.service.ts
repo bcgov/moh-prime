@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl, FormControl } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
-import { ArrayUtils } from '@lib/utils/array-utils.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfigService } from '@config/config.service';
 import { LoggerService } from '@core/services/logger.service';
@@ -12,18 +10,12 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-
-import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
-import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { DemographicFormState } from '@paper-enrolment/pages/demographic/demographic-form-state.class';
 import { CareSettingFormState } from '@paper-enrolment/pages/care-setting/care-setting-form-state.class';
+import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites/obo-sites-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +25,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
   public demographicFormState: DemographicFormState;
   public careSettingFormState: CareSettingFormState;
   public regulatoryFormState: RegulatoryFormState;
-  public jobsForm: FormGroup;
+  public jobsFormState: OboSiteFormState;
   public selfDeclarationForm: FormGroup;
   public accessAgreementForm: FormGroup;
 
@@ -45,7 +37,6 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     protected routeStateService: RouteStateService,
     protected logger: LoggerService,
     protected formUtilsService: FormUtilsService,
-    private authService: AuthService,
     private configService: ConfigService
   ) {
     super(fb, routeStateService, logger);
@@ -83,7 +74,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     const userId = this.userId;
     const profile = this.demographicFormState.json;
     const certifications = this.regulatoryFormState.json;
-    const { oboSites } = this.jobsForm.getRawValue();
+    const { oboSites } = this.jobsFormState.json;
     const careSettings = this.careSettingFormState.convertCareSettingFormToJson(id);
     const selfDeclarations = this.convertSelfDeclarationsToJson();
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
@@ -111,7 +102,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       this.demographicFormState.form,
       this.careSettingFormState.form,
       this.regulatoryFormState.form,
-      this.jobsForm,
+      this.jobsFormState.form,
       this.selfDeclarationForm,
     ];
   }
@@ -129,7 +120,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
    * Check for the requirement of at least one certification, or one obo site/job.
    */
   public hasCertificateOrJob(): boolean {
-    const oboSites = this.jobsForm.get('oboSites') as FormArray;
+    const oboSites = this.jobsFormState.oboSites;
     const certifications = this.regulatoryFormState.certifications;
     const enrolleeHealthAuthorities = this.careSettingFormState.form.get('enrolleeHealthAuthorities') as FormArray;
     let hasOboSiteForEveryHA = true;
@@ -167,7 +158,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     this.demographicFormState = new DemographicFormState(this.fb, this.formUtilsService);
     this.careSettingFormState = new CareSettingFormState(this.fb, this.configService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
-    this.jobsForm = this.buildJobsForm();
+    this.jobsFormState = new OboSiteFormState(this.fb, this.formUtilsService, this.configService);
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
@@ -182,44 +173,9 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     }
 
     this.demographicFormState.patchValue(enrolment.enrollee);
-
     this.careSettingFormState.patchValue(enrolment);
-
-    if (enrolment.oboSites.length) {
-      const oboSites = this.jobsForm.get('oboSites') as FormArray;
-      const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
-      const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
-      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
-
-      oboSites.clear();
-      communityHealthSites.clear();
-      communityPharmacySites.clear();
-      Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => healthAuthoritySites.removeControl(healthAuthorityCode));
-
-      enrolment.oboSites.forEach((s: OboSite) => {
-        const site = this.buildOboSiteForm();
-        site.patchValue(s);
-        oboSites.push(site);
-
-        switch (s.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            this.addNonHealthAuthorityOboSite(site, communityHealthSites);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            this.addNonHealthAuthorityOboSite(site, communityPharmacySites);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.addHealthAuthorityOboSite(site, healthAuthoritySites, s.healthAuthorityCode);
-            break;
-          }
-        }
-      });
-    }
-
     this.regulatoryFormState.patchValue(enrolment.certifications);
-    this.jobsForm.patchValue(enrolment);
+    this.jobsFormState.patchValue(enrolment);
 
     const defaultValue = (enrolment.profileCompleted) ? false : null;
     const selfDeclarationsTypes = {
@@ -395,49 +351,6 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
         '',
         []
       ]
-    });
-  }
-
-  public addNonHealthAuthorityOboSite(siteForm: FormGroup, siteFormList: FormArray) {
-    const siteName = siteForm.get('siteName') as FormControl;
-    this.formUtilsService.setValidators(siteName, [Validators.required]);
-    siteFormList.push(siteForm);
-  }
-
-  /**
-   * @param haSiteForm - aka Health Authority Facility Form
-   * @param healthAuthoritySites - a FormArray where each element, representing a Health Authority where the enrollee
-   * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
-   * at, in that Health Authority
-   */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
-    const facilityName = haSiteForm.get('facilityName') as FormControl;
-    this.formUtilsService.setValidators(facilityName, [Validators.required]);
-    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
-    if (!sitesOfHealthAuthority) {
-      sitesOfHealthAuthority = this.fb.array([]);
-      sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
-      healthAuthoritySites.setControl(String(healthAuthorityCode), sitesOfHealthAuthority);
-    }
-    sitesOfHealthAuthority.push(haSiteForm);
-  }
-
-  public removeUnselectedHAOboSites() {
-    // Obo Sites need to be removed from two different collections
-    const oboSites = this.jobsForm.get('oboSites') as FormArray;
-    const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
-    const enrolleeHealthAuthorities = this.careSettingFormState.form.get('enrolleeHealthAuthorities') as FormArray;
-    // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
-    this.configService.healthAuthorities.forEach((healthAuthority, index) => {
-      if (!enrolleeHealthAuthorities.at(index).value) {
-        for (let i = oboSites.controls.length - 1; i >= 0; i--) {
-          const oboSiteForm = oboSites.controls[i] as FormGroup;
-          if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
-            oboSites.removeAt(i);
-          }
-        }
-        healthAuthoritySites.removeControl(String(healthAuthority.code));
-      }
     });
   }
 

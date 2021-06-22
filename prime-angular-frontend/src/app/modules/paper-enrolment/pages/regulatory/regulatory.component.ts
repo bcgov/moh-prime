@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -15,7 +15,6 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { optionalAddressLineItems } from '@shared/models/address.model';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { pipe } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
@@ -80,6 +79,7 @@ export class RegulatoryComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   public onSubmit(): void {
+    this.removeIncompleteCertifications(true);
     this.nextRouteAfterSubmit();
 
     // if (this.formUtilsService.checkValidity(this.form)) {
@@ -218,9 +218,7 @@ export class RegulatoryComponent extends AbstractEnrolmentPage implements OnInit
     this.removeIncompleteCertifications(true);
 
     if (this.certifications.length) {
-      const form = this.paperEnrolmentFormStateService.jobsForm;
-      const oboSites = form.get('oboSites') as FormArray;
-      oboSites.clear();
+      this.paperEnrolmentFormStateService.jobsFormState.oboSites.clear();
     }
   }
 

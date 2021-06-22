@@ -1,0 +1,141 @@
+<app-page [busy]="busy">
+
+  <app-page-header>PRIME Profile</app-page-header>
+
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <section>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Site Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          You must provide the address and job title for every place you work, in each care setting you indicated.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <ng-container *ngFor="let careSetting of careSettings">
+            <app-page-subheader headerType="h6">
+              <ng-container appPageSubheaderTitle>
+                {{ careSetting.careSettingCode | configCode: 'careSettings' }}
+              </ng-container>
+            </app-page-subheader>
+
+            <ng-container [ngSwitch]="careSetting.careSettingCode">
+
+              <ng-container *ngSwitchCase="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE"
+                            formArrayName="communityHealthSites">
+
+                <ng-container *ngFor="let site of formState.communityHealthSites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
+
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="communityHealthSites.controls.length"
+                                     [last]="last"
+                                     [jobNames]="jobNames"
+                                     [allowDefaultOption]="allowDefaultOption"
+                                     [defaultOptionLabel]="defaultOptionLabel"
+                                     (remove)="formState.removeOboSite($event, careSetting.careSettingCode)">
+                  </app-obo-site-form>
+
+                </ng-container>
+                <button mat-button
+                        class="mb-4"
+                        type="button"
+                        color="primary"
+                        (click)="formState.addOboSite(careSetting.careSettingCode)">
+                  <mat-icon>add</mat-icon>
+                  Add Additional Site
+                </button>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="CareSettingEnum.COMMUNITY_PHARMACIST"
+                            formArrayName="communityPharmacySites">
+
+                <ng-container *ngFor="let site of communityPharmacySites.controls; let i = index; let last = last"
+                              [formGroupName]="i">
+
+                  <app-obo-site-form [form]="site"
+                                     [index]="i"
+                                     [careSettingCode]="careSetting.careSettingCode"
+                                     [site]="site"
+                                     [total]="communityPharmacySites.controls.length"
+                                     [last]="last"
+                                     [jobNames]="jobNames"
+                                     [allowDefaultOption]="allowDefaultOption"
+                                     [defaultOptionLabel]="defaultOptionLabel"
+                                     (remove)="removeOboSite($event, careSetting.careSettingCode)"></app-obo-site-form>
+
+                </ng-container>
+                <button mat-button
+                        class="mb-4"
+                        type="button"
+                        color="primary"
+                        (click)="addOboSite(careSetting.careSettingCode)">
+                  <mat-icon>add</mat-icon>
+                  Add Additional Site
+                </button>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY">
+                <!-- Protect against case code called from `initForm` not completed yet -->
+                <div *ngIf="hasHealthAuthoritySites">
+
+                  <ng-container *ngFor="let eha of enrolment?.enrolleeHealthAuthorities; let i = index"
+                                formGroupName="healthAuthoritySites">
+
+                    <ng-container *ngFor="let site of healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"
+                                  [formArrayName]="eha.healthAuthorityCode">
+
+                      <app-obo-site-form [form]="site"
+                                         [index]="j"
+                                         [careSettingCode]="careSetting.careSettingCode"
+                                         [healthAuthorityName]="eha.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
+                                         [site]="site"
+                                         [total]="healthAuthoritySitesAsControls(eha.healthAuthorityCode).length"
+                                         [last]="last"
+                                         [jobNames]="jobNames"
+                                         [allowDefaultOption]="allowDefaultOption"
+                                         [defaultOptionLabel]="defaultOptionLabel"
+                                         (remove)="removeOboSite($event, careSetting.careSettingCode, eha.healthAuthorityCode)">
+                      </app-obo-site-form>
+
+                    </ng-container>
+                    <button mat-button
+                            class="mb-4"
+                            type="button"
+                            color="primary"
+                            (click)="addOboSite(careSetting.careSettingCode, eha.healthAuthorityCode)">
+                      <mat-icon>add</mat-icon>
+                      Add Additional Site
+                    </button>
+
+                  </ng-container>
+
+                </div>
+              </ng-container>
+
+            </ng-container>
+
+
+          </ng-container>
+
+        </div>
+      </div>
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   (save)="onSubmit()"
+                   (back)="routeBackTo()"></app-page-footer>
+
+</app-page>

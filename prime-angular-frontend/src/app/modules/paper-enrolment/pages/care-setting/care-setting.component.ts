@@ -81,7 +81,7 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
     }
 
     // If an individual health authority was deselected, its Obo Sites should be removed as well
-    this.paperEnrolmentFormStateService.removeUnselectedHAOboSites();
+    this.paperEnrolmentFormStateService.jobsFormState.removeUnselectedHAOboSites(this.enrolment);
 
     // if (this.formUtilsService.checkValidity(this.form)) {
     //   this.handleSubmission();
@@ -178,7 +178,6 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
     }
   }
 
-
   protected patchForm(): void {
     // Will be null if enrolment has not been created
     const enrolment = this.paperEnrolmentService.enrolment;
@@ -211,7 +210,7 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
   }
 
   private nextRouteAfterSubmit(): void {
-    const oboSites = this.paperEnrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
+    const oboSites = this.paperEnrolmentFormStateService.jobsFormState.oboSites.value as OboSite[];
 
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
     if (oboSites?.length) {
@@ -245,8 +244,8 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
    * Remove obo sites by care setting if a care setting was removed from the enrolment
    */
   private removeOboSites(careSettingCode: number): void {
-    const form = this.paperEnrolmentFormStateService.jobsForm;
-    const oboSites = form.get('oboSites') as FormArray;
+    const form = this.paperEnrolmentFormStateService.jobsFormState;
+    const oboSites = form.oboSites as FormArray;
 
     oboSites.value?.forEach((site: OboSite, index: number) => {
       if (site.careSettingCode === careSettingCode) {
@@ -262,13 +261,13 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return clear(form.get('communityHealthSites') as FormArray);
+        return clear(form.communityHealthSites);
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return clear(form.get('communityPharmacySites') as FormArray);
+        return clear(form.communityPharmacySites);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const healthAuthoritySites = form.get('healthAuthoritySites') as FormGroup;
+        const healthAuthoritySites = form.healthAuthoritySites as FormGroup;
         Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => {
           const sitesOfHealthAuthority = healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
           sitesOfHealthAuthority.clearValidators();
