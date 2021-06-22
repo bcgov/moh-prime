@@ -945,44 +945,5 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
         }
-
-        public async Task<int> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel createModel)
-        {
-            createModel.ThrowIfNull(nameof(createModel));
-
-            var enrollee = _mapper.Map<Enrollee>(createModel);
-            enrollee.Addresses = new List<EnrolleeAddress>();
-            enrollee.UserId = new Guid();
-
-            // Generate GPID starting with NOBCSC
-            enrollee.GPID = GeneratePaperGpid();
-
-            UpdateAddress(enrollee, createModel.PhysicalAddress);
-
-            _context.Enrollees.Add(enrollee);
-
-            var created = await _context.SaveChangesAsync();
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could not create enrollee.");
-            }
-
-            await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
-
-            return enrollee.Id;
-        }
-
-        private static string GeneratePaperGpid()
-        {
-            IEnumerable<char> prefix = "NOBCSC";
-
-            Random r = new Random();
-            int length = 14;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
-
-            return new string(prefix.Concat(chars).ToArray());
-        }
     }
 }

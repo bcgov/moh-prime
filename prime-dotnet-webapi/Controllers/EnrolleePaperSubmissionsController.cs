@@ -19,10 +19,10 @@ namespace Prime.Controllers
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
 
-        private readonly IEnrolleeService _enrolleeService;
+        private readonly IEnrolleePaperSubmissionService _enrolleeService;
 
         public EnrolleePaperSubmissionsController(
-            IEnrolleeService enrolleeService
+            IEnrolleePaperSubmissionService enrolleeService
         )
         {
             _enrolleeService = enrolleeService;
@@ -39,14 +39,13 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<PaperEnrolleeDemographicViewModel>), StatusCodes.Status201Created)]
         public async Task<ActionResult> CreateEnrolleePaperSubmission(PaperEnrolleeDemographicViewModel payload)
         {
-            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(payload);
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
+            var createdEnrollee = await _enrolleeService.CreateEnrolleeAsync(payload);
 
             return CreatedAtAction(
                 nameof(EnrolleesController.GetEnrolleeById),
                 nameof(EnrolleesController),
-                new { enrolleeId = createdEnrolleeId },
-                enrollee
+                new { enrolleeId = createdEnrollee.Id },
+                createdEnrollee
             );
         }
 
