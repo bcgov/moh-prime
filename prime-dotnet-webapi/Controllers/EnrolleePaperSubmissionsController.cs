@@ -14,7 +14,8 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees/paper-submissions")]
     [ApiController]
-    [Authorize(Roles = Roles.TriageEnrollee)]
+    // [Authorize(Roles = Roles.TriageEnrollee)]
+    [AllowAnonymous]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
 
@@ -43,6 +44,7 @@ namespace Prime.Controllers
 
             return CreatedAtAction(
                 nameof(EnrolleesController.GetEnrolleeById),
+                nameof(EnrolleesController),
                 new { enrolleeId = createdEnrolleeId },
                 enrollee
             );
