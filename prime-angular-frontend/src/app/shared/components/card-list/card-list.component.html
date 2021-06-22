@@ -3,14 +3,14 @@
   <div class="mb-3">
     <app-summary-card [icon]="item.icon"
                       [title]="item.title"
-                      [menu]="itemMenu"
+                      [menu]="(allowRemove) ? itemMenu : null"
                       [properties]="item.properties"
                       [actionButtonTitle]="item.action.title"
                       [actionDisabled]="item.action.disabled"
                       (action)="onEdit(index)"
                       (remove)="onRemove(index)"></app-summary-card>
   </div>
-  
+
   <ng-template #itemMenu
                let-item="item">
     <button type="button"

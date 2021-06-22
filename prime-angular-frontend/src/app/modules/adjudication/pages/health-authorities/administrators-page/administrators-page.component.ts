@@ -31,11 +31,11 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
   ) {
     super(route, dialog, formUtilsService, fb, healthAuthResource, router);
 
-    this.cardTitlePrefix = 'PharmaNet Admin: ';
     this.backRoute = AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS;
   }
 
   public ngOnInit(): void {
+    this.cardTitlePrefix = 'PharmaNet Admin: ';
     this.init();
   }
 

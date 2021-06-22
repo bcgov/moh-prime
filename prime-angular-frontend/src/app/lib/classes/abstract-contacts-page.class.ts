@@ -65,11 +65,11 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   }
 
   public onRemove(index: number): void {
-    // TODO what happens if we're allowed to remove (archive) an administrator?
-    this.contacts.splice(index, 1);
-    // TODO update to be behaviour subject to stream changes
-    this.updateCardList(this.contacts);
     // TODO remove the administrator needs an API endpoint
+    // TODO what happens if we're allowed to remove (archive) an administrator?
+    // TODO update to be behaviour subject to stream changes
+    this.contacts.splice(index, 1);
+    this.updateCardList(this.contacts);
   }
 
   public onBack(): void {
@@ -194,15 +194,15 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
    * Map contacts to contact list items.
    */
   protected getContactsCardList(contacts: Contact[]): CardListItem[] {
-    return contacts.map(this.getContactListItem);
+    return contacts.map(this.getContactListItem());
   }
 
   /**
    * @description
    * Hook for contact list item properties.
    */
-  protected getContactListItem(contact: Contact): CardListItem {
-    return {
+  protected getContactListItem(): (contact: Contact) => CardListItem {
+    return (contact: Contact) => ({
       icon: 'account_circle',
       title: `${this.cardTitlePrefix}${contact.firstName} ${contact.lastName}`,
       properties: [
@@ -211,7 +211,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
       action: {
         title: 'Update Information'
       }
-    };
+    });
   }
 
   protected routeTo(routeSegment?: string): void {

@@ -31,6 +31,11 @@ export class CardListComponent implements OnInit {
   @Input() public items: CardListItem[];
   /**
    * @description
+   * Whether to show the remove icon on cards.
+   */
+  @Input() public allowRemove: boolean;
+  /**
+   * @description
    * Add an item event.
    */
   @Output() public add: EventEmitter<void>;

@@ -31,12 +31,12 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   ) {
     super(route, dialog, formUtilsService, fb, healthAuthResource, router);
 
-    this.cardTitlePrefix = 'Technical Support: ';
     this.backRoute = AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE;
     this.nextRoute = AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS;
   }
 
   public ngOnInit(): void {
+    this.cardTitlePrefix = 'Technical Support: ';
     this.init();
   }
 
