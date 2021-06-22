@@ -60,7 +60,7 @@
 
         <app-overview-section title="Privacy Officer"
                               [showEditRedirect]="true"
-                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
                               (route)="onRouteRelative($event)">
           <ng-container *ngIf="healthAuthority?.privacyOffice.email; else noPrivacyOfficer">
             <app-party-review [party]="healthAuthority.privacyOffice"></app-party-review>

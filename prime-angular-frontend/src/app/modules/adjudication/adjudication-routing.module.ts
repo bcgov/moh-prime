@@ -278,7 +278,7 @@ const routes: Routes = [
                 data: { title: 'Vendors' }
               },
               {
-                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER,
+                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE,
                 component: PrivacyOfficePageComponent,
                 data: { title: 'Privacy Office' }
               },
