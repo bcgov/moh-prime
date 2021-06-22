@@ -10,7 +10,6 @@ import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authorit
 import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
