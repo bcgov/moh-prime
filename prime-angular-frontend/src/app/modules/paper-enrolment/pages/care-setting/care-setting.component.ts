@@ -66,22 +66,10 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
     this.allowRoutingWhenDirty = false;
   }
 
-  public get careSettings(): FormArray {
-    return this.form.get('careSettings') as FormArray;
-  }
-
-  /**
-  * @description
-  *  Representing possible health authorities to select from and whether a given one was selected
-  */
-  public get enrolleeHealthAuthorities(): FormArray {
-    return this.form.get('enrolleeHealthAuthorities') as FormArray;
-  }
-
   public onSubmit(): void {
     this.nextRouteAfterSubmit();
 
-    const controls = this.careSettings.controls;
+    const controls = this.formState.careSettings.controls;
 
     // Remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach(type => {
@@ -107,7 +95,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
 
   public addCareSetting() {
     const careSetting = this.formState.buildCareSettingForm();
-    this.careSettings.push(careSetting);
+    this.formState.careSettings.push(careSetting);
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
@@ -119,14 +107,14 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
   }
 
   public removeCareSetting(index: number) {
-    this.careSettings.removeAt(index);
+    this.formState.careSettings.removeAt(index);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
     // Create a list of filtered care settings
-    if (this.careSettings.length) {
+    if (this.formState.careSettings.length) {
       // All the currently chosen care settings
-      const selectedCareSettingCodes = this.careSettings.value
+      const selectedCareSettingCodes = this.formState.careSettings.value
         .map((cs: CareSetting) => cs.careSettingCode);
       // Current care setting selected
       const currentCareSetting = this.careSettingTypes
@@ -149,7 +137,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
   }
 
   public hasSelectedHACareSetting(): boolean {
-    return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+    return (this.formState.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
   }
 
   public routeBackTo() {
@@ -188,7 +176,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
   private initForm() {
     // Always have at least one care setting ready for
     // the enrollee to fill out
-    if (!this.careSettings.length) {
+    if (!this.formState.careSettings.length) {
       this.addCareSetting();
     }
   }
@@ -240,16 +228,10 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
 
   private nextRouteAfterSubmit(): void {
     const oboSites = this.paperEnrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
-    const certifications = this.paperEnrolmentFormStateService.regulatoryFormState.certifications;
 
-    let nextRoutePath: string;
-    if (!this.isProfileComplete) {
-      nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
-    } else if (oboSites?.length) {
+    let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
+    if (oboSites?.length) {
       // Should edit existing Job/OboSites next
-      nextRoutePath = PaperEnrolmentRoutes.JOB;
-    } else if (!certifications.length && !oboSites?.length) {
-      // No College Licence and need to enter Job information
       nextRoutePath = PaperEnrolmentRoutes.JOB;
     }
     // this.routeTo(['../', this.enrolment.id, nextRouthPath]);
@@ -257,7 +239,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
   }
 
   private removeIncompleteCareSettings() {
-    this.careSettings.controls
+    this.formState.careSettings.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('careSettingCode').value;
 
@@ -269,7 +251,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
-    if (!this.careSettings.controls.length) {
+    if (!this.formState.careSettings.controls.length) {
       this.addCareSetting();
     }
   }

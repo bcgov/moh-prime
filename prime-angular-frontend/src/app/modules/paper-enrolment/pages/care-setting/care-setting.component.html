@@ -21,10 +21,10 @@
         <div class="col col-sm-10 py-3"
              formArrayName="careSettings">
 
-          <ng-container *ngFor="let careSetting of careSettings.controls; let i = index;"
+          <ng-container *ngFor="let careSetting of formState.careSettings.controls; let i = index;"
                         [formGroupName]="i">
 
-            <app-form-icon-group [show]="careSettings.length > 1"
+            <app-form-icon-group [show]="formState.careSettings.length > 1"
                                  (event)="removeCareSetting(i)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
@@ -36,8 +36,7 @@
                       {{ careSettingType.name }}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="
-                                careSetting.get('careSettingCode').hasError('required')">
+                  <mat-error *ngIf="careSetting.get('careSettingCode').hasError('required')">
                     Required
                   </mat-error>
                 </mat-form-field>
@@ -71,7 +70,7 @@
           <!-- Create visual checkboxes and bind to `enrolleeHealthAuthorities` array -->
           <div formArrayName="enrolleeHealthAuthorities"
                class="mb-3"
-               *ngFor="let eha of enrolleeHealthAuthorities.controls; let i = index">
+               *ngFor="let eha of formState.enrolleeHealthAuthorities.controls; let i = index">
             <mat-checkbox [formControl]="eha">
               {{ healthAuthorities[i].name }}
             </mat-checkbox>

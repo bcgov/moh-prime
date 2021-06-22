@@ -165,7 +165,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
    */
   protected buildForms() {
     this.demographicFormState = new DemographicFormState(this.fb, this.formUtilsService);
-    this.careSettingFormState = new CareSettingFormState(this.fb, this.formUtilsService, this.configService);
+    this.careSettingFormState = new CareSettingFormState(this.fb, this.configService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.jobsForm = this.buildJobsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();

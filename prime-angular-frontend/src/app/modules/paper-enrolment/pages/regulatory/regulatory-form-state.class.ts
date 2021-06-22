@@ -1,11 +1,11 @@
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
 
-export class DemographicFormState extends AbstractFormState<Enrollee> {
+export class RegulatoryFormState extends AbstractFormState<Enrollee> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -14,27 +14,6 @@ export class DemographicFormState extends AbstractFormState<Enrollee> {
 
     this.buildForm();
   }
-
-  public get firstName(): FormControl {
-    return this.form.get('firstName') as FormControl;
-  }
-
-  public get middleName(): FormControl {
-    return this.form.get('middleName') as FormControl;
-  }
-
-  public get lastName(): FormControl {
-    return this.form.get('lastName') as FormControl;
-  }
-
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
-  }
-
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
-  }
-
 
   public get json(): Enrollee {
     if (!this.formInstance) {

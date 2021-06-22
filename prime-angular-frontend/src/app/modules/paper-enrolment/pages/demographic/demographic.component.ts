@@ -58,26 +58,6 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public get firstName(): FormControl {
-    return this.form.get('firstName') as FormControl;
-  }
-
-  public get middleName(): FormControl {
-    return this.form.get('middleName') as FormControl;
-  }
-
-  public get lastName(): FormControl {
-    return this.form.get('lastName') as FormControl;
-  }
-
-  public get dateOfBirth(): FormControl {
-    return this.form.get('dateOfBirth') as FormControl;
-  }
-
-  public get physicalAddress(): FormGroup {
-    return this.form.get('physicalAddress') as FormGroup;
-  }
-
   public onSubmit(): void {
     this.nextRouteAfterSubmit();
 

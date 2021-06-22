@@ -8,10 +8,11 @@ import { ConfigService } from '@config/config.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
-export class CareSettingFormState extends AbstractFormState<Enrolment> {
+interface CareSettingPageDataModel extends Pick<Enrolment, 'careSettings' | 'enrolleeHealthAuthorities'> { }
+
+export class CareSettingFormState extends AbstractFormState<CareSettingPageDataModel> {
   public constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
     private configService: ConfigService
   ) {
     super();
@@ -19,7 +20,15 @@ export class CareSettingFormState extends AbstractFormState<Enrolment> {
     this.buildForm();
   }
 
-  public get json(): Enrolment {
+  public get careSettings(): FormArray {
+    return this.form.get('careSettings') as FormArray;
+  }
+
+  public get enrolleeHealthAuthorities(): FormArray {
+    return this.form.get('enrolleeHealthAuthorities') as FormArray;
+  }
+
+  public get json(): CareSettingPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -29,15 +38,15 @@ export class CareSettingFormState extends AbstractFormState<Enrolment> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(enrolment: Enrolment): void {
+  public patchValue(pageModel: CareSettingPageDataModel): void {
     if (!this.formInstance) {
       return;
     }
 
-    if (enrolment.careSettings.length) {
+    if (pageModel.careSettings.length) {
       const careSettings = this.formInstance.get('careSettings') as FormArray;
       careSettings.clear();
-      enrolment.careSettings.forEach((s: CareSetting) => {
+      pageModel.careSettings.forEach((s: CareSetting) => {
         const careSetting = this.buildCareSettingForm();
         careSetting.patchValue(s);
         careSettings.push(careSetting);
@@ -46,15 +55,14 @@ export class CareSettingFormState extends AbstractFormState<Enrolment> {
 
     // Initialize Health Authority form even if it might not be used by end user:
     // Create checkboxes for each known Health Authority, according to order of Health Authority list.
-    const enrolleeHealthAuthorities = this.formInstance.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.clear();
+    this.enrolleeHealthAuthorities.clear();
     // Set value of checkboxes according to previous selections, if any
     this.configService.healthAuthorities.forEach(ha => {
-      const checked = enrolment.enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
-      enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
+      const checked = pageModel.enrolleeHealthAuthorities.some(eha => ha.code === eha.healthAuthorityCode);
+      this.enrolleeHealthAuthorities.push(this.buildEnrolleeHealthAuthorityFormControl(checked));
     });
 
-    this.formInstance.patchValue(enrolment.careSettings);
+    this.formInstance.patchValue(pageModel.careSettings);
   }
 
   public buildForm(): void {
@@ -75,8 +83,7 @@ export class CareSettingFormState extends AbstractFormState<Enrolment> {
   }
 
   public removeHealthAuthorities() {
-    const enrolleeHealthAuthorities = this.formInstance.get('enrolleeHealthAuthorities') as FormArray;
-    enrolleeHealthAuthorities.controls.forEach(checkbox => {
+    this.enrolleeHealthAuthorities.controls.forEach(checkbox => {
       checkbox.setValue(false);
     });
   }
