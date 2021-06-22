@@ -36,7 +36,7 @@
   </ng-template>
 
   <app-page-footer [hasSecondaryAction]="true"
-                   [primaryActionLabel]="(!isEditing) ? 'Save and Continue' : 'Continue'"
+                   [primaryActionLabel]="(isEditing) ? 'Save and Continue' : 'Continue'"
                    (save)="(isEditing) ? onSubmit() : onContinue()"
                    (back)="onBack()"></app-page-footer>
 </app-page>

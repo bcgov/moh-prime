@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { pipe } from 'rxjs';
+import { Observable, pipe, UnaryFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
@@ -31,6 +31,7 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
   ) {
     super(route, dialog, formUtilsService, fb, healthAuthResource, router);
 
+    this.cardTitlePrefix = 'PharmaNet Admin: ';
     this.backRoute = AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS;
   }
 
@@ -38,11 +39,11 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
     this.init();
   }
 
-  protected performSubmissionRequest(payload: Contact[]): NoContent {
-    return this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, payload);
+  protected performSubmissionRequest(contact: Contact[]): NoContent {
+    return this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, contact);
   }
 
-  protected getContactsPipe() {
+  protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
     return pipe(map(({ pharmanetAdministrators }: HealthAuthority) => pharmanetAdministrators));
   }
 }

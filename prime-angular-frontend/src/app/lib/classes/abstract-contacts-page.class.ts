@@ -2,7 +2,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
 
-import { Observable } from 'rxjs';
+import { Observable, UnaryFunction } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Contact } from '@lib/models/contact.model';
@@ -12,9 +13,9 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { CardListItem } from '@shared/components/card-list/card-list.component';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
-// TODO step this back to accommodate remote users
+// TODO step this back and refine to accommodate other list form combinations like remote users
 export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   public title: string;
   public formState: ContactFormState;
@@ -23,6 +24,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   public contacts: Contact[];
   public contactCardListItems: CardListItem[];
 
+  protected cardTitlePrefix: string;
   protected backRoute: string;
   protected nextRoute: string;
   protected routeUtils: RouteUtils;
@@ -47,6 +49,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     ]);
     // Don't load either view until HTTP response
     this.contacts = null;
+    this.cardTitlePrefix = '';
   }
 
   public onAdd(): void {
@@ -56,8 +59,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
   public onEdit(index: number): void {
     this.isEditing = true;
-    console.log('EDIT', index, this.contacts);
-    // this.form.patchValue(this.contacts[index]);
+    this.formState.patchValue(this.contacts[index]);
   }
 
   public onRemove(index: number): void {
@@ -68,12 +70,11 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     // TODO remove the administrator needs an API endpoint
   }
 
-  // TODO feels like there's a gotcha when removing admins
   public onBack(): void {
     // Previous view when showing the list of cards or no contacts
     // exist, otherwise toggle the view from form to list
     if (!this.isEditing || !this.contacts.length) {
-      this.routeTo(this.nextRoute);
+      this.routeTo(this.backRoute);
     } else {
       this.isEditing = false;
     }
@@ -91,7 +92,11 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     }
   }
 
-  protected init() {
+  /**
+   * @description
+   * Perform common initialization.
+   */
+  protected init(): void {
     this.createFormInstance();
     this.busy = this.getContacts().subscribe();
   }
@@ -134,11 +139,14 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
   /**
    * @description
-   * Pipe that maps the HTTP response to a list of contacts.
+   * Hook to pipe the list of contacts from the response.
    */
-  protected abstract getContactsPipe();
+  protected abstract getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>>;
 
-  // TODO alternative update single administrator at a time
+  /**
+   * @description
+   * Update the contact information.
+   */
   protected performSubmission(): Observable<void> {
     const updatedContact = this.formState.json;
     const payload = (!updatedContact.id)
@@ -161,8 +169,16 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
       );
   }
 
+  /**
+   * @description
+   * Hook to perform a contact update request.
+   */
   protected abstract performSubmissionRequest(contact: Contact[]): Observable<void>;
 
+  /**
+   * @description
+   * Update the contact card list.
+   */
   protected updateCardList(contacts: Contact[]): void {
     this.contactCardListItems = this.getContactsCardList(contacts);
 
@@ -171,14 +187,22 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     }
   }
 
+  /**
+   * @description
+   * Map contacts to contact list items.
+   */
   protected getContactsCardList(contacts: Contact[]): CardListItem[] {
     return contacts.map(this.getContactListItem);
   }
 
+  /**
+   * @description
+   * Hook for contact list item properties.
+   */
   protected getContactListItem(contact: Contact): CardListItem {
     return {
       icon: 'account_circle',
-      title: `PharmaNet Admin: ${contact.firstName} ${contact.lastName}`,
+      title: `${this.cardTitlePrefix}${contact.firstName} ${contact.lastName}`,
       properties: [
         { key: 'Job Title', value: contact.jobRoleTitle }
       ],
