@@ -3,23 +3,26 @@ import { NgModule } from '@angular/core';
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
-
 import { SharedModule } from '@shared/shared.module';
 
-import { DemographicComponent } from '@paper-enrolment/pages/demographic/demographic.component';
-import { PaperEnrolmentProgressIndicatorComponent } from '@paper-enrolment/shared/components/paper-enrolment-progress-indicator/paper-enrolment-progress-indicator.component';
-import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+import { PaperEnrolmentProgressIndicatorComponent } from './shared/components/paper-enrolment-progress-indicator/paper-enrolment-progress-indicator.component';
+
+import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
+import { DemographicComponent } from './pages/demographic/demographic.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
+
 
 @NgModule({
   declarations: [
-    DemographicComponent,
     PaperEnrolmentDashboardComponent,
     PaperEnrolmentProgressIndicatorComponent,
+    DemographicComponent,
     CareSettingComponent,
-    RegulatoryComponent
+    RegulatoryComponent,
+    SelfDeclarationPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
@@ -28,4 +31,4 @@ import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
     EditorModule
   ]
 })
-export class PaperEnrolmentModule { }
+export class PaperEnrolmentModule {}
