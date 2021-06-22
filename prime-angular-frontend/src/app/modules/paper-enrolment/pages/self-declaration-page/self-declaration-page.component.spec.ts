@@ -19,7 +19,7 @@ import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-describe('SelfDeclarationComponent', () => {
+describe('SelfDeclarationPageComponent', () => {
   let component: SelfDeclarationPageComponent;
   let fixture: ComponentFixture<SelfDeclarationPageComponent>;
 

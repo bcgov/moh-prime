@@ -26,7 +26,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { DemographicFormState } from './demographic-page-form-state.class';
 
 @Component({
-  selector: 'app-demographic',
+  selector: 'app-demographic-page',
   templateUrl: './demographic-page.component.html',
   styleUrls: ['./demographic-page.component.scss']
 })

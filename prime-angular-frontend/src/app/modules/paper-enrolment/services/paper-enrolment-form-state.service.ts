@@ -14,7 +14,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { DemographicFormState } from '@paper-enrolment/pages/demographic-page/demographic-page-form-state.class';
-import { CareSettingFormState } from '@paper-enrolment/pages/care-setting/care-setting-form-state.class';
+import { CareSettingFormState } from '@paper-enrolment/pages/care-setting-page/care-setting-form-state.class';
 import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites-page/obo-sites-page-form-state.class';
 
 @Injectable({
