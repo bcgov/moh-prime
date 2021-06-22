@@ -56,10 +56,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCareSettings(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCareSettings(int enrolleeId, PaperEnrolleeCareSettingViewModel payload)
         {
-            return Ok("Care Setting Success!");
+            await _enrolleeService.UpdateEnrolleeCareSettingsById(enrolleeId, payload);
+            return Ok();
         }
 
         // PUT: api/enrollees/5/paper-submissions/certifications
@@ -70,10 +71,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId, PaperEnrolleeCertificationViewModel payload)
         {
-            return Ok("Certification Success!");
+            await _enrolleeService.UpdateEnrolleeCertificationsById(enrolleeId, payload);
+            return Ok();
         }
 
         // PUT: api/enrollees/5/paper-submissions/demographics
@@ -84,10 +86,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDemographics(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDemographics(int enrolleeId, PaperEnrolleeDemographicViewModel payload)
         {
-            return Ok("Demographic Success!");
+            await _enrolleeService.UpdateEnrolleeDemographicsById(enrolleeId, payload);
+            return Ok();
         }
 
         // PUT: api/enrollees/5/paper-submissions/obo-sites
@@ -98,10 +101,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionOboSites(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionOboSites(int enrolleeId, PaperEnrolleeOboSiteViewModel payload)
         {
-            return Ok("OBO Site Success!");
+            await _enrolleeService.UpdateEnrolleeOboSitesById(enrolleeId, payload);
+            return Ok();
         }
 
         // PUT: api/enrollees/5/paper-submissions/self-declarations
@@ -112,10 +116,11 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel payload)
         {
-            return Ok("Self Declaration Success!");
+            await _enrolleeService.UpdateEnrolleeSelfDeclarationsById(enrolleeId, payload);
+            return Ok();
         }
     }
 }
