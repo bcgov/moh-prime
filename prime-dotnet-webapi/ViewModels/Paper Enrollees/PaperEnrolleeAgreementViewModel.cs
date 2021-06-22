@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Prime.Models;
 
-namespace Prime.ViewModels
+namespace Prime.ViewModels.PaperEnrollees
 {
-    public class PaperEnrolleeToaViewModel
+    public class PaperEnrolleeAgreementViewModel
     {
         public ICollection<EnrolleeAdjudicationDocument> EnrolleeAdjudicationDocuments { get; set; }
 
