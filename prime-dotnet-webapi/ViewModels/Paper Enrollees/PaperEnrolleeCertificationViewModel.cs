@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Prime.Models;
 
-namespace Prime.ViewModels.PaperEnrollee
+namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeCertificationViewModel
     {
