@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
@@ -21,6 +22,7 @@ namespace Prime.Services
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
+        Task<int> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
         Task DeleteEnrolleeAsync(int enrolleeId);
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);

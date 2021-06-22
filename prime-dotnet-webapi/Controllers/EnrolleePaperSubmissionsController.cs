@@ -18,10 +18,13 @@ namespace Prime.Controllers
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
 
+        private readonly IEnrolleeService _enrolleeService;
 
-        public EnrolleePaperSubmissionsController()
+        public EnrolleePaperSubmissionsController(
+            IEnrolleeService enrolleeService
+        )
         {
-
+            _enrolleeService = enrolleeService;
         }
 
         // POST: api/enrollees/paper-submissions
@@ -33,9 +36,16 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<PaperEnrolleeDemographicViewModel>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateEnrolleePaperSubmission(PaperEnrolleeDemographicViewModel enrollee)
+        public async Task<ActionResult> CreateEnrolleePaperSubmission(PaperEnrolleeDemographicViewModel payload)
         {
-            return Ok("Create Success!");
+            var createdEnrolleeId = await _enrolleeService.CreateEnrolleeAsync(payload);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(createdEnrolleeId);
+
+            return CreatedAtAction(
+                nameof(EnrolleesController.GetEnrolleeById),
+                new { enrolleeId = createdEnrolleeId },
+                enrollee
+            );
         }
     }
 }
