@@ -7,6 +7,7 @@ import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
 import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
 import { PaperEnrolmentGuard } from '@paper-enrolment/shared/guards/paper-enrolment.guard';
 import { CareSettingComponent } from '@paper-enrolment/pages/care-setting/care-setting.component';
+import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 
 const routes: Routes = [
   {
@@ -28,6 +29,12 @@ const routes: Routes = [
           {
             path: PaperEnrolmentRoutes.CARE_SETTING,
             component: CareSettingComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
+            path: PaperEnrolmentRoutes.REGULATORY,
+            component: RegulatoryComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },

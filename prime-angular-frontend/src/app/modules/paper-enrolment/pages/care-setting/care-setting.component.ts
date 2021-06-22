@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
@@ -28,7 +29,7 @@ import { CareSettingFormState } from './care-setting-form-state.class';
   templateUrl: './care-setting.component.html',
   styleUrls: ['./care-setting.component.scss']
 })
-export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, OnDestroy {
+export class CareSettingComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public formState: CareSettingFormState;
@@ -38,7 +39,6 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
   public routeUtils: RouteUtils;
-  private allowRoutingWhenDirty: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -53,10 +53,7 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
   ) {
-    super(
-      route,
-      router
-    );
+    super(dialog, formUtilsService);
 
     this.careSettingTypes = this.configService.careSettings;
     this.healthAuthorities = this.configService.healthAuthorities;
@@ -168,12 +165,12 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
     this.removeIncompleteCareSettings();
   }
 
-  private createFormInstance(): void {
+  protected createFormInstance(): void {
     this.formState = this.paperEnrolmentFormStateService.careSettingFormState;
     this.form = this.formState.form;
   }
 
-  private initForm() {
+  protected initForm() {
     // Always have at least one care setting ready for
     // the enrollee to fill out
     if (!this.formState.careSettings.length) {
@@ -181,34 +178,21 @@ export class CareSettingComponent extends BaseEnrolmentPage implements OnInit, O
     }
   }
 
-  /**
-   * @description
-   * Patch the form with enrollee information.
-   */
-  private patchForm(): void {
+
+  protected patchForm(): void {
     // Will be null if enrolment has not been created
     const enrolment = this.paperEnrolmentService.enrolment;
     // this.paperEnrolmentFormStateService.setForm(enrolment);
     this.formState.patchValue(enrolment);
   }
 
-  private handleSubmission() {
+  protected performSubmission(): NoContent {
     // Update using the form which could contain changes, and ensure identity
     const enrolment = this.paperEnrolmentFormStateService.json;
-    this.busy = this.performHttpRequest(enrolment).subscribe();
-  }
-
-  private performHttpRequest(enrolment: Enrolment): Observable<void> {
-    const enrollee = this.form.getRawValue();
     return this.paperEnrolmentResource.updateEnrollee(enrolment)
       .pipe(this.handleResponse());
   }
 
-  /**
-   * @description
-   * Generic handler for the HTTP response. By default this covers update, and can
-   * also be used for create actions, or extended for any response.
-   */
   private handleResponse() {
     return pipe(
       map(() => {

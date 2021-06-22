@@ -14,7 +14,8 @@ export class PaperEnrolmentRoutes {
   public static routeOrder(): string[] {
     return [
       PaperEnrolmentRoutes.DEMOGRAPHIC,
-      PaperEnrolmentRoutes.CARE_SETTING
+      PaperEnrolmentRoutes.CARE_SETTING,
+      PaperEnrolmentRoutes.REGULATORY
     ];
   }
 }

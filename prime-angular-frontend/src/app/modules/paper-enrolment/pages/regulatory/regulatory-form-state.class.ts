@@ -4,6 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
+import { Enrolment } from '@shared/models/enrolment.model';
 
 export class RegulatoryFormState extends AbstractFormState<Enrollee> {
   public constructor(

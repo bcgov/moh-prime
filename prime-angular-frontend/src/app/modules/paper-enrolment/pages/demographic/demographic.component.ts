@@ -9,26 +9,27 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { optionalAddressLineItems } from '@shared/models/address.model';
 
 import { DemographicFormState } from './demographic-form-state.class';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
-import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import moment from 'moment';
 import { MINIMUM_AGE } from '@lib/constants';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 
 @Component({
   selector: 'app-demographic',
   templateUrl: './demographic.component.html',
   styleUrls: ['./demographic.component.scss']
 })
-export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
+export class DemographicComponent extends AbstractEnrolmentPage implements OnInit {
   public form: FormGroup;
   public formState: DemographicFormState;
   public enrolment: Enrolment;
@@ -47,10 +48,7 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
   ) {
-    super(
-      route,
-      router
-    );
+    super(dialog, formUtilsService);
 
     // Must be 18 years of age or older
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
@@ -62,7 +60,7 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
     this.nextRouteAfterSubmit();
 
     // if (this.formUtilsService.checkValidity(this.form)) {
-    //   this.handleSubmission();
+    //   this.performSubmission();
     // } else {
     //   this.utilService.scrollToErrorSection();
     // }
@@ -73,29 +71,20 @@ export class DemographicComponent extends BaseEnrolmentPage implements OnInit {
     this.patchForm()
   }
 
-  private createFormInstance(): void {
+  protected createFormInstance(): void {
     this.formState = this.paperEnrolmentFormStateService.demographicFormState;
     this.form = this.formState.form;
   }
 
-
-  /**
-   * @description
-   * Patch the form with enrollee information.
-   */
-  private patchForm(): void {
+  protected patchForm(): void {
     // Will be null if enrolment has not been created
     const enrolment = this.paperEnrolmentService.enrolment;
     this.paperEnrolmentFormStateService.setForm(enrolment);
   }
 
-  private handleSubmission() {
+  protected performSubmission(): NoContent {
     // Update using the form which could contain changes, and ensure identity
     const enrolment = this.paperEnrolmentFormStateService.json;
-    this.busy = this.performHttpRequest(enrolment).subscribe();
-  }
-
-  private performHttpRequest(enrolment: Enrolment): Observable<void> {
     const enrollee = this.form.getRawValue();
     // BCeID has to match BCSC for submission, which requires givenNames
     const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
