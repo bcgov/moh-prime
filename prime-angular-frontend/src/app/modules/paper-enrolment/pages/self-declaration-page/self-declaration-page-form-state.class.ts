@@ -1,3 +1,4 @@
-import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-export class SelfDeclarationPageFormState extends RegulatoryFormState {}
+// TODO add form state when data is being provided
+// export class SelfDeclarationPageFormState extends AbstractFormState<any> {}
