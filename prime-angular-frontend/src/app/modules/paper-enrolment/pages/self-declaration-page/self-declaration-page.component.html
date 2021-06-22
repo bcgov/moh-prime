@@ -1,0 +1,278 @@
+<app-page [busy]="busy">
+
+  <app-page-header>PRIME Enrolment</app-page-header>
+
+  <app-paper-progress-indicator *ngIf="isInitialEnrolment"
+                                [inProgress]="isInitialEnrolment"></app-paper-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
+      <ng-container appPageSubheaderSummary>
+        Self-declaration information is collected under the authority of the Information Management
+        Regulation of the Pharmaceutical Services Act and confidentiality is protected under the
+        Freedom of Information and Protection of Privacy Act. Self-declaration information is used
+        to verify the applicant is in good standing with their respective College(s) and to determine
+        eligibility for and access to PharmaNet.
+      </ng-container>
+    </app-page-subheader>
+
+    <ng-container *ngIf="showUnansweredQuestionsError">
+      <app-alert type="danger"
+                 icon="error_outline">
+        <ng-container #alertContent
+                      class="alert-content">
+          Each self-declaration question must be answered before continuing with enrolment!
+        </ng-container>
+      </app-alert>
+    </ng-container>
+
+    <section class="mb-3">
+
+      <p class="question">
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
+      </p>
+
+      <mat-radio-group formControlName="hasRegistrationSuspended">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasRegistrationSuspended.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in limits, conditions or prohibitions being imposed, including when the
+              events occurred
+            </li>
+            <li class="small">
+              Provide the name and address of the organization where the events took place
+            </li>
+            <li class="small">
+              Provide the name of the organization that imposed limits, conditions or prohibitions
+            </li>
+            <li class="small">
+              Describe the limits, conditions or prohibitions imposed
+            </li>
+            <li class="small mb-2">
+              Provide the date that the limits, conditions or prohibitions were imposed and, if applicable, removed
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasRegistrationSuspended
+                        formControlName="hasRegistrationSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Attach documents related to this self-declaration.
+            </li>
+
+            <app-document-upload componentName="has-registration-suspended"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
+            </app-document-upload>
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <p class="question">
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
+      </p>
+
+      <mat-radio-group formControlName="hasConviction">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasConviction.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in the order or conviction, including when the events occurred
+            </li>
+            <li class="small">
+              Provide the name and address of the organization where the events took place that resulted in the order or
+              conviction
+            </li>
+            <li class="small">
+              Provide the name of the entity that issued the order or conviction
+            </li>
+            <li class="small">
+              Describe the penalty imposed as a result of the order or conviction (e.g. fine, imprisonment)
+            </li>
+            <li class="small mb-2">
+              Provide the date of the order or conviction
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasConvictionInput
+                        formControlName="hasConvictionDetails"></textarea>
+              <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Attach documents related to this self-declaration.
+            </li>
+
+            <app-document-upload componentName="has-conviction"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasConvictionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasConvictionDocumentGuids', $event)">
+            </app-document-upload>
+
+          </ol>
+
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <p class="question">
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
+      </p>
+
+      <mat-radio-group formControlName="hasPharmaNetSuspended">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasPharmaNetSuspended.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in the discipline or termination, including when the events occurred
+            </li>
+            <li class="small">
+              Provide the name and address of the organization that issued the discipline or termination
+            </li>
+            <li class="small">
+              Describe the discipline imposed
+            </li>
+            <li class="small mb-2">
+              Provide the date that the discipline or termination was imposed and, if applicable, removed
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasPharmaNetSuspended
+                        formControlName="hasPharmaNetSuspendedDetails"></textarea>
+              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Attach documents related to this self-declaration.
+            </li>
+
+            <app-document-upload componentName="has-pharmanet-suspended"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
+                                 (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
+            </app-document-upload>
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="mb-3">
+
+      <p class="question">
+        {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
+      </p>
+
+      <mat-radio-group formControlName="hasDisciplinaryAction">
+        <mat-radio-button class="mr-4"
+                          *ngFor="let decision of decisions"
+                          [value]="decision.code">
+          {{ decision.name }}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div *ngIf="hasDisciplinaryAction.value"
+           class="row">
+        <div class="col pt-3">
+
+          <p class="mb-1">Provide these details:</p>
+          <ol class="mb-4 pl-3">
+            <li class="small">
+              Describe the events that resulted in the suspension or cancellation of your access, including when the
+              events occurred
+            </li>
+            <li class="small">
+              Provide the name and address of the organization that issued the suspension or cancellation of access
+            </li>
+            <li class="small">
+              Describe the suspension or cancellation imposed
+            </li>
+            <li class="small mb-2">
+              Provide the date that the suspension or cancellation of access was imposed and, if applicable, removed
+            </li>
+
+            <mat-form-field class="w-100">
+              <textarea matInput
+                        placeholder="Type Here"
+                        rows="5"
+                        #hasDisciplinaryAction
+                        formControlName="hasDisciplinaryActionDetails"></textarea>
+              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
+            </mat-form-field>
+
+            <li class="small mb-2">
+              Attach documents related to this self-declaration.
+            </li>
+
+            <app-document-upload componentName="has-disciplinary-action"
+                                 [multiple]="true"
+                                 (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
+                                 (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">
+            </app-document-upload>
+          </ol>
+        </div>
+      </div>
+
+    </section>
+
+    <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+                     (save)="onSubmit()"
+                     (back)="onBack()"></app-page-footer>
+
+  </form>
+
+</app-page>

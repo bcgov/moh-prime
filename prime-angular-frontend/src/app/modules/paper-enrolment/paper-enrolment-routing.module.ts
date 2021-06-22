@@ -1,13 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { DemographicComponent } from '@paper-enrolment/pages/demographic/demographic.component';
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
-import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+
 import { PaperEnrolmentGuard } from '@paper-enrolment/shared/guards/paper-enrolment.guard';
-import { CareSettingComponent } from '@paper-enrolment/pages/care-setting/care-setting.component';
+import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+
+import { DemographicComponent } from './pages/demographic/demographic.component';
+import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 
 const routes: Routes = [
   {
@@ -39,6 +42,12 @@ const routes: Routes = [
             data: { title: 'PRIME Profile' }
           },
           {
+            path: PaperEnrolmentRoutes.SELF_DECLARATION,
+            component: SelfDeclarationPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
             path: '', // Equivalent to `/` and alias for default view
             redirectTo: PaperEnrolmentRoutes.DEMOGRAPHIC,
             pathMatch: 'full'
@@ -53,4 +62,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PaperEnrolmentRoutingModule { }
+export class PaperEnrolmentRoutingModule {}
