@@ -39,11 +39,11 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
     this.init();
   }
 
-  protected performSubmissionRequest(contact: Contact[]): NoContent {
-    return this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, contact);
-  }
-
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
     return pipe(map(({ pharmanetAdministrators }: HealthAuthority) => pharmanetAdministrators));
+  }
+
+  protected performSubmissionRequest(contact: Contact[]): NoContent {
+    return this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, contact);
   }
 }

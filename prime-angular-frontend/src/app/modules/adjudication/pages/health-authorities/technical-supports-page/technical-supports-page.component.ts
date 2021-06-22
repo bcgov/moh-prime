@@ -40,11 +40,11 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     this.init();
   }
 
-  protected performSubmissionRequest(contact: Contact[]): NoContent {
-    return this.healthAuthResource.updateTechnicalSupports(this.route.snapshot.params.haid, contact);
-  }
-
   protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
     return pipe(map(({ technicalSupports }: HealthAuthority) => technicalSupports));
+  }
+
+  protected performSubmissionRequest(contact: Contact[]): NoContent {
+    return this.healthAuthResource.updateTechnicalSupports(this.route.snapshot.params.haid, contact);
   }
 }

@@ -9,13 +9,15 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Contact } from '@lib/models/contact.model';
 import { ContactFormState } from '@lib/classes/contact-form-state.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { CardListItem } from '@shared/components/card-list/card-list.component';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
-// TODO step this back and refine to accommodate other list form combinations like remote users
+// TODO step this back to something more generic, and refine to
+// accommodate other list form combinations like remote users
 export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   public title: string;
   public formState: ContactFormState;
@@ -173,7 +175,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
    * @description
    * Hook to perform a contact update request.
    */
-  protected abstract performSubmissionRequest(contact: Contact[]): Observable<void>;
+  protected abstract performSubmissionRequest(contact: Contact[]): NoContent;
 
   /**
    * @description
