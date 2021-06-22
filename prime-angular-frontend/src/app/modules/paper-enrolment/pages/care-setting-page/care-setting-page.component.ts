@@ -25,11 +25,11 @@ import { map, tap, catchError } from 'rxjs/operators';
 import { CareSettingFormState } from './care-setting-form-state.class';
 
 @Component({
-  selector: 'app-care-setting',
-  templateUrl: './care-setting.component.html',
-  styleUrls: ['./care-setting.component.scss']
+  selector: 'app-care-setting-page',
+  templateUrl: './care-setting-page.component.html',
+  styleUrls: ['./care-setting-page.component.scss']
 })
-export class CareSettingComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
+export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public formState: CareSettingFormState;

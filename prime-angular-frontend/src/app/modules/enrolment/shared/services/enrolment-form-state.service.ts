@@ -28,7 +28,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
-import { RegulatoryPaperEnrolmentFormState } from '@paper-enrolment/pages/regulatory/regulatory-paper-enrolment-form-state.class';
+import { RegulatoryPaperEnrolmentFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-paper-enrolment-form-state.class';
 
 @Injectable({
   providedIn: 'root'
