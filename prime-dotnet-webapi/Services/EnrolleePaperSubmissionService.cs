@@ -10,6 +10,7 @@ using AutoMapper.QueryableExtensions;
 
 using Prime.Auth;
 using Prime.Models;
+using Prime.Engines;
 using Prime.ViewModels;
 using Prime.Models.Api;
 using Prime.HttpClients;
@@ -41,8 +42,8 @@ namespace Prime.Services
             createModel.ThrowIfNull(nameof(createModel));
 
             var enrollee = _mapper.Map<Enrollee>(createModel);
-            enrollee.UserId = new Guid();
-            enrollee.GPID = GeneratePaperGpid();
+            enrollee.UserId = Guid.NewGuid();
+            enrollee.GPID = Gpid.NewGpid("NOBCSC");
 
             _context.Enrollees.Add(enrollee);
             await _context.SaveChangesAsync();
@@ -111,19 +112,6 @@ namespace Prime.Services
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             await _context.SaveChangesAsync();
-        }
-
-        private static string GeneratePaperGpid()
-        {
-            IEnumerable<char> prefix = "NOBCSC";
-
-            Random r = new Random();
-            int length = 14;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
-
-            return new string(prefix.Concat(chars).ToArray());
         }
     }
 }
