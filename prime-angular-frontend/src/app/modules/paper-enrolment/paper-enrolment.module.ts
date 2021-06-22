@@ -11,7 +11,7 @@ import { PaperEnrolmentProgressIndicatorComponent } from './shared/components/pa
 import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 
@@ -21,7 +21,7 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
     PaperEnrolmentProgressIndicatorComponent,
     DemographicPageComponent,
     CareSettingComponent,
-    RegulatoryComponent,
+    RegulatoryPageComponent,
     OboSitesPageComponent,
     SelfDeclarationPageComponent
   ],

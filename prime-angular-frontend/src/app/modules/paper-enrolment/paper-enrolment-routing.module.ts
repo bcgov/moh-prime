@@ -9,7 +9,7 @@ import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/compon
 
 import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
-import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
+import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 
 const routes: Routes = [
@@ -37,7 +37,7 @@ const routes: Routes = [
           },
           {
             path: PaperEnrolmentRoutes.REGULATORY,
-            component: RegulatoryComponent,
+            component: RegulatoryPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },
