@@ -181,7 +181,7 @@ export class RegulatoryComponent extends AbstractEnrolmentPage implements OnInit
     const careSettings = this.paperEnrolmentFormStateService.careSettingFormState.careSettings.value as CareSetting[];
 
     let nextRoutePath = (!this.certifications.length)
-      ? PaperEnrolmentRoutes.JOB
+      ? PaperEnrolmentRoutes.OBO_SITES
       : PaperEnrolmentRoutes.SELF_DECLARATION;
 
     // this.routeTo(['../', this.enrolment.id, nextRoutePath]);

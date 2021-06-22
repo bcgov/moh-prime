@@ -5,8 +5,7 @@ export class PaperEnrolmentRoutes {
   public static DEMOGRAPHIC = 'demographic';
   public static CARE_SETTING = 'care-setting';
   public static REGULATORY = 'regulatory';
-  // TODO rename to obosites and update enrolments as well
-  public static JOB = 'job';
+  public static OBO_SITES = 'obo-sites';
   public static SELF_DECLARATION = 'self-declaration';
 
   public static routePath(route: string): string {
@@ -18,7 +17,7 @@ export class PaperEnrolmentRoutes {
       PaperEnrolmentRoutes.DEMOGRAPHIC,
       PaperEnrolmentRoutes.CARE_SETTING,
       PaperEnrolmentRoutes.REGULATORY,
-      PaperEnrolmentRoutes.JOB,
+      PaperEnrolmentRoutes.OBO_SITES,
       PaperEnrolmentRoutes.SELF_DECLARATION
     ];
   }

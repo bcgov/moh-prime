@@ -215,7 +215,7 @@ export class CareSettingComponent extends AbstractEnrolmentPage implements OnIni
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
     if (oboSites?.length) {
       // Should edit existing Job/OboSites next
-      nextRoutePath = PaperEnrolmentRoutes.JOB;
+      nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
     }
     // this.routeTo(['../', this.enrolment.id, nextRouthPath]);
     this.routeUtils.routeRelativeTo(['../', '1', nextRoutePath]);

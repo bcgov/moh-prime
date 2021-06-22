@@ -12,9 +12,8 @@ import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { DemographicComponent } from './pages/demographic/demographic.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
-import { OboSitesComponent } from './pages/obo-sites/obo-sites.component';
+import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
-
 
 @NgModule({
   declarations: [
@@ -23,7 +22,7 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
     DemographicComponent,
     CareSettingComponent,
     RegulatoryComponent,
-    OboSitesComponent
+    OboSitesPageComponent,
     SelfDeclarationPageComponent
   ],
   imports: [

@@ -15,7 +15,7 @@ import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { DemographicFormState } from '@paper-enrolment/pages/demographic/demographic-form-state.class';
 import { CareSettingFormState } from '@paper-enrolment/pages/care-setting/care-setting-form-state.class';
-import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites/obo-sites-form-state.class';
+import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites-page/obo-sites-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'

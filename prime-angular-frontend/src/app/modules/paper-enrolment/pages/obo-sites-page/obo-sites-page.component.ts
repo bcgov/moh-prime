@@ -21,14 +21,14 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { pipe } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { OboSiteFormState } from './obo-sites-form-state.class';
+import { OboSiteFormState } from './obo-sites-page-form-state.class';
 
 @Component({
-  selector: 'app-obo-sites',
-  templateUrl: './obo-sites.component.html',
-  styleUrls: ['./obo-sites.component.scss']
+  selector: 'app-obo-sites-page',
+  templateUrl: './obo-sites-page.component.html',
+  styleUrls: ['./obo-sites-page.component.scss']
 })
-export class OboSitesComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
+export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
 
   public form: FormGroup;
   public formState: OboSiteFormState;
@@ -184,7 +184,7 @@ export class OboSitesComponent extends AbstractEnrolmentPage implements OnInit, 
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
     if (oboSites?.length) {
       // Should edit existing Job/OboSites next
-      nextRoutePath = PaperEnrolmentRoutes.JOB;
+      nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
     }
     // this.routeTo(['../', this.enrolment.id, nextRouthPath]);
     this.routeUtils.routeRelativeTo(['../', '1', nextRoutePath]);
@@ -223,7 +223,6 @@ export class OboSitesComponent extends AbstractEnrolmentPage implements OnInit, 
   private removeCollegeCertifications() {
     this.paperEnrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
   }
-
 
 
 }
