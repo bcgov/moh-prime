@@ -127,7 +127,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (certifications.length)
           ? EnrolmentRoutes.REGULATORY
-          : EnrolmentRoutes.JOB;
+          : EnrolmentRoutes.OBO_SITES;
     }
 
     this.routeTo(backRoutePath);

@@ -86,7 +86,7 @@ export class DeviceProviderComponent extends BaseEnrolmentProfilePage implements
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.enrolmentFormStateService.json.certifications.length)
-        ? EnrolmentRoutes.JOB
+        ? EnrolmentRoutes.OBO_SITES
         : EnrolmentRoutes.SELF_DECLARATION;
     }
 

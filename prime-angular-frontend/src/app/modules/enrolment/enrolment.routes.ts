@@ -17,7 +17,7 @@ export class EnrolmentRoutes {
   public static CARE_SETTING = 'care-setting';
   public static HEALTH_AUTHORITY = 'health-authority';
   public static REGULATORY = 'regulatory';
-  public static JOB = 'job';
+  public static OBO_SITES = 'obo-sites';
   public static DEVICE_PROVIDER = 'device-provider';
   public static REMOTE_ACCESS = 'remote-access';
   public static REMOTE_ACCESS_ADDRESSES = 'remote-access-addresses';
@@ -39,7 +39,7 @@ export class EnrolmentRoutes {
   public static ENROLMENT = 'enrolment';
 
   public static routePath(route: string): string {
-    return `/${ EnrolmentRoutes.MODULE_PATH }/${ route }`;
+    return `/${EnrolmentRoutes.MODULE_PATH}/${route}`;
   }
 
   // Use by the progress indicator to calculate percent completion
@@ -63,7 +63,7 @@ export class EnrolmentRoutes {
       EnrolmentRoutes.CARE_SETTING,
       // EnrolmentRoutes.HEALTH_AUTHORITY,
       EnrolmentRoutes.REGULATORY,
-      EnrolmentRoutes.JOB,
+      EnrolmentRoutes.OBO_SITES,
       // EnrolmentRoutes.DEVICE_PROVIDER,
       EnrolmentRoutes.REMOTE_ACCESS,
       EnrolmentRoutes.REMOTE_ACCESS_ADDRESSES,
