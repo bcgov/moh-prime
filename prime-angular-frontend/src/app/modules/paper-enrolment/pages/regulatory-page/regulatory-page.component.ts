@@ -22,7 +22,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { RegulatoryPaperEnrolmentFormState } from './regulatory-paper-enrolment-form-state.class';
+import { RegulatoryPageFormState } from './regulatory-page-form-state.class';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -31,7 +31,7 @@ import { RegulatoryPaperEnrolmentFormState } from './regulatory-paper-enrolment-
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
   public form: FormGroup;
-  public formState: RegulatoryPaperEnrolmentFormState;
+  public formState: RegulatoryPageFormState;
   public enrolment: Enrolment;
   public routeUtils: RouteUtils;
 

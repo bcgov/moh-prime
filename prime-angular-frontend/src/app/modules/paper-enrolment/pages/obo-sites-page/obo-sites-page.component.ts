@@ -2,6 +2,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { pipe } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -9,18 +16,14 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { Enrolment } from '@shared/models/enrolment.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { pipe } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
 import { OboSiteFormState } from './obo-sites-page-form-state.class';
 
 @Component({

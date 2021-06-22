@@ -2,6 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable, pipe } from 'rxjs';
+import { map, tap, catchError } from 'rxjs/operators';
+
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
@@ -9,20 +15,17 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { Observable, pipe } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
-import { CareSettingFormState } from './care-setting-form-state.class';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+
+import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
+import { CareSettingFormState } from './care-setting-page-form-state.class';
 
 @Component({
   selector: 'app-care-setting-page',
