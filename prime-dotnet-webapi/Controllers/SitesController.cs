@@ -22,6 +22,7 @@ namespace Prime.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
+        private readonly ISiteRegistrationService _siteRegistrationService;
         private readonly IOrganizationService _organizationService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
@@ -30,6 +31,7 @@ namespace Prime.Controllers
         public SitesController(
             IMapper mapper,
             ISiteService siteService,
+            ISiteRegistrationService siteRegistrationService,
             IOrganizationService organizationService,
             IEmailService emailService,
             IDocumentService documentService,
@@ -37,6 +39,7 @@ namespace Prime.Controllers
         {
             _mapper = mapper;
             _siteService = siteService;
+            _siteRegistrationService = siteRegistrationService;
             _organizationService = organizationService;
             _emailService = emailService;
             _documentService = documentService;
@@ -116,7 +119,6 @@ namespace Prime.Controllers
             {
                 return NotFound($"Organization not found with id {organizationId}");
             }
-
             var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
@@ -324,7 +326,10 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Submit))
+            {
+                return BadRequest("Action could not be performed.");
+            }
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
@@ -767,6 +772,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Approve))
+            {
+                return BadRequest("Action could not be performed.");
+            }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
             await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
@@ -794,6 +803,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Decline))
+            {
+                return BadRequest("Action could not be performed.");
+            }
 
             var updatedSite = await _siteService.DeclineSite(siteId);
             return Ok(updatedSite);
@@ -816,6 +829,21 @@ namespace Prime.Controllers
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
+            }
+            var action = SiteStatusAction.NA;
+            // Only allow enable editing for the following current site status: InReview & Approved
+            switch (site.Status)
+            {
+                case SiteStatusType.InReview:
+                    action = SiteStatusAction.RequestChange;
+                    break;
+                case SiteStatusType.Approved:
+                    action = SiteStatusAction.Unapprove;
+                    break;
+            }
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(action))
+            {
+                return BadRequest("Action could not be performed.");
             }
 
             var updatedSite = await _siteService.EnableEditingSite(siteId);
