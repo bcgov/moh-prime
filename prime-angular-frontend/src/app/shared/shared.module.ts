@@ -101,6 +101,7 @@ import { SameAsComponent } from '@shared/components/site/same-as/same-as.compone
 import { SummaryCardComponent } from '@shared/components/site/summary-card/summary-card.component';
 import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
 import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
+import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
 
 @NgModule({
   declarations: [
@@ -184,7 +185,8 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
     SummaryCardComponent,
     BannerComponent,
     SendBulkEmailComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DoingBusinessAsFormFieldComponent
   ],
   imports: [
     CommonModule,
@@ -274,7 +276,8 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
     SameAsComponent,
     SummaryCardComponent,
     BannerComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DoingBusinessAsFormFieldComponent
   ],
   providers: [
     FullnamePipe,
@@ -283,4 +286,4 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
     CapitalizePipe
   ]
 })
-export class SharedModule {}
+export class SharedModule { }

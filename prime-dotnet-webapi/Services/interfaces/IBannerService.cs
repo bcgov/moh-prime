@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Threading.Tasks;
 using Prime.Models;
 using Prime.ViewModels;
@@ -7,15 +7,9 @@ namespace Prime.Services
 {
     public interface IBannerService
     {
-        Task<BannerViewModel> GetBannerAsync(int bannerId);
-        Task<IEnumerable<BannerViewModel>> GetBannersAsync();
-        Task<BannerViewModel> GetBannerByLocationAsync(BannerLocationCode locationCode);
-        Task<BannerDisplayViewModel> GetActiveBannerByLocationAsync(BannerLocationCode locationCode);
-        Task<BannerViewModel> CreateBannerAsync(Banner banner);
-        Task RemoveBannerAsync(int bannerId);
-        Task<BannerViewModel> UpdateBannerAsync(int bannerId, BannerViewModel updateModel);
-        Task<BannerViewModel> CreateOrUpdateBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel);
-        Task RemoveBannerByLocationAsync(BannerLocationCode locationCode);
-
+        Task<BannerViewModel> GetBannerAsync(BannerLocationCode locationCode);
+        Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode, DateTime atTime);
+        Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel);
+        Task DeleteBannerAsync(BannerLocationCode locationCode);
     }
 }

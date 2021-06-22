@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
@@ -83,14 +83,6 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.deviceProviderNumber);
   }
 
-  public get hasJob(): boolean {
-    return (this.enrolment && !!this.enrolment.jobs.length);
-  }
-
-  public get jobs(): Job[] {
-    return (this.hasJob) ? this.enrolment.jobs : [];
-  }
-
   public get oboSites(): OboSite[] {
     return this.enrolment.oboSites ? this.enrolment.oboSites : [];
   }
@@ -103,19 +95,16 @@ export class EnrolleeReviewComponent {
     return (this.hasCareSetting) ? this.enrolment.careSettings : [];
   }
 
-  public get healthAuthorities(): { healthAuthorityCode: number, facilityCodes: number[] }[] {
+  public get healthAuthorities(): { healthAuthorityCode: number }[] {
     const healthAuthoritiesGrouped = this.enrolment?.enrolleeHealthAuthorities
-      ?.reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
-        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
+      ?.reduce((grouped: { [key: number]: number[] }, ha: EnrolleeHealthAuthority) => {
+        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? [])]);
         return grouped;
       }, {});
 
     const healthAuthorities = healthAuthoritiesGrouped
       ? Object.keys(healthAuthoritiesGrouped)
-        .map(key => ({
-          healthAuthorityCode: +key,
-          facilityCodes: healthAuthoritiesGrouped[key]
-        }))
+        .map(key => ({ healthAuthorityCode: +key }))
       : null;
 
     return (healthAuthorities?.length) ? healthAuthorities : [];

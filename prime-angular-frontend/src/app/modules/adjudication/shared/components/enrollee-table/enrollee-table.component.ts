@@ -20,7 +20,6 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @UntilDestroy()
 @Component({
@@ -37,6 +36,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   @Output() public route: EventEmitter<string | (string | number)[]>;
   @Output() public refresh: EventEmitter<number>;
   @Output() public sendBulkEmail: EventEmitter<void>;
+  @Output() public maintenance: EventEmitter<void>;
   @Output() public navigateEnrollee: EventEmitter<number>;
 
   @ViewChild(MatPaginator, { static: true }) public paginator: MatPaginator;
@@ -64,6 +64,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.refresh = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.sendBulkEmail = new EventEmitter<void>();
+    this.maintenance = new EventEmitter<void>();
     this.navigateEnrollee = new EventEmitter<number>();
     this.columns = [
       'prefixes',
@@ -166,11 +167,11 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     // Paginator must exist within the DOM, but does not
     // have to be visible based on the size of the dataset
-    this.hidePaginator = this.paginator.pageSize > this.enrollees.length;
+    this.hidePaginator = (this.paginator?.pageSize ?? 0) > this.enrollees.length;
     this.dataSource.data = this.enrollees;
   }
 
-  private createFormInstance() {
+  private createFormInstance(): void {
     this.form = this.fb.group({
       appliedDateRangeStart: ['', []],
       appliedDateRangeEnd: ['', []],
@@ -180,7 +181,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
     });
   }
 
-  private initForm() {
+  private initForm(): void {
     this.form.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe(value => this.dataSource.filter = value);

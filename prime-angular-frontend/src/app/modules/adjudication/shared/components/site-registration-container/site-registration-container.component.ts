@@ -79,8 +79,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  public onSearch(search: string | null): void {
-    this.routeUtils.updateQueryParams({ search });
+  public onSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch });
   }
 
   public onFilter(status: any | null): void {
@@ -154,8 +154,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-            this.siteResource.removeSiteAdjudicator(siteId),
-            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -284,7 +284,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     }
   }
 
-  private getDataset(queryParams: { search?: string, status?: number }): void {
+  private getDataset(queryParams: { textSearch?: string }): void {
     const { oid, sid } = this.route.snapshot.params;
     const request$ = (oid)
       ? combineLatest([
@@ -304,8 +304,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations({ search, status }: { search?: string, status?: number }): Observable<OrganizationSearchListViewModel[]> {
-    return this.organizationResource.getOrganizations(search)
+  private getOrganizations(queryParams: { textSearch?: string }): Observable<OrganizationSearchListViewModel[]> {
+    return this.organizationResource.getOrganizations(queryParams)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );

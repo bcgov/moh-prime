@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models.Api;
+using Prime.Extensions;
 using Prime.Services;
 using Prime.HttpClients;
 using Prime.ViewModels.Parties;
@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Route("api/parties/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee)]
-    public class PhsaController : ControllerBase
+    public class PhsaController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
         private readonly IKeycloakAdministrationClient _keycloakClient;
@@ -36,7 +36,7 @@ namespace Prime.Controllers
         /// If successful, also updates Keycloak with additional user info and the relevant role(s).
         /// </summary>
         [HttpPost(Name = nameof(CreatePhsaParty))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -44,21 +44,19 @@ namespace Prime.Controllers
         {
             if (changeModel == null)
             {
-                ModelState.AddModelError("Party", "Could not create the Party, the passed in model cannot be null.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Could not create the Party, the passed in model cannot be null.");
             }
 
             var validPartyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: changeModel.Email);
 
             if (!changeModel.Validate(validPartyTypes))
             {
-                ModelState.AddModelError("Party", "Validation failed: Email and Phone Number are required, and at least one Pre-Approved PHSA Party Type must be specified.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Validation failed: Email and Phone Number are required, and at least one Pre-Approved PHSA Party Type must be specified.");
             }
 
-            if (await _partyService.CreateOrUpdatePartyAsync(changeModel, User) == -1)
+            if ((await _partyService.CreateOrUpdatePartyAsync(changeModel, User)).IsInvalidId())
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when saving the Party." });
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not create the Party." });
             }
 
             if (!await _keycloakClient.UpdatePhsaUserInfo(User.GetPrimeUserId(), changeModel))
@@ -81,7 +79,7 @@ namespace Prime.Controllers
         {
             var partyTypes = await _partyService.GetPreApprovedRegistrationsAsync(firstName: User.GetFirstName(), lastName: User.GetLastName(), email: email);
 
-            return Ok(ApiResponse.Result(partyTypes));
+            return Ok(partyTypes);
         }
     }
 }

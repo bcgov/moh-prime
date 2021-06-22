@@ -25,5 +25,7 @@ namespace Prime.Models
         public bool RequestedRemoteAccess { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }
+
+        public bool Confirmed { get; set; }
     }
 }

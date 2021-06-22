@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+
 import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
@@ -24,9 +25,7 @@ import { AdjudicationDashboardComponent } from './shared/components/adjudication
 import { DatedContentTableComponent } from './shared/components/dated-content-table/dated-content-table.component';
 import { EnrolleeTableComponent } from './shared/components/enrollee-table/enrollee-table.component';
 import { SearchFormComponent } from './shared/components/search-form/search-form.component';
-import {
-  ReviewStatusContentComponent
-} from './shared/components/review-status-content/review-status-content.component';
+import { ReviewStatusContentComponent } from './shared/components/review-status-content/review-status-content.component';
 import { SiteRegistrationContainerComponent } from './shared/components/site-registration-container/site-registration-container.component';
 import { SiteRegistrationTableComponent } from './shared/components/site-registration-table/site-registration-table.component';
 import { SiteRegistrationActionsComponent } from './shared/components/site-registration-actions/site-registration-actions.component';
@@ -47,6 +46,32 @@ import { ContextualSiteNotificationComponent } from './shared/components/context
 import { EnrolleeBannerPageComponent } from './pages/enrollee-banner-page/enrollee-banner-page.component';
 import { SiteBannerPageComponent } from './pages/site-banner-page/site-banner-page.component';
 import { BannerMaintenanceComponent } from './shared/components/banner-maintenance/banner-maintenance.component';
+import { SiteRegistrationTabsComponent } from './shared/components/site-registration-tabs/site-registration-tabs.component';
+import { HealthAuthOrgInfoPageComponent } from './pages/health-authorities/health-auth-org-info-page/health-auth-org-info-page.component';
+import { ContextualEnrolmentConfirmationComponent } from './shared/components/contextual-enrolment-confirmation/contextual-enrolment-confirmation.component';
+import { MaintenanceContainerComponent } from './shared/components/maintenance-container/maintenance-container.component';
+import { NotificationEmailsContainerComponent } from './shared/components/notification-emails-container/notification-emails-container.component';
+import { NotificationEmailViewComponent } from './shared/components/notification-email-view/notification-email-view.component';
+import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-page/enrollee-maintenance-page.component';
+import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
+import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
+import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
+import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
+import { EnrolleeToaMaintenancePageComponent } from './pages/enrollee-toa-maintenance-page/enrollee-toa-maintenance-page.component';
+import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
+import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
+
+import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
+import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
+import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
+import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
+import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
+import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
+import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
+import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { OptionsFormComponent } from '@adjudication/shared/components/options-form/options-form.component';
 
 @NgModule({
   declarations: [
@@ -87,7 +112,32 @@ import { BannerMaintenanceComponent } from './shared/components/banner-maintenan
     ContextualSiteNotificationComponent,
     EnrolleeBannerPageComponent,
     SiteBannerPageComponent,
-    BannerMaintenanceComponent
+    BannerMaintenanceComponent,
+    SiteRegistrationTabsComponent,
+    HealthAuthOrgInfoPageComponent,
+    ContextualEnrolmentConfirmationComponent,
+    MaintenanceContainerComponent,
+    NotificationEmailsContainerComponent,
+    NotificationEmailViewComponent,
+    EnrolleeMaintenancePageComponent,
+    SiteMaintenancePageComponent,
+    EmailNotificationListPageComponent,
+    EmailNotificationViewPageComponent,
+    EnrolleeMaintenanceComponent,
+    EnrolleeToaMaintenancePageComponent,
+    EnrolleeToaMaintenanceListPageComponent,
+    EnrolleeToaMaintenanceViewPageComponent,
+    HealthAuthCareTypesPageComponent,
+    VendorsPageComponent,
+    PrivacyOfficerPageComponent,
+    TechnicalSupportsPageComponent,
+    AdministratorsPageComponent,
+    AuthorizedUsersPageComponent,
+    AuthorizedUserPageComponent,
+    HealthAuthorityTableComponent,
+    HealthAuthAuthorizedUsersViewComponent,
+    AuthorizedUserReviewComponent,
+    OptionsFormComponent
   ],
   imports: [
     AdjudicationRoutingModule,
@@ -96,4 +146,4 @@ import { BannerMaintenanceComponent } from './shared/components/banner-maintenan
     EditorModule
   ]
 })
-export class AdjudicationModule { }
+export class AdjudicationModule {}

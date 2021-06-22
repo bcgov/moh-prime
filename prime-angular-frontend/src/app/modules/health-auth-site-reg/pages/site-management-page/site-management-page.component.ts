@@ -1,25 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Organization } from '@registration/shared/models/organization.model';
-import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { FullnamePipe } from '@shared/pipes/fullname.pipe';
-import { AddressPipe } from '@shared/pipes/address.pipe';
-import { ConfigCodePipe } from '@config/config-code.pipe';
-import { UtilsService } from '@core/services/utils.service';
-import { OrganizationService } from '@registration/shared/services/organization.service';
-import { LoggerService } from '@core/services/logger.service';
-import { exhaustMap, map } from 'rxjs/operators';
-import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
+
+import { Subscription } from 'rxjs';
+
 import { ArrayUtils } from '@lib/utils/array-utils.class';
-import { optionalAddressLineItems } from '@shared/models/address.model';
-import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { OrganizationAgreementViewModel } from '@shared/models/agreement.model';
+import { ConfigCodePipe } from '@config/config-code.pipe';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { LoggerService } from '@core/services/logger.service';
+
+import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { VendorEnum } from '@shared/enums/vendor.enum';
+import { optionalAddressLineItems } from '@shared/models/address.model';
+import { AddressPipe } from '@shared/pipes/address.pipe';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
+
+// TODO if these actually are used in this module move to @lib
+import { Organization } from '@registration/shared/models/organization.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { SiteListViewModel } from '@registration/shared/models/site.model';
+import { OrganizationService } from '@registration/shared/services/organization.service';
+
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
 @Component({
@@ -83,8 +88,8 @@ export class SiteManagementPageComponent implements OnInit {
     const routePath = (site.completed)
       // ? [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id] // Defaults to overview
       // : [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id, HealthAuthSiteRegRoutes.VENDOR];
-    ? HealthAuthSiteRegRoutes.VENDOR
-    : HealthAuthSiteRegRoutes.VENDOR;
+      ? HealthAuthSiteRegRoutes.VENDOR
+      : HealthAuthSiteRegRoutes.VENDOR;
     this.routeUtils.routeRelativeTo(routePath);
   }
 
@@ -109,7 +114,10 @@ export class SiteManagementPageComponent implements OnInit {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
+      {
+        key: 'Site Address',
+        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+      },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
@@ -179,6 +187,8 @@ export class SiteManagementPageComponent implements OnInit {
     // TODO what are we doing with health authority?
     // this.busy = this.siteResource.createSite(organizationId)
     //   .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.VENDOR);
+    this.routeUtils.routeRelativeTo([
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT
+    ]);
   }
 }

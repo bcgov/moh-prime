@@ -8,7 +8,7 @@ namespace Prime.ViewModels
         public BannerType BannerType { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        public DateTimeOffset StartDate { get; set; }
-        public DateTimeOffset EndDate { get; set; }
+        public DateTime StartTimestamp { get; set; }
+        public DateTime EndTimestamp { get; set; }
     }
 }

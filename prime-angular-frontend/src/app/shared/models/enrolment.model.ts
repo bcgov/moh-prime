@@ -5,7 +5,7 @@ import { EnrolleeClassification } from '@shared/enums/enrollee-classification.en
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { IdentificationDocument } from '@shared/models/identification-document.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 
 import { Admin } from '@auth/shared/models/admin.model';
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
@@ -28,7 +28,6 @@ export interface HttpEnrollee extends Enrollee {
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  jobs: Job[];
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
@@ -37,7 +36,7 @@ export interface HttpEnrollee extends Enrollee {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   enrolleeCareSettings: CareSetting[];
-  enrolleeHealthAuthorities: HealthAuthority[];
+  enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -79,7 +78,6 @@ export interface Enrolment {
   certifications: CollegeCertification[];
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
-  jobs: Job[];
   oboSites: OboSite[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
@@ -88,7 +86,7 @@ export interface Enrolment {
   selfDeclarationDocuments: SelfDeclarationDocument[];
   identificationDocuments: IdentificationDocument[];
   careSettings: CareSetting[];
-  enrolleeHealthAuthorities: HealthAuthority[];
+  enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
   enrolmentStatuses: EnrolmentStatus[];
   currentStatus: EnrolmentStatus;
   previousStatus: EnrolmentStatus;
@@ -128,4 +126,6 @@ export interface EnrolleeListViewModel {
   remoteAccess: boolean;
   careSettingCodes: number[];
   hasNotification: boolean;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }

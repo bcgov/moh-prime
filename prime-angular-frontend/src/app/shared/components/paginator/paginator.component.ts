@@ -1,6 +1,7 @@
 import { AfterContentInit, Component, ContentChild, EventEmitter, Input, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { UtilsService } from '@core/services/utils.service';
 
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 
@@ -20,12 +21,12 @@ export class PaginatorComponent implements AfterContentInit {
    */
   @Input() public hidePaginator: boolean;
   @Output() public changed: EventEmitter<{ pageIndex: number }>;
-
   @ContentChild(MatPaginator, { static: true }) public paginator: MatPaginator;
 
   public form: FormControl;
 
   constructor(
+    private utilService: UtilsService,
     private fb: FormBuilder
   ) { }
 
@@ -34,7 +35,8 @@ export class PaginatorComponent implements AfterContentInit {
     return value < 1 || value > this.paginator.getNumberOfPages();
   }
 
-  public onChange(): void {
+  public onChange(event): void {
+    event.preventDefault();
     // Zero index the form value for comparison
     const value = +this.form.value - 1;
     if (value !== this.paginator.pageIndex && value <= this.paginator.getNumberOfPages()) {
@@ -60,7 +62,10 @@ export class PaginatorComponent implements AfterContentInit {
     ]);
 
     this.paginator.page
-      .subscribe((event: PageEvent) => this.form.patchValue(event.pageIndex + 1));
+      .subscribe((event: PageEvent) => {
+        this.form.patchValue(event.pageIndex + 1);
+        this.utilService.scrollTop();
+      });
   }
 
   /**

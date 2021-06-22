@@ -20,6 +20,7 @@ namespace Prime.HttpClients.Mail
             ILogger<ChesClient> logger)
             : base(PropertySerialization.CamelCase)
         {
+            // Credentials and Base Url are set in Startup.cs
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _logger = logger;
         }

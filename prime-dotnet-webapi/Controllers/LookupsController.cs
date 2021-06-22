@@ -14,7 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class LookupsController : ControllerBase
+    public class LookupsController : PrimeControllerBase
     {
         private readonly ILookupService _lookupService;
         private readonly ICollegeLicenceClient _collegeLicenceClient;
@@ -30,13 +30,12 @@ namespace Prime.Controllers
         /// Gets all the lookup code values.
         /// </summary>
         [HttpGet]
-        [Authorize]
         [ProducesResponseType(typeof(ApiResultResponse<LookupEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetLookups()
         {
             var lookupEntity = await _lookupService.GetLookupsAsync();
 
-            return Ok(ApiResponse.Result(lookupEntity));
+            return Ok(lookupEntity);
         }
 
         // POST /api/lookups/validate-licence
@@ -50,7 +49,7 @@ namespace Prime.Controllers
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
-            return Ok(ApiResponse.Result(record));
+            return Ok(record);
         }
     }
 }

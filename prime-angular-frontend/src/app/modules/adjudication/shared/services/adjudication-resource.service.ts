@@ -12,7 +12,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
@@ -82,8 +82,8 @@ export class AdjudicationResource {
       );
   }
 
-  public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
+  public enrolleeStatusAction(enrolleeId: number, action: EnrolleeStatusAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => {
@@ -92,7 +92,7 @@ export class AdjudicationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment status could not be updated');
-          this.logger.error('[Adjudication] AdjudicationResource::submissionAction error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );
@@ -136,6 +136,18 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be marked as always manual');
           this.logger.error('[Adjudication] AdjudicationResource::updateEnrolleeAlwaysManual error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public confirmSubmission(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/submissions/latest/confirm`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Enrollee submission could not be confirmed');
+          this.logger.error('[Adjudication] AdjudicationResource::confirmSubmission error has occurred: ', error);
           throw error;
         })
       );
@@ -516,10 +528,6 @@ export class AdjudicationResource {
 
     if (!enrollee.certifications) {
       enrollee.certifications = [];
-    }
-
-    if (!enrollee.jobs) {
-      enrollee.jobs = [];
     }
 
     if (!enrollee.enrolleeCareSettings) {

@@ -1,0 +1,25 @@
+<app-page>
+
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+
+  <app-progress-indicator message="Access Declined"></app-progress-indicator>
+
+  <div class="mb-5">
+    <app-alert type="danger"
+               icon="error_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        You have been declined as an Authorized User.
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Next Steps</ng-container>
+  </app-page-subheader>
+
+  <p>
+    If you have questions regarding your application, please contact us.
+  </p>
+
+</app-page>

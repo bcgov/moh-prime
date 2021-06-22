@@ -4,7 +4,7 @@
    [class.small]="small"
    [matMenuTriggerFor]="help"
    (click)="onOpen($event)">
-  <mat-icon>{{ icon }}</mat-icon>
+  <mat-icon [class.material-icons-outlined]="outlined">{{ icon }}</mat-icon>
 </a>
 <mat-menu #help="matMenu"
           [class]="advanced ? 'advanced-context p-3' : 'p-3'"

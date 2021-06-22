@@ -87,10 +87,7 @@ namespace Prime.Models
         /// <param name="types"></param>
         public void SetPartyTypes(params PartyType[] types)
         {
-            if (PartyEnrolments == null)
-            {
-                PartyEnrolments = new List<PartyEnrolment>();
-            }
+            PartyEnrolments ??= new List<PartyEnrolment>();
 
             foreach (var type in types)
             {

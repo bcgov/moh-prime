@@ -1,18 +1,18 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.ViewModels.Agreements;
 using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Services.Razor;
 
 namespace Prime.Services
@@ -258,7 +258,7 @@ namespace Prime.Services
 
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "signed_agreements");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedAgreements);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -292,6 +292,42 @@ namespace Prime.Services
             }
         }
 
+        private async Task<string> GetOrganizationName(int organizationId)
+        {
+            return await _context.Organizations
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+        }
+
+        public async Task<IEnumerable<AgreementVersionListViewModel>> GetLatestEnrolleeAgreementVersionsAsync()
+        {
+            var agreementVersionList = new List<AgreementVersion>();
+            foreach (var type in AgreementTypeExtensions.EnrolleeAgreementTypes())
+            {
+                agreementVersionList.Add(await FetchNewestAgreementVersionOfTypeAsync(type));
+            }
+            return _mapper.Map<IEnumerable<AgreementVersionListViewModel>>(agreementVersionList);
+        }
+
+        public async Task<AgreementVersionViewModel> GetAgreementVersionById(int agreementId)
+        {
+            return await _context.AgreementVersions
+               .AsNoTracking()
+               .Where(av => av.Id == agreementId)
+               .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
+               .SingleOrDefaultAsync();
+        }
+
+        private async Task<AgreementVersion> FetchNewestAgreementVersionOfTypeAsync(AgreementType type)
+        {
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .Where(av => av.AgreementType == type)
+                .OrderByDescending(av => av.EffectiveDate)
+                .FirstOrDefaultAsync();
+        }
+
         private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
         {
             return await _context.AgreementVersions
@@ -300,14 +336,6 @@ namespace Prime.Services
                 .Where(a => a.AgreementType == type)
                 .Select(a => a.Id)
                 .FirstAsync();
-        }
-
-        private async Task<string> GetOrganizationName(int organizationId)
-        {
-            return await _context.Organizations
-                .Where(o => o.Id == organizationId)
-                .Select(o => o.Name)
-                .SingleAsync();
         }
     }
 }

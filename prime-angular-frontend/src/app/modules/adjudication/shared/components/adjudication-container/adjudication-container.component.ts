@@ -11,7 +11,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -74,8 +74,8 @@ export class AdjudicationContainerComponent implements OnInit {
     this.showSearchFilter = false;
   }
 
-  public onSearch(search: string | null): void {
-    this.routeUtils.updateQueryParams({ search });
+  public onSearch(textSearch: string | null): void {
+    this.routeUtils.updateQueryParams({ textSearch });
   }
 
   public onFilter(status: EnrolmentStatus | null): void {
@@ -181,7 +181,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.APPROVE)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.APPROVE)
       )
       .subscribe((approvedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(approvedEnrollee);
@@ -201,7 +201,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.DECLINE_PROFILE)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.DECLINE_PROFILE)
       )
       .subscribe((declinedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(declinedEnrollee);
@@ -221,7 +221,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.LOCK_PROFILE)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.LOCK_PROFILE)
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee);
@@ -241,7 +241,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.ENABLE_EDITING)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((lockedEnrollee: HttpEnrollee) => {
         this.updateEnrollee(lockedEnrollee);
@@ -261,7 +261,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.ENABLE_EDITING)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee);
@@ -281,7 +281,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.ENABLE_EDITING)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.ENABLE_EDITING)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee);
@@ -301,7 +301,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.CANCEL_TOA)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.CANCEL_TOA)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee);
@@ -321,7 +321,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        this.adjudicationActionPipe(enrolleeId, SubmissionAction.RERUN_RULES)
+        this.adjudicationActionPipe(enrolleeId, EnrolleeStatusAction.RERUN_RULES)
       )
       .subscribe((enableEnrollee: HttpEnrollee) => {
         this.updateEnrollee(enableEnrollee);
@@ -455,8 +455,8 @@ export class AdjudicationContainerComponent implements OnInit {
       });
   }
 
-  private getEnrollees({ search, status }: { search?: string, status?: number }) {
-    return this.adjudicationResource.getEnrollees(search, status)
+  private getEnrollees({ textSearch, status }: { textSearch?: string, status?: number }) {
+    return this.adjudicationResource.getEnrollees(textSearch, status)
       .pipe(
         tap(() => this.showSearchFilter = true)
       );
@@ -468,10 +468,10 @@ export class AdjudicationContainerComponent implements OnInit {
     this.enrollees = [...this.enrollees];
   }
 
-  private adjudicationActionPipe(enrolleeId: number, action: SubmissionAction) {
+  private adjudicationActionPipe(enrolleeId: number, action: EnrolleeStatusAction) {
     return pipe(
       exhaustMap((result: { output: string }) => (result) ? of(result.output ?? null) : EMPTY),
-      exhaustMap((note: string) => this.adjudicationResource.submissionAction(enrolleeId, action).pipe(map(() => note))),
+      exhaustMap((note: string) => this.adjudicationResource.enrolleeStatusAction(enrolleeId, action).pipe(map(() => note))),
       exhaustMap((note: string) => this.adjudicationResource.createEnrolmentReference(enrolleeId).pipe(map(() => note))),
       exhaustMap((note: string) =>
         (note)
@@ -546,6 +546,8 @@ export class AdjudicationContainerComponent implements OnInit {
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
+      requiresConfirmation: false,
+      confirmed: false
     };
   }
 }

@@ -8,7 +8,7 @@ namespace Prime.Models
     /// This is related to PLR-sourced data
     /// </summary>
     [Table("IdentifierTypeLookup")]
-    public class IdentifierType : BaseAuditable, ILookup<string>
+    public class IdentifierType : ILookup<string>
     {
         /// <summary>
         /// Identifier OID, e.g. 2.16.840.1.113883.3.40.2.20

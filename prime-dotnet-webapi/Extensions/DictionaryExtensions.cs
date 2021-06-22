@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.WebUtilities;
 
 namespace Prime.Extensions
 {
@@ -11,16 +10,6 @@ namespace Prime.Extensions
             return dictionary
                 .Where(x => x.Value != null)
                 .ToDictionary(x => x.Key, x => x.Value);
-        }
-
-        public static string ToQueryStringUrl(this Dictionary<string, string> parameters, string baseUrl, bool removeNullValues = true)
-        {
-            if (removeNullValues)
-            {
-                parameters = parameters.RemoveNullValues();
-            }
-
-            return QueryHelpers.AddQueryString(baseUrl, parameters);
         }
     }
 }

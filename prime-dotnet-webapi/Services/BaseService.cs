@@ -8,6 +8,8 @@ namespace Prime.Services
 
         protected readonly IHttpContextAccessor _httpContext;
 
+        protected const int InvalidId = -1;
+
         protected BaseService(ApiDbContext context, IHttpContextAccessor httpContext)
         {
             _context = context;

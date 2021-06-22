@@ -1,5 +1,5 @@
+import { Party } from '@lib/models/party.model';
 import { SiteListViewModel } from './site.model';
-import { Party } from './party.model';
 
 export interface Organization {
   id?: number;

@@ -6,6 +6,7 @@ namespace Prime.Models
         SigningAuthority = 2,
         Labtech = 3,
         Immunizer = 4,
-        Gis = 5
+        Gis = 5,
+        AuthorizedUser = 6
     }
 }

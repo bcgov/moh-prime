@@ -33,14 +33,16 @@
       </mat-card>
     </div>
     <div class="col-6">
-      <h2>Adjudication</h2>
-      <mat-card id="adjudicationCard">
-        <mat-card-content>
-          <app-review-status-content [enrollee]="enrollee"
-                                     [hideStatusHistory]="true">
-          </app-review-status-content>
-        </mat-card-content>
-      </mat-card>
+      <ng-container *ngIf="showAdjudication">
+        <h2>Adjudication</h2>
+        <mat-card id="adjudicationCard">
+          <mat-card-content>
+            <app-review-status-content [enrollee]="enrollee"
+                                       [hideStatusHistory]="true">
+            </app-review-status-content>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
 
       <app-adjudicator-actions *ngIf="enrollees?.length"
                                class="float-right"

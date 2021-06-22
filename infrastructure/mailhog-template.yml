@@ -1,0 +1,150 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+parameters:
+- name: APP_NAME
+  displayName: Application Name
+  description: For grouping together utilities by scope
+  value: utilities
+- name: MAILHOG_SERVICE_NAME
+  displayName: Mailhog Service Name
+  value: mailhog-server
+  required: true
+- name: MAILHOG_ROUTE_HOST
+  displayName: Mailhog Route Host
+  description: The hostname to use when creating an OpenShift Route (Leave blank to use defaults.)
+  value: ""
+  required: false
+- name: MAILHOG_IMAGE
+  displayName: Mailhog Docker Image
+  value: registry.hub.docker.com/mailhog/mailhog:latest
+  description: The mailhog docker image to use
+  required: true
+message: |-
+  The following service(s) have been created in your project:
+    1. ${MAILHOG_SERVICE_NAME}
+labels:
+  template: mailhog-template
+  app: ${APP_NAME}
+  app.kubernetes.io/component: ${APP_NAME}
+  app.kubernetes.io/instance: ${APP_NAME}
+  app.kubernetes.io/part-of: ${APP_NAME}
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ${SVC_NAME}
+    app.openshift.io/runtime: golang
+  name: mailhog
+  annotations:
+    openshift.io/display-name: "Mailhog"
+    openshift.io/long-description: >
+      This template provides a Mmailhog instance.
+    description: >
+      This is a Mailhog deployment.
+objects:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: mailhog
+    name: ${MAILHOG_SERVICE_NAME}
+  spec:
+    tags:
+    - from:
+        kind: DockerImage
+        name: ${MAILHOG_IMAGE}
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      template.openshift.io/expose-uri: http://{.spec.clusterIP}:{.spec.ports[?(.name=="${MAILHOG_SERVICE_NAME}")].port}
+    name: ${MAILHOG_SERVICE_NAME}
+    labels:
+      app: mailhog
+      service: ${MAILHOG_SERVICE_NAME}
+  spec:
+    ports:
+    - name: "1025"
+      port: 1025
+      protocol: TCP
+      targetPort: 1025
+    - name: "25"
+      port: 25
+      protocol: TCP
+      targetPort: 1025
+    - name: "80"
+      port: 80
+      protocol: TCP
+      targetPort: 8025
+    selector:
+      app: mailhog
+      deploymentconfig: ${MAILHOG_SERVICE_NAME}
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Route
+  metadata:
+    name: ${MAILHOG_SERVICE_NAME}
+    labels:
+      app: mailhog
+      service: ${MAILHOG_SERVICE_NAME}
+  spec:
+    host: ${MAILHOG_ROUTE_HOST}
+    port:
+      targetPort: '80'
+    tls:
+      insecureEdgeTerminationPolicy: Redirect
+      termination: edge
+    to:
+      kind: Service
+      name: ${MAILHOG_SERVICE_NAME}
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    name: ${MAILHOG_SERVICE_NAME}
+    labels:
+      app: mailhog
+      service: ${MAILHOG_SERVICE_NAME}
+      app.kubernetes.io/part-of: ${APP_NAME}
+  spec:
+    replicas: 1
+    selector:
+      deploymentconfig: ${MAILHOG_SERVICE_NAME}
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        labels:
+          app: mailhog
+          service: ${MAILHOG_SERVICE_NAME}
+          deploymentconfig: ${MAILHOG_SERVICE_NAME}
+          template: mailhog
+      spec:
+        containers:
+        - name: ${MAILHOG_SERVICE_NAME}
+          image: ${MAILHOG_IMAGE}
+          imagePullPolicy: Always
+          ports:
+          - containerPort: 8025
+            name: mailhog-80
+            protocol: TCP
+          - containerPort: 1025
+            name: mailhog-1025
+            protocol: TCP
+          - containerPort: 1025
+            name: mailhog-25
+            protocol: TCP
+        restartPolicy: Always
+    triggers:
+    - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${MAILHOG_SERVICE_NAME}
+        from:
+          kind: ImageStreamTag
+          name: ${MAILHOG_SERVICE_NAME}:latest

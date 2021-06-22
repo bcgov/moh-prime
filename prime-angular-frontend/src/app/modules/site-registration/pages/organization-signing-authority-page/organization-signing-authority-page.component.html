@@ -126,17 +126,6 @@
 
           <mat-form-field class="w-100">
             <input matInput
-                   placeholder="Job Title"
-                   formControlName="jobRoleTitle">
-            <mat-error>Required</mat-error>
-          </mat-form-field>
-
-        </div>
-
-        <div class="col-12">
-
-          <mat-form-field class="w-100">
-            <input matInput
                    placeholder="Phone Number"
                    formControlName="phone"
                    mask="(000) 000-0000"
@@ -180,6 +169,28 @@
                    [showMaskTyped]="false">
             <mat-error *ngIf="formState.fax.hasError('required')">Required</mat-error>
             <mat-error *ngIf="formState.fax.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Job Information</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide your job information.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Job Title"
+                   formControlName="jobRoleTitle">
+            <mat-error>Required</mat-error>
           </mat-form-field>
 
         </div>

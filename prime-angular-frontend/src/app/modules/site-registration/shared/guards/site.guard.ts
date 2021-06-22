@@ -73,7 +73,7 @@ export class SiteGuard extends BaseGuard {
       childRoute = childRoute.split('?')[0];
     }
 
-    const whiteListedRoutes = site.submittedDate
+    const allowlistRoutes = site.submittedDate
       ? [
         ...SiteRoutes.editRegistrationRouteAccess(),
         ...ArrayUtils.insertIf(
@@ -84,7 +84,7 @@ export class SiteGuard extends BaseGuard {
       : SiteRoutes.siteRegistrationRoutes();
 
     // Redirect to an appropriate default route
-    if (!whiteListedRoutes.includes(childRoute)) {
+    if (!allowlistRoutes.includes(childRoute)) {
       return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
     }
 

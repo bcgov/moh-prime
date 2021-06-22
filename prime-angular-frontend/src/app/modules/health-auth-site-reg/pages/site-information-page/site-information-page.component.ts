@@ -56,7 +56,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack() {
-    this.routeUtils.routeTo([HealthAuthSiteRegRoutes.MODULE_PATH, HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_SETTING]);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.VENDOR);
   }
 
   public ngOnInit(): void {
@@ -85,7 +85,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
 
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
+      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
 
     this.routeUtils.routeRelativeTo(routePath);
   }

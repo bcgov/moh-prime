@@ -24,7 +24,7 @@ export class CollectionNoticePageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public onAccept() {
+  public onAccept(): void {
     this.authService.hasJustLoggedIn = false;
     this.nextRoute();
   }
@@ -33,10 +33,9 @@ export class CollectionNoticePageComponent implements OnInit {
     this.authService.hasJustLoggedIn = true;
   }
 
-  private nextRoute() {
-    // TODO route to SITE_MANAGEMENT and have the guards manage route by status, but for now temporarily sent to authorized user
-    // TODO replace use of router with routeUtils
-    // this.router.navigate([HealthAuthSiteRegRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent });
-    this.router.navigate([HealthAuthSiteRegRoutes.AUTHORIZED_USER], { relativeTo: this.route.parent });
+  private nextRoute(): void {
+    // Redirect to site management and allow the guards to
+    // figure out the proper routing
+    this.router.navigate([HealthAuthSiteRegRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent });
   }
 }
