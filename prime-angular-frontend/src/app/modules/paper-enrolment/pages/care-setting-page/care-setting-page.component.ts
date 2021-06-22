@@ -84,7 +84,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     }
 
     // If an individual health authority was deselected, its Obo Sites should be removed as well
-    this.paperEnrolmentFormStateService.jobsFormState.removeUnselectedHAOboSites(this.enrolment);
+    this.paperEnrolmentFormStateService.jobsFormState.removeUnselectedHAOboSites(this.paperEnrolmentService.enrolment);
 
     // if (this.formUtilsService.checkValidity(this.form)) {
     //   this.handleSubmission();

@@ -11,6 +11,7 @@ import { DemographicPageComponent } from './pages/demographic-page/demographic-p
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
 import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
+import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 const routes: Routes = [
@@ -43,6 +44,12 @@ const routes: Routes = [
             data: { title: 'PRIME Profile' }
           },
           {
+            path: PaperEnrolmentRoutes.OBO_SITES,
+            component: OboSitesPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
             path: PaperEnrolmentRoutes.SELF_DECLARATION,
             component: SelfDeclarationPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
@@ -69,4 +76,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PaperEnrolmentRoutingModule {}
+export class PaperEnrolmentRoutingModule { }
