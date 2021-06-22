@@ -7,7 +7,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentGuard } from '@paper-enrolment/shared/guards/paper-enrolment.guard';
 import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
 
-import { DemographicComponent } from './pages/demographic/demographic.component';
+import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
 import { CareSettingComponent } from './pages/care-setting/care-setting.component';
 import { RegulatoryComponent } from './pages/regulatory/regulatory.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
@@ -25,7 +25,7 @@ const routes: Routes = [
         children: [
           {
             path: PaperEnrolmentRoutes.DEMOGRAPHIC,
-            component: DemographicComponent,
+            component: DemographicPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },

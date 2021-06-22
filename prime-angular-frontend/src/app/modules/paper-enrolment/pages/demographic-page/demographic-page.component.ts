@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, pipe } from 'rxjs';
+import { pipe } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import moment from 'moment';
+
+import { MINIMUM_AGE } from '@lib/constants';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -14,22 +19,18 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { optionalAddressLineItems } from '@shared/models/address.model';
 
-import { DemographicFormState } from './demographic-form-state.class';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import moment from 'moment';
-import { MINIMUM_AGE } from '@lib/constants';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { DemographicFormState } from './demographic-page-form-state.class';
 
 @Component({
   selector: 'app-demographic',
-  templateUrl: './demographic.component.html',
-  styleUrls: ['./demographic.component.scss']
+  templateUrl: './demographic-page.component.html',
+  styleUrls: ['./demographic-page.component.scss']
 })
-export class DemographicComponent extends AbstractEnrolmentPage implements OnInit {
+export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public form: FormGroup;
   public formState: DemographicFormState;
   public enrolment: Enrolment;
@@ -68,7 +69,7 @@ export class DemographicComponent extends AbstractEnrolmentPage implements OnIni
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm()
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
