@@ -1,6 +1,6 @@
 <app-page [busy]="busy">
 
-  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-page-header>PRIME Profile</app-page-header>
 
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
@@ -43,7 +43,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasRegistrationSuspended.value"
+      <div *ngIf="formState.hasRegistrationSuspended.value"
            class="row">
         <div class="col pt-3">
 
@@ -72,7 +72,7 @@
                         rows="5"
                         #hasRegistrationSuspended
                         formControlName="hasRegistrationSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
@@ -104,7 +104,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasConviction.value"
+      <div *ngIf="formState.hasConviction.value"
            class="row">
         <div class="col pt-3">
 
@@ -133,7 +133,7 @@
                         rows="5"
                         #hasConvictionInput
                         formControlName="hasConvictionDetails"></textarea>
-              <mat-error *ngIf="hasConvictionDetails.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.hasConvictionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
@@ -167,7 +167,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasPharmaNetSuspended.value"
+      <div *ngIf="formState.hasPharmaNetSuspended.value"
            class="row">
         <div class="col pt-3">
 
@@ -192,7 +192,7 @@
                         rows="5"
                         #hasPharmaNetSuspended
                         formControlName="hasPharmaNetSuspendedDetails"></textarea>
-              <mat-error *ngIf="hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
@@ -224,7 +224,7 @@
         </mat-radio-button>
       </mat-radio-group>
 
-      <div *ngIf="hasDisciplinaryAction.value"
+      <div *ngIf="formState.hasDisciplinaryAction.value"
            class="row">
         <div class="col pt-3">
 
@@ -250,7 +250,7 @@
                         rows="5"
                         #hasDisciplinaryAction
                         formControlName="hasDisciplinaryActionDetails"></textarea>
-              <mat-error *ngIf="hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formState.hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
             <li class="small mb-2">
@@ -268,7 +268,7 @@
 
     </section>
 
-    <app-page-footer [isInitialEnrolment]="isInitialEnrolment"
+    <app-page-footer [isInitialEnrolment]="true"
                      (save)="onSubmit()"
                      (back)="onBack()"></app-page-footer>
 

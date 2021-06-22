@@ -16,6 +16,7 @@ import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form
 import { DemographicFormState } from '@paper-enrolment/pages/demographic-page/demographic-page-form-state.class';
 import { CareSettingFormState } from '@paper-enrolment/pages/care-setting-page/care-setting-page-form-state.class';
 import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites-page/obo-sites-page-form-state.class';
+import { SelfDeclarationFormState } from '@paper-enrolment/pages/self-declaration-page/self-declaration-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
   public careSettingFormState: CareSettingFormState;
   public regulatoryFormState: RegulatoryFormState;
   public jobsFormState: OboSiteFormState;
-  public selfDeclarationForm: FormGroup;
+  public selfDeclarationFormState: SelfDeclarationFormState;
   public accessAgreementForm: FormGroup;
 
   private enrolleeId: number;
@@ -76,7 +77,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     const certifications = this.regulatoryFormState.json;
     const { oboSites } = this.jobsFormState.json;
     const careSettings = this.careSettingFormState.convertCareSettingFormToJson(id);
-    const selfDeclarations = this.convertSelfDeclarationsToJson();
+    const selfDeclarations = this.selfDeclarationFormState.convertSelfDeclarationsToJson(id);
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {
@@ -103,7 +104,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       this.careSettingFormState.form,
       this.regulatoryFormState.form,
       this.jobsFormState.form,
-      this.selfDeclarationForm,
+      this.selfDeclarationFormState.form,
     ];
   }
 
@@ -159,7 +160,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     this.careSettingFormState = new CareSettingFormState(this.fb, this.configService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.jobsFormState = new OboSiteFormState(this.fb, this.formUtilsService, this.configService);
-    this.selfDeclarationForm = this.buildSelfDeclarationForm();
+    this.selfDeclarationFormState = new SelfDeclarationFormState(this.fb, this.formUtilsService, this.configService)
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -176,28 +177,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     this.careSettingFormState.patchValue(enrolment);
     this.regulatoryFormState.patchValue(enrolment.certifications);
     this.jobsFormState.patchValue(enrolment);
-
-    const defaultValue = (enrolment.profileCompleted) ? false : null;
-    const selfDeclarationsTypes = {
-      hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
-      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED,
-      hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
-      hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED
-    };
-    const selfDeclarations = Object.keys(selfDeclarationsTypes)
-      .reduce((sds, sd) => {
-        const type = selfDeclarationsTypes[sd];
-        const selfDeclarationDetails = enrolment.selfDeclarations
-          .find(esd => esd.selfDeclarationTypeCode === type)
-          ?.selfDeclarationDetails;
-        const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : defaultValue,
-          [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
-        };
-        return { ...sds, ...adapted };
-      }, {});
-
-    this.selfDeclarationForm.patchValue(selfDeclarations);
+    this.selfDeclarationFormState.patchValue(enrolment);
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -214,137 +194,8 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
   }
 
   /**
-   * JSON Helpers
-   */
-
-  private convertSelfDeclarationsToJson(): SelfDeclaration[] {
-    const selfDeclarations = this.selfDeclarationForm.getRawValue();
-    const selfDeclarationsTypes = {
-      hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
-      hasDisciplinaryAction: SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION,
-      hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
-      hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
-    };
-    return Object.keys(selfDeclarationsTypes)
-      .reduce((sds: SelfDeclaration[], sd: string) => {
-        if (selfDeclarations[sd]) {
-          sds.push(
-            new SelfDeclaration(
-              selfDeclarationsTypes[sd],
-              selfDeclarations[`${sd}Details`],
-              selfDeclarations[`${sd}DocumentGuids`],
-              this.enrolleeId
-            )
-          );
-        }
-        return sds;
-      }, []);
-  }
-
-  /**
    * Form Builders and Helpers
    */
-  public buildJobsForm(): FormGroup {
-    return this.fb.group({
-      oboSites: this.fb.array([]),
-      communityHealthSites: this.fb.array([]),
-      communityPharmacySites: this.fb.array([]),
-      healthAuthoritySites: this.fb.group({})
-    });
-  }
-
-  public buildOboSiteForm(): FormGroup {
-    return this.fb.group({
-      careSettingCode: [null, []],
-      healthAuthorityCode: [null, []],
-      siteName: [null, []],
-      facilityName: [null, []],
-      jobTitle: [null, [Validators.required]],
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2'],
-        useDefaults: ['provinceCode', 'countryCode'],
-        areDisabled: ['provinceCode', 'countryCode']
-      }),
-      pec: [null, []]
-    });
-  }
-
-  public buildDeviceProviderForm(): FormGroup {
-    return this.fb.group({
-      deviceProviderNumber: [null, [
-        FormControlValidators.numeric,
-        FormControlValidators.requiredLength(5)
-      ]],
-      isInsulinPumpProvider: [false, [FormControlValidators.requiredBoolean]]
-    });
-  }
-
-  public buildRemoteAccessForm(): FormGroup {
-    return this.fb.group({
-      remoteAccessSites: this.fb.array([]),
-      enrolleeRemoteUsers: this.fb.array([])
-    });
-  }
-
-  public enrolleeRemoteUserFormGroup(): FormGroup {
-    return this.fb.group({
-      enrolleeId: [null, []],
-      remoteUserId: [null, []]
-    });
-  }
-
-  public remoteAccessSiteFormGroup(): FormGroup {
-    return this.fb.group({
-      enrolleeId: [null, []],
-      siteId: [null, []],
-      doingBusinessAs: [null, []],
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2']
-      }),
-      siteVendors: this.fb.array([])
-    });
-  }
-
-  public buildRemoteAccessLocationsForm(): FormGroup {
-    return this.fb.group({
-      remoteAccessLocations: this.fb.array([])
-    });
-  }
-
-  public remoteAccessLocationFormGroup(): FormGroup {
-    return this.fb.group({
-      internetProvider: [
-        null,
-        [Validators.required]
-      ],
-      physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        exclude: ['street2'],
-        useDefaults: ['provinceCode', 'countryCode'],
-        areDisabled: ['provinceCode', 'countryCode']
-      })
-    });
-  }
-
-  private buildSelfDeclarationForm(): FormGroup {
-    return this.fb.group({
-      hasConviction: [null, [FormControlValidators.requiredBoolean]],
-      hasConvictionDetails: [null, []],
-      hasConvictionDocumentGuids: this.fb.array([]),
-      hasRegistrationSuspended: [null, [FormControlValidators.requiredBoolean]],
-      hasRegistrationSuspendedDetails: [null, []],
-      hasRegistrationSuspendedDocumentGuids: this.fb.array([]),
-      hasDisciplinaryAction: [null, [FormControlValidators.requiredBoolean]],
-      hasDisciplinaryActionDetails: [null, []],
-      hasDisciplinaryActionDocumentGuids: this.fb.array([]),
-      hasPharmaNetSuspended: [null, [FormControlValidators.requiredBoolean]],
-      hasPharmaNetSuspendedDetails: [null, []],
-      hasPharmaNetSuspendedDocumentGuids: this.fb.array([])
-    });
-  }
-
   private buildAccessAgreementForm(): FormGroup {
     return this.fb.group({
       accessAgreementGuid: [
@@ -354,26 +205,4 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     });
   }
 
-  /**
-   * Document Upload Helpers
-   */
-
-  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
-    control.push(this.fb.control(value));
-  }
-
-  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
-    control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
-  }
-
-  public clearSelfDeclarationDocumentGuids() {
-    [
-      'hasConvictionDocumentGuids',
-      'hasRegistrationSuspendedDocumentGuids',
-      'hasDisciplinaryActionDocumentGuids',
-      'hasPharmaNetSuspendedDocumentGuids'
-    ]
-      .map((formArrayName: string) => this.selfDeclarationForm.get(formArrayName) as FormArray)
-      .forEach((formArray: FormArray) => formArray.clear());
-  }
 }
