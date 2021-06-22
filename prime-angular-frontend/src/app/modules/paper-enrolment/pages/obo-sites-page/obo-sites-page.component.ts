@@ -80,8 +80,8 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   public routeBackTo() {
-    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.DEMOGRAPHIC]);
-    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.DEMOGRAPHIC]);
+    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.REGULATORY]);
+    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.REGULATORY]);
   }
 
   public ngOnInit(): void {
@@ -182,15 +182,8 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   private nextRouteAfterSubmit(): void {
-    const oboSites = this.formState.oboSites.value as OboSite[];
-
-    let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
-    if (oboSites?.length) {
-      // Should edit existing Job/OboSites next
-      nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
-    }
-    // this.routeTo(['../', this.enrolment.id, nextRouthPath]);
-    this.routeUtils.routeRelativeTo(['../', '1', nextRoutePath]);
+    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.SELF_DECLARATION]);
+    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.SELF_DECLARATION]);
   }
 
   /**

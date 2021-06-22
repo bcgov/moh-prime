@@ -14,6 +14,7 @@ import { CareSettingPageComponent } from './pages/care-setting-page/care-setting
 import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
+import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
     CareSettingPageComponent,
     RegulatoryPageComponent,
     OboSitesPageComponent,
-    SelfDeclarationPageComponent
+    SelfDeclarationPageComponent,
+    OverviewPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
