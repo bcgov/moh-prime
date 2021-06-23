@@ -65,7 +65,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onRemove(controlName: string, documentGuid: string) {
-    this.formState.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
+    // this.formState.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
   public onBack() {

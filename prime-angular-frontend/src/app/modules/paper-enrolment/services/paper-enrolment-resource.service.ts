@@ -28,6 +28,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,8 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateCareSettings(enrolleeId: number, careSettings: CareSetting[]): NoContent {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/care-settings`, careSettings)
+  public updateCareSettings(enrolleeId: number, careSettingForm: CareSettingForm): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/care-settings`, careSettingForm)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
