@@ -21,6 +21,7 @@ namespace Prime.Services
         Task UpdateCertificationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeCertificationViewModel> viewModels);
         Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModel);
         Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel);
+        Task SetProfileCompletedAsync(int enrolleeId);
         Task FinailizeSubmissionAsync(int enrolleeId);
         Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documents);
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);

@@ -30,7 +30,7 @@
                                             [index]="i"
                                             [total]="certifications.controls.length"
                                             [selectedColleges]="selectedCollegeCodes"
-                                            (remove)="removeCertification($event)">
+                                            (remove)="formState.removeCertification($event)">
             </app-college-certification-form>
 
           </ng-container>

@@ -85,7 +85,7 @@ namespace Prime.Services
                 CareSettingCode = code
             });
 
-            var newHealthAuthorities = viewModel.EnrolleeHealthAuthorities.Select(code => new EnrolleeHealthAuthority
+            var newHealthAuthorities = viewModel.HealthAuthorities.Select(code => new EnrolleeHealthAuthority
             {
                 HealthAuthorityCode = code
             });
@@ -129,14 +129,9 @@ namespace Prime.Services
 
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
 
-            var declarations = _mapper.Map<ICollection<SelfDeclaration>>(viewModels);
-
-            enrollee.SelfDeclarations = declarations;
-
-            _context.Update(enrollee);
+            await ReplaceCollection(enrolleeId, newDeclarations);
 
             await _context.SaveChangesAsync();
         }
@@ -183,6 +178,16 @@ namespace Prime.Services
                .ToListAsync();
         }
 
+        public async Task SetProfileCompletedAsync(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.ProfileCompleted = true;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task FinailizeSubmissionAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
@@ -201,13 +206,11 @@ namespace Prime.Services
                 .Where(x => x.EnrolleeId == enrolleeId)
                 .ToListAsync();
 
-            foreach (var item in newItems)
-            {
-                item.EnrolleeId = enrolleeId;
-            }
+            var itemList = newItems.ToList();
+            itemList.ForEach(x => x.EnrolleeId = enrolleeId);
 
             _context.Set<T>().RemoveRange(oldItems);
-            _context.Set<T>().AddRange(newItems);
+            _context.Set<T>().AddRange(itemList);
         }
     }
 }

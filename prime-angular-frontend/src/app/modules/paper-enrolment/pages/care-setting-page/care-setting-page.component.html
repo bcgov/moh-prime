@@ -5,7 +5,7 @@
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-3">
@@ -25,14 +25,14 @@
                         [formGroupName]="i">
 
             <app-form-icon-group [show]="formState.careSettings.length > 1"
-                                 (event)="removeCareSetting(i)">
+                                 (event)="formState.removeCareSetting(i)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
                   <mat-label>Care Setting</mat-label>
                   <mat-select formControlName="careSettingCode">
                     <mat-option *ngFor="let careSettingType of filterCareSettingTypes(careSetting)"
                                 [value]="careSettingType.code"
-                                [disabled]="disableCareSetting(careSettingType.code)">
+                                [disabled]="formState.disableCareSetting(careSettingType.code)">
                       {{ careSettingType.name }}
                     </mat-option>
                   </mat-select>
@@ -52,13 +52,13 @@
           <button mat-button
                   type="button"
                   color="primary"
-                  (click)="addCareSetting()">
+                  (click)="formState.addCareSetting()">
             <mat-icon>add</mat-icon>
             Add Additional Care Setting
           </button>
 
         </div>
-        <div *ngIf="hasSelectedHACareSetting()"
+        <div *ngIf="formState.hasSelectedHACareSetting()"
              class="col col-sm-10 py-3">
           <app-page-subheader>
             <ng-container appPageSubheaderTitle>Health Authority</ng-container>
@@ -67,7 +67,6 @@
             </ng-container>
           </app-page-subheader>
 
-          <!-- Create visual checkboxes and bind to `enrolleeHealthAuthorities` array -->
           <div formArrayName="enrolleeHealthAuthorities"
                class="mb-3"
                *ngFor="let eha of formState.enrolleeHealthAuthorities.controls; let i = index">

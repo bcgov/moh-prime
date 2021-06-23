@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl, FormArray, FormBuilder } from '@angular/forms';
+import { Validators, FormControl, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
-import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
@@ -43,12 +44,13 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
+    private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
 
-    this.allowUploads = true;
+    this.allowUploads = false;
     this.decisions = [
       { code: false, name: 'No' },
       { code: true, name: 'Yes' }
@@ -95,9 +97,9 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(map((enrollee: HttpEnrollee) => this.enrollee = enrollee))
-      .subscribe(({ selfDeclarations }: HttpEnrollee) => {
-        this.formState.patchValue({ selfDeclarations });
-      });
+      .subscribe(({ selfDeclarations }: HttpEnrollee) =>
+        this.formState.patchValue({ selfDeclarations }, (this.enrollee.profileCompleted) ? false : null)
+      );
   }
 
   protected initForm() {
@@ -129,13 +131,16 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
 
+    const enrolleeId = +this.route.snapshot.params.eid;
     const payload = this.formState.json.selfDeclarations;
-    return this.paperEnrolmentResource.updateSelfDeclarations(+this.route.snapshot.data.eid, payload);
+    return this.paperEnrolmentResource.updateSelfDeclarations(enrolleeId, payload)
+      .pipe(exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId)));
   }
 
   protected onSubmitFormIsInvalid() {
     this.hasAttemptedFormSubmission = true;
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
+    this.utilsService.scrollTop();
   }
 
   protected afterSubmitIsSuccessful(): void {

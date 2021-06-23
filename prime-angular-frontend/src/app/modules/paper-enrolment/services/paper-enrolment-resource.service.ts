@@ -28,6 +28,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,8 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateCareSettings(enrolleeId: number, careSettings: CareSetting[]): NoContent {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/care-settings`, careSettings)
+  public updateCareSettings(enrolleeId: number, careSettingForm: CareSettingForm): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/care-settings`, careSettingForm)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -120,6 +121,23 @@ export class PaperEnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Paper Enrolment self declarations could not be updated');
           this.logger.error('[Core] PaperEnrolmentResource::updateSelfDeclarations error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Mark the profile as completed indicating the user has traversed the entire enrolment
+   * as a wizard, and will now spoke between the views from overview.
+   */
+  public profileCompleted(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/profile-completed`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment could not be marked as completed');
+          this.logger.error('[Core] PaperEnrolmentResource::profileCompleted error has occurred: ', error);
           throw error;
         })
       );

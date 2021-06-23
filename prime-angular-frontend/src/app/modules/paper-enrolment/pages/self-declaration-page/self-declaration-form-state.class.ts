@@ -48,10 +48,10 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
   }
 
   public get json(): SelfDeclarationForm {
-    throw new Error('Method not implemented.');
-  }
+    if (!this.formInstance) {
+      return;
+    }
 
-  public convertSelfDeclarationsToJson(enrolleeId: number): SelfDeclaration[] {
     const selfDeclarations = this.form.getRawValue();
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
@@ -59,23 +59,33 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
-    return Object.keys(selfDeclarationsTypes)
-      .reduce((sds: SelfDeclaration[], sd: string) => {
-        if (selfDeclarations[sd]) {
-          sds.push(
-            new SelfDeclaration(
-              selfDeclarationsTypes[sd],
-              selfDeclarations[`${sd}Details`],
-              selfDeclarations[`${sd}DocumentGuids`],
-              enrolleeId
-            )
-          );
-        }
-        return sds;
-      }, []);
+    return {
+      selfDeclarations: Object.keys(selfDeclarationsTypes)
+        .reduce((sds: SelfDeclaration[], sd: string) => {
+          if (selfDeclarations[sd]) {
+            sds.push(
+              new SelfDeclaration(
+                selfDeclarationsTypes[sd],
+                selfDeclarations[`${sd}Details`],
+                selfDeclarations[`${sd}DocumentGuids`]
+              )
+            );
+          }
+          return sds;
+        }, [])
+    };
   }
 
-  public patchValue(pageModel: SelfDeclarationForm): void {
+  /**
+   * @description
+   * Patch the self declaration form.
+   *
+   * NOTE: Default value should track the completion of the enrolment which
+   * indicates that this view has been submitted at least once, and the
+   * questions should be marked as "No", otherwise the user should be
+   * forced to answer the questions.
+   */
+  public patchValue(pageModel: SelfDeclarationForm, defaultValue: boolean | null): void {
     if (!this.formInstance) {
       return;
     }
@@ -93,7 +103,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
           .find(esd => esd.selfDeclarationTypeCode === type)
           ?.selfDeclarationDetails;
         const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : null,
+          [sd]: (selfDeclarationDetails) ? true : defaultValue,
           [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
         };
         return { ...sds, ...adapted };

@@ -1,16 +1,12 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { Enrollee } from '@shared/models/enrollee.model';
 import { ConfigService } from '@config/config.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-
-interface CareSettingPageDataModel extends Pick<Enrolment, 'careSettings' | 'enrolleeHealthAuthorities'> { }
-
-export class CareSettingFormState extends AbstractFormState<CareSettingPageDataModel> {
+import { CareSettingForm } from './care-setting-form.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public constructor(
     private fb: FormBuilder,
     private configService: ConfigService
@@ -28,7 +24,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingPageDataM
     return this.form.get('enrolleeHealthAuthorities') as FormArray;
   }
 
-  public get json(): CareSettingPageDataModel {
+  public get json(): CareSettingForm {
     if (!this.formInstance) {
       return;
     }
@@ -38,7 +34,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingPageDataM
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(pageModel: CareSettingPageDataModel): void {
+  public patchValue(pageModel: CareSettingForm): void {
     if (!this.formInstance) {
       return;
     }
@@ -88,6 +84,27 @@ export class CareSettingFormState extends AbstractFormState<CareSettingPageDataM
     });
   }
 
+  public disableCareSetting(careSettingCode: number): boolean {
+    return ![
+      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.HEALTH_AUTHORITY,
+      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
+    ].includes(careSettingCode);
+  }
+
+  public addCareSetting() {
+    const careSetting = this.buildCareSettingForm();
+    this.careSettings.push(careSetting);
+  }
+
+  public removeCareSetting(index: number) {
+    this.careSettings.removeAt(index);
+  }
+
+  public hasSelectedHACareSetting(): boolean {
+    return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  }
+
   public convertCareSettingFormToJson(enrolleeId: number): any {
     // Variable names must match keys for FormArrays in the FormGroup to get values
     // tslint:disable-next-line:prefer-const
@@ -104,6 +121,10 @@ export class CareSettingFormState extends AbstractFormState<CareSettingPageDataM
       }
       return selectedHealthAuthorities;
     }, []);
-    return { careSettings, enrolleeHealthAuthorities };
+
+    careSettings = careSettings.map((careSetting: CareSetting) => careSetting.careSettingCode);
+    const healthAuthorities = enrolleeHealthAuthorities.map((enrolleeHealthAuthorities: EnrolleeHealthAuthority) => enrolleeHealthAuthorities.healthAuthorityCode);
+
+    return { careSettings, healthAuthorities };
   }
 }
