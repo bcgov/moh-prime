@@ -9,6 +9,8 @@ using Prime.Models;
 using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
 using System.Collections.Generic;
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
@@ -18,16 +20,19 @@ namespace Prime.Services
 
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleePaperSubmissionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
+            IDocumentManagerClient documentClient,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _businessEventService = businessEventService;
+            _documentClient = documentClient;
         }
 
         public async Task<bool> PaperSubmissionExistsAsync(int enrolleeId)
@@ -122,12 +127,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel viewModel)
+        public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
+            var declarations = _mapper.Map<ICollection<SelfDeclaration>>(viewModels);
+
+            enrollee.SelfDeclarations = declarations;
+
+            _context.Update(enrollee);
 
             await _context.SaveChangesAsync();
         }
@@ -139,6 +148,28 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents)
+        {
+            foreach (var document in documents)
+            {
+                var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                if (!string.IsNullOrWhiteSpace(filename))
+                {
+                    var adjudicationDocument = new EnrolleeAdjudicationDocument
+                    {
+                        DocumentGuid = document.DocumentGuid,
+                        EnrolleeId = enrolleeId,
+                        Filename = filename,
+                        UploadedDate = DateTimeOffset.Now,
+                        AdjudicatorId = adminId
+                    };
+                    _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
+                }
+            }
 
             await _context.SaveChangesAsync();
         }
