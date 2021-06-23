@@ -160,7 +160,13 @@ namespace Prime.Services
 
         public async Task FinailizeSubmissionAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
