@@ -72,7 +72,8 @@ namespace PrimeTests.UnitTests
                 EnrolleeStatusAction.DeclineToa,
                 EnrolleeStatusAction.EnableEditing,
                 EnrolleeStatusAction.LockProfile,
-                EnrolleeStatusAction.DeclineProfile
+                EnrolleeStatusAction.DeclineProfile,
+                EnrolleeStatusAction.CancelToaAssignment
             }.Contains(action);
 
             // Act
