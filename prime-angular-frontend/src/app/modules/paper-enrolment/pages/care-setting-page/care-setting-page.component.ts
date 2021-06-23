@@ -25,7 +25,7 @@ import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { CareSettingFormState } from './care-setting-page-form-state.class';
+import { CareSettingFormState } from './care-setting-form-state.class';
 
 @Component({
   selector: 'app-care-setting-page',

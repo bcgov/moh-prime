@@ -18,7 +18,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { Enrolment } from '@shared/models/enrolment.model';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { SelfDeclarationFormState } from './self-declaration-page-form-state.class';
+import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 import { NoContent } from '@core/resources/abstract-resource';
 import { pipe } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';

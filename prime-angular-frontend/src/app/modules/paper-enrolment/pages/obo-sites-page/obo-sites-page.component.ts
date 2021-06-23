@@ -24,7 +24,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { OboSiteFormState } from './obo-sites-page-form-state.class';
+import { OboSiteFormState } from './obo-sites-form-state.class';
 
 @Component({
   selector: 'app-obo-sites-page',

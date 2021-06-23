@@ -44,7 +44,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     private toastService: ToastService,
     private logger: LoggerService,
     private utilService: UtilsService,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -65,6 +65,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected patchForm(): void {
+    this.paperEnrolmentResource.getEnrolleeById(this.route.snapshot.params.eid);
     // Will be null if enrollee has not been created
     const enrollee = this.paperEnrolmentService.enrollee;
     if (enrollee) {
