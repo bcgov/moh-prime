@@ -76,7 +76,16 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     };
   }
 
-  public patchValue(pageModel: SelfDeclarationForm): void {
+  /**
+   * @description
+   * Patch the self declaration form.
+   *
+   * NOTE: Default value should track the completion of the enrolment which
+   * indicates that this view has been submitted at least once, and the
+   * questions should be marked as "No", otherwise the user should be
+   * forced to answer the questions.
+   */
+  public patchValue(pageModel: SelfDeclarationForm, defaultValue: boolean | null): void {
     if (!this.formInstance) {
       return;
     }
@@ -94,7 +103,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
           .find(esd => esd.selfDeclarationTypeCode === type)
           ?.selfDeclarationDetails;
         const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : null,
+          [sd]: (selfDeclarationDetails) ? true : defaultValue,
           [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
         };
         return { ...sds, ...adapted };

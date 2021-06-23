@@ -177,7 +177,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     this.careSettingFormState.patchValue(enrolment);
     this.regulatoryFormState.patchValue(enrolment.certifications);
     this.jobsFormState.patchValue(enrolment);
-    this.selfDeclarationFormState.patchValue(enrolment);
+    // this.selfDeclarationFormState.patchValue(enrolment);
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly

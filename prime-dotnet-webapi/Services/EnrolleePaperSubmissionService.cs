@@ -174,6 +174,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task SetProfileCompletedAsync(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.ProfileCompleted = true;
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task FinailizeSubmissionAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees

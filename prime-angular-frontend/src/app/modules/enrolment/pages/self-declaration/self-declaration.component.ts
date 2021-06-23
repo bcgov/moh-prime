@@ -109,8 +109,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onRemove(constrolName: string, documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
+  public onRemove(controlName: string, documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
   public onBack() {
