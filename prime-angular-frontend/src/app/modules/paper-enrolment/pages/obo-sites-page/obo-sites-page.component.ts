@@ -32,7 +32,6 @@ import { OboSiteFormState } from './obo-sites-page-form-state.class';
   styleUrls: ['./obo-sites-page.component.scss']
 })
 export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
-
   public form: FormGroup;
   public formState: OboSiteFormState;
   public enrolment: Enrolment;
@@ -136,8 +135,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected patchForm(): void {
     // Will be null if enrolment has not been created
-    const enrolment = this.paperEnrolmentService.enrollee;
-    // this.paperEnrolmentFormStateService.setForm(enrolment);
+    const enrolment = this.paperEnrolmentService.enrolment;
     this.formState.patchValue(enrolment);
   }
 

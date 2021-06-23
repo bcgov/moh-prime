@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl, FormArray } from '@angular/forms';
+import { Validators, FormControl, FormArray, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -19,45 +19,48 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Enrolment } from '@shared/models/enrolment.model';
+import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
+import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
+import { SelfDeclarationFormState } from './self-declaration-page-form-state.class';
+import { NoContent } from '@core/resources/abstract-resource';
+import { pipe } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 
 @Component({
   selector: 'app-self-declaration-page',
   templateUrl: './self-declaration-page.component.html',
   styleUrls: ['./self-declaration-page.component.scss']
 })
-export class SelfDeclarationPageComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public form: FormGroup;
+  public formState: SelfDeclarationFormState;
   public decisions: { code: boolean, name: string }[];
   public hasAttemptedFormSubmission: boolean;
   public showUnansweredQuestionsError: boolean;
   public SelfDeclarationTypeEnum = SelfDeclarationTypeEnum;
   public selfDeclarationQuestions = selfDeclarationQuestions;
+  public routeUtils: RouteUtils;
+  public enrolment: Enrolment;
 
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    protected enrolmentService: EnrolmentService,
-    protected enrolmentFormStateService: EnrolmentFormStateService,
-    protected enrolmentResource: EnrolmentResource,
+    protected paperEnrolmentService: PaperEnrolmentService,
+    protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
+    protected paperEnrolmentResource: PaperEnrolmentResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService
   ) {
-    super(
-      route,
-      router,
-      dialog,
-      enrolmentService,
-      enrolmentResource,
-      enrolmentFormStateService,
-      toastService,
-      logger,
-      utilService,
-      formUtilsService,
-      authService
-    );
+    super(dialog, formUtilsService);
 
     this.decisions = [
       { code: false, name: 'No' },
@@ -65,44 +68,18 @@ export class SelfDeclarationPageComponent extends BaseEnrolmentProfilePage imple
     ];
     this.hasAttemptedFormSubmission = false;
     this.showUnansweredQuestionsError = false;
+
+    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public get hasConviction(): FormControl {
-    return this.form.get('hasConviction') as FormControl;
-  }
-
-  public get hasConvictionDetails(): FormControl {
-    return this.form.get('hasConvictionDetails') as FormControl;
-  }
-
-  public get hasRegistrationSuspended(): FormControl {
-    return this.form.get('hasRegistrationSuspended') as FormControl;
-  }
-
-  public get hasRegistrationSuspendedDetails(): FormControl {
-    return this.form.get('hasRegistrationSuspendedDetails') as FormControl;
-  }
-
-  public get hasDisciplinaryAction(): FormControl {
-    return this.form.get('hasDisciplinaryAction') as FormControl;
-  }
-
-  public get hasDisciplinaryActionDetails(): FormControl {
-    return this.form.get('hasDisciplinaryActionDetails') as FormControl;
-  }
-
-  public get hasPharmaNetSuspended(): FormControl {
-    return this.form.get('hasPharmaNetSuspended') as FormControl;
-  }
-
-  public get hasPharmaNetSuspendedDetails(): FormControl {
-    return this.form.get('hasPharmaNetSuspendedDetails') as FormControl;
-  }
-
-  public onSubmit() {
-    const hasBeenThroughTheWizard = true;
+  public onSubmit(): void {
+    this.nextRouteAfterSubmit();
     this.hasAttemptedFormSubmission = true;
-    super.onSubmit(hasBeenThroughTheWizard);
+    // if (this.formUtilsService.checkValidity(this.form)) {
+    //   this.handleSubmission();
+    // } else {
+    //   this.utilService.scrollToErrorSection();
+    // }
   }
 
   public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
@@ -114,58 +91,63 @@ export class SelfDeclarationPageComponent extends BaseEnrolmentProfilePage imple
   }
 
   public onBack() {
-    const certifications = this.enrolmentFormStateService.regulatoryFormState.collegeCertifications;
-    const careSettings = this.enrolmentFormStateService.careSettingsForm
-      .get('careSettings').value as CareSetting[];
+    const certifications = this.enrolment?.certifications;
+    let backRoutePath = (certifications?.length)
+      ? PaperEnrolmentRoutes.REGULATORY
+      : PaperEnrolmentRoutes.OBO_SITES;
 
-    let backRoutePath: string;
-    if (!this.isProfileComplete) {
-      backRoutePath = (
-        this.enrolmentService
-          .canRequestRemoteAccess(certifications, careSettings)
-      )
-        ? EnrolmentRoutes.REMOTE_ACCESS
-        : (certifications.length)
-          ? EnrolmentRoutes.REGULATORY
-          : EnrolmentRoutes.OBO_SITES;
-    }
-
-    this.routeTo(backRoutePath);
+    // this.routeTo(['../', this.enrolment.id, backRoutePath]);
+    this.routeUtils.routeRelativeTo(['../', '1', backRoutePath]);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm().subscribe(() => this.initForm());
+    this.patchForm();
+    this.initForm();
   }
 
-  protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.selfDeclarationForm;
+  protected createFormInstance(): void {
+    this.formState = this.paperEnrolmentFormStateService.selfDeclarationFormState;
+    this.form = this.formState.form;
   }
 
   protected initForm() {
-    this.hasConviction.valueChanges
+    this.formState.hasConviction.valueChanges
       .subscribe((value: boolean) => {
-        this.toggleSelfDeclarationValidators(value, this.hasConvictionDetails);
+        this.toggleSelfDeclarationValidators(value, this.formState.hasConvictionDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
 
-    this.hasRegistrationSuspended.valueChanges
+    this.formState.hasRegistrationSuspended.valueChanges
       .subscribe((value: boolean) => {
-        this.toggleSelfDeclarationValidators(value, this.hasRegistrationSuspendedDetails);
+        this.toggleSelfDeclarationValidators(value, this.formState.hasRegistrationSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
 
-    this.hasDisciplinaryAction.valueChanges
+    this.formState.hasDisciplinaryAction.valueChanges
       .subscribe((value: boolean) => {
-        this.toggleSelfDeclarationValidators(value, this.hasDisciplinaryActionDetails);
+        this.toggleSelfDeclarationValidators(value, this.formState.hasDisciplinaryActionDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
 
-    this.hasPharmaNetSuspended.valueChanges
+    this.formState.hasPharmaNetSuspended.valueChanges
       .subscribe((value: boolean) => {
-        this.toggleSelfDeclarationValidators(value, this.hasPharmaNetSuspendedDetails);
+        this.toggleSelfDeclarationValidators(value, this.formState.hasPharmaNetSuspendedDetails);
         this.showUnansweredQuestionsError = this.showUnansweredQuestions();
       });
+  }
+
+  protected patchForm(): void {
+    // Will be null if enrolment has not been created
+    const enrolment = this.paperEnrolmentService.enrolment;
+    this.formState.patchValue(enrolment);
+  }
+
+  protected performSubmission(): NoContent {
+    // Update using the form which could contain changes, and ensure identity
+    const enrolment = this.paperEnrolmentFormStateService.json;
+    return this.paperEnrolmentResource.updateEnrollee(enrolment)
+      .pipe(this.handleResponse());
   }
 
   protected onSubmitFormIsInvalid() {
@@ -173,7 +155,7 @@ export class SelfDeclarationPageComponent extends BaseEnrolmentProfilePage imple
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.enrolmentFormStateService.clearSelfDeclarationDocumentGuids();
+    this.formState.clearSelfDeclarationDocumentGuids();
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {
@@ -188,22 +170,42 @@ export class SelfDeclarationPageComponent extends BaseEnrolmentProfilePage imple
     let shouldShowUnansweredQuestions = false;
 
     if (this.hasAttemptedFormSubmission) {
-      shouldShowUnansweredQuestions = this.hasConviction.value === null
-        || this.hasRegistrationSuspended.value === null
-        || this.hasDisciplinaryAction.value === null
-        || this.hasPharmaNetSuspended.value === null;
+      shouldShowUnansweredQuestions = this.formState.hasConviction.value === null
+        || this.formState.hasRegistrationSuspended.value === null
+        || this.formState.hasDisciplinaryAction.value === null
+        || this.formState.hasPharmaNetSuspended.value === null;
     }
 
     return shouldShowUnansweredQuestions;
   }
 
   private addSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
-    this.enrolmentFormStateService
-      .addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+    this.formState.addSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
   }
 
   private removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
-    this.enrolmentFormStateService
-      .removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+    this.formState.removeSelfDeclarationDocumentGuid(this.form.get(controlName) as FormArray, documentGuid);
+  }
+
+  private handleResponse() {
+    return pipe(
+      map(() => {
+        this.toastService.openSuccessToast('Enrolment information has been saved');
+        this.form.markAsPristine();
+
+        this.nextRouteAfterSubmit();
+      }),
+      catchError((error: any) => {
+        this.toastService.openErrorToast('Enrolment information could not be saved');
+        this.logger.error('[Enrolment] Submission error has occurred: ', error);
+
+        throw error;
+      })
+    );
+  }
+
+  private nextRouteAfterSubmit(): void {
+    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.OVERVIEW]);
+    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.OVERVIEW]);
   }
 }

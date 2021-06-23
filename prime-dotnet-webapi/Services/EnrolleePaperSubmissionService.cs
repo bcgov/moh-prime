@@ -1,27 +1,20 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
-using Prime.Auth;
 using Prime.Models;
-using Prime.ViewModels;
-using Prime.Models.Api;
-using Prime.HttpClients;
-using Prime.HttpClients.DocumentManagerApiDefinitions;
-using System.Security.Claims;
-using System.Linq.Expressions;
+using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
     public class EnrolleePaperSubmissionService : BaseService, IEnrolleePaperSubmissionService
     {
+        private const string PaperGpidPrefix = "NOBCSC";
+
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
 
@@ -36,13 +29,29 @@ namespace Prime.Services
             _businessEventService = businessEventService;
         }
 
+        public async Task<bool> PaperSubmissionExistsAsync(int enrolleeId)
+        {
+            var gpid = await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => e.GPID)
+                .SingleOrDefaultAsync();
+
+            if (gpid == null)
+            {
+                return false;
+            }
+
+            return gpid.StartsWith(PaperGpidPrefix);
+        }
+
         public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel createModel)
         {
             createModel.ThrowIfNull(nameof(createModel));
 
             var enrollee = _mapper.Map<Enrollee>(createModel);
-            enrollee.UserId = new Guid();
-            enrollee.GPID = GeneratePaperGpid();
+            enrollee.UserId = Guid.NewGuid();
+            enrollee.GPID = Gpid.NewGpid(PaperGpidPrefix);
 
             _context.Enrollees.Add(enrollee);
             await _context.SaveChangesAsync();
@@ -52,17 +61,65 @@ namespace Prime.Services
             return enrollee;
         }
 
-        private static string GeneratePaperGpid()
+        public async Task UpdateEnrolleeCareSettingsById(int enrolleeId, PaperEnrolleeCareSettingViewModel updateModel)
         {
-            IEnumerable<char> prefix = "NOBCSC";
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            Random r = new Random();
-            int length = 14;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
+            await _context.SaveChangesAsync();
+        }
 
-            return new string(prefix.Concat(chars).ToArray());
+        public async Task UpdateEnrolleeDemographicsById(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEnrolleeOboSitesById(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, PaperEnrolleeCertificationViewModel updateModel)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateEnrolleeSelfDeclarationsById(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+
+            await _context.SaveChangesAsync();
+        }
+
+        // TODO: Document stuffffffff
+        public async Task UpdateEnrolleeAgreementsById(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel)
+        {
+            var enrollee = await _context.Enrollees
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+
+            await _context.SaveChangesAsync();
         }
     }
 }

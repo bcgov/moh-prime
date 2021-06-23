@@ -222,24 +222,4 @@ export class OboSiteFormState extends AbstractFormState<OboSitesPageDataModel> {
     });
   }
 
-  public convertCareSettingFormToJson(enrolleeId: number): any {
-    // Variable names must match keys for FormArrays in the FormGroup to get values
-    // tslint:disable-next-line:prefer-const
-    let { careSettings, enrolleeHealthAuthorities } = this.formInstance.getRawValue();
-
-    // Any checked HA is converted into an enrollee health authority object literal,
-    // which is used to create the payload to back-end
-    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
-      if (checked) {
-        selectedHealthAuthorities.push({
-          enrolleeId,
-          healthAuthorityCode: this.configService.healthAuthorities[i].code
-        });
-      }
-      return selectedHealthAuthorities;
-    }, []);
-    return { careSettings, enrolleeHealthAuthorities };
-  }
-
-
 }
