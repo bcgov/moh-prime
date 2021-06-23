@@ -98,7 +98,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(map((enrollee: HttpEnrollee) => this.enrollee = enrollee))
       .subscribe(({ selfDeclarations }: HttpEnrollee) =>
-        this.formState.patchValue({ selfDeclarations }, this.enrollee.profileCompleted || null)
+        this.formState.patchValue({ selfDeclarations }, (this.enrollee.profileCompleted) ? false : null)
       );
   }
 

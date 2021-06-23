@@ -189,7 +189,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
             enrolleeHealthAuthorities
           } = enrollee;
 
-          const careSettings = enrolleeCareSettings
+          const careSettings = enrolleeCareSettings;
 
           // Attempt to patch the form if not already patched
           this.formState.patchValue({
@@ -208,11 +208,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
-        exhaustMap(() => {
-          return this.paperEnrolmentService.enrollee.oboSites.length !== oboSites.length
+        exhaustMap(() =>
+          (this.paperEnrolmentService.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
-        })
+        )
       );
   }
 
