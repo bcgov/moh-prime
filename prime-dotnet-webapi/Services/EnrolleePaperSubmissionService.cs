@@ -66,7 +66,24 @@ namespace Prime.Services
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            var careSettings = updateModel.CareSettingCodes.Select(code =>
+                new EnrolleeCareSetting
+                {
+                    CareSettingCode = code
+                }
+            ).ToList();
+
+            var healthAuthorities = updateModel.HealthAuthorityCodes.Select(code =>
+                new EnrolleeHealthAuthority
+                {
+                    HealthAuthorityCode = code
+                }
+            ).ToList();
+
+            enrollee.EnrolleeCareSettings = careSettings;
+            enrollee.EnrolleeHealthAuthorities = healthAuthorities;
+
+            _context.Update(enrollee);
 
             await _context.SaveChangesAsync();
         }
