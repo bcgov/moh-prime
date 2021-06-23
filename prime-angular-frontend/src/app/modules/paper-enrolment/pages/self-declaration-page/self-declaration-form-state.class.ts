@@ -119,15 +119,28 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     });
   }
 
+  /**
+   * @description
+   * Add document GUIDs to the self declaration form.
+   */
   public addSelfDeclarationDocumentGuid(controlName: string, value: string) {
-    this.formState.form.get(controlName) as FormArray;
+    const control = this.formInstance.get(controlName) as FormArray;
     control.push(this.fb.control(value));
   }
 
-  public removeSelfDeclarationDocumentGuid(control: FormArray, documentGuid: string) {
+  /**
+   * @description
+   * Remove document GUIDs to the self declaration form.
+   */
+  public removeSelfDeclarationDocumentGuid(controlName: string, documentGuid: string) {
+    const control = this.formInstance.get(controlName) as FormArray;
     control.removeAt(control.value.findIndex((guid: string) => guid === documentGuid));
   }
 
+  /**
+   * @description
+   * Clear all document GUIDs to the self declaration form.
+   */
   public clearSelfDeclarationDocumentGuids() {
     [
       'hasConvictionDocumentGuids',

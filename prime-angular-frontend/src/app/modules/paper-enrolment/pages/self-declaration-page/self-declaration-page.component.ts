@@ -134,6 +134,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected onSubmitFormIsInvalid() {
+    this.hasAttemptedFormSubmission = true;
     this.showUnansweredQuestionsError = this.showUnansweredQuestions();
   }
 
