@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import moment from 'moment';
 
@@ -11,9 +14,8 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
-import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { optionalAddressLineItems } from '@shared/models/address.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
@@ -95,21 +97,22 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     }
   }
 
-  protected performSubmission(): NoContent {
+  protected performSubmission(): Observable<number> {
     const payload = this.formState.json;
     const enrolleeId = this.paperEnrolmentService.enrollee?.id ?? 0;
-    let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload);
+    let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload)
+      .pipe(map(() => enrolleeId));
 
     if (!enrolleeId) {
       request$ = this.paperEnrolmentResource.createEnrollee(payload)
-        .pipe(NoContentResponse);
+        .pipe(map((enrollee: HttpEnrollee) => enrollee.id));
     }
 
     return request$;
   }
 
-  protected afterSubmitIsSuccessful() {
-    this.routeUtils.routeRelativeTo(['./', this.paperEnrolmentService.enrollee?.id ?? 0, PaperEnrolmentRoutes.CARE_SETTING]);
+  protected afterSubmitIsSuccessful(enrolleeId: number) {
+    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
   // private setAddressValidator(addressLine: FormGroup): void {
