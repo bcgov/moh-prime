@@ -77,7 +77,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId, PaperEnrolleeCertificationViewModel payload)
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId, PaperEnrolleeCertificationsViewModel payload)
         {
             if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
             {

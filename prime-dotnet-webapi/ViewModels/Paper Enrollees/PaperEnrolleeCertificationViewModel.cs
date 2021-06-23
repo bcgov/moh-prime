@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
-    public class PaperEnrolleeCertificationViewModel
+    public class PaperEnrolleeCertificationsViewModel
     {
-        public ICollection<Certification> Certifications { get; set; }
+        public ICollection<CertificationViewModel> Certifications { get; set; }
     }
 }
