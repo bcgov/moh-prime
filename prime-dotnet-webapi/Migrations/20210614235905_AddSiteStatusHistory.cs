@@ -8,9 +8,10 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Site");
+            // Existing data needs to be migrated before column is dropped
+            // migrationBuilder.DropColumn(
+            //     name: "Status",
+            //     table: "Site");
 
             migrationBuilder.CreateTable(
                 name: "SiteStatus",
