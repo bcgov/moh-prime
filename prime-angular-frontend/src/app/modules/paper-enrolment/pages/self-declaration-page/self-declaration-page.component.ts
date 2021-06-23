@@ -132,7 +132,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json.selfDeclarations;
-    return this.paperEnrolmentResource.updateSelfDeclarations(+this.route.snapshot.data.eid, payload);
+    return this.paperEnrolmentResource.updateSelfDeclarations(+this.route.snapshot.params.eid, payload);
   }
 
   protected onSubmitFormIsInvalid() {
