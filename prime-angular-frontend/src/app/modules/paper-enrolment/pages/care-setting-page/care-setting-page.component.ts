@@ -131,8 +131,9 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     return this.careSettingTypes;
   }
 
-  public hasSelectedHACareSetting(): boolean {
-    return (this.formState.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  public hasSelectedHealthAuthCareSetting(): boolean {
+    return this.formState.careSettings.value
+      .some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
   }
 
   public routeBackTo() {
@@ -219,7 +220,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   private removeUnselectedHAOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
-
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!healthAuthorities[index]) {
         for (let i = oboSites.length - 1; i >= 0; i--) {
