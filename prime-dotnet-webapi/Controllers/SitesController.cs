@@ -326,7 +326,7 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Submit))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Submit, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -772,7 +772,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Approve))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Approve, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -803,7 +803,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Decline))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Decline, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -841,7 +841,7 @@ namespace Prime.Controllers
                     action = SiteStatusAction.Unapprove;
                     break;
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(action))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(action, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }

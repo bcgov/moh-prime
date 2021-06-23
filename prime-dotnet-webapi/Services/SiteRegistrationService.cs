@@ -6,40 +6,30 @@ namespace Prime.Services
 {
     public class SiteRegistrationService : ISiteRegistrationService
     {
-        public bool CanPerformSiteStatusAction(SiteStatusAction action)
+        public bool CanPerformSiteStatusAction(SiteStatusAction action, SiteStatusType currentStatus)
         {
-            SiteStatusType fromStatus, toStatus;
+            SiteStatusType newStatus;
 
             switch (action)
             {
                 case SiteStatusAction.Submit:
-                    fromStatus = SiteStatusType.Active;
-                    toStatus = SiteStatusType.InReview;
+                case SiteStatusAction.Undecline:
+                    newStatus = SiteStatusType.InReview;
                     break;
                 case SiteStatusAction.Approve:
-                    fromStatus = SiteStatusType.InReview;
-                    toStatus = SiteStatusType.Approved;
+                    newStatus = SiteStatusType.Approved;
                     break;
                 case SiteStatusAction.Decline:
-                    fromStatus = SiteStatusType.InReview;
-                    toStatus = SiteStatusType.Locked;
+                    newStatus = SiteStatusType.Locked;
                     break;
                 case SiteStatusAction.RequestChange:
-                    fromStatus = SiteStatusType.InReview;
-                    toStatus = SiteStatusType.Active;
-                    break;
                 case SiteStatusAction.Unapprove:
-                    fromStatus = SiteStatusType.Approved;
-                    toStatus = SiteStatusType.Active;
-                    break;
-                case SiteStatusAction.Undecline:
-                    fromStatus = SiteStatusType.Locked;
-                    toStatus = SiteStatusType.InReview;
+                    newStatus = SiteStatusType.Active;
                     break;
                 default:
                     return false;
             }
-            return SiteStatusStateEngine.AllowableStatusChange(fromStatus, toStatus);
+            return SiteStatusStateEngine.AllowableStatusChange(currentStatus, newStatus);
         }
     }
 }

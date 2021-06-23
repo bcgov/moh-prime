@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
+using Prime.Models;
 using Prime.Models.Api;
 
 namespace Prime.Services
 {
     public interface ISiteRegistrationService
     {
-        bool CanPerformSiteStatusAction(SiteStatusAction action);
+        bool CanPerformSiteStatusAction(SiteStatusAction action, SiteStatusType currentStatus);
     }
 }
