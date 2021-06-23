@@ -8,6 +8,6 @@ public class PaperEnrolleesMappingProfile : Profile
     public PaperEnrolleesMappingProfile()
     {
         CreateMap<PaperEnrolleeDemographicViewModel, Enrollee>();
-        CreateMap<CertificationViewModel, Certification>();
+        CreateMap<PaperEnrolleeCertificationViewModel, Certification>();
     }
 }

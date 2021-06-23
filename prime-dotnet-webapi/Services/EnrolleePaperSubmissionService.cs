@@ -8,6 +8,7 @@ using AutoMapper;
 using Prime.Models;
 using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
+using System.Collections.Generic;
 
 namespace Prime.Services
 {
@@ -108,14 +109,12 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, PaperEnrolleeCertificationsViewModel updateModel)
+        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var certifications = updateModel.Certifications.Select(cert =>
-                _mapper.Map<Certification>(cert)
-            ).ToList();
+            var certifications = _mapper.Map<ICollection<Certification>>(updateModel);
 
             enrollee.Certifications = certifications;
 

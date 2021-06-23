@@ -1,11 +1,19 @@
 using System;
-using System.Collections.Generic;
-using Prime.Models;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
-    public class PaperEnrolleeCertificationsViewModel
+    public class PaperEnrolleeCertificationViewModel
     {
-        public ICollection<CertificationViewModel> Certifications { get; set; }
+        public int CollegeCode { get; set; }
+
+        public int LicenseCode { get; set; }
+
+        public string LicenseNumber { get; set; }
+
+        public string PractitionerId { get; set; }
+
+        public DateTimeOffset RenewalDate { get; set; }
+
+        public int? PracticeCode { get; set; }
     }
 }
