@@ -49,7 +49,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public routeBackTo() {
+  public routeBackTo(): void {
     this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
 
@@ -63,11 +63,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
     this.initForm();
+    this.patchForm();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.formState.removeIncompleteCareSettings();
   }
 
@@ -75,7 +75,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.formState = new CareSettingFormState(this.fb, this.configService);
   }
 
-  protected initForm() {
+  protected initForm(): void {
     // Always have at least one care setting ready for
     // the enrollee to fill out
     if (!this.formState.careSettings.length) {
@@ -136,12 +136,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
-        ),
-        map(() => this.enrollee.id)
+        )
       );
   }
 
-  protected afterSubmitIsSuccessful() {
+  protected afterSubmitIsSuccessful(): void {
     const oboSites = this.enrollee.oboSites;
 
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;

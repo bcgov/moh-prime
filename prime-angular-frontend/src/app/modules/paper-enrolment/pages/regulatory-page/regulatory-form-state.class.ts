@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 

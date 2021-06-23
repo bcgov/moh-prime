@@ -3,8 +3,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { pipe } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, of, pipe } from 'rxjs';
+import { map, catchError, exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -24,6 +24,7 @@ import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
 import { ConfigService } from '@config/config.service';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -60,8 +61,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
     this.initForm();
+    this.patchForm();
   }
 
   public ngOnDestroy() {
@@ -73,7 +74,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.form = this.formState.form;
   }
 
-  protected initForm() {
+  protected initForm(): void {
     // Always have at least one certification ready for
     // the enrollee to fill out
     if (!this.formState.certifications.length) {
@@ -101,43 +102,20 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       });
   }
 
-  protected onSubmitFormIsValid() {
-    // Enrollees can not have certifications and jobs
-    this.removeJobs();
-  }
+  protected performSubmission(): Observable<number> {
+    this.formState.form.markAsPristine();
 
+    const payload = this.formState.json;
+    let oboSites = this.removeJobs(this.enrollee.oboSites);
 
-  protected performSubmission(): NoContent {
-    return;
-    // // Update using the form which could contain changes, and ensure identity
-    // const enrolment = this.paperEnrolmentFormStateService.json;
-    // const enrollee = this.form.getRawValue();
-    // // BCeID has to match BCSC for submission, which requires givenNames
-    // const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
-    //
-    // if (!enrolment.id) {
-    //   const payload = {
-    //     enrollee: { ...enrollee, givenNames }
-    //   };
-    //   return this.paperEnrolmentResource.createEnrollee(payload)
-    //     .pipe(
-    //       // Merge the enrolment with generated keys
-    //       map((newEnrolment: Enrolment) => {
-    //         newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
-    //         return newEnrolment;
-    //       }),
-    //       // Populate generated keys within the form state
-    //       tap((newEnrolment: Enrolment) => {
-    //         this.paperEnrolmentFormStateService.setForm(newEnrolment, true);
-    //         this.enrolment = newEnrolment;
-    //       }),
-    //       this.handleResponse()
-    //     );
-    // } else {
-    //   enrolment.enrollee.givenNames = givenNames;
-    //   return this.paperEnrolmentResource.updateEnrollee(enrolment)
-    //     .pipe(this.handleResponse());
-    // }
+    return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
+      .pipe(
+        exhaustMap(() =>
+          (this.enrollee.oboSites.length !== oboSites.length)
+            ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
+            : of(null)
+        )
+      );
   }
 
   protected afterSubmitIsSuccessful() {
@@ -156,12 +134,14 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
    * Remove obo sites/jobs from the enrolment as enrollees can not have
    * certificate(s), as well as, job(s).
    */
-  private removeJobs() {
+  private removeJobs(oboSites: OboSite[]): OboSite[] {
     this.formState.removeIncompleteCertifications(true);
 
     if (this.formState.certifications.length) {
-      // this.paperEnrolmentFormStateService.jobsFormState.oboSites.clear();
+      oboSites = [];
     }
+
+    return oboSites;
   }
 
 }
