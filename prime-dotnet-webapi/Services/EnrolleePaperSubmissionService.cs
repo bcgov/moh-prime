@@ -101,6 +101,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
             _mapper.Map(viewModel, enrollee);
+            _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
 
             await _context.SaveChangesAsync();
         }
