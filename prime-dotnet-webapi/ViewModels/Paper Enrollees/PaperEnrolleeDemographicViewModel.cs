@@ -1,4 +1,5 @@
 using System;
+using FluentValidation;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
@@ -21,5 +22,19 @@ namespace Prime.ViewModels.PaperEnrollees
         public string PhoneExtension { get; set; }
 
         public string SmsPhone { get; set; }
+    }
+
+    public class PaperEnrolleeDemographicValidator : AbstractValidator<PaperEnrolleeDemographicViewModel>
+    {
+        public PaperEnrolleeDemographicValidator()
+        {
+            RuleFor(x => x.FirstName).NotEmpty();
+            RuleFor(x => x.LastName).NotEmpty();
+            RuleFor(x => x.GivenNames).NotEmpty();
+            RuleFor(x => x.DateOfBirth).NotEmpty();
+            RuleFor(x => x.PhysicalAddress).NotNull();
+            RuleFor(x => x.Email).NotEmpty();
+            RuleFor(x => x.Phone).NotEmpty();
+        }
     }
 }
