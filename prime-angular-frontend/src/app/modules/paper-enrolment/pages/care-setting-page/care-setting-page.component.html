@@ -5,7 +5,7 @@
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-3">
@@ -67,7 +67,6 @@
             </ng-container>
           </app-page-subheader>
 
-          <!-- Create visual checkboxes and bind to `enrolleeHealthAuthorities` array -->
           <div formArrayName="enrolleeHealthAuthorities"
                class="mb-3"
                *ngFor="let eha of formState.enrolleeHealthAuthorities.controls; let i = index">

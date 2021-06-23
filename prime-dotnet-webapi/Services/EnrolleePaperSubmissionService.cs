@@ -192,13 +192,11 @@ namespace Prime.Services
                 .Where(x => x.EnrolleeId == enrolleeId)
                 .ToListAsync();
 
-            foreach (var item in newItems)
-            {
-                item.EnrolleeId = enrolleeId;
-            }
+            var itemList = newItems.ToList();
+            itemList.ForEach(x => x.EnrolleeId = enrolleeId);
 
             _context.Set<T>().RemoveRange(oldItems);
-            _context.Set<T>().AddRange(newItems);
+            _context.Set<T>().AddRange(itemList);
         }
     }
 }
