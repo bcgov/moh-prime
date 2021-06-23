@@ -97,10 +97,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   protected performSubmission(): NoContent {
     const payload = this.formState.json;
-    const enrolleeId = this.paperEnrolmentService.enrollee.id;
+    const enrolleeId = this.paperEnrolmentService.enrollee?.id ?? 0;
     let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload);
 
-    if (!this.paperEnrolmentService.enrollee.id) {
+    if (!enrolleeId) {
       request$ = this.paperEnrolmentResource.createEnrollee(payload)
         .pipe(NoContentResponse);
     }

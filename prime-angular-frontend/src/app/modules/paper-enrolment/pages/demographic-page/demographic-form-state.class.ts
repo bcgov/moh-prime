@@ -5,6 +5,7 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { DemographicForm } from './demographic-form.model';
+import { AddressLine } from '@shared/models/address.model';
 
 export class DemographicFormState extends AbstractFormState<DemographicForm> {
   public constructor(
@@ -58,7 +59,10 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       middleName: [null, []],
       lastName: [null, [Validators.required]],
       dateOfBirth: [null, [Validators.required]],
-      physicalAddress: this.formUtilsService.buildAddressForm(),
+      physicalAddress: this.formUtilsService.buildAddressForm({
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
+        useDefaults: ['countryCode']
+      }),
       email: [null, [
         Validators.required,
         FormControlValidators.email
