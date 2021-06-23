@@ -77,7 +77,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     const certifications = this.regulatoryFormState.json;
     const { oboSites } = this.jobsFormState.json;
     const careSettings = this.careSettingFormState.convertCareSettingFormToJson(id);
-    const selfDeclarations = this.selfDeclarationFormState.convertSelfDeclarationsToJson(id);
+    // const selfDeclarations = this.selfDeclarationFormState.convertSelfDeclarationsToJson(id);
     const { accessAgreementGuid } = this.accessAgreementForm.getRawValue();
 
     return {

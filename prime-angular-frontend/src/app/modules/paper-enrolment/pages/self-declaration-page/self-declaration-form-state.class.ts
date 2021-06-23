@@ -48,10 +48,10 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
   }
 
   public get json(): SelfDeclarationForm {
-    throw new Error('Method not implemented.');
-  }
+    if (!this.formInstance) {
+      return;
+    }
 
-  public convertSelfDeclarationsToJson(enrolleeId: number): SelfDeclaration[] {
     const selfDeclarations = this.form.getRawValue();
     const selfDeclarationsTypes = {
       hasConviction: SelfDeclarationTypeEnum.HAS_CONVICTION,
@@ -59,20 +59,21 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
       hasPharmaNetSuspended: SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED,
       hasRegistrationSuspended: SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED
     };
-    return Object.keys(selfDeclarationsTypes)
-      .reduce((sds: SelfDeclaration[], sd: string) => {
-        if (selfDeclarations[sd]) {
-          sds.push(
-            new SelfDeclaration(
-              selfDeclarationsTypes[sd],
-              selfDeclarations[`${sd}Details`],
-              selfDeclarations[`${sd}DocumentGuids`],
-              enrolleeId
-            )
-          );
-        }
-        return sds;
-      }, []);
+    return {
+      selfDeclarations: Object.keys(selfDeclarationsTypes)
+        .reduce((sds: SelfDeclaration[], sd: string) => {
+          if (selfDeclarations[sd]) {
+            sds.push(
+              new SelfDeclaration(
+                selfDeclarationsTypes[sd],
+                selfDeclarations[`${sd}Details`],
+                selfDeclarations[`${sd}DocumentGuids`]
+              )
+            );
+          }
+          return sds;
+        }, [])
+    };
   }
 
   public patchValue(pageModel: SelfDeclarationForm): void {
