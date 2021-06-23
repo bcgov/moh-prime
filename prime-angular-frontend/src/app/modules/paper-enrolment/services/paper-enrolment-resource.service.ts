@@ -25,6 +25,8 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +59,54 @@ export class PaperEnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be created.');
           this.logger.error('[Enrolment] PaperEnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateDemographic(enrolleeId: number, demographic: DemographicForm): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/demographics`, demographic)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment demographic could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateDemographic error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateCareSettings(enrolleeId: number, careSettings: CareSetting[]): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/care-settings`, careSettings)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment care settings could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateCareSettings error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateCertifications(enrolleeId: number, certifications: CareSetting[]): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/certifications`, certifications)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment certifications could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateCertifications error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateOboSites(enrolleeId: number, oboSites: OboSite[]): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/obo-sites`, oboSites)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment obo sites could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateOboSites error has occurred: ', error);
           throw error;
         })
       );
