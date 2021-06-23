@@ -1,26 +1,27 @@
 using Prime.Models;
+using Prime.Models.Api;
 
 namespace Prime.Engines
 {
     public static class SiteStatusStateEngine
     {
-        public static bool AllowableStatusChange(SiteStatusType fromStatus, SiteStatusType toStatus)
+        public static bool AllowableStatusChange(SiteRegistrationAction action, SiteStatusType currentStatus)
         {
-            return (fromStatus, toStatus) switch
+            return (action, currentStatus) switch
             {
                 // Submit
-                (SiteStatusType.Active, SiteStatusType.InReview) => true,
+                (SiteRegistrationAction.Submit, SiteStatusType.Active) => true,
                 // Reject
-                (SiteStatusType.Active, SiteStatusType.Locked) => true,
-                (SiteStatusType.InReview, SiteStatusType.Locked) => true,
+                (SiteRegistrationAction.Decline, SiteStatusType.InReview) => true,
+                (SiteRegistrationAction.Decline, SiteStatusType.Active) => true,
                 // Changes requested
-                (SiteStatusType.InReview, SiteStatusType.Active) => true,
+                (SiteRegistrationAction.RequestChange, SiteStatusType.InReview) => true,
                 // Approve
-                (SiteStatusType.InReview, SiteStatusType.Approved) => true,
+                (SiteRegistrationAction.Approve, SiteStatusType.InReview) => true,
                 // Unapprove for changes
-                (SiteStatusType.Approved, SiteStatusType.Active) => true,
+                (SiteRegistrationAction.Unapprove, SiteStatusType.Approved) => true,
                 // Unreject
-                (SiteStatusType.Locked, SiteStatusType.InReview) => true,
+                (SiteRegistrationAction.Undecline, SiteStatusType.Locked) => true,
 
                 _ => false
             };

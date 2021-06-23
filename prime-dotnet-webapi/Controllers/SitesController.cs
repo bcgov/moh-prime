@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.Engines;
 
 namespace Prime.Controllers
 {
@@ -22,7 +23,6 @@ namespace Prime.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
-        private readonly ISiteRegistrationService _siteRegistrationService;
         private readonly IOrganizationService _organizationService;
         private readonly IEmailService _emailService;
         private readonly IDocumentService _documentService;
@@ -31,7 +31,6 @@ namespace Prime.Controllers
         public SitesController(
             IMapper mapper,
             ISiteService siteService,
-            ISiteRegistrationService siteRegistrationService,
             IOrganizationService organizationService,
             IEmailService emailService,
             IDocumentService documentService,
@@ -39,7 +38,6 @@ namespace Prime.Controllers
         {
             _mapper = mapper;
             _siteService = siteService;
-            _siteRegistrationService = siteRegistrationService;
             _organizationService = organizationService;
             _emailService = emailService;
             _documentService = documentService;
@@ -326,7 +324,7 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Submit, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -772,7 +770,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Approve, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -803,7 +801,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Decline, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Decline, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -841,7 +839,7 @@ namespace Prime.Controllers
                     action = SiteRegistrationAction.Unapprove;
                     break;
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(action, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(action, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -868,7 +866,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Undecline, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Undecline, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
