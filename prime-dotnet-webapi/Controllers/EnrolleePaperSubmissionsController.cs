@@ -20,12 +20,15 @@ namespace Prime.Controllers
     {
 
         private readonly IEnrolleePaperSubmissionService _enrolleeService;
+        private readonly IAdminService _adminService;
 
         public EnrolleePaperSubmissionsController(
-            IEnrolleePaperSubmissionService enrolleeService
+            IEnrolleePaperSubmissionService enrolleeService,
+            IAdminService adminService
         )
         {
             _enrolleeService = enrolleeService;
+            _adminService = adminService;
         }
 
         // POST: api/enrollees/paper-submissions
@@ -138,7 +141,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel payload)
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> payload)
         {
             if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
             {
@@ -146,6 +149,28 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.UpdateSelfDeclarationsAsync(enrolleeId, payload);
+            return Ok();
+        }
+
+        // PUT: api/enrollees/5/paper-submissions/documents
+        /// <summary>
+        /// Updates a Paper Submission's Documents.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/documents", Name = nameof(UpdateEnrolleePaperSubmissionDocuments))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDocuments(int enrolleeId, IEnumerable<PaperEnrolleeDocumentViewModel> payload)
+        {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            await _enrolleeService.AddEnrolleeAdjudicationDocumentsAsync(enrolleeId, admin.Id, payload);
+
             return Ok();
         }
 

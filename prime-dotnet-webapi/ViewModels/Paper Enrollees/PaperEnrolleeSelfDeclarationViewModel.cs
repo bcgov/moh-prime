@@ -5,8 +5,10 @@ namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeSelfDeclarationViewModel
     {
-        public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
+        public int EnrolleeId { get; set; }
 
-        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+        public int SelfDeclarationTypeCode { get; set; }
+
+        public string SelfDeclarationDetails { get; set; }
     }
 }
