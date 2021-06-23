@@ -5,6 +5,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
+import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
 @Component({
   selector: 'app-site-registration-actions',
@@ -21,6 +22,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public Role = Role;
   public SiteStatusType = SiteStatusType;
+  public SiteAdjudicationAction = SiteAdjudicationAction;
 
   constructor(
     private permissionService: PermissionService,
@@ -39,7 +41,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     }
   }
 
-  public onDecline(): void {
+  public onReject(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.decline.emit(this.siteRegistration.siteId);
     }
@@ -66,11 +68,30 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.delete.emit(record);
   }
 
-  public onEnableEditing(): void {
+  public onRequestChanges(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
       this.enableEditing.emit(this.siteRegistration.siteId);
     }
   }
 
   public ngOnInit(): void { }
+
+  /**
+   * @param action
+   * @returns Whether the given action is valid according to the status of the site registration
+   */
+  public isValid(action: SiteAdjudicationAction): boolean {
+    switch (this.siteRegistration.status) {
+      case SiteStatusType.ACTIVE:
+        return (action === SiteAdjudicationAction.REJECT);
+      case SiteStatusType.IN_REVIEW:
+        return (action === SiteAdjudicationAction.REQUEST_CHANGES || action === SiteAdjudicationAction.APPROVE || action === SiteAdjudicationAction.REJECT);
+      case SiteStatusType.APPROVED:
+        return (action === SiteAdjudicationAction.REQUEST_CHANGES);
+      case SiteStatusType.LOCKED:
+        return (action === SiteAdjudicationAction.UNREJECT);
+      default:
+        return false;
+    }
+  }
 }
