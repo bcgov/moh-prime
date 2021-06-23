@@ -59,6 +59,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionCareSettings(int enrolleeId, PaperEnrolleeCareSettingViewModel payload)
         {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
             await _enrolleeService.UpdateEnrolleeCareSettingsById(enrolleeId, payload);
             return Ok();
         }
@@ -74,6 +79,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId, PaperEnrolleeCertificationViewModel payload)
         {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
             await _enrolleeService.UpdateEnrolleeCertificationsById(enrolleeId, payload);
             return Ok();
         }
@@ -89,6 +99,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionDemographics(int enrolleeId, PaperEnrolleeDemographicViewModel payload)
         {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
             await _enrolleeService.UpdateEnrolleeDemographicsById(enrolleeId, payload);
             return Ok();
         }
@@ -104,6 +119,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionOboSites(int enrolleeId, PaperEnrolleeOboSiteViewModel payload)
         {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
             await _enrolleeService.UpdateEnrolleeOboSitesById(enrolleeId, payload);
             return Ok();
         }
@@ -119,6 +139,11 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel payload)
         {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
             await _enrolleeService.UpdateEnrolleeSelfDeclarationsById(enrolleeId, payload);
             return Ok();
         }
