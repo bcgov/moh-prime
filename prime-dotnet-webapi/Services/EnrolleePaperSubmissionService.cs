@@ -143,6 +143,18 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task FinailizeSubmissionAsync(int enrolleeId)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.EnrolmentStatuses)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+
+            await _context.SaveChangesAsync();
+        }
+
         private async Task ReplaceCollection<T>(int enrolleeId, IEnumerable<T> newItems) where T : class, IEnrolleeNavigationProperty
         {
             var oldItems = await _context.Set<T>()
@@ -156,17 +168,6 @@ namespace Prime.Services
 
             _context.Set<T>().RemoveRange(oldItems);
             _context.Set<T>().AddRange(newItems);
-        }
-
-        public async Task FinailizeSubmissionAsync(int enrolleeId)
-        {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
-
-            await _context.SaveChangesAsync();
         }
     }
 }
