@@ -10,21 +10,13 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-import { UtilsService } from '@core/services/utils.service';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
-import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { CareSettingFormState } from './care-setting-form-state.class';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
@@ -35,7 +27,6 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 })
 export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
   public formState: CareSettingFormState;
-  public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
@@ -43,18 +34,13 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   public enrollee: HttpEnrollee;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
     protected dialog: MatDialog,
-    protected paperEnrolmentService: PaperEnrolmentService,
-    protected paperEnrolmentResource: PaperEnrolmentResource,
-    protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private paperEnrolmentResource: PaperEnrolmentResource,
+    private route: ActivatedRoute,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
@@ -64,45 +50,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
     this.allowRoutingWhenDirty = false;
-  }
-
-  public onSubmit(): void {
-    const controls = this.formState.careSettings.controls;
-
-    // Remove any oboSites belonging to careSetting which is no longer selected
-    this.careSettingTypes.forEach(type => {
-      if (!controls.some(c => c.value.careSettingCode === type.code)) {
-        this.removeOboSites(type.code);
-      }
-    });
-
-    // Remove health authorities if health authority care setting not chosen
-    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.formState.removeHealthAuthorities();
-    }
-
-    if (this.formUtilsService.checkValidity(this.formState.form)) {
-      super.onSubmit();
-    } else {
-      this.utilService.scrollToErrorSection();
-    }
-  }
-
-  public addCareSetting() {
-    const careSetting = this.formState.buildCareSettingForm();
-    this.formState.careSettings.push(careSetting);
-  }
-
-  public disableCareSetting(careSettingCode: number): boolean {
-    return ![
-      CareSettingEnum.COMMUNITY_PHARMACIST,
-      CareSettingEnum.HEALTH_AUTHORITY,
-      CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE
-    ].includes(careSettingCode);
-  }
-
-  public removeCareSetting(index: number) {
-    this.formState.careSettings.removeAt(index);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -131,20 +78,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     return this.careSettingTypes;
   }
 
-  public hasSelectedHACareSetting(): boolean {
-    return (this.formState.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
-  }
-
   public routeBackTo() {
-    this.routeUtils.routeRelativeTo(['../', this.enrollee.id, PaperEnrolmentRoutes.DEMOGRAPHIC]);
+    this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
-    const data = 'unsaved';
-
-    const canDeactivate = (this.formState.form.dirty && !this.allowRoutingWhenDirty)
-      ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
-      : true;
+    const canDeactivate = super.canDeactivate();
 
     return (canDeactivate instanceof Observable)
       ? canDeactivate.pipe(tap(() => this.removeIncompleteCareSettings()))
@@ -170,7 +109,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     // Always have at least one care setting ready for
     // the enrollee to fill out
     if (!this.formState.careSettings.length) {
-      this.addCareSetting();
+      this.formState.addCareSetting();
     }
   }
 
@@ -203,14 +142,28 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
 
+    // Remove health authorities if health authority care setting not chosen
+    if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      this.formState.removeHealthAuthorities();
+    }
+
     const payload = this.formState.convertCareSettingFormToJson(this.enrollee.id);
+    let oboSites = this.enrollee.oboSites;
+
+    // Remove any oboSites belonging to careSetting which is no longer selected
+    this.careSettingTypes.forEach(type => {
+      if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === type.code)) {
+        oboSites = this.removeOboSites(type.code, oboSites);
+      }
+    });
+
     // If an individual health authority was deselected, its Obo Sites should be removed as well
-    const oboSites = this.removeUnselectedHAOboSites(payload.healthAuthorities, this.enrollee.oboSites);
+    oboSites = this.removeUnselectedHAOboSites(payload.healthAuthorities, oboSites);
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
         exhaustMap(() =>
-          (this.paperEnrolmentService.enrollee.oboSites.length !== oboSites.length)
+          (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
         ),
@@ -234,15 +187,15 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     return oboSites;
   }
 
-  protected afterSubmitIsSuccessful(enrolleeId: number) {
-    const oboSites = this.paperEnrolmentFormStateService.jobsFormState.oboSites.value as OboSite[];
+  protected afterSubmitIsSuccessful() {
+    const oboSites = this.enrollee.oboSites;
 
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
     if (oboSites?.length) {
       // Should edit existing Job/OboSites next
       nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
     }
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, nextRoutePath]);
+    this.routeUtils.routeRelativeTo(['./', nextRoutePath]);
   }
 
   private removeIncompleteCareSettings() {
@@ -252,14 +205,14 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
         // Remove if care setting is empty or the group is invalid
         if (!value || control.invalid) {
-          this.removeCareSetting(index);
+          this.formState.removeCareSetting(index);
         }
       });
 
     // Always have a single care setting available, and it prevents
     // the page from jumping too much when routing
     if (!this.formState.careSettings.controls.length) {
-      this.addCareSetting();
+      this.formState.addCareSetting();
     }
   }
 
@@ -267,38 +220,13 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
    * @description
    * Remove obo sites by care setting if a care setting was removed from the enrolment
    */
-  private removeOboSites(careSettingCode: number): void {
-    const form = this.paperEnrolmentFormStateService.jobsFormState;
-    const oboSites = form.oboSites as FormArray;
-
-    oboSites.value?.forEach((site: OboSite, index: number) => {
+  private removeOboSites(careSettingCode: number, oboSites: OboSite[]): OboSite[] {
+    oboSites.forEach((site: OboSite, index: number) => {
       if (site.careSettingCode === careSettingCode) {
-        oboSites.removeAt(index);
+        oboSites.splice(index, 1);
       }
     });
 
-    const clear = (fa: FormArray) => {
-      fa.clear();
-      fa.clearValidators();
-      fa.updateValueAndValidity();
-    };
-
-    switch (careSettingCode) {
-      case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        return clear(form.communityHealthSites);
-      }
-      case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        return clear(form.communityPharmacySites);
-      }
-      case CareSettingEnum.HEALTH_AUTHORITY: {
-        const healthAuthoritySites = form.healthAuthoritySites as FormGroup;
-        Object.keys(healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-          const sitesOfHealthAuthority = healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
-          sitesOfHealthAuthority.clearValidators();
-          sitesOfHealthAuthority.updateValueAndValidity();
-          healthAuthoritySites.removeControl(healthAuthorityCode);
-        });
-      }
-    }
+    return oboSites;
   }
 }
