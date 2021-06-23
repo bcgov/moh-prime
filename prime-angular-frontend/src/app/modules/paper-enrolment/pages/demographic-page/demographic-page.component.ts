@@ -127,11 +127,11 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     return request$;
   }
 
-  protected afterSubmitIsSuccessful(enrolleeId: number) {
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
+  protected afterSubmitIsSuccessful(enrolleeId: number): void {
+    this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
-  protected onSubmitFormIsInvalid() {
+  protected onSubmitFormIsInvalid(): void {
     this.showAddressFields = true;
   }
 }
