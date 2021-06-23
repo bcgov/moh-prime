@@ -157,5 +157,10 @@ namespace Prime.Services
             _context.Set<T>().RemoveRange(oldItems);
             _context.Set<T>().AddRange(newItems);
         }
+
+        public async Task FinailizeSubmissionAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

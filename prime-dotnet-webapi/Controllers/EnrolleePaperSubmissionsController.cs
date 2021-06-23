@@ -148,5 +148,25 @@ namespace Prime.Controllers
             await _enrolleeService.UpdateSelfDeclarationsAsync(enrolleeId, payload);
             return Ok();
         }
+
+        // POST: api/enrollees/5/paper-submissions/finalize
+        /// <summary>
+        /// Finalizes a Paper Submission.
+        /// </summary>
+        [HttpPost("{enrolleeId}/paper-submissions/finalize", Name = nameof(FinalizeEnrolleePaperSubmission))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> FinalizeEnrolleePaperSubmission(int enrolleeId)
+        {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
+            await _enrolleeService.FinailizeSubmissionAsync(enrolleeId);
+            return Ok();
+        }
     }
 }
