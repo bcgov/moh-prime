@@ -17,7 +17,7 @@ namespace Prime.Services
         Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel update);
         Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel);
         Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel);
-        Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationsViewModel> updateModels);
+        Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> updateModels);
         Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel);
         Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel);
     }
