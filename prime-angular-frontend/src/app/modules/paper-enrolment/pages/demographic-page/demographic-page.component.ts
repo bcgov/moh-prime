@@ -11,7 +11,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { ToastService } from '@core/services/toast.service';
 import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { optionalAddressLineItems } from '@shared/models/address.model';
 
@@ -97,54 +97,19 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   protected performSubmission(): NoContent {
     const payload = this.formState.json;
-    // const updateEnrollee$ = this.paperEnrolmentResource.updateDemographic(payload);
+    let request$ = this.paperEnrolmentResource.updateDemographic(payload);
 
-    // if (!enrolment.id) {
-    //   const payload = {
-    //     enrollee: { ...enrollee, givenNames }
-    //   };
-    //   return this.paperEnrolmentResource.createEnrollee(payload)
-    //     .pipe(
-    //       // Merge the enrolment with generated keys
-    //       map((newEnrolment: Enrolment) => {
-    //         newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
-    //         return newEnrolment;
-    //       }),
-    //       // Populate generated keys within the form state
-    //       tap((newEnrolment: Enrolment) => {
-    //         this.paperEnrolmentFormStateService.setForm(newEnrolment, true);
-    //         this.enrolment = newEnrolment;
-    //       }),
-    //       this.handleResponse()
-    //     );
-    // } else {
-    //   enrolment.enrollee.givenNames = givenNames;
-    //   return this.paperEnrolmentResource.updateEnrollee(enrolment)
-    //     .pipe(this.handleResponse());
-    // }
+    if (!this.paperEnrolmentService.enrollee.id) {
+      request$ = this.paperEnrolmentResource.createEnrollee(payload)
+        .pipe(NoContentResponse);
+    }
+
+    return request$;
   }
 
-  // private handleResponse() {
-  //   return pipe(
-  //     map(() => {
-  //       this.toastService.openSuccessToast('Enrolment information has been saved');
-  //       this.form.markAsPristine();
-  //
-  //       this.nextRouteAfterSubmit();
-  //     }),
-  //     catchError((error: any) => {
-  //       this.toastService.openErrorToast('Enrolment information could not be saved');
-  //       this.logger.error('[Enrolment] Submission error has occurred: ', error);
-  //
-  //       throw error;
-  //     })
-  //   );
-  // }
-
-  // private nextRouteAfterSubmit(): void {
-  //   // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.CARE_SETTING]);
-  //   this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.CARE_SETTING]);
-  // }
+  protected afterSubmitIsSuccessful() {
+    this.routeUtils.routeRelativeTo(['./', '1', PaperEnrolmentRoutes.CARE_SETTING]);
+  }
 
   // private setAddressValidator(addressLine: FormGroup): void {
   //   this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
