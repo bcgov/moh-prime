@@ -172,7 +172,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   private removeUnselectedHAOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
-
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!healthAuthorities[index]) {
         for (let i = oboSites.length - 1; i >= 0; i--) {
