@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormArray, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,7 +12,6 @@ import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
@@ -52,32 +51,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.allowRoutingWhenDirty = false;
   }
 
-  public filterCareSettingTypes(careSetting: FormGroup) {
-    // Create a list of filtered care settings
-    if (this.formState.careSettings.length) {
-      // All the currently chosen care settings
-      const selectedCareSettingCodes = this.formState.careSettings.value
-        .map((cs: CareSetting) => cs.careSettingCode);
-      // Current care setting selected
-      const currentCareSetting = this.careSettingTypes
-        .find(cs => cs.code === careSetting.get('careSettingCode').value);
-      // Filter the list of possible care settings using the selected care setting
-      const filteredCareSettingTypes = this.careSettingTypes
-        .filter((c: Config<number>) => !selectedCareSettingCodes.includes(c.code));
-
-      if (currentCareSetting) {
-        // Add the current careSetting to the list of filtered
-        // careSettings so it remains visible
-        filteredCareSettingTypes.unshift(currentCareSetting);
-      }
-
-      return filteredCareSettingTypes;
-    }
-
-    // Otherwise, provide the entire list of care setting types
-    return this.careSettingTypes;
-  }
-
   public routeBackTo() {
     this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
@@ -89,7 +62,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       ? canDeactivate.pipe(tap(() => this.removeIncompleteCareSettings()))
       : canDeactivate;
   }
-
 
   public ngOnInit(): void {
     this.createFormInstance();

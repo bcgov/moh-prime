@@ -6,6 +6,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CareSettingForm } from './care-setting-form.model';
 import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { Config } from '@config/config.model';
 export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public constructor(
     private fb: FormBuilder,
@@ -103,6 +104,32 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
 
   public hasSelectedHACareSetting(): boolean {
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+  }
+
+  public filterCareSettingTypes(careSetting: FormGroup) {
+    // Create a list of filtered care settings
+    if (this.careSettings.length) {
+      // All the currently chosen care settings
+      const selectedCareSettingCodes = this.careSettings.value
+        .map((cs: CareSetting) => cs.careSettingCode);
+      // Current care setting selected
+      const currentCareSetting = this.configService.careSettings
+        .find(cs => cs.code === careSetting.get('careSettingCode').value);
+      // Filter the list of possible care settings using the selected care setting
+      const filteredCareSettingTypes = this.configService.careSettings
+        .filter((c: Config<number>) => !selectedCareSettingCodes.includes(c.code));
+
+      if (currentCareSetting) {
+        // Add the current careSetting to the list of filtered
+        // careSettings so it remains visible
+        filteredCareSettingTypes.unshift(currentCareSetting);
+      }
+
+      return filteredCareSettingTypes;
+    }
+
+    // Otherwise, provide the entire list of care setting types
+    return this.configService.careSettings;
   }
 
   public convertCareSettingFormToJson(enrolleeId: number): any {
