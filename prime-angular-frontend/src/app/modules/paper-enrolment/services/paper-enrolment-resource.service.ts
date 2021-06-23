@@ -143,6 +143,22 @@ export class PaperEnrolmentResource {
       );
   }
 
+  /**
+   * @description
+   * Finalize the paper enrolment submission.
+   */
+  public finalize(enrolleeId: number): NoContent {
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/paper-submissions/finalize`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment could not be finalized');
+          this.logger.error('[Core] PaperEnrolmentResource::finalize error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   // TODO things below this line are on the chopping block
 
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
