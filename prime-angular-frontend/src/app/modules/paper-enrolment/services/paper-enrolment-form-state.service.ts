@@ -89,7 +89,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       certifications,
       oboSites,
       ...careSettings,
-      selfDeclarations,
+      // selfDeclarations,
       accessAgreementGuid
     };
   }
