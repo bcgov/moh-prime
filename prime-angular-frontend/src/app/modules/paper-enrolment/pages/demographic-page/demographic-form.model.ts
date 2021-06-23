@@ -1,6 +1,6 @@
 import { Address } from '@shared/models/address.model';
 
-export interface Demographic {
+export interface DemographicForm {
   firstName: string;
   middleName: string;
   lastName: string;

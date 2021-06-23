@@ -4,9 +4,9 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { Demographic } from './demographic-page.model';
+import { DemographicForm } from './demographic-form.model';
 
-export class DemographicFormState extends AbstractFormState<Demographic> {
+export class DemographicFormState extends AbstractFormState<DemographicForm> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -36,7 +36,7 @@ export class DemographicFormState extends AbstractFormState<Demographic> {
     return this.form.get('physicalAddress') as FormGroup;
   }
 
-  public get json(): Demographic {
+  public get json(): DemographicForm {
     if (!this.formInstance) {
       return;
     }
@@ -44,7 +44,7 @@ export class DemographicFormState extends AbstractFormState<Demographic> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: Demographic): void {
+  public patchValue(model: DemographicForm): void {
     if (!this.formInstance) {
       return;
     }

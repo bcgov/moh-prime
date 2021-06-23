@@ -13,7 +13,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
-import { DemographicFormState } from '@paper-enrolment/pages/demographic-page/demographic-page-form-state.class';
+import { DemographicFormState } from '@paper-enrolment/pages/demographic-page/demographic-form-state.class';
 import { CareSettingFormState } from '@paper-enrolment/pages/care-setting-page/care-setting-page-form-state.class';
 import { OboSiteFormState } from '@paper-enrolment/pages/obo-sites-page/obo-sites-page-form-state.class';
 import { SelfDeclarationFormState } from '@paper-enrolment/pages/self-declaration-page/self-declaration-page-form-state.class';
@@ -160,7 +160,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
     this.careSettingFormState = new CareSettingFormState(this.fb, this.configService);
     this.regulatoryFormState = new RegulatoryFormState(this.fb);
     this.jobsFormState = new OboSiteFormState(this.fb, this.formUtilsService, this.configService);
-    this.selfDeclarationFormState = new SelfDeclarationFormState(this.fb, this.formUtilsService, this.configService)
+    this.selfDeclarationFormState = new SelfDeclarationFormState(this.fb, this.formUtilsService, this.configService);
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 

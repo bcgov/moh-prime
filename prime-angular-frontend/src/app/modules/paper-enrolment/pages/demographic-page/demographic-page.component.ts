@@ -19,7 +19,7 @@ import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { DemographicFormState } from './demographic-page-form-state.class';
+import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
   selector: 'app-demographic-page',
@@ -97,7 +97,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   protected performSubmission(): NoContent {
     const payload = this.formState.json;
-    const updateEnrollee$ = this.paperEnrolmentResource.updateDemographic(payload);
+    // const updateEnrollee$ = this.paperEnrolmentResource.updateDemographic(payload);
 
     // if (!enrolment.id) {
     //   const payload = {
