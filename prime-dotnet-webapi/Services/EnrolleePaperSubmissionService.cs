@@ -152,16 +152,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents)
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
         {
-            foreach (var document in documents)
+            foreach (var guid in documentGuids)
             {
-                var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
                 if (!string.IsNullOrWhiteSpace(filename))
                 {
                     var adjudicationDocument = new EnrolleeAdjudicationDocument
                     {
-                        DocumentGuid = document.DocumentGuid,
+                        DocumentGuid = guid,
                         EnrolleeId = enrolleeId,
                         Filename = filename,
                         UploadedDate = DateTimeOffset.Now,
@@ -172,6 +172,15 @@ namespace Prime.Services
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId)
+        {
+            return await _context.EnrolleeAdjudicationDocuments
+               .Where(bl => bl.EnrolleeId == enrolleeId)
+               .Include(bl => bl.Adjudicator)
+                .OrderByDescending(bl => bl.UploadedDate)
+               .ToListAsync();
         }
 
         public async Task FinailizeSubmissionAsync(int enrolleeId)
