@@ -22,7 +22,8 @@
     </button>
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole)"
-            *ngIf="isValid(SiteAdjudicationAction.UNREJECT)">
+            *ngIf="isValid(SiteAdjudicationAction.UNREJECT)"
+            (click)="onUnreject()">
       <mat-icon>arrow_circle_up</mat-icon>
       <span>Unreject Site</span>
     </button>
