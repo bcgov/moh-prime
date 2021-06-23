@@ -64,7 +64,7 @@ namespace Prime.Controllers
                 return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
             }
 
-            await _enrolleeService.UpdateEnrolleeCareSettingsById(enrolleeId, payload);
+            await _enrolleeService.UpdateCareSettingsAsync(enrolleeId, payload);
             return Ok();
         }
 
@@ -84,7 +84,7 @@ namespace Prime.Controllers
                 return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
             }
 
-            await _enrolleeService.UpdateEnrolleeCertificationsById(enrolleeId, payload);
+            await _enrolleeService.UpdateCertificationsAsync(enrolleeId, payload);
             return Ok();
         }
 
@@ -104,7 +104,7 @@ namespace Prime.Controllers
                 return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
             }
 
-            await _enrolleeService.UpdateEnrolleeDemographicsById(enrolleeId, payload);
+            await _enrolleeService.UpdateDemographicsAsync(enrolleeId, payload);
             return Ok();
         }
 
@@ -124,7 +124,7 @@ namespace Prime.Controllers
                 return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
             }
 
-            await _enrolleeService.UpdateEnrolleeOboSitesById(enrolleeId, payload);
+            await _enrolleeService.UpdateOboSitesAsync(enrolleeId, payload);
             return Ok();
         }
 
@@ -144,7 +144,7 @@ namespace Prime.Controllers
                 return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
             }
 
-            await _enrolleeService.UpdateEnrolleeSelfDeclarationsById(enrolleeId, payload);
+            await _enrolleeService.UpdateSelfDeclarationsAsync(enrolleeId, payload);
             return Ok();
         }
     }

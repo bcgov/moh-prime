@@ -25,8 +25,8 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { Job } from '@enrolment/shared/models/job.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 
 @Injectable({
@@ -52,7 +52,7 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public createEnrollee(payload: { enrollee: Enrollee, identificationDocumentGuid?: string }): Observable<HttpEnrollee> {
+  public createEnrollee(payload: DemographicForm): Observable<HttpEnrollee> {
     return this.apiResource.post<HttpEnrollee>('enrollees/paper-submissions', payload)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),

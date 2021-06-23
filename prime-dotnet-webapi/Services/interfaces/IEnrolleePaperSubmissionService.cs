@@ -14,11 +14,11 @@ namespace Prime.Services
         /// <param name="enrolleeId"></param>
         Task<bool> PaperSubmissionExistsAsync(int enrolleeId);
         Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel enrollee);
-        Task UpdateEnrolleeCareSettingsById(int enrolleeId, PaperEnrolleeCareSettingViewModel update);
-        Task UpdateEnrolleeDemographicsById(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel);
-        Task UpdateEnrolleeOboSitesById(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel);
-        Task UpdateEnrolleeCertificationsById(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> updateModel);
-        Task UpdateEnrolleeSelfDeclarationsById(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel);
-        Task UpdateEnrolleeAgreementsById(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel);
+        Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel update);
+        Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel);
+        Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel);
+        Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationsViewModel> updateModels);
+        Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel);
+        Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel);
     }
 }
