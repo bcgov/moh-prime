@@ -6,50 +6,45 @@ import { ConfigService } from '@config/config.service';
 import { LicenseConfig } from '@config/config.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
-import { Enrolment } from '@shared/models/enrolment.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 
-export interface IEnrolmentService {
-  enrolment$: BehaviorSubject<Enrolment>;
-  enrolment: Enrolment;
-  isInitialEnrolment: boolean;
+export interface IPaperEnrolmentService {
+  enrollee$: BehaviorSubject<HttpEnrollee>;
+  enrollee: HttpEnrollee;
   isProfileComplete: boolean;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class PaperEnrolmentService implements IEnrolmentService {
+export class PaperEnrolmentService implements IPaperEnrolmentService {
   // tslint:disable-next-line: variable-name
-  private _enrolment: BehaviorSubject<Enrolment>;
+  private readonly _enrollee: BehaviorSubject<HttpEnrollee>;
 
   constructor(
     private configService: ConfigService
   ) {
-    this._enrolment = new BehaviorSubject<Enrolment>(null);
+    this._enrollee = new BehaviorSubject<HttpEnrollee>(null);
   }
 
-  public get enrolment$(): BehaviorSubject<Enrolment> {
-    return this._enrolment;
+  public get enrollee$(): BehaviorSubject<HttpEnrollee> {
+    return this._enrollee;
   }
 
-  public get enrolment(): Enrolment {
-    return this._enrolment.value;
+  public get enrollee(): HttpEnrollee {
+    return this._enrollee.value;
   }
 
-  public set enrolment(enrolment: Enrolment) {
+  public set enrollee(enrollee: HttpEnrollee) {
     // Store a copy to prevent updates by reference
-    this._enrolment.next({ ...enrolment });
-  }
-
-  public get isInitialEnrolment(): boolean {
-    return !this.enrolment || (this.enrolment && !this.enrolment.expiryDate);
+    this._enrollee.next({ ...enrollee });
   }
 
   public get isProfileComplete(): boolean {
-    return this.enrolment && this.enrolment.profileCompleted;
+    return this.enrollee && this.enrollee.profileCompleted;
   }
 
   /**

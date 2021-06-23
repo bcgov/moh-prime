@@ -37,34 +37,32 @@ export class PaperEnrolmentResource {
     private logger: LoggerService
   ) { }
 
-  public getEnrolleeById(enrolleeId: number): Observable<Enrolment> {
+  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
     return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee) =>
-          this.enrolleeAdapterResponse(enrollee)
-        ),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] PaperEnrolmentResource::enrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getEnrolleeById error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public createEnrollee(payload: { enrollee: Enrollee, identificationDocumentGuid?: string }): Observable<Enrolment> {
-    return this.apiResource.post<HttpEnrollee>('enrollees', payload)
+  public createEnrollee(payload: { enrollee: Enrollee, identificationDocumentGuid?: string }): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>('enrollees/paper-submissions', payload)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be created.');
-          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::createEnrollee error has occurred: ', error);
           throw error;
         })
       );
   }
+
+  // TODO things below this line are on the chopping block
 
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
     const { id } = enrolment;
@@ -74,7 +72,7 @@ export class PaperEnrolmentResource {
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee could not be updated.');
-          this.logger.error('[Enrolment] EnrolmentResource::updateEnrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::updateEnrollee error has occurred: ', error);
           throw error;
         })
       );
@@ -88,7 +86,7 @@ export class PaperEnrolmentResource {
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Application submission could not be completed.');
-          this.logger.error('[Enrolment] EnrolmentResource::submitApplication error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::submitApplication error has occurred: ', error);
           throw error;
         })
       );
@@ -102,7 +100,7 @@ export class PaperEnrolmentResource {
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Action could not be completed.');
-          this.logger.error('[Enrolment] EnrolmentResource::enrolleeStatusAction error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );
@@ -115,7 +113,7 @@ export class PaperEnrolmentResource {
         tap((accessTerms: EnrolmentStatus) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee current status could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getCurrentStatus error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getCurrentStatus error has occurred: ', error);
           throw error;
         })
       );
@@ -133,7 +131,7 @@ export class PaperEnrolmentResource {
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email could not be sent');
-          this.logger.error('[Enrolment] EnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
           throw error;
         })
       );
@@ -151,7 +149,7 @@ export class PaperEnrolmentResource {
         tap((accessTerms: EnrolleeAgreement[]) => this.logger.info('ENROLLEE_AGREEMENTS', accessTerms)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee agreements could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAcceptedAccessTerms error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getAcceptedAccessTerms error has occurred: ', error);
           throw error;
         })
       );
@@ -165,7 +163,7 @@ export class PaperEnrolmentResource {
         tap((accessTerm: EnrolleeAgreement) => this.logger.info('LATEST_ENROLLEE_AGREEMENT', accessTerm)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee agreement could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getLatestAccessTerm error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getLatestAccessTerm error has occurred: ', error);
           throw error;
         })
       );
@@ -178,7 +176,7 @@ export class PaperEnrolmentResource {
         tap((accessTerm: EnrolleeAgreement) => this.logger.info('ENROLLEE_AGREEMENT', accessTerm)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee agreement could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAccessTerm error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getAccessTerm error has occurred: ', error);
           throw error;
         })
       );
@@ -199,7 +197,7 @@ export class PaperEnrolmentResource {
         map(this.enrolleeSubmissionAdapterResponse()),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
           throw error;
         })
       );
@@ -216,7 +214,7 @@ export class PaperEnrolmentResource {
         tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Agreement versions could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
           throw error;
         })
       );
@@ -229,7 +227,7 @@ export class PaperEnrolmentResource {
         tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Agreement version could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getAgreementVersion error has occurred: ', error);
           throw error;
         })
       );
@@ -247,7 +245,7 @@ export class PaperEnrolmentResource {
         tap((document: string) => this.logger.info('DOCUMENT', document)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be downloaded.');
-          this.logger.error('[Enrolment] EnrolmentResource::getDownloadTokenSelfDeclarationDocument error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getDownloadTokenSelfDeclarationDocument error has occurred: ', error);
           throw error;
         })
       );
@@ -262,7 +260,7 @@ export class PaperEnrolmentResource {
         tap((document: string) => this.logger.info('DOCUMENT', document)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be downloaded.');
-          this.logger.error('[Enrolment] EnrolmentResource::getDownloadTokenIdentificationDocument error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getDownloadTokenIdentificationDocument error has occurred: ', error);
           throw error;
         })
       );
@@ -275,7 +273,7 @@ export class PaperEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAdjudicationDocument>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::createEnrolleeAdjudicationDocument error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::createEnrolleeAdjudicationDocument error has occurred: ', error);
           throw error;
         })
       );
@@ -286,7 +284,7 @@ export class PaperEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAdjudicationDocument[]>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocuments error has occurred: ', error);
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getEnrolleeAdjudicationDocuments error has occurred: ', error);
           throw error;
         })
       );
@@ -297,7 +295,7 @@ export class PaperEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
+          this.logger.error('[Enrolment] PaperEnrolmentResource::getEnrolleeAdjudicationDocumentDownloadToken error has occurred: ',
             error);
           throw error;
         })
@@ -316,7 +314,7 @@ export class PaperEnrolmentResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Document could not be deleted');
-          this.logger.error('[Adjudication] EnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
+          this.logger.error('[Adjudication] PaperEnrolmentResource::deleteEnrolleeAdjudicationDocument error has occurred: ', error);
           throw error;
         })
       );
