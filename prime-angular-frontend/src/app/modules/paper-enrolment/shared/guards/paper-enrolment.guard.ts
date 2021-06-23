@@ -33,13 +33,13 @@ export class PaperEnrolmentGuard extends BaseGuard {
           map((enrolment: Enrolment) => {
             // Store the site for access throughout creation and updating of a
             // site, which will allows provide the most up-to-date site
-            this.paperEnrolmentService.enrolment = enrolment;
+            this.paperEnrolmentService.enrollee = enrolment;
 
             return this.routeDestination(routePath, enrolment);
           })
         );
     } else {
-      return new Promise(async (resolve, reject) => resolve(true))
+      return new Promise(async (resolve, reject) => resolve(true));
     }
   }
 

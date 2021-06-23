@@ -3,9 +3,21 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Enrollee } from '@shared/models/enrollee.model';
+import { Address } from '@shared/models/address.model';
 
-export class DemographicFormState extends AbstractFormState<Enrollee> {
+export interface DemographicFormModel {
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dateOfBirth: string;
+  physicalAddress: Address;
+  email: string;
+  phone: string;
+  phoneExtension: string;
+  smsPhone: string;
+}
+
+export class DemographicFormState extends AbstractFormState<DemographicFormModel> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -35,25 +47,20 @@ export class DemographicFormState extends AbstractFormState<Enrollee> {
     return this.form.get('physicalAddress') as FormGroup;
   }
 
-
-  public get json(): Enrollee {
+  public get json(): DemographicFormModel {
     if (!this.formInstance) {
       return;
     }
-
-    // TODO adapt the data after getting values, ie. address(es)
 
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(enrollee: Enrollee): void {
+  public patchValue(model: DemographicFormModel): void {
     if (!this.formInstance) {
       return;
     }
 
-    // TODO adapt the data before patching values, ie. address(es)
-
-    this.formInstance.patchValue(enrollee);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {

@@ -136,7 +136,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected patchForm(): void {
     // Will be null if enrolment has not been created
-    const enrolment = this.paperEnrolmentService.enrolment;
+    const enrolment = this.paperEnrolmentService.enrollee;
     // this.paperEnrolmentFormStateService.setForm(enrolment);
     this.formState.patchValue(enrolment);
   }

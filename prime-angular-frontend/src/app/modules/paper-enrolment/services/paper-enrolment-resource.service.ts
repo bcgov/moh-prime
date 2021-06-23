@@ -29,7 +29,7 @@ import { Job } from '@enrolment/shared/models/job.model';
 @Injectable({
   providedIn: 'root'
 })
-export class PaperPaperEnrolmentResource {
+export class PaperEnrolmentResource {
   constructor(
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
