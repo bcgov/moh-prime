@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
-import { PaperEnrolmentGuard } from '@paper-enrolment/shared/guards/paper-enrolment.guard';
-import { PaperEnrolmentDashboardComponent } from '@paper-enrolment/shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
+import { PaperEnrolmentRoutes } from './paper-enrolment.routes';
+import { PaperEnrolmentGuard } from './shared/guards/paper-enrolment.guard';
+import { PaperEnrolmentDashboardComponent } from './shared/components/paper-enrolment-dashboard/paper-enrolment-dashboard.component';
 
 import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
@@ -13,6 +13,7 @@ import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
+import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,12 @@ const routes: Routes = [
             data: { title: 'PRIME Profile' }
           },
           {
+            path: PaperEnrolmentRoutes.NEXT_STEPS,
+            component: NextStepsComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
             path: '', // Equivalent to `/` and alias for default view
             redirectTo: PaperEnrolmentRoutes.DEMOGRAPHIC,
             pathMatch: 'full'
@@ -76,4 +83,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PaperEnrolmentRoutingModule { }
+export class PaperEnrolmentRoutingModule {}
