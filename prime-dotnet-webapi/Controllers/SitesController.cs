@@ -850,6 +850,33 @@ namespace Prime.Controllers
             return Ok(updatedSite);
         }
 
+        // PUT: api/Sites/5/unreject
+        /// <summary>
+        /// Unreject a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/unreject", Name = nameof(UnrejectSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnrejectSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Undecline))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            var updatedSite = await _siteService.UnrejectSite(siteId);
+            return Ok(updatedSite);
+        }
+
         // POST: api/Sites/5/site-registration-notes
         /// <summary>
         /// Creates a new site registration note on a site.

@@ -351,10 +351,22 @@ namespace Prime.Services
             return site;
         }
 
+        public async Task<Site> UnrejectSite(int siteId)
+        {
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            site.AddStatus(SiteStatusType.InReview);
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Unrejected");
+
+            return site;
+        }
+
         public async Task<Site> EnableEditingSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.SubmittedDate = null;
+            site.ApprovedDate = null;
             site.AddStatus(SiteStatusType.Active);
             await _context.SaveChangesAsync();
 
