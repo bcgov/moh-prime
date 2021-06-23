@@ -174,6 +174,27 @@ namespace Prime.Controllers
             return Ok();
         }
 
+        // PUT: api/enrollees/5/paper-submissions/profile-completed
+        /// <summary>
+        /// Sets the Paper Submission's profile as "completed", allowing frontend and backend behavioural changes.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/profile-completed", Name = nameof(SetEnrolleePaperSubmissionProfileCompleted))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> SetEnrolleePaperSubmissionProfileCompleted(int enrolleeId)
+        {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
+            await _enrolleeService.SetProfileCompletedAsync(enrolleeId);
+
+            return Ok();
+        }
+
         // POST: api/enrollees/5/paper-submissions/finalize
         /// <summary>
         /// Finalizes a Paper Submission.
