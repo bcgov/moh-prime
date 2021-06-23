@@ -1,22 +1,14 @@
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { ConfigService } from '@config/config.service';
-import { Enrolment } from '@shared/models/enrolment.model';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { SelfDeclarationForm } from './self-declaration-form.model';
 
-interface SelfDeclarationPageDataModel extends Pick<Enrolment, 'selfDeclarations'> { }
-
-export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationPageDataModel> {
-
+export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationForm> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
-    private configService: ConfigService
+    private fb: FormBuilder
   ) {
     super();
 
@@ -55,7 +47,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationP
     return this.form.get('hasPharmaNetSuspendedDetails') as FormControl;
   }
 
-  public get json(): SelfDeclarationPageDataModel {
+  public get json(): SelfDeclarationForm {
     throw new Error('Method not implemented.');
   }
 
@@ -83,7 +75,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationP
       }, []);
   }
 
-  public patchValue(pageModel: SelfDeclarationPageDataModel): void {
+  public patchValue(pageModel: SelfDeclarationForm): void {
     if (!this.formInstance) {
       return;
     }
@@ -127,11 +119,8 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationP
     });
   }
 
-  /**
-  * Document Upload Helpers
-  */
-
-  public addSelfDeclarationDocumentGuid(control: FormArray, value: string) {
+  public addSelfDeclarationDocumentGuid(controlName: string, value: string) {
+    this.formState.form.get(controlName) as FormArray;
     control.push(this.fb.control(value));
   }
 
@@ -149,5 +138,4 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationP
       .map((formArrayName: string) => this.form.get(formArrayName) as FormArray)
       .forEach((formArray: FormArray) => formArray.clear());
   }
-
 }

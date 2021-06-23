@@ -1,11 +1,10 @@
 <app-page [busy]="busy">
-
   <app-page-header>PRIME Profile</app-page-header>
-
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
+        autocomplete="off"
         novalidate>
 
     <app-page-subheader>
@@ -79,7 +78,8 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-registration-suspended"
+            <app-document-upload *ngIf="allowUploads"
+                                 componentName="has-registration-suspended"
                                  [multiple]="true"
                                  (completed)="onUpload('hasRegistrationSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasRegistrationSuspendedDocumentGuids', $event)">
@@ -140,7 +140,8 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-conviction"
+            <app-document-upload *ngIf="allowUploads"
+                                 componentName="has-conviction"
                                  [multiple]="true"
                                  (completed)="onUpload('hasConvictionDocumentGuids', $event)"
                                  (remove)="onRemove('hasConvictionDocumentGuids', $event)">
@@ -199,7 +200,8 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-pharmanet-suspended"
+            <app-document-upload *ngIf="allowUploads"
+                                 componentName="has-pharmanet-suspended"
                                  [multiple]="true"
                                  (completed)="onUpload('hasPharmaNetSuspendedDocumentGuids', $event)"
                                  (remove)="onRemove('hasPharmaNetSuspendedDocumentGuids', $event)">
@@ -257,7 +259,8 @@
               Attach documents related to this self-declaration.
             </li>
 
-            <app-document-upload componentName="has-disciplinary-action"
+            <app-document-upload *ngIf="allowUploads"
+                                 componentName="has-disciplinary-action"
                                  [multiple]="true"
                                  (completed)="onUpload('hasDisciplinaryActionDocumentGuids', $event)"
                                  (remove)="onRemove('hasDisciplinaryActionDocumentGuids', $event)">

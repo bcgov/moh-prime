@@ -12,9 +12,6 @@ import moment from 'moment';
 import { MINIMUM_AGE } from '@lib/constants';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@shared/models/address.model';
@@ -45,9 +42,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
-    private toastService: ToastService,
-    private utilService: UtilsService,
-    private logger: LoggerService,
     private route: ActivatedRoute,
     router: Router
   ) {
