@@ -7,6 +7,7 @@ using Prime;
 using Prime.Models;
 using Prime.Models.Api;
 using PrimeTests.Utils;
+using Prime.Controllers;
 
 namespace PrimeTests.Integration
 {
