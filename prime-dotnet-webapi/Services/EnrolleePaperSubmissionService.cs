@@ -62,29 +62,22 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel updateModel)
+        public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel paperCareSettings)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newCareSettings = paperCareSettings.CareSettingCodes.Select(code => new EnrolleeCareSetting
+            {
+                EnrolleeId = enrolleeId,
+                CareSettingCode = code
+            });
 
-            var careSettings = updateModel.CareSettingCodes.Select(code =>
-                new EnrolleeCareSetting
-                {
-                    CareSettingCode = code
-                }
-            ).ToList();
+            var newHealthAuthorities = paperCareSettings.HealthAuthorityCodes.Select(code => new EnrolleeHealthAuthority
+            {
+                EnrolleeId = enrolleeId,
+                HealthAuthorityCode = code
+            });
 
-            var healthAuthorities = updateModel.HealthAuthorityCodes.Select(code =>
-                new EnrolleeHealthAuthority
-                {
-                    HealthAuthorityCode = code
-                }
-            ).ToList();
-
-            enrollee.EnrolleeCareSettings = careSettings;
-            enrollee.EnrolleeHealthAuthorities = healthAuthorities;
-
-            _context.Update(enrollee);
+            await ReplaceCollection(enrolleeId, newCareSettings);
+            await ReplaceCollection(enrolleeId, newHealthAuthorities);
 
             await _context.SaveChangesAsync();
         }
@@ -142,6 +135,16 @@ namespace Prime.Services
             _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
 
             await _context.SaveChangesAsync();
+        }
+
+        private async Task ReplaceCollection<T>(int enrolleeId, IEnumerable<T> newItems) where T : class, IEnrolleeNavigationProperty
+        {
+            var oldItems = await _context.Set<T>()
+                .Where(x => x.EnrolleeId == enrolleeId)
+                .ToListAsync();
+
+            _context.Set<T>().RemoveRange(oldItems);
+            _context.Set<T>().AddRange(newItems);
         }
     }
 }
