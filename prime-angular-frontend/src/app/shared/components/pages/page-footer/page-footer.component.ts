@@ -46,10 +46,12 @@ export class PageFooterComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    console.log('CHANGES', changes);
-
     if (changes.primaryActionLabel) {
+      this.saveButtonLabel = changes.primaryActionLabel.currentValue;
+    }
 
+    if (changes.secondaryActionLabel) {
+      this.secondaryActionButtonLabel = changes.secondaryActionLabel.currentValue;
     }
   }
 
