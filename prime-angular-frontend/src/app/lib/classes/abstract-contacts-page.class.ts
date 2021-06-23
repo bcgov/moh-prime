@@ -56,7 +56,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
 
   public onAdd(): void {
     this.isEditing = true;
-    this.formState.form.reset();
+    this.formState.form.reset({ id: 0 });
   }
 
   public onEdit(index: number): void {
