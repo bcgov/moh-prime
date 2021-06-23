@@ -10,7 +10,6 @@
     <section class="mb-3">
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
-
         <ng-container appPageSubheader2Summary>
           Provide this information.
         </ng-container>
@@ -85,7 +84,7 @@
 
       <app-address-form [form]="formState.physicalAddress"
                         [showManualButton]="true"
-                        [showAddressFields]="false"></app-address-form>
+                        [showAddressFields]="showAddressFields"></app-address-form>
 
     </section>
 

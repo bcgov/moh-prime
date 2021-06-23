@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Location } from '@angular/common';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,11 +17,12 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { Address } from '@shared/models/address.model';
 
 import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
@@ -31,6 +33,7 @@ import { DemographicFormState } from './demographic-form-state.class';
 export class DemographicPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: DemographicFormState;
   public maxDateOfBirth: moment.Moment;
+  public showAddressFields: boolean;
 
   private routeUtils: RouteUtils;
 
@@ -38,12 +41,13 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
+    private location: Location,
     private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
     private toastService: ToastService,
-    private logger: LoggerService,
     private utilService: UtilsService,
+    private logger: LoggerService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -51,7 +55,6 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
     // Must be 18 years of age or older
     this.maxDateOfBirth = moment().subtract(MINIMUM_AGE, 'years');
-
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
@@ -65,50 +68,66 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected patchForm(): void {
-    this.paperEnrolmentResource.getEnrolleeById(this.route.snapshot.params.eid);
-    // Will be null if enrollee has not been created
-    const enrollee = this.paperEnrolmentService.enrollee;
-    if (enrollee) {
-      const {
-        firstName,
-        givenNames,
-        lastName,
-        dateOfBirth,
-        physicalAddress,
-        email,
-        phone,
-        phoneExtension,
-        smsPhone
-      } = enrollee;
-
-      const middleName = givenNames.replace(firstName, '').trim();
-
-      // Attempt to patch the form if not already patched
-      this.formState.patchValue({
-        firstName,
-        middleName,
-        lastName,
-        dateOfBirth,
-        physicalAddress,
-        email,
-        phone,
-        phoneExtension,
-        smsPhone
-      });
+    const enrolleeId = +this.route.snapshot.params.eid;
+    if (!enrolleeId) {
+      return;
     }
+
+    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+      .subscribe((enrollee: HttpEnrollee) => {
+        if (enrollee) {
+          const {
+            firstName,
+            givenNames,
+            lastName,
+            dateOfBirth,
+            physicalAddress,
+            email,
+            phone,
+            phoneExtension,
+            smsPhone
+          } = enrollee;
+
+          const middleName = givenNames.replace(firstName, '').trim();
+
+          // Attempt to patch the form if not already patched
+          this.formState.patchValue({
+            firstName,
+            middleName,
+            lastName,
+            dateOfBirth,
+            physicalAddress,
+            email,
+            phone,
+            phoneExtension,
+            smsPhone
+          });
+
+          if (Address.isNotEmpty(physicalAddress)) {
+            this.showAddressFields = true;
+          }
+        }
+      });
   }
 
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
-    const enrolleeId = this.paperEnrolmentService.enrollee?.id ?? 0;
+    const enrolleeId = +this.route.snapshot.data.eid;
     let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload)
       .pipe(map(() => enrolleeId));
 
     if (!enrolleeId) {
       request$ = this.paperEnrolmentResource.createEnrollee(payload)
-        .pipe(map((enrollee: HttpEnrollee) => enrollee.id));
+        .pipe(
+          map((enrollee: HttpEnrollee) => {
+            // Replace the URL with redirection, and prevent initial
+            // ID of zero being pushed onto browser history
+            this.location.replaceState([PaperEnrolmentRoutes.MODULE_PATH, enrollee.id, PaperEnrolmentRoutes.DEMOGRAPHIC].join('/'));
+            return enrollee.id;
+          })
+        );
     }
 
     return request$;
@@ -118,7 +137,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
-  // private setAddressValidator(addressLine: FormGroup): void {
-  //   this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
-  // }
+  protected onSubmitFormIsInvalid() {
+    this.showAddressFields = true;
+  }
 }

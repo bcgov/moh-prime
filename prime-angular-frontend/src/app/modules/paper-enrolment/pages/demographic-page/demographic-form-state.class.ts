@@ -5,7 +5,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { DemographicForm } from './demographic-form.model';
-import { AddressLine } from '@shared/models/address.model';
 
 export class DemographicFormState extends AbstractFormState<DemographicForm> {
   public constructor(
