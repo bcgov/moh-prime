@@ -1,5 +1,4 @@
 using System;
-using Prime.Models;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
@@ -13,7 +12,7 @@ namespace Prime.ViewModels.PaperEnrollees
 
         public DateTime DateOfBirth { get; set; }
 
-        public PhysicalAddress PhysicalAddress { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
 
         public string Email { get; set; }
 
