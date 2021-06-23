@@ -5,6 +5,6 @@ namespace Prime.Services
 {
     public interface ISiteRegistrationService
     {
-        bool CanPerformSiteStatusAction(SiteStatusAction action, SiteStatusType currentStatus);
+        bool CanPerformSiteStatusAction(SiteRegistrationAction action, SiteStatusType currentStatus);
     }
 }

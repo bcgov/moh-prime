@@ -326,7 +326,7 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Submit, site.Status))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Submit, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -772,7 +772,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Approve, site.Status))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Approve, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -803,7 +803,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Decline, site.Status))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Decline, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -830,15 +830,15 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            var action = SiteStatusAction.NA;
+            var action = SiteRegistrationAction.NA;
             // Only allow enable editing for the following current site status: InReview & Approved
             switch (site.Status)
             {
                 case SiteStatusType.InReview:
-                    action = SiteStatusAction.RequestChange;
+                    action = SiteRegistrationAction.RequestChange;
                     break;
                 case SiteStatusType.Approved:
-                    action = SiteStatusAction.Unapprove;
+                    action = SiteRegistrationAction.Unapprove;
                     break;
             }
             if (!_siteRegistrationService.CanPerformSiteStatusAction(action, site.Status))
@@ -868,7 +868,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteStatusAction.Undecline))
+            if (!_siteRegistrationService.CanPerformSiteStatusAction(SiteRegistrationAction.Undecline, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }

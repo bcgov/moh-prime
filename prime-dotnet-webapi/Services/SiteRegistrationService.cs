@@ -6,24 +6,24 @@ namespace Prime.Services
 {
     public class SiteRegistrationService : ISiteRegistrationService
     {
-        public bool CanPerformSiteStatusAction(SiteStatusAction action, SiteStatusType currentStatus)
+        public bool CanPerformSiteStatusAction(SiteRegistrationAction action, SiteStatusType currentStatus)
         {
             SiteStatusType newStatus;
 
             switch (action)
             {
-                case SiteStatusAction.Submit:
-                case SiteStatusAction.Undecline:
+                case SiteRegistrationAction.Submit:
+                case SiteRegistrationAction.Undecline:
                     newStatus = SiteStatusType.InReview;
                     break;
-                case SiteStatusAction.Approve:
+                case SiteRegistrationAction.Approve:
                     newStatus = SiteStatusType.Approved;
                     break;
-                case SiteStatusAction.Decline:
+                case SiteRegistrationAction.Decline:
                     newStatus = SiteStatusType.Locked;
                     break;
-                case SiteStatusAction.RequestChange:
-                case SiteStatusAction.Unapprove:
+                case SiteRegistrationAction.RequestChange:
+                case SiteRegistrationAction.Unapprove:
                     newStatus = SiteStatusType.Active;
                     break;
                 default:

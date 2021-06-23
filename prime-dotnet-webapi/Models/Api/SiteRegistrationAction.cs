@@ -1,6 +1,6 @@
 namespace Prime.Models.Api
 {
-    public enum SiteStatusAction
+    public enum SiteRegistrationAction
     {
         NA = 0,
         Submit = 1,
