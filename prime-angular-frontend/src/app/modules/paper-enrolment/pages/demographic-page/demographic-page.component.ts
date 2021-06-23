@@ -19,7 +19,7 @@ import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { DemographicFormState } from './demographic-page-form-state.class';
+import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
   selector: 'app-demographic-page',
@@ -64,43 +64,41 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
 
   protected patchForm(): void {
     // Will be null if enrollee has not been created
-    let enrollee = this.paperEnrolmentService.enrollee;
-    if (!enrollee) {
+    const enrollee = this.paperEnrolmentService.enrollee;
+    if (enrollee) {
+      const {
+        firstName,
+        givenNames,
+        lastName,
+        dateOfBirth,
+        physicalAddress,
+        email,
+        phone,
+        phoneExtension,
+        smsPhone
+      } = enrollee;
 
+      const middleName = givenNames.replace(firstName, '').trim();
+
+      // Attempt to patch the form if not already patched
+      this.formState.patchValue({
+        firstName,
+        middleName,
+        lastName,
+        dateOfBirth,
+        physicalAddress,
+        email,
+        phone,
+        phoneExtension,
+        smsPhone
+      });
     }
-    const {
-      firstName,
-      givenNames,
-      lastName,
-      dateOfBirth,
-      physicalAddress,
-      email,
-      phone,
-      phoneExtension,
-      smsPhone
-    } = this.paperEnrolmentService.enrollee;
-
-    const middleName = givenNames.replace(firstName, '').trim();
-
-    // Attempt to patch the form if not already patched
-    this.formState.patchValue({
-      firstName,
-      middleName,
-      lastName,
-      dateOfBirth,
-      physicalAddress,
-      email,
-      phone,
-      phoneExtension,
-      smsPhone
-    });
   }
 
   protected performSubmission(): NoContent {
     const payload = this.formState.json;
-    const updateEnrollee$ = this.paperEnrolmentResource.updateEnrollee(payload);
-    // BCeID has to match BCSC for submission, which requires givenNames
-    // const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
+    // const updateEnrollee$ = this.paperEnrolmentResource.updateDemographic(payload);
+
     // if (!enrolment.id) {
     //   const payload = {
     //     enrollee: { ...enrollee, givenNames }
@@ -148,7 +146,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   //   this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.CARE_SETTING]);
   // }
 
-  private setAddressValidator(addressLine: FormGroup): void {
-    this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
-  }
+  // private setAddressValidator(addressLine: FormGroup): void {
+  //   this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+  // }
 }
