@@ -27,6 +27,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { Job } from '@enrolment/shared/models/job.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
 
 @Injectable({
   providedIn: 'root'
@@ -88,7 +89,7 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateCertifications(enrolleeId: number, certifications: CareSetting[]): NoContent {
+  public updateCertifications(enrolleeId: number, certifications: CollegeCertification[]): NoContent {
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/certifications`, certifications)
       .pipe(
         NoContentResponse,
@@ -107,6 +108,18 @@ export class PaperEnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Paper Enrolment obo sites could not be updated');
           this.logger.error('[Core] PaperEnrolmentResource::updateOboSites error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateSelfDeclarations(enrolleeId: number, selfDeclarations: SelfDeclaration[]): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/self-declarations`, selfDeclarations)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment self declarations could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateSelfDeclarations error has occurred: ', error);
           throw error;
         })
       );
