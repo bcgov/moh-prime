@@ -76,7 +76,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     };
   }
 
-  public patchValue(pageModel: SelfDeclarationForm): void {
+  public patchValue(pageModel: SelfDeclarationForm, defaultValue: boolean | null = null): void {
     if (!this.formInstance) {
       return;
     }
@@ -94,7 +94,7 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
           .find(esd => esd.selfDeclarationTypeCode === type)
           ?.selfDeclarationDetails;
         const adapted = {
-          [sd]: (selfDeclarationDetails) ? true : null,
+          [sd]: (selfDeclarationDetails) ? true : defaultValue,
           [`${sd}Details`]: (selfDeclarationDetails) ? selfDeclarationDetails : null
         };
         return { ...sds, ...adapted };
