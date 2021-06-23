@@ -77,13 +77,11 @@ namespace Prime.Services
         {
             var newCareSettings = viewModel.CareSettingCodes.Select(code => new EnrolleeCareSetting
             {
-                EnrolleeId = enrolleeId,
                 CareSettingCode = code
             });
 
             var newHealthAuthorities = viewModel.HealthAuthorityCodes.Select(code => new EnrolleeHealthAuthority
             {
-                EnrolleeId = enrolleeId,
                 HealthAuthorityCode = code
             });
 
@@ -106,26 +104,20 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel viewModel)
+        public async Task UpdateOboSitesAsync(int enrolleeId, IEnumerable<PaperEnrolleeOboSiteViewModel> viewModels)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newSites = _mapper.Map<IEnumerable<OboSite>>(viewModels);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
+            await ReplaceCollection(enrolleeId, newSites);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> viewModel)
+        public async Task UpdateCertificationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeCertificationViewModel> viewModels)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newCerts = _mapper.Map<IEnumerable<Certification>>(viewModels);
 
-            var certifications = _mapper.Map<ICollection<Certification>>(viewModel);
-
-            enrollee.Certifications = certifications;
-
-            _context.Update(enrollee);
+            await ReplaceCollection(enrolleeId, newCerts);
 
             await _context.SaveChangesAsync();
         }
@@ -156,6 +148,11 @@ namespace Prime.Services
             var oldItems = await _context.Set<T>()
                 .Where(x => x.EnrolleeId == enrolleeId)
                 .ToListAsync();
+
+            foreach (var item in newItems)
+            {
+                item.EnrolleeId = enrolleeId;
+            }
 
             _context.Set<T>().RemoveRange(oldItems);
             _context.Set<T>().AddRange(newItems);

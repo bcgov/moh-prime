@@ -1,12 +1,15 @@
-using System.Collections.Generic;
 using Prime.Models;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeOboSiteViewModel
     {
-        public ICollection<Job> Jobs { get; set; }
-
-        public ICollection<OboSite> OboSites { get; set; }
+        public int CareSettingCode { get; set; }
+        public HealthAuthorityCode? HealthAuthorityCode { get; set; }
+        public string SiteName { get; set; }
+        public string PEC { get; set; }
+        public string FacilityName { get; set; }
+        public string JobTitle { get; set; }
+        public AddressViewModel PhysicalAddress { get; set; }
     }
 }
