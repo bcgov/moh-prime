@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -11,13 +11,13 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 @Component({
   selector: 'app-care-setting-page',
@@ -35,8 +35,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private configService: ConfigService,
     private fb: FormBuilder,
+    private configService: ConfigService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
     router: Router
@@ -49,8 +49,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public routeBackTo(): void {
-    this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.DEMOGRAPHIC]);
+  public routeBackTo() {
+    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
@@ -128,7 +128,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     });
 
     // If an individual health authority was deselected, its Obo Sites should be removed as well
-    oboSites = this.removeUnselectedHAOboSites(payload.healthAuthorities, oboSites);
+    oboSites = this.removeUnselectedHealthAuthOboSites(payload.healthAuthorities, oboSites);
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
@@ -148,10 +148,10 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       // Should edit existing Job/OboSites next
       nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
     }
-    this.routeUtils.routeRelativeTo(['./', nextRoutePath]);
+    this.routeUtils.routeRelativeTo([nextRoutePath]);
   }
 
-  private removeUnselectedHAOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
+  private removeUnselectedHealthAuthOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!healthAuthorities[index]) {
         for (let i = oboSites.length - 1; i >= 0; i--) {
@@ -168,7 +168,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   /**
    * @description
-   * Remove obo sites by care setting if a care setting was removed from the enrolment
+   * Remove obo sites by care setting if a care setting was removed
+   * from the enrolment
    */
   private removeOboSites(careSettingCode: number, oboSites: OboSite[]): OboSite[] {
     oboSites.forEach((site: OboSite, index: number) => {
