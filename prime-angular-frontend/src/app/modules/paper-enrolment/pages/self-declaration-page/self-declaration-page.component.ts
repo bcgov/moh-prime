@@ -85,7 +85,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   public onBack() {
     const certifications = this.enrolment?.certifications;
-    let backRoutePath = (certifications?.length)
+    const backRoutePath = (certifications?.length)
       ? PaperEnrolmentRoutes.REGULATORY
       : PaperEnrolmentRoutes.OBO_SITES;
 
@@ -132,8 +132,8 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   protected patchForm(): void {
     // Will be null if enrolment has not been created
-    const enrolment = this.paperEnrolmentService.enrolment;
-    this.formState.patchValue(enrolment);
+    const enrollee = this.paperEnrolmentService.enrollee;
+    this.formState.patchValue(enrollee);
   }
 
   protected performSubmission(): NoContent {

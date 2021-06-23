@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,7 +29,7 @@ import { RegulatoryPageFormState } from './regulatory-page-form-state.class';
   templateUrl: './regulatory-page.component.html',
   styleUrls: ['./regulatory-page.component.scss']
 })
-export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
   public form: FormGroup;
   public formState: RegulatoryPageFormState;
   public enrolment: Enrolment;
@@ -119,7 +119,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   protected patchForm(): void {
     // Will be null if enrolment has not been created
     const enrolment = this.paperEnrolmentService.enrollee;
-    this.paperEnrolmentFormStateService.setForm(enrolment);
+    // this.paperEnrolmentFormStateService.setForm(enrolment);
   }
 
   protected onSubmitFormIsValid() {
@@ -132,35 +132,36 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected performSubmission(): NoContent {
-    // Update using the form which could contain changes, and ensure identity
-    const enrolment = this.paperEnrolmentFormStateService.json;
-    const enrollee = this.form.getRawValue();
-    // BCeID has to match BCSC for submission, which requires givenNames
-    const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
-
-    if (!enrolment.id) {
-      const payload = {
-        enrollee: { ...enrollee, givenNames }
-      };
-      return this.paperEnrolmentResource.createEnrollee(payload)
-        .pipe(
-          // Merge the enrolment with generated keys
-          map((newEnrolment: Enrolment) => {
-            newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
-            return newEnrolment;
-          }),
-          // Populate generated keys within the form state
-          tap((newEnrolment: Enrolment) => {
-            this.paperEnrolmentFormStateService.setForm(newEnrolment, true);
-            this.enrolment = newEnrolment;
-          }),
-          this.handleResponse()
-        );
-    } else {
-      enrolment.enrollee.givenNames = givenNames;
-      return this.paperEnrolmentResource.updateEnrollee(enrolment)
-        .pipe(this.handleResponse());
-    }
+    return;
+    // // Update using the form which could contain changes, and ensure identity
+    // const enrolment = this.paperEnrolmentFormStateService.json;
+    // const enrollee = this.form.getRawValue();
+    // // BCeID has to match BCSC for submission, which requires givenNames
+    // const givenNames = `${enrollee.firstName} ${enrollee.middleName}`;
+    //
+    // if (!enrolment.id) {
+    //   const payload = {
+    //     enrollee: { ...enrollee, givenNames }
+    //   };
+    //   return this.paperEnrolmentResource.createEnrollee(payload)
+    //     .pipe(
+    //       // Merge the enrolment with generated keys
+    //       map((newEnrolment: Enrolment) => {
+    //         newEnrolment.enrollee = { ...newEnrolment.enrollee, ...enrolment.enrollee };
+    //         return newEnrolment;
+    //       }),
+    //       // Populate generated keys within the form state
+    //       tap((newEnrolment: Enrolment) => {
+    //         this.paperEnrolmentFormStateService.setForm(newEnrolment, true);
+    //         this.enrolment = newEnrolment;
+    //       }),
+    //       this.handleResponse()
+    //     );
+    // } else {
+    //   enrolment.enrollee.givenNames = givenNames;
+    //   return this.paperEnrolmentResource.updateEnrollee(enrolment)
+    //     .pipe(this.handleResponse());
+    // }
   }
 
   private handleResponse() {
@@ -184,7 +185,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     const certifications = this.formState.collegeCertifications;
     const careSettings = this.paperEnrolmentFormStateService.careSettingFormState.careSettings.value as CareSetting[];
 
-    let nextRoutePath = (!this.certifications.length)
+    const nextRoutePath = (!this.certifications.length)
       ? PaperEnrolmentRoutes.OBO_SITES
       : PaperEnrolmentRoutes.SELF_DECLARATION;
 
