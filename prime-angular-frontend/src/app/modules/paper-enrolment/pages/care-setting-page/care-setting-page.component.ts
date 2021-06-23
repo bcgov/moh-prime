@@ -213,7 +213,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
           (this.paperEnrolmentService.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
-        }),
+        ),
         map(() => this.enrollee.id)
       );
   }
