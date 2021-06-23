@@ -46,31 +46,42 @@ namespace Prime.Services
             return gpid.StartsWith(PaperGpidPrefix);
         }
 
-        public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel createModel)
+        public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel viewModel)
         {
-            createModel.ThrowIfNull(nameof(createModel));
+            viewModel.ThrowIfNull(nameof(viewModel));
 
-            var enrollee = _mapper.Map<Enrollee>(createModel);
+            var enrollee = _mapper.Map<Enrollee>(viewModel);
+
             enrollee.UserId = Guid.NewGuid();
             enrollee.GPID = Gpid.NewGpid(PaperGpidPrefix);
+            enrollee.Addresses = new[]
+            {
+                new EnrolleeAddress
+                {
+                    Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
+                }
+            };
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
+            enrollee.AddEnrolmentStatus(StatusType.UnderReview)
+                .AddStatusReason(StatusReasonType.PaperEnrollee);
 
             _context.Enrollees.Add(enrollee);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
+            await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Paper Submission Created");
 
             return enrollee;
         }
 
-        public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel paperCareSettings)
+        public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel viewModel)
         {
-            var newCareSettings = paperCareSettings.CareSettingCodes.Select(code => new EnrolleeCareSetting
+            var newCareSettings = viewModel.CareSettingCodes.Select(code => new EnrolleeCareSetting
             {
                 EnrolleeId = enrolleeId,
                 CareSettingCode = code
             });
 
-            var newHealthAuthorities = paperCareSettings.HealthAuthorityCodes.Select(code => new EnrolleeHealthAuthority
+            var newHealthAuthorities = viewModel.HealthAuthorityCodes.Select(code => new EnrolleeHealthAuthority
             {
                 EnrolleeId = enrolleeId,
                 HealthAuthorityCode = code
@@ -82,32 +93,34 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel)
+        public async Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel viewModel)
         {
             var enrollee = await _context.Enrollees
+                .Include(e => e.Addresses)
+                    .ThenInclude(a => a.Address)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            _mapper.Map(viewModel, enrollee);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel)
+        public async Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel viewModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> updateModel)
+        public async Task UpdateCertificationsAsync(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> viewModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            var certifications = _mapper.Map<ICollection<Certification>>(updateModel);
+            var certifications = _mapper.Map<ICollection<Certification>>(viewModel);
 
             enrollee.Certifications = certifications;
 
@@ -116,23 +129,23 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel)
+        public async Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel viewModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
 
             await _context.SaveChangesAsync();
         }
 
         // TODO: Document stuffffffff
-        public async Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel)
+        public async Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
 
             await _context.SaveChangesAsync();
         }
