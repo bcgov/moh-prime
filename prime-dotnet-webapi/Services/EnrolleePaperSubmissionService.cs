@@ -61,7 +61,7 @@ namespace Prime.Services
             return enrollee;
         }
 
-        public async Task UpdateEnrolleeCareSettingsById(int enrolleeId, PaperEnrolleeCareSettingViewModel updateModel)
+        public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -88,7 +88,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeDemographicsById(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel)
+        public async Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -98,7 +98,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeOboSitesById(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel)
+        public async Task UpdateOboSitesAsync(int enrolleeId, PaperEnrolleeOboSiteViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -108,7 +108,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, PaperEnrolleeCertificationsViewModel updateModel)
+        public async Task UpdateCertificationsAsync(int enrolleeId, PaperEnrolleeCertificationsViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -124,7 +124,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeSelfDeclarationsById(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel)
+        public async Task UpdateSelfDeclarationsAsync(int enrolleeId, PaperEnrolleeSelfDeclarationViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
@@ -135,7 +135,7 @@ namespace Prime.Services
         }
 
         // TODO: Document stuffffffff
-        public async Task UpdateEnrolleeAgreementsById(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel)
+        public async Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
