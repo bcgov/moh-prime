@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { tap, exhaustMap } from 'rxjs/operators';
+import { tap, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -200,7 +200,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       });
   }
 
-  protected performSubmission(): NoContent {
+  protected performSubmission(): Observable<number> {
+    this.formState.form.markAsPristine();
 
     const payload = this.formState.convertCareSettingFormToJson(this.enrollee.id);
     // If an individual health authority was deselected, its Obo Sites should be removed as well
@@ -212,7 +213,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
           (this.paperEnrolmentService.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
-        )
+        }),
+        map(() => this.enrollee.id)
       );
   }
 
