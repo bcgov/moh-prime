@@ -5,7 +5,7 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
-import { Enrolment } from '@shared/models/enrolment.model';
+import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -27,15 +27,15 @@ export class PaperEnrolmentGuard extends BaseGuard {
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     const enrolleeId = params.eid;
-    if (enrolleeId != 0) {
+    if (!enrolleeId) {
       return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
-          map((enrolment: Enrolment) => {
+          map((enrollee: HttpEnrollee) => {
             // Store the site for access throughout creation and updating of a
             // site, which will allows provide the most up-to-date site
-            this.paperEnrolmentService.enrollee = enrolment;
+            this.paperEnrolmentService.enrollee = enrollee;
 
-            return this.routeDestination(routePath, enrolment);
+            return this.routeDestination(routePath, enrollee);
           })
         );
     } else {
@@ -47,7 +47,7 @@ export class PaperEnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment.
    */
-  private routeDestination(routePath: string, enrolment: Enrolment) {
+  private routeDestination(routePath: string, enrolment: HttpEnrollee) {
     return (enrolment)
       ? true
       : false;

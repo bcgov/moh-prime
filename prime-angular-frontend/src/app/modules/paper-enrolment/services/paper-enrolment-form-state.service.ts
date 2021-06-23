@@ -173,7 +173,7 @@ export class PaperEnrolmentFormStateService extends AbstractFormStateService<Enr
       return;
     }
 
-    this.demographicFormState.patchValue(enrolment.enrollee);
+    // this.demographicFormState.patchValue(enrolment.enrollee);
     this.careSettingFormState.patchValue(enrolment);
     this.regulatoryFormState.patchValue(enrolment.certifications);
     this.jobsFormState.patchValue(enrolment);
