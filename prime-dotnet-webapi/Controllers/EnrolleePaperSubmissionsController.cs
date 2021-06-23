@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.PaperEnrollees;
 
@@ -161,7 +163,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDocuments(int enrolleeId, IEnumerable<PaperEnrolleeDocumentViewModel> payload)
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionDocuments(int enrolleeId, IEnumerable<Guid> payload)
         {
             if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
             {
@@ -193,6 +195,29 @@ namespace Prime.Controllers
             await _enrolleeService.SetProfileCompletedAsync(enrolleeId);
 
             return Ok();
+        }
+
+        // GET: api/enrollees/5/paper-submissions/documents
+        /// <summary>
+        /// Gets all enrollee adjudication documents for a paper enrollee.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/paper-submissions/documents", Name = nameof(GetAdjudicationDocuments))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrolleeAdjudicationDocument>>> GetAdjudicationDocuments(int enrolleeId)
+        {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
+            var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
+
+            return Ok(documents);
         }
 
         // POST: api/enrollees/5/paper-submissions/finalize
