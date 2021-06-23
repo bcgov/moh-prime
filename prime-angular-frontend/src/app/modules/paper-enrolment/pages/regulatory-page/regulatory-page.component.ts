@@ -23,6 +23,7 @@ import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
+import { ConfigService } from '@config/config.service';
 
 @Component({
   selector: 'app-regulatory-page',
@@ -31,39 +32,21 @@ import { RegulatoryFormState } from './regulatory-form-state.class';
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
   public formState: RegulatoryFormState;
-  public enrolment: Enrolment;
   public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
     protected dialog: MatDialog,
-    protected paperEnrolmentService: PaperEnrolmentService,
-    protected paperEnrolmentResource: PaperEnrolmentResource,
-    protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
-    protected toastService: ToastService,
-    protected logger: LoggerService,
-    protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
-    private fb: FormBuilder
+    private configService: ConfigService,
+    private fb: FormBuilder,
+    private paperEnrolmentResource: PaperEnrolmentResource,
+    private route: ActivatedRoute,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-  }
-
-  public get certifications(): FormArray {
-    return this.formState.certifications as FormArray;
-  }
-
-  public get selectedCollegeCodes(): number[] {
-    return this.certifications.value
-      .map((certification: CollegeCertification) => +certification.collegeCode);
-  }
-
-  public addEmptyCollegeCertification() {
-    this.formState.addCollegeCertification();
   }
 
   public routeBackTo() {
@@ -71,14 +54,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onSubmit(): void {
-    this.removeIncompleteCertifications(true);
-    this.nextRouteAfterSubmit();
-
-    // if (this.formUtilsService.checkValidity(this.form)) {
-    //   this.performSubmission();
-    // } else {
-    //   this.utilService.scrollToErrorSection();
-    // }
+    this.formState.removeIncompleteCertifications(true);
+    super.onSubmit();
   }
 
   public ngOnInit(): void {
@@ -88,7 +65,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteCertifications(true);
+    this.formState.removeIncompleteCertifications(true);
   }
 
   protected createFormInstance(): void {
@@ -99,15 +76,29 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   protected initForm() {
     // Always have at least one certification ready for
     // the enrollee to fill out
-    if (!this.certifications.length) {
-      this.addEmptyCollegeCertification();
+    if (!this.formState.certifications.length) {
+      this.formState.addEmptyCollegeCertification();
     }
   }
 
   protected patchForm(): void {
-    // Will be null if enrolment has not been created
-    const enrolment = this.paperEnrolmentService.enrollee;
-    // this.paperEnrolmentFormStateService.setForm(enrolment);
+    const enrolleeId = +this.route.snapshot.params.eid;
+    if (!enrolleeId) {
+      return;
+    }
+
+    this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+      .subscribe((enrollee: HttpEnrollee) => {
+        if (enrollee) {
+          this.enrollee = enrollee;
+          const {
+            certifications
+          } = enrollee;
+
+          // Attempt to patch the form if not already patched
+          this.formState.patchValue(certifications);
+        }
+      });
   }
 
   protected onSubmitFormIsValid() {
@@ -115,9 +106,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.removeJobs();
   }
 
-  protected afterSubmitIsSuccessful() {
-    this.removeIncompleteCertifications(true);
-  }
 
   protected performSubmission(): NoContent {
     return;
@@ -152,54 +140,15 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     // }
   }
 
-  private handleResponse() {
-    return pipe(
-      map(() => {
-        this.toastService.openSuccessToast('Enrolment information has been saved');
-        this.form.markAsPristine();
-
-        this.nextRouteAfterSubmit();
-      }),
-      catchError((error: any) => {
-        this.toastService.openErrorToast('Enrolment information could not be saved');
-        this.logger.error('[Enrolment] Submission error has occurred: ', error);
-
-        throw error;
-      })
-    );
-  }
-
-  private nextRouteAfterSubmit(): void {
+  protected afterSubmitIsSuccessful() {
+    this.formState.removeIncompleteCertifications(true);
     const certifications = this.formState.collegeCertifications;
-    const careSettings = this.paperEnrolmentFormStateService.careSettingFormState.careSettings.value as CareSetting[];
 
-    const nextRoutePath = (!this.certifications.length)
+    const nextRoutePath = (!certifications.length)
       ? PaperEnrolmentRoutes.OBO_SITES
       : PaperEnrolmentRoutes.SELF_DECLARATION;
 
-    // this.routeTo(['../', this.enrolment.id, nextRoutePath]);
-    this.routeUtils.routeRelativeTo(['../', '1', nextRoutePath]);
-  }
-
-  /**
-   * @description
-   * Removes incomplete certifications from the list in preparation
-   * for submission, and allows for an empty list of certifications.
-   */
-  private removeIncompleteCertifications(noEmptyCert: boolean = false) {
-    this.certifications.controls
-      .forEach((control: FormGroup, index: number) => {
-        // Remove if college code is "None" or the group is invalid
-        if (!control.get('collegeCode').value || control.invalid) {
-          this.formState.removeCertification(index);
-        }
-      });
-
-    // Always have a single cerfication available, and it prevents
-    // the page from jumping too much when routing
-    if (!noEmptyCert && !this.certifications.controls.length) {
-      this.addEmptyCollegeCertification();
-    }
+    this.routeUtils.routeRelativeTo(['./', nextRoutePath]);
   }
 
   /**
@@ -208,10 +157,10 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
    * certificate(s), as well as, job(s).
    */
   private removeJobs() {
-    this.removeIncompleteCertifications(true);
+    this.formState.removeIncompleteCertifications(true);
 
-    if (this.certifications.length) {
-      this.paperEnrolmentFormStateService.jobsFormState.oboSites.clear();
+    if (this.formState.certifications.length) {
+      // this.paperEnrolmentFormStateService.jobsFormState.oboSites.clear();
     }
   }
 

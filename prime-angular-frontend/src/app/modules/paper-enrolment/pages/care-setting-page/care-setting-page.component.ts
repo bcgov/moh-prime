@@ -47,8 +47,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.healthAuthorities = this.configService.healthAuthorities;
 
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-
-    this.allowRoutingWhenDirty = false;
   }
 
   public routeBackTo() {
@@ -59,7 +57,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     const canDeactivate = super.canDeactivate();
 
     return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap(() => this.removeIncompleteCareSettings()))
+      ? canDeactivate.pipe(tap(() => this.formState.removeIncompleteCareSettings()))
       : canDeactivate;
   }
 
@@ -70,7 +68,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public ngOnDestroy() {
-    this.removeIncompleteCareSettings();
+    this.formState.removeIncompleteCareSettings();
   }
 
   protected createFormInstance(): void {
@@ -143,6 +141,17 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       );
   }
 
+  protected afterSubmitIsSuccessful() {
+    const oboSites = this.enrollee.oboSites;
+
+    let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
+    if (oboSites?.length) {
+      // Should edit existing Job/OboSites next
+      nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
+    }
+    this.routeUtils.routeRelativeTo(['./', nextRoutePath]);
+  }
+
   private removeUnselectedHAOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!healthAuthorities[index]) {
@@ -156,35 +165,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     });
 
     return oboSites;
-  }
-
-  protected afterSubmitIsSuccessful() {
-    const oboSites = this.enrollee.oboSites;
-
-    let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;
-    if (oboSites?.length) {
-      // Should edit existing Job/OboSites next
-      nextRoutePath = PaperEnrolmentRoutes.OBO_SITES;
-    }
-    this.routeUtils.routeRelativeTo(['./', nextRoutePath]);
-  }
-
-  private removeIncompleteCareSettings() {
-    this.formState.careSettings.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('careSettingCode').value;
-
-        // Remove if care setting is empty or the group is invalid
-        if (!value || control.invalid) {
-          this.formState.removeCareSetting(index);
-        }
-      });
-
-    // Always have a single care setting available, and it prevents
-    // the page from jumping too much when routing
-    if (!this.formState.careSettings.controls.length) {
-      this.formState.addCareSetting();
-    }
   }
 
   /**

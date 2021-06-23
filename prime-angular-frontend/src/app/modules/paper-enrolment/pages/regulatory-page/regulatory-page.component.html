@@ -23,13 +23,13 @@
         <div class="col col-sm-10 py-3"
              formArrayName="certifications">
 
-          <ng-container *ngFor="let certificate of certifications.controls; let i = index;"
+          <ng-container *ngFor="let certificate of formState.certifications.controls; let i = index;"
                         [formGroupName]="i">
 
             <app-college-certification-form [form]="certificate"
                                             [index]="i"
-                                            [total]="certifications.controls.length"
-                                            [selectedColleges]="selectedCollegeCodes"
+                                            [total]="formState.certifications.controls.length"
+                                            [selectedColleges]="formState.selectedCollegeCodes"
                                             (remove)="formState.removeCertification($event)">
             </app-college-certification-form>
 
@@ -38,7 +38,7 @@
           <button mat-button
                   type="button"
                   color="primary"
-                  (click)="addEmptyCollegeCertification()">
+                  (click)="formState.addEmptyCollegeCertification()">
             <mat-icon>add</mat-icon>
             Add Additional Licences
           </button>

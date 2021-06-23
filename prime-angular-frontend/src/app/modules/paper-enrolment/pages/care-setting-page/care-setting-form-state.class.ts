@@ -132,6 +132,24 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.configService.careSettings;
   }
 
+  public removeIncompleteCareSettings() {
+    this.careSettings.controls
+      .forEach((control: FormGroup, index: number) => {
+        const value = control.get('careSettingCode').value;
+
+        // Remove if care setting is empty or the group is invalid
+        if (!value || control.invalid) {
+          this.removeCareSetting(index);
+        }
+      });
+
+    // Always have a single care setting available, and it prevents
+    // the page from jumping too much when routing
+    if (!this.careSettings.controls.length) {
+      this.addCareSetting();
+    }
+  }
+
   public convertCareSettingFormToJson(enrolleeId: number): any {
     // Variable names must match keys for FormArrays in the FormGroup to get values
     // tslint:disable-next-line:prefer-const
