@@ -129,14 +129,9 @@ namespace Prime.Services
 
         public async Task UpdateSelfDeclarationsAsync(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> viewModels)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var newDeclarations = _mapper.Map<IEnumerable<SelfDeclaration>>(viewModels);
 
-            var declarations = _mapper.Map<ICollection<SelfDeclaration>>(viewModels);
-
-            enrollee.SelfDeclarations = declarations;
-
-            _context.Update(enrollee);
+            await ReplaceCollection(enrolleeId, newDeclarations);
 
             await _context.SaveChangesAsync();
         }
