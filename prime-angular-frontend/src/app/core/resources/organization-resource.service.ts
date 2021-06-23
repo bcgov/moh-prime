@@ -114,7 +114,9 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizations(queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }): Observable<OrganizationSearchListViewModel[]> {
+  public getOrganizations(
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }
+  ): Observable<OrganizationSearchListViewModel[]> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<OrganizationSearchListViewModel[]>('organizations', params)
       .pipe(

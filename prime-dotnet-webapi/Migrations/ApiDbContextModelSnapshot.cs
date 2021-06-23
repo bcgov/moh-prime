@@ -9018,7 +9018,12 @@ namespace Prime.Migrations
                     b.Property<int>("LicenseCode")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("CollegeLicenseGroupingCode")
+                        .HasColumnType("integer");
+
                     b.HasKey("CollegeCode", "LicenseCode");
+
+                    b.HasIndex("CollegeLicenseGroupingCode");
 
                     b.HasIndex("LicenseCode");
 
@@ -9208,157 +9213,188 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 32
+                            LicenseCode = 32,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 33
+                            LicenseCode = 33,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 34
+                            LicenseCode = 34,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 35
+                            LicenseCode = 35,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 36
+                            LicenseCode = 36,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 37
+                            LicenseCode = 37,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 38
+                            LicenseCode = 38,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 39
+                            LicenseCode = 39,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 40
+                            LicenseCode = 40,
+                            CollegeLicenseGroupingCode = 2
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 41
+                            LicenseCode = 41,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 42
+                            LicenseCode = 42,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 43
+                            LicenseCode = 43,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 44
+                            LicenseCode = 44,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 45
+                            LicenseCode = 45,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 46
+                            LicenseCode = 46,
+                            CollegeLicenseGroupingCode = 3
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 47
+                            LicenseCode = 47,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 48
+                            LicenseCode = 48,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 49
+                            LicenseCode = 49,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 50
+                            LicenseCode = 50,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 51
+                            LicenseCode = 51,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 52
+                            LicenseCode = 52,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 53
+                            LicenseCode = 53,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 54
+                            LicenseCode = 54,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 55
+                            LicenseCode = 55,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 56
+                            LicenseCode = 56,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 57
+                            LicenseCode = 57,
+                            CollegeLicenseGroupingCode = 1
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 58
+                            LicenseCode = 58,
+                            CollegeLicenseGroupingCode = 4
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 60
+                            LicenseCode = 60,
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 61
+                            LicenseCode = 61,
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 62
+                            LicenseCode = 62,
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 63
+                            LicenseCode = 63,
+                            CollegeLicenseGroupingCode = 5
                         },
                         new
                         {
@@ -9434,6 +9470,56 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 18,
                             LicenseCode = 64
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.CollegeLicenseGrouping", b =>
+                {
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Weight")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("CollegeLicenseGroupingLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Licensed Practical Nurse",
+                            Weight = 1
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "Registered Nurse/Licensed Graduate Nurse",
+                            Weight = 2
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "Registered Psychiatric Nurse",
+                            Weight = 3
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "Nurse Practitioner",
+                            Weight = 4
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "Midwife",
+                            Weight = 5
                         });
                 });
 
@@ -12333,6 +12419,262 @@ namespace Prime.Migrations
                     b.HasIndex("PartyId");
 
                     b.ToTable("GisEnrolment");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.CareType", b =>
+                {
+                    b.Property<int>("Code")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("CareTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "Ambulatory Care"
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "Acute Care"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("CareType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityOrganizationId");
+
+                    b.ToTable("HealthAuthorityCareType");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("ContactId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContactId");
+
+                    b.ToTable("HealthAuthorityContact");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HealthAuthorityOrganization");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Northern Health",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Interior Health",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Vancouver Coastal Health",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Island Health",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Fraser Health",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
+                            Name = "Provincial Health Services Authority",
+                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
+                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("VendorCode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityOrganizationId");
+
+                    b.HasIndex("VendorCode");
+
+                    b.ToTable("HealthAuthorityVendor");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthorityOrganizationId")
+                        .IsUnique();
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.ToTable("PrivacyOffice");
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
@@ -15538,6 +15880,41 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
+                {
+                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
+
+                    b.HasIndex("HealthAuthorityOrganizationId");
+
+                    b.ToTable("HealthAuthorityContact");
+
+                    b.HasDiscriminator().HasValue("HealthAuthorityPharmanetAdministrator");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
+                {
+                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
+
+                    b.HasIndex("HealthAuthorityOrganizationId")
+                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId1");
+
+                    b.ToTable("HealthAuthorityContact");
+
+                    b.HasDiscriminator().HasValue("HealthAuthorityPrivacyOfficer");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
+                {
+                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
+
+                    b.HasIndex("HealthAuthorityOrganizationId")
+                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId2");
+
+                    b.ToTable("HealthAuthorityContact");
+
+                    b.HasDiscriminator().HasValue("HealthAuthorityTechnicalSupport");
+                });
+
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -15710,6 +16087,10 @@ namespace Prime.Migrations
                         .HasForeignKey("CollegeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Prime.Models.CollegeLicenseGrouping", "CollegeLicenseGrouping")
+                        .WithMany()
+                        .HasForeignKey("CollegeLicenseGroupingCode");
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("CollegeLicenses")
@@ -15951,6 +16332,52 @@ namespace Prime.Migrations
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany("CareTypes")
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
+                {
+                    b.HasOne("Prime.Models.Contact", "Contact")
+                        .WithMany()
+                        .HasForeignKey("ContactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany("Vendors")
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Vendor", "Vendor")
+                        .WithMany()
+                        .HasForeignKey("VendorCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithOne("PrivacyOffice")
+                        .HasForeignKey("Prime.Models.HealthAuthorities.PrivacyOffice", "HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
                 });
 
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
@@ -16290,6 +16717,35 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
                         .WithMany()
                         .HasForeignKey("CareSettingCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany("PharmanetAdministrators")
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany("PrivacyOfficers")
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
+                {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
+                        .WithMany("TechnicalSupports")
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
