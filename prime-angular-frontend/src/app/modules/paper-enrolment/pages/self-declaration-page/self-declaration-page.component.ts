@@ -60,15 +60,15 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onUpload(controlName: string, sdd: SelfDeclarationDocument) {
+  public onUpload(controlName: string, sdd: SelfDeclarationDocument): void {
     this.formState.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onRemove(controlName: string, documentGuid: string) {
+  public onRemove(controlName: string, documentGuid: string): void {
     this.formState.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
-  public onBack() {
+  public onBack(): void {
     const certifications = this.enrollee?.certifications;
     const backRoutePath = (certifications?.length)
       ? PaperEnrolmentRoutes.REGULATORY
@@ -102,7 +102,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
       );
   }
 
-  protected initForm() {
+  protected initForm(): void {
     this.formState.hasConviction.valueChanges
       .subscribe((value: boolean) => {
         this.toggleSelfDeclarationValidators(value, this.formState.hasConvictionDetails);
