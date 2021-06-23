@@ -85,7 +85,7 @@ namespace Prime.Services
                 CareSettingCode = code
             });
 
-            var newHealthAuthorities = viewModel.EnrolleeHealthAuthorities.Select(code => new EnrolleeHealthAuthority
+            var newHealthAuthorities = viewModel.HealthAuthorities.Select(code => new EnrolleeHealthAuthority
             {
                 HealthAuthorityCode = code
             });
