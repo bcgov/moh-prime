@@ -11,84 +11,81 @@ namespace PrimeTests.UnitTests
 {
     public class SiteStatusStateEngineTests
     {
-        public static IEnumerable<object[]> SiteStatussData()
+        public static IEnumerable<object[]> SiteRegistrationActionData()
         {
-            foreach (EnrolleeStatusAction action in Enum.GetValues(typeof(SiteStatusType)))
+            foreach (EnrolleeStatusAction action in Enum.GetValues(typeof(SiteRegistrationAction)))
             {
                 yield return new object[] { action };
             }
         }
 
         [Theory]
-        [MemberData(nameof(SiteStatussData))]
-        public void TestAllowableStatusChange_Active(SiteStatusType newStatus)
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_Active(SiteRegistrationAction action)
         {
             // Arrange
-            var currentStatus = SiteStatusType.Active;
             var expectedAllowed = new[]
             {
-                SiteStatusType.InReview,
-                SiteStatusType.Locked
-            }.Contains(newStatus);
+                SiteRegistrationAction.Submit,
+                SiteRegistrationAction.Decline
+            }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(currentStatus, newStatus);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Active);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
         }
 
         [Theory]
-        [MemberData(nameof(SiteStatussData))]
-        public void TestAllowableStatusChange_InReview(SiteStatusType newStatus)
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_InReview(SiteRegistrationAction action)
         {
             // Arrange
-            var currentStatus = SiteStatusType.InReview;
             var expectedAllowed = new[]
             {
-                SiteStatusType.Active,
-                SiteStatusType.Approved,
-                SiteStatusType.Locked
-            }.Contains(newStatus);
+                SiteRegistrationAction.Approve,
+                SiteRegistrationAction.Decline,
+                SiteRegistrationAction.RequestChange
+            }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(currentStatus, newStatus);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.InReview);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
         }
 
         [Theory]
-        [MemberData(nameof(SiteStatussData))]
-        public void TestAllowableStatusChange_Approved(SiteStatusType newStatus)
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_Approved(SiteRegistrationAction action)
         {
             // Arrange
-            var currentStatus = SiteStatusType.Approved;
             var expectedAllowed = new[]
             {
-                SiteStatusType.Active,
-            }.Contains(newStatus);
+                SiteRegistrationAction.Unapprove,
+
+            }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(currentStatus, newStatus);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Approved);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
         }
 
         [Theory]
-        [MemberData(nameof(SiteStatussData))]
-        public void TestAllowableStatusChange_Locked(SiteStatusType newStatus)
+        [MemberData(nameof(SiteRegistrationActionData))]
+        public void TestAllowableStatusChange_Locked(SiteRegistrationAction action)
         {
             // Arrange
-            var currentStatus = SiteStatusType.Locked;
             var expectedAllowed = new[]
             {
-                SiteStatusType.InReview
-            }.Contains(newStatus);
+                SiteRegistrationAction.Undecline,
+            }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(currentStatus, newStatus);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Locked);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);

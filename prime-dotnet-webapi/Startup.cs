@@ -68,7 +68,6 @@ namespace Prime
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
-            services.AddScoped<ISiteRegistrationService, SiteRegistrationService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
