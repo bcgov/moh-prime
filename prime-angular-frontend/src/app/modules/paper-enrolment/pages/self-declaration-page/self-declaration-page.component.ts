@@ -11,13 +11,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { RouteUtils } from '@lib/utils/route-utils.class';
