@@ -108,12 +108,18 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, PaperEnrolleeCertificationViewModel updateModel)
+        public async Task UpdateEnrolleeCertificationsById(int enrolleeId, PaperEnrolleeCertificationsViewModel updateModel)
         {
             var enrollee = await _context.Enrollees
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(updateModel);
+            var certifications = updateModel.Certifications.Select(cert =>
+                _mapper.Map<Certification>(cert)
+            ).ToList();
+
+            enrollee.Certifications = certifications;
+
+            _context.Update(enrollee);
 
             await _context.SaveChangesAsync();
         }
