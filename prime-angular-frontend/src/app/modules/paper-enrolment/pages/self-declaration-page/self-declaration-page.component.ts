@@ -3,7 +3,7 @@ import { Validators, FormControl, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -65,7 +65,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onRemove(controlName: string, documentGuid: string) {
-    // this.formState.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
+    this.formState.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
   public onBack() {
@@ -97,9 +97,9 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .pipe(map((enrollee: HttpEnrollee) => this.enrollee = enrollee))
-      .subscribe(({ selfDeclarations }: HttpEnrollee) => {
-        this.formState.patchValue({ selfDeclarations });
-      });
+      .subscribe(({ selfDeclarations }: HttpEnrollee) =>
+        this.formState.patchValue({ selfDeclarations }, this.enrollee.profileCompleted || null)
+      );
   }
 
   protected initForm() {
@@ -131,8 +131,10 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
 
+    const enrolleeId = +this.route.snapshot.params.eid;
     const payload = this.formState.json.selfDeclarations;
-    return this.paperEnrolmentResource.updateSelfDeclarations(+this.route.snapshot.params.eid, payload);
+    return this.paperEnrolmentResource.updateSelfDeclarations(enrolleeId, payload)
+      .pipe(exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId)));
   }
 
   protected onSubmitFormIsInvalid() {

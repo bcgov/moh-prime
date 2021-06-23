@@ -126,6 +126,23 @@ export class PaperEnrolmentResource {
       );
   }
 
+  /**
+   * @description
+   * Mark the profile as completed indicating the user has traversed the entire enrolment
+   * as a wizard, and will now spoke between the views from overview.
+   */
+  public profileCompleted(enrolleeId: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/profile-completed`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment could not be marked as completed');
+          this.logger.error('[Core] PaperEnrolmentResource::profileCompleted error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   // TODO things below this line are on the chopping block
 
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {

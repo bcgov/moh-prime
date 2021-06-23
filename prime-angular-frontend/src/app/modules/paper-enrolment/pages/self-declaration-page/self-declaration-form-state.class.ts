@@ -76,7 +76,16 @@ export class SelfDeclarationFormState extends AbstractFormState<SelfDeclarationF
     };
   }
 
-  public patchValue(pageModel: SelfDeclarationForm, defaultValue: boolean | null = null): void {
+  /**
+   * @description
+   * Patch the self declaration form.
+   *
+   * NOTE: Default value should track the completion of the enrolment which
+   * indicates that this view has been submitted at least once, and the
+   * questions should be marked as "No", otherwise the user should be
+   * forced to answer the questions.
+   */
+  public patchValue(pageModel: SelfDeclarationForm, defaultValue: boolean | null): void {
     if (!this.formInstance) {
       return;
     }
