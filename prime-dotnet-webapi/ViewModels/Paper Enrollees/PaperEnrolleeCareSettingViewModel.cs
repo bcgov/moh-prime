@@ -5,8 +5,8 @@ namespace Prime.ViewModels.PaperEnrollees
 {
     public class PaperEnrolleeCareSettingViewModel
     {
-        public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+        public ICollection<int> CareSettingCodes { get; set; }
 
-        public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
+        public ICollection<HealthAuthorityCode> HealthAuthorityCodes { get; set; }
     }
 }
