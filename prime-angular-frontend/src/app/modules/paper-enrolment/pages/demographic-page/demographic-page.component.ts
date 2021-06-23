@@ -108,7 +108,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
-    const enrolleeId = +this.route.snapshot.data.eid;
+    const enrolleeId = +this.route.snapshot.params.eid;
     let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload)
       .pipe(map(() => enrolleeId));
 
