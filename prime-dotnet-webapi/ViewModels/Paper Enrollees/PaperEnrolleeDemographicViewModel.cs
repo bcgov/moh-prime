@@ -9,7 +9,7 @@ namespace Prime.ViewModels.PaperEnrollees
 
         public string LastName { get; set; }
 
-        public string GivenNames { get; set; }
+        public string MiddleName { get; set; }
 
         public DateTime DateOfBirth { get; set; }
 
@@ -30,7 +30,7 @@ namespace Prime.ViewModels.PaperEnrollees
         {
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();
-            RuleFor(x => x.GivenNames).NotEmpty();
+            RuleFor(x => x.MiddleName).NotEmpty();
             RuleFor(x => x.DateOfBirth).NotEmpty();
             RuleFor(x => x.PhysicalAddress).NotNull();
             RuleFor(x => x.Email).NotEmpty();
