@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { pipe } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -14,7 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { LoggerService } from '@core/services/logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
-import { Enrolment } from '@shared/models/enrolment.model';
+import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
@@ -30,10 +30,10 @@ import { RegulatoryFormState } from './regulatory-form-state.class';
   styleUrls: ['./regulatory-page.component.scss']
 })
 export class RegulatoryPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
-  public form: FormGroup;
   public formState: RegulatoryFormState;
   public enrolment: Enrolment;
   public routeUtils: RouteUtils;
+  public enrollee: HttpEnrollee;
 
   constructor(
     protected route: ActivatedRoute,
@@ -46,6 +46,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     protected logger: LoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
+    private fb: FormBuilder
   ) {
     super(dialog, formUtilsService);
 
@@ -65,21 +66,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.addCollegeCertification();
   }
 
-  /**
-   * @description
-   * Removes a certification from the list in response to an
-   * emitted event from college certifications. Does not allow
-   * the list of certifications to empty.
-   *
-   * @param index to be removed
-   */
-  public removeCertification(index: number) {
-    this.certifications.removeAt(index);
-  }
-
   public routeBackTo() {
-    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.CARE_SETTING]);
-    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.CARE_SETTING]);
+    this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
   public onSubmit(): void {
@@ -104,7 +92,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected createFormInstance(): void {
-    this.formState = this.paperEnrolmentFormStateService.regulatoryFormState;
+    this.formState = new RegulatoryFormState(this.fb);
     this.form = this.formState.form;
   }
 
@@ -203,7 +191,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid
         if (!control.get('collegeCode').value || control.invalid) {
-          this.removeCertification(index);
+          this.formState.removeCertification(index);
         }
       });
 

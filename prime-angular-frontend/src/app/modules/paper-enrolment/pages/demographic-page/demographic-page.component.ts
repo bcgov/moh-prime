@@ -16,9 +16,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@shared/models/address.model';
 
-import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { DemographicFormState } from './demographic-form-state.class';
 
@@ -39,9 +37,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private location: Location,
-    private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
-    private paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace Prime.Services
         Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel);
         Task SetProfileCompletedAsync(int enrolleeId);
         Task FinailizeSubmissionAsync(int enrolleeId);
-        Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents);
+        Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documents);
+        Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
     }
 }
