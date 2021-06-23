@@ -80,12 +80,12 @@ namespace Prime.Services
 
         public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel viewModel)
         {
-            var newCareSettings = viewModel.CareSettingCodes.Select(code => new EnrolleeCareSetting
+            var newCareSettings = viewModel.CareSettings.Select(code => new EnrolleeCareSetting
             {
                 CareSettingCode = code
             });
 
-            var newHealthAuthorities = viewModel.HealthAuthorityCodes.Select(code => new EnrolleeHealthAuthority
+            var newHealthAuthorities = viewModel.EnrolleeHealthAuthorities.Select(code => new EnrolleeHealthAuthority
             {
                 HealthAuthorityCode = code
             });
