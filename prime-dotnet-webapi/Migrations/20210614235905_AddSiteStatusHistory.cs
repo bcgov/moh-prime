@@ -8,10 +8,12 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Existing data needs to be migrated before column is dropped
-            // migrationBuilder.DropColumn(
-            //     name: "Status",
-            //     table: "Site");
+            // Existing data needs to be migrated before column is dropped.
+            // However, new Site rows cannot run into not-nullable constraint.
+            migrationBuilder.AlterColumn<int>(
+                name: "Status",
+                table: "Site",
+                nullable: true);
 
             migrationBuilder.CreateTable(
                 name: "SiteStatus",
