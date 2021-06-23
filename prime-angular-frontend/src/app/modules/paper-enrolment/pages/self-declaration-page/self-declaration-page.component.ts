@@ -205,7 +205,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   private nextRouteAfterSubmit(): void {
-    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.SELF_DECLARATION]);
-    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.SELF_DECLARATION]);
+    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.OVERVIEW]);
+    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.OVERVIEW]);
   }
 }
