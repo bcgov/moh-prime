@@ -53,6 +53,26 @@ namespace Prime.Controllers
             );
         }
 
+        // PUT: api/enrollees/5/paper-submissions/agreement
+        /// <summary>
+        /// Updates a Paper Submission's Agreement.
+        /// </summary>
+        [HttpPut("{enrolleeId}/paper-submissions/agreement", Name = nameof(UpdateEnrolleePaperSubmissionAgreement))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEnrolleePaperSubmissionAgreement(int enrolleeId, PaperEnrolleeAgreementViewModel payload)
+        {
+            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            {
+                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+            }
+
+            await _enrolleeService.UpdateAgreementAsync(enrolleeId, payload);
+            return Ok();
+        }
+
         // PUT: api/enrollees/5/paper-submissions/care-settings
         /// <summary>
         /// Updates a Paper Submission's Care Settings.
