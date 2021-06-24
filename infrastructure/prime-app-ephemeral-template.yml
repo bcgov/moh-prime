@@ -93,6 +93,12 @@ parameters:
   from: '[a-zA-Z0-9]{16}'
   generate: expression
   required: true
+- description: Password for the PostgreSQL admin user.
+  displayName: PostgreSQL admin Password
+  name: POSTGRESQL_ADMIN_PASSWORD
+  from: '[a-zA-Z0-9]{16}'
+  generate: expression
+  required: true
 - description: Version of PostgreSQL image to be used (10-el7, 10-el8, or latest).
   displayName: Version of PostgreSQL Image
   name: POSTGRESQL_VERSION
@@ -348,11 +354,6 @@ objects:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: POSTGRESQL_ADMIN_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: admin-password
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -816,6 +817,7 @@ objects:
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   stringData:
+    admin-password: ${POSTGRESQL_ADMIN_PASSWORD}
     database-name: prime-${SVC_NAME}
     database-password: ${POSTGRESQL_PASSWORD}
     database-user: prime-user
