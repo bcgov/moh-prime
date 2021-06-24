@@ -22,7 +22,8 @@ export class PaperEnrolmentRoutes {
       PaperEnrolmentRoutes.REGULATORY,
       PaperEnrolmentRoutes.OBO_SITES,
       PaperEnrolmentRoutes.SELF_DECLARATION,
-      PaperEnrolmentRoutes.UPLOAD
+      PaperEnrolmentRoutes.UPLOAD,
+      PaperEnrolmentRoutes.NEXT_STEPS
     ];
   }
 }
