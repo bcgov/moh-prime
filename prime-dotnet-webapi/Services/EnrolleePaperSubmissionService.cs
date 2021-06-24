@@ -1,14 +1,16 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using Newtonsoft.Json.Linq;
 
 using Prime.Models;
 using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
-using System.Collections.Generic;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 
@@ -18,19 +20,25 @@ namespace Prime.Services
     {
         private const string PaperGpidPrefix = "NOBCSC";
 
+        private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IAgreementService _agreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
 
         public EnrolleePaperSubmissionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            ILogger<EnrolleePaperSubmissionService> logger,
             IMapper mapper,
+            IAgreementService agreementService,
             IDocumentManagerClient documentClient,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
+            _logger = logger;
             _mapper = mapper;
+            _agreementService = agreementService;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
         }
@@ -64,6 +72,15 @@ namespace Prime.Services
                 new EnrolleeAddress
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
+                }
+            };
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    Confirmed = true,
+                    CreatedDate = DateTimeOffset.Now,
+                    ProfileSnapshot = new JObject()
                 }
             };
             enrollee.AddEnrolmentStatus(StatusType.Editable);
@@ -136,15 +153,30 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        // TODO: Document stuffffffff
-        public async Task UpdateAgreementsAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel)
+        /// <summary>
+        /// Also updates the Submission for the Enrollee (to set the assigned Agreement Type).
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="viewModel"></param>
+        public async Task UpdateAgreementAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel)
         {
-            var enrollee = await _context.Enrollees
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+            var submission = await _context.Submissions
+                .SingleOrDefaultAsync(s => s.EnrolleeId == enrolleeId);
 
-            _context.Entry(enrollee).CurrentValues.SetValues(viewModel);
+            submission.AgreementType = viewModel.AgreementType;
+
+            var agreement = await _context.Agreements
+                .SingleOrDefaultAsync(a => a.EnrolleeId == enrolleeId);
+
+            if (agreement != null)
+            {
+                _context.Agreements.Remove(agreement);
+            }
 
             await _context.SaveChangesAsync();
+
+            await _agreementService.CreateEnrolleeAgreementAsync(enrolleeId);
+            await _agreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
         public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
@@ -152,6 +184,7 @@ namespace Prime.Services
             foreach (var guid in documentGuids)
             {
                 var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
+
                 if (!string.IsNullOrWhiteSpace(filename))
                 {
                     var adjudicationDocument = new EnrolleeAdjudicationDocument
@@ -172,10 +205,10 @@ namespace Prime.Services
         public async Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId)
         {
             return await _context.EnrolleeAdjudicationDocuments
-               .Where(bl => bl.EnrolleeId == enrolleeId)
-               .Include(bl => bl.Adjudicator)
-                .OrderByDescending(bl => bl.UploadedDate)
-               .ToListAsync();
+                .Include(d => d.Adjudicator)
+                .Where(d => d.EnrolleeId == enrolleeId)
+                .OrderByDescending(d => d.UploadedDate)
+                .ToListAsync();
         }
 
         public async Task SetProfileCompletedAsync(int enrolleeId)
@@ -194,7 +227,8 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+            enrollee.AddEnrolmentStatus(StatusType.RequiresToa)
+                .AddStatusReason(StatusReasonType.Automatic);
             enrollee.AddEnrolmentStatus(StatusType.UnderReview);
 
             await _context.SaveChangesAsync();
