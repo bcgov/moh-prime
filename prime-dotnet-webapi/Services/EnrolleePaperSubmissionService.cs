@@ -185,18 +185,21 @@ namespace Prime.Services
             {
                 var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
 
-                if (!string.IsNullOrWhiteSpace(filename))
+                if (string.IsNullOrWhiteSpace(filename))
                 {
-                    var adjudicationDocument = new EnrolleeAdjudicationDocument
-                    {
-                        DocumentGuid = guid,
-                        EnrolleeId = enrolleeId,
-                        Filename = filename,
-                        UploadedDate = DateTimeOffset.Now,
-                        AdjudicatorId = adminId
-                    };
-                    _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
+                    _logger.LogError($"Could not finalize document {guid}");
+                    continue;
                 }
+
+                var adjudicationDocument = new EnrolleeAdjudicationDocument
+                {
+                    DocumentGuid = guid,
+                    EnrolleeId = enrolleeId,
+                    Filename = filename,
+                    UploadedDate = DateTimeOffset.Now,
+                    AdjudicatorId = adminId
+                };
+                _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }
 
             await _context.SaveChangesAsync();
