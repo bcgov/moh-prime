@@ -21,7 +21,6 @@ namespace Prime.Models
         public DateTimeOffset StatusDate { get; set; }
 
 
-        // TODO: Why not constructor?
         public static SiteStatus FromType(SiteStatusType siteStatusType, int siteId)
         {
             return new SiteStatus
