@@ -65,6 +65,7 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
+      nurseCategory: [null, []],
       licenseCode: [null, []],
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
