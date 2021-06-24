@@ -15,11 +15,8 @@ export class PartyReviewComponent {
    * List of fields that should be excluded.
    */
   @Input() public excludeList: ('jobRoleTitle' | 'fax' | 'smsPhone' | 'mailingAddress')[];
-  // TODO remove this and add to excludeList
-  @Input() public showName: boolean;
 
   constructor() {
     this.excludeList = [];
-    this.showName = true;
   }
 }
