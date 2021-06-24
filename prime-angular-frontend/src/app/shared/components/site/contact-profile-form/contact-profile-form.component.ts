@@ -173,7 +173,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * toggle being checked or not.
    */
   private toggleAddressValidators(address: FormGroup, blacklist: string[] = ['id', 'street2']) {
-    if (this.toggle) {
+    if (this.toggle && !this.excludeList.includes('physicalAddress')) {
       (this.toggle.checked)
         ? this.formUtilsService.resetAndClearValidators(address)
         : this.formUtilsService.setValidators(address, [Validators.required], blacklist);
