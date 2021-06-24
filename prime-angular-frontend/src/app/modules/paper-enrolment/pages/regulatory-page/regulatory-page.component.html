@@ -3,7 +3,7 @@
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
-        [formGroup]="form"
+        [formGroup]="formState.form"
         novalidate>
 
     <section class="mb-3">
