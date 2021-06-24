@@ -11,7 +11,7 @@
       </ng-container>
       <ng-container #alertContent
                     class="alert-content">
-        This enrolment now has a GPID: NOBCSCXXXXXXXXXXXXXXXXX
+        This enrolment now has a GPID: {{ enrollee?.gpid | default: 'NOBCSCXXXXXXXXXXXXXX' }}
       </ng-container>
     </app-alert>
   </div>
