@@ -62,11 +62,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm();
     this.initForm();
+    this.patchForm();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.formState.removeIncompleteCareSettings();
   }
 
@@ -74,7 +74,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.formState = new CareSettingFormState(this.fb, this.configService);
   }
 
-  protected initForm() {
+  protected initForm(): void {
     // Always have at least one care setting ready for
     // the enrollee to fill out
     if (!this.formState.careSettings.length) {
@@ -116,7 +116,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       this.formState.removeHealthAuthorities();
     }
 
-    const payload = this.formState.convertCareSettingFormToJson(this.enrollee.id);
+    const payload = this.formState.json;
     let oboSites = this.enrollee.oboSites;
 
     // Remove any oboSites belonging to careSetting which is no longer selected
@@ -135,12 +135,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
             : of(null)
-        ),
-        map(() => this.enrollee.id)
+        )
       );
   }
 
-  protected afterSubmitIsSuccessful() {
+  protected afterSubmitIsSuccessful(): void {
     const oboSites = this.enrollee.oboSites;
 
     let nextRoutePath = PaperEnrolmentRoutes.REGULATORY;

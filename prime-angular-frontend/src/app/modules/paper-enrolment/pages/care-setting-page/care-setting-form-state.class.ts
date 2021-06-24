@@ -26,14 +26,27 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.form.get('enrolleeHealthAuthorities') as FormArray;
   }
 
-  public get json(): CareSettingForm {
+  public get json(): any {
     if (!this.formInstance) {
       return;
     }
 
-    // TODO adapt the data after getting values, ie. address(es)
+    // Variable names must match keys for FormArrays in the FormGroup to get values
+    // tslint:disable-next-line:prefer-const
+    let { careSettings, enrolleeHealthAuthorities } = this.formInstance.getRawValue();
 
-    return this.formInstance.getRawValue();
+    // Any checked HA is converted into an enrollee health authority object literal,
+    // which is used to create the payload to back-end
+    const healthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
+      if (checked) {
+        selectedHealthAuthorities.push(this.configService.healthAuthorities[i].code);
+      }
+      return selectedHealthAuthorities;
+    }, []);
+
+    careSettings = careSettings.map((careSetting: CareSetting) => careSetting.careSettingCode);
+
+    return { careSettings, healthAuthorities };
   }
 
   public patchValue(pageModel: CareSettingForm): void {
@@ -150,26 +163,4 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     }
   }
 
-  public convertCareSettingFormToJson(enrolleeId: number): any {
-    // Variable names must match keys for FormArrays in the FormGroup to get values
-    // tslint:disable-next-line:prefer-const
-    let { careSettings, enrolleeHealthAuthorities } = this.formInstance.getRawValue();
-
-    // Any checked HA is converted into an enrollee health authority object literal,
-    // which is used to create the payload to back-end
-    enrolleeHealthAuthorities = enrolleeHealthAuthorities.reduce((selectedHealthAuthorities, checked, i) => {
-      if (checked) {
-        selectedHealthAuthorities.push({
-          enrolleeId,
-          healthAuthorityCode: this.configService.healthAuthorities[i].code
-        });
-      }
-      return selectedHealthAuthorities;
-    }, []);
-
-    careSettings = careSettings.map((careSetting: CareSetting) => careSetting.careSettingCode);
-    const healthAuthorities = enrolleeHealthAuthorities.map((enrolleeHealthAuthorities: EnrolleeHealthAuthority) => enrolleeHealthAuthorities.healthAuthorityCode);
-
-    return { careSettings, healthAuthorities };
-  }
 }

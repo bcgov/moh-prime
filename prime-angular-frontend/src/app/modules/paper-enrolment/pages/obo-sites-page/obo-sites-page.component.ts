@@ -180,8 +180,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   private nextRouteAfterSubmit(): void {
-    // this.routeTo(['../', this.enrolment.id, PaperEnrolmentRoutes.SELF_DECLARATION]);
-    this.routeUtils.routeRelativeTo(['../', '1', PaperEnrolmentRoutes.SELF_DECLARATION]);
+    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.SELF_DECLARATION);
   }
 
   /**
