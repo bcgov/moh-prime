@@ -7,7 +7,7 @@
         autocomplete="off"
         novalidate>
 
-    <section>
+    <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Site Information</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -122,20 +122,17 @@
 
                 </div>
               </ng-container>
-
             </ng-container>
-
-
           </ng-container>
 
         </div>
       </div>
-    </section>
+    </app-page-section>
 
   </form>
 
   <app-page-footer [isInitialEnrolment]="true"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"></app-page-footer>
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>

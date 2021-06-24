@@ -6,8 +6,7 @@
         [formGroup]="formState.form"
         novalidate>
 
-    <section class="mb-3">
-
+    <app-page-section>
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Care Setting</ng-container>
         <ng-container appPageSubheaderSummary>
@@ -74,12 +73,12 @@
           </div>
         </div>
       </div>
-    </section>
+    </app-page-section>
 
   </form>
 
   <app-page-footer [isInitialEnrolment]="true"
                    (save)="onSubmit()"
-                   (back)="routeBackTo()"></app-page-footer>
+                   (back)="onBack()"></app-page-footer>
 
 </app-page>
