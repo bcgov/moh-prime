@@ -64,9 +64,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionAgreement(int enrolleeId, PaperEnrolleeAgreementViewModel payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateAgreementAsync(enrolleeId, payload);
@@ -84,9 +84,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionCareSettings(int enrolleeId, PaperEnrolleeCareSettingViewModel payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateCareSettingsAsync(enrolleeId, payload);
@@ -104,9 +104,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionCertifications(int enrolleeId, ICollection<PaperEnrolleeCertificationViewModel> payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateCertificationsAsync(enrolleeId, payload);
@@ -125,9 +125,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionDemographics(int enrolleeId, PaperEnrolleeDemographicViewModel payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateDemographicsAsync(enrolleeId, payload);
@@ -145,9 +145,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionOboSites(int enrolleeId, IEnumerable<PaperEnrolleeOboSiteViewModel> payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateOboSitesAsync(enrolleeId, payload);
@@ -165,9 +165,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionSelfDeclarations(int enrolleeId, IEnumerable<PaperEnrolleeSelfDeclarationViewModel> payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.UpdateSelfDeclarationsAsync(enrolleeId, payload);
@@ -185,9 +185,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEnrolleePaperSubmissionDocuments(int enrolleeId, IEnumerable<Guid> payload)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
@@ -207,9 +207,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> SetEnrolleePaperSubmissionProfileCompleted(int enrolleeId)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.SetProfileCompletedAsync(enrolleeId);
@@ -230,9 +230,9 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EnrolleeAdjudicationDocument>>> GetAdjudicationDocuments(int enrolleeId)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             var documents = await _enrolleeService.GetEnrolleeAdjudicationDocumentsAsync(enrolleeId);
@@ -251,9 +251,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> FinalizeEnrolleePaperSubmission(int enrolleeId)
         {
-            if (!await _enrolleeService.PaperSubmissionExistsAsync(enrolleeId))
+            if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
-                return NotFound($"No Paper Submission found with Enrollee ID {enrolleeId}");
+                return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
             await _enrolleeService.FinailizeSubmissionAsync(enrolleeId);

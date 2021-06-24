@@ -13,6 +13,7 @@ using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using DelegateDecompiler.EntityFrameworkCore;
 
 namespace Prime.Services
 {
@@ -43,20 +44,27 @@ namespace Prime.Services
             _documentClient = documentClient;
         }
 
-        public async Task<bool> PaperSubmissionExistsAsync(int enrolleeId)
+        public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
         {
-            var gpid = await _context.Enrollees
+            var dto = await _context.Enrollees
                 .AsNoTracking()
                 .Where(e => e.Id == enrolleeId)
-                .Select(e => e.GPID)
+                .Select(e => new
+                {
+                    e.GPID,
+                    CurrentStatusCode = e.CurrentStatus.StatusCode
+                })
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
 
-            if (gpid == null)
+            if (dto == null
+                || dto.GPID == null
+                || dto.CurrentStatusCode != (int)StatusType.UnderReview)
             {
                 return false;
             }
 
-            return gpid.StartsWith(PaperGpidPrefix);
+            return dto.GPID.StartsWith(PaperGpidPrefix);
         }
 
         public async Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel viewModel)

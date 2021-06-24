@@ -10,10 +10,10 @@ namespace Prime.Services
     public interface IEnrolleePaperSubmissionService
     {
         /// <summary>
-        /// Returns true if the Enrollee both 1) exits and 2) was created from a paper submission.
+        /// Returns true if the Enrollee 1) exits 2) was created from a paper submission and 3) is currently "Under Review".
         /// </summary>
         /// <param name="enrolleeId"></param>
-        Task<bool> PaperSubmissionExistsAsync(int enrolleeId);
+        Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId);
         Task<Enrollee> CreateEnrolleeAsync(PaperEnrolleeDemographicViewModel enrollee);
         Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel update);
         Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel viewModel);
