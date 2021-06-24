@@ -16,6 +16,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using System.Security.Claims;
 using System.Linq.Expressions;
+using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {

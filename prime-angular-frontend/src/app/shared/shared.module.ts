@@ -104,6 +104,7 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
 import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
 import { CardListComponent } from '@shared/components/card-list/card-list.component';
 import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
+import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.component';
 
 @NgModule({
   declarations: [
@@ -191,6 +192,7 @@ import { OptionsFormComponent } from '@shared/components/forms/options-form/opti
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
     OptionsFormComponent
+    OboSiteFormComponent
   ],
   imports: [
     CommonModule,
@@ -284,6 +286,7 @@ import { OptionsFormComponent } from '@shared/components/forms/options-form/opti
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
     OptionsFormComponent
+    OboSiteFormComponent
   ],
   providers: [
     FullnamePipe,

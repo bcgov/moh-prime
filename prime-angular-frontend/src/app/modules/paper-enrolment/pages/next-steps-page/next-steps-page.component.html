@@ -1,0 +1,69 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-paper-enrolment-progress-indicator [noContent]="true"></app-paper-enrolment-progress-indicator>
+
+  <div class="mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Submission Successful
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        This enrolment now has a GPID: {{ enrollee?.gpid | default: 'NOBCSCXXXXXXXXXXXXXX' }}
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Next Steps</ng-container>
+      <ng-container appPageSubheader2Summary>
+        <p>
+          Send this approval and GPID to correct PharmaNet administrator. If this enrollee works in more than one clinic
+          include the email addresses for all the PharmaNet administrators separated by a comma. The enrollee will also
+          receive their GPID using the email provided in the enrolment.
+        </p>
+      </ng-container>
+    </app-page-subheader2>
+
+    <form (ngSubmit)="onSubmit()"
+          [formGroup]="formState.form"
+          autocomplete="off"
+          novalidate>
+
+      <div class="row">
+        <div class="col-8">
+
+          <mat-form-field class="w-100 mb-3">
+            <input matInput
+                   placeholder="Email"
+                   [formControl]="formState.emails">
+            <mat-error *ngIf="formState.emails.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.emails.hasError('emails') && !formState.emails.hasError('trim')">
+              Must be a valid email address(es)
+            </mat-error>
+            <mat-error *ngIf="formState.emails.hasError('emails') && formState.emails.hasError('trim')">
+              Contains invalid space character(s)
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-4">
+          <button mat-flat-button
+                  type="submit"
+                  color="primary">Send
+          </button>
+        </div>
+      </div>
+
+    </form>
+  </app-page-section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   secondaryActionLabel="Back to Admin"
+                   primaryActionLabel="Add more paper enrollees"
+                   (back)="onBack()"
+                   (save)="onNext()"></app-page-footer>
+</app-page>

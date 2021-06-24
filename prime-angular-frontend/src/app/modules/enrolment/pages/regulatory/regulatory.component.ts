@@ -139,7 +139,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.certifications.length)
-        ? EnrolmentRoutes.JOB
+        ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;

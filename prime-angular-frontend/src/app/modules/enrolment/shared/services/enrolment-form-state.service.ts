@@ -26,9 +26,9 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 
-import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
+import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-form-state.class';
 
 @Injectable({
   providedIn: 'root'

@@ -2,7 +2,6 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];

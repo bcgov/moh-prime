@@ -38,6 +38,19 @@ namespace Prime.Controllers
         }
 
         /// <summary>
+        /// Sends a StatusCodes.Status201Created response with an ApiResultResponse body wrapping the value.
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
+        /// <param name="routeValues"></param>
+        /// <param name="value"></param>
+        [NonAction]
+        public CreatedAtActionResult CreatedAtAction<T>(string actionName, string controllerName, object routeValues, [ActionResultObjectValue] T value)
+        {
+            return base.CreatedAtAction(actionName, controllerName, routeValues, new ApiResultResponse<T>(value));
+        }
+
+        /// <summary>
         /// Sends a StatusCodes.Status404NotFound response with an ApiMessageResponse body.
         /// </summary>
         /// <param name="message"></param>
