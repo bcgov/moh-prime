@@ -142,7 +142,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTokenUrl(tokenId: string): string {
-    return `${ this.config.loginRedirectUrl }/provisioner-access/${ tokenId }`;
+    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -183,7 +183,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.enrollee.id, careSettingCode)
             : EMPTY
         )
       )
