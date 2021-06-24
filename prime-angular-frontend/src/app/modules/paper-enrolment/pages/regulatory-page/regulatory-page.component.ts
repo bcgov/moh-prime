@@ -45,7 +45,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   public onSubmit(): void {
-    this.formState.removeIncompleteCertifications(true);
     super.onSubmit();
   }
 
@@ -92,6 +91,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected performSubmission(): Observable<number> {
+    this.formState.removeIncompleteCertifications(true);
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
