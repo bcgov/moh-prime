@@ -50,17 +50,19 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
     this.routeUtils.routeRelativeTo(['/', AdjudicationRoutes.MODULE_PATH]);
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.createFormInstance();
+  }
 
   protected createFormInstance(): void {
     this.formState = new NextStepsFormState(this.fb);
   }
 
   protected patchForm(): void {
-    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
-      .subscribe(() => {
-
-      });
+    // this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
+    //   .subscribe(() => {
+    //
+    //   });
   }
 
   protected performSubmission(): NoContent {
