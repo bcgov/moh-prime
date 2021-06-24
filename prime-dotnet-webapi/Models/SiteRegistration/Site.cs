@@ -105,7 +105,7 @@ namespace Prime.Models
         [Computed]
         public SiteStatusType Status
         {
-            get => (SiteStatuses != null ?
+            get => (SiteStatuses != null && SiteStatuses.Count > 0 ?
                 SiteStatuses
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id)
