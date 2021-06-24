@@ -129,8 +129,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
     const enrolleeId = +this.route.snapshot.params.eid;
     const payload = this.formState.json.selfDeclarations;
-    return this.paperEnrolmentResource.updateSelfDeclarations(enrolleeId, payload)
-      .pipe(exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId)));
+    return this.paperEnrolmentResource.updateSelfDeclarations(enrolleeId, payload);
   }
 
   protected onSubmitFormIsInvalid() {

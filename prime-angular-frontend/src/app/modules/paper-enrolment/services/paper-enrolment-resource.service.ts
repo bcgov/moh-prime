@@ -126,6 +126,18 @@ export class PaperEnrolmentResource {
       );
   }
 
+  public updateAgreementType(enrolleeId: number, agreementType: number): NoContent {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/agreement`, { agreementType })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment agreement could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateAgreementType error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   /**
    * @description
    * Mark the profile as completed indicating the user has traversed the entire enrolment
