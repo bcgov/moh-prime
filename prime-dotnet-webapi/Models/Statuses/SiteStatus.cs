@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace Prime.Models
 {
@@ -13,8 +13,8 @@ namespace Prime.Models
 
         public int SiteId { get; set; }
 
-        // [JsonIgnore]
-        // public Site Site { get; set; }
+        [JsonIgnore]
+        public Site Site { get; set; }
 
         public SiteStatusType StatusType { get; set; }
 
