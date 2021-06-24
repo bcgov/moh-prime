@@ -1,6 +1,6 @@
 <ng-container [formGroup]="form">
 
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>
       <!-- Work around for ngProjectAs not passing directive reference to subheader2 when applied to ng-content -->
@@ -49,9 +49,9 @@
         </div>
       </ng-container>
     </div>
-  </section>
+  </app-page-section>
 
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }} Contact Information</ng-container>
     </app-page-subheader2>
@@ -110,9 +110,9 @@
 
       </div>
     </div>
-  </section>
+  </app-page-section>
 
-  <ng-container *ngIf="!excludeList.includes('physicalAddress')">
+  <div [hidden]="excludeList.includes('physicalAddress')">
     <div class="mb-4">
       <mat-slide-toggle #slider
                         color="primary"
@@ -123,7 +123,7 @@
 
     <ng-container *ngIf="!slider.checked">
 
-      <section class="mb-3">
+      <app-page-section>
         <app-page-subheader2>
           <ng-container appPageSubheader2Title>Address</ng-container>
         </app-page-subheader2>
@@ -131,10 +131,10 @@
         <app-address-form [form]="physicalAddress"
                           [showManualButton]="true"
                           [showAddressFields]="showAddressFields"></app-address-form>
-      </section>
+      </app-page-section>
 
     </ng-container>
-  </ng-container>
+  </div>
 
   <ng-content select="app-page-footer"></ng-content>
 

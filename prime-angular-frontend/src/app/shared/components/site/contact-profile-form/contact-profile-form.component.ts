@@ -6,7 +6,7 @@ import {
   QueryList,
   ContentChild,
   AfterContentInit,
-  ViewChild, AfterViewInit
+  ViewChild
 } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
@@ -23,7 +23,7 @@ import { PageFooterComponent } from '@shared/components/pages/page-footer/page-f
   templateUrl: './contact-profile-form.component.html',
   styleUrls: ['./contact-profile-form.component.scss']
 })
-export class ContactProfileFormComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class ContactProfileFormComponent implements OnInit, AfterContentInit {
   /**
    * @description
    * Title of the contact profile section.
@@ -122,8 +122,6 @@ export class ContactProfileFormComponent implements OnInit, AfterViewInit, After
       this.toggleAddress(true);
     }
   }
-
-  public ngAfterViewInit(): void { }
 
   public ngAfterContentInit(): void {
     if (this.sameAs) {
