@@ -1,14 +1,17 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Role } from '@auth/shared/enum/role.enum';
+
+import { Subscription } from 'rxjs';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
-import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
-import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
-import { Subscription } from 'rxjs';
+import { Role } from '@auth/shared/enum/role.enum';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 @Component({
   selector: 'app-authorized-user-review',
@@ -37,11 +40,11 @@ export class AuthorizedUserReviewComponent implements OnInit {
   public onApprove() {
     this.busy = this.healthAuthorityResource
       .approveAuthorizedUser(this.route.snapshot.params.auid)
-      .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]));
+      .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]));
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.AUTHORIZED_USERS]);
+    this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS]);
   }
 
   public ngOnInit(): void {

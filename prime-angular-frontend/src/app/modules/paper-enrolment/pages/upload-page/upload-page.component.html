@@ -1,0 +1,64 @@
+<app-page [busy]="busy">
+  <app-page-header>PRIME Profile</app-page-header>
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Upload Information</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Upload the documents associated with this enrolment including the TOA.
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-document-upload #documentUpload
+                         componentName="adjudication-document"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event)"
+                         (remove)="onRemoveDocument($event)"></app-document-upload>
+
+    <ng-container *ngIf="savedDocuments?.length">
+      <div *ngFor="let document of savedDocuments"
+           class="mb-2">
+        <button mat-stroked-button
+                color="primary"
+                (click)="getDocument(document.id)">
+          <mat-icon class="mr-2">attachment</mat-icon>
+          {{ document.filename | default }}
+        </button>
+      </div>
+    </ng-container>
+
+  </section>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Terms of Access</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Select which TOA this user signed.
+      </ng-container>
+    </app-page-subheader2>
+
+    <form (ngSubmit)="onSubmit()"
+          [formGroup]="formState.form"
+          autocomplete="off"
+          novalidate>
+
+      <mat-form-field>
+        <mat-label>TOA</mat-label>
+        <mat-select [formControl]="formState.agreementType">
+          <mat-option *ngFor="let type of agreementTypes"
+                      [value]="type">
+            {{ AgreementTypeNameMap[type] }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </form>
+
+  </section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   (back)="onBack()"
+                   (save)="onSubmit()"></app-page-footer>
+</app-page>

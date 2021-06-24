@@ -10,7 +10,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -22,16 +21,14 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Site } from '@registration/shared/models/site.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 
-import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
-import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
+import { RegulatoryFormState } from '@paper-enrolment/pages/regulatory-page/regulatory-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +45,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
-  public healthAuthoritiesFormState: HealthAuthorityFormState;
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
@@ -154,8 +150,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       this.jobsForm,
       this.remoteAccessLocationsForm,
       this.selfDeclarationForm,
-      this.careSettingsForm,
-      this.healthAuthoritiesFormState.form
+      this.careSettingsForm
     ];
   }
 
@@ -221,7 +216,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
-    this.healthAuthoritiesFormState = new HealthAuthorityFormState(this.fb, this.configService);
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -358,8 +352,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       }, {});
 
     this.selfDeclarationForm.patchValue(selfDeclarations);
-
-    this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
