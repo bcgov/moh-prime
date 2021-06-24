@@ -1,11 +1,10 @@
 <app-page [busy]="busy">
-
   <app-page-header>PRIME Profile</app-page-header>
-
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
   <form (ngSubmit)="onSubmit()"
         [formGroup]="form"
+        autocomplete="off"
         novalidate>
 
     <section>

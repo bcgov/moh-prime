@@ -97,7 +97,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
-    let oboSites = this.removeJobs(this.enrollee.oboSites);
+    const oboSites = this.removeJobs(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
       .pipe(
