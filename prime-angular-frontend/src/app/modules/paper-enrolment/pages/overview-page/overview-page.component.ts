@@ -23,6 +23,7 @@ export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public enrollee: HttpEnrollee;
   public routeUtils: RouteUtils;
+  public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
   constructor(
     protected dialog: MatDialog,
