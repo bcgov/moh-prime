@@ -131,10 +131,13 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
-        exhaustMap(() =>
-          (this.enrollee.oboSites.length !== oboSites.length)
-            ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
-            : of(null)
+        exhaustMap(() => {
+          if (this.enrollee.oboSites.length !== oboSites.length) {
+            this.enrollee.oboSites = oboSites;
+            return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites);
+          } else
+            return of(null)
+        }
         )
       );
   }
@@ -171,9 +174,9 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
    * from the enrolment
    */
   private removeOboSites(careSettingCode: number, oboSites: OboSite[]): OboSite[] {
-    oboSites.forEach((site: OboSite, index: number) => {
-      if (site.careSettingCode === careSettingCode) {
-        oboSites.splice(index, 1);
+    oboSites = oboSites.filter((site: OboSite, index: number) => {
+      if (site.careSettingCode !== careSettingCode) {
+        return site;
       }
     });
 
