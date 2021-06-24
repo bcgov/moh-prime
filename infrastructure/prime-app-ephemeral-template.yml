@@ -812,7 +812,7 @@ objects:
       template.openshift.io/expose-database_name: '{.data[''database-name'']}'
       template.openshift.io/expose-password: '{.data[''database-password'']}'
       template.openshift.io/expose-username: '{.data[''database-user'']}'
-    name: ${SVC_NAME}-postgres-database
+    name: ${SVC_NAME}-postgres
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   stringData:
