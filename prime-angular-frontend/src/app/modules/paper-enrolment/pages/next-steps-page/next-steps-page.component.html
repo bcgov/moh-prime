@@ -36,13 +36,18 @@
       <div class="row">
         <div class="col-6">
 
-          <!--          <mat-form-field class="w-100">-->
-          <!--            <input matInput-->
-          <!--                   placeholder="Email"-->
-          <!--                   formControlName="email">-->
-          <!--            <mat-error *ngIf="email.hasError('required')">Required</mat-error>-->
-          <!--            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>-->
-          <!--          </mat-form-field>-->
+          <mat-form-field class="w-100 mb-3">
+            <input matInput
+                   placeholder="Email"
+                   [formControl]="formState.emails">
+            <mat-error *ngIf="formState.emails.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.emails.hasError('emails') && !formState.emails.hasError('trim')">Must be a valid
+              email address(es)
+            </mat-error>
+            <mat-error *ngIf="formState.emails.hasError('emails') && formState.emails.hasError('trim')">Contains invalid
+              space character(s)
+            </mat-error>
+          </mat-form-field>
 
         </div>
       </div>

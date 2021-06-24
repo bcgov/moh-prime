@@ -171,6 +171,36 @@ export class PaperEnrolmentResource {
       );
   }
 
+  public sendProvisionerAccessLink(emails: string = null, careSettingCode: number): Observable<EnrolmentCertificateAccessToken> {
+    const payload = { data: emails };
+    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${careSettingCode}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
+        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email could not be sent');
+          this.logger.error('[Core] PaperEnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  /**
+   * @description
+   * Send ...
+   */
+  public sendEmail(enrolleeId: number, emails: string): NoContent {
+    return this.apiResource.post<NoContent>(`pre/${enrolleeId}/paper-submissions/???`, { emails })
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment ???');
+          this.logger.error('[Core] PaperEnrolmentResource::finalize error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   // TODO things below this line are on the chopping block
 
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
@@ -232,19 +262,19 @@ export class PaperEnrolmentResource {
   // Provisioner Access
   // ---
 
-  public sendProvisionerAccessLink(emails: string = null, careSettingCode: number): Observable<EnrolmentCertificateAccessToken> {
-    const payload = { data: emails };
-    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${careSettingCode}`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
-        tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Email could not be sent');
-          this.logger.error('[Enrolment] PaperEnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
+  // public sendProvisionerAccessLink(emails: string = null, careSettingCode: number): Observable<EnrolmentCertificateAccessToken> {
+  //   const payload = { data: emails };
+  //   return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${careSettingCode}`, payload)
+  //     .pipe(
+  //       map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
+  //       tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
+  //       catchError((error: any) => {
+  //         this.toastService.openErrorToast('Email could not be sent');
+  //         this.logger.error('[Enrolment] PaperEnrolmentResource::sendProvisionerAccessLink error has occurred: ', error);
+  //         throw error;
+  //       })
+  //     );
+  // }
 
   // ---
   // Agreements
