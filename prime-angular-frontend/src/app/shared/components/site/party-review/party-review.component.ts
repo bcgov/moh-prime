@@ -9,12 +9,17 @@ import { Party } from '@lib/models/party.model';
   styleUrls: ['./party-review.component.scss']
 })
 export class PartyReviewComponent {
-  // TODO set this to be base class of Person and hide keys that don't exist
   @Input() public party: Party;
-  // TODO temporary fix for signing authority being different then the other parties
+  /**
+   * @description
+   * List of fields that should be excluded.
+   */
+  @Input() public excludeList: ('jobRoleTitle' | 'fax' | 'smsPhone' | 'mailingAddress')[];
+  // TODO remove this and add to excludeList
   @Input() public showName: boolean;
 
   constructor() {
+    this.excludeList = [];
     this.showName = true;
   }
 }
