@@ -16,7 +16,6 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 
@@ -40,7 +39,6 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,

@@ -22,7 +22,6 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { OboSiteFormState } from './obo-sites-form-state.class';
 
 @Component({
@@ -45,7 +44,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     protected route: ActivatedRoute,
     protected router: Router,
     protected dialog: MatDialog,
-    protected paperEnrolmentService: PaperEnrolmentService,
     protected paperEnrolmentResource: PaperEnrolmentResource,
     protected toastService: ToastService,
     protected logger: LoggerService,
@@ -134,8 +132,8 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected patchForm(): void {
     // Will be null if enrolment has not been created
-    const enrollee = this.paperEnrolmentService.enrollee;
-    this.formState.patchValue(enrollee);
+    // const enrollee = this.paperEnrolmentService.enrollee;
+    // this.formState.patchValue(enrollee);
   }
 
   protected performSubmission(): NoContent {
