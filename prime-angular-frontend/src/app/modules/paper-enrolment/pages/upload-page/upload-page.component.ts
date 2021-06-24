@@ -2,19 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { UtilsService } from '@core/services/utils.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+
+import { of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
+
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { UtilsService } from '@core/services/utils.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
+import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
 import { UploadFormState } from './upload-form-state.class';
 
 @Component({
@@ -24,11 +28,8 @@ import { UploadFormState } from './upload-form-state.class';
 })
 export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: UploadFormState;
-
-  public busy: Subscription;
-  public savedDocuments: EnrolleeAdjudicationDocument[];
   public agreementTypes: number[];
-
+  public savedDocuments: EnrolleeAdjudicationDocument[];
   public AgreementTypeNameMap = AgreementTypeNameMap;
 
   private routeUtils: RouteUtils;
@@ -39,20 +40,15 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
-    private route: ActivatedRoute,
-    private router: Router,
     private utilsService: UtilsService,
+    private route: ActivatedRoute,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
     this.documentGuids = [];
-    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
     this.agreementTypes = EnumUtils.values(AgreementType);
-  }
-
-  public routeBackTo() {
-    const enrolleeId = +this.route.snapshot.params.eid;
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.SELF_DECLARATION]);
+    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
   public onUpload(document: BaseDocument): void {
@@ -73,7 +69,11 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
       );
   }
 
-  ngOnInit(): void {
+  public onBack() {
+    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.SELF_DECLARATION]);
+  }
+
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
   }
@@ -89,11 +89,8 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        if (enrollee) {
-          const {
-            assignedTOAType
-          } = enrollee;
+      .subscribe(({ assignedTOAType }: HttpEnrollee) => {
+        if (assignedTOAType) {
           this.formState.patchValue({ agreementType: assignedTOAType });
         }
       });
@@ -101,27 +98,23 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     this.paperEnrolmentResource.getAdjudicationDocuments(enrolleeId)
       .subscribe(documents => this.savedDocuments = documents);
   }
-  protected performSubmission(): Observable<number> {
+
+  protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
 
     const enrolleeId = +this.route.snapshot.params.eid;
-
-    let request$ = this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.agreementType)
+    return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.agreementType)
       .pipe(
         exhaustMap(() =>
           (this.documentGuids.length > 0)
             ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
             : of(null)
         ),
-        exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId)),
-        map(() => enrolleeId)
+        exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId))
       );
-
-    return request$;
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number) {
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.OVERVIEW]);
+    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.OVERVIEW]);
   }
-
 }
