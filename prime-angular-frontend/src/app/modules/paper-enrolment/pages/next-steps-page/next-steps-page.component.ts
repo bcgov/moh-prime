@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+
+import { merge } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { MatDialog } from '@angular/material/dialog';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { exhaustMap, map } from 'rxjs/operators';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { merge, Observable } from 'rxjs';
-import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+
+import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 
 @Component({
   selector: 'app-next-steps',
@@ -26,6 +25,7 @@ import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certif
 })
 export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: NextStepsFormState;
+  public enrollee: HttpEnrollee;
   public routeUtils: RouteUtils;
 
   constructor(
@@ -42,7 +42,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onSubmit() {
+  public onNext() {
     this.routeUtils.routeRelativeTo(['../', 0, PaperEnrolmentRoutes.DEMOGRAPHIC]);
   }
 
@@ -52,6 +52,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.patchForm();
   }
 
   protected createFormInstance(): void {
@@ -59,21 +60,22 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
   }
 
   protected patchForm(): void {
-    // this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
-    //   .subscribe(() => {
-    //
-    //   });
+    this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
+      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
   }
 
   protected performSubmission(): NoContent {
+    this.formState.form.markAsPristine();
+
     const payload = this.formState.json.emails;
-    return this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
-      .pipe(
-        map((enrollee: HttpEnrollee) => enrollee.enrolleeCareSettings.map(ecs => ecs.careSettingCode)),
-        exhaustMap((enrolleeCareSettingCodes: number[]) =>
-          merge(enrolleeCareSettingCodes.map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, ecsc)))
-        ),
-        NoContentResponse
-      );
+    const requests$ = this.enrollee.enrolleeCareSettings
+      .map(ecs => ecs.careSettingCode)
+      .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, ecsc));
+
+    return merge(requests$).pipe(NoContentResponse);
+  }
+
+  protected onSubmitFormIsValid() {
+    console.log('WOOT!');
   }
 }

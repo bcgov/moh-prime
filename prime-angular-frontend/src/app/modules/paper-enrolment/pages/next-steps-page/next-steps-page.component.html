@@ -50,6 +50,12 @@
           </mat-form-field>
 
         </div>
+        <div class="col-6">
+          <button mat-flat-button
+                  type="submit"
+                  color="primary">Submit
+          </button>
+        </div>
       </div>
 
     </form>
@@ -60,5 +66,5 @@
                    secondaryActionLabel="Back to Admin"
                    primaryActionLabel="Add more paper enrollees"
                    (back)="onBack()"
-                   (save)="onSubmit()"></app-page-footer>
+                   (save)="onNext()"></app-page-footer>
 </app-page>
