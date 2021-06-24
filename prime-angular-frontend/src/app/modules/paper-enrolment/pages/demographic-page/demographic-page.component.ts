@@ -124,7 +124,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number): void {
-    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.CARE_SETTING]);
+    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
   protected onSubmitFormIsInvalid(): void {

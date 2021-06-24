@@ -28,8 +28,8 @@ import { UploadPageComponent } from './pages/upload-page/upload-page.component';
     OboSitesPageComponent,
     SelfDeclarationPageComponent,
     OverviewPageComponent,
-    NextStepsComponent,
     UploadPageComponent
+    NextStepsPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,

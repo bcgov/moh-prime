@@ -1,0 +1,57 @@
+<app-page>
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-paper-enrolment-progress-indicator [inProgress]="false"></app-paper-enrolment-progress-indicator>
+
+  <div class="mb-4">
+    <app-alert type="success"
+               icon="check_circle_outline">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Submission Successful
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        This enrolment now has a GPID: NOBCSCXXXXXXXXXXXXXXXXX
+      </ng-container>
+    </app-alert>
+  </div>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Next Steps</ng-container>
+      <ng-container appPageSubheader2Summary>
+        <p>
+          Send this approval and GPID to correct PharmaNet administrator. If this enrollee works in more than one clinic
+          include the email addresses for all the PharmaNet administrators separated by a comma. The enrollee will also
+          receive their GPID using the email provided in the enrolment.
+        </p>
+      </ng-container>
+    </app-page-subheader2>
+
+    <form [formGroup]="form">
+
+      <div class="row">
+        <div class="col-6">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Email"
+                   formControlName="email">
+            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
+          </mat-form-field>
+
+        </div>
+      </div>
+
+    </form>
+
+  </section>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   [hasSecondaryAction]="true"
+                   secondaryActionLabel="Back to Admin"
+                   primaryActionLabel="Add more paper enrollees"
+                   (back)="onBack()"
+                   (save)="onSubmit()"></app-page-footer>
+</app-page>
