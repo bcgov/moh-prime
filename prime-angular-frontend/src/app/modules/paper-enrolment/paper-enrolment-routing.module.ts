@@ -14,7 +14,7 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
-import { NextStepsComponent } from './pages/next-steps/next-steps.component';
+import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 
 const routes: Routes = [
   {
