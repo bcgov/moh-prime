@@ -44,10 +44,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   ) {
     super(dialog, formUtilsService);
 
-    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-    this.jobNames = this.configService.jobNames;
     this.allowDefaultOption = false;
     this.defaultOptionLabel = 'None';
+    this.jobNames = this.configService.jobNames;
+    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
   public get careSettings() {
@@ -66,6 +66,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   public ngOnDestroy(): void {
+    // TODO is this required when there is no FormStateService
     this.removeIncompleteOboSites(true);
     this.formState.removeCareSettingSites();
   }
@@ -82,10 +83,12 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
+        // TODO would the enrollee not exist if there is an ID?
         if (enrollee) {
           this.enrollee = enrollee;
 
           // Add at least one site for each careSetting selected by enrollee
+          // TODO move into form state and refine
           this.careSettings?.forEach((careSetting) => {
             switch (careSetting.careSettingCode) {
               case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
@@ -123,6 +126,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
 
+    // TODO move into form state and refine
     this.formState.oboSites.clear();
     this.formState.communityHealthSites.controls.forEach((site) => this.formState.oboSites.push(site));
     this.formState.communityPharmacySites.controls.forEach((site) => this.formState.oboSites.push(site));
@@ -145,8 +149,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected afterSubmitIsSuccessful(): void {
+    // TODO is the needed if performed on destroy?
     this.removeIncompleteOboSites(true);
 
+    // TODO replicated code from performSubmission, one of these isn't needed
     this.formState.oboSites.clear();
     this.formState.communityHealthSites.controls.forEach((site) => this.formState.oboSites.push(site));
     this.formState.communityPharmacySites.controls.forEach((site) => this.formState.oboSites.push(site));
@@ -166,6 +172,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
    * allows for an empty list of oboSites if no jobs are selected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
+    // TODO reduce complexity by using JSON
     this.formState.oboSites.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('physicalAddress').value.city;

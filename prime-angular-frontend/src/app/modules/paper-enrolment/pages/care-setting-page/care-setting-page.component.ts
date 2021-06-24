@@ -66,6 +66,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public ngOnDestroy(): void {
+    // TODO is this required when there is no FormStateService
     this.formState.removeIncompleteCareSettings();
   }
 
@@ -98,10 +99,12 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       });
   }
 
+  // TODO refactor logic this is quite awkward to understand, and NoContent return type
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
 
     // Remove health authorities if health authority care setting not chosen
+    // TODO refactor don't need to use forms just use JSON
     if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
       this.formState.removeHealthAuthorities();
     }
@@ -111,6 +114,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     // Remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach(type => {
+      // TODO refactor don't need to use forms just use JSON
       if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === type.code)) {
         oboSites = this.removeOboSites(type.code, oboSites);
       }
@@ -141,6 +145,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   private removeUnselectedHealthAuthOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
+    // TODO refactor and return directly this is inefficient and hard to read
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {
       if (!healthAuthorities[index]) {
         for (let i = oboSites.length - 1; i >= 0; i--) {
@@ -157,10 +162,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   /**
    * @description
-   * Remove obo sites by care setting if a care setting was removed
-   * from the enrolment
+   * Remove obo sites if the associated care setting was removed
+   * from the enrolment.
    */
   private removeOboSites(careSettingCode: number, oboSites: OboSite[]): OboSite[] {
+    // TODO refactor this isn't how filter works can directly return if-statement condition
     oboSites = oboSites.filter((site: OboSite) => {
       if (site.careSettingCode !== careSettingCode) {
         return site;
