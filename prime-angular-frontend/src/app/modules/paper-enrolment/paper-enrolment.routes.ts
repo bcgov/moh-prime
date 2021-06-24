@@ -7,6 +7,7 @@ export class PaperEnrolmentRoutes {
   public static REGULATORY = 'regulatory';
   public static OBO_SITES = 'obo-sites';
   public static SELF_DECLARATION = 'self-declaration';
+  public static UPLOAD = 'upload';
   public static OVERVIEW = 'overview';
   public static NEXT_STEPS = 'next-steps';
 
@@ -20,7 +21,8 @@ export class PaperEnrolmentRoutes {
       PaperEnrolmentRoutes.CARE_SETTING,
       PaperEnrolmentRoutes.REGULATORY,
       PaperEnrolmentRoutes.OBO_SITES,
-      PaperEnrolmentRoutes.SELF_DECLARATION
+      PaperEnrolmentRoutes.SELF_DECLARATION,
+      PaperEnrolmentRoutes.UPLOAD
     ];
   }
 }

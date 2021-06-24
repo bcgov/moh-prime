@@ -13,6 +13,7 @@ import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
+import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
 
 const routes: Routes = [
@@ -53,6 +54,12 @@ const routes: Routes = [
           {
             path: PaperEnrolmentRoutes.SELF_DECLARATION,
             component: SelfDeclarationPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'PRIME Profile' }
+          },
+          {
+            path: PaperEnrolmentRoutes.UPLOAD,
+            component: UploadPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PRIME Profile' }
           },

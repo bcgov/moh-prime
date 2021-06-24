@@ -16,6 +16,7 @@ import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.com
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsComponent } from './pages/next-steps/next-steps.component';
+import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     OboSitesPageComponent,
     SelfDeclarationPageComponent,
     OverviewPageComponent,
-    NextStepsComponent
+    NextStepsComponent,
+    UploadPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
@@ -36,4 +38,4 @@ import { NextStepsComponent } from './pages/next-steps/next-steps.component';
     EditorModule
   ]
 })
-export class PaperEnrolmentModule {}
+export class PaperEnrolmentModule { }

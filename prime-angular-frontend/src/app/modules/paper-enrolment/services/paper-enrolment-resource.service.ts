@@ -331,6 +331,33 @@ export class PaperEnrolmentResource {
   }
 
   // ---
+  // Enrollee Adjudication Documents
+  // ---
+
+  public updateAdjudicationDocuments(enrolleeId: number, documentGuids: string[]): Observable<any> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentGuids)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Paper Enrolment documents could not be updated');
+          this.logger.error('[Core] PaperEnrolmentResource::updateAdjudicationDocuments error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAdjudicationDocuments(enrolleeId: number): Observable<EnrolleeAdjudicationDocument[]> {
+    return this.apiResource.get<EnrolleeAdjudicationDocument[]>(`enrollees/${enrolleeId}/paper-submissions/documents`)
+      .pipe(
+        map((response: ApiHttpResponse<EnrolleeAdjudicationDocument[]>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::getAdjudicationDocuments error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  // ---
   // Self Declaration Documents
   // ---
 
