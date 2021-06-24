@@ -14,6 +14,7 @@ export interface Configuration {
   healthAuthorities: Config<number>[];
   facilities: Config<number>[];
   careTypes: Config<number>[];
+  collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
 }
 
 export class Config<T> {
@@ -47,6 +48,13 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
 export interface CollegeLicenseConfig {
   collegeCode: number;
   licenseCode: number;
+  collegeLicenseGroupingCode: number;
+}
+
+export class CollegeLicenseGroupingConfig extends Config<number> implements IWeightedConfig {
+  code: number;
+  name: string;
+  weight: number;
 }
 
 export interface CollegePracticeConfig {

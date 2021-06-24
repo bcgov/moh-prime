@@ -59,6 +59,9 @@ namespace Prime.Services
                 Facilities = await _context.Set<Facility>()
                     .AsNoTracking()
                     .ToListAsync(),
+                CollegeLicenseGroupings = await _context.Set<CollegeLicenseGrouping>()
+                    .AsNoTracking()
+                    .ToListAsync(),
                 CareTypes = await _context.Set<CareType>()
                     .AsNoTracking()
                     .ToListAsync(),
