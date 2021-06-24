@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Newtonsoft.Json.Linq;
@@ -19,6 +20,7 @@ namespace Prime.Services
     {
         private const string PaperGpidPrefix = "NOBCSC";
 
+        private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly IAgreementService _agreementService;
         private readonly IBusinessEventService _businessEventService;
@@ -27,12 +29,14 @@ namespace Prime.Services
         public EnrolleePaperSubmissionService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
+            ILogger<EnrolleePaperSubmissionService> logger,
             IMapper mapper,
             IAgreementService agreementService,
             IDocumentManagerClient documentClient,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
+            _logger = logger;
             _mapper = mapper;
             _agreementService = agreementService;
             _businessEventService = businessEventService;
@@ -68,6 +72,15 @@ namespace Prime.Services
                 new EnrolleeAddress
                 {
                     Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
+                }
+            };
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    Confirmed = true,
+                    CreatedDate = DateTimeOffset.Now,
+                    ProfileSnapshot = new JObject()
                 }
             };
             enrollee.AddEnrolmentStatus(StatusType.Editable);
@@ -141,7 +154,7 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Also creates/updates the Submission for the Enrollee (to set the assigned Agreement Type).
+        /// Also updates the Submission for the Enrollee (to set the assigned Agreement Type).
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="viewModel"></param>
@@ -149,22 +162,11 @@ namespace Prime.Services
         {
             var submission = await _context.Submissions
                 .SingleOrDefaultAsync(s => s.EnrolleeId == enrolleeId);
-            var agreement = await _context.Agreements
-                .SingleOrDefaultAsync(a => a.EnrolleeId == enrolleeId);
-
-            if (submission == null)
-            {
-                submission = new Submission
-                {
-                    EnrolleeId = enrolleeId,
-                    Confirmed = true,
-                    CreatedDate = DateTimeOffset.Now,
-                    ProfileSnapshot = new JObject()
-                };
-                _context.Submissions.Add(submission);
-            }
 
             submission.AgreementType = viewModel.AgreementType;
+
+            var agreement = await _context.Agreements
+                .SingleOrDefaultAsync(a => a.EnrolleeId == enrolleeId);
 
             if (agreement != null)
             {
