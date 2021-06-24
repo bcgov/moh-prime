@@ -13,7 +13,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { Observable, of, Subscription } from 'rxjs';
+import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 import { UploadFormState } from './upload-form-state.class';
 
@@ -106,28 +106,22 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
     const enrolleeId = +this.route.snapshot.params.eid;
 
-    // TODO: When endpoint made uncomment
-    // let request$ = this.paperEnrolmentResource.updateAgreementType(this.formState.json.agreementType)
-    //   .pipe(
-    //     exhaustMap(() =>
-    //       (this.documentGuids.length > 0)
-    //         ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
-    //         : EMPTY
-    //     ),
-    //     map(() => enrolleeId)
-    //   );
-
-    let request$ = (this.documentGuids.length > 0)
-      ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids).pipe(
+    let request$ = this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.agreementType)
+      .pipe(
+        exhaustMap(() =>
+          (this.documentGuids.length > 0)
+            ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
+            : of(null)
+        ),
+        exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId)),
         map(() => enrolleeId)
-      )
-      : of(enrolleeId);
+      );
 
     return request$;
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number) {
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, "TODO: Somewhere"]);
+    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.OVERVIEW]);
   }
 
 }
