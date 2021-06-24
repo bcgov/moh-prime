@@ -3,22 +3,17 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, of, pipe } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
-import { UtilsService } from '@core/services/utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
@@ -31,12 +26,11 @@ import { OboSiteFormState } from './obo-sites-form-state.class';
 })
 export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
   public formState: OboSiteFormState;
-  public routeUtils: RouteUtils;
   public enrollee: HttpEnrollee;
+  public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
   public jobNames: Config<number>[];
-  public allowDefaultOption: boolean;
-
+  public routeUtils: RouteUtils;
   public CareSettingEnum = CareSettingEnum;
 
   constructor(
@@ -57,11 +51,12 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   public get careSettings() {
-    let careSettings = (this.enrollee?.enrolleeCareSettings) ? this.enrollee.enrolleeCareSettings : null;
-    return careSettings;
+    return (this.enrollee?.enrolleeCareSettings)
+      ? this.enrollee.enrolleeCareSettings
+      : null;
   }
 
-  public routeBackTo() {
+  public onBack() {
     this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.REGULATORY);
   }
 
@@ -139,7 +134,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     this.formState.removeCareSettingSites();
 
     const payload = this.formState.json;
-
     return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, payload.oboSites)
       .pipe(
         exhaustMap(() =>
@@ -166,11 +160,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.SELF_DECLARATION);
   }
 
-
   /**
    * @description
    * Removes incomplete oboSites from the list in preparation for submission, and
-   * allows for an empty list of oboSites if no jobs are solected.
+   * allows for an empty list of oboSites if no jobs are selected.
    */
   private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
     this.formState.oboSites.controls
@@ -191,5 +184,4 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
       }
     });
   }
-
 }
