@@ -183,7 +183,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.enrollee.id, careSettingCode)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode)
             : EMPTY
         )
       )
