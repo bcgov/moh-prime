@@ -7,10 +7,9 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { OboSitesFormModel } from './obo-sites-form.model';
 
-interface OboSitesPageDataModel extends Pick<Enrolment, 'oboSites'> { }
-
-export class OboSiteFormState extends AbstractFormState<OboSitesPageDataModel> {
+export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
@@ -111,7 +110,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesPageDataModel> {
     });
   }
 
-  public get json(): OboSitesPageDataModel {
+  public get json(): OboSitesFormModel {
     if (!this.formInstance) {
       return;
     }
@@ -121,7 +120,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesPageDataModel> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(pageModel: OboSitesPageDataModel): void {
+  public patchValue(pageModel: OboSitesFormModel): void {
     if (!this.formInstance) {
       return;
     }

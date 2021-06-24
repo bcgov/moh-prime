@@ -90,7 +90,7 @@
                 <!-- Protect against case code called from `initForm` not completed yet -->
                 <div *ngIf="formState.hasHealthAuthoritySites">
 
-                  <ng-container *ngFor="let eha of enrolment?.enrolleeHealthAuthorities; let i = index"
+                  <ng-container *ngFor="let eha of enrollee?.enrolleeHealthAuthorities; let i = index"
                                 formGroupName="healthAuthoritySites">
 
                     <ng-container *ngFor="let site of formState.healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"

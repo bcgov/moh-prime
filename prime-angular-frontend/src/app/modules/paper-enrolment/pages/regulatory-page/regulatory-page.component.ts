@@ -15,7 +15,6 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
-import { ConfigService } from '@config/config.service';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 @Component({
@@ -41,7 +40,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public routeBackTo() {
+  public routeBackTo(): void {
     this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.CARE_SETTING);
   }
 
@@ -56,13 +55,12 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.patchForm();
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.formState.removeIncompleteCertifications(true);
   }
 
   protected createFormInstance(): void {
     this.formState = new RegulatoryFormState(this.fb);
-    this.form = this.formState.form;
   }
 
   protected initForm(): void {
@@ -109,7 +107,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       );
   }
 
-  protected afterSubmitIsSuccessful() {
+  protected afterSubmitIsSuccessful(): void {
     this.formState.removeIncompleteCertifications(true);
     const certifications = this.formState.collegeCertifications;
 
