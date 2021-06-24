@@ -7,7 +7,8 @@
 
       <app-contact-profile-form [title]="title | replace: '\\(s\\)' : ''"
                                 [form]="formState.form"
-                                [excludeList]="['fax']">
+                                [excludeList]="['fax']"
+                                [showAddressFields]="showAddressFields">
         <ng-container appPageSubheader2Summary>
           Provide information for a PharmaNet Administrator for this Health Authority.
         </ng-container>

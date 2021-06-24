@@ -11,6 +11,7 @@ import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class'
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -27,9 +28,10 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
     protected formUtilsService: FormUtilsService,
     protected fb: FormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
+    protected utilsService: UtilsService,
     router: Router
   ) {
-    super(route, dialog, formUtilsService, fb, healthAuthResource, router);
+    super(route, dialog, formUtilsService, fb, healthAuthResource, utilsService, router);
 
     this.backRoute = AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE;
     this.nextRoute = AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS;

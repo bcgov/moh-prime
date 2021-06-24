@@ -15,6 +15,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { CardListItem } from '@shared/components/card-list/card-list.component';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { UtilsService } from '@core/services/utils.service';
 
 // TODO step this back to something more generic, and refine to
 // accommodate other list form combinations like remote users
@@ -25,6 +26,7 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
   public isEditing: boolean;
   public contacts: Contact[];
   public contactCardListItems: CardListItem[];
+  public showAddressFields: boolean;
 
   protected cardTitlePrefix: string;
   protected backRoute: string;
@@ -37,7 +39,8 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
     protected formUtilsService: FormUtilsService,
     protected fb: FormBuilder,
     protected healthAuthResource: HealthAuthorityResource,
-    router: Router,
+    protected utilsService: UtilsService,
+    router: Router
   ) {
     super(dialog, formUtilsService);
 
@@ -145,6 +148,10 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
    */
   protected abstract getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>>;
 
+  protected onSubmitFormIsInvalid() {
+    this.showAddressFields = true;
+  }
+
   /**
    * @description
    * Update the contact information.
@@ -167,7 +174,10 @@ export abstract class AbstractContactsPage extends AbstractEnrolmentPage {
           this.updateCardList(contacts);
         }),
         // Display the card list view with the updates
-        tap(() => this.isEditing = false)
+        tap(() => {
+          this.isEditing = false;
+          this.utilsService.scrollTop();
+        })
       );
   }
 
