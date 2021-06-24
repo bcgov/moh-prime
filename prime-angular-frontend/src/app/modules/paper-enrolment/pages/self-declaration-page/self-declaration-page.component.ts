@@ -140,7 +140,7 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
 
   protected afterSubmitIsSuccessful(): void {
     this.formState.clearSelfDeclarationDocumentGuids();
-    this.routeUtils.routeRelativeTo(['./', PaperEnrolmentRoutes.OVERVIEW]);
+    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.UPLOAD]);
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

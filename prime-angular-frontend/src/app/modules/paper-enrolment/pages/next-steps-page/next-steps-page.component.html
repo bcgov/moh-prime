@@ -28,18 +28,21 @@
       </ng-container>
     </app-page-subheader2>
 
-    <form [formGroup]="form">
+    <form (ngSubmit)="onSubmit()"
+          [formGroup]="form"
+          autocomplete="off"
+          novalidate>
 
       <div class="row">
         <div class="col-6">
 
-          <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Email"
-                   formControlName="email">
-            <mat-error *ngIf="email.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>
-          </mat-form-field>
+          <!--          <mat-form-field class="w-100">-->
+          <!--            <input matInput-->
+          <!--                   placeholder="Email"-->
+          <!--                   formControlName="email">-->
+          <!--            <mat-error *ngIf="email.hasError('required')">Required</mat-error>-->
+          <!--            <mat-error *ngIf="email.hasError('email')">Must be a valid email address</mat-error>-->
+          <!--          </mat-form-field>-->
 
         </div>
       </div>
@@ -49,7 +52,6 @@
   </section>
 
   <app-page-footer [isInitialEnrolment]="true"
-                   [hasSecondaryAction]="true"
                    secondaryActionLabel="Back to Admin"
                    primaryActionLabel="Add more paper enrollees"
                    (back)="onBack()"
