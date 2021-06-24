@@ -68,7 +68,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
-    this.initForm();
   }
 
   public ngOnDestroy(): void {
@@ -78,40 +77,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected createFormInstance(): void {
     this.formState = new OboSiteFormState(this.fb, this.formUtilsService, this.configService);
-  }
-
-  protected initForm(): void {
-    // Initialize listeners before patching
-    this.patchForm();
-
-    // Add at least one site for each careSetting selected by enrollee
-    this.careSettings?.forEach((careSetting) => {
-      switch (careSetting.careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          this.formState.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.formState.communityHealthSites.length) {
-            this.formState.addOboSite(careSetting.careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          this.formState.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.formState.communityPharmacySites.length) {
-            this.formState.addOboSite(careSetting.careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          this.enrollee.enrolleeHealthAuthorities.forEach(ha => {
-            const sitesOfHealthAuthority = this.formState.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
-            if (!sitesOfHealthAuthority) {
-              this.formState.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
-            }
-          });
-          break;
-        }
-      }
-    });
   }
 
   protected patchForm(): void {
@@ -125,6 +90,35 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
         if (enrollee) {
           this.enrollee = enrollee;
 
+          // Add at least one site for each careSetting selected by enrollee
+          this.careSettings?.forEach((careSetting) => {
+            switch (careSetting.careSettingCode) {
+              case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+                this.formState.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+                if (!this.formState.communityHealthSites.length) {
+                  this.formState.addOboSite(careSetting.careSettingCode);
+                }
+                break;
+              }
+              case CareSettingEnum.COMMUNITY_PHARMACIST: {
+                this.formState.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+                if (!this.formState.communityPharmacySites.length) {
+                  this.formState.addOboSite(careSetting.careSettingCode);
+                }
+                break;
+              }
+              case CareSettingEnum.HEALTH_AUTHORITY: {
+                this.enrollee.enrolleeHealthAuthorities.forEach(ha => {
+                  const sitesOfHealthAuthority = this.formState.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
+                  if (!sitesOfHealthAuthority) {
+                    this.formState.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
+                  }
+                });
+                break;
+              }
+            }
+          });
+
           // Attempt to patch the form if not already patched
           this.formState.patchValue(enrollee);
         }
@@ -133,6 +127,16 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
+
+    this.formState.oboSites.clear();
+    this.formState.communityHealthSites.controls.forEach((site) => this.formState.oboSites.push(site));
+    this.formState.communityPharmacySites.controls.forEach((site) => this.formState.oboSites.push(site));
+    Object.keys(this.formState.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
+      const sitesOfHealthAuthority = this.formState.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
+      sitesOfHealthAuthority.controls.forEach((site) =>
+        this.formState.oboSites.push(site));
+    });
+    this.formState.removeCareSettingSites();
 
     const payload = this.formState.json;
 
