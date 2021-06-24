@@ -13,6 +13,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-overview-page',
@@ -23,6 +24,7 @@ export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public enrollee: HttpEnrollee;
   public routeUtils: RouteUtils;
+  public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
   constructor(

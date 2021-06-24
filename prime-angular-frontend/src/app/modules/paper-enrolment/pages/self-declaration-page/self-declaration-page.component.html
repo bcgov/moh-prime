@@ -28,7 +28,7 @@
       </app-alert>
     </ng-container>
 
-    <section class="mb-3">
+    <app-page-section>
 
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
@@ -74,7 +74,8 @@
               <mat-error *ngIf="formState.hasRegistrationSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
-            <li class="small mb-2">
+            <li *ngIf="allowUploads"
+                class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
@@ -88,9 +89,9 @@
         </div>
       </div>
 
-    </section>
+    </app-page-section>
 
-    <section class="mb-3">
+    <app-page-section>
 
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
@@ -136,7 +137,8 @@
               <mat-error *ngIf="formState.hasConvictionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
-            <li class="small mb-2">
+            <li *ngIf="allowUploads"
+                class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
@@ -152,9 +154,9 @@
         </div>
       </div>
 
-    </section>
+    </app-page-section>
 
-    <section class="mb-3">
+    <app-page-section>
 
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
@@ -196,7 +198,8 @@
               <mat-error *ngIf="formState.hasPharmaNetSuspendedDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
-            <li class="small mb-2">
+            <li *ngIf="allowUploads"
+                class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
@@ -210,9 +213,9 @@
         </div>
       </div>
 
-    </section>
+    </app-page-section>
 
-    <section class="mb-3">
+    <app-page-section>
 
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
@@ -255,7 +258,8 @@
               <mat-error *ngIf="formState.hasDisciplinaryActionDetails.hasError('required')">Required</mat-error>
             </mat-form-field>
 
-            <li class="small mb-2">
+            <li *ngIf="allowUploads"
+                class="small mb-2">
               Attach documents related to this self-declaration.
             </li>
 
@@ -269,7 +273,7 @@
         </div>
       </div>
 
-    </section>
+    </app-page-section>
 
     <app-page-footer [isInitialEnrolment]="true"
                      (save)="onSubmit()"

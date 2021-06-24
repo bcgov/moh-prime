@@ -25,7 +25,7 @@ import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolmen
 })
 export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: NextStepsFormState;
-  public enrolleeCareSettingCodes: number[];
+  public enrollee: HttpEnrollee;
   public routeUtils: RouteUtils;
 
   constructor(
@@ -61,16 +61,15 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
 
   protected patchForm(): void {
     this.paperEnrolmentResource.getEnrolleeById(+this.route.snapshot.params.eid)
-      .subscribe(({ enrolleeCareSettings }: HttpEnrollee) =>
-        this.enrolleeCareSettingCodes = enrolleeCareSettings.map(ecs => ecs.careSettingCode)
-      );
+      .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
   }
 
   protected performSubmission(): any {
     this.formState.emails.markAsPristine();
 
     const payload = this.formState.json.emails;
-    const requests$ = this.enrolleeCareSettingCodes
+    const requests$ = this.enrollee.enrolleeCareSettings
+      .map(ecs => ecs.careSettingCode)
       .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, +this.route.snapshot.params.eid, ecsc));
 
     return merge(...requests$);

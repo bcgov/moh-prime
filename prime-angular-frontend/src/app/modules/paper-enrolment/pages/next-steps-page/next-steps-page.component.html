@@ -1,6 +1,6 @@
 <app-page>
   <app-page-header>PharmaNet Site Registration</app-page-header>
-  <app-paper-enrolment-progress-indicator [inProgress]="false"></app-paper-enrolment-progress-indicator>
+  <app-paper-enrolment-progress-indicator [noContent]="true"></app-paper-enrolment-progress-indicator>
 
   <div class="mb-4">
     <app-alert type="success"
@@ -16,7 +16,7 @@
     </app-alert>
   </div>
 
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Next Steps</ng-container>
       <ng-container appPageSubheader2Summary>
@@ -34,33 +34,32 @@
           novalidate>
 
       <div class="row">
-        <div class="col-6">
+        <div class="col-8">
 
           <mat-form-field class="w-100 mb-3">
             <input matInput
                    placeholder="Email"
                    [formControl]="formState.emails">
             <mat-error *ngIf="formState.emails.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="formState.emails.hasError('emails') && !formState.emails.hasError('trim')">Must be a valid
-              email address(es)
+            <mat-error *ngIf="formState.emails.hasError('emails') && !formState.emails.hasError('trim')">
+              Must be a valid email address(es)
             </mat-error>
-            <mat-error *ngIf="formState.emails.hasError('emails') && formState.emails.hasError('trim')">Contains invalid
-              space character(s)
+            <mat-error *ngIf="formState.emails.hasError('emails') && formState.emails.hasError('trim')">
+              Contains invalid space character(s)
             </mat-error>
           </mat-form-field>
 
         </div>
-        <div class="col-6">
+        <div class="col-4">
           <button mat-flat-button
                   type="submit"
-                  color="primary">Submit
+                  color="primary">Send
           </button>
         </div>
       </div>
 
     </form>
-
-  </section>
+  </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"
                    secondaryActionLabel="Back to Admin"
