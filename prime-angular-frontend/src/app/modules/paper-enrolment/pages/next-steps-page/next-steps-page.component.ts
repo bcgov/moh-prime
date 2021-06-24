@@ -3,8 +3,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 
-import { merge } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { forkJoin, merge, of } from 'rxjs';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -64,18 +64,19 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
   }
 
-  protected performSubmission(): NoContent {
-    this.formState.form.markAsPristine();
+  protected performSubmission(): any {
+    this.formState.emails.markAsPristine();
 
     const payload = this.formState.json.emails;
     const requests$ = this.enrollee.enrolleeCareSettings
       .map(ecs => ecs.careSettingCode)
-      .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, ecsc));
+      .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, this.enrollee.id, ecsc));
 
-    return merge(requests$).pipe(NoContentResponse);
+    return merge(...requests$);
   }
 
-  protected onSubmitFormIsValid() {
-    console.log('WOOT!');
+  protected afterSubmitIsSuccessful() {
+    this.formState.emails.reset();
+    this.formState.emails.markAsPristine();
   }
 }
