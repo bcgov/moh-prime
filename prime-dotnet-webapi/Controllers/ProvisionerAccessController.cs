@@ -80,7 +80,7 @@ namespace Prime.Controllers
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
         [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Roles = Roles.PrimeEnrollee + Roles.TriageEnrollee)]
+        // [Authorize(Roles = Roles.PrimeEnrollee + Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
