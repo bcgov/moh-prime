@@ -58,7 +58,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.SELF_DECLARATION]);
+    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.UPLOAD]);
   }
 
   public ngOnInit(): void {
