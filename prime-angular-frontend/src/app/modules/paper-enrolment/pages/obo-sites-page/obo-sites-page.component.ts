@@ -21,7 +21,6 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { OboSiteFormState } from './obo-sites-form-state.class';
@@ -48,7 +47,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     protected dialog: MatDialog,
     protected paperEnrolmentService: PaperEnrolmentService,
     protected paperEnrolmentResource: PaperEnrolmentResource,
-    protected paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
     protected toastService: ToastService,
     protected logger: LoggerService,
     protected utilService: UtilsService,
@@ -64,8 +62,9 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   public get careSettings() {
-    let careSettings = (this.enrolment?.careSettings) ? this.enrolment.careSettings : null;
-    return careSettings;
+    return (this.enrolment?.careSettings)
+      ? this.enrolment.careSettings
+      : null;
   }
 
   public onSubmit(): void {
@@ -95,8 +94,8 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected createFormInstance(): void {
-    this.formState = this.paperEnrolmentFormStateService.jobsFormState;
-    this.form = this.formState.form;
+    // this.formState = this.paperEnrolmentFormStateService.jobsFormState;
+    // this.form = this.formState.form;
   }
 
   protected initForm() {
@@ -141,9 +140,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
 
   protected performSubmission(): NoContent {
     // Update using the form which could contain changes, and ensure identity
-    const enrolment = this.paperEnrolmentFormStateService.json;
-    return this.paperEnrolmentResource.updateEnrollee(enrolment)
-      .pipe(this.handleResponse());
+    // const enrolment = this.paperEnrolmentFormStateService.json;
+    return void (0);
+    // return this.paperEnrolmentResource.updateEnrollee(enrolment)
+    //   .pipe(this.handleResponse());
   }
 
   private handleResponse() {
@@ -215,8 +215,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
    * job(s), as well as, college certification(s).
    */
   private removeCollegeCertifications() {
-    this.paperEnrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
+    // this.paperEnrolmentFormStateService.regulatoryFormState.removeCollegeCertifications();
   }
-
-
 }

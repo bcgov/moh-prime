@@ -18,7 +18,6 @@ import { SelfDeclarationDocument } from '@shared/models/self-declaration-documen
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentService } from '@paper-enrolment/services/paper-enrolment.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { PaperEnrolmentFormStateService } from '@paper-enrolment/services/paper-enrolment-form-state.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 
 @Component({
@@ -43,7 +42,6 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
     private fb: FormBuilder,
     private paperEnrolmentService: PaperEnrolmentService,
     private paperEnrolmentResource: PaperEnrolmentResource,
-    private paperEnrolmentFormStateService: PaperEnrolmentFormStateService,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router

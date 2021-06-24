@@ -7,6 +7,7 @@ import { CareSettingForm } from './care-setting-form.model';
 import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Config } from '@config/config.model';
+
 export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public constructor(
     private fb: FormBuilder,
@@ -80,9 +81,8 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   }
 
   public removeHealthAuthorities() {
-    this.enrolleeHealthAuthorities.controls.forEach(checkbox => {
-      checkbox.setValue(false);
-    });
+    this.enrolleeHealthAuthorities.controls
+      .forEach(checkbox => checkbox.setValue(false));
   }
 
   public disableCareSetting(careSettingCode: number): boolean {

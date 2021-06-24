@@ -55,7 +55,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public canDeactivate(): Observable<boolean> | boolean {
     const canDeactivate = super.canDeactivate();
-
     return (canDeactivate instanceof Observable)
       ? canDeactivate.pipe(tap(() => this.formState.removeIncompleteCareSettings()))
       : canDeactivate;
@@ -127,7 +126,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       }
     });
 
-    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    // When an individual health authority is deselected the OBO Sites should be removed
     oboSites = this.removeUnselectedHealthAuthOboSites(payload.healthAuthorities, oboSites);
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
