@@ -2,7 +2,7 @@
 
   <app-page-header>PRIME Profile</app-page-header>
 
-  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+  <app-paper-enrolment-progress-indicator [inProgress]="false"></app-paper-enrolment-progress-indicator>
 
   <div class="mb-5">
     <app-page-subheader>
@@ -13,20 +13,9 @@
     </app-page-subheader>
   </div>
 
-  <!--  <app-page-subheader>-->
-  <!--    <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>-->
-
-  <!--    <button *ngIf="identityProvider === IdentityProviderEnum.BCEID"-->
-  <!--            mat-icon-button-->
-  <!--            matTooltip="Edit Demographic"-->
-  <!--            (click)="routeTo(demographicRoutePath)">-->
-  <!--      <mat-icon>edit</mat-icon>-->
-  <!--    </button>-->
-  <!--  </app-page-subheader>-->
-
-  <!--  <app-enrollee-review *ngIf="enrolment"-->
-  <!--                       [showEditRedirect]="currentStatus === EnrolmentStatus.EDITABLE"-->
-  <!--                       [enrolment]="enrolment"-->
+  <!--  <app-enrollee-review *ngIf="enrollee"-->
+  <!--                       [showEditRedirect]="true"-->
+  <!--                       [enrolment]="enrollee"-->
   <!--                       (route)="routeTo($event)"></app-enrollee-review>-->
 
   <app-page-footer [isInitialEnrolment]="true"

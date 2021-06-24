@@ -7,7 +7,6 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
@@ -23,7 +22,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public enrollee: HttpEnrollee;
-  public EnrolmentStatus = EnrolmentStatus;
   public routeUtils: RouteUtils;
 
   constructor(
@@ -52,6 +50,11 @@ export class OverviewPageComponent implements OnInit {
         )
       )
       .subscribe(() => this.afterSubmitIsSuccessful());
+  }
+
+  public onRoute(routePath: string | string[]) {
+    routePath = (Array.isArray(routePath)) ? routePath : [routePath];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public onBack(): void {
