@@ -117,7 +117,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       this.formState.removeHealthAuthorities();
     }
 
-    const payload = this.formState.convertCareSettingFormToJson(this.enrollee.id);
+    const payload = this.formState.json;
     let oboSites = this.enrollee.oboSites;
 
     // Remove any oboSites belonging to careSetting which is no longer selected

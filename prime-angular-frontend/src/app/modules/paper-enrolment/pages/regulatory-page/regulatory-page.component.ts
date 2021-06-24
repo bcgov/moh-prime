@@ -31,7 +31,6 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private configService: ConfigService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
