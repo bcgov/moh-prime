@@ -70,7 +70,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
     const payload = this.formState.json.emails;
     const requests$ = this.enrollee.enrolleeCareSettings
       .map(ecs => ecs.careSettingCode)
-      .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, ecsc));
+      .map(ecsc => this.paperEnrolmentResource.sendProvisionerAccessLink(payload, this.enrollee.id, ecsc));
 
     return merge(...requests$);
   }
