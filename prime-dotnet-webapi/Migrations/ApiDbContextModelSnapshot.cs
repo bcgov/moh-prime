@@ -15657,6 +15657,11 @@ namespace Prime.Migrations
                         {
                             Code = 17,
                             Name = "No address from BCSC. Enrollee entered address."
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Manually entered paper enrolment"
                         });
                 });
 

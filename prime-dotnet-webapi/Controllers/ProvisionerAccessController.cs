@@ -71,20 +71,21 @@ namespace Prime.Controllers
             return Ok(tokens);
         }
 
-        // POST: api/provisioner-access/send-link/1
+        // POST: api/enrollees/5/provisioner-access/send-link/1
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
         /// then sends the link to a recipient by email based on Care Setting Code.
         /// </summary>
+        /// <param name="enrolleeId"></param>
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
-        [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Roles = Roles.PrimeEnrollee)]
+        [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
+        [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.TriageEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int enrolleeId, int careSettingCode, FromBodyText providedEmails)
         {
             var emails = Email.ParseCommaSeparatedEmails(providedEmails);
             if (!emails.Any())
@@ -92,10 +93,14 @@ namespace Prime.Controllers
                 return BadRequest("The email(s) provided are not valid.");
             }
 
-            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
+            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
             if (enrollee == null)
             {
-                return BadRequest("No enrollee exists for this User Id.");
+                return NotFound("No enrollee exists for this User Id.");
+            }
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
             if (enrollee.ExpiryDate == null)
             {
@@ -105,10 +110,10 @@ namespace Prime.Controllers
             {
                 return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
