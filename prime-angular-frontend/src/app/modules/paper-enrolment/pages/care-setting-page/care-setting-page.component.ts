@@ -18,6 +18,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
   selector: 'app-care-setting-page',
@@ -100,23 +101,20 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   // TODO refactor logic this is quite awkward to understand, and NoContent return type
-  protected performSubmission(): Observable<number> {
+  protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
+    let oboSites = this.enrollee.oboSites;
+    const payload = this.formState.json;
 
     // Remove health authorities if health authority care setting not chosen
-    // TODO refactor don't need to use forms just use JSON
-    if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.formState.removeHealthAuthorities();
+    if (!payload.careSettings.some(code => code === CareSettingEnum.HEALTH_AUTHORITY)) {
+      payload.healthAuthorities = [];
     }
-
-    const payload = this.formState.json;
-    let oboSites = this.enrollee.oboSites;
 
     // Remove any oboSites belonging to careSetting which is no longer selected
     this.careSettingTypes.forEach(type => {
-      // TODO refactor don't need to use forms just use JSON
-      if (!this.formState.careSettings.controls.some(c => c.value.careSettingCode === type.code)) {
-        oboSites = this.removeOboSites(type.code, oboSites);
+      if (!payload.careSettings.some(code => code === type.code)) {
+        oboSites = oboSites.filter((site: OboSite) => site.careSettingCode !== type.code);
       }
     });
 
@@ -126,13 +124,13 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
         exhaustMap(() => {
-            if (this.enrollee.oboSites.length !== oboSites.length) {
-              this.enrollee.oboSites = oboSites;
-              return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites);
-            } else {
-              return of(null);
-            }
+          if (this.enrollee.oboSites.length !== oboSites.length) {
+            this.enrollee.oboSites = oboSites;
+            return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites);
+          } else {
+            return of(null);
           }
+        }
         )
       );
   }
@@ -160,19 +158,4 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     return oboSites;
   }
 
-  /**
-   * @description
-   * Remove obo sites if the associated care setting was removed
-   * from the enrolment.
-   */
-  private removeOboSites(careSettingCode: number, oboSites: OboSite[]): OboSite[] {
-    // TODO refactor this isn't how filter works can directly return if-statement condition
-    oboSites = oboSites.filter((site: OboSite) => {
-      if (site.careSettingCode !== careSettingCode) {
-        return site;
-      }
-    });
-
-    return oboSites;
-  }
 }
