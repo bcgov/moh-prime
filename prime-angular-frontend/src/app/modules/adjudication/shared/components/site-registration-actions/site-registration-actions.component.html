@@ -9,20 +9,20 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole) || !isValid(SiteAdjudicationAction.APPROVE)"
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.APPROVE)"
             (click)="onApprove()">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Site</span>
     </button>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole) || !isValid(SiteAdjudicationAction.REJECT)"
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.REJECT)"
             (click)="onReject()">
       <mat-icon>block</mat-icon>
       <span>Reject Site</span>
     </button>
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole)"
-            *ngIf="isValid(SiteAdjudicationAction.UNREJECT)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.UNREJECT)"
             (click)="onUnreject()">
       <mat-icon>arrow_circle_up</mat-icon>
       <span>Unreject Site</span>
@@ -41,7 +41,7 @@
     </button>
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole)"
-            *ngIf="isValid(SiteAdjudicationAction.REQUEST_CHANGES)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.REQUEST_CHANGES)"
             (click)="onRequestChanges()">
       <mat-icon>lock_open</mat-icon>
       <span>Request Changes</span>

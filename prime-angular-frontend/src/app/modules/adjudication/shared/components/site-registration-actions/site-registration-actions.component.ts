@@ -82,13 +82,11 @@ export class SiteRegistrationActionsComponent implements OnInit {
     }
   }
 
-  public ngOnInit(): void { }
-
   /**
    * @param action
    * @returns Whether the given action is valid according to the status of the site registration
    */
-  public isValid(action: SiteAdjudicationAction): boolean {
+  public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
       case SiteStatusType.ACTIVE:
         return (action === SiteAdjudicationAction.REJECT);
@@ -102,4 +100,6 @@ export class SiteRegistrationActionsComponent implements OnInit {
         return false;
     }
   }
+
+  public ngOnInit(): void { }
 }
