@@ -14,6 +14,7 @@ import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes'
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { PaperEnrolmentRoutes } from './modules/paper-enrolment/paper-enrolment.routes';
 
 const routes: Routes = [
   {
@@ -39,6 +40,10 @@ const routes: Routes = [
   {
     path: HealthAuthSiteRegRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/health-auth-site-reg/health-auth-site-reg.module').then(m => m.HealthAuthSiteRegModule)
+  },
+  {
+    path: PaperEnrolmentRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/paper-enrolment/paper-enrolment.module').then(m => m.PaperEnrolmentModule)
   },
   {
     path: AppRoutes.DENIED,
