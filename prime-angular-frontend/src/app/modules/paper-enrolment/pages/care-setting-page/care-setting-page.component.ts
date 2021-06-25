@@ -32,6 +32,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
   public routeUtils: RouteUtils;
+  public hasNoHealthAuthoritiesError: boolean;
 
   constructor(
     protected dialog: MatDialog,
@@ -47,6 +48,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.careSettingTypes = this.configService.careSettings;
     this.healthAuthorities = this.configService.healthAuthorities;
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
+    this.hasNoHealthAuthoritiesError = false;
   }
 
   public onBack() {
@@ -91,16 +93,25 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
         const { enrolleeCareSettings, enrolleeHealthAuthorities } = enrollee;
-        const careSettings = enrolleeCareSettings;
+
         this.formState.patchValue({
           // TODO renamed to match Enrolment model, but should be refactored to use enrolleeCareSettings to match HttpEnrollee
-          careSettings,
+          enrolleeCareSettings,
           enrolleeHealthAuthorities
         });
       });
   }
 
-  // TODO refactor logic this is quite awkward to understand, and NoContent return type
+  protected onSubmitFormIsValid(): void {
+    this.hasNoHealthAuthoritiesError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (this.formState.hasSelectedHACareSetting() && this.formState.enrolleeHealthAuthorities.hasError) {
+      this.hasNoHealthAuthoritiesError = true;
+    }
+  }
+
   protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
     let oboSites = this.enrollee.oboSites;
