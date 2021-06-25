@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -40,7 +39,7 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.LDAP_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.LDAP_INFO_PAGE}`]);
   }
 
   public ngOnInit(): void {
@@ -63,6 +62,6 @@ export class OrganizationInformationPageComponent extends AbstractEnrolmentPage 
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([`./${ GisEnrolmentRoutes.ENROLLEE_INFO_PAGE }`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ENROLLEE_INFO_PAGE}`]);
   }
 }
