@@ -393,20 +393,6 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 48, PrivilegeId = 16 },
                     new DefaultPrivilege { LicenseCode = 48, PrivilegeId = 19 },
 
-                    // Temporary Nurse Practitioner (special event)
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 5 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 6 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 7 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 8 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 9 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 10 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 11 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 12 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 13 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 14 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 15 },
-                    new DefaultPrivilege { LicenseCode = 50, PrivilegeId = 16 },
-
                     // Temporary Nurse Practitioner (emergency)
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 5 },
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 6 },
@@ -421,20 +407,6 @@ namespace Prime.Configuration
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 15 },
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 16 },
                     new DefaultPrivilege { LicenseCode = 51, PrivilegeId = 19 },
-
-                    // Temporary Nurse Practitioner (time-limited)
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 5 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 6 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 7 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 8 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 9 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 10 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 11 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 12 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 13 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 14 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 15 },
-                    new DefaultPrivilege { LicenseCode = 58, PrivilegeId = 16 },
                 };
             }
         }
