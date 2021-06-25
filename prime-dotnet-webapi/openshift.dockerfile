@@ -1,7 +1,7 @@
 ###################################
 ### Stage 1 - Build environment ###
 ###################################
-FROM registry.access.redhat.com/ubi8/dotnet-50 AS build
+FROM registry.access.redhat.com/rhel8/dotnet-50 AS build
 WORKDIR /opt/app-root/app
 ARG API_PORT
 ARG ASPNETCORE_ENVIRONMENT
