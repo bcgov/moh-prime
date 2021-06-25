@@ -158,7 +158,7 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
           PR_NUMBER: ${{steps.PR.outputs.number}}
-          REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca"
+          REDIRECT_URL: "https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
         run: |
           echo PR_NUMBER=${PR_NUMBER}
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
