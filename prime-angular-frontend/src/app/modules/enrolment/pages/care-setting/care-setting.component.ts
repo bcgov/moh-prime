@@ -84,27 +84,26 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-    if (this.form.valid) {
 
-      const controls = this.careSettings.controls;
+    const controls = this.careSettings.controls;
 
-      // Remove any oboSites belonging to careSetting which is no longer selected
-      this.careSettingTypes.forEach(type => {
-        if (!controls.some(c => c.value.careSettingCode === type.code)) {
-          this.removeOboSites(type.code);
-        }
-      });
-
-      // Remove health authorities if health authority care setting not chosen
-      if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-        this.enrolmentFormStateService.removeHealthAuthorities();
+    // Remove any oboSites belonging to careSetting which is no longer selected
+    this.careSettingTypes.forEach(type => {
+      if (!controls.some(c => c.value.careSettingCode === type.code)) {
+        this.removeOboSites(type.code);
       }
+    });
 
-      // If an individual health authority was deselected, its Obo Sites should be removed as well
-      this.enrolmentFormStateService.removeUnselectedHAOboSites();
-
-      super.onSubmit();
+    // Remove health authorities if health authority care setting not chosen
+    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+      this.enrolmentFormStateService.removeHealthAuthorities();
+      this.setHealthAuthorityValidator();
     }
+
+    // If an individual health authority was deselected, its Obo Sites should be removed as well
+    this.enrolmentFormStateService.removeUnselectedHAOboSites();
+
+    super.onSubmit();
   }
 
   public addCareSetting() {
