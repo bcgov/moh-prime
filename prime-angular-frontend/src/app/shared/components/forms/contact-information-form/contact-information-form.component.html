@@ -1,11 +1,10 @@
 <ng-container [formGroup]="form">
 
-  <section class="mb-3">
-
+  <app-page-section>
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Contact Information</ng-container>
       <ng-container appPageSubheaderSummary>
-        Provide a phone number that may be used to contact you.
+        {{ contactDescription }}
       </ng-container>
     </app-page-subheader>
 
@@ -36,11 +35,9 @@
 
       </div>
     </div>
+  </app-page-section>
 
-  </section>
-
-  <section class="mb-3">
-
+  <app-page-section>
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Notification Information</ng-container>
       <ng-container appPageSubheaderSummary>
@@ -48,7 +45,7 @@
                     select="[notificationInfoSummary]"></ng-content>
         <ng-template #defaultSummary>
           Provide an email address
-          <ng-container *ngIf="showSmsPhone">and phone number (optional) </ng-container>
+          <ng-container *ngIf="showSmsPhone">and phone number (optional)</ng-container>
           that may be used for sending notifications from the PRIME
           system.
         </ng-template>
@@ -91,7 +88,6 @@
 
       </div>
     </div>
-
-  </section>
+  </app-page-section>
 
 </ng-container>
