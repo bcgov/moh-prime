@@ -31,7 +31,7 @@ export class AdjudicationRoutes {
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';
   public static HEALTH_AUTH_VENDORS = 'vendors';
-  public static HEALTH_AUTH_PRIVACY_OFFICER = 'privacy-officer';
+  public static HEALTH_AUTH_PRIVACY_OFFICE = 'privacy-office';
   public static HEALTH_AUTH_TECHNICAL_SUPPORTS = 'technical-supports';
   public static HEALTH_AUTH_ADMINISTRATORS = 'administrators';
 
@@ -41,18 +41,6 @@ export class AdjudicationRoutes {
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
-  }
-
-  // Used to indicate the routes and order for register health
-  // authority organization information
-  public static healthAuthorityOrgInfoRouteOrder(): string[] {
-    return [
-      this.HEALTH_AUTH_CARE_TYPES,
-      this.HEALTH_AUTH_VENDORS,
-      this.HEALTH_AUTH_PRIVACY_OFFICER,
-      this.HEALTH_AUTH_TECHNICAL_SUPPORTS,
-      this.HEALTH_AUTH_ADMINISTRATORS
-    ];
+    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
   }
 }
