@@ -334,26 +334,21 @@ objects:
                 value: https://${SVC_NAME}${URL_STUB}/api/v1/
               - name: FRONTEND_URL
                 value: https://${SVC_NAME}${URL_STUB}
-              - name: database-password
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-postgres                    
+                    key: database-user
+              - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: database-name
+              - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-name
-              - name: database-user
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-user
-              - name: database-password
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -744,11 +739,6 @@ objects:
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               # PostgreSQL environment variables
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-password
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:

@@ -2,16 +2,9 @@
 echo "Running the migrations..."
 #psql -d postgres -f databaseMigration.sql
 
-if [ -n $(printenv DB_PASS) ]
-then 
-export PGPASSWORD=$(printenv DB_PASS)
-export POSTGRESQL_USERNAME=$(printenv DB_USER)
-export POSTGRESQL_DATABASE=$(printenv DB_NAME)
-fi
-
 if [ -z "${DB_CONNECTION_STRING}" ]
 then
-export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USERNAME};password=${PGPASSWORD}"
+export DB_CONNECTION_STRING="host=${DB_HOST};port=5432;database=${POSTGRESQL_DATABASE};username=${POSTGRESQL_USERNAME};password=${POSTGRESQL_PASSWORD}"
 fi
 export AUTH=$(printf $PHARMANET_API_USERNAME:$PHARMANET_API_PASSWORD|base64)
 export logfile=prime.logfile.out
