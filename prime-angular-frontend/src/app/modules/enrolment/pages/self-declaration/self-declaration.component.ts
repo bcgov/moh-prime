@@ -109,8 +109,8 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
     this.addSelfDeclarationDocumentGuid(controlName, sdd.documentGuid);
   }
 
-  public onRemove(constrolName: string, documentGuid: string) {
-    this.removeSelfDeclarationDocumentGuid(constrolName, documentGuid);
+  public onRemove(controlName: string, documentGuid: string) {
+    this.removeSelfDeclarationDocumentGuid(controlName, documentGuid);
   }
 
   public onBack() {
@@ -127,7 +127,7 @@ export class SelfDeclarationComponent extends BaseEnrolmentProfilePage implement
         ? EnrolmentRoutes.REMOTE_ACCESS
         : (certifications.length)
           ? EnrolmentRoutes.REGULATORY
-          : EnrolmentRoutes.JOB;
+          : EnrolmentRoutes.OBO_SITES;
     }
 
     this.routeTo(backRoutePath);
