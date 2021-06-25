@@ -11,6 +11,14 @@ namespace Prime.Models
     [Table("Site")]
     public class Site : BaseAuditable
     {
+        public Site()
+        {
+            // Initialize collections to prevent null exception on computed properties
+            // like `Status`
+            this.SiteStatuses = new List<SiteStatus>();
+        }
+
+
         [Key]
         public int Id { get; set; }
 
@@ -105,7 +113,7 @@ namespace Prime.Models
         [Computed]
         public SiteStatusType Status
         {
-            get => (SiteStatuses != null && SiteStatuses.Count > 0 ?
+            get => (SiteStatuses.Count > 0 ?
                 SiteStatuses
                 .OrderByDescending(s => s.StatusDate)
                 .ThenByDescending(s => s.Id)
