@@ -73,7 +73,9 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
 
   constructor(
     private formUtilsService: FormUtilsService
-  ) { }
+  ) {
+    this.excludeList = [];
+  }
 
   public get hasPageSubheaderMoreInfo(): boolean {
     return !!this.pageSubheaderMoreInfoChildren.length;
