@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -10,8 +10,6 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
-import { VendorEnum } from '@shared/enums/vendor.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
@@ -30,9 +28,8 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
+  public administrators: BehaviorSubject<Contact[]>;
   public SiteRoutes = HealthAuthSiteRegRoutes;
-  public contacts: Contact[];
-  public formSubmittingEvent: Subject<void>;
 
   private site: HealthAuthSite;
 
@@ -49,7 +46,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.formSubmittingEvent = new Subject<void>();
   }
 
   // TODO remove this method add to allow routing between pages
@@ -82,10 +78,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public ngOnInit() {
     this.createFormInstance();
     this.patchForm();
-
-    // TODO: pass in the administrator array of the site
-    // currently site model only supports single administrator
-    this.contacts = [];
   }
 
   protected createFormInstance() {
@@ -99,6 +91,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     this.formState.form.markAsPristine();
   }
 
+  protected onSubmitFormIsInvalid(): void {
+
+  }
+
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
     return this.siteResource.updateSite(payload);
@@ -107,9 +103,5 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   protected afterSubmitIsSuccessful(): void {
     this.formState.form.markAsPristine();
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    this.formSubmittingEvent.next();
   }
 }

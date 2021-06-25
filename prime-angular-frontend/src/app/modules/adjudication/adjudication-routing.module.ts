@@ -40,7 +40,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
 import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
-import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { PrivacyOfficePageComponent } from './pages/health-authorities/privacy-office-page/privacy-office-page.component';
 import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
@@ -279,19 +279,19 @@ const routes: Routes = [
                 data: { title: 'Vendors' }
               },
               {
-                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER,
-                component: PrivacyOfficerPageComponent,
-                data: { title: 'Privacy Officer' }
+                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE,
+                component: PrivacyOfficePageComponent,
+                data: { title: 'Privacy Office' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
                 component: TechnicalSupportsPageComponent,
-                data: { title: 'Technical Support Contacts' }
+                data: { title: 'Technical Support Contact(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,
                 component: AdministratorsPageComponent,
-                data: { title: 'Administrator Contacts' }
+                data: { title: 'PharmaNet Administrator(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS,
