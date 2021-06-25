@@ -164,6 +164,10 @@
 
             <div class="d-flex align-items-center">
               <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
+              <mat-icon *ngIf="row.currentStatusCode === EnrolmentStatus.EDITABLE"
+                        matTooltip="Submission editable"
+                        matTooltipPosition="after">lock_open
+              </mat-icon>
               <mat-icon *ngIf="row.alwaysManual"
                         matTooltip="Enrollee flagged for manual adjudication"
                         matTooltipPosition="after">flag
@@ -268,6 +272,11 @@
                 (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
           <mat-icon>build</mat-icon>
           <span>Maintenance</span>
+        </button>
+        <button mat-menu-item
+                [routerLink]="['/', PaperEnrolmentRoutes.MODULE_PATH, '0', PaperEnrolmentRoutes.DEMOGRAPHIC]">
+          <mat-icon>description</mat-icon>
+          <span>Enter Paper Enrolment</span>
         </button>
       </mat-menu>
     </ng-template>

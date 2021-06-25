@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
-using System.IO;
+using Flurl;
 
 namespace Prime.Services
 {
@@ -11,30 +11,32 @@ namespace Prime.Services
         public MetabaseService()
         { }
 
-        public string BuildMetabaseEmbeddedString()
+        public string BuildMetabaseEmbeddedUrl()
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrimeEnvironment.MetabaseApi.Key));
+            var token = BuildMetabaseSecurityToken();
 
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            return Url.Combine(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", token)
+                .SetFragment("bordered=false&titled=false");
+        }
 
-            var header = new JwtHeader(credentials);
-
-            // 10 minutes in the future represented by milliseconds from epoch
-            var expired = DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds();
-
+        private string BuildMetabaseSecurityToken()
+        {
             var payload = new JwtPayload
             {
-               { "resource", new {dashboard = PrimeEnvironment.MetabaseApi.DashboardId} },
-               { "exp",  expired},
-               { "params", new object()}
+               { "resource", new { dashboard = PrimeEnvironment.MetabaseApi.DashboardId } },
+               { "exp", DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds() },
+               { "params", new object() }
             };
 
-            var secToken = new JwtSecurityToken(header, payload);
-            var handler = new JwtSecurityTokenHandler();
+            var secToken = new JwtSecurityToken(BuildJwtHeader(), payload);
+            return new JwtSecurityTokenHandler().WriteToken(secToken);
+        }
 
-            var tokenString = handler.WriteToken(secToken);
-
-            return Path.Join(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", tokenString, "#bordered=false&titled=false");
+        private JwtHeader BuildJwtHeader()
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrimeEnvironment.MetabaseApi.Key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
+            return new JwtHeader(credentials);
         }
     }
 }

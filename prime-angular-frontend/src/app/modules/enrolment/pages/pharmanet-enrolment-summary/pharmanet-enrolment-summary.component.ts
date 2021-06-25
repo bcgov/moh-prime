@@ -36,6 +36,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
+  public isRenewal: boolean;
 
   public careSettingConfigs: {
     setting: string,
@@ -141,7 +142,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   }
 
   public getTokenUrl(tokenId: string): string {
-    return `${ this.config.loginRedirectUrl }/provisioner-access/${ tokenId }`;
+    return `${this.config.loginRedirectUrl}/provisioner-access/${tokenId}`;
   }
 
   public sendProvisionerAccessLinkTo(careSettingCode: number) {
@@ -182,7 +183,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       .pipe(
         exhaustMap((result: boolean) =>
           result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails, careSettingCode)
+            ? this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode)
             : EMPTY
         )
       )
@@ -195,6 +196,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public ngOnInit() {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
+    this.isRenewal = this.route.snapshot.queryParams?.isRenewal === 'true';
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {

@@ -9,15 +9,21 @@ import { HelpComponent } from '@lib/modules/root-routes/components/help/help.com
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 import { AuthRoutes } from '@auth/auth.routes';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { PaperEnrolmentRoutes } from './modules/paper-enrolment/paper-enrolment.routes';
 
 const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: AdjudicationRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/adjudication/adjudication.module').then(m => m.AdjudicationModule)
   },
   {
     path: ProvisionerAccessRoutes.MODULE_PATH,
@@ -34,6 +40,10 @@ const routes: Routes = [
   {
     path: HealthAuthSiteRegRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/health-auth-site-reg/health-auth-site-reg.module').then(m => m.HealthAuthSiteRegModule)
+  },
+  {
+    path: PaperEnrolmentRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/paper-enrolment/paper-enrolment.module').then(m => m.PaperEnrolmentModule)
   },
   {
     path: AppRoutes.DENIED,
@@ -53,7 +63,7 @@ const routes: Routes = [
     path: AppRoutes.MAINTENANCE,
     component: MaintenanceComponent,
     data: {
-      title: 'Under Scheduled Maintenace'
+      title: 'Under Scheduled Maintenance'
     }
   },
   {
@@ -84,4 +94,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { enableTracing: false })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

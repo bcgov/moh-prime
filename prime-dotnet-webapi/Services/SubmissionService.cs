@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -101,10 +100,10 @@ namespace Prime.Services
         }
 
         /// <summary>
-        /// Performs a submission action on an Enrollee.
+        /// Performs a Status Action on an Enrollee.
         /// Returns true if the Action was successfully performed.
         /// </summary>
-        public async Task<bool> PerformSubmissionActionAsync(int enrolleeId, SubmissionAction action, object additionalParameters = null)
+        public async Task<bool> PerformEnrolleeStatusActionAsync(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.Addresses)
@@ -120,12 +119,12 @@ namespace Prime.Services
                     .ThenInclude(l => l.License)
                 .SingleOrDefaultAsync(e => e.Id == enrolleeId);
 
-            if (!SubmissionStateEngine.AllowableAction(action, enrollee.CurrentStatus))
+            if (!EnrolleeStatusStateEngine.AllowableAction(action, enrollee.CurrentStatus))
             {
                 return false;
             }
 
-            return await HandleSubmissionActionAsync(action, enrollee, additionalParameters);
+            return await HandleEnrolleeStatusActionAsync(action, enrollee, additionalParameters);
         }
 
         public async Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual)
@@ -137,7 +136,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task ConfirmSubmissionAsync(int enrolleeId)
+        public async Task ConfirmLatestSubmissionAsync(int enrolleeId)
         {
             var submission = await _context.Submissions
                 .Where(s => s.EnrolleeId == enrolleeId)
@@ -148,43 +147,43 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task<bool> HandleSubmissionActionAsync(SubmissionAction action, Enrollee enrollee, object additionalParameters)
+        private async Task<bool> HandleEnrolleeStatusActionAsync(EnrolleeStatusAction action, Enrollee enrollee, object additionalParameters)
         {
             switch (action)
             {
-                case SubmissionAction.Approve:
+                case EnrolleeStatusAction.Approve:
                     await ApproveApplicationAsync(enrollee);
                     break;
 
-                case SubmissionAction.AcceptToa:
+                case EnrolleeStatusAction.AcceptToa:
                     return await AcceptToaAsync(enrollee, additionalParameters);
 
-                case SubmissionAction.DeclineToa:
+                case EnrolleeStatusAction.DeclineToa:
                     await DeclineToaAsync(enrollee);
                     break;
 
-                case SubmissionAction.EnableEditing:
+                case EnrolleeStatusAction.EnableEditing:
                     await EnableEditingAsync(enrollee);
                     break;
 
-                case SubmissionAction.LockProfile:
+                case EnrolleeStatusAction.LockProfile:
                     await LockProfileAsync(enrollee);
                     break;
 
-                case SubmissionAction.DeclineProfile:
+                case EnrolleeStatusAction.DeclineProfile:
                     await DeclineProfileAsync(enrollee);
                     break;
 
-                case SubmissionAction.RerunRules:
+                case EnrolleeStatusAction.RerunRules:
                     await RerunRulesAsync(enrollee);
                     break;
 
-                case SubmissionAction.CancelToaAssignment:
+                case EnrolleeStatusAction.CancelToaAssignment:
                     await CancelToaAssignmentAsync(enrollee);
                     break;
 
                 default:
-                    throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleSubmissionActionAsync)}");
+                    throw new InvalidOperationException($"Action {action} is not recognized in {nameof(HandleEnrolleeStatusActionAsync)}");
             }
 
             return true;
@@ -203,7 +202,7 @@ namespace Prime.Services
             await _businessEventService.CreateEmailEventAsync(enrollee.Id, "Notified Enrollee");
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
             // Manually Approved submissions are automatically confirmed
-            await ConfirmSubmissionAsync(enrollee.Id);
+            await ConfirmLatestSubmissionAsync(enrollee.Id);
         }
 
         private async Task<bool> AcceptToaAsync(Enrollee enrollee, object additionalParameters)
@@ -319,21 +318,10 @@ namespace Prime.Services
             {
                 do
                 {
-                    enrollee.GPID = GenerateGpid();
+                    enrollee.GPID = Gpid.NewGpid();
                 }
                 while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
-        }
-
-        private static string GenerateGpid()
-        {
-            Random r = new Random();
-            int length = 20;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
-
-            return new string(chars.ToArray());
         }
 
         private async Task ProcessEnrolleeApplicationRules(int enrolleeId)

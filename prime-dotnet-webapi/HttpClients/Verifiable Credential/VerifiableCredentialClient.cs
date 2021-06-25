@@ -27,8 +27,8 @@ namespace Prime.HttpClients
             HttpClient client,
             ILogger<VerifiableCredentialClient> logger)
         {
-            // Auth header and api-key are injected in Startup.cs
-            _client = client;
+            // Credentials and Base Url are set in Startup.cs
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger;
         }
 

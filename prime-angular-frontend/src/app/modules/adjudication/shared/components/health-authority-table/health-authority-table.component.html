@@ -13,29 +13,76 @@
         <td mat-cell
             *matCellDef="let row;"
             class="prefix">
-          <button *ngIf="flaggedHealthAuthorities?.includes(row.code)"
+          <button *ngIf="flaggedHealthAuthorities?.includes(row.id)"
                   mat-icon-button
                   title="View Pending Authorized Users"
-                  (click)="onRoute(row.code)">
+                  (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
             <mat-icon class="red-icon">admin_panel_settings</mat-icon>
           </button>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="referenceId">
+      <ng-container matColumnDef="orgName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Reference ID </th>
+            scope="col"> Organization Name
+        </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.code }} </td>
+            *matCellDef="let row;"> {{ row.name | default }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="name">
+      <ng-container matColumnDef="siteName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Organization Name </th>
+            scope="col"> Site Name
+        </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.name | default: '' }} </td>
+            *matCellDef="let row;"> {{ null | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="submissionDate">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Submission Date
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ null | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="assignedTo">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Assigned To
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ null | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="state">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> State
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ null | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="siteId">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Site ID
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ null | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remoteUsers">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Remote Users
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ null | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -74,9 +121,14 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute(row.code)">
-          <mat-icon>list</mat-icon>
-          <span>View Authorized User</span>
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+          <mat-icon>business</mat-icon>
+          <span>Add Organization Information</span>
+        </button>
+        <button mat-menu-item
+                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>View Authorized Users</span>
         </button>
       </mat-menu>
 

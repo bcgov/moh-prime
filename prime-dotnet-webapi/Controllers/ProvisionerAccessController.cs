@@ -17,7 +17,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/provisioner-access")]
     [ApiController]
-    public class ProvisionerAccessController : ControllerBase
+    public class ProvisionerAccessController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolmentCertificateService _certificateService;
@@ -49,10 +49,10 @@ namespace Prime.Controllers
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
             if (certificate == null)
             {
-                return NotFound(ApiResponse.Message($"No valid Enrolment Certificate Access Token found with id {accessTokenId}"));
+                return NotFound($"No valid Enrolment Certificate Access Token found with id {accessTokenId}");
             }
 
-            return Ok(ApiResponse.Result(certificate));
+            return Ok(certificate);
         }
 
         // GET: api/provisioner-access/token
@@ -68,56 +68,57 @@ namespace Prime.Controllers
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
-            return Ok(ApiResponse.Result(tokens));
+            return Ok(tokens);
         }
 
-        // POST: api/provisioner-access/send-link/1
+        // POST: api/enrollees/5/provisioner-access/send-link/1
         /// <summary>
         /// Creates an EnrolmentCertificateAccessToken for the user if the user has a finished enrolment,
         /// then sends the link to a recipient by email based on Care Setting Code.
         /// </summary>
+        /// <param name="enrolleeId"></param>
         /// <param name="careSettingCode"></param>
         /// <param name="providedEmails"></param>
-        [HttpPost("send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
-        [Authorize(Roles = Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [HttpPost("/api/enrollees/{enrolleeId}/provisioner-access/send-link/{careSettingCode}", Name = nameof(SendProvisionerLink))]
+        [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int careSettingCode, FromBodyText providedEmails)
+        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int enrolleeId, int careSettingCode, FromBodyText providedEmails)
         {
             var emails = Email.ParseCommaSeparatedEmails(providedEmails);
             if (!emails.Any())
             {
-                ModelState.AddModelError("Emails", "The email(s) provided are not valid.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The email(s) provided are not valid.");
             }
 
-            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
+            var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
             if (enrollee == null)
             {
-                ModelState.AddModelError("Enrollee.UserId", "No enrollee exists for this User Id.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return NotFound("No enrollee exists for this User Id.");
+            }
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
             if (enrollee.ExpiryDate == null)
             {
-                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in a finished state.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The enrollee for this User Id is not in a finished state.");
             }
             if (!enrollee.CurrentStatus.IsType(StatusType.Editable))
             {
-                ModelState.AddModelError("Enrollee.UserId", "The enrollee for this User Id is not in an editable state.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("The enrollee for this User Id is not in an editable state.");
             }
-            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrollee.Id);
+            var createdToken = await _certificateService.CreateCertificateAccessTokenAsync(enrolleeId);
 
             await _emailService.SendProvisionerLinkAsync(emails, createdToken, careSettingCode);
-            await _businessEventService.CreateEmailEventAsync(enrollee.Id, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
+            await _businessEventService.CreateEmailEventAsync(enrolleeId, $"Provisioner link sent to email(s): {string.Join(",", emails)}");
 
             return CreatedAtAction(
                 nameof(GetEnrolmentCertificate),
                 new { accessTokenId = createdToken.Id },
-                ApiResponse.Result(createdToken)
+                createdToken
             );
         }
 
@@ -133,7 +134,7 @@ namespace Prime.Controllers
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
 
-            return Ok(ApiResponse.Result(enrollee?.GPID));
+            return Ok(enrollee?.GPID);
         }
 
         // GET: api/provisioner-access/gpids?hpdids=11111&hpdids=22222
@@ -149,7 +150,7 @@ namespace Prime.Controllers
         {
             var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
-            return Ok(ApiResponse.Result(result));
+            return Ok(result);
         }
 
         // POST: api/provisioner-access/gpids/123456789/validate
@@ -167,17 +168,17 @@ namespace Prime.Controllers
         {
             if (parameters == null)
             {
-                return BadRequest(ApiResponse.Message($"Must supply validation parameters"));
+                return BadRequest($"Must supply validation parameters");
             }
 
             var response = await _enrolleeService.ValidateProvisionerDataAsync(gpid, parameters);
 
             if (response == null)
             {
-                return NotFound(ApiResponse.Message($"Enrollee not found with GPID {gpid}"));
+                return NotFound($"Enrollee not found with GPID {gpid}");
             }
 
-            return Ok(ApiResponse.Result(response));
+            return Ok(response);
         }
     }
 }
