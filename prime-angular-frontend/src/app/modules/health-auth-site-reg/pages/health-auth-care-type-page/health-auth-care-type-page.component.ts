@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { HealthAuthCareTypePageFormState } from './health-auth-care-type-page-form-state.class';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-health-auth-care-type-page',
@@ -24,7 +28,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
   public formState: HealthAuthCareTypePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public careSettingConfig: Config<number>[];
+  public careTypes: Observable<string[]>;
   public isCompleted: boolean;
 
   constructor(
@@ -32,6 +36,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
     private siteResource: HealthAuthSiteRegResource,
+    private healthAuthResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     private route: ActivatedRoute,
@@ -40,8 +45,6 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     super(dialog, formUtilsService);
 
     this.title = this.route.snapshot.data.title;
-    // TODO: replace the placeholder with the real careSetting for HA from lookup
-    this.careSettingConfig = [{ code: 1, name: 'Acute Care' }, { code: 2, name: 'Other' }];
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
@@ -71,6 +74,9 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
   }
 
   protected patchForm(): void {
+    this.careTypes = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+      .pipe(map((healthAuthority: HealthAuthority) => healthAuthority.careTypes));
+
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
     this.formStateService.setForm(site, true);

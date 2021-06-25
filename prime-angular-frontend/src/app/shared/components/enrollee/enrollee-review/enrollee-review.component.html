@@ -145,12 +145,10 @@
   </app-page-subheader>
 
   <ng-container *ngFor="let healthAuthority of healthAuthorities">
-
     <app-enrollee-property title="Health Authority"
                            [makeBold]="true">
       <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
     </app-enrollee-property>
-
   </ng-container>
 
 </section>
@@ -238,7 +236,7 @@
     <button *ngIf="showEditRedirect"
             mat-icon-button
             matTooltip="Edit Job Site Information"
-            (click)="onRoute(EnrolmentRoutes.JOB)">
+            (click)="onRoute(EnrolmentRoutes.OBO_SITES)">
       <mat-icon>edit</mat-icon>
     </button>
   </app-page-subheader>
@@ -250,7 +248,9 @@
         <app-enrollee-property title="Care Setting"
                                [makeBold]="true">
           <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
-            <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">({{ site.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})</span>
+            <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">
+              ({{ site.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
+            </span>
           </div>
 
           <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
@@ -327,16 +327,15 @@
     <app-enrollee-property title="Site Information"
                            [makeBold]="true">
       <ng-container *ngIf="admin; else enrolleeView">
-        <a (click)="onRoute(
+        <a href="#"
+           (click)="onRoute(
             [
               remoteAccessSite.site?.organizationId,
               AdjudicationRoutes.SITE_REGISTRATION,
               remoteAccessSite.site?.id
             ],
             $event
-          )"
-          href="#"
-        >
+          )">
           {{ remoteAccessSite.site?.doingBusinessAs | default }}
         </a>
       </ng-container>

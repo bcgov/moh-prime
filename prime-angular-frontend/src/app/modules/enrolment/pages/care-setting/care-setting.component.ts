@@ -13,7 +13,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
@@ -151,7 +151,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     return (this.careSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
   }
 
-
   public routeBackTo() {
     this.authService.identityProvider$()
       .subscribe((identityProvider: IdentityProviderEnum) => {
@@ -201,10 +200,10 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
       nextRoutePath = EnrolmentRoutes.REGULATORY;
     } else if (oboSites?.length) {
       // Should edit existing Job/OboSites next
-      nextRoutePath = EnrolmentRoutes.JOB;
+      nextRoutePath = EnrolmentRoutes.OBO_SITES;
     } else if (!certifications.length && !oboSites?.length) {
       // No College Licence and need to enter Job information
-      nextRoutePath = EnrolmentRoutes.JOB;
+      nextRoutePath = EnrolmentRoutes.OBO_SITES;
     }
 
     super.nextRouteAfterSubmit(nextRoutePath);

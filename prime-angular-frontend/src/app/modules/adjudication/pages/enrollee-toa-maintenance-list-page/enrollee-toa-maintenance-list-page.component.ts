@@ -45,7 +45,7 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
     return [
       {
         key: 'Last Modified',
-        value: this.formatDatePipe.transform(agreementVersion.updatedDate)
+        value: this.formatDatePipe.transform(agreementVersion.effectiveDate)
       }
     ];
   }

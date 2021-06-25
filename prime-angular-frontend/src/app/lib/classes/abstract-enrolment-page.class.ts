@@ -14,11 +14,13 @@ export interface IEnrolmentPage {
    * Instance of the form state providing access to its API.
    */
   formState: AbstractFormState<unknown>;
+
   /**
    * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
+
   /**
    * @description
    * Handle redirection from the view when the form is
@@ -58,8 +60,8 @@ export interface IEnrolmentPage {
  *   }
  * }
  */
-// TODO make AbstractFormState generic on AbstractEnrolmentPage
-// export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
+  // TODO make AbstractFormState generic on AbstractEnrolmentPage
+  // export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
 export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   /**
    * @description
@@ -79,8 +81,8 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Form state
    */
-  // TODO make AbstractFormState generic on AbstractEnrolmentPage
-  // public abstract formState: T;
+    // TODO make AbstractFormState generic on AbstractEnrolmentPage
+    // public abstract formState: T;
   public abstract formState: AbstractFormState<unknown>;
   /**
    * @description
@@ -96,7 +98,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   protected allowRoutingWhenDirty: boolean;
   /**
    * @description
-   * Whitelisted set of control names that can be dirty, but
+   * Allowlisted set of control names that can be dirty, but
    * still allow routing. Allows for targeted route gating
    * on specific controls.
    *
@@ -107,7 +109,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * NOTE: allowRoutingWhenDirty must be falsey, as only one
    * of the routing checks can be used at a time.
    */
-  protected canDeactivateWhitelist: string[];
+  protected canDeactivateAllowlist: string[];
 
   protected constructor(
     protected dialog: MatDialog,
@@ -225,9 +227,9 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * or specifically gated on a set of allowed control names.
    */
   private checkDeactivationIsAllowed(): boolean {
-    if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
+    if (!this.allowRoutingWhenDirty && this.canDeactivateAllowlist?.length) {
       return Object.keys(this.formState.form.controls)
-        .filter(key => !this.canDeactivateWhitelist.includes(key))
+        .filter(key => !this.canDeactivateAllowlist.includes(key))
         .every(key => !this.formState.form.controls[key].dirty);
     }
 
