@@ -13,18 +13,17 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Job } from '@enrolment/shared/models/job.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 @Component({
   selector: 'app-care-setting',
@@ -36,6 +35,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
+  public hasNoHealthAuthoritiesError: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -68,6 +68,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
     this.careSettingTypes = this.configService.careSettings;
     this.healthAuthorities = this.configService.healthAuthorities;
+    this.hasNoHealthAuthoritiesError = false;
   }
 
   public get careSettings(): FormArray {
@@ -83,29 +84,33 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-    const controls = this.careSettings.controls;
+    if (this.form.valid) {
 
-    // Remove any oboSites belonging to careSetting which is no longer selected
-    this.careSettingTypes.forEach(type => {
-      if (!controls.some(c => c.value.careSettingCode === type.code)) {
-        this.removeOboSites(type.code);
+      const controls = this.careSettings.controls;
+
+      // Remove any oboSites belonging to careSetting which is no longer selected
+      this.careSettingTypes.forEach(type => {
+        if (!controls.some(c => c.value.careSettingCode === type.code)) {
+          this.removeOboSites(type.code);
+        }
+      });
+
+      // Remove health authorities if health authority care setting not chosen
+      if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
+        this.enrolmentFormStateService.removeHealthAuthorities();
       }
-    });
 
-    // Remove health authorities if health authority care setting not chosen
-    if (!controls.some(c => c.value.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY)) {
-      this.enrolmentFormStateService.removeHealthAuthorities();
+      // If an individual health authority was deselected, its Obo Sites should be removed as well
+      this.enrolmentFormStateService.removeUnselectedHAOboSites();
+
+      super.onSubmit();
     }
-
-    // If an individual health authority was deselected, its Obo Sites should be removed as well
-    this.enrolmentFormStateService.removeUnselectedHAOboSites();
-
-    super.onSubmit();
   }
 
   public addCareSetting() {
     const careSetting = this.enrolmentFormStateService.buildCareSettingForm();
     this.careSettings.push(careSetting);
+    this.setHealthAuthorityValidator();
   }
 
   public disableCareSetting(careSettingCode: number): boolean {
@@ -118,6 +123,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
 
   public removeCareSetting(index: number, careSettingCode: number) {
     this.careSettings.removeAt(index);
+    this.setHealthAuthorityValidator();
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -188,6 +194,16 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     // the enrollee to fill out
     if (!this.careSettings.length) {
       this.addCareSetting();
+    }
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoHealthAuthoritiesError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (this.hasSelectedHACareSetting() && this.enrolleeHealthAuthorities.hasError) {
+      this.hasNoHealthAuthoritiesError = true;
     }
   }
 
@@ -264,5 +280,11 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
         });
       }
     }
+  }
+
+  private setHealthAuthorityValidator(): void {
+    this.hasSelectedHACareSetting
+      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
+      : this.enrolleeHealthAuthorities.clearValidators()
   }
 }

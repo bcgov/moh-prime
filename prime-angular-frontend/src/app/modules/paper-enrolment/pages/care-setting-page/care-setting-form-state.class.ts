@@ -6,6 +6,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CareSettingForm } from './care-setting-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Config } from '@config/config.model';
+import { FormArrayValidators } from '@lib/validators/form-array.validators';
 
 export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public constructor(
@@ -105,46 +106,16 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   public addCareSetting() {
     const careSetting = this.buildCareSettingForm();
     this.enrolleeCareSettings.push(careSetting);
-
-    this.hasSelectedHACareSetting
-      ? this.enrolleeHealthAuthorities.setValidators(this.atLeastOneCheckboxCheckedValidator())
-      : this.enrolleeHealthAuthorities.clearValidators()
+    this.setHealthAuthorityValidator();
   }
 
   public removeCareSetting(index: number) {
     this.enrolleeCareSettings.removeAt(index);
-
-    this.hasSelectedHACareSetting
-      ? this.enrolleeHealthAuthorities.setValidators(this.atLeastOneCheckboxCheckedValidator())
-      : this.enrolleeHealthAuthorities.clearValidators()
+    this.setHealthAuthorityValidator();
   }
 
   public hasSelectedHACareSetting(): boolean {
     return (this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
-  }
-
-  public atLeastOneCheckboxCheckedValidator(
-    minRequired = 1
-  ): ValidatorFn {
-    return function validate(formGroup: FormGroup) {
-      let checked = 0
-
-      Object.keys(formGroup.controls).forEach(key => {
-        const control = formGroup.controls[key]
-
-        if (control.value) {
-          checked++
-        }
-      })
-
-      if (checked < minRequired) {
-        return {
-          requireCheckboxToBeChecked: true,
-        }
-      }
-
-      return null
-    }
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -173,7 +144,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.configService.careSettings;
   }
 
-  public removeIncompleteCareSettings() {
+  public removeIncompleteCareSettings(): void {
     this.enrolleeCareSettings.controls
       .forEach((control: FormGroup, index: number) => {
         const value = control.get('careSettingCode').value;
@@ -189,6 +160,12 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     if (!this.enrolleeCareSettings.controls.length) {
       this.addCareSetting();
     }
+  }
+
+  private setHealthAuthorityValidator(): void {
+    this.hasSelectedHACareSetting
+      ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
+      : this.enrolleeHealthAuthorities.clearValidators()
   }
 
 }
