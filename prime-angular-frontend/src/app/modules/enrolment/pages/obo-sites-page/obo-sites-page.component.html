@@ -92,9 +92,8 @@
                   <ng-container *ngFor="let eha of enrolment?.enrolleeHealthAuthorities; let i = index"
                                 formGroupName="healthAuthoritySites">
 
-                    <ng-container
-                      *ngFor="let site of healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"
-                      [formArrayName]="eha.healthAuthorityCode">
+                    <ng-container *ngFor="let site of healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"
+                                  [formArrayName]="eha.healthAuthorityCode">
 
                       <app-obo-site-form [form]="site"
                                          [index]="j"

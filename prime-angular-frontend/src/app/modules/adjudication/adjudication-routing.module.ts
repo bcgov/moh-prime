@@ -36,6 +36,7 @@ import { EmailNotificationListPageComponent } from './pages/email-notification-l
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
 import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';

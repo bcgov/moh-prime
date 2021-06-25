@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -319,21 +318,10 @@ namespace Prime.Services
             {
                 do
                 {
-                    enrollee.GPID = GenerateGpid();
+                    enrollee.GPID = Gpid.NewGpid();
                 }
                 while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
-        }
-
-        private static string GenerateGpid()
-        {
-            Random r = new Random();
-            int length = 20;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
-
-            return new string(chars.ToArray());
         }
 
         private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
