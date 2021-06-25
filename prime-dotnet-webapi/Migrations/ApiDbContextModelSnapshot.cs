@@ -9249,12 +9249,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 38,
-                            CollegeLicenseGroupingCode = 2
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 39,
                             CollegeLicenseGroupingCode = 2
                         },
@@ -9280,12 +9274,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 44,
                             CollegeLicenseGroupingCode = 3
                         },
                         new
@@ -9321,12 +9309,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 50,
-                            CollegeLicenseGroupingCode = 4
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 51,
                             CollegeLicenseGroupingCode = 4
                         },
@@ -9357,24 +9339,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 56,
-                            CollegeLicenseGroupingCode = 1
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 57,
-                            CollegeLicenseGroupingCode = 1
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 58,
-                            CollegeLicenseGroupingCode = 4
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 60,
                             CollegeLicenseGroupingCode = 5
                         },
@@ -9394,6 +9358,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
+                            CollegeLicenseGroupingCode = 5
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 69,
                             CollegeLicenseGroupingCode = 5
                         },
                         new
@@ -11344,66 +11314,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 5,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 6,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 7,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 8,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 9,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 10,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 11,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 12,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 13,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 14,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 15,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 16,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 5,
                             LicenseCode = 51
                         },
                         new
@@ -11465,66 +11375,6 @@ namespace Prime.Migrations
                         {
                             PrivilegeId = 19,
                             LicenseCode = 51
-                        },
-                        new
-                        {
-                            PrivilegeId = 5,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 6,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 7,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 8,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 9,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 10,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 11,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 12,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 13,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 14,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 15,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 16,
-                            LicenseCode = 58
                         });
                 });
 
@@ -13421,18 +13271,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 50,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Nurse Practitioner (Special Event)",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            PrescriberIdType = 2,
-                            Validate = true,
-                            Weight = 3
-                        },
-                        new
-                        {
                             Code = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13476,18 +13314,6 @@ namespace Prime.Migrations
                             Prefix = "R9",
                             Validate = false,
                             Weight = 7
-                        },
-                        new
-                        {
-                            Code = 38,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Registered Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            Validate = false,
-                            Weight = 8
                         },
                         new
                         {
@@ -13582,18 +13408,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 44,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Registered Psychiatric Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            Validate = false,
-                            Weight = 17
-                        },
-                        new
-                        {
                             Code = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13661,17 +13475,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 56,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Licensed Practical Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            Validate = false,
-                            Weight = 24
-                        },
-                        new
-                        {
                             Code = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
@@ -13680,28 +13483,6 @@ namespace Prime.Migrations
                             Prefix = "L9",
                             Validate = false,
                             Weight = 25
-                        },
-                        new
-                        {
-                            Code = 57,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            Name = "Non-Practicing Licensed Nurse Practitioner",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            Validate = true,
-                            Weight = 26
-                        },
-                        new
-                        {
-                            Code = 58,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Nurse Practitioner (time-limited)",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            Validate = true,
-                            Weight = 27
                         },
                         new
                         {
@@ -13746,6 +13527,17 @@ namespace Prime.Migrations
                             Prefix = "98",
                             Validate = false,
                             Weight = 31
+                        },
+                        new
+                        {
+                            Code = 69,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Student Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
+                            Weight = 32
                         },
                         new
                         {
@@ -15642,6 +15434,11 @@ namespace Prime.Migrations
                         {
                             Code = 17,
                             Name = "No address from BCSC. Enrollee entered address."
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Manually entered paper enrolment"
                         });
                 });
 
