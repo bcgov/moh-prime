@@ -1,0 +1,56 @@
+<app-page [busy]="busy">
+  <app-page-header>PRIME Profile</app-page-header>
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formState.form"
+        autocomplete="off"
+        novalidate>
+
+    <section class="mb-3">
+
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Provide details for all your active College licenses. This is the licence that indicates your authority to
+          deliver health care directly to patients in B.C. If you do not have a licence from one of the colleges listed
+          here, select <strong>None</strong>.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="certifications">
+
+          <ng-container *ngFor="let certificate of formState.certifications.controls; let i = index;"
+                        [formGroupName]="i">
+
+            <app-college-certification-form [form]="certificate"
+                                            [index]="i"
+                                            [total]="formState.certifications.controls.length"
+                                            [selectedColleges]="formState.selectedCollegeCodes"
+                                            (remove)="formState.removeCertification($event)">
+            </app-college-certification-form>
+
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="formState.addEmptyCollegeCertification()">
+            <mat-icon>add</mat-icon>
+            Add Additional Licences
+          </button>
+
+        </div>
+      </div>
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   (save)="onSubmit()"
+                   (back)="routeBackTo()"></app-page-footer>
+
+</app-page>

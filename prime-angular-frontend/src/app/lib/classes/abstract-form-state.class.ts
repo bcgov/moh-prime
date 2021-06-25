@@ -7,6 +7,7 @@ import { FormGroup } from '@angular/forms';
  */
 export abstract class AbstractFormState<T> {
   protected formInstance: FormGroup;
+
   /**
    * @description
    * Get the reactive form instance.
@@ -25,7 +26,7 @@ export abstract class AbstractFormState<T> {
    * @description
    * Patch the reactive form with data.
    */
-  public abstract patchValue(data: T & unknown): void;
+  public abstract patchValue(data: T, options?: unknown): void;
 
   /**
    * @description

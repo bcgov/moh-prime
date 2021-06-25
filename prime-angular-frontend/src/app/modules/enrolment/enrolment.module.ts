@@ -37,7 +37,6 @@ import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolmen
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolment-progress-indicator/enrolment-progress-indicator.component';
-import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site-form.component';
 
 @NgModule({
   declarations: [
@@ -69,8 +68,7 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
-    RemoteAccessAddressesComponent,
-    OboSiteFormComponent,
+    RemoteAccessAddressesComponent
   ],
   imports: [
     SharedModule,
@@ -79,4 +77,4 @@ import { OboSiteFormComponent } from './shared/components/obo-site-form/obo-site
     ClipboardModule
   ]
 })
-export class EnrolmentModule {}
+export class EnrolmentModule { }

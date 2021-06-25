@@ -111,7 +111,7 @@ const routes: Routes = [
         data: { title: 'PRIME Enrolment' }
       },
       {
-        path: EnrolmentRoutes.JOB,
+        path: EnrolmentRoutes.OBO_SITES,
         component: OboSitesPageComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
