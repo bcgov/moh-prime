@@ -1,5 +1,5 @@
 <app-page [busy]="busy">
-  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-page-header>PharmaNet Health Authority Information</app-page-header>
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
   <form [formGroup]="formState.form"
@@ -12,8 +12,7 @@
           {{ title }}
         </ng-container>
         <ng-container appPageSubheader2Summary>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eos est ex hic iure laborum modi
-          perferendis quaerat.
+          Enter general email address and office phone number for the health authority Privacy Office.
         </ng-container>
       </app-page-subheader2>
 
@@ -56,10 +55,10 @@
                               [form]="formState.privacyOfficer"
                               [excludeList]="['fax', 'jobRoleTitle', 'physicalAddress']">
       <ng-container appPageSubheader2Summary>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eos est ex hic iure laborum modi
-        perferendis quaerat.
+        Enter the name of the individual currently holding the Privacy Officer position for this health authority.
       </ng-container>
     </app-contact-profile-form>
+
   </form>
 
   <app-page-footer [hasSecondaryAction]="true"
