@@ -191,7 +191,7 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     PaginatorComponent,
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
-    OptionsFormComponent
+    OptionsFormComponent,
     OboSiteFormComponent
   ],
   imports: [
@@ -285,7 +285,7 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     PaginatorComponent,
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
-    OptionsFormComponent
+    OptionsFormComponent,
     OboSiteFormComponent
   ],
   providers: [
