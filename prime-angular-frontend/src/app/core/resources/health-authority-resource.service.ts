@@ -18,6 +18,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { Organization } from '@registration/shared/models/organization.model';
+import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
 
 @Injectable({
   providedIn: 'root'
@@ -81,9 +82,16 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updatePrivacyOfficer(healthAuthorityId: number, contact: Contact): NoContent {
-    // Only a single privacy officer, but creates parity with other contact endpoints
-    return this.updateContacts(healthAuthorityId, 'privacy-officers', [contact]);
+  public updatePrivacyOffice(healthAuthorityId: number, privacyOffice: PrivacyOffice): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthorityId}/privacy-office`, privacyOffice)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority privacy office could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updatePrivacyOffice error has occurred: ', error);
+          throw error;
+        })
+      );
   }
 
   public updateTechnicalSupports(healthAuthorityId: number, contacts: Contact[]): NoContent {
