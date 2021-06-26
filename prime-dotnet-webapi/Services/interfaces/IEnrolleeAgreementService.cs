@@ -1,9 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Prime.Models;
 using Prime.Models.Api;
-using Prime.ViewModels;
 
 namespace Prime.Services
 {
