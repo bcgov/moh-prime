@@ -20,7 +20,7 @@ namespace Prime.Controllers
     public class EnrolleeAgreementsController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
@@ -29,14 +29,14 @@ namespace Prime.Controllers
 
         public EnrolleeAgreementsController(
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
+            IEnrolleeAgreementService enrolleeAgreementService,
             IEnrolleeSubmissionService enrolleeSubmissionService,
             IRazorConverterService razorConverterService,
             IBusinessEventService businessEventService,
             IPdfService pdfService)
         {
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
+            _enrolleeAgreementService = enrolleeAgreementService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
@@ -66,7 +66,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
             if (User.IsAdministrant())
             {
@@ -101,7 +101,7 @@ namespace Prime.Controllers
 
             var enrolmentCards = new List<EnrolmentCardViewModel>();
 
-            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
             foreach (var agreement in agreements)
             {
@@ -149,7 +149,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            var agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
             if (agreement == null)
             {
                 return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
@@ -187,7 +187,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
+            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
             if (agreement == null || agreement.AcceptedDate == null)
             {
                 return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
@@ -231,7 +231,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
 
             if (agreement == null)
             {

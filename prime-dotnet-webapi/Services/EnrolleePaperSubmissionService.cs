@@ -23,7 +23,7 @@ namespace Prime.Services
 
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private readonly IAgreementService _agreementService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
 
@@ -32,14 +32,14 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             ILogger<EnrolleePaperSubmissionService> logger,
             IMapper mapper,
-            IAgreementService agreementService,
+            IEnrolleeAgreementService enrolleeAgreementService,
             IDocumentManagerClient documentClient,
             IBusinessEventService businessEventService)
             : base(context, httpContext)
         {
             _logger = logger;
             _mapper = mapper;
-            _agreementService = agreementService;
+            _enrolleeAgreementService = enrolleeAgreementService;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
         }
@@ -183,8 +183,8 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            await _agreementService.CreateEnrolleeAgreementAsync(enrolleeId);
-            await _agreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
+            await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrolleeId);
+            await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
         public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
