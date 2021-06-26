@@ -83,6 +83,8 @@ namespace Prime
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
             services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
+            services.AddScoped<IEnrolleeAgreementService, EnrolleeAgreementService>();
+            services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

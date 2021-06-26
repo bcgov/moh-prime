@@ -38,7 +38,7 @@ namespace Prime.Controllers
 
         /// /api/agreements/2
         /// <summary>
-        /// Get an enrollee Agreement Version by id
+        /// Get an Agreement Version by id
         /// </summary>
         /// <param name="agreementId"></param>
         [HttpGet("{agreementId}", Name = nameof(GetAgreementVersionById))]
