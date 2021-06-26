@@ -8,7 +8,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <div class="mb-5">
-    <app-alert *ngIf="!isInitialEnrolment"
+    <app-alert *ngIf="!isInitialEnrolment && within90DaysOfRenewal"
                type="info"
                icon="error_outline"
                class="mb-4">
@@ -82,7 +82,11 @@
       <ng-container #alertContent
                     class="alert-content">
         Your enrolment has already been submitted for adjudication and cannot be edited. If you have questions please
-        contact us at <app-prime-phone></app-prime-phone> or <app-prime-support-email></app-prime-support-email>.
+        contact us at
+        <app-prime-phone></app-prime-phone>
+        or
+        <app-prime-support-email></app-prime-support-email>
+        .
       </ng-container>
     </app-alert>
 
@@ -101,7 +105,8 @@
       <button mat-flat-button
               color="primary"
               [disabled]="!accept.checked || !hasRegOrJob()"
-              (click)="onSubmit()">Submit Enrolment</button>
+              (click)="onSubmit()">Submit Enrolment
+      </button>
 
     </div>
   </div>
