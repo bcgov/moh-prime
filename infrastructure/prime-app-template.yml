@@ -29,6 +29,16 @@ parameters:
   description: For naming the web/reverse proxy pod
   required: true
   value: frontend
+- name: FRONTEND_REPLICAS
+  displayName: Number of frontend pods
+  description: For scaling frontend pods
+  required: true
+  value: '3'
+- name: BACKEND_REPLICAS
+  displayName: Number of backend pods
+  description: For scaling backend pods
+  required: true
+  value: '3'
 - name: VANITY_URL
   displayName: Vanity URL
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
@@ -116,7 +126,7 @@ objects:
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 3
+    replicas: ${{FRONTEND_REPLICAS}}
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
     strategy:
@@ -275,7 +285,7 @@ objects:
       app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 3
+    replicas: ${{BACKEND_REPLICAS}}
     selector:
       name: ${SVC_NAME}-${API_POD}
     strategy:

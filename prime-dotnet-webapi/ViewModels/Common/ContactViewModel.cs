@@ -2,6 +2,7 @@ namespace Prime.ViewModels
 {
     public class ContactViewModel
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string JobRoleTitle { get; set; }
