@@ -1,0 +1,67 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <section class="mb-3">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        You can create an Organization and its site(s), or claim an existing Organization to add or update sites.
+        Choose “Claim Organization” if you are taking over an Organization that already has sites registered in PRIME.
+        You will need to know at least one of your organization’s SiteID/PEC codes.
+      </ng-container>
+    </app-page-subheader2>
+    <mat-slide-toggle #claimExistingOrg
+                      color="primary"
+                      [checked]="isClaimExistingOrg"
+                      (change)="onChange($event)">
+      Claim an existing organization.
+    </mat-slide-toggle>
+  </section>
+
+  <form *ngIf="claimExistingOrg.checked"
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Site ID/PEC Code</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide the PEC or SiteID for one of the sites associated with your organization. If you do not have this
+          information, contact PRIMESupport@gov.bc.ca
+        </ng-container>
+      </app-page-subheader2>
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Site ID/PEC Code"
+               formControlName="pec">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </section>
+
+    <section class="mb-3">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Change/Claim Details</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide rationale for change in Organization Signing Authority.
+        </ng-container>
+      </app-page-subheader2>
+
+      <mat-form-field class="w-100">
+        <textarea matInput
+                  placeholder="Write Here"
+                  rows="5"
+                  formControlName="claimDetail"></textarea>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   [primaryActionLabel]="claimExistingOrg.checked ? 'Save and Continue' : 'Continue'"
+                   (save)="onContinue()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>
