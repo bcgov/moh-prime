@@ -90,7 +90,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         const { enrolleeCareSettings, enrolleeHealthAuthorities } = enrollee;
 
         this.formState.patchValue({
-          // TODO renamed to match Enrolment model, but should be refactored to use enrolleeCareSettings to match HttpEnrollee
+          // TODO renamed to match Enrolment model, but should be refactored to
+          // use enrolleeCareSettings to match HttpEnrollee
           enrolleeCareSettings,
           enrolleeHealthAuthorities
         });
@@ -129,14 +130,11 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
     return this.paperEnrolmentResource.updateCareSettings(this.enrollee.id, payload)
       .pipe(
-        exhaustMap(() => {
-          if (this.enrollee.oboSites.length !== oboSites.length) {
-            this.enrollee.oboSites = oboSites;
-            return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites);
-          } else {
-            return of(null);
-          }
-        }
+        exhaustMap(() =>
+          (this.enrollee.oboSites.length !== oboSites.length)
+            ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
+              .pipe(tap(() => this.enrollee.oboSites = oboSites))
+            : of(null)
         )
       );
   }
@@ -150,7 +148,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   private removeUnselectedHealthAuthOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
     return oboSites.filter((oboSite: OboSite) =>
-      healthAuthorities.some((healthAuthorityCode: number) => healthAuthorityCode === oboSite.healthAuthorityCode))
+      healthAuthorities.some((healthAuthorityCode: number) => healthAuthorityCode === oboSite.healthAuthorityCode));
   }
-
 }
