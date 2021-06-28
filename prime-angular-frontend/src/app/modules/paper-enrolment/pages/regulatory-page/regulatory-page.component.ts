@@ -80,12 +80,8 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
       .subscribe((enrollee: HttpEnrollee) => {
         if (enrollee) {
           this.enrollee = enrollee;
-          const {
-            certifications
-          } = enrollee;
-
           // Attempt to patch the form if not already patched
-          this.formState.patchValue(certifications);
+          this.formState.patchValue(enrollee.certifications);
         }
       });
   }
