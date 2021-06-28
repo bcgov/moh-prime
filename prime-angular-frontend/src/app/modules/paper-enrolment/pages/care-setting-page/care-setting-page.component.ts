@@ -140,10 +140,15 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    const routePath = (this.enrollee.oboSites?.length)
+    // Force obo sites to always be checked regardless of the profile being
+    // completed so validations are applied prior to overview pushing the
+    // responsibility of validation to obo sites
+    const nextRoutePath = (this.enrollee.oboSites?.length)
       ? PaperEnrolmentRoutes.OBO_SITES
-      : PaperEnrolmentRoutes.REGULATORY;
-    this.routeUtils.routeRelativeTo([routePath]);
+      : (this.enrollee.profileCompleted)
+        ? PaperEnrolmentRoutes.OVERVIEW
+        : PaperEnrolmentRoutes.SELF_DECLARATION;
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   private removeUnselectedHealthAuthOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {

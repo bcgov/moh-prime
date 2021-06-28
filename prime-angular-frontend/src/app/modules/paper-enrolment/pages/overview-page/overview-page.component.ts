@@ -70,6 +70,6 @@ export class OverviewPageComponent implements OnInit {
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.NEXT_STEPS]);
+    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.NEXT_STEPS);
   }
 }

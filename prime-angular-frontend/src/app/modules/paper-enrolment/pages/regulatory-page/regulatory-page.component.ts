@@ -73,7 +73,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
-      return;
+      throw new Error('No enrollee ID was provided');
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
@@ -108,14 +108,16 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.removeIncompleteCertifications(true);
-    const certifications = this.formState.collegeCertifications;
-
-    const nextRoutePath = (!certifications.length)
+    // Force obo sites to always be checked regardless of the profile being
+    // completed so validations are applied prior to overview pushing the
+    // responsibility of validation to obo sites
+    const nextRoutePath = (!this.formState.collegeCertifications.length)
       ? PaperEnrolmentRoutes.OBO_SITES
-      : PaperEnrolmentRoutes.SELF_DECLARATION;
+      : (this.enrollee.profileCompleted)
+        ? PaperEnrolmentRoutes.OVERVIEW
+        : PaperEnrolmentRoutes.SELF_DECLARATION;
 
-    this.routeUtils.routeRelativeTo([nextRoutePath]);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   /**
@@ -132,5 +134,4 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
     return oboSites;
   }
-
 }

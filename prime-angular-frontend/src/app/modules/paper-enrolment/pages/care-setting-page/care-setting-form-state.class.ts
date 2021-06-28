@@ -163,7 +163,6 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   private setHealthAuthorityValidator(): void {
     this.hasSelectedHACareSetting()
       ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
-      : this.enrolleeHealthAuthorities.clearValidators()
+      : this.enrolleeHealthAuthorities.clearValidators();
   }
-
 }

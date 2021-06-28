@@ -139,11 +139,11 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    const routePath = (this.enrollee.profileCompleted)
-      ? [PaperEnrolmentRoutes.OVERVIEW]
-      : [PaperEnrolmentRoutes.UPLOAD];
+    const nextRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : PaperEnrolmentRoutes.UPLOAD;
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

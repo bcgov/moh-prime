@@ -81,6 +81,7 @@ export class NextStepsPageComponent extends AbstractEnrolmentPage implements OnI
   }
 
   protected afterSubmitIsSuccessful() {
+    // Clean up, but don't go anywhere!
     this.formState.emails.reset();
     this.formState.emails.markAsPristine();
   }

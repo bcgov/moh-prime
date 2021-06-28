@@ -128,13 +128,13 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(enrollee: HttpEnrollee): void {
-    const routePath = (enrollee.profileCompleted)
-      ? [PaperEnrolmentRoutes.OVERVIEW]
+    const nextRoutePath = (enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
       // Must go up a route-level and down with newly minted enrollee ID
       // to override the replaced route state during submission
       : ['../', enrollee.id, PaperEnrolmentRoutes.CARE_SETTING];
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   protected onSubmitFormIsInvalid(): void {
