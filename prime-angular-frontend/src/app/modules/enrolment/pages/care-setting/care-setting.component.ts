@@ -194,6 +194,10 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     if (!this.careSettings.length) {
       this.addCareSetting();
     }
+
+    this.setHealthAuthorityValidator();
+
+    this.careSettings.valueChanges.subscribe(() => this.setHealthAuthorityValidator());
   }
 
   protected onSubmitFormIsValid(): void {
@@ -282,7 +286,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   private setHealthAuthorityValidator(): void {
-    this.hasSelectedHACareSetting
+    this.hasSelectedHACareSetting()
       ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators()
   }
