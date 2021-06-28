@@ -19,4 +19,6 @@ Compile the app using `dotnet build` in project folder
 
 ## Note
 
-Some template value can be adjusted. See the included template.sql. After modifying template.sql file, re-run the app the generate the new SQL output.
+- Some template value can be adjusted. See the included template.sql. After modifying template.sql file, re-run the app the generate the new SQL output.
+- Binaries files are built and generated into `bin\Debug\netcoreapp3.1` folder under the project root.
+- Output SQL file is generated into same working directory of the binaries by default.
