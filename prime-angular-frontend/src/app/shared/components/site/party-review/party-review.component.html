@@ -1,9 +1,9 @@
-<app-enrollee-property *ngIf="showName"
-                       title="Name">
+<app-enrollee-property title="Name">
   {{ party | fullname | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="Job Title">
+<app-enrollee-property *ngIf="!excludeList.includes('jobRoleTitle')"
+                       title="Job Title">
   {{ party?.jobRoleTitle | default }}
 </app-enrollee-property>
 
@@ -11,11 +11,13 @@
   {{ party?.phone | phone | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="Fax">
+<app-enrollee-property *ngIf="!excludeList.includes('fax')"
+                       title="Fax">
   {{ party?.fax | phone | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="SMS Phone">
+<app-enrollee-property *ngIf="!excludeList.includes('smsPhone')"
+                       title="SMS Phone">
   {{ party?.smsPhone | phone | default }}
 </app-enrollee-property>
 
@@ -23,7 +25,7 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
-<ng-container *ngIf="party?.mailingAddress">
+<ng-container *ngIf="party?.mailingAddress && !excludeList.includes('mailingAddress')">
 
   <div class="my-3">
     <strong>Mailing Address</strong>
