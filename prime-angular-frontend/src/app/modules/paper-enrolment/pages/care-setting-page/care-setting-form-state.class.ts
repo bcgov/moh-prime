@@ -71,7 +71,6 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     });
 
     this.formInstance.patchValue(pageModel.enrolleeCareSettings);
-    this.setHealthAuthorityValidator();
   }
 
   public buildForm(): void {
@@ -164,7 +163,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   }
 
   private setHealthAuthorityValidator(): void {
-    this.hasSelectedHACareSetting()
+    this.hasSelectedHACareSetting
       ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators()
   }
