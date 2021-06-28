@@ -85,7 +85,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
-      return;
+      throw new Error('No enrollee ID was provided');
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
