@@ -154,19 +154,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   private removeUnselectedHealthAuthOboSites(healthAuthorities: number[], oboSites: OboSite[]): OboSite[] {
-    // TODO refactor and return directly this is inefficient and hard to read
-    this.configService.healthAuthorities.forEach((healthAuthority, index) => {
-      if (!healthAuthorities[index]) {
-        for (let i = oboSites.length - 1; i >= 0; i--) {
-          const oboSiteForm = oboSites[i];
-          if (oboSiteForm.healthAuthorityCode === healthAuthority.code) {
-            oboSites.splice(i, 1);
-          }
-        }
-      }
-    });
-
-    return oboSites;
+    return oboSites.filter((oboSite: OboSite) =>
+      healthAuthorities.some((healthAuthorityCode: number) => healthAuthorityCode === oboSite.healthAuthorityCode))
   }
 
 }
