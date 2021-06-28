@@ -262,7 +262,8 @@
   </app-page-section>
 
   <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations?.length"
-                                  [enrolment]="enrollee">
+                                  [enrolment]="enrollee"
+                                  [showAllSelfDeclarationsQuestions]="true">
     <button *ngIf="true"
             mat-icon-button
             matTooltip="Edit Self-declaration"
@@ -272,6 +273,7 @@
   </app-enrollee-self-declarations>
 
   <app-page-footer [isInitialEnrolment]="true"
+                   primaryActionLabel="Submit Enrolment"
                    (save)="onSubmit()"
                    (back)="onBack()"></app-page-footer>
 
