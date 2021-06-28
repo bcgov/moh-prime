@@ -94,8 +94,10 @@ namespace Prime.Services
                 .Select(c => c.Contact)
                 .ToListAsync();
 
-            // Should cascade into the HealthAuthorityContact XRef table
+            // Should cascade into the HealthAuthorityContact XRef table. We have to save here to drop the Contacts before the Addresses.
             _context.Contacts.RemoveRange(oldContacts);
+            await _context.SaveChangesAsync();
+
             _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
             var newContacts = contacts.Select(contact => new T
@@ -117,7 +119,9 @@ namespace Prime.Services
 
             if (existing == null)
             {
-                _context.PrivacyOffices.Add(_mapper.Map<PrivacyOffice>(privacyOffice));
+                var newOffice = _mapper.Map<PrivacyOffice>(privacyOffice);
+                newOffice.HealthAuthorityOrganizationId = healthAuthorityId;
+                _context.PrivacyOffices.Add(newOffice);
             }
             else
             {

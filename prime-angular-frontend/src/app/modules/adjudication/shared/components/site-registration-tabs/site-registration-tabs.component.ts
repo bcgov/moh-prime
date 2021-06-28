@@ -201,8 +201,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-              this.siteResource.removeSiteAdjudicator(siteId),
-              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+            this.siteResource.removeSiteAdjudicator(siteId),
+            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -334,7 +334,9 @@ export class SiteRegistrationTabsComponent implements OnInit {
       .subscribe((siteRegistrations: SiteRegistrationListViewModel[]) => this.dataSource.data = siteRegistrations);
   }
 
-  private getOrganizations(queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }): Observable<OrganizationSearchListViewModel[]> {
+  private getOrganizations(
+    queryParam: { textSearch?: string, careSettingCode?: CareSettingEnum }
+  ): Observable<OrganizationSearchListViewModel[]> {
     return this.organizationResource.getOrganizations(queryParam)
       .pipe(
         tap(() => this.showSearchFilter = true)

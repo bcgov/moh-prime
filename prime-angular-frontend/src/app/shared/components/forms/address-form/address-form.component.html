@@ -11,11 +11,10 @@
   </button>
 </app-address-form-autocomplete>
 
-<div [formGroup]="form"
-     [hidden]="!showAddressFields">
+<ng-container *ngIf="showAddressFields"
+              [formGroup]="form">
 
   <div class="row">
-
     <div *ngIf="showFormControl('countryCode')"
          class="col-12"
          [class]="getFormControlOrder('countryCode')">
@@ -105,4 +104,4 @@
     </div>
   </div>
 
-</div>
+</ng-container>

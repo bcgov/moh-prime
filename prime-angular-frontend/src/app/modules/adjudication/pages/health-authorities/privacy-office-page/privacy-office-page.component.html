@@ -1,0 +1,69 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <form [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
+
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>
+          {{ title }}
+        </ng-container>
+        <ng-container appPageSubheader2Summary>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eos est ex hic iure laborum modi
+          perferendis quaerat.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Email"
+                   formControlName="email">
+            <mat-error *ngIf="formState.email.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.email.hasError('email')">Must be a valid email address</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <mat-form-field class="w-100">
+            <input matInput
+                   placeholder="Phone"
+                   formControlName="phone"
+                   mask="(000) 000-0000"
+                   [showMaskTyped]="false">
+            <mat-error *ngIf="formState.phone.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="formState.phone.hasError('phone')">Must be a valid phone number</mat-error>
+          </mat-form-field>
+
+        </div>
+        <div class="col-12">
+
+          <app-address-form [form]="formState.physicalAddress"
+                            [showManualButton]="true"
+                            [showAddressFields]="showAddressFields"></app-address-form>
+
+        </div>
+      </div>
+    </app-page-section>
+
+    <app-contact-profile-form title="Privacy Officer"
+                              [form]="formState.privacyOfficer"
+                              [excludeList]="['fax', 'jobRoleTitle', 'physicalAddress']">
+      <ng-container appPageSubheader2Summary>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque eos est ex hic iure laborum modi
+        perferendis quaerat.
+      </ng-container>
+    </app-contact-profile-form>
+  </form>
+
+  <app-page-footer [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+</app-page>
