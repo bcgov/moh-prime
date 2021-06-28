@@ -59,8 +59,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       lastName: [null, [Validators.required]],
       dateOfBirth: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        useDefaults: ['countryCode']
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
       }),
       email: [null, [
         Validators.required,
