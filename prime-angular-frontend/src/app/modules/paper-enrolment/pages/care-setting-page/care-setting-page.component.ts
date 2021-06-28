@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,7 +25,7 @@ import { NoContent } from '@core/resources/abstract-resource';
   templateUrl: './care-setting-page.component.html',
   styleUrls: ['./care-setting-page.component.scss']
 })
-export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit, OnDestroy {
+export class CareSettingPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: CareSettingFormState;
   public enrollee: HttpEnrollee;
   public careSettingTypes: Config<number>[];
@@ -66,11 +66,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
     this.createFormInstance();
     this.initForm();
     this.patchForm();
-  }
-
-  public ngOnDestroy(): void {
-    // TODO is this required when there is no FormStateService
-    this.formState.removeIncompleteCareSettings();
   }
 
   protected createFormInstance(): void {

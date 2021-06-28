@@ -63,6 +63,8 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
       });
     }
 
+    this.enrolleeCareSettings.valueChanges.subscribe(() => this.setHealthAuthorityValidator());
+
     this.enrolleeHealthAuthorities.clear();
     // Set value of checkboxes according to previous selections, if any
     this.configService.healthAuthorities.forEach(ha => {
@@ -90,11 +92,6 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     return this.fb.control(checkState);
   }
 
-  public removeHealthAuthorities() {
-    this.enrolleeHealthAuthorities.controls
-      .forEach(checkbox => checkbox.setValue(false));
-  }
-
   public disableCareSetting(careSettingCode: number): boolean {
     return ![
       CareSettingEnum.COMMUNITY_PHARMACIST,
@@ -115,7 +112,8 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   }
 
   public hasSelectedHACareSetting(): boolean {
-    return (this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+    console.log(this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
+    return this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
   }
 
   public filterCareSettingTypes(careSetting: FormGroup) {
@@ -163,7 +161,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   }
 
   private setHealthAuthorityValidator(): void {
-    this.hasSelectedHACareSetting
+    this.hasSelectedHACareSetting()
       ? this.enrolleeHealthAuthorities.setValidators(FormArrayValidators.atLeast(1, (control: FormControl) => control.value))
       : this.enrolleeHealthAuthorities.clearValidators()
   }
