@@ -721,20 +721,6 @@ objects:
         targetPort: 6001
     selector:
       name: ${SVC_NAME}-${DOCMAN_POD}
-#   Document Manager (backend) Persistent Volume Claim
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-pvc
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  spec:
-    accessModes:
-      - ReadWriteOnce
-    resources:
-      requests:
-        storage: 1Gi
 
 ###########################################
 ###     Document Manager (Migration)    ###
