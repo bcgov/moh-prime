@@ -261,7 +261,7 @@
 
   </app-page-section>
 
-  <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations?.length"
+  <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations"
                                   [enrolment]="enrollee"
                                   [showAllSelfDeclarationsQuestions]="true">
     <button *ngIf="true"
