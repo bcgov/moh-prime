@@ -125,6 +125,6 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
-    this.administratorPageFormState.patchValue(site?.administratorPharmaNet);
+    // this.administratorPageFormState.patchValue(site?.administratorPharmaNet);
   }
 }
