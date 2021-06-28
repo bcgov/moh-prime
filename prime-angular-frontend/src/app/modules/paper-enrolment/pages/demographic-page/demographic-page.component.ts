@@ -124,6 +124,8 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number): void {
+    // Must go up a route-level and down with new minted enrollee ID
+    // to override the replaced route state during submission
     this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
   }
 
