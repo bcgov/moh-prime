@@ -7,7 +7,7 @@
         autocomplete="on"
         novalidate>
 
-    <section class="mb-3">
+    <app-page-section>
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Enrollee Information</ng-container>
         <ng-container appPageSubheader2Summary>
@@ -74,11 +74,9 @@
 
         </div>
       </div>
+    </app-page-section>
 
-    </section>
-
-    <section class="mb-3">
-
+    <app-page-section>
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Address Information</ng-container>
         <ng-container appPageSubheader2Summary>Provide the enrollee's address.</ng-container>
@@ -87,8 +85,7 @@
       <app-address-form [form]="formState.physicalAddress"
                         [showManualButton]="true"
                         [showAddressFields]="showAddressFields"></app-address-form>
-
-    </section>
+    </app-page-section>
 
     <app-contact-information-form [form]="formState.form"></app-contact-information-form>
 
