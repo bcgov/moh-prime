@@ -73,6 +73,8 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     });
 
     this.formInstance.patchValue(pageModel.enrolleeCareSettings);
+
+    this.setHealthAuthorityValidator();
   }
 
   public buildForm(): void {
@@ -112,7 +114,6 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
   }
 
   public hasSelectedHACareSetting(): boolean {
-    console.log(this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY));
     return this.enrolleeCareSettings.value.some(e => e.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
   }
 
