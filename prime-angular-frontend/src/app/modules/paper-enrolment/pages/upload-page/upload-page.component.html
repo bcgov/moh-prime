@@ -17,6 +17,15 @@
                          (completed)="onUpload($event)"
                          (remove)="onRemoveDocument($event)"></app-document-upload>
 
+    <app-alert *ngIf="hasNoUploadError"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        No business licence has been uploaded.
+      </ng-container>
+    </app-alert>
+
     <ng-container *ngIf="savedDocuments?.length">
       <div *ngFor="let document of savedDocuments"
            class="mb-2">

@@ -31,6 +31,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   public agreementTypes: number[];
   public savedDocuments: EnrolleeAdjudicationDocument[];
   public AgreementTypeNameMap = AgreementTypeNameMap;
+  public hasNoUploadError: boolean;
 
   private routeUtils: RouteUtils;
   private documentGuids: string[];
@@ -53,6 +54,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   public onUpload(document: BaseDocument): void {
     this.documentGuids.push(document.documentGuid);
+    this.hasNoUploadError = false;
   }
 
   public onRemoveDocument(document: BaseDocument): void {
@@ -112,6 +114,16 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
         ),
         exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId))
       );
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoUploadError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (this.documentGuids.length == 0) {
+      this.hasNoUploadError = true;
+    }
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number) {
