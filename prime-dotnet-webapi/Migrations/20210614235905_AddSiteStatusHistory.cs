@@ -42,10 +42,10 @@ namespace Prime.Migrations
             // Migrate the site status data to the new SiteStatus table
             // bump old site status by 1, and insert into new table
             migrationBuilder.Sql(
-                    "INSERT INTO public.\"SiteStatus\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"SiteId\", \"StatusType\", \"StatusDate\")"
-                    + " SELECT \"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"Id\" AS \"SiteId\", (\"Status\" + 1) AS \"StatusType\", \"UpdatedTimeStamp\" AS \"StatusDate\""
-                    + " FROM public.\"Site\""
-                    + " WHERE \"SubmittedDate\" IS NOT NULL"
+                  "INSERT INTO public.\"SiteStatus\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"SiteId\", \"StatusType\", \"StatusDate\")"
+                + " SELECT \"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"Id\" AS \"SiteId\", (\"Status\" + 1) AS \"StatusType\", \"UpdatedTimeStamp\" AS \"StatusDate\""
+                + " FROM public.\"Site\""
+                + " WHERE \"SubmittedDate\" IS NOT NULL"
             );
 
             // the old status 1 without SubmittedDate becomes the new Active
