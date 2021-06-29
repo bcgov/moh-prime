@@ -8,13 +8,6 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Existing data needs to be migrated before column is dropped.
-            // However, new Site rows cannot run into not-nullable constraint.
-            migrationBuilder.AlterColumn<int>(
-                name: "Status",
-                table: "Site",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "SiteStatus",
                 columns: table => new
@@ -44,6 +37,30 @@ namespace Prime.Migrations
                 name: "IX_SiteStatus_SiteId",
                 table: "SiteStatus",
                 column: "SiteId");
+
+
+            // Migrate the site status data to the new SiteStatus table
+            // bump old site status by 1, and insert into new table
+            migrationBuilder.Sql(
+                    "INSERT INTO public.\"SiteStatus\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"SiteId\", \"StatusType\", \"StatusDate\")"
+                    + " SELECT \"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"Id\" AS \"SiteId\", (\"Status\" + 1) AS \"StatusType\", \"UpdatedTimeStamp\" AS \"StatusDate\""
+                    + " FROM public.\"Site\""
+                    + " WHERE \"SubmittedDate\" IS NOT NULL"
+            );
+
+            // the old status 1 without SubmittedDate becomes the new Active
+            migrationBuilder.Sql(
+                  "INSERT INTO public.\"SiteStatus\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"SiteId\", \"StatusType\", \"StatusDate\")"
+                + " SELECT \"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"Id\" AS \"SiteId\", 1 AS \"StatusType\", \"UpdatedTimeStamp\" AS \"StatusDate\""
+                + " FROM public.\"Site\""
+                + " WHERE \"Status\" = 1 AND \"SubmittedDate\" IS NULL"
+            );
+
+            // Drop the Status column of Site table
+            migrationBuilder.DropColumn(
+                name: "Status",
+                table: "Site"
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
