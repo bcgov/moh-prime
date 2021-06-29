@@ -130,7 +130,7 @@ function occleanup() {
 
 function cleanOcArtifacts() {
     echo "Cleaning PR $1"
-    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' ) )
+    declare -p ALL_BRANCH_ARTIFACTS=( $(oc get all,pvc,secrets,ingress,route -n $PROJECT_PREFIX-dev | grep -i "pr\-$1" | awk '{print $1}' ) )
     for a in "${ALL_BRANCH_ARTIFACTS[@]}"
     do
        echo "oc delete -n $PROJECT_PREFIX-dev $a"
