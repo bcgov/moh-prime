@@ -15,6 +15,11 @@ Docker command:
 
 	docker-compose up --build	
 
+or
+  run containers with Docker desktop
+  cd prime-angular-frontend
+  ng serve
+
 To update the database schema, first update the model file in the
 [Models](prime-dotnet-webapi/Models) folder, and rebuild using:
 
