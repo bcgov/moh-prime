@@ -31,13 +31,13 @@ namespace SiteExcelToSql
                 }
                 else
                 {
-                    Console.WriteLine("Invalid time format at data row {0} column {1}: \"{2}\"", reader.Depth, index, time);
+                    Console.WriteLine("Invalid time format at cell {0}{1}: \"{2}\"", IntToLetters(index), reader.Depth + 1, time);
                     return null;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error parsing time on row {0} column {1}: {2}", reader.Depth, index, ex);
+                Console.WriteLine("Error parsing time on cell {0}{1}: {2}", IntToLetters(index), reader.Depth + 1, ex);
                 return null;
             }
         }
@@ -129,6 +129,18 @@ namespace SiteExcelToSql
             };
 
             return user;
+        }
+
+        public static string IntToLetters(int value)
+        {
+            string result = string.Empty;
+            while (value >= 0)
+            {
+                result = (char)('A' + value % 26 ) + result;
+                value /= 26;
+                value--;
+            }
+            return result;
         }
     }
 }
