@@ -43,7 +43,7 @@
     "moment": "^2.29.1",
     "ng-busy": "^10.0.0",
     "ngx-clipboard": "^14.0.1",
-    "ngx-filepond": "^5.0.1",
+    "ngx-filepond": "^6.0.0",
     "ngx-mask": "^10.0.4",
     "ngx-progressbar": "^6.0.3",
     "popper.js": "^1.16.0",
