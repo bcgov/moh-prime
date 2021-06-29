@@ -3,13 +3,14 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { tap, exhaustMap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -18,8 +19,6 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
-import { NoContent } from '@core/resources/abstract-resource';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-care-setting-page',
@@ -54,13 +53,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
 
   public onBack() {
     this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.DEMOGRAPHIC]);
-  }
-
-  public canDeactivate(): Observable<boolean> | boolean {
-    const canDeactivate = super.canDeactivate();
-    return (canDeactivate instanceof Observable)
-      ? canDeactivate.pipe(tap(() => this.formState.removeIncompleteCareSettings()))
-      : canDeactivate;
   }
 
   public ngOnInit(): void {
