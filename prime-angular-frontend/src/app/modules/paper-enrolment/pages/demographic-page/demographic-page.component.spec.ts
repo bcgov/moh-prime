@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 import { DemographicPageComponent } from './demographic-page.component';
 
@@ -8,7 +10,16 @@ describe('DemographicPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DemographicPageComponent]
+      declarations: [DemographicPageComponent],
+      imports: [
+        NgxMaterialModule
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+      ]
     })
       .compileComponents();
   });

@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { PaperEnrolmentModule } from '@paper-enrolment/paper-enrolment.module';
 
 import { RegulatoryPageComponent } from './regulatory-page.component';
 
@@ -8,7 +11,11 @@ describe('RegulatoryPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RegulatoryPageComponent]
+      declarations: [RegulatoryPageComponent],
+      imports: [
+        NgxMaterialModule,
+        ReactiveFormsModule
+      ]
     })
       .compileComponents();
   });
