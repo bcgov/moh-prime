@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrivacyOfficerPageComponent } from './privacy-officer-page.component';
+import { CardListComponent } from './card-list.component';
 
-describe('PrivacyOfficerPageComponent', () => {
-  let component: PrivacyOfficerPageComponent;
-  let fixture: ComponentFixture<PrivacyOfficerPageComponent>;
+describe('CardListComponent', () => {
+  let component: CardListComponent;
+  let fixture: ComponentFixture<CardListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PrivacyOfficerPageComponent ]
+      declarations: [ CardListComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivacyOfficerPageComponent);
+    fixture = TestBed.createComponent(CardListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

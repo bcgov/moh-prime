@@ -102,6 +102,8 @@ import { SummaryCardComponent } from '@shared/components/site/summary-card/summa
 import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
 import { PaginatorComponent } from '@shared/components/paginator/paginator.component';
 import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
+import { CardListComponent } from '@shared/components/card-list/card-list.component';
+import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
 import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.component';
 
 @NgModule({
@@ -188,6 +190,8 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     SendBulkEmailComponent,
     PaginatorComponent,
     DoingBusinessAsFormFieldComponent,
+    CardListComponent,
+    OptionsFormComponent,
     OboSiteFormComponent
   ],
   imports: [
@@ -280,6 +284,8 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     BannerComponent,
     PaginatorComponent,
     DoingBusinessAsFormFieldComponent,
+    CardListComponent,
+    OptionsFormComponent,
     OboSiteFormComponent
   ],
   providers: [
@@ -289,4 +295,4 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     CapitalizePipe
   ]
 })
-export class SharedModule { }
+export class SharedModule {}
