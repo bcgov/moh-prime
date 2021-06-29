@@ -227,7 +227,7 @@ export class FormUtilsService {
    * @description
    * Convert party JSON to form model for reactive forms.
    */
-  // TODO usecase has changed and should be refactored
+  // TODO use case has changed and should be refactored
   public toPersonFormModel<P extends Person>([formGroup, data]: [FormGroup, P]): void {
     if (data) {
       const { physicalAddress, mailingAddress, ...person } = data;
@@ -267,7 +267,7 @@ export class FormUtilsService {
 
     if (person) {
       // Add the address reference ID to the party
-      person[`${ addressKey }Id`] = (!!person[addressKey]?.id)
+      person[`${addressKey}Id`] = (!!person[addressKey]?.id)
         ? person[addressKey].id
         : 0;
     }

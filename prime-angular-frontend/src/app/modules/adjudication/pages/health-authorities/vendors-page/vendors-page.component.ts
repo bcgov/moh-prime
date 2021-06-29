@@ -104,7 +104,7 @@ export class VendorsPageComponent implements OnInit {
   }
 
   private nextRouteAfterSubmit() {
-    this.routeTo(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER);
+    this.routeTo(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE);
   }
 
   private routeTo(routeSegment?: string) {
