@@ -3,17 +3,17 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfigService } from '@config/config.service';
-import { Enrolment } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { OboSitesFormModel } from './obo-sites-form.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 
 export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
   public constructor(
     private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
-    private configService: ConfigService
+    private formUtilsService: FormUtilsService
   ) {
     super();
 
@@ -202,18 +202,36 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     sitesOfHealthAuthority.push(haSiteForm);
   }
 
-  public removeUnselectedHAOboSites(enrolment: Enrolment) {
-    // Obo Sites need to be removed from two different collections
-    // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
-    this.configService.healthAuthorities.forEach((healthAuthority, index) => {
-      if (!enrolment.enrolleeHealthAuthorities[index]) {
-        for (let i = this.oboSites.controls.length - 1; i >= 0; i--) {
-          const oboSiteForm = this.oboSites.controls[i] as FormGroup;
-          if (oboSiteForm.controls.healthAuthorityCode.value === healthAuthority.code) {
-            this.oboSites.removeAt(i);
+  public addOboSitesByCareSettingCode(
+    careSettingCodes: number[],
+    enrolleeHealthAuthorities: EnrolleeHealthAuthority[]
+  ) {
+    // Add at least one site for each careSetting selected by enrollee
+    careSettingCodes?.forEach((careSettingCode) => {
+      switch (careSettingCode) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityHealthSites.length) {
+            this.addOboSite(careSettingCode);
           }
+          break;
         }
-        this.healthAuthoritySites.removeControl(String(healthAuthority.code));
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
+          if (!this.communityPharmacySites.length) {
+            this.addOboSite(careSettingCode);
+          }
+          break;
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          enrolleeHealthAuthorities?.forEach(ha => {
+            const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
+            if (!sitesOfHealthAuthority) {
+              this.addOboSite(careSettingCode, ha.healthAuthorityCode);
+            }
+          });
+          break;
+        }
       }
     });
   }

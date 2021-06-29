@@ -9,6 +9,9 @@ export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
 }
 
+// TODO use RegulatoryFormModel instead of CollegeCertification[], which
+// makes the passing in and out of form state more like using specific
+// keys from the original model
 export class RegulatoryFormState extends AbstractFormState<CollegeCertification[]> {
   public constructor(
     private fb: FormBuilder,

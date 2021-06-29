@@ -16,7 +16,7 @@
       </app-page-subheader>
 
       <div class="row">
-        <div class="col col-sm-10 py-3">
+        <div class="col col-sm-10">
 
           <ng-container *ngFor="let careSetting of careSettings">
             <app-page-subheader headerType="h6">
@@ -110,7 +110,6 @@
 
                     </ng-container>
                     <button mat-button
-                            class="mb-4"
                             type="button"
                             color="primary"
                             (click)="formState.addOboSite(careSetting.careSettingCode, eha.healthAuthorityCode)">

@@ -66,7 +66,7 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   protected createFormInstance(): void {
-    this.formState = new OboSiteFormState(this.fb, this.formUtilsService, this.configService);
+    this.formState = new OboSiteFormState(this.fb, this.formUtilsService);
   }
 
   protected patchForm(): void {
@@ -79,35 +79,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
       .subscribe((enrollee: HttpEnrollee) => {
         this.enrollee = enrollee;
 
-        // Add at least one site for each careSetting selected by enrollee
-        // TODO move into form state and refine
-        this.careSettings?.forEach((careSetting) => {
-          switch (careSetting.careSettingCode) {
-            case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-              this.formState.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-              if (!this.formState.communityHealthSites.length) {
-                this.formState.addOboSite(careSetting.careSettingCode);
-              }
-              break;
-            }
-            case CareSettingEnum.COMMUNITY_PHARMACIST: {
-              this.formState.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-              if (!this.formState.communityPharmacySites.length) {
-                this.formState.addOboSite(careSetting.careSettingCode);
-              }
-              break;
-            }
-            case CareSettingEnum.HEALTH_AUTHORITY: {
-              this.enrollee.enrolleeHealthAuthorities.forEach(ha => {
-                const sitesOfHealthAuthority = this.formState.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
-                if (!sitesOfHealthAuthority) {
-                  this.formState.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
-                }
-              });
-              break;
-            }
-          }
-        });
+        this.formState.addOboSitesByCareSettingCode(
+          this.careSettings.map(cs => cs.careSettingCode),
+          enrollee.enrolleeHealthAuthorities
+        );
 
         // Attempt to patch the form if not already patched
         this.formState.patchValue(enrollee);
@@ -145,31 +120,5 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
       ? PaperEnrolmentRoutes.OVERVIEW
       : PaperEnrolmentRoutes.SELF_DECLARATION;
     this.routeUtils.routeRelativeTo(nextRoutePath);
-  }
-
-  /**
-   * @description
-   * Removes incomplete oboSites from the list in preparation for submission, and
-   * allows for an empty list of oboSites if no jobs are selected.
-   */
-  private removeIncompleteOboSites(noEmptyOboSites: boolean = false) {
-    // TODO reduce complexity by using JSON
-    this.formState.oboSites.controls
-      .forEach((control: FormGroup, index: number) => {
-        const value = control.get('physicalAddress').value.city;
-        const careSetting = control.get('careSettingCode').value;
-
-        // Remove when empty, default option, or group is invalid
-        if (!value || value === this.defaultOptionLabel || control.invalid) {
-          this.formState.removeOboSite(index, careSetting);
-        }
-      });
-
-    // Add at least one site for each careSetting selected by enrollee
-    this.careSettings?.forEach((careSetting) => {
-      if (!noEmptyOboSites && !this.formState.oboSitesByCareSetting(careSetting.careSettingCode)?.length) {
-        this.formState.addOboSite(careSetting.careSettingCode);
-      }
-    });
   }
 }
