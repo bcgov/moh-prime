@@ -11,6 +11,7 @@ import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner, BannerViewModel } from '@shared/models/banner.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -57,6 +58,11 @@ export class BannerListViewComponent implements OnInit {
             .subscribe(() => this.banners = this.banners.filter(b => b.id !== bannerId))
         }
       });
+  }
+
+  public isExpired(banner: Banner): boolean {
+    const viewModel = BannerViewModel.fromBanner(banner);
+    return viewModel.endTimestamp.isBefore(moment());
   }
 
   public getTemplateProperties(banner: Banner) {

@@ -20,6 +20,15 @@
                           actionButtonTitle="Edit"
                           [actionDisabled]="false"
                           (action)="onView(banner.id)">
+          <ng-container *ngIf="isExpired(banner)"
+                        [ngTemplateOutlet]="expired"
+                        [ngTemplateOutletContext]="{ props:
+                        {
+                          icon: 'hourglass_bottom',
+                          text: 'Banner Expired'
+                        }
+                      }">
+          </ng-container>
         </app-summary-card>
 
         <ng-template #bannerMenu>
@@ -34,4 +43,14 @@
       </div>
     </ng-container>
   </div>
+
+  <ng-template #expired
+               let-props="props">
+    <div class="d-flex align-items-center mt-2">
+      <mat-icon class="mr-2"
+                color="warn">{{ props.icon }}</mat-icon>
+      <span class="text-red">{{ props.text }}</span>
+    </div>
+  </ng-template>
+
 </div>
