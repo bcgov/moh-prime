@@ -19,6 +19,7 @@ import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolmen
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
 import { NoContent } from '@core/resources/abstract-resource';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-care-setting-page',
@@ -90,8 +91,6 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         const { enrolleeCareSettings, enrolleeHealthAuthorities } = enrollee;
 
         this.formState.patchValue({
-          // TODO renamed to match Enrolment model, but should be refactored to
-          // use enrolleeCareSettings to match HttpEnrollee
           enrolleeCareSettings,
           enrolleeHealthAuthorities
         });
@@ -133,6 +132,7 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         exhaustMap(() =>
           (this.enrollee.oboSites.length !== oboSites.length)
             ? this.paperEnrolmentResource.updateOboSites(this.enrollee.id, oboSites)
+              // Refresh obo sites for routing to the next view
               .pipe(tap(() => this.enrollee.oboSites = oboSites))
             : of(null)
         )
@@ -140,14 +140,18 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
+    const oboSites = this.enrollee.oboSites;
+    const certifications = this.enrollee.certifications;
+
     // Force obo sites to always be checked regardless of the profile being
     // completed so validations are applied prior to overview pushing the
     // responsibility of validation to obo sites
-    const nextRoutePath = (this.enrollee.oboSites?.length)
+    const nextRoutePath = (oboSites?.length || (!oboSites?.length && !certifications.length))
       ? PaperEnrolmentRoutes.OBO_SITES
       : (this.enrollee.profileCompleted)
         ? PaperEnrolmentRoutes.OVERVIEW
-        : PaperEnrolmentRoutes.SELF_DECLARATION;
+        : PaperEnrolmentRoutes.REGULATORY;
+
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
