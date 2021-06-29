@@ -303,7 +303,7 @@ namespace Prime.Controllers
                 return NotFound($"Organization not found with id {organizationId}");
             }
 
-            if (agreementType.IsEnrolleeAgreement())
+            if (!agreementType.IsOrganizationAgreement())
             {
                 return BadRequest($"Agreement with type {agreementType} not allowed");
             }
