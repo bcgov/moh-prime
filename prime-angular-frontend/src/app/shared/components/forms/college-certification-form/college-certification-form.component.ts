@@ -175,9 +175,8 @@ export class CollegeCertificationFormComponent implements OnInit {
         });
 
       this.nurseCategory.valueChanges
-        .subscribe((collegeLicenseGroupingCode: number) => {
-          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
-        });
+        .subscribe((collegeLicenseGroupingCode: number) =>
+          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode));
     } else {
       const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
@@ -193,7 +192,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if (collegeCode === CollegeLicenceClassEnum.BCCNM && !this.condensed) {
       this.formUtilsService.setValidators(this.nurseCategory, [Validators.required]);
-      return
+      return;
     }
 
     // Initialize the validations when the college code is not

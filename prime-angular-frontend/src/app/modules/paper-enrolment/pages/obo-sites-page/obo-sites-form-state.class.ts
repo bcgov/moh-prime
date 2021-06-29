@@ -36,7 +36,6 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
 
-
   public get hasHealthAuthoritySites(): boolean {
     return Object.keys(this.healthAuthoritySites.controls).length > 0;
   }
@@ -115,8 +114,6 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
       return;
     }
 
-    // TODO adapt the data after getting values, ie. address(es)
-
     return this.formInstance.getRawValue();
   }
 
@@ -126,11 +123,11 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     }
 
     if (pageModel.oboSites.length) {
-
       this.oboSites.clear();
       this.communityHealthSites.clear();
       this.communityPharmacySites.clear();
-      Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => this.healthAuthoritySites.removeControl(healthAuthorityCode));
+      Object.keys(this.healthAuthoritySites.controls)
+        .forEach(healthAuthorityCode => this.healthAuthoritySites.removeControl(healthAuthorityCode));
 
       pageModel.oboSites.forEach((s: OboSite) => {
         const site = this.buildOboSiteForm();
@@ -220,5 +217,4 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
       }
     });
   }
-
 }

@@ -8,7 +8,7 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-
+import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
@@ -30,6 +30,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
@@ -59,7 +60,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected createFormInstance(): void {
-    this.formState = new RegulatoryFormState(this.fb);
+    this.formState = new RegulatoryFormState(this.fb, this.configService);
   }
 
   protected initForm(): void {

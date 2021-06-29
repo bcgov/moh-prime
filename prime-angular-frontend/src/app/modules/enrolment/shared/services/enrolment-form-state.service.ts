@@ -167,23 +167,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * Check for the requirement of at least one certification, or one obo site/job.
    */
   public hasCertificateOrJob(): boolean {
-    // const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities').value as boolean[];
-    // const oboSites = this.oboSitesForm.get('oboSites').value as OboSite[];
-    // // When you set certifications to 'None' there still exists an item in
-    // // the FormArray, and this checks for its existence
-    // const hasCertification = !!this.regulatoryFormState.json.shift()?.licenseNumber;
-    // const hasOboSiteForEveryChosenHA = enrolleeHealthAuthorities.every((checkbox: boolean) => {
-    //   if (!checkbox) {
-    //     return true;
-    //   }
-    //   // Only chosen health authorities need to be checked
-    //   return oboSites.every((oboSite: OboSite, index: number) =>
-    //     oboSite.healthAuthorityCode === this.configService.healthAuthorities[index].code
-    //   );
-    // });
-    //
-    // return hasCertification || hasOboSiteForEveryChosenHA;
-
     const oboSites = this.jobsForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
@@ -211,6 +194,24 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     // When you set certifications to 'None' there still exists an item in
     // the FormArray, and this checks for its existence
     return (oboSites.length && hasOboSiteForEveryHA) || (certifications.length && certifications.value[0].licenseNumber);
+
+    // TODO untested replacement for above code to simplify what is actually occurring
+    // const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities').value as boolean[];
+    // const oboSites = this.oboSitesForm.get('oboSites').value as OboSite[];
+    // // When you set certifications to 'None' there still exists an item in
+    // // the FormArray, and this checks for its existence
+    // const hasCertification = !!this.regulatoryFormState.json.shift()?.licenseNumber;
+    // const hasOboSiteForEveryChosenHA = enrolleeHealthAuthorities.every((checkbox: boolean) => {
+    //   if (!checkbox) {
+    //     return true;
+    //   }
+    //   // Only chosen health authorities need to be checked
+    //   return oboSites.every((oboSite: OboSite, index: number) =>
+    //     oboSite.healthAuthorityCode === this.configService.healthAuthorities[index].code
+    //   );
+    // });
+    //
+    // return hasCertification || hasOboSiteForEveryChosenHA;
   }
 
   /**
@@ -226,7 +227,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
-    this.regulatoryFormState = new RegulatoryFormState(this.fb);
+    this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
     this.deviceProviderForm = this.buildDeviceProviderForm();
     this.jobsForm = this.buildJobsForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
