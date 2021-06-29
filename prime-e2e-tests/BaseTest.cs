@@ -37,14 +37,11 @@ namespace TestPrimeE2E
             _driver.FindPatientlyById("passcode").SendKeys(TestParameters.BcscPassword);
             _driver.FindPatientlyById("btnSubmit").Click();
             _driver.TakeScreenshot("BCSC_SignIn_Completion");
-            try
+            var submitButton = _driver.FindPatientlyById("btnSubmit");
+            // Sometimes screen is not displayed to user?
+            if (submitButton != null)
             {
-                _driver.FindPatientlyById("btnSubmit").Click();
-            }
-            catch (OpenQA.Selenium.WebDriverTimeoutException)
-            {
-                // Oddly, sometimes the screen displaying details sent to PRIME from BCSC is not displayed (?!?),
-                // so "btnSubmit" is not available to click
+                submitButton.Click();
             }
         }
 
