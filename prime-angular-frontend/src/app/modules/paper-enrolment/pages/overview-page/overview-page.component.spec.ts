@@ -17,6 +17,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
 
 describe('OverviewComponent', () => {
   let component: OverviewPageComponent;
@@ -25,6 +26,7 @@ describe('OverviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
+        declarations: [OverviewPageComponent],
         imports: [
           HttpClientTestingModule,
           NgxBusyModule,
@@ -32,7 +34,6 @@ describe('OverviewComponent', () => {
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule,
-          EnrolmentModule
         ],
         providers: [
           {
