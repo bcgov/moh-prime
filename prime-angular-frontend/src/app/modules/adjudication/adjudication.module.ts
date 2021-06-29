@@ -72,6 +72,9 @@ import { HealthAuthorityTableComponent } from './shared/components/health-author
 import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
 import { OptionsFormComponent } from '@adjudication/shared/components/options-form/options-form.component';
+import { BannerListViewComponent } from './shared/components/banner-list-view/banner-list-view.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
 
 @NgModule({
   declarations: [
@@ -137,7 +140,10 @@ import { OptionsFormComponent } from '@adjudication/shared/components/options-fo
     HealthAuthorityTableComponent,
     HealthAuthAuthorizedUsersViewComponent,
     AuthorizedUserReviewComponent,
-    OptionsFormComponent
+    OptionsFormComponent,
+    BannerListViewComponent,
+    EnrolleeBannerListPageComponent,
+    SiteBannerListPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

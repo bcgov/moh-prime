@@ -37,7 +37,8 @@ export class BannerComponent implements OnInit {
       return;
     }
 
-    this.bannerResource.getActiveBannerByLocationCode(this.locationCode)
-      .subscribe((banner: Banner) => this.banner = banner);
+    // TODO:
+    this.bannerResource.getActiveBannersByLocationCode(this.locationCode)
+      .subscribe((banners: Banner[]) => this.banner = banners[0]);
   }
 }

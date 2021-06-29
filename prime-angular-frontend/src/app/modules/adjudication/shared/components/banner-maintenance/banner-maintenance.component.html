@@ -1,7 +1,7 @@
-<app-page-header>Create Banner</app-page-header>
+<app-page-header>Banner Maintenance</app-page-header>
 
 <form (ngSubmit)="onSubmit()"
-      [formGroup]="form"
+      [formGroup]="formState.form"
       novalidate>
 
   <div class="row mb-4">
@@ -16,7 +16,7 @@
 
       <mat-form-field class="w-100">
         <mat-label>Location</mat-label>
-        <mat-select [formControl]="bannerLocationCode">
+        <mat-select [formControl]="formState.bannerLocationCode">
           <mat-option [value]="locationCode">
             {{ BannerLocationCode[locationCode] | replace: '_' : ' ' | capitalize }}
           </mat-option>
@@ -26,7 +26,7 @@
 
       <mat-form-field class="w-100">
         <mat-label>Type</mat-label>
-        <mat-select [formControl]="bannerType">
+        <mat-select [formControl]="formState.bannerType">
           <mat-option [value]="BannerType.INFO">
             {{ BannerType[BannerType.INFO] | capitalize }}
           </mat-option>
@@ -38,7 +38,7 @@
       </mat-form-field>
 
 
-      <div [formGroup]="dateRange"
+      <div [formGroup]="formState.dateRange"
            class="row">
 
         <div class="col-sm-12 col-md-6">
@@ -76,8 +76,9 @@
             <mat-datepicker-toggle matSuffix
                                    [for]="endDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #endDatePicker></mat-datepicker>
-            <mat-error *ngIf="endDate.hasError('required')">Required</mat-error>
-            <mat-error *ngIf="!endDate.hasError('required') && dateRange.hasError('isSameOrBefore')">
+            <mat-error *ngIf="formState.endDate.hasError('required')">Required</mat-error>
+            <mat-error
+                       *ngIf="!formState.endDate.hasError('required') && formState.dateRange.hasError('isSameOrBefore')">
               End Date must be equal or greater than Start Date.
             </mat-error>
           </mat-form-field>

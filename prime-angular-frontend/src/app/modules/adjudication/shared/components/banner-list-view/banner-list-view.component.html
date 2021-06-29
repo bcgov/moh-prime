@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <button mat-button
+            class="mb-2"
+            type="button"
+            color="primary"
+            (click)="onCreate()">
+      <mat-icon>add</mat-icon>
+      Create New Banner
+    </button>
+  </div>
+  <div class="row">
+    <ng-container *ngFor="let banner of banners">
+      <div class="col-md-6 col-sm-12">
+        <app-summary-card class=""
+                          icon="bookmark"
+                          [title]="banner.title"
+                          [menu]="bannerMenu"
+                          [properties]="getTemplateProperties(banner)"
+                          actionButtonTitle="Edit"
+                          [actionDisabled]="false"
+                          (action)="onView(banner.id)">
+        </app-summary-card>
+
+        <ng-template #bannerMenu>
+          <button type="button"
+                  mat-icon-button
+                  color="primary"
+                  matTooltip="Remove Banner"
+                  (click)="onRemove(banner.id)">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-template>
+      </div>
+    </ng-container>
+  </div>
+</div>

@@ -14,7 +14,7 @@ export class AdjudicationRoutes {
   public static EVENT_LOG = 'event-log';
   public static DOCUMENT_UPLOAD = 'documents';
   public static ENROLLEE_OVERVIEW = 'overview';
-  public static BANNER = 'banner';
+  public static BANNERS = 'banners';
   public static MAINTENANCE = 'maintenance';
   public static NOTIFICATION_EMAILS = 'notification-emails';
   public static TOA = 'toa';
@@ -41,7 +41,7 @@ export class AdjudicationRoutes {
   public static METABASE_REPORTS = 'metabase-reports';
 
   public static routePath(route: string): string {
-    return `/${ AdjudicationRoutes.MODULE_PATH }/${ route }`;
+    return `/${AdjudicationRoutes.MODULE_PATH}/${route}`;
   }
 
   // Used to indicate the routes and order for register health
