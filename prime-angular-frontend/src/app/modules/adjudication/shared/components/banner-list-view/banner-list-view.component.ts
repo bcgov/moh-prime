@@ -1,9 +1,12 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
+
+import moment from 'moment';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { TechnicalSupportPageComponent } from '@registration/pages/technical-support-page/technical-support-page.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
@@ -11,8 +14,8 @@ import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner, BannerViewModel } from '@shared/models/banner.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
-import moment from 'moment';
-import { Observable } from 'rxjs';
+import { TechnicalSupportPageComponent } from '@registration/pages/technical-support-page/technical-support-page.component';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-banner-list-view',
@@ -83,7 +86,5 @@ export class BannerListViewComponent implements OnInit {
     ];
   }
 
-  public ngOnInit(): void {
-  }
-
+  public ngOnInit(): void { }
 }
