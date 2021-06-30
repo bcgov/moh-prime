@@ -70,37 +70,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="logs\prime20210507.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210510.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210511.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210512.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210513.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210514.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210515.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210517.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210518.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210519.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210520.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210521.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210522.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210525.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210526.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210527.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210528.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210529.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210530.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210531.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210601.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210602.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210603.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210604.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210607.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210608.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210609.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210610.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210611.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210614.json" />
-    <_ContentIncludedByDefault Remove="logs\prime20210615.json" />
-  </ItemGroup>
 </Project>
