@@ -64,6 +64,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     const careSettingCodes = enrollee.enrolleeCareSettings.map(ecs => ecs.careSettingCode);
     const healthAuthCodes = enrollee.enrolleeHealthAuthorities.map(eha => eha.healthAuthorityCode);
 
+    // Each care setting must have at least one site
     careSettingCodes.forEach(csc => {
       switch (csc) {
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
@@ -83,7 +84,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
           return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
-          healthAuthCodes.forEach(hac => {
+          return healthAuthCodes.forEach(hac => {
             const oboSite = oboSites.find(os => os.careSettingCode === csc && os.healthAuthorityCode === hac);
             const site = this.buildOboSiteForm();
             if (oboSite) {
@@ -97,47 +98,43 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
   }
 
   public buildForm(): void {
+    // Types of sites grouped by care setting
     this.formInstance = this.fb.group({
       communityHealthSites: this.fb.array([]),
       communityPharmacySites: this.fb.array([]),
+      // Keyed by health authority code
       healthAuthoritySites: this.fb.group({})
     });
   }
 
-  public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
+  public addOboSite(careSettingCode: number, healthAuthorityCode?: number): void {
     const site = this.buildOboSiteForm();
     site.get('careSettingCode').patchValue(careSettingCode);
     site.get('healthAuthorityCode').patchValue(healthAuthorityCode);
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
-        break;
+        return this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
-        break;
+        return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, healthAuthorityCode);
-        break;
+        return this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, healthAuthorityCode);
       }
     }
   }
 
-  public removeOboSite(index: number, careSettingCode: number, healthAuthCode?: number) {
+  public removeOboSite(index: number, careSettingCode: number, healthAuthCode?: number): void {
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-        this.communityHealthSites.removeAt(index);
-        break;
+        return this.communityHealthSites.removeAt(index);
       }
       case CareSettingEnum.COMMUNITY_PHARMACIST: {
-        this.communityPharmacySites.removeAt(index);
-        break;
+        return this.communityPharmacySites.removeAt(index);
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        this.healthAuthorityCodeSites(healthAuthCode).removeAt(index);
-        break;
+        return this.healthAuthorityCodeSites(healthAuthCode).removeAt(index);
       }
     }
   }
