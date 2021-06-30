@@ -80,6 +80,7 @@ namespace Prime
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
             services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
