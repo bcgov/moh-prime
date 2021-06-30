@@ -39,5 +39,4 @@ export class EnrolleeBannerListPageComponent implements OnInit {
   private getBanners(): void {
     this.bannerResource.getEnrolmentLandingBanners().subscribe((banners: Banner[]) => this.banners = banners);
   }
-
 }
