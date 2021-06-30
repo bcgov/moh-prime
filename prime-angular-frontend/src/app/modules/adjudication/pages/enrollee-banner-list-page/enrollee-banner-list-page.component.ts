@@ -1,11 +1,13 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { Banner } from '@shared/models/banner.model';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
-import { Subscription } from 'rxjs';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-enrollee-banner-list-page',
@@ -30,7 +32,7 @@ export class EnrolleeBannerListPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../']);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getBanners();
   }
 
