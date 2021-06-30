@@ -14,6 +14,6 @@ namespace Prime.Services
         Task<HealthAuthoritySite> GetSiteAsync(int siteId);
         Task<HealthAuthoritySite> CreateSiteAsync(HealthAuthoritySiteVendorViewModel viewModel);
         Task UpdateCareTypeAsync(int siteId, string careType);
-        Task UpdateVendorAsync(int siteId, int vendorCode);
+        Task UpdateVendorAsync(int siteId, int healthAuthorityId, int vendorCode);
     }
 }

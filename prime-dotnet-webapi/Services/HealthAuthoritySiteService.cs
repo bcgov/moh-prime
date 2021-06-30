@@ -79,21 +79,16 @@ namespace Prime.Services
         }
 
 
-        public async Task UpdateVendorAsync(int siteId, int vendorCode)
+        public async Task UpdateVendorAsync(int siteId, int healthAuthorityId, int vendorCode)
         {
-            // var oldVendors = await _context.HealthAuthorityVendors
-            //     .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
-            //     .ToListAsync();
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(ct => ct.Id == siteId);
 
-            // _context.HealthAuthorityVendors.RemoveRange(oldVendors);
-
-            // var newVendors = vendorCodes.Select(code => new HealthAuthorityVendor
-            // {
-            //     HealthAuthorityOrganizationId = healthAuthorityId,
-            //     VendorCode = code
-            // });
-
-            // _context.HealthAuthorityVendors.AddRange(newVendors);
+            site.Vendor = new HealthAuthorityVendor
+            {
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                VendorCode = vendorCode
+            };
 
             await _context.SaveChangesAsync();
         }
