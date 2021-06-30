@@ -46,12 +46,12 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        [HttpGet("{healthAuthorityId}/sites/{siteId}", Name = nameof(GetHealthAuthorityById))]
+        [HttpGet("{healthAuthorityId}/sites/{siteId}", Name = nameof(GetHealthAuthoritySiteById))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthorityViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetHealthAuthorityById(int healthAuthorityId, int siteId)
+        public async Task<ActionResult> GetHealthAuthoritySiteById(int healthAuthorityId, int siteId)
         {
             var healthAuthority = await _healthAuthoritySiteService.GetSiteAsync(siteId);
             if (healthAuthority == null)
@@ -69,14 +69,14 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         /// <param name="careType"></param>
-        [HttpPut("{healthAuthorityId}/sites/{siteId}/care-types", Name = nameof(UpdateCareTypes))]
+        [HttpPut("{healthAuthorityId}/sites/{siteId}/care-types", Name = nameof(UpdateCareType))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateCareTypes(int healthAuthorityId, int siteId, string careType)
+        public async Task<IActionResult> UpdateCareType(int healthAuthorityId, int siteId, string careType)
         {
             if (careType == null)
             {
@@ -100,14 +100,14 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// /// <param name="siteId"></param>
         /// <param name="vendor"></param>
-        [HttpPut("{healthAuthorityId}/sites/{siteId}/vendor", Name = nameof(UpdateVendors))]
+        [HttpPut("{healthAuthorityId}/sites/{siteId}/vendor", Name = nameof(UpdateVendor))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateVendors(int healthAuthorityId, int siteId, int vendor)
+        public async Task<IActionResult> UpdateVendor(int healthAuthorityId, int siteId, int vendor)
         {
             if (vendor == null)
             {
