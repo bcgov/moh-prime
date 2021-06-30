@@ -31,6 +31,8 @@ namespace Prime.Models.HealthAuthorities
 
         public HealthAuthorityVendor Vendor { get; set; }
 
+        public HealthAuthorityCareType CareType { get; set; }
+
         public bool Completed { get; set; }
 
         public DateTimeOffset? SubmittedDate { get; set; }
