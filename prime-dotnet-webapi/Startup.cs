@@ -33,6 +33,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
@@ -91,6 +92,7 @@ namespace Prime
 
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<HealthAuthoritySiteVendorValidator>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());

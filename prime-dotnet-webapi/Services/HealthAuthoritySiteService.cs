@@ -7,10 +7,11 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.Models.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
 {
@@ -40,6 +41,15 @@ namespace Prime.Services
                 .Where(s => s.HealthAuthorityOrganizationId == healthAuthorityId)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+
+
+        public async Task<HealthAuthoritySite> CreateSiteAsync(HealthAuthoritySiteVendorViewModel viewModel)
+        {
+            viewModel.ThrowIfNull(nameof(viewModel));
+
+            return null;
         }
 
         public async Task<HealthAuthoritySite> GetSiteAsync(int siteId)

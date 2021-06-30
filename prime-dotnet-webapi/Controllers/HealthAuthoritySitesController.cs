@@ -7,9 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Prime.Auth;
 using Prime.Services;
 using Prime.Models.HealthAuthorities;
-using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.ViewModels;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Controllers
 {
@@ -60,6 +59,27 @@ namespace Prime.Controllers
             }
 
             return Ok(healthAuthority);
+        }
+
+        // POST: api/health-authorities
+        /// <summary>
+        /// Creates a new health authority site.
+        /// </summary>
+        [HttpPost("paper-submissions", Name = nameof(CreateHealthAuthoritySite))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySite>), StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateHealthAuthoritySite(HealthAuthoritySiteVendorViewModel payload)
+        {
+            var createdSite = await _healthAuthoritySiteService.CreateSiteAsync(payload);
+
+            return CreatedAtAction(
+                nameof(HealthAuthoritySitesController.GetHealthAuthoritySiteById),
+                "health-authorities",
+                new { siteId = createdSite.Id },
+                createdSite
+            );
         }
 
         // PUT: api/health-authorities/5/sites/5/care-type
