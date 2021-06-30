@@ -3,29 +3,29 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ValidationErro
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import moment from 'moment';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
-
 import { FormUtilsService } from '@core/services/form-utils.service';
-
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner } from '@shared/models/banner.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-
+import { BannerResourceService } from '@shared/services/banner-resource.service';
 import { Role } from '@auth/shared/enum/role.enum';
-import moment from 'moment';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Observable, of } from 'rxjs';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+
 import { BannerMaintenanceForm } from './banner-maintenance-form.model';
 import { BannerMaintenanceFormState } from './banner-maintenance-form-state.class';
-import { ActivatedRoute, Router } from '@angular/router';
-import { BannerResourceService } from '@shared/services/banner-resource.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { map } from 'rxjs/operators';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -171,5 +171,4 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
   protected afterSubmitIsSuccessful(bannerId: number): void {
     this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.BANNERS]);
   }
-
 }
