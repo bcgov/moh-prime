@@ -1,10 +1,12 @@
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { Banner } from '@shared/models/banner.model';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
-import { Subscription } from 'rxjs';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-site-banner-list-page',
@@ -29,11 +31,12 @@ export class SiteBannerListPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../']);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.getBanners();
   }
 
   private getBanners(): void {
-    this.bannerResource.getSiteLandingBanners().subscribe((banners: Banner[]) => this.banners = banners);
+    this.bannerResource.getSiteLandingBanners()
+      .subscribe((banners: Banner[]) => this.banners = banners);
   }
 }
