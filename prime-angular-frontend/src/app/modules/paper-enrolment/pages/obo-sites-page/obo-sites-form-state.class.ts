@@ -1,14 +1,11 @@
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { ConfigService } from '@config/config.service';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { OboSitesFormModel } from './obo-sites-form.model';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
+import { OboSitesFormModel } from './obo-sites-form.model';
 
 export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
   public constructor(
@@ -18,10 +15,6 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     super();
 
     this.buildForm();
-  }
-
-  public get oboSites(): FormArray {
-    return this.form.get('oboSites') as FormArray;
   }
 
   public get communityHealthSites(): FormArray {
@@ -36,25 +29,79 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
 
-  public get hasHealthAuthoritySites(): boolean {
-    return Object.keys(this.healthAuthoritySites.controls).length > 0;
+  /**
+   * @description
+   * Get the sites for a specific health authority.
+   *
+   * NOTE: The health authority control may not exist
+   * if no sites exists.
+   */
+  public healthAuthorityCodeSites(healthAuthorityCode: number): FormArray | null {
+    return this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
   }
 
-  public healthAuthoritySitesAsControls(healthAuthorityCode: number): AbstractControl[] {
-    const sites = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
-    return sites?.controls;
-  }
-
-  public oboSitesByCareSetting(careSettingCode: number): FormArray {
-    const sites: FormArray = this.fb.array([]);
-    if (this.oboSites?.length) {
-      this.oboSites.controls.forEach((site, i) => {
-        if (site.value.careSettingCode === careSettingCode) {
-          sites.push(site as FormGroup);
-        }
-      });
+  public get json(): OboSitesFormModel {
+    if (!this.formInstance) {
+      return;
     }
-    return sites as FormArray;
+
+    const sites = this.formInstance.getRawValue();
+    const oboSites = [
+      sites.communityHealthSites,
+      sites.communityPharmacySites,
+      Object.keys(sites.healthAuthoritySites)
+        .flatMap((healthAuthSiteCode: string) => sites.healthAuthoritySites[healthAuthSiteCode])
+    ].flat();
+
+    return { oboSites };
+  }
+
+  public patchValue({ oboSites }: OboSitesFormModel, enrollee: HttpEnrollee): void {
+    if (!this.formInstance) {
+      return;
+    }
+
+    const careSettingCodes = enrollee.enrolleeCareSettings.map(ecs => ecs.careSettingCode);
+    const healthAuthCodes = enrollee.enrolleeHealthAuthorities.map(eha => eha.healthAuthorityCode);
+
+    careSettingCodes.forEach(csc => {
+      switch (csc) {
+        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
+          const oboSite = oboSites.find(os => os.careSettingCode === csc);
+          const site = this.buildOboSiteForm();
+          if (oboSite) {
+            site.patchValue(oboSite);
+          }
+          return this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
+        }
+        case CareSettingEnum.COMMUNITY_PHARMACIST: {
+          const oboSite = oboSites.find(os => os.careSettingCode === csc);
+          const site = this.buildOboSiteForm();
+          if (oboSite) {
+            site.patchValue(oboSite);
+          }
+          return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
+        }
+        case CareSettingEnum.HEALTH_AUTHORITY: {
+          healthAuthCodes.forEach(hac => {
+            const oboSite = oboSites.find(os => os.careSettingCode === csc && os.healthAuthorityCode === hac);
+            const site = this.buildOboSiteForm();
+            if (oboSite) {
+              site.patchValue(oboSite);
+            }
+            this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, hac);
+          });
+        }
+      }
+    });
+  }
+
+  public buildForm(): void {
+    this.formInstance = this.fb.group({
+      communityHealthSites: this.fb.array([]),
+      communityPharmacySites: this.fb.array([]),
+      healthAuthoritySites: this.fb.group({})
+    });
   }
 
   public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
@@ -78,7 +125,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     }
   }
 
-  public removeOboSite(index: number, careSettingCode: number, healthAuthorityCode?: number) {
+  public removeOboSite(index: number, careSettingCode: number, healthAuthCode?: number) {
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
         this.communityHealthSites.removeAt(index);
@@ -89,79 +136,31 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
         break;
       }
       case CareSettingEnum.HEALTH_AUTHORITY: {
-        const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
-        sitesOfHealthAuthority.removeAt(index);
+        this.healthAuthorityCodeSites(healthAuthCode).removeAt(index);
         break;
       }
     }
   }
 
-  public removeCareSettingSites() {
-    // Clear out sites so validation doesn't interrupt submissions
-    this.communityHealthSites.clearValidators();
-    this.communityHealthSites.updateValueAndValidity();
-    this.communityPharmacySites.clearValidators();
-    this.communityPharmacySites.updateValueAndValidity();
-    Object.keys(this.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-      const sitesOfHealthAuthority = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
-      sitesOfHealthAuthority.clearValidators();
-      sitesOfHealthAuthority.updateValueAndValidity();
-    });
+  private addNonHealthAuthorityOboSite(site: FormGroup, sites: FormArray) {
+    this.formUtilsService.setValidators(site.get('siteName') as FormControl, [Validators.required]);
+    sites.push(site);
   }
 
-  public get json(): OboSitesFormModel {
-    if (!this.formInstance) {
-      return;
+  private addHealthAuthorityOboSite(site: FormGroup, sites: FormGroup, healthAuthorityCode: number) {
+    // Check for health authority control and associated sites, otherwise
+    // add the health authority with validations before appending the site
+    let healthAuthoritySites = this.healthAuthorityCodeSites(healthAuthorityCode);
+    if (!healthAuthoritySites) {
+      healthAuthoritySites = this.fb.array([]);
+      healthAuthoritySites.setValidators([FormArrayValidators.atLeast(1)]);
+      sites.setControl(`${healthAuthorityCode}`, healthAuthoritySites);
     }
-
-    return this.formInstance.getRawValue();
+    this.formUtilsService.setValidators(site.get('facilityName') as FormControl, [Validators.required]);
+    healthAuthoritySites.push(site);
   }
 
-  public patchValue(pageModel: OboSitesFormModel): void {
-    if (!this.formInstance) {
-      return;
-    }
-
-    if (pageModel.oboSites.length) {
-      this.oboSites.clear();
-      this.communityHealthSites.clear();
-      this.communityPharmacySites.clear();
-      Object.keys(this.healthAuthoritySites.controls)
-        .forEach(healthAuthorityCode => this.healthAuthoritySites.removeControl(healthAuthorityCode));
-
-      pageModel.oboSites.forEach((s: OboSite) => {
-        const site = this.buildOboSiteForm();
-        site.patchValue(s);
-        this.oboSites.push(site);
-
-        switch (s.careSettingCode) {
-          case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-            this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
-            break;
-          }
-          case CareSettingEnum.COMMUNITY_PHARMACIST: {
-            this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
-            break;
-          }
-          case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, s.healthAuthorityCode);
-            break;
-          }
-        }
-      });
-    }
-  }
-
-  public buildForm(): void {
-    this.formInstance = this.fb.group({
-      oboSites: this.fb.array([]),
-      communityHealthSites: this.fb.array([]),
-      communityPharmacySites: this.fb.array([]),
-      healthAuthoritySites: this.fb.group({})
-    });
-  }
-
-  public buildOboSiteForm(): FormGroup {
+  private buildOboSiteForm(): FormGroup {
     return this.fb.group({
       careSettingCode: [null, []],
       healthAuthorityCode: [null, []],
@@ -175,64 +174,6 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
         areDisabled: ['provinceCode', 'countryCode']
       }),
       pec: [null, []]
-    });
-  }
-
-  public addNonHealthAuthorityOboSite(siteForm: FormGroup, siteFormList: FormArray) {
-    const siteName = siteForm.get('siteName') as FormControl;
-    this.formUtilsService.setValidators(siteName, [Validators.required]);
-    siteFormList.push(siteForm);
-  }
-
-  /**
-   * @param haSiteForm - aka Health Authority Facility Form
-   * @param healthAuthoritySites - a FormArray where each element, representing a Health Authority where the enrollee
-   * works, contains a FormArray. This nested FormArray contains a FormGroup for each facility that the enrollee works
-   * at, in that Health Authority
-   */
-  public addHealthAuthorityOboSite(haSiteForm: FormGroup, healthAuthoritySites: FormGroup, healthAuthorityCode: number) {
-    const facilityName = haSiteForm.get('facilityName') as FormControl;
-    this.formUtilsService.setValidators(facilityName, [Validators.required]);
-    let sitesOfHealthAuthority = healthAuthoritySites.get(String(healthAuthorityCode)) as FormArray;
-    if (!sitesOfHealthAuthority) {
-      sitesOfHealthAuthority = this.fb.array([]);
-      sitesOfHealthAuthority.setValidators([FormArrayValidators.atLeast(1)]);
-      healthAuthoritySites.setControl(String(healthAuthorityCode), sitesOfHealthAuthority);
-    }
-    sitesOfHealthAuthority.push(haSiteForm);
-  }
-
-  public addOboSitesByCareSettingCode(
-    careSettingCodes: number[],
-    enrolleeHealthAuthorities: EnrolleeHealthAuthority[]
-  ) {
-    // Add at least one site for each careSetting selected by enrollee
-    careSettingCodes?.forEach((careSettingCode) => {
-      switch (careSettingCode) {
-        case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
-          this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.communityHealthSites.length) {
-            this.addOboSite(careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.COMMUNITY_PHARMACIST: {
-          this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
-          if (!this.communityPharmacySites.length) {
-            this.addOboSite(careSettingCode);
-          }
-          break;
-        }
-        case CareSettingEnum.HEALTH_AUTHORITY: {
-          enrolleeHealthAuthorities?.forEach(ha => {
-            const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
-            if (!sitesOfHealthAuthority) {
-              this.addOboSite(careSettingCode, ha.healthAuthorityCode);
-            }
-          });
-          break;
-        }
-      }
     });
   }
 }

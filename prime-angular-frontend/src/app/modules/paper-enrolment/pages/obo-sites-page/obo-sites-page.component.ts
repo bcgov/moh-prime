@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
+import { exhaustMap, tap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -14,6 +14,7 @@ import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
@@ -36,11 +37,11 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
     router: Router,
-    private configService: ConfigService
   ) {
     super(dialog, formUtilsService);
 
@@ -48,12 +49,6 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     this.defaultOptionLabel = 'None';
     this.jobNames = this.configService.jobNames;
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-  }
-
-  public get careSettings() {
-    return (this.enrollee?.enrolleeCareSettings)
-      ? this.enrollee.enrolleeCareSettings
-      : null;
   }
 
   public onBack() {
@@ -76,32 +71,14 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
-      .subscribe((enrollee: HttpEnrollee) => {
-        this.enrollee = enrollee;
-
-        this.formState.addOboSitesByCareSettingCode(
-          this.careSettings.map(cs => cs.careSettingCode),
-          enrollee.enrolleeHealthAuthorities
-        );
-
-        // Attempt to patch the form if not already patched
-        this.formState.patchValue(enrollee);
-      });
+      .pipe(tap((enrollee: HttpEnrollee) => this.enrollee = enrollee))
+      .subscribe((enrollee: HttpEnrollee) =>
+        this.formState.patchValue({ oboSites: enrollee.oboSites }, enrollee)
+      );
   }
 
   protected performSubmission(): Observable<number> {
     this.formState.form.markAsPristine();
-
-    // TODO refactor this into something readable, and move into FormState
-    this.formState.oboSites.clear();
-    this.formState.communityHealthSites.controls.forEach((site) => this.formState.oboSites.push(site));
-    this.formState.communityPharmacySites.controls.forEach((site) => this.formState.oboSites.push(site));
-    Object.keys(this.formState.healthAuthoritySites.controls).forEach(healthAuthorityCode => {
-      const sitesOfHealthAuthority = this.formState.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
-      sitesOfHealthAuthority.controls.forEach((site) => this.formState.oboSites.push(site));
-    });
-    // TODO care setting sites? rename to obo sites?
-    this.formState.removeCareSettingSites();
 
     const payload = this.formState.json;
     return this.paperEnrolmentResource.updateOboSites(this.enrollee.id, payload.oboSites)
