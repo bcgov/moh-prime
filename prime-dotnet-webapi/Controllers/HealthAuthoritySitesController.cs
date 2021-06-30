@@ -96,10 +96,6 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates a specific Health authority Site vendor.
         /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// /// <param name="siteId"></param>
-        /// <param name="vendor"></param>
         [HttpPut("{healthAuthorityId}/sites/{siteId}/vendor", Name = nameof(UpdateVendor))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
@@ -107,18 +103,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateVendor(int healthAuthorityId, int siteId, int vendor)
+        public async Task<IActionResult> UpdateVendor(int healthAuthorityId, int siteId, HealthAuthoritySiteVendorViewModel payload)
         {
-            if (vendor == null)
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
-                return BadRequest("Health authority site vendor cannot be null.");
-            }
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId))
-            {
-                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+                return NotFound($"Health Authority not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateVendorAsync(siteId, vendor);
+            await _healthAuthoritySiteService.UpdateVendorAsync(siteId, healthAuthorityId, payload.VendorCode);
 
             return NoContent();
         }

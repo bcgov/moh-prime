@@ -12,6 +12,6 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthoritySite>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySite> GetSiteAsync(int siteId);
         Task UpdateCareTypeAsync(int siteId, string careType);
-        Task UpdateVendorAsync(int siteId, int vendorCode);
+        Task UpdateVendorAsync(int siteId, int healthAuthorityId, int vendorCode);
     }
 }
