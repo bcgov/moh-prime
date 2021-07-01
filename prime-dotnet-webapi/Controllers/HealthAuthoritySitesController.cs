@@ -61,7 +61,7 @@ namespace Prime.Controllers
             return Ok(healthAuthority);
         }
 
-        // POST: api/health-authorities
+        // POST: api/health-authorities/5/sites
         /// <summary>
         /// Creates a new health authority site.
         /// </summary>

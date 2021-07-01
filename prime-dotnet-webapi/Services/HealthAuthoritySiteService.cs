@@ -49,7 +49,12 @@ namespace Prime.Services
         {
             viewModel.ThrowIfNull(nameof(viewModel));
 
-            return null;
+            var site = _mapper.Map<HealthAuthoritySite>(viewModel);
+
+            _context.HealthAuthoritySites.Add(site);
+            await _context.SaveChangesAsync();
+
+            return site;
         }
 
         public async Task<HealthAuthoritySite> GetSiteAsync(int siteId)
