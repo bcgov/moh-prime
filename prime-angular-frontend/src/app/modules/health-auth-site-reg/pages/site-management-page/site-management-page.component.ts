@@ -160,7 +160,7 @@ export class SiteManagementPageComponent implements OnInit {
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
-      text: `Site Approved<br>Site ID: ${ site.pec }`
+      text: `Site Approved<br>Site ID: ${site.pec}`
     };
   }
 
@@ -188,7 +188,7 @@ export class SiteManagementPageComponent implements OnInit {
     // this.busy = this.siteResource.createSite(organizationId)
     //   .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
     this.routeUtils.routeRelativeTo([
-      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.VENDOR
     ]);
   }
 }

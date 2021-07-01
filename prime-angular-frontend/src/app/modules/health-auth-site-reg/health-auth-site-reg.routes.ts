@@ -14,7 +14,6 @@ export class HealthAuthSiteRegRoutes {
   public static SITE_MANAGEMENT = 'site-management';
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
-  public static ORGANIZATION_AGREEMENT = 'organization-agreement';
   public static VENDOR = 'vendor';
   public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_INFORMATION = 'site-information';
@@ -25,13 +24,12 @@ export class HealthAuthSiteRegRoutes {
   public static SITE_OVERVIEW = 'site-overview';
 
   public static routePath(route: string): string {
-    return `/${ HealthAuthSiteRegRoutes.MODULE_PATH }/${ route }`;
+    return `/${HealthAuthSiteRegRoutes.MODULE_PATH}/${route}`;
   }
 
   // Used to indicate the routes and order of registration for sites
   public static siteRegistrationRouteOrder(): string[] {
     return [
-      this.ORGANIZATION_AGREEMENT,
       this.VENDOR,
       this.SITE_INFORMATION,
       this.HEALTH_AUTH_CARE_TYPE,

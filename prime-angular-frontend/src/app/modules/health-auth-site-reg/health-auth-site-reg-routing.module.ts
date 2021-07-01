@@ -14,7 +14,6 @@ import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authori
 import { AuthorizedUserApprovedPageComponent } from '@health-auth/pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
-import { OrganizationAgreementPageComponent } from '@health-auth/pages/organization-agreement-page/organization-agreement-page.component';
 import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
@@ -85,7 +84,7 @@ const routes: Routes = [
       // Viewing and editing route for an existing and
       // approved authorized user
       {
-        path: `${ HealthAuthSiteRegRoutes.AUTHORIZED_USER }/:auid`,
+        path: `${HealthAuthSiteRegRoutes.AUTHORIZED_USER}/:auid`,
         component: AuthorizedUserPageComponent,
         canActivate: [AuthorizedUserGuard],
         canDeactivate: [CanDeactivateFormGuard],
@@ -94,15 +93,9 @@ const routes: Routes = [
       // Site registration and maintenance routes for administration
       // of health authority information
       {
-        path: `${ HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES }/:haid`,
+        path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid`,
         canActivate: [AuthorizedUserGuard],
         children: [
-          {
-            path: HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT,
-            component: OrganizationAgreementPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Organization Agreement' }
-          },
           {
             path: HealthAuthSiteRegRoutes.VENDOR,
             component: VendorPageComponent,

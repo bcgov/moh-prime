@@ -23,7 +23,6 @@ import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/r
 import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
-import { OrganizationAgreementPageComponent } from './pages/organization-agreement-page/organization-agreement-page.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +34,6 @@ import { OrganizationAgreementPageComponent } from './pages/organization-agreeme
     AuthorizedUserApprovedPageComponent,
     AuthorizedUserDeclinedPageComponent,
     SiteManagementPageComponent,
-    OrganizationAgreementPageComponent,
     VendorPageComponent,
     SiteInformationPageComponent,
     HealthAuthCareTypePageComponent,
