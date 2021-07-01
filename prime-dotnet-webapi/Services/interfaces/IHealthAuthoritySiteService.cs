@@ -13,7 +13,7 @@ namespace Prime.Services
         Task<IEnumerable<HealthAuthoritySite>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySite> GetSiteAsync(int siteId);
         Task<HealthAuthoritySite> CreateSiteAsync(HealthAuthoritySiteVendorViewModel viewModel);
-        Task UpdateCareTypeAsync(int siteId, string careType);
+        Task UpdateCareTypeAsync(int siteId, int healthAuthorityId, string careType);
         Task UpdateVendorAsync(int siteId, int healthAuthorityId, int vendorCode);
     }
 }

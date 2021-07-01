@@ -86,9 +86,6 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates a specific Health Authority Site's care type.
         /// </summary>
-        /// <param name="healthAuthorityId"></param>
-        /// <param name="siteId"></param>
-        /// <param name="careType"></param>
         [HttpPut("{healthAuthorityId}/sites/{siteId}/care-types", Name = nameof(UpdateCareType))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
@@ -96,18 +93,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateCareType(int healthAuthorityId, int siteId, string careType)
+        public async Task<IActionResult> UpdateCareType(int healthAuthorityId, int siteId, HealthAuthorityCareTypeViewModel payload)
         {
-            if (careType == null)
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
-                return BadRequest("Health authority site care type cannot be null.");
-            }
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId))
-            {
-                return NotFound($"Health Authority not found with id {healthAuthorityId}");
+                return NotFound($"Health Authority Site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, careType);
+            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, healthAuthorityId, payload.CareType);
 
             return NoContent();
         }

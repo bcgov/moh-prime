@@ -64,21 +64,16 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(ha => ha.Id == siteId);
         }
 
-        public async Task UpdateCareTypeAsync(int siteId, string careType)
+        public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityId, string careType)
         {
-            // var oldCareTypes = await _context.HealthAuthorityCareTypes
-            //     .Where(ct => ct.HealthAuthorityOrganizationId == healthAuthorityId)
-            //     .ToListAsync();
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(ct => ct.Id == siteId);
 
-            // _context.HealthAuthorityCareTypes.RemoveRange(oldCareTypes);
-
-            // var newCareTypes = careTypes.Select(careType => new HealthAuthorityCareType
-            // {
-            //     HealthAuthorityOrganizationId = healthAuthorityId,
-            //     CareType = careType
-            // });
-
-            // _context.HealthAuthorityCareTypes.AddRange(newCareTypes);
+            site.CareType = new HealthAuthorityCareType
+            {
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                CareType = careType
+            };
 
             await _context.SaveChangesAsync();
         }
