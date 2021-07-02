@@ -19,10 +19,7 @@ namespace Prime.Models.HealthAuthorities
         [JsonIgnore]
         public HealthAuthorityOrganization Organization { get; set; }
 
-        public int HealthAuthorityVendorId { get; set; }
-
-        [JsonIgnore]
-        public HealthAuthorityVendor HealthAuthorityVendor { get; set; }
+        public int VendorCode { get; set; }
 
         public string SiteName { get; set; }
 
@@ -30,7 +27,10 @@ namespace Prime.Models.HealthAuthorities
 
         public string SecurityGroup { get; set; }
 
-        public HealthAuthorityCareType CareType { get; set; }
+        public int HealthAuthorityCareTypeId { get; set; }
+
+        [JsonIgnore]
+        public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }
 

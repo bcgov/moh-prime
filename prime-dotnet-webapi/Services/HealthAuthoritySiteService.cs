@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
@@ -30,49 +31,45 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<HealthAuthoritySite> CreateSiteAsync(int healthAuthorityId, int vendorCode)
+        public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
         {
             var site = new HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
-                Vendor = new HealthAuthorityVendor
-                {
-                    HealthAuthorityOrganizationId = healthAuthorityId,
-                    VendorCode = vendorCode
-                },
+                VendorCode = vendorCode
                 // TODO set initial status change
             };
 
             _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
 
-            return site;
+            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
-        public async Task<IEnumerable<HealthAuthoritySite>> GetSitesAsync(int healthAuthorityId)
+        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
             return await _context.HealthAuthoritySites
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
                 .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
-        public async Task<HealthAuthoritySite> GetSiteAsync(int siteId)
+        public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
         public async Task UpdateVendorAsync(int siteId, int vendorCode)
         {
             var site = await _context.HealthAuthoritySites
-                // .Include(has => has.Vendor)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO verify this vendor exists on the HealthAuthority list vendor
-            // TODO find vendor code in HA list
-            // site.Vendor.VendorCode = vendorCode;
+            site.VendorCode = vendorCode;
 
             await _context.SaveChangesAsync();
         }
@@ -87,14 +84,13 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCareTypeAsync(int siteId, string careType)
+        public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId)
         {
             var site = await _context.HealthAuthoritySites
-                .Include(has => has.CareType)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO can this be automapped
-            site.CareType.CareType = careType;
+            // site.CareType.CareType = careType;
 
             await _context.SaveChangesAsync();
         }

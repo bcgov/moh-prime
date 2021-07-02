@@ -6,8 +6,8 @@ public class HealthAuthoritySiteMappingProfile : Profile
 {
     public HealthAuthoritySiteMappingProfile()
     {
-        CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>()
-            .ForMember(dest => dest.VendorCode, opt => opt.MapFrom(src => src.Vendor.VendorCode))
+        CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
+            // .ForMember(dest => dest.VendorCode, opt => opt.MapFrom(src => src.Vendor.VendorCode))
             // .ForMember(dest => dest., opt => opt.MapFrom(src => src.Vendor.VendorCode));
 
         CreateMap<HealthAuthoritySiteInfoViewModel, HealthAuthoritySite>();
