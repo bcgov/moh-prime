@@ -11,6 +11,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSigningAuthorityPageFormState } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page-form-state.class';
 import { OrganizationNamePageFormState } from '@registration/pages/organization-name-page/organization-name-page-form-state.class';
 import { OrganizationAgreementPageFormState } from '@registration/pages/organization-agreement-page/organization-agreement-page-form-state.class';
+import { OrganizationClaimPageFormState } from '@registration/pages/organization-claim-page/organization-claim-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
   public organizationSigningAuthorityPageFormState: OrganizationSigningAuthorityPageFormState;
   public organizationNamePageFormState: OrganizationNamePageFormState;
   public organizationAgreementPageFormState: OrganizationAgreementPageFormState;
+  public organizationClaimPageFormState: OrganizationClaimPageFormState;
 
   constructor(
     protected fb: FormBuilder,
@@ -71,6 +73,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
     this.organizationSigningAuthorityPageFormState = new OrganizationSigningAuthorityPageFormState(this.fb, this.formUtilsService);
     this.organizationNamePageFormState = new OrganizationNamePageFormState(this.fb);
     this.organizationAgreementPageFormState = new OrganizationAgreementPageFormState(this.fb);
+    this.organizationClaimPageFormState = new OrganizationClaimPageFormState(this.fb);
   }
 
   /**

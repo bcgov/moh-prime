@@ -62,8 +62,8 @@ export class SiteRoutes {
   public static organizationRegistrationRouteOrder(): string[] {
     return [
       this.COLLECTION_NOTICE,
-      this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_CLAIM,
+      this.ORGANIZATION_SIGNING_AUTHORITY,
       this.ORGANIZATION_NAME
     ];
   }

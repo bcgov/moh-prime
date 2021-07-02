@@ -48,6 +48,11 @@ const routes: Routes = [
         data: { title: 'Collection Notice' }
       },
       {
+        path: SiteRoutes.ORGANIZATION_CLAIM,
+        component: OrganizationClaimPageComponent,
+        data: { title: 'Create or Claim Organization' }
+      },
+      {
         path: SiteRoutes.SITE_MANAGEMENT,
         children: [
           {
@@ -67,12 +72,6 @@ const routes: Routes = [
                 component: OrganizationSigningAuthorityPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_CLAIM,
-                component: OrganizationClaimPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Create or Claim Organization' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,
