@@ -59,14 +59,15 @@ namespace Prime.Services
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 
-            return banners.Select(banner =>
+            banners.ForEach(banner =>
             {
                 // Banner time stamps are stored as UTC, but are materialized as DateTimeKind.Unspecified
                 // Once we upgrade our EF / Npgsql, we can use NodaTime instead
                 banner.StartTimestamp = DateTime.SpecifyKind(banner.StartTimestamp, DateTimeKind.Utc);
                 banner.EndTimestamp = DateTime.SpecifyKind(banner.EndTimestamp, DateTimeKind.Utc);
-                return banner;
             });
+
+            return banners;
         }
 
         public async Task DeleteBannerAsync(int bannerId)

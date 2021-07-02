@@ -21,32 +21,6 @@ export class BannerResourceService {
     private logger: LoggerService
   ) { }
 
-  public createEnrolmentLandingBanner(banner: Banner): Observable<Banner> {
-    return this.apiResource.post<BannerViewModel>(`banners/enrolment-landing`, BannerViewModel.fromBanner(banner))
-      .pipe(
-        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
-        tap(() => this.toastService.openSuccessToast('Banner has been created')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Banner could not be created');
-          this.logger.error('[Banner] BannerResource::createEnrolmentLandingBanner error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public createSiteLandingBanner(banner: Banner): Observable<Banner> {
-    return this.apiResource.post<BannerViewModel>(`banners/site-landing`, BannerViewModel.fromBanner(banner))
-      .pipe(
-        map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
-        tap(() => this.toastService.openSuccessToast('Banner has been created')),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Banner could not be created');
-          this.logger.error('[Banner] BannerResource::createSiteLandingBanner error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
   public createBanner(locationCode: BannerLocationCode, banner: Banner): Observable<Banner> {
     const params = this.apiResourceUtilsService.makeHttpParams({ locationCode });
     return this.apiResource.post<BannerViewModel>(`banners`, BannerViewModel.fromBanner(banner), params)
@@ -121,20 +95,6 @@ export class BannerResourceService {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site Landing Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getSiteLandingBanners error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getBanners(locationCode: BannerLocationCode): Observable<Banner[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ locationCode });
-    return this.apiResource.get<BannerViewModel[]>(`banners/site-landing`, params)
-      .pipe(
-        map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
-        tap((banners: Banner[]) => this.logger.info('BANNERS', banners)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Banners could not be retrieved');
-          this.logger.error('[Banner] BannerResource::getBanners error has occurred: ', error);
           throw error;
         })
       );

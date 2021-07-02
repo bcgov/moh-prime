@@ -24,6 +24,8 @@ export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatche
 export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintenanceForm> {
   public isSameOrBeforeErrorStateMatcher: IsSameOrBeforeErrorStateMatcher;
 
+  private id: number;
+
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
@@ -76,6 +78,7 @@ export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintena
     }
     const banner = this.formInstance.getRawValue();
     return {
+      id: this.id,
       ...banner,
       startDate: banner.dateRange.startDate,
       startTime: banner.dateRange.startTime,
@@ -88,6 +91,7 @@ export class BannerMaintenanceFormState extends AbstractFormState<BannerMaintena
     if (!this.formInstance) {
       return;
     }
+    this.id = model.id;
 
     this.formInstance.patchValue(model);
     this.startDate.setValue(model.startDate);

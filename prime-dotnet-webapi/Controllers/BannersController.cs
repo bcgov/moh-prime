@@ -42,38 +42,6 @@ namespace Prime.Controllers
             return Ok(banner);
         }
 
-        // POST: api/banners/enrolment-landing
-        /// <summary>
-        /// Create an Enrollee landing banner
-        /// </summary>
-        /// <param name="viewModel"></param>
-        [HttpPost("enrolment-landing", Name = nameof(CreateEnrolleeLandingBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateEnrolleeLandingBanner(BannerViewModel viewModel)
-        {
-            var banner = await _bannerService.CreateBannerAsync(BannerLocationCode.EnrolmentLandingPage, viewModel);
-            return Ok(banner);
-        }
-
-        // POST: api/banners/site-landing
-        /// <summary>
-        /// Set the Site landing banner
-        /// </summary>
-        /// <param name="viewModel"></param>
-        [HttpPost("site-landing", Name = nameof(CreateSiteLandingBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateSiteLandingBanner(BannerViewModel viewModel)
-        {
-            var banner = await _bannerService.CreateBannerAsync(BannerLocationCode.SiteRegistrationLandingPage, viewModel);
-            return Ok(banner);
-        }
-
         // PUT: api/banners/1
         /// <summary>
         /// Update banner
@@ -84,9 +52,15 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateBanner(int bannerId, BannerViewModel viewModel)
         {
+            if (viewModel.Id != bannerId)
+            {
+                return BadRequest("Banner Id does not match view model Id");
+            }
+
             var updatedBanner = await _bannerService.UpdateBannerAsync(bannerId, viewModel);
             return Ok(updatedBanner);
         }
@@ -123,22 +97,6 @@ namespace Prime.Controllers
             return Ok(banner);
         }
 
-        // GET: api/banners?locationCode=1
-        /// <summary>
-        /// Get banners
-        /// </summary>
-        /// <param name="locationCode"></param>
-        [HttpGet("", Name = nameof(GetBanners))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetBanners([FromQuery] BannerLocationCode locationCode)
-        {
-            var banners = await _bannerService.GetBannersAsync(locationCode);
-            return Ok(banners);
-        }
-
         // GET: api/banners/enrolment-landing
         /// <summary>
         /// Get enrollee landing banners
@@ -171,7 +129,7 @@ namespace Prime.Controllers
 
         // GET: api/banners/active?locationCode=4
         /// <summary>
-        /// Gets the active Banners by location code. Returns null result if no active banner
+        /// Gets the active Banners by location code. Returns empty array if no banner found
         /// </summary>
         /// <param name="locationCode"></param>
         [HttpGet("active", Name = nameof(GetActiveBannersByLocationCode))]
