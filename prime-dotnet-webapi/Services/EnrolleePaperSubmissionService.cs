@@ -103,6 +103,19 @@ namespace Prime.Services
             return enrollee;
         }
 
+        public async Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel viewModel)
+        {
+            var enrollee = await _context.Enrollees
+                .Include(e => e.Addresses)
+                .ThenInclude(a => a.Address)
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            _mapper.Map(viewModel, enrollee);
+            _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task UpdateCareSettingsAsync(int enrolleeId, PaperEnrolleeCareSettingViewModel viewModel)
         {
             var newCareSettings = viewModel.CareSettings.Select(code => new EnrolleeCareSetting
@@ -117,19 +130,6 @@ namespace Prime.Services
 
             await ReplaceCollection(enrolleeId, newCareSettings);
             await ReplaceCollection(enrolleeId, newHealthAuthorities);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateDemographicsAsync(int enrolleeId, PaperEnrolleeDemographicViewModel viewModel)
-        {
-            var enrollee = await _context.Enrollees
-                .Include(e => e.Addresses)
-                    .ThenInclude(a => a.Address)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            _mapper.Map(viewModel, enrollee);
-            _mapper.Map(viewModel.PhysicalAddress, enrollee.PhysicalAddress);
 
             await _context.SaveChangesAsync();
         }
@@ -232,7 +232,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task FinailizeSubmissionAsync(int enrolleeId)
+        public async Task FinalizeSubmissionAsync(int enrolleeId)
         {
             var enrollee = await _context.Enrollees
                 .Include(e => e.EnrolmentStatuses)

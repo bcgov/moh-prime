@@ -11,12 +11,12 @@ import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { AdministratorPageFormState } from './administrator-page-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
   selector: 'app-administrator-page',
@@ -31,12 +31,12 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public administrators: BehaviorSubject<Contact[]>;
   public SiteRoutes = HealthAuthSiteRegRoutes;
 
-  private site: HealthAuthSite;
+  private site: HealthAuthoritySite;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     route: ActivatedRoute,
@@ -97,7 +97,8 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload);
+    // return this.siteResource.updateSite(payload);
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

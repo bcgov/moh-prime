@@ -8,12 +8,12 @@ import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { SiteInformationPageFormState } from './site-information-page-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
   selector: 'app-site-information-page',
@@ -24,14 +24,14 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   public formState: SiteInformationPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public site: HealthAuthSite;
+  public site: HealthAuthoritySite;
   public isCompleted: boolean;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     private route: ActivatedRoute,
@@ -77,7 +77,8 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
 
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload);
+    // return this.siteResource.updateSite(payload);
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

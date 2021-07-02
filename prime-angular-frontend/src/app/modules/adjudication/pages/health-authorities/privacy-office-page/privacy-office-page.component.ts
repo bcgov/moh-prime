@@ -74,7 +74,7 @@ export class PrivacyOfficePageComponent extends AbstractEnrolmentPage implements
   }
 
   protected performSubmission(): NoContent {
-    return this.healthAuthResource.updatePrivacyOffice(this.route.snapshot.params.haid, this.formState.json);
+    return this.healthAuthResource.updateHealthAuthorityPrivacyOffice(this.route.snapshot.params.haid, this.formState.json);
   }
 
   protected onSubmitFormIsInvalid(): void {

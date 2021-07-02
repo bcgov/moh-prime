@@ -4,7 +4,7 @@ import { DashboardModule } from '@lib/modules/dashboard/dashboard.module';
 import { SharedModule } from '@shared/shared.module';
 
 import { HealthAuthSiteRegRoutingModule } from './health-auth-site-reg-routing.module';
-import { HealthAuthSiteRegDashboardComponent } from './shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
+import { HealthAuthSiteRegDashboardComponent } from '@health-auth/shared/components/health-auth-site-reg-dashboard/health-auth-site-reg-dashboard.component';
 // TODO share this between site registration modules by moving out into @lib...
 import { SiteProgressIndicatorComponent } from '@health-auth/shared/components/site-progress-indicator/site-progress-indicator.component';
 

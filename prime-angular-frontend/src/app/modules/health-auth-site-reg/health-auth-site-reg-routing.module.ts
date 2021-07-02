@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
@@ -28,13 +29,9 @@ const routes: Routes = [
   {
     path: '',
     component: HealthAuthSiteRegDashboardComponent,
-    canLoad: [
-      HealthAuthSiteRegGuard
-    ],
-    canActivate: [],
-    canActivateChild: [
-      HealthAuthSiteRegGuard
-    ],
+    // TODO add registration related guards
+    canActivate: [AuthenticationGuard],
+    canActivateChild: [AuthenticationGuard],
     children: [
       {
         path: HealthAuthSiteRegRoutes.COLLECTION_NOTICE,
@@ -93,8 +90,8 @@ const routes: Routes = [
       // Site registration and maintenance routes for administration
       // of health authority information
       {
-        path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid`,
-        canActivate: [AuthorizedUserGuard],
+        path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid/${HealthAuthSiteRegRoutes.SITES}/:sid`,
+        canActivateChild: [AuthorizedUserGuard],
         children: [
           {
             path: HealthAuthSiteRegRoutes.VENDOR,

@@ -19,7 +19,6 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.TriageEnrollee)]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
-
         private readonly IEnrolleePaperSubmissionService _enrolleeService;
         private readonly IAdminService _adminService;
 
@@ -256,7 +255,7 @@ namespace Prime.Controllers
                 return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
-            await _enrolleeService.FinailizeSubmissionAsync(enrolleeId);
+            await _enrolleeService.FinalizeSubmissionAsync(enrolleeId);
 
             return Ok();
         }

@@ -17,9 +17,9 @@ import { NoContent } from '@core/resources/abstract-resource';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { HoursOperationPageFormModel, HoursOperationPageFormState } from './hours-operation-page-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -66,7 +66,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     route: ActivatedRoute,
@@ -167,8 +167,9 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
 
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.formState.form.markAsPristine()));
+    // return this.siteResource.updateSite(payload)
+    //   .pipe(tap(() => this.formState.form.markAsPristine()));
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

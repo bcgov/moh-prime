@@ -9,10 +9,10 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
   selector: 'app-overview-page',
@@ -21,7 +21,7 @@ import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
-  public site: HealthAuthSite;
+  public site: HealthAuthoritySite;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
@@ -31,7 +31,7 @@ export class OverviewPageComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService
   ) {
     this.showEditRedirect = true;

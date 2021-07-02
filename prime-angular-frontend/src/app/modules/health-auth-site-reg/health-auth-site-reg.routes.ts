@@ -14,6 +14,7 @@ export class HealthAuthSiteRegRoutes {
   public static SITE_MANAGEMENT = 'site-management';
 
   public static HEALTH_AUTHORITIES = 'health-authorities';
+  public static SITES = 'sites';
   public static VENDOR = 'vendor';
   public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_INFORMATION = 'site-information';

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -26,6 +27,7 @@ import { SiteListViewModel } from '@registration/shared/models/site.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-site-management-page',
@@ -33,32 +35,30 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
   styleUrls: ['./site-management-page.component.scss']
 })
 export class SiteManagementPageComponent implements OnInit {
-  public busy: Subscription;
+  // public busy: Subscription;
   public title: string;
-  public organizations: Organization[];
-  public organizationAgreements: OrganizationAgreementViewModel[];
-  public hasSubmittedSite: boolean;
+  // public organizations: Organization[];
+  // public organizationAgreements: OrganizationAgreementViewModel[];
+  // public hasSubmittedSite: boolean;
   public routeUtils: RouteUtils;
-  public VendorEnum = VendorEnum;
-  public AgreementType = AgreementType;
-  public CareSettingEnum = CareSettingEnum;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
+  // public VendorEnum = VendorEnum;
+  // public AgreementType = AgreementType;
+  // public CareSettingEnum = CareSettingEnum;
+  // public SiteRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private organizationResource: OrganizationResource,
-    private siteResource: SiteResource,
-    private fullnamePipe: FullnamePipe,
-    private addressPipe: AddressPipe,
-    private configCodePipe: ConfigCodePipe,
-    private utilsService: UtilsService,
-    private organizationService: OrganizationService,
-    private logger: LoggerService
+    // private organizationResource: OrganizationResource,
+    // private siteResource: SiteResource,
+    // private fullnamePipe: FullnamePipe,
+    // private addressPipe: AddressPipe,
+    // private configCodePipe: ConfigCodePipe,
+    // private utilsService: UtilsService
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.organizations = [];
+    // this.organizations = [];
   }
 
   // public viewOrganization(organization: Organization): void {
@@ -84,111 +84,105 @@ export class SiteManagementPageComponent implements OnInit {
   //   this.busy = request$.subscribe();
   // }
 
-  public viewSite(organizationId: number, site: SiteListViewModel): void {
-    const routePath = (site.completed)
-      // ? [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id] // Defaults to overview
-      // : [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id, HealthAuthSiteRegRoutes.VENDOR];
-      ? HealthAuthSiteRegRoutes.VENDOR
-      : HealthAuthSiteRegRoutes.VENDOR;
-    this.routeUtils.routeRelativeTo(routePath);
-  }
+  // public viewSite(organizationId: number, site: SiteListViewModel): void {
+  //   const routePath = (site.completed)
+  //     // ? [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id] // Defaults to overview
+  //     // : [organizationId, HealthAuthSiteRegRoutes.MODULE_PATH, site.id, HealthAuthSiteRegRoutes.VENDOR];
+  //     ? HealthAuthSiteRegRoutes.VENDOR
+  //     : HealthAuthSiteRegRoutes.VENDOR;
+  //   this.routeUtils.routeRelativeTo(routePath);
+  // }
 
   // public viewSiteRemoteUsers(organizationId: number, site: SiteListViewModel): void {
   //   const routePath = [organizationId, SiteRoutes.SITES, site.id, SiteRoutes.REMOTE_USERS];
   //   this.routeUtils.routeRelativeTo(routePath);
   // }
 
-  public addSite(organizationId: number): void {
-    this.createSite(organizationId);
+  public addSite(healthAuthorityId: number): void {
+    // Site created on submission of first page
+    this.redirectToSite(healthAuthorityId, 0);
   }
 
-  public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
-    return [
-      { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
-      { key: 'Organization Name', value: organization.name },
-      ...ArrayUtils.insertIf(organization?.doingBusinessAs, { key: 'Doing Business As', value: organization.doingBusinessAs })
-    ];
-  }
+  // public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
+  //   return [
+  //     { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
+  //     { key: 'Organization Name', value: organization.name },
+  //     ...ArrayUtils.insertIf(organization?.doingBusinessAs, { key: 'Doing Business As', value: organization.doingBusinessAs })
+  //   ];
+  // }
+  //
+  // public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
+  //   return [
+  //     ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
+  //     { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
+  //     {
+  //       key: 'Site Address',
+  //       value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+  //     },
+  //     { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
+  //   ];
+  // }
 
-  public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
-    return [
-      ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
-      { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      {
-        key: 'Site Address',
-        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
-      },
-      { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
-    ];
-  }
+  // public getNotSubmittedSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
+  //   return {
+  //     icon: 'notification_important',
+  //     text: 'Submission not completed',
+  //     label: 'Continue Site Submission',
+  //     route: () => this.viewSite(organizationId, site)
+  //   };
+  // }
 
-  public getNotSubmittedSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
-    return {
-      icon: 'notification_important',
-      text: 'Submission not completed',
-      label: 'Continue Site Submission',
-      route: () => this.viewSite(organizationId, site)
-    };
-  }
+  // public isUnderReview(site: SiteListViewModel): boolean {
+  //   return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
+  // }
+  //
+  // public getUnderReviewSiteNotificationProperties() {
+  //   return {
+  //     icon: 'notification_important',
+  //     text: 'This site is waiting for approval and an assigned Site ID',
+  //   };
+  // }
 
-  public isUnderReview(site: SiteListViewModel): boolean {
-    return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
-  }
-
-  public getUnderReviewSiteNotificationProperties() {
-    return {
-      icon: 'notification_important',
-      text: 'This site is waiting for approval and an assigned Site ID',
-    };
-  }
-
-  public isDeclined(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.DECLINED);
-  }
-
-  public getDeclinedSiteNotificationProperties() {
-    return {
-      icon: 'not_interested',
-      text: 'Declined',
-    };
-  }
-
-  public isApproved(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.APPROVED);
-  }
-
-  public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
-    return {
-      icon: 'task_alt',
-      text: `Site Approved<br>Site ID: ${site.pec}`
-    };
-  }
+  // public isDeclined(site: SiteListViewModel): boolean {
+  //   return (site.status === SiteStatusType.DECLINED);
+  // }
+  //
+  // public getDeclinedSiteNotificationProperties() {
+  //   return {
+  //     icon: 'not_interested',
+  //     text: 'Declined',
+  //   };
+  // }
+  //
+  // public isApproved(site: SiteListViewModel): boolean {
+  //   return (site.status === SiteStatusType.APPROVED);
+  // }
+  //
+  // public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
+  //   return {
+  //     icon: 'task_alt',
+  //     text: `Site Approved<br>Site ID: ${site.pec}`
+  //   };
+  // }
 
   public ngOnInit(): void {
-    this.getOrganizations();
+    // this.getHealthAuthorities();
   }
 
-  private getOrganizations(): void {
-    // this.busy = this.organizationResource.getOrganizations()
-    //   .pipe(
-    //     map((organizations: Organization[]) =>
-    //       this.organizations = organizations
-    //     ),
-    //     exhaustMap((organization: Organization[]) =>
-    //       this.organizationResource.getOrganizationAgreements(organization[0].id)
-    //     )
-    //   )
-    //   .subscribe((agreements: OrganizationAgreementViewModel[]) =>
-    //     this.organizationAgreements = agreements
-    //   );
-  }
+  // private getHealthAuthorities(): void {
+  //   this.busy = this.healthAuthorityResource.getOrganizations()
+  //     .pipe(
+  //       map((healthAuthorities: HealthAuthority[]) => this.healthAuthorities = healthAuthorities)
+  //     ).subscribe();
+  // }
 
-  private createSite(organizationId: number): void {
-    // TODO what are we doing with health authority?
-    // this.busy = this.siteResource.createSite(organizationId)
-    //   .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
+  private redirectToSite(healthAuthId: number, healthAuthSiteId: number): void {
     this.routeUtils.routeRelativeTo([
-      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES, 1, HealthAuthSiteRegRoutes.VENDOR
+      HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
+      healthAuthId,
+      HealthAuthSiteRegRoutes.SITES,
+      healthAuthSiteId,
+      HealthAuthSiteRegRoutes.VENDOR
     ]);
   }
 }

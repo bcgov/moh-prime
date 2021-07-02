@@ -19,9 +19,9 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @UntilDestroy()
 @Component({
@@ -42,7 +42,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     private route: ActivatedRoute,
@@ -162,19 +162,20 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
         return newRemoteUsersAcc;
       }, []);
 
-    return this.siteResource.updateSite(payload)
-      .pipe(
-        exhaustMap(() =>
-          (site.submittedDate)
-            ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : of(noop())
-        ),
-        exhaustMap(() =>
-          (site.submittedDate && newRemoteUsers)
-            ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
-            : of(noop())
-        )
-      );
+    // return this.siteResource.updateSite(payload)
+    //   .pipe(
+    //     exhaustMap(() =>
+    //       (site.submittedDate)
+    //         ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
+    //         : of(noop())
+    //     ),
+    //     exhaustMap(() =>
+    //       (site.submittedDate && newRemoteUsers)
+    //         ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
+    //         : of(noop())
+    //     )
+    //   );
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

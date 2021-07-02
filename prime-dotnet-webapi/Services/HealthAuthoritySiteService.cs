@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
-
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
-using Prime.ViewModels;
-using Prime.ViewModels.Parties;
-using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
@@ -35,21 +30,18 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<IEnumerable<HealthAuthoritySite>> GetSitesAsync(int healthAuthorityId)
+        public async Task<HealthAuthoritySite> CreateSiteAsync(int healthAuthorityId, int vendorCode)
         {
-            return await _context.HealthAuthoritySites
-                .Where(s => s.HealthAuthorityOrganizationId == healthAuthorityId)
-                .AsNoTracking()
-                .ToListAsync();
-        }
-
-
-
-        public async Task<HealthAuthoritySite> CreateSiteAsync(HealthAuthoritySiteVendorViewModel viewModel)
-        {
-            viewModel.ThrowIfNull(nameof(viewModel));
-
-            var site = _mapper.Map<HealthAuthoritySite>(viewModel);
+            var site = new HealthAuthoritySite
+            {
+                HealthAuthorityOrganizationId = healthAuthorityId,
+                Vendor = new HealthAuthorityVendor
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    VendorCode = vendorCode
+                },
+                // TODO set initial status change
+            };
 
             _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
@@ -57,38 +49,114 @@ namespace Prime.Services
             return site;
         }
 
+        public async Task<IEnumerable<HealthAuthoritySite>> GetSitesAsync(int healthAuthorityId)
+        {
+            return await _context.HealthAuthoritySites
+                .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
         public async Task<HealthAuthoritySite> GetSiteAsync(int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .SingleOrDefaultAsync(ha => ha.Id == siteId);
+                .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
-        public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityId, string careType)
+        public async Task UpdateVendorAsync(int siteId, int vendorCode)
         {
             var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(ct => ct.Id == siteId);
+                // .Include(has => has.Vendor)
+                .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            site.CareType = new HealthAuthorityCareType
-            {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                CareType = careType
-            };
+            // TODO verify this vendor exists on the HealthAuthority list vendor
+            // TODO find vendor code in HA list
+            // site.Vendor.VendorCode = vendorCode;
 
             await _context.SaveChangesAsync();
         }
 
-
-        public async Task UpdateVendorAsync(int siteId, int healthAuthorityId, int vendorCode)
+        public async Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel)
         {
             var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(ct => ct.Id == siteId);
+                .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            site.Vendor = new HealthAuthorityVendor
-            {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                VendorCode = vendorCode
-            };
+            _mapper.Map(viewModel, site);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateCareTypeAsync(int siteId, string careType)
+        {
+            var site = await _context.HealthAuthoritySites
+                .Include(has => has.CareType)
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO can this be automapped
+            site.CareType.CareType = careType;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            _mapper.Map(physicalAddress, site.PhysicalAddress);
+            // site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateHoursOperationAsync(int siteId, HealthAuthoritySiteHoursOperationViewModel viewModel)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // _mapper.Map(viewModel, site);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRemoteUsersAsync(int siteId, HealthAuthoritySiteRemoteUsersViewModel viewModel)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // _mapper.Map(viewModel, site);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // _mapper.Map(viewModel, site);
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task SetSiteCompletedAsync(int siteId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            site.Completed = true;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task FinalizeSubmissionAsync(int siteId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .Include(has => has.Status)
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO add status change to site
 
             await _context.SaveChangesAsync();
         }

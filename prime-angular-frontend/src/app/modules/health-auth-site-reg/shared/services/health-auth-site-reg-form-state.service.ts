@@ -6,9 +6,8 @@ import { RouteStateService } from '@core/services/route-state.service';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { OrganizationAgreementPageFormState } from '@health-auth/pages/organization-agreement-page/organization-agreement-page-form-state.class';
 import { VendorPageFormState } from '@health-auth/pages/vendor-page/vendor-page-form-state.class';
 import { SiteInformationPageFormState } from '@health-auth/pages/site-information-page/site-information-page-form-state.class';
 import { HealthAuthCareTypePageFormState } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page-form-state.class';
@@ -20,8 +19,7 @@ import { AdministratorPageFormState } from '@health-auth/pages/administrator-pag
 @Injectable({
   providedIn: 'root'
 })
-export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<HealthAuthSite> {
-  public orgAgreementPageFormState: OrganizationAgreementPageFormState;
+export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<HealthAuthoritySite> {
   public vendorPageFormState: VendorPageFormState;
   public siteInfoPageFormState: SiteInformationPageFormState;
   public healthAuthCareTypePageFormState: HealthAuthCareTypePageFormState;
@@ -45,9 +43,8 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     this.initialize([HealthAuthSiteRegRoutes.SITE_MANAGEMENT]);
   }
 
-  public get json(): HealthAuthSite {
-    const organizationAgreement = this.orgAgreementPageFormState.json;
-    const { siteVendors } = this.vendorPageFormState.json;
+  public get json(): HealthAuthoritySite {
+    // const { siteVendors } = this.vendorPageFormState.json;
     const { doingBusinessAs, pec } = this.siteInfoPageFormState.json;
     const { careSettingCode } = this.healthAuthCareTypePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
@@ -83,12 +80,11 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
       // submittedDate (N/A)
       // pec
       // TODO output should be a Site-like model instead due to missing properties
-    } as HealthAuthSite; // Enforced type due to N/A properties
+    } as HealthAuthoritySite; // Enforced type due to N/A properties
   }
 
   public get forms(): AbstractControl[] {
     return [
-      this.orgAgreementPageFormState.form,
       this.vendorPageFormState.form,
       this.siteInfoPageFormState.form,
       this.healthAuthCareTypePageFormState.form,
@@ -100,7 +96,6 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
   }
 
   protected buildForms(): void {
-    this.orgAgreementPageFormState = new OrganizationAgreementPageFormState(this.fb);
     this.vendorPageFormState = new VendorPageFormState(this.fb);
     this.siteInfoPageFormState = new SiteInformationPageFormState(this.fb);
     this.healthAuthCareTypePageFormState = new HealthAuthCareTypePageFormState(this.fb);
@@ -110,21 +105,21 @@ export class HealthAuthSiteRegFormStateService extends AbstractFormStateService<
     this.administratorPageFormState = new AdministratorPageFormState(this.fb, this.formUtilsService);
   }
 
-  protected patchForm(site: HealthAuthSite): void {
+  protected patchForm(site: HealthAuthoritySite): void {
     if (!site) {
       return;
     }
 
-    const { siteVendors, careSettingCode, doingBusinessAs, pec, } = site;
+    // const { siteVendors, careTypeCode, doingBusinessAs, pec, } = site;
 
     // TODO model has not been determined
     // this.orgAgreementPageFormState.patchValue(site?.organizationAgreement);
-    this.vendorPageFormState.patchValue({ siteVendors });
-    this.healthAuthCareTypePageFormState.patchValue({ careSettingCode });
-    this.siteInfoPageFormState.patchValue({ doingBusinessAs, pec });
-    this.siteAddressPageFormState.patchValue(site?.physicalAddress);
-    this.hoursOperationPageFormState.patchValue(site?.businessHours);
-    this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
+    // this.vendorPageFormState.patchValue({ siteVendors });
+    // this.healthAuthCareTypePageFormState.patchValue({ careTypeCode: careSettingCode });
+    // this.siteInfoPageFormState.patchValue({ doingBusinessAs, pec });
+    // this.siteAddressPageFormState.patchValue(site?.physicalAddress);
+    // this.hoursOperationPageFormState.patchValue(site?.businessHours);
+    // this.remoteUsersPageFormState.patchValue(site?.remoteUsers);
     // this.administratorPageFormState.patchValue(site?.administratorPharmaNet);
   }
 }

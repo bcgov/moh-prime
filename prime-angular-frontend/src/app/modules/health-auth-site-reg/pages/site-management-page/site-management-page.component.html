@@ -8,8 +8,7 @@
         Use this management page to update your information or to add multiple sites.
         <em class="emphasize">
           A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at
-          one
-          location, you have multiple sites.
+          one location, you have multiple sites.
         </em>
       </ng-container>
     </app-page-subheader2>
@@ -34,22 +33,22 @@
     </button>
   </div>
 
-  <app-summary-card *ngIf="hasSubmittedSite"
-                    icon="store"
-                    title="Site Information"
-                    [properties]="[
-                      { key: 'Site Name', value: 'Site name' },
-                      { key: 'Site ID', value: 'Site id' },
-                      { key: 'Vendor', value: 'Site vendor' },
-                      { key: 'PharmaNet Admin', value: 'Admin name' }
-                    ]">
-    <div class="d-flex align-items-center mt-2">
-      <mat-icon class="mr-2"
-                color="warn">notification_important
-      </mat-icon>
-      <span class="text-red">This site is waiting for approval</span>
-    </div>
-  </app-summary-card>
+  <!--  <app-summary-card *ngIf="hasSubmittedSite"-->
+  <!--                    icon="store"-->
+  <!--                    title="Site Information"-->
+  <!--                    [properties]="[-->
+  <!--                      { key: 'Site Name', value: 'Site name' },-->
+  <!--                      { key: 'Site ID', value: 'Site id' },-->
+  <!--                      { key: 'Vendor', value: 'Site vendor' },-->
+  <!--                      { key: 'PharmaNet Admin', value: 'Admin name' }-->
+  <!--                    ]">-->
+  <!--    <div class="d-flex align-items-center mt-2">-->
+  <!--      <mat-icon class="mr-2"-->
+  <!--                color="warn">notification_important-->
+  <!--      </mat-icon>-->
+  <!--      <span class="text-red">This site is waiting for approval</span>-->
+  <!--    </div>-->
+  <!--  </app-summary-card>-->
 
   <!--  <ng-container *ngFor="let organization of organizations; let first = first">-->
 

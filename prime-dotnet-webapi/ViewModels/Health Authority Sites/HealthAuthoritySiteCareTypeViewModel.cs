@@ -3,15 +3,14 @@ using FluentValidation;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
-    public class HealthAuthorityCareTypeViewModel
+    public class HealthAuthoritySiteCareTypeViewModel
     {
-        public int Id { get; set; }
         public string CareType { get; set; }
     }
 
-    public class HealthAuthorityCareTypeValidator : AbstractValidator<HealthAuthorityCareTypeViewModel>
+    public class HealthAuthoritySiteCareTypeValidator : AbstractValidator<HealthAuthoritySiteCareTypeViewModel>
     {
-        public HealthAuthorityCareTypeValidator()
+        public HealthAuthoritySiteCareTypeValidator()
         {
             RuleFor(x => x.CareType).NotNull();
         }

@@ -140,8 +140,8 @@ export class PaperEnrolmentResource {
 
   /**
    * @description
-   * Mark the profile as completed indicating the user has traversed the entire enrolment
-   * as a wizard, and will now spoke between the views from overview.
+   * Mark the as completed indicating the workflow has been entirely traversed
+   * in wizard mode, and will now spoke between the views from overview.
    */
   public profileCompleted(enrolleeId: number): NoContent {
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/profile-completed`)

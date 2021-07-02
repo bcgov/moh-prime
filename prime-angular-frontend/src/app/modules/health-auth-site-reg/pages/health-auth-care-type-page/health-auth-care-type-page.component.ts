@@ -14,7 +14,6 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { HealthAuthCareTypePageFormState } from './health-auth-care-type-page-form-state.class';
 import { HealthAuthority } from '@shared/models/health-authority.model';
@@ -35,7 +34,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private healthAuthResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
@@ -85,7 +84,8 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
 
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload);
+    // return this.siteResource.updateSite(payload);
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {

@@ -12,9 +12,9 @@ import { AddressLine } from '@shared/models/address.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { SiteAddressPageFormState } from './site-address-page-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
   selector: 'app-site-address-page',
@@ -33,7 +33,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
+    private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
     private formStateService: HealthAuthSiteRegFormStateService,
     route: ActivatedRoute,
@@ -95,8 +95,9 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
 
   protected performSubmission(): NoContent {
     const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.formState.form.markAsPristine()));
+    // return this.siteResource.updateSite(payload)
+    //   .pipe(tap(() => this.formState.form.markAsPristine()));
+    return void 0;
   }
 
   protected afterSubmitIsSuccessful(): void {
