@@ -38,7 +38,10 @@ namespace Prime.Models.HealthAuthorities
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
-        public HealthAuthorityContact SiteAdministrator { get; set; }
+        public int HealthAuthorityPharmanetAdministratorId { get; set; }
+
+        [JsonIgnore]
+        public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
 
         public bool Completed { get; set; }
 

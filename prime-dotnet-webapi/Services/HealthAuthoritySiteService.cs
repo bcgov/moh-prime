@@ -74,67 +74,67 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // TODO can this be automapped
-            // site.CareType.CareType = careType;
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            _mapper.Map(physicalAddress, site.PhysicalAddress);
-            // site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateHoursOperationAsync(int siteId, HealthAuthoritySiteHoursOperationViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateRemoteUsersAsync(int siteId, HealthAuthoritySiteRemoteUsersViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
-        {
-            var site = await _context.HealthAuthoritySites
-                .SingleOrDefaultAsync(has => has.Id == siteId);
-
-            // _mapper.Map(viewModel, site);
-
-            await _context.SaveChangesAsync();
-        }
+        // public async Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     _mapper.Map(viewModel, site);
+        //
+        //     await _context.SaveChangesAsync();
+        // }
+        //
+        // public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     // TODO can this be automapped
+        //     // site.CareType.CareType = careType;
+        //
+        //     await _context.SaveChangesAsync();
+        // }
+        //
+        // public async Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     _mapper.Map(physicalAddress, site.PhysicalAddress);
+        //     // site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
+        //
+        //     await _context.SaveChangesAsync();
+        // }
+        //
+        // public async Task UpdateHoursOperationAsync(int siteId, HealthAuthoritySiteHoursOperationViewModel viewModel)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     // _mapper.Map(viewModel, site);
+        //
+        //     await _context.SaveChangesAsync();
+        // }
+        //
+        // public async Task UpdateRemoteUsersAsync(int siteId, HealthAuthoritySiteRemoteUsersViewModel viewModel)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     // _mapper.Map(viewModel, site);
+        //
+        //     await _context.SaveChangesAsync();
+        // }
+        //
+        // public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
+        // {
+        //     var site = await _context.HealthAuthoritySites
+        //         .SingleOrDefaultAsync(has => has.Id == siteId);
+        //
+        //     // _mapper.Map(viewModel, site);
+        //
+        //     await _context.SaveChangesAsync();
+        // }
 
         public async Task SetSiteCompletedAsync(int siteId)
         {

@@ -30,7 +30,8 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="payload"></param>
         [HttpPost(Name = nameof(CreateHealthAuthoritySite))]
-        //[Authorize(Roles = Roles.EditSite)]
+        // TODO should the authorize be EditSite for creation?
+        // [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -52,7 +53,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
-        //[Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
@@ -68,7 +69,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}", Name = nameof(GetHealthAuthoritySiteById))]
-        //[Authorize(Roles = Roles.ViewSite)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -129,7 +130,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateSiteInfoAsync(siteId, payload);
+            // await _healthAuthoritySiteService.UpdateSiteInfoAsync(siteId, payload);
 
             return NoContent();
         }
@@ -155,7 +156,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.CareType);
+            // await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.CareType);
 
             return NoContent();
         }
@@ -180,7 +181,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload.PhysicalAddress);
+            // await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload.PhysicalAddress);
 
             return NoContent();
         }
@@ -205,7 +206,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload);
+            // await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload);
 
             return NoContent();
         }
@@ -230,7 +231,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload);
+            // await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload);
 
             return NoContent();
         }
@@ -255,7 +256,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateAdministratorAsync(siteId, payload);
+            // await _healthAuthoritySiteService.UpdateAdministratorAsync(siteId, payload);
 
             return NoContent();
         }

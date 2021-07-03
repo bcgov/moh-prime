@@ -12470,9 +12470,6 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("CareTypeId")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
 
@@ -12482,7 +12479,13 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("HealthAuthorityCareTypeId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("HealthAuthorityPharmanetAdministratorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("PEC")
@@ -12496,9 +12499,6 @@ namespace Prime.Migrations
 
                     b.Property<string>("SecurityGroup")
                         .HasColumnType("text");
-
-                    b.Property<int?>("SiteAdministratorId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("SiteId")
                         .HasColumnType("text");
@@ -12518,22 +12518,20 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int?>("VendorId")
+                    b.Property<int>("VendorCode")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
 
-                    b.HasIndex("CareTypeId");
+                    b.HasIndex("HealthAuthorityCareTypeId");
 
                     b.HasIndex("HealthAuthorityOrganizationId");
 
+                    b.HasIndex("HealthAuthorityPharmanetAdministratorId");
+
                     b.HasIndex("PhysicalAddressId");
-
-                    b.HasIndex("SiteAdministratorId");
-
-                    b.HasIndex("VendorId");
 
                     b.ToTable("HealthAuthoritySite");
                 });
@@ -16233,9 +16231,11 @@ namespace Prime.Migrations
                         .WithMany()
                         .HasForeignKey("AdjudicatorId");
 
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityCareType", "CareType")
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityCareType", "HealthAuthorityCareType")
                         .WithMany()
-                        .HasForeignKey("CareTypeId");
+                        .HasForeignKey("HealthAuthorityCareTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "Organization")
                         .WithMany()
@@ -16243,17 +16243,15 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityContact", "SiteAdministrator")
-                        .WithMany()
-                        .HasForeignKey("SiteAdministratorId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityVendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorId");
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
