@@ -14,7 +14,6 @@ import { Address } from '@shared/models/address.model';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { AdministratorPageFormState } from './administrator-page-form-state.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
@@ -38,7 +37,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     protected formUtilsService: FormUtilsService,
     private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
     route: ActivatedRoute,
     router: Router
   ) {
@@ -81,13 +79,12 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected createFormInstance() {
-    this.formState = this.formStateService.administratorPageFormState;
+    this.formState = null;
   }
 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    this.formStateService.setForm(this.site, true);
     this.formState.form.markAsPristine();
   }
 
@@ -96,7 +93,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
+    // const payload = this.formStateService.json;
     // return this.siteResource.updateSite(payload);
     return void 0;
   }

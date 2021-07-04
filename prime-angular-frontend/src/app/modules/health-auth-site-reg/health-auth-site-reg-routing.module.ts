@@ -32,6 +32,7 @@ const routes: Routes = [
     // TODO add registration related guards
     canActivate: [AuthenticationGuard],
     canActivateChild: [AuthenticationGuard],
+    // TODO add proper default route when accessing module
     children: [
       {
         path: HealthAuthSiteRegRoutes.COLLECTION_NOTICE,

@@ -16,9 +16,13 @@ import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+// TODO move models into lib
 import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
-import { VendorForm } from '@health-auth/pages/vendor-page/vendor-page-form-state.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { VendorForm } from '@health-auth/pages/vendor-page/vendor-form.model';
+import { SiteInformationForm } from '@health-auth/pages/site-information-page/site-information-form.model';
+import { HealthAuthCareTypeForm } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form.model';
+import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-address-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -259,7 +263,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteInfo(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
+  public updateHealthAuthoritySiteInfo(healthAuthCode: number, siteId: number, payload: SiteInformationForm): NoContent {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/site-info`, payload)
       .pipe(
         NoContentResponse,
@@ -271,7 +275,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteCareType(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
+  public updateHealthAuthoritySiteCareType(healthAuthCode: number, siteId: number, payload: HealthAuthCareTypeForm): NoContent {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/care-type`, payload)
       .pipe(
         NoContentResponse,
@@ -283,19 +287,19 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySitePhysicalAddress(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
+  public updateHealthAuthoritySitePhysicalAddress(healthAuthCode: number, siteId: number, payload: SiteAddressForm): NoContent {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/physical-address`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority address could not be updated');
+          this.toastService.openErrorToast('Health authority site address could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySitePhysicalAddress error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public updateHealthAuthoritySiteHoursOperation(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
+  public updateHealthAuthoritySiteHoursOperation(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
     return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/hours-operation`, payload)
       .pipe(
         NoContentResponse,
@@ -307,29 +311,29 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteRemoteUsers(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
-    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/remote-users`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority remote users could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteRemoteUsers error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
+  // public updateHealthAuthoritySiteRemoteUsers(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
+  //   return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/remote-users`, payload)
+  //     .pipe(
+  //       NoContentResponse,
+  //       catchError((error: any) => {
+  //         this.toastService.openErrorToast('Health authority remote users could not be updated');
+  //         this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteRemoteUsers error has occurred: ', error);
+  //         throw error;
+  //       })
+  //     );
+  // }
 
-  public updateHealthAuthoritySiteAdministrator(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
-    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/vendor`, payload)
-      .pipe(
-        NoContentResponse,
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority administrator could not be updated');
-          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
+  // public updateHealthAuthoritySiteAdministrator(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
+  //   return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/vendor`, payload)
+  //     .pipe(
+  //       NoContentResponse,
+  //       catchError((error: any) => {
+  //         this.toastService.openErrorToast('Health authority administrator could not be updated');
+  //         this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
+  //         throw error;
+  //       })
+  //     );
+  // }
 
   /**
    * @description

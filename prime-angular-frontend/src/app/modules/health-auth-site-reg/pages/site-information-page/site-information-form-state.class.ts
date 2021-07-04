@@ -1,11 +1,9 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Site } from '@registration/shared/models/site.model';
+import { SiteInformationForm } from './site-information-form.model';
 
-interface SiteInformationPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> {}
-
-export class SiteInformationPageFormState extends AbstractFormState<SiteInformationPageDataModel> {
+export class SiteInformationFormState extends AbstractFormState<SiteInformationForm> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -14,12 +12,12 @@ export class SiteInformationPageFormState extends AbstractFormState<SiteInformat
     this.buildForm();
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
+  public get siteName(): FormControl {
+    return this.formInstance.get('siteName') as FormControl;
   }
 
-  public get pec(): FormControl {
-    return this.formInstance.get('pec') as FormControl;
+  public get siteId(): FormControl {
+    return this.formInstance.get('siteId') as FormControl;
   }
 
   public get securityGroup(): FormControl {
@@ -34,7 +32,7 @@ export class SiteInformationPageFormState extends AbstractFormState<SiteInformat
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: SiteInformationPageDataModel): void {
+  public patchValue(data: SiteInformationForm): void {
     if (!this.formInstance) {
       return;
     }
@@ -44,9 +42,9 @@ export class SiteInformationPageFormState extends AbstractFormState<SiteInformat
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      doingBusinessAs: ['', [Validators.required]],
-      pec: [null, [Validators.required]],
-      securityGroup: [null, []]
+      siteName: ['', [Validators.required]],
+      siteId: [null, [Validators.required]],
+      securityGroup: [null, [Validators.required]]
     });
   }
 }

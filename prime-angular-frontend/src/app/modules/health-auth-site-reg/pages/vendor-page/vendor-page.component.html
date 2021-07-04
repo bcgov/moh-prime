@@ -17,7 +17,7 @@
 
       <mat-radio-group class="radio-group"
                        formControlName="vendorCode">
-        <mat-radio-button *ngFor="let vendorCode of vendorCodes | async"
+        <mat-radio-button *ngFor="let vendorCode of vendorCodes"
                           class="radio-button"
                           [value]="vendorCode">
           {{ vendorCode | configCode: 'vendors' }}

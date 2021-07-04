@@ -114,7 +114,11 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
           map((enrollee: HttpEnrollee) => {
             // Replace the URL with redirection, and prevent initial
             // ID of zero being pushed onto browser history
-            this.location.replaceState([PaperEnrolmentRoutes.MODULE_PATH, enrollee.id, PaperEnrolmentRoutes.DEMOGRAPHIC].join('/'));
+            this.location.replaceState([
+              PaperEnrolmentRoutes.MODULE_PATH,
+              enrollee.id,
+              PaperEnrolmentRoutes.DEMOGRAPHIC
+            ].join('/'));
             return enrollee.id;
           })
         );

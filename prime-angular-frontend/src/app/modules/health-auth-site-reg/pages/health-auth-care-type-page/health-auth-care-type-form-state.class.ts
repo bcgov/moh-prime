@@ -1,12 +1,9 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Site } from '@registration/shared/models/site.model';
+import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
 
-// TODO should not be Site from @registration move to @lib/models if model will be shared
-interface HealthAuthCareTypePageDataModel extends Pick<Site, 'careSettingCode'> {}
-
-export class HealthAuthCareTypePageFormState extends AbstractFormState<HealthAuthCareTypePageDataModel> {
+export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCareTypeForm> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -15,8 +12,8 @@ export class HealthAuthCareTypePageFormState extends AbstractFormState<HealthAut
     this.buildForm();
   }
 
-  public get careSettingCode(): FormControl {
-    return this.formInstance.get('careSettingCode') as FormControl;
+  public get healthAuthorityCareTypeId(): FormControl {
+    return this.formInstance.get('healthAuthorityCareTypeId') as FormControl;
   }
 
   public get json(): any {
@@ -27,7 +24,7 @@ export class HealthAuthCareTypePageFormState extends AbstractFormState<HealthAut
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: HealthAuthCareTypePageDataModel): void {
+  public patchValue(data: HealthAuthCareTypeForm): void {
     if (!this.formInstance) {
       return;
     }
@@ -37,7 +34,7 @@ export class HealthAuthCareTypePageFormState extends AbstractFormState<HealthAut
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      careSettingCode: [
+      healthAuthorityCareTypeId: [
         null,
         [Validators.required]
       ]

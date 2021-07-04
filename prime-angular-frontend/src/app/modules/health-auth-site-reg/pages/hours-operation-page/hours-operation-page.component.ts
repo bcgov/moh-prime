@@ -1,25 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective, FormBuilder } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
-import { tap } from 'rxjs/operators';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { HoursOperationPageFormModel, HoursOperationPageFormState } from './hours-operation-page-form-state.class';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HoursOperationFormState } from './hours-operation-form-state.class';
+import { HoursOperationPageFormModel } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
+import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -37,7 +36,7 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   styleUrls: ['./hours-operation-page.component.scss']
 })
 export class HoursOperationPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: HoursOperationPageFormState;
+  public formState: HoursOperationFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
@@ -66,28 +65,15 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthorityResource,
-    private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
-    route: ActivatedRoute,
+    private fb: FormBuilder,
+    private healthAuthResource: HealthAuthorityResource,
+    private route: ActivatedRoute,
     router: Router,
   ) {
     super(dialog, formUtilsService);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-  }
-
-  // TODO remove this method add to allow routing between pages
-  public onSubmit() {
-    this.hasAttemptedSubmission = true;
-
-    if (this.checkValidity(this.formState.form)) {
-      this.onSubmitFormIsValid();
-      this.afterSubmitIsSuccessful();
-    } else {
-      this.onSubmitFormIsInvalid();
-    }
   }
 
   public hasDay(group: FormGroup): boolean {
@@ -135,25 +121,34 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected createFormInstance() {
-    this.formState = this.formStateService.hoursOperationPageFormState;
+    this.formState = new HoursOperationFormState(this.fb);
     this.lessThanErrorStateMatcher = new LessThanErrorStateMatcher();
   }
 
   protected patchForm(): void {
-    const site = this.siteService.site;
-    this.isCompleted = site?.completed;
-    // Force the site to be patched each time
-    this.formStateService.setForm(site, true);
-    this.formState.form.markAsPristine();
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
 
-    this.formState.businessDays.controls.forEach((group: FormGroup) => {
-      if (this.is24Hours(group)) {
-        this.allowEditingHours(group, false);
-      }
-    });
+
+    this.busy = this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .subscribe(({ businessHours, completed }: HealthAuthoritySite) => {
+        this.isCompleted = completed;
+        this.formState.patchValue({ businessHours });
+      });
+
+    // TODO needs to be refactored
+    // this.formState.businessDays.controls.forEach((group: FormGroup) => {
+    //   if (this.is24Hours(group)) {
+    //     this.allowEditingHours(group, false);
+    //   }
+    // });
   }
 
-  protected additionalValidityChecks(formValue: HoursOperationPageFormModel): boolean {
+  protected additionalValidityChecks(formValue: BusinessHoursForm): boolean {
+    // TODO needs to be refactored due to change in param typing
     return !!formValue.businessDays.length;
   }
 
@@ -166,15 +161,13 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
-    // return this.siteResource.updateSite(payload)
-    //   .pipe(tap(() => this.formState.form.markAsPristine()));
-    return void 0;
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
+
+    return this.healthAuthResource.updateHealthAuthoritySiteHoursOperation(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (!this.isCompleted)
       ? HealthAuthSiteRegRoutes.REMOTE_USERS
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;

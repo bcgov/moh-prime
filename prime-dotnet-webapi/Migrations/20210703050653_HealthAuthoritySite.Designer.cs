@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210703025750_HealthAuthoritySite")]
+    [Migration("20210703050653_HealthAuthoritySite")]
     partial class HealthAuthoritySite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -12481,13 +12481,13 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("HealthAuthorityCareTypeId")
+                    b.Property<int?>("HealthAuthorityCareTypeId")
                         .HasColumnType("integer");
 
                     b.Property<int>("HealthAuthorityOrganizationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("HealthAuthorityPharmanetAdministratorId")
+                    b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("PEC")
@@ -16235,9 +16235,7 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityCareType", "HealthAuthorityCareType")
                         .WithMany()
-                        .HasForeignKey("HealthAuthorityCareTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HealthAuthorityCareTypeId");
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "Organization")
                         .WithMany()
@@ -16247,9 +16245,7 @@ namespace Prime.Migrations
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
                         .WithMany()
-                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

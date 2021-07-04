@@ -48,9 +48,9 @@ namespace Prime.Migrations
                     SiteName = table.Column<string>(nullable: true),
                     SiteId = table.Column<string>(nullable: true),
                     SecurityGroup = table.Column<string>(nullable: true),
-                    HealthAuthorityCareTypeId = table.Column<int>(nullable: false),
+                    HealthAuthorityCareTypeId = table.Column<int>(nullable: true),
                     PhysicalAddressId = table.Column<int>(nullable: true),
-                    HealthAuthorityPharmanetAdministratorId = table.Column<int>(nullable: false),
+                    HealthAuthorityPharmanetAdministratorId = table.Column<int>(nullable: true),
                     Completed = table.Column<bool>(nullable: false),
                     SubmittedDate = table.Column<DateTimeOffset>(nullable: true),
                     ApprovedDate = table.Column<DateTimeOffset>(nullable: true),
@@ -73,7 +73,7 @@ namespace Prime.Migrations
                         column: x => x.HealthAuthorityCareTypeId,
                         principalTable: "HealthAuthorityCareType",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HealthAuthoritySite_HealthAuthorityOrganization_HealthAutho~",
                         column: x => x.HealthAuthorityOrganizationId,
@@ -85,7 +85,7 @@ namespace Prime.Migrations
                         column: x => x.HealthAuthorityPharmanetAdministratorId,
                         principalTable: "HealthAuthorityContact",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HealthAuthoritySite_Address_PhysicalAddressId",
                         column: x => x.PhysicalAddressId,

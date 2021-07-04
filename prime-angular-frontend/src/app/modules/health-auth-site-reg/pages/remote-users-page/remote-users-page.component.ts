@@ -19,7 +19,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
@@ -44,7 +43,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     protected formUtilsService: FormUtilsService,
     private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -95,25 +93,25 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.createFormInstance();
     this.initForm();
 
-    if (this.siteService.site?.submittedDate) {
-      this.submitButtonText = 'Save and Submit';
-    }
+    // if (this.siteService.site?.submittedDate) {
+    //   this.submitButtonText = 'Save and Submit';
+    // }
   }
 
   protected createFormInstance() {
-    this.formState = this.formStateService.remoteUsersPageFormState;
+    this.formState = null;
   }
 
   protected patchForm(): void {
-    const site = this.siteService.site;
-    this.isCompleted = site?.completed;
-    // Inform the parent not to patch the form as there are outstanding changes
-    // to the remote users that need to be persisted
-    const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-    // Remove query param from URL without refreshing
-    this.routeUtils.removeQueryParams({ fromRemoteUser: null });
-    this.formStateService.setForm(site, !fromRemoteUser);
-    this.formState.form.markAsPristine();
+    // const site = this.siteService.site;
+    // this.isCompleted = site?.completed;
+    // // Inform the parent not to patch the form as there are outstanding changes
+    // // to the remote users that need to be persisted
+    // const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+    // // Remove query param from URL without refreshing
+    // this.routeUtils.removeQueryParams({ fromRemoteUser: null });
+    // this.formStateService.setForm(site, !fromRemoteUser);
+    // this.formState.form.markAsPristine();
   }
 
   protected initForm() {
@@ -148,19 +146,19 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
-    const site = this.siteService.site;
-    const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
-      .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
-        if (!site.remoteUsers.find((current: RemoteUser) =>
-          current.firstName === updated.firstName &&
-          current.lastName === updated.lastName &&
-          current.email === updated.email
-        )) {
-          newRemoteUsersAcc.push(updated);
-        }
-        return newRemoteUsersAcc;
-      }, []);
+    // const payload = this.formStateService.json;
+    // const site = this.siteService.site;
+    // const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
+    //   .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+    //     if (!site.remoteUsers.find((current: RemoteUser) =>
+    //       current.firstName === updated.firstName &&
+    //       current.lastName === updated.lastName &&
+    //       current.email === updated.email
+    //     )) {
+    //       newRemoteUsersAcc.push(updated);
+    //     }
+    //     return newRemoteUsersAcc;
+    //   }, []);
 
     // return this.siteResource.updateSite(payload)
     //   .pipe(

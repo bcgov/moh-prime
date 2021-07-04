@@ -7,6 +7,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AbstractFormState } from './abstract-form-state.class';
+import { tap } from 'rxjs/operators';
 
 export interface IEnrolmentPage {
   /**
@@ -126,6 +127,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
     if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
+        .pipe(tap((_) => this.formState.form.markAsPristine()))
         .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();

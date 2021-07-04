@@ -2,12 +2,9 @@ import { FormBuilder, FormControl } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { VendorForm } from './vendor-form.model';
 
-export interface VendorForm {
-  vendorCode: number;
-}
-
-export class VendorPageFormState extends AbstractFormState<VendorForm> {
+export class VendorFormState extends AbstractFormState<VendorForm> {
   public constructor(
     private fb: FormBuilder
   ) {

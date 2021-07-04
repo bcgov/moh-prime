@@ -35,7 +35,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
   styleUrls: ['./site-management-page.component.scss']
 })
 export class SiteManagementPageComponent implements OnInit {
-  // public busy: Subscription;
+  public busy: Subscription;
   public title: string;
   // public organizations: Organization[];
   // public organizationAgreements: OrganizationAgreementViewModel[];

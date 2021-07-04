@@ -27,7 +27,7 @@ namespace Prime.Models.HealthAuthorities
 
         public string SecurityGroup { get; set; }
 
-        public int HealthAuthorityCareTypeId { get; set; }
+        public int? HealthAuthorityCareTypeId { get; set; }
 
         [JsonIgnore]
         public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
@@ -38,7 +38,7 @@ namespace Prime.Models.HealthAuthorities
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
-        public int HealthAuthorityPharmanetAdministratorId { get; set; }
+        public int? HealthAuthorityPharmanetAdministratorId { get; set; }
 
         [JsonIgnore]
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }

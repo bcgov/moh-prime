@@ -21,7 +21,6 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 
 @Component({
@@ -60,7 +59,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private formStateService: HealthAuthSiteRegFormStateService,
     private siteService: HealthAuthSiteRegService,
     // TODO do we need this in health authority?
     // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
@@ -168,7 +166,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance() {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = this.formStateService.remoteUsersPageFormState;
+    this.formState = null;
   }
 
   protected patchForm(): void {
@@ -177,7 +175,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    this.formStateService.setForm(site);
+    // this.formStateService.setForm(site);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;

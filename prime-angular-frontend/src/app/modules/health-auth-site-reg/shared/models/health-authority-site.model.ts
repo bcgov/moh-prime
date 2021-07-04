@@ -10,7 +10,7 @@ export interface HealthAuthoritySite {
   siteName: string;
   siteId: string;
   securityGroup: string;
-  careType: string;
+  healthAuthorityCareTypeId: number;
   physicalAddress: Address;
   businessHours: BusinessDay[];
   remoteUsers: RemoteUser[];
