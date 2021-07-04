@@ -29,6 +29,7 @@ namespace PrimeTests.UnitTests
                 provider.GetService<IRazorViewEngine>(),
                 A.Fake<ITempDataProvider>(),
                 provider,
+                A.Fake<IEmailTemplateService>(),
                 A.Fake<IHttpContextAccessor>()
             );
         }
