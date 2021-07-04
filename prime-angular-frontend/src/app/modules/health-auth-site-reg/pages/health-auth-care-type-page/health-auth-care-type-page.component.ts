@@ -77,9 +77,9 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
             : EMPTY
         )
       )
-      .subscribe(({ completed }: HealthAuthoritySite) => {
+      .subscribe(({ careType, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        // this.formState.patchValue({ careType });
+        this.formState.patchValue({ careType });
       });
   }
 

@@ -14,10 +14,11 @@ namespace Prime.Services
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
         Task UpdateVendorAsync(int siteId, int vendorCode);
         Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel);
-        Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId);
+        // Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId);
+        Task UpdateCareTypeAsync(int siteId, string careType);
         Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress);
-        Task UpdateHoursOperationAsync(int siteId, HealthAuthoritySiteHoursOperationViewModel viewModel);
-        // Task UpdateRemoteUsersAsync(int siteId, HealthAuthoritySiteRemoteUsersViewModel viewModel);
+        Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
+        Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
         // Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel);
         Task SetSiteCompletedAsync(int siteId);
         Task FinalizeSubmissionAsync(int siteId);

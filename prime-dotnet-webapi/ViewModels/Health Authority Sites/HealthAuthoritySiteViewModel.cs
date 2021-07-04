@@ -12,7 +12,8 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public string SiteName { get; set; }
         public string SiteId { get; set; }
         public string SecurityGroup { get; set; }
-        public int HealthAuthorityCareTypeId { get; set; }
+        // public int HealthAuthorityCareTypeId { get; set; }
+        public string CareType { get; set; }
         public PhysicalAddress PhysicalAddress { get; set; }
         public ICollection<BusinessDay> BusinessHours { get; set; }
         public ICollection<RemoteUser> RemoteUsers { get; set; }

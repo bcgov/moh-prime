@@ -156,7 +156,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.HealthAuthorityCareTypeId);
+            await _healthAuthoritySiteService.UpdateCareTypeAsync(siteId, payload.CareType);
 
             return NoContent();
         }
@@ -206,7 +206,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            // await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload);
+            await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload.BusinessHours);
 
             return NoContent();
         }
@@ -231,7 +231,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            // await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload);
+            await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload.RemoteUsers);
 
             return NoContent();
         }

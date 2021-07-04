@@ -1,9 +1,9 @@
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { StringUtils } from '@lib/utils/string-utils.class';
-// TODO moved to lib or shared module
+// TODO moved to lib into /common
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 import { BusinessHoursForm } from './hours-operation-form.model';
@@ -26,7 +26,7 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
       return;
     }
 
-    return this.formInstance.getRawValue().businessDays
+    const businessHours = this.formInstance.getRawValue().businessDays
       .map((hours: BusinessDayHours, dayOfWeek: number) => {
         if (hours.startTime && hours.endTime) {
           hours.startTime = StringUtils.splice(hours.startTime, 2, ':');
@@ -35,6 +35,8 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
         return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
       })
       .filter((day: BusinessDay) => day.startTime);
+
+    return { businessHours };
   }
 
   public patchValue({ businessHours }: BusinessHoursForm): void {

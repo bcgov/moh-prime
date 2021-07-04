@@ -19,6 +19,7 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 import { HoursOperationFormState } from './hours-operation-form-state.class';
 import { HoursOperationPageFormModel } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
 import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {
@@ -132,24 +133,24 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
       return;
     }
 
-
     this.busy = this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .subscribe(({ businessHours, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
         this.formState.patchValue({ businessHours });
-      });
 
-    // TODO needs to be refactored
-    // this.formState.businessDays.controls.forEach((group: FormGroup) => {
-    //   if (this.is24Hours(group)) {
-    //     this.allowEditingHours(group, false);
-    //   }
-    // });
+        // TODO needs to be refactored and move into FormState
+        this.formState.businessDays.controls.forEach((group: FormGroup) => {
+          if (this.is24Hours(group)) {
+            this.allowEditingHours(group, false);
+          }
+        });
+      });
   }
 
-  protected additionalValidityChecks(formValue: BusinessHoursForm): boolean {
-    // TODO needs to be refactored due to change in param typing
-    return !!formValue.businessDays.length;
+  protected additionalValidityChecks(formValue: { businessDays: BusinessDayHours[] }): boolean {
+    console.log(formValue);
+    return false;
+    // return !!formValue.businessDays.length;
   }
 
   protected onSubmitFormIsValid(): void {

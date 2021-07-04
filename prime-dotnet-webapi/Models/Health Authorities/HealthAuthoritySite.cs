@@ -27,10 +27,12 @@ namespace Prime.Models.HealthAuthorities
 
         public string SecurityGroup { get; set; }
 
-        public int? HealthAuthorityCareTypeId { get; set; }
+        public string CareType { get; set; }
 
-        [JsonIgnore]
-        public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
+        // public int? HealthAuthorityCareTypeId { get; set; }
+        //
+        // [JsonIgnore]
+        // public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
         public PhysicalAddress PhysicalAddress { get; set; }
 

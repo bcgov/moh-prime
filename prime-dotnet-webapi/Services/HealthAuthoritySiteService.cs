@@ -68,7 +68,7 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO check vendor exists on the HealthAuthority list of vendors
+            // TODO check vendor exists on the HealthAuthority list of vendor(s)
             _mapper.Map(vendorCode, site.VendorCode);
 
             await _context.SaveChangesAsync();
@@ -84,13 +84,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId)
+        public async Task UpdateCareTypeAsync(int siteId, string careType)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO check careType exists on the HealthAuthority list of careTypes
-            _mapper.Map(healthAuthorityCareTypeId, site.HealthAuthorityCareTypeId);
+            // TODO check careType exists on the HealthAuthority list of careType(s)
+            // _mapper.Map(careType, site.CareType);
+            // TODO why does the above not work like VendorCode?
+            site.CareType = careType;
 
             await _context.SaveChangesAsync();
         }
@@ -100,36 +102,43 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            _mapper.Map(physicalAddress, site.PhysicalAddress);
+            // TODO why does the above not work like VendorCode?
+            // _mapper.Map(physicalAddress, site.PhysicalAddress);
+            site.PhysicalAddress = physicalAddress;
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateHoursOperationAsync(int siteId, HealthAuthoritySiteHoursOperationViewModel viewModel)
+        public async Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            _mapper.Map(viewModel, site);
+            // TODO why does the above not work like VendorCode?
+            // _mapper.Map(businessHours, site.BusinessHours);
+            site.BusinessHours = businessHours;
 
             await _context.SaveChangesAsync();
         }
 
-        // public async Task UpdateRemoteUsersAsync(int siteId, HealthAuthoritySiteRemoteUsersViewModel viewModel)
-        // {
-        //     var site = await _context.HealthAuthoritySites
-        //         .SingleOrDefaultAsync(has => has.Id == siteId);
-        //
-        //     // _mapper.Map(viewModel, site);
-        //
-        //     await _context.SaveChangesAsync();
-        // }
-        //
+        public async Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO why does the above not work like VendorCode?
+            // _mapper.Map(remoteUsers, site.RemoteUsers);
+            site.RemoteUsers = remoteUsers;
+
+            await _context.SaveChangesAsync();
+        }
+
         // public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
         // {
         //     var site = await _context.HealthAuthoritySites
         //         .SingleOrDefaultAsync(has => has.Id == siteId);
         //
+        //     // TODO check administrator exists on the HealthAuthority list of administrator(s)
         //     // _mapper.Map(viewModel, site);
         //
         //     await _context.SaveChangesAsync();

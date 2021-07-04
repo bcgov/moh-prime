@@ -23,6 +23,7 @@ import { VendorForm } from '@health-auth/pages/vendor-page/vendor-form.model';
 import { SiteInformationForm } from '@health-auth/pages/site-information-page/site-information-form.model';
 import { HealthAuthCareTypeForm } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form.model';
 import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-address-form.model';
+import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -221,8 +222,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public createHealthAuthoritySite(healthAuthCode: number, payload: VendorForm): Observable<HealthAuthoritySite> {
-    return this.apiResource.post<HealthAuthoritySite>(`health-authorities/${healthAuthCode}/sites`, payload)
+  public createHealthAuthoritySite(healthAuthId: number, payload: VendorForm): Observable<HealthAuthoritySite> {
+    return this.apiResource.post<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites`, payload)
       .pipe(
         map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
         tap((healthAuthoritySite: HealthAuthoritySite) => this.logger.info('HEALTH_AUTH_SITE', healthAuthoritySite)),
@@ -251,8 +252,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteVendor(healthAuthCode: number, siteId: number, payload: VendorForm): Observable<NoContent> {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/vendor`, payload)
+  public updateHealthAuthoritySiteVendor(healthAuthId: number, siteId: number, payload: VendorForm): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -275,8 +276,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteCareType(healthAuthCode: number, siteId: number, payload: HealthAuthCareTypeForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/care-type`, payload)
+  public updateHealthAuthoritySiteCareType(healthAuthId: number, siteId: number, payload: HealthAuthCareTypeForm): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/care-type`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -287,8 +288,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySitePhysicalAddress(healthAuthCode: number, siteId: number, payload: SiteAddressForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/physical-address`, payload)
+  public updateHealthAuthoritySitePhysicalAddress(healthAuthId: number, siteId: number, payload: SiteAddressForm): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/address`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -299,8 +300,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteHoursOperation(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
-    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/hours-operation`, payload)
+  public updateHealthAuthoritySiteHoursOperation(healthAuthId: number, siteId: number, payload: BusinessHoursForm): NoContent {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/hours-operation`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -311,8 +312,8 @@ export class HealthAuthorityResource {
       );
   }
 
-  // public updateHealthAuthoritySiteRemoteUsers(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
-  //   return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/remote-users`, payload)
+  // public updateHealthAuthoritySiteRemoteUsers(healthAuthId: number, siteId: number, payload: ???): NoContent {
+  //   return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/remote-users`, payload)
   //     .pipe(
   //       NoContentResponse,
   //       catchError((error: any) => {
@@ -323,8 +324,8 @@ export class HealthAuthorityResource {
   //     );
   // }
 
-  // public updateHealthAuthoritySiteAdministrator(healthAuthCode: number, siteId: number, payload: VendorForm): NoContent {
-  //   return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthCode}/sites/${siteId}/vendor`, payload)
+  // public updateHealthAuthoritySiteAdministrator(healthAuthId: number, siteId: number, payload: ???): NoContent {
+  //   return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
   //     .pipe(
   //       NoContentResponse,
   //       catchError((error: any) => {

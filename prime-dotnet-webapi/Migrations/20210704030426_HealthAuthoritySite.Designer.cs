@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210703050653_HealthAuthoritySite")]
+    [Migration("20210704030426_HealthAuthoritySite")]
     partial class HealthAuthoritySite
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -12472,6 +12472,9 @@ namespace Prime.Migrations
                     b.Property<DateTimeOffset?>("ApprovedDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("CareType")
+                        .HasColumnType("text");
+
                     b.Property<bool>("Completed")
                         .HasColumnType("boolean");
 
@@ -12480,9 +12483,6 @@ namespace Prime.Migrations
 
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
-
-                    b.Property<int?>("HealthAuthorityCareTypeId")
-                        .HasColumnType("integer");
 
                     b.Property<int>("HealthAuthorityOrganizationId")
                         .HasColumnType("integer");
@@ -12526,8 +12526,6 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
-
-                    b.HasIndex("HealthAuthorityCareTypeId");
 
                     b.HasIndex("HealthAuthorityOrganizationId");
 
@@ -16232,10 +16230,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
                         .WithMany()
                         .HasForeignKey("AdjudicatorId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityCareType", "HealthAuthorityCareType")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityCareTypeId");
 
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "Organization")
                         .WithMany()

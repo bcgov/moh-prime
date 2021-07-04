@@ -48,7 +48,7 @@ namespace Prime.Migrations
                     SiteName = table.Column<string>(nullable: true),
                     SiteId = table.Column<string>(nullable: true),
                     SecurityGroup = table.Column<string>(nullable: true),
-                    HealthAuthorityCareTypeId = table.Column<int>(nullable: true),
+                    CareType = table.Column<string>(nullable: true),
                     PhysicalAddressId = table.Column<int>(nullable: true),
                     HealthAuthorityPharmanetAdministratorId = table.Column<int>(nullable: true),
                     Completed = table.Column<bool>(nullable: false),
@@ -66,12 +66,6 @@ namespace Prime.Migrations
                         name: "FK_HealthAuthoritySite_Admin_AdjudicatorId",
                         column: x => x.AdjudicatorId,
                         principalTable: "Admin",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_HealthAuthoritySite_HealthAuthorityCareType_HealthAuthority~",
-                        column: x => x.HealthAuthorityCareTypeId,
-                        principalTable: "HealthAuthorityCareType",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -123,11 +117,6 @@ namespace Prime.Migrations
                 name: "IX_HealthAuthoritySite_AdjudicatorId",
                 table: "HealthAuthoritySite",
                 column: "AdjudicatorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HealthAuthoritySite_HealthAuthorityCareTypeId",
-                table: "HealthAuthoritySite",
-                column: "HealthAuthorityCareTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HealthAuthoritySite_HealthAuthorityOrganizationId",
