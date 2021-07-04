@@ -120,8 +120,6 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   protected afterSubmitIsSuccessful(healthAuthSiteId: number): void {
-    this.formState.form.markAsPristine();
-
     const nextRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       // Must go up a route-level and down with newly minted site ID

@@ -75,8 +75,6 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;

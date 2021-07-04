@@ -111,7 +111,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     // // Remove query param from URL without refreshing
     // this.routeUtils.removeQueryParams({ fromRemoteUser: null });
     // this.formStateService.setForm(site, !fromRemoteUser);
-    // this.formState.form.markAsPristine();
   }
 
   protected initForm() {

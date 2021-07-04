@@ -27,7 +27,7 @@ export class SiteAddressFormState extends AbstractFormState<SiteAddressForm> {
   }
 
   public patchValue(address: SiteAddressForm): void {
-    if (!this.formInstance || !address) {
+    if (!this.formInstance || !address?.physicalAddress) {
       return;
     }
 

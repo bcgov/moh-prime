@@ -148,9 +148,8 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected additionalValidityChecks(formValue: { businessDays: BusinessDayHours[] }): boolean {
-    console.log(formValue);
-    return false;
-    // return !!formValue.businessDays.length;
+    // Ensure at least one business day has hours
+    return !!formValue.businessDays.some(bd => bd.startTime);
   }
 
   protected onSubmitFormIsValid(): void {

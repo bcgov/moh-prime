@@ -34,7 +34,12 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
         }
         return new BusinessDay(dayOfWeek, hours.startTime, hours.endTime);
       })
-      .filter((day: BusinessDay) => day.startTime);
+      .filter((day: BusinessDay) => day.startTime)
+      .map((businessDay: BusinessDay) => {
+        businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
+        businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+        return businessDay;
+      });
 
     return { businessHours };
   }
@@ -43,6 +48,12 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
     if (!this.formInstance || !businessHours?.length) {
       return;
     }
+
+    businessHours = businessHours.map((businessDay: BusinessDay) => {
+      businessDay.startTime = BusinessDayHours.fromTimeSpan(businessDay.startTime);
+      businessDay.endTime = BusinessDayHours.fromTimeSpan(businessDay.endTime);
+      return businessDay;
+    });
 
     const businessDays = [...Array(7).keys()]
       .reduce((days: (BusinessDay | {})[], dayOfWeek: number) => {

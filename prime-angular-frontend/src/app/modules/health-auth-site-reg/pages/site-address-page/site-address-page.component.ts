@@ -8,7 +8,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AddressLine } from '@shared/models/address.model';
+import { Address, AddressLine } from '@shared/models/address.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { SiteAddressFormState } from './site-address-form-state.class';
@@ -75,6 +75,9 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
       .subscribe(({ physicalAddress, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
         this.formState.patchValue({ physicalAddress });
+        if (Address.isNotEmpty(physicalAddress)) {
+          this.showAddressFields = true;
+        }
       });
   }
 
