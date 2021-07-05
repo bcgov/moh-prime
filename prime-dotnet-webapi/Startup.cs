@@ -92,10 +92,6 @@ namespace Prime
 
             services.AddControllers()
                 .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<HealthAuthoritySiteVendorValidator>())
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<HealthAuthoritySiteInfoValidator>())
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<HealthAuthoritySiteCareTypeValidator>())
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<HealthAuthoritySiteAddressValidator>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
