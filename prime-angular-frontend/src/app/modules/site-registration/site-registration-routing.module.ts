@@ -28,6 +28,7 @@ import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 
 const routes: Routes = [
   {
@@ -72,6 +73,12 @@ const routes: Routes = [
                 component: OrganizationSigningAuthorityPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
+              },
+              {
+                path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
+                component: OrganizationClaimConfirmationPageComponent,
+                canDeactivate: [CanDeactivateFormGuard],
+                data: { title: 'Next Steps' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,

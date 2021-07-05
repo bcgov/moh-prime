@@ -13,6 +13,7 @@ export class SiteRoutes {
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
   public static ORGANIZATION_CLAIM = 'organization-claim';
   public static ORGANIZATION_NAME = 'organization-name';
+  public static ORGANIZATION_CLAIM_CONFIRMATION = 'organization-claime-confirmation'
   public static ORGANIZATION_REVIEW = 'organization-review';
   public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
@@ -64,6 +65,7 @@ export class SiteRoutes {
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_SIGNING_AUTHORITY,
+      this.ORGANIZATION_CLAIM_CONFIRMATION,
       this.ORGANIZATION_NAME
     ];
   }

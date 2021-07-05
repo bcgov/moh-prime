@@ -167,11 +167,17 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
+    const claimOrg = this.route.snapshot.queryParams.claimOrg;
     let routePath: (string | number)[];
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
-    } else {
+    }
+    else if (claimOrg === 'true') {
+      console.log('routing to next step with org', claimOrg, organization.id);
+      routePath = ['../', organization.id, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
+    }
+    else {
       routePath = (this.isCompleted)
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];

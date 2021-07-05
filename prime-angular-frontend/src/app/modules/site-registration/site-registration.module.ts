@@ -26,6 +26,7 @@ import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.
     SiteRegistrationDashboardComponent,
     SiteProgressIndicatorComponent,
     OverviewPageComponent,
-    NextStepsPageComponent
+    NextStepsPageComponent,
+    OrganizationClaimConfirmationPageComponent
   ],
   imports: [
     SiteRegistrationRoutingModule,
