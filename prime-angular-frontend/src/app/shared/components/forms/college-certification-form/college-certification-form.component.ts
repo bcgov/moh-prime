@@ -193,7 +193,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
     if (collegeCode === CollegeLicenceClassEnum.BCCNM && !this.condensed) {
       this.formUtilsService.setValidators(this.nurseCategory, [Validators.required]);
-      return
+      return;
     }
 
     // Initialize the validations when the college code is not

@@ -8,7 +8,8 @@
         <mat-label>College Licences</mat-label>
         <mat-select formControlName="collegeCode">
           <mat-option *ngIf="!condensed"
-                      value="">None</mat-option>
+                      value="">None
+          </mat-option>
           <mat-option *ngFor="let college of allowedColleges()"
                       [value]="college.code">
             {{ college.name }}
@@ -50,8 +51,7 @@
         </ng-container>
       </div>
 
-      <ng-container
-                    *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
+      <ng-container *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
         <div *ngIf="filteredLicenses?.length > 1"
              class="col-sm-12 pl-5">
 
@@ -67,8 +67,8 @@
           </mat-form-field>
 
         </div>
-        <div class="col-sm-12 pl-5"
-             *ngIf="collegeCode.value !== CollegeLicenceClassEnum.CPSBC">
+        <div *ngIf="collegeCode.value !== CollegeLicenceClassEnum.CPSBC"
+             class="col-sm-12 pl-5">
 
           <mat-form-field class="w-100">
             <input matInput
@@ -103,8 +103,8 @@
             </mat-form-field>
 
           </div>
-          <div class="col-sm-12 pl-5"
-               *ngIf="hasPractices && shouldShowPractices()">
+          <div *ngIf="hasPractices && shouldShowPractices()"
+               class="col-sm-12 pl-5">
 
             <mat-form-field class="w-100">
               <mat-label>Advanced Practices (Optional)</mat-label>
@@ -122,8 +122,8 @@
 
         </ng-container>
 
-        <div class="col-sm-12 pl-5"
-             *ngIf="collegeCode.value === CollegeLicenceClassEnum.CPSBC">
+        <div *ngIf="collegeCode.value === CollegeLicenceClassEnum.CPSBC"
+             class="col-sm-12 pl-5">
           <app-page-subheader>
             <ng-container appPageSubheaderTitle>CPSID Number</ng-container>
             <ng-container appPageSubheaderSummary>

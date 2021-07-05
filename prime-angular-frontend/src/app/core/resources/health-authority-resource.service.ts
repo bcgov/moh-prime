@@ -24,6 +24,7 @@ import { SiteInformationForm } from '@health-auth/pages/site-information-page/si
 import { HealthAuthCareTypeForm } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form.model';
 import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-address-form.model';
 import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
+import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -312,17 +313,17 @@ export class HealthAuthorityResource {
       );
   }
 
-  // public updateHealthAuthoritySiteRemoteUsers(healthAuthId: number, siteId: number, payload: ???): NoContent {
-  //   return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/remote-users`, payload)
-  //     .pipe(
-  //       NoContentResponse,
-  //       catchError((error: any) => {
-  //         this.toastService.openErrorToast('Health authority remote users could not be updated');
-  //         this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteRemoteUsers error has occurred: ', error);
-  //         throw error;
-  //       })
-  //     );
-  // }
+  public updateHealthAuthoritySiteRemoteUsers(healthAuthId: number, siteId: number, payload: RemoteUsersForm): NoContent {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/remote-users`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority remote users could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteRemoteUsers error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   // public updateHealthAuthoritySiteAdministrator(healthAuthId: number, siteId: number, payload: ???): NoContent {
   //   return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)

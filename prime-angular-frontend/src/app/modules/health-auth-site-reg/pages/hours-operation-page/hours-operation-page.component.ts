@@ -13,13 +13,12 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+// TODO move to /lib
+import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HoursOperationFormState } from './hours-operation-form-state.class';
-import { HoursOperationPageFormModel } from '@registration/pages/hours-operation-page/hours-operation-page-form-state.class';
-import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
-import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
 
 export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   public isErrorState(control: FormControl | null, form: FormGroupDirective | null): boolean {

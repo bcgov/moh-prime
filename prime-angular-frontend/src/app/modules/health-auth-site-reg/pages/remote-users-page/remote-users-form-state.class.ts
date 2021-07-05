@@ -5,8 +5,9 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
+import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 
-export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
+export class RemoteUsersPageFormState extends AbstractFormState<RemoteUsersForm> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -31,7 +32,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
     return this.remoteUsers.getRawValue() as RemoteUser[];
   }
 
-  public get json(): RemoteUser[] {
+  public get json(): RemoteUsersForm {
     if (!this.formInstance) {
       return;
     }
@@ -44,7 +45,7 @@ export class RemoteUsersPageFormState extends AbstractFormState<RemoteUser[]> {
       });
   }
 
-  public patchValue(remoteUsers: RemoteUser[]): void {
+  public patchValue({ remoteUsers }: RemoteUsersForm): void {
     if (!this.formInstance || !remoteUsers?.length) {
       return;
     }

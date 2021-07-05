@@ -21,7 +21,7 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
 
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
+import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-form-state.class';
 
 @Component({
   selector: 'app-remote-user-page',
