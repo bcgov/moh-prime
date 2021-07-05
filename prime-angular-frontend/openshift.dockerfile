@@ -59,6 +59,7 @@ RUN sed s/\$SVC_NAME/$SVC_NAME/g /tmp/openshift.nginx.conf > /etc/nginx/conf.d/p
     chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
 
 # Create symlinks to redirect nginx logs to stdout and stderr
+RUN bash -xeu -c 'mkdir -p /var/log/nginx'
 RUN  ln -sf /dev/stdout /var/log/nginx/access.log \
   && ln -sf /dev/stderr /var/log/nginx/error.log
 
