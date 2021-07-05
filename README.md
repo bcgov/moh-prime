@@ -15,6 +15,24 @@ Docker command:
 
 	docker-compose up --build	
 
+### LOCAL DEVELOPMENT
+
+For local development where the web client and server are run directly off the host system some of the containers should be stopped to avoid port collisions and to reduce resources on containers that aren't required.
+
+**Required Containers**
+
+* primedb
+* mailhog
+* document-manager-backend
+* prime-redis
+ 
+To run the backend open `prime-dotnet-webapi` in VSCode and launch the API using the debugger (or F5).  For the web client run the web client locally type:
+
+```
+cd prime-angular-frontend
+ng serve -o
+```
+
 To update the database schema, first update the model file in the
 [Models](prime-dotnet-webapi/Models) folder, and rebuild using:
 

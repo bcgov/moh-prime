@@ -135,6 +135,19 @@ objects:
           name: ${SVC_NAME}-${FRONTEND_POD}
       spec:
         containers:
+          - name: ${SVC_NAME}-nginx-logs
+            image: 'public.ecr.aws/runecast/busybox:1.32.1'
+            args:
+              - /bin/sh
+              - '-c'
+              - tail -f /var/log/nginx/*.log
+            resources: {}
+            volumeMounts:
+              - name: nginx-logs
+                mountPath: /var/log/nginx/
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+            imagePullPolicy: Always
           - name: ${SVC_NAME}-${FRONTEND_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
@@ -173,6 +186,8 @@ objects:
               readOnly: true
               mountPath: /etc/nginx/conf.d/prime.conf
               subPath: prime.conf
+            - name: nginx-logs
+              mountPath: /var/log/nginx/
         volumes:
         - name: vanity-tls-certs
           secret:
@@ -186,6 +201,8 @@ objects:
           secret:
             secretName: plr-integration
             defaultMode: 420
+        - name: nginx-logs
+          emptyDir: {}
     triggers:
       - type: ConfigChange
       - type: ImageChange
