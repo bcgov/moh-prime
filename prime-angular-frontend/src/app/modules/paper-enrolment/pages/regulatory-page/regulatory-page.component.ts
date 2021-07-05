@@ -91,7 +91,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
-    const oboSites = this.removeJobs(this.enrollee.oboSites);
+    const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
       .pipe(
@@ -118,10 +118,10 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
   /**
    * @description
-   * Remove obo sites/jobs from the enrolment as enrollees can not have
-   * certificate(s), as well as, job(s).
+   * Remove obo sites from the enrolment as enrollees can not have
+   * certificate(s), as well as, obo site(s).
    */
-  private removeJobs(oboSites: OboSite[]): OboSite[] {
+  private removeOboSites(oboSites: OboSite[]): OboSite[] {
     this.formState.removeIncompleteCertifications(true);
 
     if (this.formState.certifications.length) {
