@@ -2,6 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Prime.Models.Agreements.Internal;
+using System.Reflection;
 
 namespace Prime.Models
 {
@@ -16,7 +17,7 @@ namespace Prime.Models
         public static IEnumerable<AgreementType> AgreementTypes(this AgreementGroup group)
         {
             return typeof(AgreementType)
-                .GetFields()
+                .GetFields(BindingFlags.Public | BindingFlags.Static)
                 .Where(x => x.GetCustomAttributes(false)
                     .OfType<AgreementGroupsAttribute>()
                     .Single()

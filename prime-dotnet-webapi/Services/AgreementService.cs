@@ -31,12 +31,29 @@ namespace Prime.Services
         }
 
 
-        public async Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId)
+        public async Task<IEnumerable<AgreementVersionListViewModel>> GetLatestAgreementVersionsAsync(AgreementGroup? group)
         {
-            return await _context.Agreements
-                .Where(a => a.Id == agreementId)
-                .Select(a => a.SignedAgreement)
-                .SingleOrDefaultAsync();
+            // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .Select(av => av.AgreementType)
+                .Distinct()
+                .If(group.HasValue, q => q.Where(at => group.Value.AgreementTypes().Contains(at)))
+                .Select(at => _context.AgreementVersions
+                    .Where(av => av.AgreementType == at)
+                    .OrderByDescending(av => av.EffectiveDate)
+                    .First())
+                .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<AgreementVersionViewModel> GetAgreementVersionAsync(int agreementVersionId)
+        {
+            return await _context.AgreementVersions
+               .AsNoTracking()
+               .Where(av => av.Id == agreementVersionId)
+               .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
+               .SingleOrDefaultAsync();
         }
 
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
@@ -61,23 +78,12 @@ namespace Prime.Services
             return signedAgreement;
         }
 
-        public async Task<IEnumerable<AgreementVersionListViewModel>> GetLatestEnrolleeAgreementVersionsAsync()
+        public async Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId)
         {
-            var agreementVersionList = new List<AgreementVersion>();
-            foreach (var type in AgreementTypeExtensions.EnrolleeAgreementTypes())
-            {
-                agreementVersionList.Add(await FetchNewestAgreementVersionOfTypeAsync(type));
-            }
-            return _mapper.Map<IEnumerable<AgreementVersionListViewModel>>(agreementVersionList);
-        }
-
-        public async Task<AgreementVersionViewModel> GetAgreementVersionById(int agreementId)
-        {
-            return await _context.AgreementVersions
-               .AsNoTracking()
-               .Where(av => av.Id == agreementId)
-               .ProjectTo<AgreementVersionViewModel>(_mapper.ConfigurationProvider)
-               .SingleOrDefaultAsync();
+            return await _context.Agreements
+                .Where(a => a.Id == agreementId)
+                .Select(a => a.SignedAgreement)
+                .SingleOrDefaultAsync();
         }
 
         private async Task<AgreementVersion> FetchNewestAgreementVersionOfTypeAsync(AgreementType type)
