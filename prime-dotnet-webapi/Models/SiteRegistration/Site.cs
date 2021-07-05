@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-
+using DelegateDecompiler;
 using Newtonsoft.Json;
 
 namespace Prime.Models
@@ -11,6 +11,14 @@ namespace Prime.Models
     [Table("Site")]
     public class Site : BaseAuditable
     {
+        public Site()
+        {
+            // Initialize collections to prevent null exception on computed properties
+            // like `Status`
+            this.SiteStatuses = new List<SiteStatus>();
+        }
+
+
         [Key]
         public int Id { get; set; }
 
@@ -50,7 +58,7 @@ namespace Prime.Models
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
-        public SiteStatusType Status { get; set; }
+        public ICollection<SiteStatus> SiteStatuses { get; set; }
 
         public DateTimeOffset? ApprovedDate { get; set; }
 
@@ -83,6 +91,34 @@ namespace Prime.Models
                 .Where(h => atTime == null || h.IsOpen(atTime.Value))
                 .Select(b => b.Day)
                 .Distinct();
+        }
+
+        public SiteStatus AddStatus(SiteStatusType siteStatusType)
+        {
+            var newStatus = SiteStatus.FromType(siteStatusType, Id);
+
+            if (SiteStatuses == null)
+            {
+                SiteStatuses = new List<SiteStatus>();
+            }
+            SiteStatuses.Add(newStatus);
+
+            return newStatus;
+        }
+
+        /// <summary>
+        /// Gets the most recent Status of the Site.
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public SiteStatusType Status
+        {
+            get => (SiteStatuses.Count > 0 ?
+                SiteStatuses
+                .OrderByDescending(s => s.StatusDate)
+                .ThenByDescending(s => s.Id)
+                .FirstOrDefault().StatusType :
+                SiteStatusType.Active);
         }
     }
 }

@@ -268,6 +268,11 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
+  public onUnreject(siteId: number) {
+    this.busy = this.siteResource.unrejectSite(siteId)
+      .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
