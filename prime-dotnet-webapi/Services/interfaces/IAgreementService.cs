@@ -10,6 +10,7 @@ namespace Prime.Services
     {
         Task<IEnumerable<AgreementVersionListViewModel>> GetLatestAgreementVersionsAsync(AgreementGroup? group);
         Task<AgreementVersionViewModel> GetAgreementVersionAsync(int agreementVersionId);
+        Task<int> GetLatestAgreementVersionIdOfTypeAsync(AgreementType type);
         Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
     }

@@ -56,6 +56,16 @@ namespace Prime.Services
                .SingleOrDefaultAsync();
         }
 
+        public async Task<int> GetLatestAgreementVersionIdOfTypeAsync(AgreementType type)
+        {
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .OrderByDescending(a => a.EffectiveDate)
+                .Where(a => a.AgreementType == type)
+                .Select(a => a.Id)
+                .FirstAsync();
+        }
+
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedAgreements);
@@ -84,15 +94,6 @@ namespace Prime.Services
                 .Where(a => a.Id == agreementId)
                 .Select(a => a.SignedAgreement)
                 .SingleOrDefaultAsync();
-        }
-
-        private async Task<AgreementVersion> FetchNewestAgreementVersionOfTypeAsync(AgreementType type)
-        {
-            return await _context.AgreementVersions
-                .AsNoTracking()
-                .Where(av => av.AgreementType == type)
-                .OrderByDescending(av => av.EffectiveDate)
-                .FirstOrDefaultAsync();
         }
     }
 }

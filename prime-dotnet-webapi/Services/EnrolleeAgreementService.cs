@@ -89,7 +89,7 @@ namespace Prime.Services
                 .Where(e => e.Id == enrolleeId)
                 .Select(e => new
                 {
-                    NewestAssignedAgreement = e.Submissions
+                    AssignedAgreementType = e.Submissions
                         .OrderByDescending(s => s.CreatedDate)
                         .Select(s => s.AgreementType)
                         .FirstOrDefault(),
@@ -97,7 +97,7 @@ namespace Prime.Services
                 })
                 .SingleAsync();
 
-            if (dto.NewestAssignedAgreement == null)
+            if (dto.AssignedAgreementType == null)
             {
                 throw new InvalidOperationException("Agreement type is required to approve an enrollee");
             }
@@ -105,7 +105,7 @@ namespace Prime.Services
             var agreement = new Agreement
             {
                 EnrolleeId = enrolleeId,
-                AgreementVersionId = await FetchNewestAgreementVersionIdOfType(dto.NewestAssignedAgreement.Value),
+                AgreementVersionId = await _agreementService.GetLatestAgreementVersionIdOfTypeAsync(dto.AssignedAgreementType.Value),
                 LimitsConditionsClause = LimitsConditionsClause.FromAgreementNote(dto.AccessAgreementNote),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -170,16 +170,6 @@ namespace Prime.Services
                     agreement.AgreementContent = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Agreements.Base, agreement);
                 }
             }
-        }
-
-        private async Task<int> FetchNewestAgreementVersionIdOfType(AgreementType type)
-        {
-            return await _context.AgreementVersions
-                .AsNoTracking()
-                .OrderByDescending(a => a.EffectiveDate)
-                .Where(a => a.AgreementType == type)
-                .Select(a => a.Id)
-                .FirstAsync();
         }
     }
 }
