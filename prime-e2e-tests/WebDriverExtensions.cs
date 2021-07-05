@@ -27,14 +27,22 @@ namespace TestPrimeE2E
         // TODO: Don't duplicate code shared with FindPatiently method
         public static IWebElement FindPatientlyById(this IWebDriver driver, string id)
         {
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromMinutes(1));
-            Func<IWebDriver, IWebElement> waitForElement = new Func<IWebDriver, IWebElement>((IWebDriver Web) =>
+            try
             {
-                Console.WriteLine($"Trying to find '{id}' ...");
-                IWebElement element = Web.FindElement(By.Id(id));
-                return element;
-            });
-            return wait.Until(waitForElement);
+                WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+                Func<IWebDriver, IWebElement> waitForElement = new Func<IWebDriver, IWebElement>((IWebDriver Web) =>
+                {
+                    Console.WriteLine($"Trying to find '{id}' ...");
+                    IWebElement element = Web.FindElement(By.Id(id));
+                    return element;
+                });
+                return wait.Until(waitForElement);
+            }
+            catch (OpenQA.Selenium.WebDriverTimeoutException e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
 
