@@ -2,20 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Subject } from 'rxjs';
-
+import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
-import { Contact } from '@lib/models/contact.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { AdministratorPageFormState } from './administrator-page-form-state.class';
@@ -30,7 +27,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public formSubmittingEvent: Subject<void>;
+  public showAddressFields: boolean;
   public SiteRoutes = SiteRoutes;
 
   private site: Site;
@@ -48,7 +45,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.formSubmittingEvent = new Subject<void>();
   }
 
   public onSelect(contact: Contact) {
@@ -98,9 +94,5 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
       : SiteRoutes.PRIVACY_OFFICER;
 
     this.routeUtils.routeRelativeTo(routePath);
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    this.formSubmittingEvent.next();
   }
 }

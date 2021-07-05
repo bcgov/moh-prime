@@ -1,21 +1,43 @@
 <app-page [busy]="busy">
-  <app-page-header>PharmaNet Site Registration</app-page-header>
-
+  <app-page-header>PharmaNet Health Authority Information</app-page-header>
   <app-progress-indicator [noContent]="true"></app-progress-indicator>
 
-  <app-contact-profile-form [title]="title"
-                            [form]="form"
-                            [formSubmitting]="formSubmittingEvent"
-                            [showFax]="false"
-                            (submit)="onSubmit()">
-    <ng-container appPageSubheader2Summary>
-      Directly sets up individual PharmaNet access accounts at a site or has the authority to request accounts from the
-      site's PharmaNet software vendor. May be the Signing Authority.
+  <ng-container *ngIf="contacts">
+    <ng-container *ngIf="isEditing || !contacts?.length; else showList">
+
+      <app-contact-profile-form [title]="title | replace: '\\(s\\)' : ''"
+                                [form]="formState.form"
+                                [excludeList]="['fax', 'physicalAddress']"
+                                [showAddressFields]="showAddressFields">
+        <ng-container appPageSubheader2Summary>
+          Provide information for a PharmaNet Administrator for this Health Authority.
+        </ng-container>
+      </app-contact-profile-form>
+
     </ng-container>
-  </app-contact-profile-form>
+  </ng-container>
+
+  <ng-template #showList>
+
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide information for PharmaNet Administrator(s) for this Health Authority.
+        </ng-container>
+      </app-page-subheader2>
+
+      <app-card-list itemTypeLabel="PharmaNet Administrator"
+                     [items]="contactCardListItems"
+                     (add)="onAdd()"
+                     (edit)="onEdit($event)"
+                     (remove)="onRemove($event)"></app-card-list>
+    </app-page-section>
+
+  </ng-template>
 
   <app-page-footer [hasSecondaryAction]="true"
-                   primaryActionLabel="Save and Continue"
-                   (save)="onSubmit()"
+                   [primaryActionLabel]="(isEditing) ? 'Save and Continue' : 'Continue'"
+                   (save)="(isEditing) ? onSubmit() : onContinue()"
                    (back)="onBack()"></app-page-footer>
 </app-page>
