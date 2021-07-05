@@ -13,7 +13,7 @@ namespace PrimeTests.UnitTests
     {
         public static IEnumerable<object[]> SubmissionActionsData()
         {
-            foreach (SubmissionAction action in Enum.GetValues(typeof(SubmissionAction)))
+            foreach (EnrolleeStatusAction action in Enum.GetValues(typeof(EnrolleeStatusAction)))
             {
                 yield return new object[] { action };
             }
@@ -21,18 +21,18 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SubmissionActionsData))]
-        public void TestAllowableActions_Editable(SubmissionAction action)
+        public void TestAllowableActions_Editable(EnrolleeStatusAction action)
         {
             // Arrange
             var status = EnrolmentStatus.FromType(StatusType.Editable, 0);
             var expectedAllowed = new[]
             {
-                SubmissionAction.LockProfile,
-                SubmissionAction.DeclineProfile
+                EnrolleeStatusAction.LockProfile,
+                EnrolleeStatusAction.DeclineProfile
             }.Contains(action);
 
             // Act
-            var allowed = SubmissionStateEngine.AllowableAction(action, status);
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -40,21 +40,21 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SubmissionActionsData))]
-        public void TestAllowableActions_UnderReview(SubmissionAction action)
+        public void TestAllowableActions_UnderReview(EnrolleeStatusAction action)
         {
             // Arrange
             var status = EnrolmentStatus.FromType(StatusType.UnderReview, 0);
             var expectedAllowed = new[]
             {
-                SubmissionAction.Approve,
-                SubmissionAction.EnableEditing,
-                SubmissionAction.LockProfile,
-                SubmissionAction.DeclineProfile,
-                SubmissionAction.RerunRules
+                EnrolleeStatusAction.Approve,
+                EnrolleeStatusAction.EnableEditing,
+                EnrolleeStatusAction.LockProfile,
+                EnrolleeStatusAction.DeclineProfile,
+                EnrolleeStatusAction.RerunRules
             }.Contains(action);
 
             // Act
-            var allowed = SubmissionStateEngine.AllowableAction(action, status);
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -62,21 +62,22 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SubmissionActionsData))]
-        public void TestAllowableActions_RequiresToa(SubmissionAction action)
+        public void TestAllowableActions_RequiresToa(EnrolleeStatusAction action)
         {
             // Arrange
             var status = EnrolmentStatus.FromType(StatusType.RequiresToa, 0);
             var expectedAllowed = new[]
             {
-                SubmissionAction.AcceptToa,
-                SubmissionAction.DeclineToa,
-                SubmissionAction.EnableEditing,
-                SubmissionAction.LockProfile,
-                SubmissionAction.DeclineProfile
+                EnrolleeStatusAction.AcceptToa,
+                EnrolleeStatusAction.DeclineToa,
+                EnrolleeStatusAction.EnableEditing,
+                EnrolleeStatusAction.LockProfile,
+                EnrolleeStatusAction.DeclineProfile,
+                EnrolleeStatusAction.CancelToaAssignment
             }.Contains(action);
 
             // Act
-            var allowed = SubmissionStateEngine.AllowableAction(action, status);
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -84,18 +85,18 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SubmissionActionsData))]
-        public void TestAllowableActions_Locked(SubmissionAction action)
+        public void TestAllowableActions_Locked(EnrolleeStatusAction action)
         {
             // Arrange
             var status = EnrolmentStatus.FromType(StatusType.Locked, 0);
             var expectedAllowed = new[]
             {
-                SubmissionAction.EnableEditing,
-                SubmissionAction.DeclineProfile
+                EnrolleeStatusAction.EnableEditing,
+                EnrolleeStatusAction.DeclineProfile
             }.Contains(action);
 
             // Act
-            var allowed = SubmissionStateEngine.AllowableAction(action, status);
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -103,17 +104,17 @@ namespace PrimeTests.UnitTests
 
         [Theory]
         [MemberData(nameof(SubmissionActionsData))]
-        public void TestAllowableActions_Declined(SubmissionAction action)
+        public void TestAllowableActions_Declined(EnrolleeStatusAction action)
         {
             // Arrange
             var status = EnrolmentStatus.FromType(StatusType.Declined, 0);
             var expectedAllowed = new[]
             {
-                SubmissionAction.EnableEditing
+                EnrolleeStatusAction.EnableEditing
             }.Contains(action);
 
             // Act
-            var allowed = SubmissionStateEngine.AllowableAction(action, status);
+            var allowed = EnrolleeStatusStateEngine.AllowableAction(action, status);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);

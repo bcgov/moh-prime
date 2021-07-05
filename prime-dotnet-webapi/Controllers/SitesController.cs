@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.Engines;
 
 namespace Prime.Controllers
 {
@@ -116,7 +117,6 @@ namespace Prime.Controllers
             {
                 return NotFound($"Organization not found with id {organizationId}");
             }
-
             var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
@@ -324,7 +324,10 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
@@ -767,6 +770,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
             await _emailService.SendSiteApprovedPharmaNetAdministratorAsync(site);
@@ -794,6 +801,10 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Decline, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
 
             var updatedSite = await _siteService.DeclineSite(siteId);
             return Ok(updatedSite);
@@ -817,8 +828,50 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
+            var action = SiteRegistrationAction.NA;
+            // Only allow enable editing for the following current site status: InReview & Approved
+            switch (site.Status)
+            {
+                case SiteStatusType.InReview:
+                    action = SiteRegistrationAction.RequestChange;
+                    break;
+                case SiteStatusType.Approved:
+                    action = SiteRegistrationAction.Unapprove;
+                    break;
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(action, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
 
             var updatedSite = await _siteService.EnableEditingSite(siteId);
+            return Ok(updatedSite);
+        }
+
+        // PUT: api/Sites/5/unreject
+        /// <summary>
+        /// Unreject a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/unreject", Name = nameof(UnrejectSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnrejectSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Undecline, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            var updatedSite = await _siteService.UnrejectSite(siteId);
             return Ok(updatedSite);
         }
 
