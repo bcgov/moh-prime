@@ -64,20 +64,4 @@ describe('ArrayUtils', () => {
       expect(result).toEqual(['Yosemite Sam', null, 'Road Runner']);
     });
   });
-
-  describe('intersection', () => {
-
-  });
-
-  describe('difference', () => {
-
-  });
-
-  describe('union', () => {
-
-  });
-
-  describe('symmetricDifference', () => {
-
-  });
 });
