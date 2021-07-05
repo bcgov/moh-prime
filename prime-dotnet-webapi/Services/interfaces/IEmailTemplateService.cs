@@ -10,5 +10,6 @@ namespace Prime.Services
         Task<EmailTemplate> GetEmailTemplateByTypeAsync(EmailTemplateType type);
         Task<IEnumerable<EmailTemplateListViewModel>> GetEmailTemplatesAsync();
         Task<EmailTemplateViewModel> GetEmailTemplateAsync(int id);
+        Task<int> UpdateEmailTemplateAsync(int id, EmailTemplateViewModel updateModel);
     }
 }

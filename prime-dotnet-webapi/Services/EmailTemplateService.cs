@@ -41,5 +41,21 @@ namespace Prime.Services
                 .ProjectTo<EmailTemplateViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
         }
+
+        public async Task<int> UpdateEmailTemplateAsync(int id, EmailTemplateViewModel updateModel)
+        {
+            var template = _context.EmailTemplates.Where(t => t.Id == id).SingleOrDefaultAsync();
+
+            _context.Entry(template).CurrentValues.SetValues(updateModel);
+
+            try
+            {
+                return await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return 0;
+            }
+        }
     }
 }

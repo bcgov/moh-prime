@@ -89,5 +89,22 @@ namespace Prime.Controllers
             var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
             return Ok(template);
         }
+
+        // PUT: api/emails/management/templates/1
+        /// <summary>
+        /// Update email template
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="payload"></param>
+        [HttpPut("management/templates/{emailTemplateId}", Name = nameof(UpdateEmailTemplate))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, EmailTemplateViewModel payload)
+        {
+            var template = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, payload);
+            return Ok(template);
+        }
     }
 }
