@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import {
   Router,
   Params,
@@ -12,6 +12,7 @@ import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolmen
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { Observable } from 'rxjs';
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { map } from 'rxjs/operators';
 
 
@@ -21,6 +22,7 @@ import { map } from 'rxjs/operators';
 export class FinalizedEnrolmentGuard implements CanActivate {
   constructor(
     private router: Router,
+    @Inject(APP_CONFIG) private config: AppConfig,
     private paperEnrolmentResource: PaperEnrolmentResource
   ) { }
 
@@ -33,11 +35,11 @@ export class FinalizedEnrolmentGuard implements CanActivate {
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     const enrolleeId = +params.eid;
-    if (!enrolleeId) {
+    if (enrolleeId) {
       return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
           map((enrollee: HttpEnrollee) => {
-            return this.routeDestination(routePath, enrollee);
+            return this.routeDestination(routePath, enrollee, params);
           })
         );
     } else {
@@ -45,11 +47,14 @@ export class FinalizedEnrolmentGuard implements CanActivate {
     }
   }
 
-  private routeDestination(routePath: string, httpEnrollee: HttpEnrollee) {
+  private routeDestination(routePath: string, httpEnrollee: HttpEnrollee, params) {
     if (!httpEnrollee?.approvedDate) {
       return true;
     }
-    this.router.navigate([PaperEnrolmentRoutes.NEXT_STEPS]);
+    if (routePath.includes('demographic')) {
+      routePath = routePath.replace('demographic', '');
+    }
+    this.navigate(PaperEnrolmentRoutes.NEXT_STEPS, params);
     return false;
   }
 
@@ -57,6 +62,18 @@ export class FinalizedEnrolmentGuard implements CanActivate {
     return (Array.isArray(routeParam))
       ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')
       : routeParam.url;
+  }
+
+  private navigate(routePath: string, params): boolean {
+    const modulePath = this.config.routes.paperEnrolment;
+    const comparePath = `/${modulePath}/${params}/${routePath}`;
+
+    if (routePath === comparePath) {
+      return true;
+    } else {
+      this.router.navigate([comparePath]);
+      return false;
+    }
   }
 
 }
