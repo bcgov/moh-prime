@@ -30,5 +30,22 @@ namespace TestPrimeE2E.Admin
             VerifyAdminPageTitle(expectedTitle);
             CheckLogThenScreenshot(expectedTitle);
         }
+
+
+        [Test]
+        public void ApproveRejectUnrejectSiteRegistration()
+        {
+            _driver.Navigate().GoToUrl(TestParameters.AdminUrl);
+
+            LoginWithIdirAccount();
+
+            // Click on left menu item "Site Registrations"
+            _driver.FindPatiently("(//mat-list-item/div)[2]").Click();
+
+            // Click on tab "Community Pharmacies"
+            _driver.FindPatiently("(//div[@role='tab'])[2]").Click();
+
+            // TODO: Needs more work ...
+        }
     }
 }

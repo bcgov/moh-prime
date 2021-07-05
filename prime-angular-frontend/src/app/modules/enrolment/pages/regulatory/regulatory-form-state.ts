@@ -41,7 +41,10 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
       return;
     }
 
-    return this.certifications.getRawValue();
+    return this.certifications.getRawValue().map(c => {
+      const { nurseCategory, ...collegeCertification } = c;
+      return collegeCertification;
+    });
   }
 
   public patchValue(certifications: CollegeCertification[]): void {
