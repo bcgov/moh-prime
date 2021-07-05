@@ -174,9 +174,12 @@ export class CollegeCertificationFormComponent implements OnInit {
           }
         });
 
+      const initialNursingCategory: number | null = +this.nurseCategory.value ?? null;
       this.nurseCategory.valueChanges
+        .pipe(startWith(initialNursingCategory))
         .subscribe((collegeLicenseGroupingCode: number) =>
-          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode));
+          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode)
+        );
     } else {
       const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
@@ -315,8 +318,10 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private loadLicensesByNursingCategory(nursingCategory: number) {
-    this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
-    this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
+    if (this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) {
+      this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
+      this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
+    }
   }
 
   private loadPractices(collegeCode: number) {

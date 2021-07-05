@@ -52,6 +52,7 @@
       </div>
 
       <ng-container *ngIf="collegeCode.value !== CollegeLicenceClassEnum.BCCNM && collegeCode.value || collegeCode.value === CollegeLicenceClassEnum.BCCNM && (condensed || nurseCategory?.value)">
+
         <div *ngIf="filteredLicenses?.length > 1"
              class="col-sm-12 pl-5">
 
