@@ -69,7 +69,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO check vendor exists on the HealthAuthority list of vendor(s)
-            _mapper.Map(vendorCode, site.VendorCode);
+            site.VendorCode = vendorCode;
 
             await _context.SaveChangesAsync();
         }
@@ -90,8 +90,6 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO check careType exists on the HealthAuthority list of careType(s)
-            // _mapper.Map(careType, site.CareType);
-            // TODO why does the above not work like VendorCode?
             site.CareType = careType;
 
             await _context.SaveChangesAsync();
@@ -102,8 +100,6 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO why does the above not work like VendorCode?
-            // _mapper.Map(physicalAddress, site.PhysicalAddress);
             site.PhysicalAddress = physicalAddress;
 
             await _context.SaveChangesAsync();
@@ -114,8 +110,6 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO why does the above not work like VendorCode?
-            // _mapper.Map(businessHours, site.BusinessHours);
             site.BusinessHours = businessHours;
 
             await _context.SaveChangesAsync();
@@ -126,8 +120,6 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO why does the above not work like VendorCode?
-            // _mapper.Map(remoteUsers, site.RemoteUsers);
             site.RemoteUsers = remoteUsers;
 
             await _context.SaveChangesAsync();

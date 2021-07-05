@@ -21,6 +21,11 @@ namespace Prime.Models.HealthAuthorities
 
         public int VendorCode { get; set; }
 
+        // public int? HealthAuthorityVendorId { get; set; }
+        //
+        // [JsonIgnore]
+        // public HealthAuthorityVendor HealthAuthorityVendor { get; set; }
+
         public string SiteName { get; set; }
 
         public string SiteId { get; set; }
@@ -29,6 +34,7 @@ namespace Prime.Models.HealthAuthorities
 
         public string CareType { get; set; }
 
+        // TODO list of care types?
         // public int? HealthAuthorityCareTypeId { get; set; }
         //
         // [JsonIgnore]
