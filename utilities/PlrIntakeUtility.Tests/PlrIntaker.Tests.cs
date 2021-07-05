@@ -53,7 +53,7 @@ namespace PlrIntakeUtility.Tests
                     Assert.Equal("ACTIVE", provider.StatusCode);
                     Assert.Equal("PRAC", provider.StatusReasonCode);
                     Assert.Equal(new DateTime(2020, 1, 10), provider.StatusStartDate);
-                    Assert.Equal(new DateTime(9999, 12, 30), provider.StatusExpiryDate);
+                    Assert.Equal(null, provider.StatusExpiryDate);
                     Assert.Equal(new string[] { "101" }, provider.Expertise);
                     Assert.Equal("7887 Fallen Circus", provider.Address1Line1);
                     Assert.Equal("Burnaby", provider.City1);
@@ -66,7 +66,7 @@ namespace PlrIntakeUtility.Tests
                     Assert.Equal("PRIMETTEN@test.ca", provider.Email);
                     Assert.Equal("ADMIN", provider.ConditionCode);
                     Assert.Equal(new DateTime(2020, 1, 1), provider.ConditionStartDate);
-                    Assert.Equal(new DateTime(9999, 12, 30), provider.ConditionEndDate);
+                    Assert.Equal(null, provider.ConditionEndDate);
 
                     Assert.Null(provider.Address1Line2);
 

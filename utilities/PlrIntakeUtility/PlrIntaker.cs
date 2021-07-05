@@ -9,6 +9,9 @@ namespace PlrIntakeUtility
 {
     public class PlrIntaker
     {
+        private static readonly DateTime PlrNullDateTime = new DateTime(9999, 12, 30);
+
+
         /// <summary>
         /// Reads from a row in Excel file into a PlrProvider object.
         /// </summary>
@@ -65,7 +68,23 @@ namespace PlrIntakeUtility
         private DateTime? TryGetDateTime(IExcelDataReader reader, string columnId)
         {
             // If cell is empty, `reader.GetDateTime` will cause a `System.NullReferenceException: Object reference not set to an instance of an object.`
-            return (reader.IsDBNull(GetIndex(columnId)) ? (DateTime?)null : reader.GetDateTime(GetIndex(columnId)));
+            if (reader.IsDBNull(GetIndex(columnId)))
+            {
+                return (DateTime?)null;
+            }
+            else
+            {
+                var dateTime = reader.GetDateTime(GetIndex(columnId));
+                // Treat value meant to represent NULL as `null`
+                if (dateTime.Equals(PlrNullDateTime))
+                {
+                    return (DateTime?)null;
+                }
+                else
+                {
+                    return dateTime;
+                }
+            }
         }
 
 
@@ -99,7 +118,6 @@ namespace PlrIntakeUtility
             CheckRequiredField(provider.StatusCode, nameof(provider.StatusCode), rowNum);
             CheckRequiredField(provider.StatusReasonCode, nameof(provider.StatusReasonCode), rowNum);
             CheckRequiredField(provider.StatusStartDate, nameof(provider.StatusStartDate), rowNum);
-            CheckRequiredField(provider.StatusExpiryDate, nameof(provider.StatusExpiryDate), rowNum);
             CheckRequiredField(provider.Address1Line1, nameof(provider.Address1Line1), rowNum);
             CheckRequiredField(provider.City1, nameof(provider.City1), rowNum);
             CheckRequiredField(provider.Province1, nameof(provider.Province1), rowNum);
