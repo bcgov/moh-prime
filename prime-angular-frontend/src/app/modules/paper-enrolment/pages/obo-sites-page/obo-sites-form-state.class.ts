@@ -70,26 +70,23 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
         case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
           const oboSite = oboSites.find(os => os.careSettingCode === csc);
           const site = this.buildOboSiteForm();
-          if (oboSite) {
-            site.patchValue(oboSite);
-          }
+          const value = (oboSite) ? oboSite : { careSettingCode: csc };
+          site.patchValue(value);
           return this.addNonHealthAuthorityOboSite(site, this.communityHealthSites);
         }
         case CareSettingEnum.COMMUNITY_PHARMACIST: {
           const oboSite = oboSites.find(os => os.careSettingCode === csc);
           const site = this.buildOboSiteForm();
-          if (oboSite) {
-            site.patchValue(oboSite);
-          }
+          const value = (oboSite) ? oboSite : { careSettingCode: csc };
+          site.patchValue(value);
           return this.addNonHealthAuthorityOboSite(site, this.communityPharmacySites);
         }
         case CareSettingEnum.HEALTH_AUTHORITY: {
           return healthAuthCodes.forEach(hac => {
             const oboSite = oboSites.find(os => os.careSettingCode === csc && os.healthAuthorityCode === hac);
             const site = this.buildOboSiteForm();
-            if (oboSite) {
-              site.patchValue(oboSite);
-            }
+            const value = (oboSite) ? oboSite : { careSettingCode: csc, healthAuthorityCode: hac };
+            site.patchValue(value);
             this.addHealthAuthorityOboSite(site, this.healthAuthoritySites, hac);
           });
         }

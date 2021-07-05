@@ -134,16 +134,14 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
   protected afterSubmitIsSuccessful(): void {
     const oboSites = this.enrollee.oboSites;
     const certifications = this.enrollee.certifications;
-
-    // Force obo sites to always be checked regardless of the profile being
-    // completed so validations are applied prior to overview pushing the
-    // responsibility of validation to obo sites
-    const nextRoutePath = (oboSites?.length || (!oboSites?.length && !certifications.length))
-      ? PaperEnrolmentRoutes.OBO_SITES
-      : (this.enrollee.profileCompleted)
-        ? PaperEnrolmentRoutes.OVERVIEW
-        : PaperEnrolmentRoutes.REGULATORY;
-
+    // Force regulatory/obo sites to always be visited regardless of the
+    // profile completion so validations are applied prior to overview
+    // pushing the responsibility of validation to obo sites
+    const nextRoutePath = (!this.enrollee.profileCompleted || (!oboSites?.length && !certifications.length))
+      ? PaperEnrolmentRoutes.REGULATORY
+      : (oboSites?.length)
+        ? PaperEnrolmentRoutes.OBO_SITES
+        : PaperEnrolmentRoutes.OVERVIEW;
     this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
