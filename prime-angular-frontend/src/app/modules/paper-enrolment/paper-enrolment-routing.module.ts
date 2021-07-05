@@ -15,6 +15,7 @@ import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.com
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { FinalizedEnrolmentGuard } from './shared/guards/finalized-enrolment.guard';
 
 const routes: Routes = [
   {
@@ -25,7 +26,8 @@ const routes: Routes = [
         // During initial registration the ID will be set to
         // zero indicating the organization does not exist
         path: ':eid',
-        canActivateChild: [PaperEnrolmentGuard],
+        // canActivateChild: [PaperEnrolmentGuard],
+        canActivate: [FinalizedEnrolmentGuard],
         children: [
           {
             path: PaperEnrolmentRoutes.DEMOGRAPHIC,
@@ -90,4 +92,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PaperEnrolmentRoutingModule {}
+export class PaperEnrolmentRoutingModule { }
