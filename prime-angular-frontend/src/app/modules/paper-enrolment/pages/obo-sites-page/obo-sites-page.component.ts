@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -8,13 +8,11 @@ import { exhaustMap, tap } from 'rxjs/operators';
 
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
@@ -52,7 +50,10 @@ export class OboSitesPageComponent extends AbstractEnrolmentPage implements OnIn
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.REGULATORY);
+    const backRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : PaperEnrolmentRoutes.CARE_SETTING;
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit(): void {

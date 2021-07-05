@@ -41,12 +41,11 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public routeBackTo(): void {
-    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.CARE_SETTING);
-  }
-
-  public onSubmit(): void {
-    super.onSubmit();
+  public onBack(): void {
+    const backRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : PaperEnrolmentRoutes.CARE_SETTING;
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit(): void {
