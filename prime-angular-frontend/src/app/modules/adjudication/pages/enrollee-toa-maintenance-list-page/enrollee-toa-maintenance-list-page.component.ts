@@ -1,8 +1,9 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
@@ -27,7 +28,7 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     private router: Router,
-    private enrolmentResource: EnrolmentResource,
+    private adjudicationResource: AdjudicationResource,
     private formatDatePipe: FormatDatePipe
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
@@ -51,7 +52,7 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.enrolmentResource.getLatestAgreementVersions()
+    this.busy = this.adjudicationResource.getLatestAgreementVersions(AgreementTypeGroup.ENROLLEE)
       .subscribe((result) => this.enrolleeAgreementVersions = result);
   }
 }
