@@ -57,7 +57,6 @@ import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
 import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
-import { EnrolleeToaMaintenancePageComponent } from './pages/enrollee-toa-maintenance-page/enrollee-toa-maintenance-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 
@@ -123,7 +122,6 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     EmailNotificationListPageComponent,
     EmailNotificationViewPageComponent,
     EnrolleeMaintenanceComponent,
-    EnrolleeToaMaintenancePageComponent,
     EnrolleeToaMaintenanceListPageComponent,
     EnrolleeToaMaintenanceViewPageComponent,
     HealthAuthCareTypesPageComponent,
@@ -144,4 +142,4 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     EditorModule
   ]
 })
-export class AdjudicationModule {}
+export class AdjudicationModule { }
