@@ -9,7 +9,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
@@ -127,15 +127,15 @@ export class EnrolmentGuard extends BaseGuard {
    */
   private enrolmentStatusRouting(routePath: string, enrolment: Enrolment, identityProvider: IdentityProviderEnum): boolean {
     switch (enrolment.currentStatus.statusCode) {
-      case EnrolmentStatus.EDITABLE:
+      case EnrolmentStatusEnum.EDITABLE:
         return this.manageEditableRouting(routePath, enrolment, identityProvider);
-      case EnrolmentStatus.UNDER_REVIEW:
+      case EnrolmentStatusEnum.UNDER_REVIEW:
         return this.manageUnderReviewRouting(routePath, enrolment);
-      case EnrolmentStatus.REQUIRES_TOA:
+      case EnrolmentStatusEnum.REQUIRES_TOA:
         return this.manageRequiresToaRouting(routePath, enrolment);
-      case EnrolmentStatus.LOCKED:
+      case EnrolmentStatusEnum.LOCKED:
         return this.navigate(routePath, EnrolmentRoutes.ACCESS_LOCKED);
-      case EnrolmentStatus.DECLINED:
+      case EnrolmentStatusEnum.DECLINED:
         return this.navigate(routePath, EnrolmentRoutes.ACCESS_DECLINED);
       default:
         return false; // Status is unknown and routing cannot be determined
@@ -224,7 +224,7 @@ export class EnrolmentGuard extends BaseGuard {
   private navigate(routePath: string, destinationPath: string): boolean {
     const enrolmentRoutePath = this.config.routes.enrolment;
 
-    if (routePath === `/${ enrolmentRoutePath }/${ destinationPath }`) {
+    if (routePath === `/${enrolmentRoutePath}/${destinationPath}`) {
       return true;
     } else {
       this.router.navigate([enrolmentRoutePath, destinationPath]);
@@ -245,7 +245,7 @@ export class EnrolmentGuard extends BaseGuard {
       ].includes(RouteUtils.currentRoutePath(routePath))
     ) {
       return routePath.replace(
-        new RegExp(`${ EnrolmentRoutes.ACCESS_CODE }|${ EnrolmentRoutes.ID_SUBMISSION }`),
+        new RegExp(`${EnrolmentRoutes.ACCESS_CODE}|${EnrolmentRoutes.ID_SUBMISSION}`),
         EnrolmentRoutes.OVERVIEW
       );
     }

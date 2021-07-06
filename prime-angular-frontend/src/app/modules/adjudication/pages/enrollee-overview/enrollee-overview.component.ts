@@ -15,7 +15,7 @@ import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-proper
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -57,6 +57,8 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public ngOnInit(): void {
     this.route.params
       .subscribe(params => this.loadEnrollee(params.id));
+
+    this.action.subscribe(() => this.loadEnrollee(this.route.snapshot.params.id));
   }
 
   private loadEnrollee(enrolleeId: number): void {
@@ -78,7 +80,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
           this.enrolment = enrollee.enrolment;
           this.enrolleeNavigation = enrolleeNavigation;
           // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
-          this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatus.EDITABLE
+          this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
             && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);
         });
   }
