@@ -107,8 +107,8 @@ namespace SiteExcelToSql
             {
                 // output site SQL
                 writer.WriteLine("\t-- Site {0} - {1} | {2}", i + 1, siteList[i].PEC, siteList[i].DoingBusinessAs);
-                writer.WriteLine("\tINSERT INTO public.\"Site\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"PEC\", \"Completed\", \"DoingBusinessAs\", \"OrganizationId\", \"Status\") "
-                                + "VALUES(vCreatorUUID, now(), vCreatorUUID, now(), '{0}', TRUE, '{1}', vOrganizationID, 1) "
+                writer.WriteLine("\tINSERT INTO public.\"Site\" (\"CreatedUserId\", \"CreatedTimeStamp\", \"UpdatedUserId\", \"UpdatedTimeStamp\", \"PEC\", \"Completed\", \"DoingBusinessAs\", \"OrganizationId\", \"Status\", \"CareSettingCode\") "
+                                + "VALUES(vCreatorUUID, now(), vCreatorUUID, now(), '{0}', TRUE, '{1}', vOrganizationID, 1, 2) "
                                 + "RETURNING \"Id\" INTO vSiteId;",
                                 siteList[i].PEC, siteList[i].DoingBusinessAs.Replace("'", "''"));
 
