@@ -41,7 +41,7 @@ export class SiteInformationFormComponent implements OnInit {
   }
 
   public isCommunityPharmacy() {
-    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+    return this.siteService.site?.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
   }
 
   public ngOnInit(): void {

@@ -18,6 +18,7 @@ namespace Prime.Services
         Task DeleteSiteAsync(int siteId);
         Task<Site> ApproveSite(int siteId);
         Task<Site> DeclineSite(int siteId);
+        Task<Site> UnrejectSite(int siteId);
         Task<Site> EnableEditingSite(int siteId);
         Task<Site> SubmitRegistrationAsync(int siteId);
         Task<Site> GetSiteNoTrackingAsync(int siteId);
