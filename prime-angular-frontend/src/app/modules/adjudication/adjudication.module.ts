@@ -56,7 +56,6 @@ import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-p
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
-import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 
@@ -123,7 +122,6 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
     SiteMaintenancePageComponent,
     EmailNotificationListPageComponent,
     EmailNotificationViewPageComponent,
-    EnrolleeMaintenanceComponent,
     EnrolleeToaMaintenanceListPageComponent,
     EnrolleeToaMaintenanceViewPageComponent,
     HealthAuthCareTypesPageComponent,
