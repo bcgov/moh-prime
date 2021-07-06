@@ -8,6 +8,7 @@
       <app-contact-profile-form [title]="title | replace: '\\(s\\)' : ''"
                                 [form]="formState.form"
                                 [excludeList]="['fax']"
+                                [hasAddressToggle]="false"
                                 [showAddressFields]="showAddressFields">
         <ng-container appPageSubheader2Summary>
           Provide information for a Technical Support Contact for this Health Authority.
