@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210614235905_AddSiteStatusHistory")]
+    partial class AddSiteStatusHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -9018,12 +9020,7 @@ namespace Prime.Migrations
                     b.Property<int>("LicenseCode")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("CollegeLicenseGroupingCode")
-                        .HasColumnType("integer");
-
                     b.HasKey("CollegeCode", "LicenseCode");
-
-                    b.HasIndex("CollegeLicenseGroupingCode");
 
                     b.HasIndex("LicenseCode");
 
@@ -9213,158 +9210,157 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 32,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 32
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 33,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 33
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 34,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 34
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 35,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 35
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 36,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 36
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 37,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 37
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 39,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 38
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 40,
-                            CollegeLicenseGroupingCode = 2
+                            LicenseCode = 39
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 41,
-                            CollegeLicenseGroupingCode = 3
+                            LicenseCode = 40
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 42,
-                            CollegeLicenseGroupingCode = 3
+                            LicenseCode = 41
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3
+                            LicenseCode = 42
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 45,
-                            CollegeLicenseGroupingCode = 3
+                            LicenseCode = 43
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 46,
-                            CollegeLicenseGroupingCode = 3
+                            LicenseCode = 44
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 47,
-                            CollegeLicenseGroupingCode = 4
+                            LicenseCode = 45
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 48,
-                            CollegeLicenseGroupingCode = 4
+                            LicenseCode = 46
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 49,
-                            CollegeLicenseGroupingCode = 4
+                            LicenseCode = 47
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 51,
-                            CollegeLicenseGroupingCode = 4
+                            LicenseCode = 48
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 52,
-                            CollegeLicenseGroupingCode = 1
+                            LicenseCode = 49
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 53,
-                            CollegeLicenseGroupingCode = 1
+                            LicenseCode = 50
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 54,
-                            CollegeLicenseGroupingCode = 1
+                            LicenseCode = 51
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 55,
-                            CollegeLicenseGroupingCode = 1
+                            LicenseCode = 52
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 60,
-                            CollegeLicenseGroupingCode = 5
+                            LicenseCode = 53
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 61,
-                            CollegeLicenseGroupingCode = 5
+                            LicenseCode = 54
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 62,
-                            CollegeLicenseGroupingCode = 5
+                            LicenseCode = 55
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 63,
-                            CollegeLicenseGroupingCode = 5
+                            LicenseCode = 56
                         },
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 69,
-                            CollegeLicenseGroupingCode = 5
+                            LicenseCode = 57
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 60
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 61
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 62
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 63
                         },
                         new
                         {
@@ -9440,56 +9436,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 18,
                             LicenseCode = 64
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.CollegeLicenseGrouping", b =>
-                {
-                    b.Property<int>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("CollegeLicenseGroupingLookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = 1,
-                            Name = "Licensed Practical Nurse",
-                            Weight = 1
-                        },
-                        new
-                        {
-                            Code = 2,
-                            Name = "Registered Nurse/Licensed Graduate Nurse",
-                            Weight = 2
-                        },
-                        new
-                        {
-                            Code = 3,
-                            Name = "Registered Psychiatric Nurse",
-                            Weight = 3
-                        },
-                        new
-                        {
-                            Code = 4,
-                            Name = "Nurse Practitioner",
-                            Weight = 4
-                        },
-                        new
-                        {
-                            Code = 5,
-                            Name = "Midwife",
-                            Weight = 5
                         });
                 });
 
@@ -11314,6 +11260,66 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 5,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 6,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 7,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 8,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 9,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 10,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 11,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 12,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 13,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 14,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 15,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 16,
+                            LicenseCode = 50
+                        },
+                        new
+                        {
+                            PrivilegeId = 5,
                             LicenseCode = 51
                         },
                         new
@@ -11375,6 +11381,66 @@ namespace Prime.Migrations
                         {
                             PrivilegeId = 19,
                             LicenseCode = 51
+                        },
+                        new
+                        {
+                            PrivilegeId = 5,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 6,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 7,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 8,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 9,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 10,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 11,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 12,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 13,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 14,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 15,
+                            LicenseCode = 58
+                        },
+                        new
+                        {
+                            PrivilegeId = 16,
+                            LicenseCode = 58
                         });
                 });
 
@@ -12271,262 +12337,6 @@ namespace Prime.Migrations
                     b.ToTable("GisEnrolment");
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.CareType", b =>
-                {
-                    b.Property<int>("Code")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.HasKey("Code");
-
-                    b.ToTable("CareTypeLookup");
-
-                    b.HasData(
-                        new
-                        {
-                            Code = 1,
-                            Name = "Ambulatory Care"
-                        },
-                        new
-                        {
-                            Code = 2,
-                            Name = "Acute Care"
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<string>("CareType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.ToTable("HealthAuthorityCareType");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("ContactId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContactId");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("HealthAuthorityContact");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HealthAuthorityOrganization");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Northern Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Interior Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Vancouver Coastal Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Island Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Fraser Health",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
-                            Name = "Provincial Health Services Authority",
-                            UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
-                        });
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("VendorCode")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.HasIndex("VendorCode");
-
-                    b.ToTable("HealthAuthorityVendor");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("text");
-
-                    b.Property<int>("HealthAuthorityOrganizationId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("text");
-
-                    b.Property<int?>("PhysicalAddressId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HealthAuthorityOrganizationId")
-                        .IsUnique();
-
-                    b.HasIndex("PhysicalAddressId");
-
-                    b.ToTable("PrivacyOffice");
-                });
-
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
                 {
                     b.Property<int>("Code")
@@ -13271,6 +13081,18 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 50,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Temporary Nurse Practitioner (Special Event)",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            PrescriberIdType = 2,
+                            Validate = true,
+                            Weight = 3
+                        },
+                        new
+                        {
                             Code = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13314,6 +13136,18 @@ namespace Prime.Migrations
                             Prefix = "R9",
                             Validate = false,
                             Weight = 7
+                        },
+                        new
+                        {
+                            Code = 38,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Temporary Registered Nurse (Special Event)",
+                            NamedInImReg = false,
+                            Prefix = "R9",
+                            PrescriberIdType = 1,
+                            Validate = false,
+                            Weight = 8
                         },
                         new
                         {
@@ -13408,6 +13242,18 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 44,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Temporary Registered Psychiatric Nurse (Special Event)",
+                            NamedInImReg = false,
+                            Prefix = "Y9",
+                            PrescriberIdType = 1,
+                            Validate = false,
+                            Weight = 17
+                        },
+                        new
+                        {
                             Code = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13475,6 +13321,17 @@ namespace Prime.Migrations
                         },
                         new
                         {
+                            Code = 56,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Temporary Licensed Practical Nurse (Special Event)",
+                            NamedInImReg = false,
+                            Prefix = "L9",
+                            Validate = false,
+                            Weight = 24
+                        },
+                        new
+                        {
                             Code = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
@@ -13483,6 +13340,28 @@ namespace Prime.Migrations
                             Prefix = "L9",
                             Validate = false,
                             Weight = 25
+                        },
+                        new
+                        {
+                            Code = 57,
+                            LicensedToProvideCare = false,
+                            Manual = true,
+                            Name = "Non-Practicing Licensed Nurse Practitioner",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            Validate = true,
+                            Weight = 26
+                        },
+                        new
+                        {
+                            Code = 58,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Temporary Nurse Practitioner (time-limited)",
+                            NamedInImReg = true,
+                            Prefix = "96",
+                            Validate = true,
+                            Weight = 27
                         },
                         new
                         {
@@ -13527,17 +13406,6 @@ namespace Prime.Migrations
                             Prefix = "98",
                             Validate = false,
                             Weight = 31
-                        },
-                        new
-                        {
-                            Code = 69,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Student Midwife",
-                            NamedInImReg = false,
-                            Prefix = "98",
-                            Validate = false,
-                            Weight = 32
                         },
                         new
                         {
@@ -15481,11 +15349,6 @@ namespace Prime.Migrations
                         {
                             Code = 17,
                             Name = "No address from BCSC. Enrollee entered address."
-                        },
-                        new
-                        {
-                            Code = 18,
-                            Name = "Manually entered paper enrolment"
                         });
                 });
 
@@ -15677,41 +15540,6 @@ namespace Prime.Migrations
                     b.HasDiscriminator().HasValue(3);
                 });
 
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityPharmanetAdministrator");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId")
-                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId1");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityPrivacyOfficer");
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
-                {
-                    b.HasBaseType("Prime.Models.HealthAuthorities.HealthAuthorityContact");
-
-                    b.HasIndex("HealthAuthorityOrganizationId")
-                        .HasName("IX_HealthAuthorityContact_HealthAuthorityOrganizationId2");
-
-                    b.ToTable("HealthAuthorityContact");
-
-                    b.HasDiscriminator().HasValue("HealthAuthorityTechnicalSupport");
-                });
-
             modelBuilder.Entity("Prime.Models.AccessAgreementNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -15884,10 +15712,6 @@ namespace Prime.Migrations
                         .HasForeignKey("CollegeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Prime.Models.CollegeLicenseGrouping", "CollegeLicenseGrouping")
-                        .WithMany()
-                        .HasForeignKey("CollegeLicenseGroupingCode");
 
                     b.HasOne("Prime.Models.License", "License")
                         .WithMany("CollegeLicenses")
@@ -16129,52 +15953,6 @@ namespace Prime.Migrations
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityCareType", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("CareTypes")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityContact", b =>
-                {
-                    b.HasOne("Prime.Models.Contact", "Contact")
-                        .WithMany()
-                        .HasForeignKey("ContactId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("Vendors")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Vendor", "Vendor")
-                        .WithMany()
-                        .HasForeignKey("VendorCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.PrivacyOffice", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithOne("PrivacyOffice")
-                        .HasForeignKey("Prime.Models.HealthAuthorities.PrivacyOffice", "HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
-                        .WithMany()
-                        .HasForeignKey("PhysicalAddressId");
                 });
 
             modelBuilder.Entity("Prime.Models.IdentificationDocument", b =>
@@ -16514,35 +16292,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
                         .WithMany()
                         .HasForeignKey("CareSettingCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("PharmanetAdministrators")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityPrivacyOfficer", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("PrivacyOfficers")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", b =>
-                {
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
-                        .WithMany("TechnicalSupports")
-                        .HasForeignKey("HealthAuthorityOrganizationId")
-                        .HasConstraintName("FK_HealthAuthorityContact_HealthAuthorityOrganization_HealthA~2")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

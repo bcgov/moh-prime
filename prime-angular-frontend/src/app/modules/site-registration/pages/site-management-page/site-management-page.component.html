@@ -50,11 +50,11 @@
                       [ngTemplateOutlet]="notification"
                       [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
         </ng-container>
-        <ng-container *ngIf="isUnderReview(site)"
+        <ng-container *ngIf="isInReview(site)"
                       [ngTemplateOutlet]="notification"
-                      [ngTemplateOutletContext]="{ props: getUnderReviewSiteNotificationProperties(site) }">
+                      [ngTemplateOutletContext]="{ props: getInReviewSiteNotificationProperties(site) }">
         </ng-container>
-        <ng-container *ngIf="isDeclined(site)"
+        <ng-container *ngIf="isLocked(site)"
                       [ngTemplateOutlet]="notification"
                       [ngTemplateOutletContext]="{ props:
                         {

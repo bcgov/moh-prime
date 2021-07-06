@@ -5,6 +5,7 @@ using Xunit;
 
 using Prime.Models.Api;
 using PrimeTests.Utils;
+using Prime.Controllers;
 
 namespace PrimeTests.Integration
 {
