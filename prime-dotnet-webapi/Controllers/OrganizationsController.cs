@@ -114,7 +114,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Claim an existing Organization.
         /// </summary>
-        [HttpPost(Name = nameof(ClaimOrganization))]
+        [HttpPost("claim", Name = nameof(ClaimOrganization))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
