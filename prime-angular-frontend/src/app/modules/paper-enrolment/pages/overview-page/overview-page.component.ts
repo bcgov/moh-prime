@@ -54,9 +54,7 @@ export class OverviewPageComponent implements OnInit {
   public getDocument(documentId: number): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
-      .subscribe((token: string) =>
-        this.utilsService.downloadToken(token)
-      );
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public onSubmit() {

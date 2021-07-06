@@ -129,9 +129,9 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
-  public shouldShowPractices(collegeCode: number, licenseCode: number): boolean {
+  public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return CollegeCertification.hasPractice(collegeCode, licenseCode);
+    return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
   }
 
   /**
@@ -313,8 +313,9 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private loadLicensesByNursingCategory(nursingCategory: number) {
-    if (this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) {
-      this.loadPractices(this.collegeCode.value);
+    const collegeCode = this.collegeCode.value;
+    if (collegeCode === CollegeLicenceClassEnum.BCCNM) {
+      this.loadPractices(collegeCode);
       this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
       this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
     }
