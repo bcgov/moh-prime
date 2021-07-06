@@ -319,6 +319,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   private loadLicensesByNursingCategory(nursingCategory: number) {
     if (this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) {
+      this.loadPractices(this.collegeCode.value);
       this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
       this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
     }
