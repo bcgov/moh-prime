@@ -36,7 +36,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
-    toastService: ToastService,
+    toastService: ToastService
   ) {
     super(defaultOptions,
       route,
@@ -65,7 +65,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
         enrollee: this.adjudicationResource.getEnrolleeById(enrolleeId)
           .pipe(
             map(enrollee => ({
-              enrollee: enrollee,
+              enrollee,
               enrolleeView: this.toEnrolleeListViewModel(enrollee),
               enrolment: this.enrolmentAdapter(enrollee)
             }))
