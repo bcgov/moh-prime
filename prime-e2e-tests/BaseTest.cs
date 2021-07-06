@@ -15,6 +15,8 @@ namespace TestPrimeE2E
     {
         protected IWebDriver _driver;
 
+        private Faker faker = new Faker();
+
 
         [SetUp]
         public void TestSetup()
@@ -35,7 +37,12 @@ namespace TestPrimeE2E
             _driver.FindPatientlyById("passcode").SendKeys(TestParameters.BcscPassword);
             _driver.FindPatientlyById("btnSubmit").Click();
             _driver.TakeScreenshot("BCSC_SignIn_Completion");
-            _driver.FindPatientlyById("btnSubmit").Click();
+            var submitButton = _driver.FindPatientlyById("btnSubmit");
+            // Sometimes screen is not displayed to user?
+            if (submitButton != null)
+            {
+                submitButton.Click();
+            }
         }
 
 
@@ -146,6 +153,12 @@ namespace TestPrimeE2E
         protected string GetCanadianPostalCode(Address anAddress)
         {
             return anAddress.ZipCode("?#? #?#");
+        }
+
+
+        protected string GeneratePecLikeString()
+        {
+            return faker.Random.String2(3).ToUpper();
         }
 
 
