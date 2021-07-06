@@ -45,6 +45,8 @@ import { TechnicalSupportsPageComponent } from './pages/health-authorities/techn
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
 import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
+import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
 const routes: Routes = [
   {
@@ -77,7 +79,7 @@ const routes: Routes = [
               {
                 path: '',
                 component: EnrolleeMaintenancePageComponent,
-                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
+                data: { title: 'Enrollee Maintenance' }
               },
               {
                 path: AdjudicationRoutes.NOTIFICATION_EMAILS,
@@ -214,6 +216,21 @@ const routes: Routes = [
                   },
                 ]
               },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: OrganizationToaMaintenanceListPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: OrganizationToaMaintenanceViewPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                ]
+              }
             ]
           },
           {
@@ -346,4 +363,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }

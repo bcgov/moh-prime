@@ -12,7 +12,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-organization-toa-maintenance-list-page',
   templateUrl: './organization-toa-maintenance-list-page.component.html',
-  styleUrls: ['./organization-toa-maintenance-list-page.component.scss']
+  styleUrls: ['./organization-toa-maintenance-list-page.component.scss'],
+  providers: [FormatDatePipe]
 })
 export class OrganizationToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;
