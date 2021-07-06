@@ -144,10 +144,18 @@ objects:
           name: ${SVC_NAME}-${FRONTEND_POD}
       spec:
         volumes:
-          - name: nginx-logs
-            emptyDir: {}
-            # persistentVolumeClaim:
-            #   claimName: ${SVC_NAME}-nginx-logs
+          - name: vanity-tls-certs
+            secret:
+              secretName: vanity-tls-certificate
+              defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: ${SVC_NAME}-nginx-config
+              defaultMode: 420
+          - name: plr-integration-volume
+            secret:
+              secretName: plr-integration
+              defaultMode: 420
         containers:
           - name: ${SVC_NAME}-nginx-logs
             image: 'public.ecr.aws/runecast/busybox:1.32.1'
@@ -177,8 +185,16 @@ objects:
               - containerPort: 8890
                 protocol: TCP
             volumeMounts:
-              - name: nginx-logs
-                mountPath: /var/log/nginx/
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+            - name: plr-integration-volume
+              readOnly: true
+              mountPath: /etc/nginx/certs/plr
+            - name: nginx-config
+              readOnly: true
+              mountPath: /etc/nginx/conf.d/prime.conf
+              subPath: prime.conf
             resources: {}
             envFrom:
               - configMapRef:
@@ -371,7 +387,7 @@ objects:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: POSTGRESQL_USERNAME
+              - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
@@ -381,8 +397,6 @@ objects:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-name
-              - name: POSTGRESQL_USER
-                value: prime-user
             ports:
               - containerPort: 1025
                 protocol: TCP
