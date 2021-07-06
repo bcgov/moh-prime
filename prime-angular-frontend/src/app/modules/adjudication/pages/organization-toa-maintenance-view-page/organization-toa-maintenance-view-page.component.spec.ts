@@ -8,9 +8,9 @@ describe('OrganizationToaMaintenanceViewPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrganizationToaMaintenanceViewPageComponent ]
+      declarations: [OrganizationToaMaintenanceViewPageComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
