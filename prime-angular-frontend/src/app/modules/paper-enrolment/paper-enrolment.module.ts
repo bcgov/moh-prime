@@ -17,6 +17,7 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
+import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview/demographic-overview.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UploadPageComponent } from './pages/upload-page/upload-page.component';
     SelfDeclarationPageComponent,
     OverviewPageComponent,
     UploadPageComponent,
-    NextStepsPageComponent
+    NextStepsPageComponent,
+    DemographicOverviewComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
