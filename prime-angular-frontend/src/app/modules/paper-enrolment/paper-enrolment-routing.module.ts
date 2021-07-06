@@ -16,6 +16,8 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { FinalizedEnrolmentGuard } from './shared/guards/finalized-enrolment.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+import { AdjudicationGuard } from '@adjudication/shared/guards/adjudication.guard';
 
 const routes: Routes = [
   {
@@ -27,7 +29,11 @@ const routes: Routes = [
         // zero indicating the organization does not exist
         path: ':eid',
         // canActivateChild: [PaperEnrolmentGuard],
-        canActivate: [FinalizedEnrolmentGuard],
+        canActivate: [
+          FinalizedEnrolmentGuard,
+          AuthenticationGuard,
+          AdjudicationGuard
+        ],
         children: [
           {
             path: PaperEnrolmentRoutes.DEMOGRAPHIC,
