@@ -14,6 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -128,15 +129,9 @@ export class CollegeCertificationFormComponent implements OnInit {
     this.remove.emit(this.index);
   }
 
-  public shouldShowPractices(): boolean {
+  public shouldShowPractices(collegeCode: number, licenseCode: number): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return ((+this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) && ([
-      NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
-      NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
-      NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
-      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
-      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT
-    ].includes(this.licenseCode.value)));
+    return CollegeCertification.hasPractice(collegeCode, licenseCode);
   }
 
   /**

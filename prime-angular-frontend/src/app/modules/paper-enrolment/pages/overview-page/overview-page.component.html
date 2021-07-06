@@ -173,7 +173,8 @@
         {{ certification.renewalDate | formatDate | default }}
       </app-enrollee-property>
 
-      <app-enrollee-property title="Advanced Practices">
+      <app-enrollee-property *ngIf="shouldShowPractices(certification.collegeCode, certification.licenseCode)"
+                             title="Advanced Practices">
         {{ certification.practiceCode | configCode: 'practices' | default }}
       </app-enrollee-property>
 

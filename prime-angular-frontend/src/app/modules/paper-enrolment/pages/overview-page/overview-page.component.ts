@@ -17,6 +17,9 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 import { UtilsService } from '@core/services/utils.service';
 import { AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-overview-page',
@@ -41,6 +44,11 @@ export class OverviewPageComponent implements OnInit {
     router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
+  }
+
+  public shouldShowPractices(collegeCode: number, licenseCode: number): boolean {
+    // Only display Advanced Practices for certain nursing licences
+    return CollegeCertification.hasPractice(collegeCode, licenseCode);
   }
 
   public getDocument(documentId: number): void {
