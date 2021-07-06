@@ -90,6 +90,14 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
+        public async Task<Organization> GetOrganizationByPecAsync(string pec)
+        {
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
+                .Where(o => o.Sites.Any(s => s.PEC == pec))
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<int> CreateOrganizationAsync(int partyId)
         {
             var organizations = await GetOrganizationsByPartyIdAsync(partyId);
@@ -114,6 +122,19 @@ namespace Prime.Services
             await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Created");
 
             return organization.Id;
+        }
+
+        public async Task ClaimOrganizationAsync(int partyId, string pec, string claimDetail)
+        {
+            var organization = await GetOrganizationByPecAsync(pec);
+            if (organization == null)
+            {
+                throw new InvalidOperationException("Could not claim Organization. Organization could not be found.");
+            }
+
+            // TODO: submit the claim for organization with the claimDetail reason
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Calim Submitted");
         }
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)

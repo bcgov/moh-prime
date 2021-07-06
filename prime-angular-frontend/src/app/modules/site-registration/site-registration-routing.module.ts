@@ -54,6 +54,12 @@ const routes: Routes = [
         data: { title: 'Create or Claim Organization' }
       },
       {
+        path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
+        component: OrganizationClaimConfirmationPageComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'Next Steps' }
+      },
+      {
         path: SiteRoutes.SITE_MANAGEMENT,
         children: [
           {
@@ -73,12 +79,6 @@ const routes: Routes = [
                 component: OrganizationSigningAuthorityPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
-              },
-              {
-                path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
-                component: OrganizationClaimConfirmationPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Next Steps' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_NAME,

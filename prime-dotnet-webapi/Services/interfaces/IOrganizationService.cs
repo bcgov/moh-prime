@@ -15,7 +15,9 @@ namespace Prime.Services
         Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions search);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
+        Task<Organization> GetOrganizationByPecAsync(string pec);
         Task<int> CreateOrganizationAsync(int signingAuthorityId);
+        Task ClaimOrganizationAsync(int signingAuthorityId, string pec, string claimDetail);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);

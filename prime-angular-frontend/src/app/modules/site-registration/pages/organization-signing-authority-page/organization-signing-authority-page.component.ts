@@ -154,9 +154,16 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
               // signing authority data is resubmitted possibly with alteration
               : updateSigningAuthority$
           ),
-          exhaustMap((party: Party) =>
-            this.organizationResource.createOrganization(party.id)
-          )
+          exhaustMap((party: Party) => {
+            if (this.route.snapshot.queryParams.claimOrg === 'true') {
+              var claimData = this.organizationFormStateService.organizationClaimPageFormState.json;
+              this.organizationResource.claimOrganization(party.id, claimData.pec, claimData.claimDetail);
+              return of(null);
+            }
+            else {
+              return this.organizationResource.createOrganization(party.id);
+            }
+          })
         );
     }
 
@@ -167,22 +174,19 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
-    const claimOrg = this.route.snapshot.queryParams.claimOrg;
     let routePath: (string | number)[];
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     }
-    else if (claimOrg === 'true') {
-      console.log('routing to next step with org', claimOrg, organization.id);
-      routePath = ['../', organization.id, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
+    else if (this.route.snapshot.queryParams.claimOrg === 'true') {
+      routePath = ['../../', SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
     }
     else {
       routePath = (this.isCompleted)
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
     }
-
     this.routeUtils.routeRelativeTo(routePath);
   }
 

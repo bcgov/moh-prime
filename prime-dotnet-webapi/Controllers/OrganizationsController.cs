@@ -110,6 +110,27 @@ namespace Prime.Controllers
             );
         }
 
+        // POST: api/Organizations/claim
+        /// <summary>
+        /// Claim an existing Organization.
+        /// </summary>
+        [HttpPost(Name = nameof(ClaimOrganization))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult<Organization>> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
+        {
+            if (!await _partyService.PartyExistsAsync(claimOrganization.PartyId, PartyType.SigningAuthority))
+            {
+                return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
+            }
+
+            await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
+
+            return NoContent();
+        }
+
         // PUT: api/Organizations/5
         /// <summary>
         /// Updates a specific Organization.

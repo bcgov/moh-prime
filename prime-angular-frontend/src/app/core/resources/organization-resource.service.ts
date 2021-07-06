@@ -159,6 +159,19 @@ export class OrganizationResource {
       );
   }
 
+  public claimOrganization(partyId: number, pec: string, claimDetail: string): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/claim`, { partyId, pec, claimDetail })
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization could not be claimed');
+          this.logger.error('[Core] OrganizationResource::claimOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateOrganization(organization: Organization): NoContent {
     return this.apiResource.put<NoContent>(`organizations/${organization.id}`, organization)
       .pipe(
