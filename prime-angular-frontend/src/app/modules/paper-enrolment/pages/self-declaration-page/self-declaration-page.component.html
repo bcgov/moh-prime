@@ -10,11 +10,7 @@
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Self-declaration</ng-container>
       <ng-container appPageSubheaderSummary>
-        Self-declaration information is collected under the authority of the Information Management
-        Regulation of the Pharmaceutical Services Act and confidentiality is protected under the
-        Freedom of Information and Protection of Privacy Act. Self-declaration information is used
-        to verify the applicant is in good standing with their respective College(s) and to determine
-        eligibility for and access to PharmaNet.
+        Enter the enrollee's responses to the self-declaration questions as they indicated them on the form.
       </ng-container>
     </app-page-subheader>
 
@@ -29,7 +25,6 @@
     </ng-container>
 
     <app-page-section>
-
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_REGISTRATION_SUSPENDED] }}
       </p>
@@ -88,11 +83,9 @@
           </ol>
         </div>
       </div>
-
     </app-page-section>
 
     <app-page-section>
-
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_CONVICTION] }}
       </p>
@@ -153,11 +146,9 @@
 
         </div>
       </div>
-
     </app-page-section>
 
     <app-page-section>
-
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_PHARMANET_SUSPENDED] }}
       </p>
@@ -212,11 +203,9 @@
           </ol>
         </div>
       </div>
-
     </app-page-section>
 
     <app-page-section>
-
       <p class="question">
         {{ selfDeclarationQuestions[SelfDeclarationTypeEnum.HAS_DISCIPLINARY_ACTION] }}
       </p>
@@ -272,7 +261,6 @@
           </ol>
         </div>
       </div>
-
     </app-page-section>
 
     <app-page-footer [isInitialEnrolment]="true"

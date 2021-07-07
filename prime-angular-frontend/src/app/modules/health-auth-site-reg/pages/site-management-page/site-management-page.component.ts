@@ -131,22 +131,22 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  public isUnderReview(site: SiteListViewModel): boolean {
-    return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
+  public isInReview(site: SiteListViewModel): boolean {
+    return site.submittedDate && site.status === SiteStatusType.IN_REVIEW;
   }
 
-  public getUnderReviewSiteNotificationProperties() {
+  public getInReviewSiteNotificationProperties() {
     return {
       icon: 'notification_important',
       text: 'This site is waiting for approval and an assigned Site ID',
     };
   }
 
-  public isDeclined(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.DECLINED);
+  public isLocked(site: SiteListViewModel): boolean {
+    return (site.status === SiteStatusType.LOCKED);
   }
 
-  public getDeclinedSiteNotificationProperties() {
+  public getLockedSiteNotificationProperties() {
     return {
       icon: 'not_interested',
       text: 'Declined',
@@ -160,7 +160,7 @@ export class SiteManagementPageComponent implements OnInit {
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
-      text: `Site Approved<br>Site ID: ${ site.pec }`
+      text: `Site Approved<br>Site ID: ${site.pec}`
     };
   }
 

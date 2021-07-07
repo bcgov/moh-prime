@@ -36,7 +36,7 @@ namespace PrimeTests.Utils
 
         private void Seed()
         {
-            if (TestDb.Statuses.Any())
+            if (TestDb.Vendors.Any())
             {
                 return;
             }
