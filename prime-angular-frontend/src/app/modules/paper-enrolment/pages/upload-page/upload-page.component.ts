@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { of, Subscription } from 'rxjs';
+import { of } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { EnumUtils } from '@lib/utils/enum-utils.class';
@@ -31,6 +31,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   public agreementTypes: number[];
   public savedDocuments: EnrolleeAdjudicationDocument[];
   public AgreementTypeNameMap = AgreementTypeNameMap;
+  public hasNoUploadError: boolean;
 
   private routeUtils: RouteUtils;
   private documentGuids: string[];
@@ -53,12 +54,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   public onUpload(document: BaseDocument): void {
     this.documentGuids.push(document.documentGuid);
-  }
-
-  public onRemoveDocument(document: BaseDocument): void {
-    if (this.documentGuids.includes(document.documentGuid)) {
-      this.documentGuids = this.documentGuids.filter(i => i !== document.documentGuid);
-    }
+    this.hasNoUploadError = false;
   }
 
   public getDocument(documentId: number): void {
@@ -85,7 +81,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
-      return;
+      throw new Error('No enrollee ID was provided');
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
@@ -96,7 +92,14 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
       });
 
     this.paperEnrolmentResource.getAdjudicationDocuments(enrolleeId)
-      .subscribe(documents => this.savedDocuments = documents);
+      .subscribe(documents => {
+        this.savedDocuments = documents;
+        this.documentGuids = documents.map(d => d.documentGuid);
+      });
+  }
+
+  protected additionalValidityChecks(): boolean {
+    return !!this.documentGuids.length;
   }
 
   protected performSubmission(): NoContent {
@@ -112,6 +115,16 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
         ),
         exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId))
       );
+  }
+
+  protected onSubmitFormIsValid(): void {
+    this.hasNoUploadError = false;
+  }
+
+  protected onSubmitFormIsInvalid(): void {
+    if (!this.documentGuids.length) {
+      this.hasNoUploadError = true;
+    }
   }
 
   protected afterSubmitIsSuccessful(enrolleeId: number) {

@@ -16,7 +16,10 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { ReplacePipe } from '@shared/pipes/replace.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
+import { PhonePipe } from '@shared/pipes/phone.pipe';
 
 describe('OverviewComponent', () => {
   let component: OverviewPageComponent;
@@ -25,6 +28,13 @@ describe('OverviewComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
+        declarations: [
+          OverviewPageComponent,
+          DefaultPipe,
+          ReplacePipe,
+          FormatDatePipe,
+          PhonePipe
+        ],
         imports: [
           HttpClientTestingModule,
           NgxBusyModule,
@@ -32,7 +42,6 @@ describe('OverviewComponent', () => {
           NgxMaterialModule,
           ReactiveFormsModule,
           RouterTestingModule,
-          EnrolmentModule
         ],
         providers: [
           {
