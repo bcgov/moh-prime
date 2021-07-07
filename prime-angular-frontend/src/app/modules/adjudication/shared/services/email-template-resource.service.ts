@@ -49,6 +49,7 @@ export class EmailTemplateResourceService {
     return this.apiResource.put<EmailTemplate>(`emails/management/templates/${id}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Email Template has been updated.')),
         tap((template: EmailTemplate) => this.logger.info('EMAIL_TEMPLATE', template)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Email Template could not be updated');

@@ -52,7 +52,10 @@ export class NotificationEmailViewComponent implements OnInit {
         .afterClosed()
         .subscribe(() => {
           this.emailTemplateResource.updateEmailTemplate(this.route.snapshot.params.eid, this.template.value)
-            .subscribe((emailTemplate: EmailTemplate) => this.emailTemplate = emailTemplate);
+            .subscribe((emailTemplate: EmailTemplate) => {
+              this.emailTemplate = emailTemplate;
+              this.editable = false;
+            });
         });
     }
   }
