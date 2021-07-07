@@ -2,7 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -50,13 +51,19 @@ export class NotificationEmailViewComponent implements OnInit {
 
       this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
-        .subscribe(() => {
-          this.emailTemplateResource.updateEmailTemplate(this.route.snapshot.params.eid, this.template.value)
-            .subscribe((emailTemplate: EmailTemplate) => {
-              this.emailTemplate = emailTemplate;
-              this.editable = false;
-            });
-        });
+        .pipe(
+          exhaustMap((result: { output: string }) => {
+            if (result) {
+              return this.emailTemplateResource.updateEmailTemplate(this.route.snapshot.params.eid, this.template.value);
+            }
+            return EMPTY;
+          }),
+        )
+        .subscribe((emailTemplate: EmailTemplate) => {
+          this.emailTemplate = emailTemplate;
+          this.editable = false;
+        }
+        );
     }
   }
 
