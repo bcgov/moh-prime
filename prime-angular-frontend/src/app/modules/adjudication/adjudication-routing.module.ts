@@ -45,6 +45,8 @@ import { TechnicalSupportsPageComponent } from './pages/health-authorities/techn
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
 import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
 
 const routes: Routes = [
   {
@@ -67,9 +69,19 @@ const routes: Routes = [
             data: { title: 'Enrollees' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: EnrolleeBannerPageComponent,
-            data: { title: 'Enrollee Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: EnrolleeBannerListPageComponent,
+                data: { title: 'Enrollee Banners' }
+              },
+              {
+                path: ':bid',
+                component: EnrolleeBannerPageComponent,
+                data: { title: 'Enrollee Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -187,9 +199,19 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: SiteBannerPageComponent,
-            data: { title: 'Site Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: SiteBannerListPageComponent,
+                data: { title: 'Site Banners' }
+              },
+              {
+                path: ':bid',
+                component: SiteBannerPageComponent,
+                data: { title: 'Site Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -346,4 +368,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }
