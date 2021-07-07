@@ -20,8 +20,6 @@ import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 export class OrganizationToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;
   public orgAgreementVersions: AgreementVersion[];
-  public AgreementTypeNameMap = AgreementTypeNameMap;
-  public previewingToa: AgreementVersion;
 
   public AgreementType = AgreementType;
 
