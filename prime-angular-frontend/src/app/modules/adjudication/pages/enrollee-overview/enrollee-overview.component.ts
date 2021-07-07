@@ -14,8 +14,8 @@ import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
-import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
 
 @Component({
   selector: 'app-enrollee-overview',
