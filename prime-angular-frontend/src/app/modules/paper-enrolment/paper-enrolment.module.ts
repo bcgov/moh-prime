@@ -21,6 +21,7 @@ import { DemographicOverviewComponent } from './pages/demographic-page/demograph
 import { OverviewRegulatoryComponent } from './pages/regulatory-page/overview-regulatory/overview-regulatory.component';
 import { OverviewCareSettingComponent } from './pages/care-setting-page/overview-care-setting/overview-care-setting.component';
 import { OverviewOboSitesComponent } from './pages/obo-sites-page/overview-obo-sites/overview-obo-sites.component';
+import { CareSettingOverviewComponent } from './pages/care-setting-page/care-setting-overview.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { OverviewOboSitesComponent } from './pages/obo-sites-page/overview-obo-s
     DemographicOverviewComponent,
     OverviewRegulatoryComponent,
     OverviewCareSettingComponent,
-    OverviewOboSitesComponent
+    OverviewOboSitesComponent,
+    CareSettingOverviewComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
