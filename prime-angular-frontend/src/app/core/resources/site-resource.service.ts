@@ -398,6 +398,19 @@ export class SiteResource {
       );
   }
 
+  public unrejectSite(siteId: number): Observable<Site> {
+    return this.apiResource.put<Site>(`sites/${siteId}/unreject`)
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Site has been unrejected')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site registration could not be unrejected');
+          this.logger.error('[SiteRegistration] SiteResource::unrejectSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
     const payload = { data: note };
     return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)

@@ -9,16 +9,23 @@
 
   <mat-menu #menu>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole)"
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.APPROVE)"
             (click)="onApprove()">
       <mat-icon>check_circle_outline</mat-icon>
       <span>Approve Site</span>
     </button>
     <button mat-menu-item
-            [disabled]="!(Role.EDIT_SITE | inRole)"
-            (click)="onDecline()">
+            [disabled]="!(Role.EDIT_SITE | inRole) || !isActionAllowed(SiteAdjudicationAction.REJECT)"
+            (click)="onReject()">
       <mat-icon>block</mat-icon>
-      <span>Decline Site</span>
+      <span>Reject Site</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.EDIT_SITE | inRole)"
+            *ngIf="isActionAllowed(SiteAdjudicationAction.UNREJECT)"
+            (click)="onUnreject()">
+      <mat-icon>arrow_circle_up</mat-icon>
+      <span>Unreject Site</span>
     </button>
     <button mat-menu-item
             [disabled]="!(Role.VIEW_SITE | inRole)"
@@ -34,10 +41,10 @@
     </button>
     <button mat-menu-item
             [disabled]="!(Role.EDIT_SITE | inRole)"
-            *ngIf="siteRegistration.status === SiteStatusType.UNDER_REVIEW || siteRegistration.status === SiteStatusType.APPROVED"
-            (click)="onEnableEditing()">
+            *ngIf="isActionAllowed(SiteAdjudicationAction.REQUEST_CHANGES)"
+            (click)="onRequestChanges()">
       <mat-icon>lock_open</mat-icon>
-      <span>Enable Editing</span>
+      <span>Request Changes</span>
     </button>
 
     <mat-divider></mat-divider>

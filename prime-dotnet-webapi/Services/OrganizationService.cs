@@ -80,6 +80,7 @@ namespace Prime.Services
                             .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
+                .DecompileAsync()
                 .ToListAsync();
         }
 
@@ -87,6 +88,7 @@ namespace Prime.Services
         {
             return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
+                    .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
