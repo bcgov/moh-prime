@@ -26,7 +26,7 @@ export class FinalizedEnrolmentGuard implements CanActivateChild {
     private paperEnrolmentResource: PaperEnrolmentResource
   ) { }
 
-  canActivateChild(
+  public canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
