@@ -2,7 +2,7 @@
   <app-page-header>PRIME Profile</app-page-header>
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Upload Information</ng-container>
       <ng-container appPageSubheader2Summary>
@@ -14,8 +14,16 @@
                          componentName="adjudication-document"
                          labelMessage="Drag and drop your documents or click to browse"
                          [multiple]="true"
-                         (completed)="onUpload($event)"
-                         (remove)="onRemoveDocument($event)"></app-document-upload>
+                         (completed)="onUpload($event)"></app-document-upload>
+
+    <app-alert *ngIf="hasNoUploadError"
+               type="danger"
+               icon="warning">
+      <ng-container #alertContent
+                    class="alert-content">
+        No files have been uploaded.
+      </ng-container>
+    </app-alert>
 
     <ng-container *ngIf="savedDocuments?.length">
       <div *ngFor="let document of savedDocuments"
@@ -28,10 +36,9 @@
         </button>
       </div>
     </ng-container>
+  </app-page-section>
 
-  </section>
-
-  <section class="mb-3">
+  <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Terms of Access</ng-container>
       <ng-container appPageSubheader2Summary>
@@ -55,8 +62,7 @@
       </mat-form-field>
 
     </form>
-
-  </section>
+  </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"
                    (back)="onBack()"

@@ -1,13 +1,15 @@
 import { Inject, Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
-import { AuthService } from '@auth/shared/services/auth.service';
-import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { BaseGuard } from '@core/guards/base.guard';
+import { LoggerService } from '@core/services/logger.service';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { AuthService } from '@auth/shared/services/auth.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,8 +31,9 @@ export class PaperEnrolmentGuard extends BaseGuard {
       return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
           map((enrollee: HttpEnrollee) => {
-            // Store the site for access throughout creation and updating of a
+            // Store the enrollee for access throughout creation and updating of a
             // site, which will allows provide the most up-to-date site
+            // TODO replace each enrollee GET for the service
             // this.paperEnrolmentService.enrollee = enrollee;
 
             return this.routeDestination(routePath, enrollee);
