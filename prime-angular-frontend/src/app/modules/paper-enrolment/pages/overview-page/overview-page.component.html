@@ -24,53 +24,9 @@
                             [smsPhone]="enrollee?.smsPhone">
   </app-demographic-overview>
 
-  <app-page-section>
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Care Setting</ng-container>
-
-      <button *ngIf="true"
-              mat-icon-button
-              matTooltip="Edit Care Setting"
-              (click)="onRoute(PaperEnrolmentRoutes.CARE_SETTING)">
-        <mat-icon>edit</mat-icon>
-      </button>
-    </app-page-subheader>
-
-    <ng-container *ngFor="let careSetting of enrollee?.enrolleeCareSettings">
-
-      <app-enrollee-property title="Care Setting"
-                             [makeBold]="true">
-        {{ careSetting.careSettingCode | configCode: 'careSettings' }}
-      </app-enrollee-property>
-
-    </ng-container>
-
-    <app-enrollee-property *ngIf="!enrollee?.enrolleeCareSettings?.length"
-                           title="Care Setting"
-                           [makeBold]="true">
-      None
-    </app-enrollee-property>
-  </app-page-section>
-
-  <app-page-section *ngIf="enrollee?.enrolleeHealthAuthorities?.length">
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Health Authority</ng-container>
-
-      <button *ngIf="true"
-              mat-icon-button
-              matTooltip="Edit Health Authority"
-              (click)="onRoute(PaperEnrolmentRoutes.CARE_SETTING)">
-        <mat-icon>edit</mat-icon>
-      </button>
-    </app-page-subheader>
-
-    <ng-container *ngFor="let healthAuthority of enrollee.enrolleeHealthAuthorities">
-      <app-enrollee-property title="Health Authority"
-                             [makeBold]="true">
-        <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
-      </app-enrollee-property>
-    </ng-container>
-  </app-page-section>
+  <app-overview-care-setting [careSettings]="enrollee?.enrolleeCareSettings"
+                             [healthAuthorities]="enrollee?.enrolleeHealthAuthorities">
+  </app-overview-care-setting>
 
   <app-overview-regulatory [certifications]="enrollee?.certifications"></app-overview-regulatory>
 
