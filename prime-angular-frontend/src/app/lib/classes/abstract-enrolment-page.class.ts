@@ -216,6 +216,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Submission hook for execution.
    */
+  // TODO add generic to return value that must match afterSubmitIsSuccessful parameter
   protected abstract performSubmission(): Observable<unknown>;
 
   /**

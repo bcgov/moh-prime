@@ -77,6 +77,14 @@
               {{ healthAuthorities[i].name }}
             </mat-checkbox>
           </div>
+          <app-alert *ngIf="hasNoHealthAuthoritiesError"
+                     type="danger"
+                     icon="warning">
+            <ng-container #alertContent
+                          class="alert-content">
+              No health authority has been chosen.
+            </ng-container>
+          </app-alert>
         </div>
       </div>
     </section>

@@ -3,7 +3,6 @@ import { RegulatoryFormState as BaseRegulatoryPageFormState } from '@enrolment/p
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 export class RegulatoryFormState extends BaseRegulatoryPageFormState {
-
   public get selectedCollegeCodes(): number[] {
     return this.certifications.value
       .map((certification: CollegeCertification) => +certification.collegeCode);

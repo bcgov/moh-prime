@@ -240,7 +240,7 @@ namespace Prime.Services
 
             enrollee.AddEnrolmentStatus(StatusType.RequiresToa)
                 .AddStatusReason(StatusReasonType.Automatic);
-            enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+            enrollee.AddEnrolmentStatus(StatusType.Editable);
 
             await _context.SaveChangesAsync();
         }

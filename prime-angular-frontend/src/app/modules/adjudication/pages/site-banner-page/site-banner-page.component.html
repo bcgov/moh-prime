@@ -1,7 +1,7 @@
 <app-page [busy]="busy"
-          mode="full">
+          mode="full"
+          [showToolbar]="true"
+          (back)="onBack()">
   <app-banner-maintenance [locationCode]="locationCode"
-                          [banner]="banner"
-                          (save)="onSave($event)"
-                          (delete)="onDelete()"></app-banner-maintenance>
+                          [path]="path"></app-banner-maintenance>
 </app-page>

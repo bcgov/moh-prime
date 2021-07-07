@@ -17,6 +17,7 @@ import { DefaultPipe } from '@shared/pipes/default.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { PostalPipe } from '@shared/pipes/postal.pipe';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -29,12 +30,13 @@ describe('AuthorizedUserPageComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
-        // AuthorizedUserPageComponent,
-        // DefaultPipe,
-        // FullnamePipe,
-        // FormatDatePipe,
-        // ConfigCodePipe,
-        // PostalPipe
+        AuthorizedUserPageComponent,
+        DefaultPipe,
+        FullnamePipe,
+        FormatDatePipe,
+        ConfigCodePipe,
+        PostalPipe,
+        CapitalizePipe
       ],
       imports: [
         // BrowserAnimationsModule,

@@ -14,6 +14,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 @Component({
   selector: 'app-college-certification-form',
@@ -130,13 +131,7 @@ export class CollegeCertificationFormComponent implements OnInit {
 
   public shouldShowPractices(): boolean {
     // Only display Advanced Practices for certain nursing licences
-    return ((+this.collegeCode.value === CollegeLicenceClassEnum.BCCNM) && ([
-      NursingLicenseCode.NON_PRACTICING_REGISTERED_NURSE,
-      NursingLicenseCode.PRACTICING_REGISTERED_NURSE,
-      NursingLicenseCode.PROVISIONAL_REGISTERED_NURSE,
-      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_EMERGENCY,
-      NursingLicenseCode.TEMPORARY_REGISTERED_NURSE_SPECIAL_EVENT
-    ].includes(this.licenseCode.value)));
+    return CollegeCertification.hasPractice(this.collegeCode.value, this.licenseCode.value);
   }
 
   /**
@@ -174,10 +169,12 @@ export class CollegeCertificationFormComponent implements OnInit {
           }
         });
 
+      const initialNursingCategory: number | null = +this.nurseCategory.value ?? null;
       this.nurseCategory.valueChanges
-        .subscribe((collegeLicenseGroupingCode: number) => {
-          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode);
-        });
+        .pipe(startWith(initialNursingCategory))
+        .subscribe((collegeLicenseGroupingCode: number) =>
+          this.loadLicensesByNursingCategory(collegeLicenseGroupingCode)
+        );
     } else {
       const prescriberIdType = this.prescriberIdTypeByLicenceCode(this.licenseCode.value);
       const isPrescribing = prescriberIdType === PrescriberIdTypeEnum.Optional && !!this.practitionerId.value;
@@ -316,8 +313,12 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private loadLicensesByNursingCategory(nursingCategory: number) {
-    this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
-    this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
+    const collegeCode = this.collegeCode.value;
+    if (collegeCode === CollegeLicenceClassEnum.BCCNM) {
+      this.loadPractices(collegeCode);
+      this.filteredLicenses = this.filterLicensesByGrouping(nursingCategory);
+      this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
+    }
   }
 
   private loadPractices(collegeCode: number) {
