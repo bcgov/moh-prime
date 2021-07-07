@@ -18,6 +18,7 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview/demographic-overview.component';
+import { OverviewRegulatoryComponent } from './pages/regulatory-page/overview-regulatory/overview-regulatory.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { DemographicOverviewComponent } from './pages/demographic-page/demograph
     OverviewPageComponent,
     UploadPageComponent,
     NextStepsPageComponent,
-    DemographicOverviewComponent
+    DemographicOverviewComponent,
+    OverviewRegulatoryComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,

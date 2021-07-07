@@ -1,0 +1,47 @@
+<app-page-section>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
+
+    <button *ngIf="true"
+            mat-icon-button
+            matTooltip="Edit College Licenses"
+            (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <ng-container *ngFor="let certification of certifications; let i = index;">
+
+    <app-enrollee-property title="College Licence"
+                           [makeBold]="true">
+      {{ certification.collegeCode | configCode: 'colleges' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Licence Class">
+      {{ certification.licenseCode | configCode: 'licenses' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Licence Number">
+      {{ certification.licenseNumber | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Prescriber ID">
+      {{ certification.practitionerId | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Renewal Date">
+      {{ certification.renewalDate | formatDate | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Advanced Practices">
+      {{ certification.practiceCode | configCode: 'practices' | default }}
+    </app-enrollee-property>
+
+  </ng-container>
+
+  <app-enrollee-property *ngIf="!certifications?.length"
+                         title="College Certification"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
+</app-page-section>
