@@ -73,7 +73,7 @@ export class CareSettingOverviewComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public onRoute(routePath: string | string[]) {

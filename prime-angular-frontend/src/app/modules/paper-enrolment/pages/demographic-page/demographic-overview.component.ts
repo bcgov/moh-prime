@@ -110,7 +110,7 @@ export class DemographicOverviewComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
   }
 
   public onRoute(routePath: string | string[]) {
