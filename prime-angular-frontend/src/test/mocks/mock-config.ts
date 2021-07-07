@@ -151,7 +151,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 2,
@@ -198,7 +200,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 3,
@@ -364,7 +368,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 5,
@@ -376,7 +382,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 6,
@@ -388,7 +396,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 7,
@@ -400,7 +410,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 8,
@@ -412,7 +424,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 9,
@@ -424,7 +438,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 10,
@@ -436,7 +452,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 11,
@@ -448,7 +466,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 12,
@@ -460,7 +480,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 13,
@@ -472,7 +494,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 14,
@@ -484,7 +508,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 15,
@@ -496,7 +522,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 16,
@@ -508,7 +536,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 17,
@@ -520,7 +550,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         },
         {
           "code": 18,
@@ -532,7 +564,9 @@ export class MockConfig {
               "collegeLicenseGroupingCode": null
             }
           ],
-          "collegePractices": []
+          "collegePractices": [
+
+          ]
         }
       ],
       "jobNames": [
@@ -2214,6 +2248,22 @@ export class MockConfig {
           "name": "No address from BCSC. Enrollee entered address."
         },
         {
+          "code": 16,
+          "name": "Terms of Access to be determined by an Adjudicator"
+        },
+        {
+          "code": 17,
+          "name": "No address from BCSC. Enrollee entered address."
+        },
+        {
+          "code": 3,
+          "name": "PharmaNet Error, License could not be validated"
+        },
+        {
+          "code": 4,
+          "name": "College License or Practitioner ID not in PharmaNet table"
+        },
+        {
           "code": 18,
           "name": "Manually entered paper enrolment"
         }
@@ -2327,6 +2377,32 @@ export class MockConfig {
         {
           "code": 3,
           "name": "In-patient pharmacy"
+        },
+        {
+          "code": 5,
+          "name": "Outpatient or community-based clinic"
+        }
+      ],
+      "careTypes": [
+        {
+          "code": 1,
+          "name": "Ambulatory Care"
+        },
+        {
+          "code": 2,
+          "name": "Acute Care"
+        }
+      ],
+      "collegeLicenseGroupings": [
+        {
+          "code": 1,
+          "name": "Licensed Practical Nurse",
+          "weight": 1
+        },
+        {
+          "code": 2,
+          "name": "Registered Nurse/Licensed Graduate Nurse",
+          "weight": 2
         },
         {
           "code": 5,
