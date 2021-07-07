@@ -28,7 +28,7 @@
                              [healthAuthorities]="enrollee?.enrolleeHealthAuthorities">
   </app-care-setting-overview>
 
-  <app-overview-regulatory [certifications]="enrollee?.certifications"></app-overview-regulatory>
+  <app-regulatory-overview [certifications]="enrollee?.certifications"></app-regulatory-overview>
 
   <app-obo-sites-overview *ngIf="enrollee?.oboSites?.length"
                           [careSettings]="enrollee.enrolleeCareSettings"

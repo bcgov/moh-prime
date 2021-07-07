@@ -20,6 +20,7 @@ import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview.component';
 import { CareSettingOverviewComponent } from './pages/care-setting-page/care-setting-overview.component';
 import { OboSitesOverviewComponent } from './pages/obo-sites-page/obo-sites-overview.component';
+import { RegulatoryOverviewComponent } from './pages/regulatory-page/regulatory-overview.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { OboSitesOverviewComponent } from './pages/obo-sites-page/obo-sites-over
     NextStepsPageComponent,
     DemographicOverviewComponent,
     CareSettingOverviewComponent,
-    OboSitesOverviewComponent
+    OboSitesOverviewComponent,
+    RegulatoryOverviewComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
