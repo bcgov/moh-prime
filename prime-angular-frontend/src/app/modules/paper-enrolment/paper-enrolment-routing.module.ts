@@ -28,8 +28,8 @@ const routes: Routes = [
         // During initial registration the ID will be set to
         // zero indicating the organization does not exist
         path: ':eid',
-        // canActivateChild: [PaperEnrolmentGuard],
-        canActivate: [
+        canActivateChild: [
+          PaperEnrolmentGuard,
           FinalizedEnrolmentGuard,
           AuthenticationGuard,
           AdjudicationGuard

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import {
   Router,
   Params,
-  CanActivate,
+  CanActivateChild,
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
   UrlTree,
@@ -19,14 +19,14 @@ import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class FinalizedEnrolmentGuard implements CanActivate {
+export class FinalizedEnrolmentGuard implements CanActivateChild {
   constructor(
     private router: Router,
     @Inject(APP_CONFIG) private config: AppConfig,
     private paperEnrolmentResource: PaperEnrolmentResource
   ) { }
 
-  canActivate(
+  canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
