@@ -17,10 +17,7 @@ import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
-import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview/demographic-overview.component';
-import { OverviewRegulatoryComponent } from './pages/regulatory-page/overview-regulatory/overview-regulatory.component';
-import { OverviewCareSettingComponent } from './pages/care-setting-page/overview-care-setting/overview-care-setting.component';
-import { OverviewOboSitesComponent } from './pages/obo-sites-page/overview-obo-sites/overview-obo-sites.component';
+import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview.component';
 import { CareSettingOverviewComponent } from './pages/care-setting-page/care-setting-overview.component';
 
 @NgModule({
@@ -36,9 +33,6 @@ import { CareSettingOverviewComponent } from './pages/care-setting-page/care-set
     UploadPageComponent,
     NextStepsPageComponent,
     DemographicOverviewComponent,
-    OverviewRegulatoryComponent,
-    OverviewCareSettingComponent,
-    OverviewOboSitesComponent,
     CareSettingOverviewComponent
   ],
   imports: [
@@ -48,4 +42,4 @@ import { CareSettingOverviewComponent } from './pages/care-setting-page/care-set
     EditorModule
   ]
 })
-export class PaperEnrolmentModule {}
+export class PaperEnrolmentModule { }
