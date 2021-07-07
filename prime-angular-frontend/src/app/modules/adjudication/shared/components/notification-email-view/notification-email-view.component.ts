@@ -52,12 +52,11 @@ export class NotificationEmailViewComponent implements OnInit {
       this.dialog.open(ConfirmDialogComponent, { data })
         .afterClosed()
         .pipe(
-          exhaustMap((result: { output: string }) => {
-            if (result) {
-              return this.emailTemplateResource.updateEmailTemplate(this.route.snapshot.params.eid, this.template.value);
-            }
-            return EMPTY;
-          }),
+          exhaustMap((result: { output: string }) =>
+            (result)
+              ? this.emailTemplateResource.updateEmailTemplate(this.route.snapshot.params.eid, this.template.value)
+              : EMPTY
+          ),
         )
         .subscribe((emailTemplate: EmailTemplate) => {
           this.emailTemplate = emailTemplate;
