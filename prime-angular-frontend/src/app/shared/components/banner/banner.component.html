@@ -1,15 +1,16 @@
-<div *ngIf="banner"
-     class="row">
-  <div class="col-sm-12 col-md-9 col-xl-7">
-    <app-alert [type]="type">
-      <ng-container #alertTitle
-                    class="alert-title">
-        {{ banner?.title }}
-      </ng-container>
-      <ng-container #alertContent
-                    class="alert-content">
-        <div [innerHTML]="banner?.content"></div>
-      </ng-container>
-    </app-alert>
+<ng-container *ngFor="let banner of banners">
+  <div class="row">
+    <div class="col-sm-12 col-md-9 col-xl-7">
+      <app-alert [type]="type(banner)">
+        <ng-container #alertTitle
+                      class="alert-title">
+          {{ banner?.title }}
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          <div [innerHTML]="banner?.content"></div>
+        </ng-container>
+      </app-alert>
+    </div>
   </div>
-</div>
+</ng-container>

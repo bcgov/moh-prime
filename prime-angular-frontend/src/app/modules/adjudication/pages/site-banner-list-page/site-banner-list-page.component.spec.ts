@@ -20,11 +20,11 @@ import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
 
-import { SiteMaintenancePageComponent } from './site-maintenance-page.component';
+import { SiteBannerListPageComponent } from './site-banner-list-page.component';
 
-describe('SiteMaintenancePageComponent', () => {
-  let component: SiteMaintenancePageComponent;
-  let fixture: ComponentFixture<SiteMaintenancePageComponent>;
+describe('SiteBannerListPageComponent', () => {
+  let component: SiteBannerListPageComponent;
+  let fixture: ComponentFixture<SiteBannerListPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -61,7 +61,7 @@ describe('SiteMaintenancePageComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SiteMaintenancePageComponent);
+    fixture = TestBed.createComponent(SiteBannerListPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

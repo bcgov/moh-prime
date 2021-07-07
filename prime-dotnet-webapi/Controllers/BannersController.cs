@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,111 +25,121 @@ namespace Prime.Controllers
             _bannerService = bannerService;
         }
 
-        // PUT: api/banners/enrolment-landing
+        // POST: api/banners?locationCode=1
         /// <summary>
-        /// Set the Enrollee landing banner
+        /// Create a banner
         /// </summary>
         /// <param name="viewModel"></param>
-        [HttpPut("enrolment-landing", Name = nameof(SetEnrolleeLandingBanner))]
+        /// <param name="locationCode"></param>
+        [HttpPost("", Name = nameof(CreateBanner))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SetEnrolleeLandingBanner(BannerViewModel viewModel)
+        public async Task<ActionResult> CreateBanner(BannerViewModel viewModel, [FromQuery] BannerLocationCode locationCode)
         {
-            var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.EnrolmentLandingPage, viewModel);
+            var banner = await _bannerService.CreateBannerAsync(locationCode, viewModel);
+            return Ok(banner);
+        }
+
+        // PUT: api/banners/1
+        /// <summary>
+        /// Update banner
+        /// </summary>
+        /// <param name="bannerId"></param>
+        /// <param name="viewModel"></param>
+        [HttpPut("{bannerId}", Name = nameof(UpdateBanner))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateBanner(int bannerId, BannerViewModel viewModel)
+        {
+            if (viewModel.Id != bannerId)
+            {
+                return BadRequest("Banner Id does not match view model Id");
+            }
+
+            var updatedBanner = await _bannerService.UpdateBannerAsync(bannerId, viewModel);
             return Ok(updatedBanner);
         }
 
-        // PUT: api/banners/site-landing
+        // DELETE: api/banners/1
         /// <summary>
-        /// Set the Site landing banner
+        /// Delete a banner by id
         /// </summary>
-        /// <param name="viewModel"></param>
-        [HttpPut("site-landing", Name = nameof(SetSiteLandingBanner))]
+        /// <param name="bannerId"></param>
+        [HttpDelete("{bannerId}", Name = nameof(DeleteBanner))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteBanner(int bannerId)
+        {
+            await _bannerService.DeleteBannerAsync(bannerId);
+            return NoContent();
+        }
+
+        // GET: api/banners/1
+        /// <summary>
+        /// Get Banner by Id
+        /// </summary>
+        /// <param name="bannerId"></param>
+        [HttpGet("{bannerId}", Name = nameof(GetBannerById))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SetSiteLandingBanner(BannerViewModel viewModel)
+        public async Task<ActionResult> GetBannerById(int bannerId)
         {
-            var updatedBanner = await _bannerService.SetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage, viewModel);
-            return Ok(updatedBanner);
+            var banner = await _bannerService.GetBannerAsync(bannerId);
+            return Ok(banner);
         }
 
         // GET: api/banners/enrolment-landing
         /// <summary>
-        /// Get the Enrollee landing banner
+        /// Get enrollee landing banners
         /// </summary>
-        [HttpGet("enrolment-landing", Name = nameof(GetEnrolleeLandingBanner))]
+        [HttpGet("enrolment-landing", Name = nameof(GetEnrolmentLandingBanners))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetEnrolleeLandingBanner()
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolmentLandingBanners()
         {
-            var banner = await _bannerService.GetBannerAsync(BannerLocationCode.EnrolmentLandingPage);
-            return Ok(banner);
+            var banners = await _bannerService.GetBannersAsync(BannerLocationCode.EnrolmentLandingPage);
+            return Ok(banners);
         }
 
         // GET: api/banners/site-landing
         /// <summary>
-        /// Get the Site landing banner
+        /// Get Site Landing Banners
         /// </summary>
-        [HttpGet("site-landing", Name = nameof(GetSiteLandingBanner))]
+        [HttpGet("site-landing", Name = nameof(GetSiteLandingBanners))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetSiteLandingBanner()
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSiteLandingBanners()
         {
-            var banner = await _bannerService.GetBannerAsync(BannerLocationCode.SiteRegistrationLandingPage);
-            return Ok(banner);
-        }
-
-        // DELETE: api/banners/enrolment-landing
-        /// <summary>
-        /// Delete the Enrollee landing banner
-        /// </summary>
-        [HttpDelete("enrolment-landing", Name = nameof(DeleteEnrolleeLandingBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeleteEnrolleeLandingBanner()
-        {
-            await _bannerService.DeleteBannerAsync(BannerLocationCode.EnrolmentLandingPage);
-            return NoContent();
-        }
-
-        // DELETE: api/banners/site-landing
-        /// <summary>
-        /// Delete the Site landing banner
-        /// </summary>
-        [HttpDelete("site-landing", Name = nameof(DeleteSiteLandingBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> DeleteSiteLandingBanner()
-        {
-            await _bannerService.DeleteBannerAsync(BannerLocationCode.SiteRegistrationLandingPage);
-            return NoContent();
+            var banners = await _bannerService.GetBannersAsync(BannerLocationCode.SiteRegistrationLandingPage);
+            return Ok(banners);
         }
 
         // GET: api/banners/active?locationCode=4
         /// <summary>
-        /// Gets the active Banner by location code. Returns null result if no active banner
+        /// Gets the active Banners by location code. Returns empty array if no banner found
         /// </summary>
         /// <param name="locationCode"></param>
-        [HttpGet("active", Name = nameof(GetActiveBannerByLocationCode))]
+        [HttpGet("active", Name = nameof(GetActiveBannersByLocationCode))]
         [AllowAnonymous]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<BannerDisplayViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetActiveBannerByLocationCode([FromQuery] BannerLocationCode locationCode)
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerDisplayViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetActiveBannersByLocationCode([FromQuery] BannerLocationCode locationCode)
         {
-            var banner = await _bannerService.GetActiveBannerAsync(locationCode, DateTime.UtcNow);
-            return Ok(banner);
+            var banners = await _bannerService.GetActiveBannersAsync(locationCode, DateTime.UtcNow);
+            return Ok(banners);
         }
     }
 }
