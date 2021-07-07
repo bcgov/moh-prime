@@ -125,16 +125,16 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        // public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
-        // {
-        //     var site = await _context.HealthAuthoritySites
-        //         .SingleOrDefaultAsync(has => has.Id == siteId);
-        //
-        //     // TODO check administrator exists on the HealthAuthority list of administrator(s)
-        //     // _mapper.Map(viewModel, site);
-        //
-        //     await _context.SaveChangesAsync();
-        // }
+        public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO check administrator exists on the HealthAuthority list of administrator(s)
+            _mapper.Map(viewModel, site);
+
+            await _context.SaveChangesAsync();
+        }
 
         public async Task SetSiteCompletedAsync(int siteId)
         {

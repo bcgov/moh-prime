@@ -8,5 +8,6 @@ public class HealthAuthoritySiteMappingProfile : Profile
     {
         CreateMap<HealthAuthoritySite, HealthAuthoritySiteViewModel>();
         CreateMap<HealthAuthoritySiteInfoViewModel, HealthAuthoritySite>();
+        CreateMap<HealthAuthorityPharmanetAdministrator, HealthAuthoritySite>();
     }
 }
