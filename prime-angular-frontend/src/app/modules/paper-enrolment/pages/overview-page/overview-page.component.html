@@ -30,11 +30,11 @@
 
   <app-overview-regulatory [certifications]="enrollee?.certifications"></app-overview-regulatory>
 
-  <app-overview-obo-sites *ngIf="enrollee?.oboSites?.length"
+  <app-obo-sites-overview *ngIf="enrollee?.oboSites?.length"
                           [careSettings]="enrollee.enrolleeCareSettings"
                           [oboSites]="enrollee.oboSites"
                           [healthAuthority]="CareSettingEnum.HEALTH_AUTHORITY">
-  </app-overview-obo-sites>
+  </app-obo-sites-overview>
 
   <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations?.length"
                                   [enrolment]="enrollee">
