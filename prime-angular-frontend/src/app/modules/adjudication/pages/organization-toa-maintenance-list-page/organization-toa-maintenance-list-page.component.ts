@@ -2,12 +2,14 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-organization-toa-maintenance-list-page',
