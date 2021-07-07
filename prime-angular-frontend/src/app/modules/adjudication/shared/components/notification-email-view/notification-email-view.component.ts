@@ -61,8 +61,7 @@ export class NotificationEmailViewComponent implements OnInit {
         .subscribe((emailTemplate: EmailTemplate) => {
           this.emailTemplate = emailTemplate;
           this.editable = false;
-        }
-        );
+        });
     }
   }
 
