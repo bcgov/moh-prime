@@ -45,7 +45,8 @@ namespace Prime.Services
 
         public async Task<EmailTemplateViewModel> UpdateEmailTemplateAsync(int id, string template)
         {
-            var emailTemplate = await _context.EmailTemplates.SingleOrDefaultAsync(t => t.Id == id);
+            var emailTemplate = await _context.EmailTemplates
+                .SingleOrDefaultAsync(t => t.Id == id);
 
             emailTemplate.Template = template;
             emailTemplate.ModifiedDate = DateTimeOffset.Now;
