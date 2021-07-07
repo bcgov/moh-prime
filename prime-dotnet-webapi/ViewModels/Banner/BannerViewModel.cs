@@ -5,6 +5,7 @@ namespace Prime.ViewModels
 {
     public class BannerViewModel
     {
+        public int Id { get; set; }
         public BannerType BannerType { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }

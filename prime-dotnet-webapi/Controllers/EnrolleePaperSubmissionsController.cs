@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.PaperEnrollees;
 
@@ -19,7 +18,6 @@ namespace Prime.Controllers
     [Authorize(Roles = Roles.TriageEnrollee)]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
-
         private readonly IEnrolleePaperSubmissionService _enrolleeService;
         private readonly IAdminService _adminService;
 

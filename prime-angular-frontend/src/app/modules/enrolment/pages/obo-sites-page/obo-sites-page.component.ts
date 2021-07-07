@@ -167,7 +167,6 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     this.form = this.enrolmentFormStateService.jobsForm;
   }
 
-  // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching
     this.patchForm().subscribe(() => {
