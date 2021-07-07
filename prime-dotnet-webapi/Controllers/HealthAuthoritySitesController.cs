@@ -98,7 +98,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateVendor(int healthAuthorityId, int siteId, HealthAuthoritySiteVendorViewModel payload)
+        public async Task<ActionResult> UpdateVendor(int healthAuthorityId, int siteId, HealthAuthoritySiteVendorViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -123,7 +123,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateSiteInfo(int healthAuthorityId, int siteId, HealthAuthoritySiteInfoViewModel payload)
+        public async Task<ActionResult> UpdateSiteInfo(int healthAuthorityId, int siteId, HealthAuthoritySiteInfoViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -149,7 +149,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateCareType(int healthAuthorityId, int siteId, HealthAuthoritySiteCareTypeViewModel payload)
+        public async Task<ActionResult> UpdateCareType(int healthAuthorityId, int siteId, HealthAuthoritySiteCareTypeViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -174,7 +174,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateAddress(int healthAuthorityId, int siteId, HealthAuthoritySiteAddressViewModel payload)
+        public async Task<ActionResult> UpdateAddress(int healthAuthorityId, int siteId, HealthAuthoritySiteAddressViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -199,7 +199,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateHoursOperation(int healthAuthorityId, int siteId, HealthAuthoritySiteHoursOperationViewModel payload)
+        public async Task<ActionResult> UpdateHoursOperation(int healthAuthorityId, int siteId, HealthAuthoritySiteHoursOperationViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -224,7 +224,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateRemoteUsers(int healthAuthorityId, int siteId, HealthAuthoritySiteRemoteUsersViewModel payload)
+        public async Task<ActionResult> UpdateRemoteUsers(int healthAuthorityId, int siteId, HealthAuthoritySiteRemoteUsersViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
@@ -249,7 +249,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateAdministrator(int healthAuthorityId, int siteId, HealthAuthoritySiteAdministratorViewModel payload)
+        public async Task<ActionResult> UpdateAdministrator(int healthAuthorityId, int siteId, HealthAuthoritySiteAdministratorViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
