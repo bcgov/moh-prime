@@ -5,7 +5,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 
 /**
  * @description
- * Class is used to provide a set of methods for page
+ * Class is used to provide a set of methods for
  * overview components.
  */
 @Directive()
