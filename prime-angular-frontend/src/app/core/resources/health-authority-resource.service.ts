@@ -291,7 +291,7 @@ export class HealthAuthorityResource {
   }
 
   public updateHealthAuthoritySitePhysicalAddress(healthAuthId: number, siteId: number, payload: SiteAddressForm): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/address`, payload)
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/address`, payload.physicalAddress)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

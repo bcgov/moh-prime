@@ -11,9 +11,9 @@ import { AdministratorForm } from './administrator-form.model';
   template: `
     <app-overview-section title="PharmaNet Administrator"
                           [showEditRedirect]="showEditRedirect"
-                          [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
+                          [editRoute]="HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR"
                           (route)="onRoute($event)">
-      <app-party-review [party]="administrator"></app-party-review>
+      <!-- <app-party-review [party]="administrator"></app-party-review> -->
     </app-overview-section>
   `,
   styles: [],

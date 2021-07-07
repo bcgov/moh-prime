@@ -188,7 +188,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
 
   protected afterSubmitIsSuccessful(): void {
     const nextRoutePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
+      ? HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo([nextRoutePath]);

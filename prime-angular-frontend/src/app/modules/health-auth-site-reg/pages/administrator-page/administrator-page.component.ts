@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, EMPTY } from 'rxjs';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,6 +16,9 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { AdministratorFormState } from './administrator-form-state.class';
+import { exhaustMap, tap } from 'rxjs/operators';
+import { HealthAuthority } from '@shared/models/health-authority.model';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-administrator-page',
@@ -32,9 +35,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private fb: FormBuilder,
     private siteResource: HealthAuthorityResource,
     private siteService: HealthAuthSiteRegService,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -64,11 +68,29 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected createFormInstance() {
-    this.formState = null;
+    this.formState = new AdministratorFormState(this.fb, this.formUtilsService);
   }
 
   protected patchForm(): void {
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
 
+    // this.busy = this.healthAuthResource.getHealthAuthorityById(healthAuthId)
+    //   .pipe(
+    //     tap(({ careTypes }: HealthAuthority) => this.careTypes = careTypes),
+    //     exhaustMap((_: HealthAuthority) =>
+    //       (healthAuthSiteId)
+    //         ? this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    //         : EMPTY
+    //     )
+    //   )
+    //   .subscribe(({ careType, completed }: HealthAuthoritySite) => {
+    //     this.isCompleted = completed;
+    //     this.formState.patchValue({ careType });
+    //   });
   }
 
   protected onSubmitFormIsInvalid(): void {
@@ -76,6 +98,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected performSubmission(): NoContent {
+
     return void 0;
   }
 

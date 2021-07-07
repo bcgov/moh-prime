@@ -21,7 +21,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
-  public site: HealthAuthoritySite;
+  public healthAuthoritySite: HealthAuthoritySite;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;

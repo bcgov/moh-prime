@@ -21,7 +21,7 @@ export class HealthAuthSiteRegRoutes {
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static REMOTE_USERS = 'remote-users';
-  public static ADMINISTRATOR = 'site-administrator';
+  public static SITE_ADMINISTRATOR = 'site-administrator';
   public static SITE_OVERVIEW = 'site-overview';
 
   public static routePath(route: string): string {
@@ -37,7 +37,7 @@ export class HealthAuthSiteRegRoutes {
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
-      this.ADMINISTRATOR
+      this.SITE_ADMINISTRATOR
     ];
   }
 }

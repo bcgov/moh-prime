@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { AbstractOverview } from '@lib/classes/abstract-overview.class';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+
+import { RemoteUsersForm } from './remote-users-form.model';
 
 @Component({
   selector: 'app-remote-users-overview',
@@ -28,8 +34,16 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
   styles: [],
   encapsulation: ViewEncapsulation.None
 })
-export class RemoteUsersOverviewComponent implements OnInit {
-  constructor() { }
+export class RemoteUsersOverviewComponent extends AbstractOverview implements OnInit {
+  @Input() remoteUsers: RemoteUsersForm;
+  public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
+
+  constructor(
+    route: ActivatedRoute,
+    router: Router
+  ) {
+    super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+  }
 
   public ngOnInit(): void { }
 }

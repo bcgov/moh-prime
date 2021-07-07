@@ -142,7 +142,7 @@ const routes: Routes = [
             ]
           },
           {
-            path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
+            path: HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR,
             component: AdministratorPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PharmaNet Administrator' }
@@ -151,6 +151,11 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
             component: OverviewPageComponent,
             data: { title: 'Information Review' }
+          },
+          {
+            path: '', // Equivalent to `/` and alias for default view
+            redirectTo: HealthAuthSiteRegRoutes.VENDOR,
+            pathMatch: 'full'
           }
         ]
       },
