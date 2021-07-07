@@ -43,4 +43,18 @@ export class EmailTemplateResourceService {
         })
       );
   }
+
+  public updateEmailTemplate(id: number, template: string): Observable<EmailTemplate> {
+    const payload = { data: template };
+    return this.apiResource.put<EmailTemplate>(`emails/management/templates/${id}`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<EmailTemplate>) => response.result),
+        tap((template: EmailTemplate) => this.logger.info('EMAIL_TEMPLATE', template)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Email Template could not be updated');
+          this.logger.error('[Adjudication] EmailTemplateResource::updateEmailTemplate error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }

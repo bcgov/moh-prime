@@ -42,20 +42,15 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
         }
 
-        public async Task<int> UpdateEmailTemplateAsync(int id, EmailTemplateViewModel updateModel)
+        public async Task<EmailTemplateViewModel> UpdateEmailTemplateAsync(int id, string template)
         {
-            var template = _context.EmailTemplates.Where(t => t.Id == id).SingleOrDefaultAsync();
+            var emailTemplate = await _context.EmailTemplates.Where(t => t.Id == id).SingleOrDefaultAsync();
 
-            _context.Entry(template).CurrentValues.SetValues(updateModel);
+            emailTemplate.Template = template;
 
-            try
-            {
-                return await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return 0;
-            }
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
         }
     }
 }

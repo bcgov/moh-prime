@@ -7,6 +7,7 @@ using Prime.Auth;
 using Prime.Services;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
@@ -95,16 +96,16 @@ namespace Prime.Controllers
         /// Update email template
         /// </summary>
         /// <param name="emailTemplateId"></param>
-        /// <param name="payload"></param>
+        /// <param name="template"></param>
         [HttpPut("management/templates/{emailTemplateId}", Name = nameof(UpdateEmailTemplate))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, EmailTemplateViewModel payload)
+        public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, FromBodyText template)
         {
-            var template = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, payload);
-            return Ok(template);
+            var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
+            return Ok(emailTemplate);
         }
     }
 }
