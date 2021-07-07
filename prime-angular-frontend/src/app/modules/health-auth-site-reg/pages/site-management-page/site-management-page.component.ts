@@ -28,6 +28,9 @@ import { OrganizationService } from '@registration/shared/services/organization.
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { HealthAuthority } from '@shared/models/health-authority.model';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 
 @Component({
   selector: 'app-site-management-page',
@@ -37,20 +40,17 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
-  // public organizations: Organization[];
-  // public organizationAgreements: OrganizationAgreementViewModel[];
-  // public hasSubmittedSite: boolean;
+  public healthAuthority: HealthAuthority;
   public routeUtils: RouteUtils;
-  // public VendorEnum = VendorEnum;
-  // public AgreementType = AgreementType;
-  // public CareSettingEnum = CareSettingEnum;
-  // public SiteRoutes = HealthAuthSiteRegRoutes;
+  public VendorEnum = VendorEnum;
+  public SiteRoutes = HealthAuthSiteRegRoutes;
+  public HealthAuthorityEnum = HealthAuthorityEnum;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    // private organizationResource: OrganizationResource,
-    // private siteResource: SiteResource,
+    private authorizedUserService: AuthorizedUserService,
+    private healthAuthorityResource: HealthAuthorityResource,
     // private fullnamePipe: FullnamePipe,
     // private addressPipe: AddressPipe,
     // private configCodePipe: ConfigCodePipe,
@@ -58,7 +58,6 @@ export class SiteManagementPageComponent implements OnInit {
   ) {
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    // this.organizations = [];
   }
 
   // public viewOrganization(organization: Organization): void {
@@ -98,7 +97,9 @@ export class SiteManagementPageComponent implements OnInit {
   //   this.routeUtils.routeRelativeTo(routePath);
   // }
 
-  public addSite(healthAuthorityId: number): void {
+  public addSite(): void {
+    // Health authority ID and code are synonymous
+    const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
     // Site created on submission of first page
     this.redirectToSite(healthAuthorityId, 0);
   }
@@ -166,15 +167,16 @@ export class SiteManagementPageComponent implements OnInit {
   // }
 
   public ngOnInit(): void {
-    // this.getHealthAuthorities();
+    this.getHealthAuthorities();
   }
 
-  // private getHealthAuthorities(): void {
-  //   this.busy = this.healthAuthorityResource.getOrganizations()
-  //     .pipe(
-  //       map((healthAuthorities: HealthAuthority[]) => this.healthAuthorities = healthAuthorities)
-  //     ).subscribe();
-  // }
+  private getHealthAuthorities(): void {
+    const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
+    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
+      .pipe(
+        map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority)
+      ).subscribe();
+  }
 
   private redirectToSite(healthAuthId: number, healthAuthSiteId: number): void {
     this.routeUtils.routeRelativeTo([

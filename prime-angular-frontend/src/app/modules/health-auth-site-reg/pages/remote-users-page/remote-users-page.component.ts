@@ -167,7 +167,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     //     }
     //     return newRemoteUsersAcc;
     //   }, []);
-    
+
     // return this.siteResource.updateSite(payload)
     //   .pipe(
     //     exhaustMap(() =>

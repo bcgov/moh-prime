@@ -14,24 +14,28 @@
     </app-page-subheader2>
   </section>
 
-  <app-summary-card icon="business"
-                    title="Organization Information"
-                    [properties]="[
-                      { key: 'Health Authority', value: 'Health Authority Name' }
+  <ng-container *ngIf="this.healthAuthority">
+
+    <app-summary-card icon="business"
+                      title="Organization Information"
+                      [properties]="[
+                      { key: 'Health Authority', value: HealthAuthorityEnum[this.healthAuthority.id] | case : 'snake' : 'space' | capitalize : true }
                     ]">
-  </app-summary-card>
+    </app-summary-card>
 
-  <hr class="divider">
+    <hr class="divider">
 
-  <div class="add-site">
-    <button mat-button
-            type="button"
-            color="primary"
-            (click)="addSite(1)">
-      <mat-icon>add_business</mat-icon>
-      Add Site
-    </button>
-  </div>
+    <div class="add-site">
+      <button mat-button
+              type="button"
+              color="primary"
+              (click)="addSite()">
+        <mat-icon>add_business</mat-icon>
+        Add Site
+      </button>
+    </div>
+
+  </ng-container>
 
   <!--  <app-summary-card *ngIf="hasSubmittedSite"-->
   <!--                    icon="store"-->
