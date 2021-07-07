@@ -13,6 +13,28 @@
   <div class="row mt-4">
 
     <div class="col-6 mb-3">
+      <div *ngIf="organization?.isUnderReview">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">front_hand</mat-icon>
+            Signing Authority request for change
+          </ng-container>
+        </app-page-subheader>
+        <mat-card class="enrolmentCard">
+          <mat-card-content>
+            <app-page-subheader>
+              <ng-container appPageSubheaderTitle>Reason for Change</ng-container>
+            </app-page-subheader>
+
+            <app-overview-section title="New Signing Authority"
+                                  (route)="onRoute($event)">
+              <!-- TODO: New Signing Authority details -->
+              <app-bcsc-profile [user]="organization?.signingAuthority"></app-bcsc-profile>
+            </app-overview-section>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>
           <mat-icon class="mr-2">location_city</mat-icon>

@@ -18,6 +18,7 @@ namespace Prime.ViewModels
         public bool Completed { get; set; }
         public bool HasAcceptedAgreement { get; set; }
         public bool HasSubmittedSite { get; set; }
+        public bool IsUnderReview { get; set; }
 
         public IEnumerable<string> MatchedOn(string textSearch)
         {

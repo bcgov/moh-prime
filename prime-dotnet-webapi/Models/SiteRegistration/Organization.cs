@@ -54,5 +54,10 @@ namespace Prime.Models
         {
             get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
         }
+
+        // TODO: Way to not duplicate in Organization and OrganizationListViewModel?
+        [NotMapped]
+        public bool IsUnderReview { get; set; }
+
     }
 }

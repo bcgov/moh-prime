@@ -20,6 +20,7 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
@@ -28,12 +29,14 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
             IPartyService partyService,
+            IOrganizationClaimService organizationClaimService,
             IMapper mapper,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
+            _organizationClaimService = organizationClaimService;
             _documentClient = documentClient;
             _mapper = mapper;
         }
@@ -64,6 +67,8 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
+            results.ForEach(async r => r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id));
+
             return results
                 .Select(r => new OrganizationSearchViewModel
                 {
@@ -86,10 +91,13 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            return await GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
+            // TODO: Simplify using Linq?
+            organization.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(organizationId);
+            return organization;
         }
 
         public async Task<Organization> GetOrganizationByPecAsync(string pec)
@@ -309,6 +317,13 @@ namespace Prime.Services
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
                         .ThenInclude(pa => pa.Address);
+        }
+
+        public async Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
+        {
+            var organization = await GetOrganizationAsync(organizationId);
+            organization.SigningAuthorityId = newSigningAuthorityId;
+            return await _context.SaveChangesAsync() == 1;
         }
     }
 }

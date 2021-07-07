@@ -26,19 +26,22 @@ namespace Prime.Controllers
         private readonly IPartyService _partyService;
         private readonly IDocumentService _documentService;
         private readonly ISiteService _siteService;
+        private readonly IOrganizationClaimService _organizationClaimService;
 
         public OrganizationsController(
             IOrganizationService organizationService,
             IAgreementService agreementService,
             IPartyService partyService,
             IDocumentService documentService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IOrganizationClaimService organizationClaimService)
         {
             _organizationService = organizationService;
             _agreementService = agreementService;
             _partyService = partyService;
             _documentService = documentService;
             _siteService = siteService;
+            _organizationClaimService = organizationClaimService;
         }
 
         // GET: api/Organizations
@@ -127,6 +130,37 @@ namespace Prime.Controllers
             }
 
             await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
+
+            return NoContent();
+        }
+
+        // POST: api/Organizations/claim/approve
+        /// <summary>
+        /// Approve claim for an existing Organization.
+        /// </summary>
+        [HttpPost("claim/approve", Name = nameof(ApproveOrganizationClaim))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<IActionResult> ApproveOrganizationClaim(OrganizationClaimApprovalViewModel claimApproval)
+        {
+            if (!await _partyService.PartyExistsAsync(claimApproval.PartyId, PartyType.SigningAuthority) ||
+                !await _organizationService.OrganizationExistsAsync(claimApproval.OrganizationId))
+            {
+                return BadRequest("Could not approve claim for an organization, as the given SigningAuthority or Organization does not exist.");
+            }
+
+            if (!await _organizationService.SwitchSigningAuthorityAsync(claimApproval.OrganizationId, claimApproval.PartyId))
+            {
+                // TODO: Properly communicate error
+                return BadRequest("Could not assign Organization to new SigningAuthority.");
+            }
+            if (!await _organizationClaimService.DeleteClaimAsync(claimApproval.OrganizationId, claimApproval.PartyId))
+            {
+                return NotFound("Cannot remove Claim for given SigningAuthority and Organization.");
+            }
 
             return NoContent();
         }
