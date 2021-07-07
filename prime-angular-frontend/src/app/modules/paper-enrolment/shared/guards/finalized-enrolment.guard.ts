@@ -11,7 +11,7 @@ import {
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { map } from 'rxjs/operators';
 
@@ -40,9 +40,8 @@ export class FinalizedEnrolmentGuard implements CanActivateChild {
         .pipe(
           map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
         );
-    } else {
-      return new Promise(async (resolve, reject) => resolve(true));
     }
+    return of(true);
   }
 
   private routeDestination(routePath: string, httpEnrollee: HttpEnrollee, params) {
