@@ -38,9 +38,7 @@ export class FinalizedEnrolmentGuard implements CanActivateChild {
     if (enrolleeId) {
       return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
-          map((enrollee: HttpEnrollee) => {
-            return this.routeDestination(routePath, enrollee, params);
-          })
+          map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
         );
     } else {
       return new Promise(async (resolve, reject) => resolve(true));
