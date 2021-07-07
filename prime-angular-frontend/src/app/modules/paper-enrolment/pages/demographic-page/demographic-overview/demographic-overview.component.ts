@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 

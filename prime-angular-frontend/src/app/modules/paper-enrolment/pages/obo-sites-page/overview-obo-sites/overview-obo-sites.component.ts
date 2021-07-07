@@ -1,8 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { Router, ActivatedRoute } from '@angular/router';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+
 
 @Component({
   selector: 'app-overview-obo-sites',
