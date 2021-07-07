@@ -1,12 +1,15 @@
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+import { UtilsService } from '@core/services/utils.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EmailTemplateTypeEnum } from '@adjudication/shared/models/email-template-type.model';
 import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
 import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UtilsService } from '@core/services/utils.service';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { Subscription } from 'rxjs';
+
 
 @Component({
   selector: 'app-email-notification-list-page',
@@ -36,7 +39,7 @@ export class EmailNotificationListPageComponent implements OnInit {
     this.getEmailTemplates();
   }
 
-  private getEmailTemplates() {
+  private getEmailTemplates(): void {
     this.busy = this.emailTemplateResource.getEmailTemplates()
       .subscribe(templates =>
         this.templates = templates
