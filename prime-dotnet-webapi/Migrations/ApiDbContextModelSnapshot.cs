@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
+using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -15075,9 +15076,6 @@ namespace Prime.Migrations
                     b.Property<int?>("ProvisionerId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -15271,6 +15269,41 @@ namespace Prime.Migrations
                     b.HasIndex("SiteId");
 
                     b.ToTable("SiteRegistrationReviewDocument");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("StatusDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("StatusType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteStatus");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
@@ -15622,6 +15655,8 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -15629,6 +15664,8 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
+
+                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Prime.Models.VerifiedAddress", b =>
@@ -16434,6 +16471,15 @@ namespace Prime.Migrations
                 {
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteRegistrationReviewDocuments")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteStatus", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteStatuses")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
