@@ -69,6 +69,9 @@ import { AuthorizedUserPageComponent } from './pages/health-authorities/authoriz
 import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { BannerListViewComponent } from './shared/components/banner-list-view/banner-list-view.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
 import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
@@ -134,6 +137,9 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
     HealthAuthorityTableComponent,
     HealthAuthAuthorizedUsersViewComponent,
     AuthorizedUserReviewComponent,
+    BannerListViewComponent,
+    EnrolleeBannerListPageComponent,
+    SiteBannerListPageComponent
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent
   ],
