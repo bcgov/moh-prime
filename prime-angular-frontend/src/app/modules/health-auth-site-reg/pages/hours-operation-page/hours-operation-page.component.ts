@@ -112,7 +112,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_ADDRESS);
+    const backRoutePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.SITE_ADDRESS;
+
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit() {
@@ -167,11 +171,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
-    const routePath = (!this.isCompleted)
+    const nextRoutePath = (!this.isCompleted)
       ? HealthAuthSiteRegRoutes.REMOTE_USERS
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   private allowEditingHours(group: FormGroup, isEditable: boolean = true) {

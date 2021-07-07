@@ -52,7 +52,11 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
+    const backRoutePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
+
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit() {
@@ -93,10 +97,10 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    const routePath = (this.isCompleted)
+    const nextRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 }

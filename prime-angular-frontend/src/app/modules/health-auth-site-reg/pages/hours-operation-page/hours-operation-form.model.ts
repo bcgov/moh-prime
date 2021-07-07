@@ -1,3 +1,3 @@
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
-export interface BusinessHoursForm extends Pick<HealthAuthoritySite, 'businessHours'> {}
+export interface HoursOperationForm extends Pick<HealthAuthoritySite, 'businessHours'> {}

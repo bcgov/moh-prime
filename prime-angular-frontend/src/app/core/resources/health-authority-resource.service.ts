@@ -23,7 +23,7 @@ import { VendorForm } from '@health-auth/pages/vendor-page/vendor-form.model';
 import { SiteInformationForm } from '@health-auth/pages/site-information-page/site-information-form.model';
 import { HealthAuthCareTypeForm } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-form.model';
 import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-address-form.model';
-import { BusinessHoursForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
+import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 
 @Injectable({
@@ -301,7 +301,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteHoursOperation(healthAuthId: number, siteId: number, payload: BusinessHoursForm): NoContent {
+  public updateHealthAuthoritySiteHoursOperation(healthAuthId: number, siteId: number, payload: HoursOperationForm): NoContent {
     return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/hours-operation`, payload)
       .pipe(
         NoContentResponse,

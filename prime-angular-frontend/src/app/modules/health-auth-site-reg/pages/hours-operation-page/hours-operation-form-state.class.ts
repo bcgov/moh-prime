@@ -6,9 +6,9 @@ import { StringUtils } from '@lib/utils/string-utils.class';
 // TODO moved to lib into /common
 import { BusinessDay } from '@registration/shared/models/business-day.model';
 import { BusinessDayHours } from '@registration/shared/models/business-day-hours.model';
-import { BusinessHoursForm } from './hours-operation-form.model';
+import { HoursOperationForm } from './hours-operation-form.model';
 
-export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm> {
+export class HoursOperationFormState extends AbstractFormState<HoursOperationForm> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -21,7 +21,7 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
     return this.formInstance.get('businessDays') as FormArray;
   }
 
-  public get json(): BusinessHoursForm {
+  public get json(): HoursOperationForm {
     if (!this.formInstance) {
       return;
     }
@@ -44,7 +44,7 @@ export class HoursOperationFormState extends AbstractFormState<BusinessHoursForm
     return { businessHours };
   }
 
-  public patchValue({ businessHours }: BusinessHoursForm): void {
+  public patchValue({ businessHours }: HoursOperationForm): void {
     if (!this.formInstance || !businessHours?.length) {
       return;
     }

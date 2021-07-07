@@ -1,0 +1,48 @@
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { AbstractOverview } from '@lib/classes/abstract-overview.class';
+import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
+
+import { SiteInformationForm } from './site-information-form.model';
+
+@Component({
+  selector: 'app-site-information-overview',
+  template: `
+    <app-overview-section title="Site Name"
+                          [showEditRedirect]="showEditRedirect"
+                          [editRoute]="[]"
+                          (route)="onRoute($event)">
+      <app-enrollee-property title="Site Name">
+        {{ siteInformation.siteName }}
+      </app-enrollee-property>
+    </app-overview-section>
+
+    <app-overview-section title="Site Details"
+                          [showEditRedirect]="showEditRedirect"
+                          [editRoute]="[]"
+                          (route)="onRoute($event)">
+      <app-enrollee-property title="Site ID">
+        {{ siteInformation.siteId }}
+      </app-enrollee-property>
+      <app-enrollee-property title="Security Group">
+        {{ siteInformation.securityGroup }}
+      </app-enrollee-property>
+    </app-overview-section>
+  `,
+  styles: [],
+  encapsulation: ViewEncapsulation.None
+})
+export class SiteInformationOverviewComponent extends AbstractOverview implements OnInit {
+  @Input() siteInformation: SiteInformationForm;
+  public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
+
+  constructor(
+    route: ActivatedRoute,
+    router: Router
+  ) {
+    super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+  }
+
+  public ngOnInit(): void { }
+}

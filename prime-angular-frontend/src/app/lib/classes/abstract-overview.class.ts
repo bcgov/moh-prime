@@ -1,0 +1,28 @@
+import { Directive, Input } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { RouteUtils } from '@lib/utils/route-utils.class';
+
+/**
+ * @description
+ * Class is used to provide a set of methods for page
+ * overview components.
+ */
+@Directive()
+// tslint:disable-next-line:directive-class-suffix
+export abstract class AbstractOverview {
+  @Input() public showEditRedirect: boolean;
+  public routeUtils: RouteUtils;
+
+  protected constructor(
+    route: ActivatedRoute,
+    router: Router,
+    baseRoute: string | (string | number)[]
+  ) {
+    this.routeUtils = new RouteUtils(route, router, baseRoute);
+  }
+
+  public onRoute(routePath: string): void {
+    this.routeUtils.routeRelativeTo(routePath);
+  }
+}

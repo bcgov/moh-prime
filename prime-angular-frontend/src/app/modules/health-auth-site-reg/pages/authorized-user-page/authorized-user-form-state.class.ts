@@ -3,11 +3,11 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-// TODO move into @lib
-import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 
-export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUser> {
+import { AuthorizedUserForm } from './authorized-user-form.model';
+
+export class AuthorizedUserFormState extends AbstractFormState<AuthorizedUserForm> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -49,20 +49,20 @@ export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUse
     return this.formInstance.get('email') as FormControl;
   }
 
-  public get json(): AuthorizedUser {
+  public get json(): AuthorizedUserForm {
     if (!this.formInstance) {
       return;
     }
 
-    return this.toAuthorizedUserJson(this.formInstance.getRawValue());
+    return this.formToJson(this.formInstance.getRawValue());
   }
 
-  public patchValue(authorizedUser: AuthorizedUser): void {
+  public patchValue(authorizedUser: AuthorizedUserForm): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.toAuthorizedUserFormModel(this.formInstance, authorizedUser);
+    this.jsonToForm(this.formInstance, authorizedUser);
   }
 
   // TODO BCSC information form reuse for sharing between enrolment and PHSA
@@ -96,9 +96,9 @@ export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUse
 
   /**
    * @description
-   * Convert authorized user JSON to form model for reactive forms.
+   * Sanitize JSON for patching the reactive form.
    */
-  private toAuthorizedUserFormModel(formGroup: FormGroup, data: AuthorizedUser): void {
+  private jsonToForm(formGroup: FormGroup, data: AuthorizedUserForm): void {
     if (data) {
       const { verifiedAddress, physicalAddress, ...remainder } = data;
       const addresses = { verifiedAddress, physicalAddress };
@@ -118,10 +118,11 @@ export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUse
 
   /**
    * @description
-   * Convert the authorized user form model into JSON.
+   * Sanitize form value into JSON.
    */
-  private toAuthorizedUserJson(authorizedUser: AuthorizedUser): AuthorizedUser {
-    // Minimal check that authorized user is invalid
+  private formToJson(authorizedUser: AuthorizedUserForm): AuthorizedUserForm {
+    // Minimal check that authorized user is invalid based on
+    // a field that is always required
     if (!authorizedUser.firstName) {
       return null;
     }
@@ -138,7 +139,7 @@ export class AuthorizedUserPageFormState extends AbstractFormState<AuthorizedUse
         }
 
         // Add the address reference ID to the authorizedUser
-        authorizedUser[`${ addressType }Id`] = (!!authorizedUser[addressType]?.id)
+        authorizedUser[`${addressType}Id`] = (!!authorizedUser[addressType]?.id)
           ? authorizedUser[addressType].id
           : 0;
       });

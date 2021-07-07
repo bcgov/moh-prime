@@ -39,45 +39,41 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    const payload = this.siteService.site;
-    const data: DialogOptions = {
-      title: 'Save Site',
-      message: 'When your site is saved, it will be submitted for review.',
-      actionText: 'Save Site'
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        // TODO do whatever it is that we'll be doing with health authority submissions
-        // exhaustMap((result: boolean) =>
-        //   (result)
-        //     ? this.siteResource.submitSite(payload)
-        //     : EMPTY
-        // )
-      )
-      .subscribe(() => this.nextRoute());
-  }
-
-  public onRoute(routePath: string): void {
-    this.routeUtils.routeRelativeTo(routePath);
+    // const payload = this.siteService.site;
+    // const data: DialogOptions = {
+    //   title: 'Save Site',
+    //   message: 'When your site is saved, it will be submitted for review.',
+    //   actionText: 'Save Site'
+    // };
+    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+    //   .afterClosed()
+    //   .pipe(
+    //     // TODO do whatever it is that we'll be doing with health authority submissions
+    //     // exhaustMap((result: boolean) =>
+    //     //   (result)
+    //     //     ? this.siteResource.submitSite(payload)
+    //     //     : EMPTY
+    //     // )
+    //   )
+    //   .subscribe(() => this.nextRoute());
   }
 
   public onBack(): void {
-    this.routeUtils.routeTo([
+    this.routeUtils.routeRelativeTo([
       HealthAuthSiteRegRoutes.MODULE_PATH,
       HealthAuthSiteRegRoutes.SITE_MANAGEMENT
     ]);
   }
 
   public nextRoute(): void {
-    this.routeUtils.routeTo([
-      HealthAuthSiteRegRoutes.MODULE_PATH,
-      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
-    ], { queryParams: { submitted: true } });
+    // this.routeUtils.routeTo([
+    //   HealthAuthSiteRegRoutes.MODULE_PATH,
+    //   HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    // ], { queryParams: { submitted: true } });
   }
 
   public ngOnInit(): void {
-    this.site = this.siteService.site;
-    this.showSubmissionAction = !this.site?.submittedDate;
+    // this.site = this.siteService.site;
+    // this.showSubmissionAction = !this.site?.submittedDate;
   }
 }
