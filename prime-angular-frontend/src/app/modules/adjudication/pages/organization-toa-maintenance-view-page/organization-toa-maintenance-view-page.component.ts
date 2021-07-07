@@ -2,10 +2,12 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Subscription } from 'rxjs';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-organization-toa-maintenance-view-page',
