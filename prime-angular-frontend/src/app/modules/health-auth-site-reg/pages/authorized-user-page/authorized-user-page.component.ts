@@ -141,7 +141,6 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ACCESS_REQUESTED);
   }
 

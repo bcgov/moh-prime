@@ -85,7 +85,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   protected patchForm(): void {
     // this.site = this.siteService.site;
     // this.isCompleted = this.site?.completed;
-    // this.formState.form.markAsPristine();
   }
 
   protected onSubmitFormIsInvalid(): void {

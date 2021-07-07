@@ -154,8 +154,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
 
     return this.healthAuthResource.updateHealthAuthoritySiteRemoteUsers(haid, sid, payload);
 
-    // const payload = this.formStateService.json;
-    // const site = this.siteService.site;
+    // TODO do we need to send emails to remote users?
     // const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
     //   .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
     //     if (!site.remoteUsers.find((current: RemoteUser) =>
@@ -184,12 +183,10 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (!this.isCompleted)
       ? HealthAuthSiteRegRoutes.ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
-    this.routeUtils.routeRelativeTo(['../', routePath]);
+    this.routeUtils.routeRelativeTo([routePath]);
   }
 }
