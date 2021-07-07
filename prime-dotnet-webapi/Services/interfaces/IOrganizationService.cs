@@ -28,5 +28,13 @@ namespace Prime.Services
         Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="organizationId"></param>
+        /// <param name="newSigningAuthorityId"></param>
+        /// <returns><c>true</c> if can successfully switch signing authority, <c>false</c> otherwise.</returns>
+        Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
     }
 }

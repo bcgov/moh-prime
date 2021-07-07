@@ -14,6 +14,7 @@ export interface Organization {
   completed: boolean;
   hasAcceptedAgreement: boolean;
   hasSubmittedSite: boolean;
+  isUnderReview: boolean;
   // Children -----
   sites: SiteListViewModel[];
 }
