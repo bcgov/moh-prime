@@ -33,12 +33,15 @@ namespace Prime.Services
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
         {
+            // TODO dependency of Site navigational property in Vendor
             var site = new HealthAuthoritySite
             {
                 HealthAuthorityOrganizationId = healthAuthorityId,
                 VendorCode = vendorCode
-                // TODO set initial status change
+                // TODO set initial status change (next sprint)
             };
+
+            // TODO add business events (next sprint)
 
             _context.HealthAuthoritySites.Add(site);
             await _context.SaveChangesAsync();
@@ -110,6 +113,7 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
+            // TODO dependency of Site navigational property in BusinessDay
             site.BusinessHours = businessHours;
 
             await _context.SaveChangesAsync();
@@ -152,7 +156,8 @@ namespace Prime.Services
                 .Include(has => has.Status)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            // TODO add status change to site
+            // TODO add status change to site (next sprint)
+            // TODO add business events (next sprint)
 
             await _context.SaveChangesAsync();
         }
