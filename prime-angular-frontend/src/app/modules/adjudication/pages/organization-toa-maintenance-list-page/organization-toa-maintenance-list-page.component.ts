@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
-import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
 import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
