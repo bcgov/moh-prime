@@ -126,17 +126,49 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task ClaimOrganizationAsync(int partyId, string pec, string claimDetail)
+        public async Task<Organization> ClaimOrganizationAsync(int partyId, string pec, string claimDetail)
         {
             var organization = await GetOrganizationByPecAsync(pec);
             if (organization == null)
             {
-                throw new InvalidOperationException("Could not claim Organization. Organization could not be found.");
+                return null;
             }
 
-            // TODO: submit the claim for organization with the claimDetail reason
+            var organizationCLaim = new OrganizationClaim
+            {
+                OrganizationId = organization.Id,
+                PartyId = partyId,
+                Details = claimDetail
+            };
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Calim Submitted");
+            _context.OrganizationClaims.Add(organizationCLaim);
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Calim Careted");
+
+            return organization;
+        }
+
+        public async Task<int> GetOrganizationClaimAsync(OrganizationClaimSearchOptions searchOptions)
+        {
+            // return 0 if searchOptions is invalid
+            if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && string.IsNullOrEmpty(searchOptions.UserId))
+            {
+                return 0;
+            }
+
+            var userId = Guid.Empty;
+            Guid.TryParse(searchOptions.UserId, out userId);
+
+            return await _context.OrganizationClaims
+                .AsNoTracking()
+                .If(!string.IsNullOrEmpty(searchOptions.Pec), q => q
+                    .Where(o => o.Organization.Sites.Any(s => s.PEC == searchOptions.Pec))
+                )
+                .If(userId != Guid.Empty, q => q
+                    .Where(o => o.Party.UserId == userId)
+                )
+                .CountAsync();
         }
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)

@@ -3,14 +3,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { ToastService } from '@core/services/toast.service';
 
 import { Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
+import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 
 @Component({
   selector: 'app-organization-claim-page',
@@ -28,6 +36,9 @@ export class OrganizationClaimPageComponent implements OnInit {
   constructor(
     private formUtilsService: FormUtilsService,
     private organizationFormStateService: OrganizationFormStateService,
+    private organizationResource: OrganizationResource,
+    private toastService: ToastService,
+    private authService: AuthService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -42,10 +53,27 @@ export class OrganizationClaimPageComponent implements OnInit {
 
   public onContinue(): void {
     // Claim an existing organization
-    if (this.isClaimExistingOrg && !this.formUtilsService.checkValidity(this.formState.form)) {
-      return;
+    if (this.isClaimExistingOrg) {
+      if (this.formUtilsService.checkValidity(this.formState.form)) {
+        // check if the organization w/ the PEC has already been claimed
+        this.busy = this.organizationResource.getOrganizationClaim({ pec: this.formState.json.pec })
+          .subscribe((result: number) => {
+            if (result) {
+              this.toastService.openErrorToast(`The organization associated the site of PEC code ${this.formState.json.pec} cannot be claimed.`);
+            }
+            else {
+              this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT], { queryParams: { claimOrg: true } });
+            }
+          });
+      }
+      else {
+        // invalid form
+        return;
+      }
     }
-    this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT], { queryParams: { claimOrg: this.isClaimExistingOrg } });
+    else {
+      this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT], { queryParams: { claimOrg: false } });
+    }
   }
 
   public onChange(event: MatSlideToggleChange): void {
@@ -58,6 +86,16 @@ export class OrganizationClaimPageComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.isClaimExistingOrg = !!this.formState.json.pec && !!this.formState.json.claimDetail;
+    this.authService.getUser$()
+      .pipe(
+        exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationClaim({ userId: user.userId }))
+      )
+      .subscribe((result: number) => {
+        // if there is existing org claim with the user, navigate to the 'next step' page
+        if (result) {
+          this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]);
+        }
+      });
   }
 
   protected createFormInstance(): void {

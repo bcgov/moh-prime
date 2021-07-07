@@ -117,8 +117,8 @@ namespace Prime.Controllers
         [HttpPost("claim", Name = nameof(ClaimOrganization))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
+
         public async Task<ActionResult<Organization>> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
         {
             if (!await _partyService.PartyExistsAsync(claimOrganization.PartyId, PartyType.SigningAuthority))
@@ -126,9 +126,33 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
             }
 
-            await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
+            var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
 
-            return NoContent();
+            return Ok(organization);
+        }
+
+        // GET: api/Organizations/claim
+        /// <summary>
+        /// Gets organization claim by criteria.
+        /// </summary>
+        [HttpGet("claim", Name = nameof(GetOrganizationClaim))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<int>> GetOrganizationClaim([FromQuery] OrganizationClaimSearchOptions search)
+        {
+            // check if the organization exists with the given PEC
+            if (!string.IsNullOrEmpty(search.Pec))
+            {
+                var organization = await _organizationService.GetOrganizationByPecAsync(search.Pec);
+                if (organization == null)
+                {
+                    return BadRequest("Organization does not exist with the passed in site PEC.");
+                }
+            }
+            var result = await _organizationService.GetOrganizationClaimAsync(search);
+
+            return Ok(result);
         }
 
         // PUT: api/Organizations/5

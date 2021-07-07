@@ -3,14 +3,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { EMPTY, Observable, of } from 'rxjs';
+import { exhaustMap, map, switchMap } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { ToastService } from '@core/services/toast.service';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -51,6 +52,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private authService: AuthService,
+    private toastService: ToastService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -157,8 +159,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
           exhaustMap((party: Party) => {
             if (this.route.snapshot.queryParams.claimOrg === 'true') {
               var claimData = this.organizationFormStateService.organizationClaimPageFormState.json;
-              this.organizationResource.claimOrganization(party.id, claimData.pec, claimData.claimDetail);
-              return of(null);
+              return this.organizationResource.claimOrganization(party.id, claimData.pec, claimData.claimDetail);
             }
             else {
               return this.organizationResource.createOrganization(party.id);
@@ -180,7 +181,12 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     }
     else if (this.route.snapshot.queryParams.claimOrg === 'true') {
-      routePath = ['../../', SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
+      if (organization) {
+        routePath = ['../../', SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
+      }
+      else {
+        this.toastService.openErrorToast('Could not claim the organization.');
+      }
     }
     else {
       routePath = (this.isCompleted)

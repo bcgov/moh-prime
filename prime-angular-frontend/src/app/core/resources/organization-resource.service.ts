@@ -15,6 +15,7 @@ import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
+import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Injectable({
@@ -143,6 +144,22 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationClaim(
+    queryParam: { pec?: string, userId?: string }
+  ): Observable<number> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<number>(`organizations/claim`, params)
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result),
+        tap((result: number) => this.logger.info('ORGANIZATIONCLAIM', result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast(error.errors.message);
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaim error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createOrganization(partyId: number): Observable<Organization> {
     return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
@@ -159,10 +176,10 @@ export class OrganizationResource {
       );
   }
 
-  public claimOrganization(partyId: number, pec: string, claimDetail: string): NoContent {
-    return this.apiResource.post<NoContent>(`organizations/claim`, { partyId, pec, claimDetail })
+  public claimOrganization(partyId: number, pec: string, claimDetail: string): Observable<Organization> {
+    return this.apiResource.post<Organization>(`organizations/claim`, { partyId, pec, claimDetail })
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<Organization>) => response.result),
         tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be claimed');

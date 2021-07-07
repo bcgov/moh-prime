@@ -1,14 +1,9 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Organization } from '@registration/shared/models/organization.model';
+import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 
-interface OrganizationClaimPageDataModel {
-  pec: string;
-  claimDetail: string;
-}
-
-export class OrganizationClaimPageFormState extends AbstractFormState<OrganizationClaimPageDataModel> {
+export class OrganizationClaimPageFormState extends AbstractFormState<OrganizationClaimFormModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -25,7 +20,7 @@ export class OrganizationClaimPageFormState extends AbstractFormState<Organizati
     return this.formInstance.get('claimDetail') as FormControl;
   }
 
-  public get json(): OrganizationClaimPageDataModel {
+  public get json(): OrganizationClaimFormModel {
     if (!this.formInstance) {
       return;
     }
@@ -33,7 +28,7 @@ export class OrganizationClaimPageFormState extends AbstractFormState<Organizati
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(organization: OrganizationClaimPageDataModel): void {
+  public patchValue(organization: OrganizationClaimFormModel): void {
     if (!this.formInstance) {
       return;
     }
@@ -42,7 +37,6 @@ export class OrganizationClaimPageFormState extends AbstractFormState<Organizati
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      //id: [0, []],
       pec: [null, [Validators.required]],
       claimDetail: [null, [Validators.required]]
     });
