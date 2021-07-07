@@ -2,20 +2,21 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChange
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
+import { noop } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
+
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
-import { Role } from '@auth/shared/enum/role.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
-import { exhaustMap } from 'rxjs/operators';
-import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-adjudicator-actions',
