@@ -11,5 +11,6 @@ namespace Prime.Services
         Task<IEnumerable<EmailTemplateListViewModel>> GetEmailTemplatesAsync();
         Task<EmailTemplateViewModel> GetEmailTemplateAsync(int id);
         Task<EmailTemplateViewModel> UpdateEmailTemplateAsync(int id, string template);
+        Task<bool> EmailTemplateExistsAsync(int id);
     }
 }

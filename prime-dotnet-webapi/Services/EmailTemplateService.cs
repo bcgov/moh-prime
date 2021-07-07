@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -47,10 +48,18 @@ namespace Prime.Services
             var emailTemplate = await _context.EmailTemplates.Where(t => t.Id == id).SingleOrDefaultAsync();
 
             emailTemplate.Template = template;
+            emailTemplate.ModifiedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
+        }
+
+        public async Task<bool> EmailTemplateExistsAsync(int id)
+        {
+            return await _context.EmailTemplates
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == id);
         }
     }
 }

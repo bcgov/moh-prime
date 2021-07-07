@@ -101,9 +101,15 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, FromBodyText template)
         {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
             var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
             return Ok(emailTemplate);
         }
