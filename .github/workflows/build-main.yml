@@ -5,7 +5,7 @@
 # Images are then deployed to the respective OpenShift namespace via the
 # prime-app-template.yml in the infrastructure folder.
 
-name: Build PRIME from Master branch and Deploy to OpenShift Image Registry
+name: Build Main
 
 on:
   push:

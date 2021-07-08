@@ -1,4 +1,4 @@
-name: Build PRIME from Test Branch and Deploy to OpenShift Image Registry
+name: Build Test
 on:
   push:
     branches:
