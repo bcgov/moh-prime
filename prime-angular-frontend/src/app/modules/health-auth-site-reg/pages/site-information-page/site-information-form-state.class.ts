@@ -32,12 +32,12 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: SiteInformationForm): void {
+  public patchValue(model: SiteInformationForm): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(data);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {

@@ -1,19 +1,20 @@
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormArrayValidators } from '@lib/validators/form-array.validators';
-import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { AdministratorForm } from './administrator-form.model';
 
 export class AdministratorFormState extends AbstractFormState<AdministratorForm> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService
+    private fb: FormBuilder
   ) {
     super();
 
     this.buildForm();
+  }
+
+  public get pharmanetAdministratorId(): FormControl {
+    return this.formInstance.get('pharmanetAdministratorId') as FormControl;
   }
 
   public get json(): AdministratorForm {
@@ -21,7 +22,7 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
       return;
     }
 
-    // return this.formUtilsService.toPersonJson(this.formInstance.getRawValue());
+    return this.formInstance.getRawValue();
   }
 
   public patchValue(model: AdministratorForm): void {
@@ -29,12 +30,12 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
       return;
     }
 
-    // this.formUtilsService.toPersonFormModel([this.formInstance, model]);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(disabled: boolean = false): void {
     this.formInstance = this.fb.group({
-      administrators: this.fb.array([], FormArrayValidators.atLeast(1))
+      pharmanetAdministratorId: [0, [Validators.required]]
     });
   }
 }

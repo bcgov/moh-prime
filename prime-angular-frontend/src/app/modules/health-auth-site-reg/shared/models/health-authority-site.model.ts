@@ -20,8 +20,8 @@ export interface HealthAuthoritySite {
   physicalAddress: Address;
   businessHours: BusinessDay[];
   remoteUsers: RemoteUser[];
-  siteAdministratorId: number;
-  siteAdministrator: Contact;
+  healthAuthorityPharmanetAdministratorId: number;
+  healthAuthorityPharmanetAdministrator: Contact;
   // Indicates that a user has progressed through the entire registration, and
   // reached the overview page switching them from wizard to spoking navigation
   completed: boolean;

@@ -25,12 +25,12 @@ export class VendorFormState extends AbstractFormState<VendorForm> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(vendorForm: VendorForm): void {
+  public patchValue(model: VendorForm): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(vendorForm);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {

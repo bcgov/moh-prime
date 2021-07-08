@@ -57,12 +57,12 @@ export class AuthorizedUserFormState extends AbstractFormState<AuthorizedUserFor
     return this.formToJson(this.formInstance.getRawValue());
   }
 
-  public patchValue(authorizedUser: AuthorizedUserForm): void {
+  public patchValue(model: AuthorizedUserForm): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.jsonToForm(this.formInstance, authorizedUser);
+    this.jsonToForm(this.formInstance, model);
   }
 
   // TODO BCSC information form reuse for sharing between enrolment and PHSA

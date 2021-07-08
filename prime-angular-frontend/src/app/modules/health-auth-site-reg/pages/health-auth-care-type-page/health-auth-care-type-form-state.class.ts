@@ -24,12 +24,12 @@ export class HealthAuthCareTypeFormState extends AbstractFormState<HealthAuthCar
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(data: HealthAuthCareTypeForm): void {
+  public patchValue(model: HealthAuthCareTypeForm): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(data);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {

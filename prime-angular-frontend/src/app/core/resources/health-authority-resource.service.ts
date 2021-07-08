@@ -326,7 +326,7 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthoritySiteAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
+  public updateHealthAuthorityPharmanetAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
     return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
       .pipe(
         NoContentResponse,

@@ -26,12 +26,12 @@ export class SiteAddressFormState extends AbstractFormState<SiteAddressForm> {
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(address: SiteAddressForm): void {
-    if (!this.formInstance || !address?.physicalAddress) {
+  public patchValue(model: SiteAddressForm): void {
+    if (!this.formInstance || !model?.physicalAddress) {
       return;
     }
 
-    this.formInstance.patchValue(address);
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {
