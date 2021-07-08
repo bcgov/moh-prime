@@ -291,19 +291,19 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
-        [HttpPost("{siteId}/finalize", Name = nameof(FinalizeHealthAuthoritySite))]
+        [HttpPost("{siteId}/submit", Name = nameof(HealthAuthoritySiteSubmission))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> FinalizeHealthAuthoritySite(int healthAuthorityId, int siteId)
+        public async Task<ActionResult> HealthAuthoritySiteSubmission(int healthAuthorityId, int siteId)
         {
             // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
             // {
             //     return NotFound($"No editable health authority site found with site id {siteId}");
             // }
 
-            await _healthAuthoritySiteService.FinalizeSubmissionAsync(siteId);
+            await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
 
             return Ok();
         }

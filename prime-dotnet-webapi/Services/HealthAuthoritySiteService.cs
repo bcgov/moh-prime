@@ -153,7 +153,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task FinalizeSubmissionAsync(int siteId)
+        public async Task SiteSubmissionAsync(int siteId)
         {
             var site = await _context.HealthAuthoritySites
                 .Include(has => has.Status)

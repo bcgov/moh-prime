@@ -26,6 +26,6 @@ namespace Prime.Services
         Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
 
         Task SetSiteCompletedAsync(int siteId);
-        Task FinalizeSubmissionAsync(int siteId);
+        Task SiteSubmissionAsync(int siteId);
     }
 }
