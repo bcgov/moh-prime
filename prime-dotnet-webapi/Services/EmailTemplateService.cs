@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,9 +23,17 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        public async Task<bool> EmailTemplateExistsAsync(int id)
+        {
+            return await _context.EmailTemplates
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == id);
+        }
+
         public async Task<EmailTemplate> GetEmailTemplateByTypeAsync(EmailTemplateType type)
         {
-            return await _context.EmailTemplates.Where(t => t.EmailType == type).SingleOrDefaultAsync();
+            return await _context.EmailTemplates
+                .SingleOrDefaultAsync(t => t.EmailType == type);
         }
 
         public async Task<IEnumerable<EmailTemplateListViewModel>> GetEmailTemplatesAsync()
@@ -40,6 +49,19 @@ namespace Prime.Services
                 .Where(t => t.Id == id)
                 .ProjectTo<EmailTemplateViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+        }
+
+        public async Task<EmailTemplateViewModel> UpdateEmailTemplateAsync(int id, string template)
+        {
+            var emailTemplate = await _context.EmailTemplates
+                .SingleOrDefaultAsync(t => t.Id == id);
+
+            emailTemplate.Template = template;
+            emailTemplate.ModifiedDate = DateTimeOffset.Now;
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
         }
     }
 }

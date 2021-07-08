@@ -1,0 +1,21 @@
+<app-page [busy]="busy"
+          showToolbar="true"
+          (back)="onBack()">
+  <app-page-header>TOA Maintenance</app-page-header>
+
+  <app-page-subheader *ngIf="orgAgreementVersion"
+                      class="mb-4"
+                      [divider]="false">
+    <ng-container appPageSubheaderTitle>
+      {{ AgreementType[orgAgreementVersion.agreementType] | replace: '_':' ' | capitalize: true }}
+    </ng-container>
+  </app-page-subheader>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      Preview
+    </ng-container>
+  </app-page-subheader>
+
+  <div [innerHtml]="orgAgreementVersion?.text"></div>
+</app-page>

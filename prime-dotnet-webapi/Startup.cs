@@ -66,6 +66,7 @@ namespace Prime
             services.AddScoped<IEmailRenderingService, EmailRenderingService>();
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<IEnrolleeService, EnrolleeService>();
+            services.AddScoped<IEnrolleeAgreementService, EnrolleeAgreementService>();
             services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
             services.AddScoped<IEnrolleeSubmissionService, EnrolleeSubmissionService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
@@ -75,6 +76,7 @@ namespace Prime
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
+            services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();

@@ -47,6 +47,8 @@ import { AuthorizedUsersPageComponent } from './pages/health-authorities/authori
 import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
 import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
 import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
+import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
+import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
 const routes: Routes = [
   {
@@ -89,7 +91,7 @@ const routes: Routes = [
               {
                 path: '',
                 component: EnrolleeMaintenancePageComponent,
-                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
+                data: { title: 'Enrollee Maintenance' }
               },
               {
                 path: AdjudicationRoutes.NOTIFICATION_EMAILS,
@@ -236,6 +238,21 @@ const routes: Routes = [
                   },
                 ]
               },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: OrganizationToaMaintenanceListPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: OrganizationToaMaintenanceViewPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                ]
+              }
             ]
           },
           {
