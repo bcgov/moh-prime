@@ -102,7 +102,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo([
       HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES,
       healthAuthorityId,
-      ...ArrayUtils.insertIf(healthAuthoritySiteId, [
+      ...ArrayUtils.insertIf(healthAuthoritySiteId > 0, [
         HealthAuthSiteRegRoutes.SITES,
         healthAuthoritySiteId
       ]),
