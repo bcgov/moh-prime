@@ -7,6 +7,7 @@ using Prime.Auth;
 using Prime.Services;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
@@ -88,6 +89,29 @@ namespace Prime.Controllers
         {
             var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
             return Ok(template);
+        }
+
+        // PUT: api/emails/management/templates/1
+        /// <summary>
+        /// Update email template
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="template"></param>
+        [HttpPut("management/templates/{emailTemplateId}", Name = nameof(UpdateEmailTemplate))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, FromBodyText template)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
+            return Ok(emailTemplate);
         }
     }
 }
