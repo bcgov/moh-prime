@@ -139,7 +139,7 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
     AuthorizedUserReviewComponent,
     BannerListViewComponent,
     EnrolleeBannerListPageComponent,
-    SiteBannerListPageComponent
+    SiteBannerListPageComponent,
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent
   ],
