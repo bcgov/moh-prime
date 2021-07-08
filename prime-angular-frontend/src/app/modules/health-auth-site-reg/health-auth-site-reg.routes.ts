@@ -37,7 +37,8 @@ export class HealthAuthSiteRegRoutes {
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
-      this.SITE_ADMINISTRATOR
+      this.SITE_ADMINISTRATOR,
+      this.SITE_OVERVIEW
     ];
   }
 }

@@ -9,7 +9,7 @@ import { RemoteUsersForm } from './remote-users-form.model';
 @Component({
   selector: 'app-remote-users-overview',
   template: `
-    <!--    <div *ngIf="site?.remoteUsers.length"-->
+    <!--    <div *ngIf="remoteUsers?.length"-->
     <!--         class="row mt-4">-->
     <!--      <div class="col-6">-->
     <!--        <app-page-subheader>-->

@@ -237,8 +237,17 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySites() {
-
+  public getHealthAuthoritySites(healthAuthId: number): Observable<HealthAuthoritySite[]> {
+    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/${healthAuthId}/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority sites could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySites error has occurred: ', error);
+          throw error;
+        })
+      );
   }
 
   public getHealthAuthoritySiteById(healthAuthId: number, healthAuthSiteId: number): Observable<HealthAuthoritySite> {
