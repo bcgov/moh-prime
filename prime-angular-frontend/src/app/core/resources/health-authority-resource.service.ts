@@ -327,7 +327,7 @@ export class HealthAuthorityResource {
   }
 
   public updateHealthAuthorityPharmanetAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
-    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/administrator`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -343,8 +343,8 @@ export class HealthAuthorityResource {
    * Mark the as completed indicating the workflow has been entirely traversed
    * in wizard mode, and will now spoke between the views from overview.
    */
-  public completed(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/completed`)
+  public healthAuthoritySiteCompleted(healthAuthCode: number, siteId: number): NoContent {
+    return this.apiResource.put<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/site-completed`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

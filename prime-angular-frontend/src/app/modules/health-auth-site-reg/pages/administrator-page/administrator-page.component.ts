@@ -91,16 +91,12 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
       });
   }
 
-  protected initForm(): void {
-    this.formState.pharmanetAdministratorId.valueChanges
-      .subscribe((value) => {
-        console.log(value);
-      });
-  }
-
   protected performSubmission(): NoContent {
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
 
-    return void 0;
+    return this.healthAuthorityResource.updateHealthAuthorityPharmanetAdministrator(haid, sid, payload)
+      .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
   }
 
   protected afterSubmitIsSuccessful(): void {

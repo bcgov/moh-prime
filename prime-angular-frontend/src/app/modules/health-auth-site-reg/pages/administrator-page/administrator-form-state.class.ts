@@ -33,9 +33,9 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
     this.formInstance.patchValue(model);
   }
 
-  public buildForm(disabled: boolean = false): void {
+  public buildForm(): void {
     this.formInstance = this.fb.group({
-      pharmanetAdministratorId: [0, [Validators.required]]
+      pharmanetAdministratorId: [null, [Validators.required]]
     });
   }
 }
