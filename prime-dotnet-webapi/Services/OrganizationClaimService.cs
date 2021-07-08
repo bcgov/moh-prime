@@ -31,6 +31,12 @@ namespace Prime.Services
             int numAffected = await _context.SaveChangesAsync();
             return (numAffected == 1);
         }
+
+        public Task<Models.OrganizationClaim> GetOrganizationClaimAsync(int organizationId)
+        {
+            return _context.OrganizationClaims
+                .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
+        }
     }
 }
 

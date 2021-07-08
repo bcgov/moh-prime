@@ -20,6 +20,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
+import { Party } from '@lib/models/party.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -36,6 +38,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public columns: string[];
   public organization: Organization;
   public site: Site;
+  public orgClaim: OrganizationClaim;
+  public newSigningAuthority: Party;
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
@@ -79,6 +83,17 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
+  public onApproveOrgClaim() {
+    this.busy = this.organizationResource
+      .approveOrganizationClaim(this.organization.id, this.newSigningAuthority.id)
+      .subscribe(() => {
+        this.refresh.next(true);
+        // TODO: Better way to refresh organization?
+        this.organizationResource.getOrganizationById(this.organization.id)
+          .subscribe((organization: Organization) => this.organization = organization);
+      });
+  }
+
   public ngOnInit(): void {
     super.ngOnInit();
 
@@ -88,10 +103,17 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     this.busy = forkJoin({
       organization: this.organizationResource.getOrganizationById(oid),
-      site: this.siteResource.getSiteById(sid)
-    }).subscribe(({ organization, site }) => {
+      site: this.siteResource.getSiteById(sid),
+      orgClaim: this.organizationResource.getOrganizationClaimByOrgId(oid)
+    }).subscribe(({ organization, site, orgClaim }) => {
       this.organization = organization;
       this.site = site;
+      this.orgClaim = orgClaim;
+      // TODO: Remove hack
+      if (this.orgClaim.organizationId > 0) {
+        this.busy = this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim.partyId}`)
+          .subscribe((signingAuthority: Party) => this.newSigningAuthority = signingAuthority);
+      }
       this.form.get('pec').setValue(site.pec);
     });
   }

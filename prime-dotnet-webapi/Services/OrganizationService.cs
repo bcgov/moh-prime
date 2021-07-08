@@ -52,7 +52,7 @@ namespace Prime.Services
         {
             searchOptions ??= new OrganizationSearchOptions();
 
-            var results = await _context.Organizations
+            var task = _context.Organizations
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(
@@ -66,6 +66,9 @@ namespace Prime.Services
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { careSettingCode = searchOptions.CareSettingCode })
                 .DecompileAsync()
                 .ToListAsync();
+
+            // TODO: Fix "A second operation started on this context before a previous operation completed." error
+            var results = task.Result;
 
             results.ForEach(async r => r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id));
 

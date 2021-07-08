@@ -158,6 +158,30 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
+        // GET: api/Organizations/claim/5
+        /// <summary>
+        /// Find OrganizationClaim by Organization ID.
+        /// </summary>
+        [HttpGet("claim/{organizationId}", Name = nameof(GetOrganizationClaimByOrgId))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<OrganizationClaim>> GetOrganizationClaimByOrgId(int organizationId)
+        {
+            var claim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
+            if (claim == null)
+            {
+                // TODO: Remove hack
+                //                return NotFound("No claim by a SigningAuthority exists for given Organization.");
+                return Ok(new OrganizationClaim { PartyId = -1, OrganizationId = -1 });
+            }
+            else
+            {
+                return Ok(claim);
+            }
+        }
+
         // POST: api/Organizations/claim/approve
         /// <summary>
         /// Approve claim for an existing Organization.

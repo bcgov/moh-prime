@@ -17,6 +17,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
 import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 
 @Injectable({
   providedIn: 'root'
@@ -160,6 +161,20 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationClaimByOrgId(organizationId: number): Observable<OrganizationClaim> {
+    return this.apiResource.get<OrganizationClaim>(`organizations/claim/${organizationId}`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationClaim>) => response.result),
+        tap((orgClaim: OrganizationClaim) => this.logger.info('OrganizationClaim', orgClaim)),
+        catchError((error: any) => {
+          // TODO: How to return null on 404 error?
+          this.toastService.openErrorToast('OrganizationClaim could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaimByOrgId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createOrganization(partyId: number): Observable<Organization> {
     return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
@@ -184,6 +199,19 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be claimed');
           this.logger.error('[Core] OrganizationResource::claimOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveOrganizationClaim(organizationId: number, partyId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/claim/approve`, { organizationId, partyId })
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('Organization Claim has been approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization Claim could not be approved');
+          this.logger.error('[Core] OrganizationResource::approveOrganizationClaim error has occurred: ', error);
           throw error;
         })
       );

@@ -24,13 +24,20 @@
           <mat-card-content>
             <app-page-subheader>
               <ng-container appPageSubheaderTitle>Reason for Change</ng-container>
+              <ng-container appPageSubheaderSummary>
+                {{ orgClaim?.details }}
+              </ng-container>
             </app-page-subheader>
 
             <app-overview-section title="New Signing Authority"
                                   (route)="onRoute($event)">
-              <!-- TODO: New Signing Authority details -->
-              <app-bcsc-profile [user]="organization?.signingAuthority"></app-bcsc-profile>
+              <app-bcsc-profile [user]="newSigningAuthority"></app-bcsc-profile>
             </app-overview-section>
+
+            <!-- TODO: Change color and position properly -->
+            <button mat-flat-button
+                    color="primary"
+                    (click)="onApproveOrgClaim()">Approve Change</button>
           </mat-card-content>
         </mat-card>
       </div>

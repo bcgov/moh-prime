@@ -1,5 +1,6 @@
 
 using System.Threading.Tasks;
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -14,5 +15,7 @@ namespace Prime.Services
         /// <param name="partyId"></param>
         /// <returns><c>true</c> if can successfully delete claim, <c>false</c> otherwise.</returns>
         Task<bool> DeleteClaimAsync(int organizationId, int partyId);
+
+        Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId);
     }
 }
