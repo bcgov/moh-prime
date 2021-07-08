@@ -13,19 +13,11 @@
     </app-page-subheader>
   </div>
 
-  <app-demographic-overview [firstName]="enrollee?.firstName"
-                            [givenNames]="enrollee?.givenNames"
-                            [lastName]="enrollee?.lastName"
-                            [dateOfBirth]="enrollee?.dateOfBirth"
-                            [physicalAddress]="enrollee?.physicalAddress"
-                            [phone]="enrollee?.phone"
-                            [phoneExtension]="enrollee?.phoneExtension"
-                            [email]="enrollee?.email"
-                            [smsPhone]="enrollee?.smsPhone">
+  <app-demographic-overview [enrollee]="enrollee">
   </app-demographic-overview>
 
-  <app-care-setting-overview [careSettings]="enrollee?.enrolleeCareSettings"
-                             [healthAuthorities]="enrollee?.enrolleeHealthAuthorities">
+  <app-care-setting-overview [careSettings]="enrollee"
+                             [healthAuthorities]="enrollee">
   </app-care-setting-overview>
 
   <app-regulatory-overview [certifications]="enrollee?.certifications"></app-regulatory-overview>
