@@ -13,19 +13,17 @@ namespace Prime.Services
         Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode);
         Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId);
         Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId);
-        // TODO should we use a relationship or direct data type?
+        // TODO should we use a relationship but issues around deletion
         // Task UpdateVendorAsync(int siteId, int healthAuthorityVendorId);
         Task UpdateVendorAsync(int siteId, int vendorCode);
         Task UpdateSiteInfoAsync(int siteId, HealthAuthoritySiteInfoViewModel viewModel);
-        // TODO should we use a relationship or direct data type?
+        // TODO should we use a relationship but issues around deletion
         // Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId);
         Task UpdateCareTypeAsync(int siteId, string careType);
         Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress);
         Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
         Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
-        // TODO should we use a relationship or direct data type?
-        // Task UpdateAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
-        // Task UpdateAdministratorAsync(int siteId, int HealthAuthoritySiteAdministratorViewModel);
+        Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
 
         Task SetSiteCompletedAsync(int siteId);
         Task FinalizeSubmissionAsync(int siteId);

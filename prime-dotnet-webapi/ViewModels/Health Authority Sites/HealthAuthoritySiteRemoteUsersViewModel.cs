@@ -9,12 +9,4 @@ namespace Prime.ViewModels.HealthAuthoritySites
     {
         public ICollection<RemoteUser> RemoteUsers { get; set; }
     }
-
-    public class HealthAuthoritySiteRemoteUsersValidator : AbstractValidator<HealthAuthoritySiteRemoteUsersViewModel>
-    {
-        public HealthAuthoritySiteRemoteUsersValidator()
-        {
-            RuleFor(x => x.RemoteUsers).NotNull();
-        }
-    }
 }

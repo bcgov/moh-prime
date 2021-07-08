@@ -116,7 +116,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO dependency of Site navigational property in BusinessDay
-            site.BusinessHours = businessHours;
+            // site.BusinessHours = businessHours;
 
             await _context.SaveChangesAsync();
         }
@@ -126,18 +126,19 @@ namespace Prime.Services
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            site.RemoteUsers = remoteUsers;
+            // TODO dependency of Site navigational property in RemoteUser
+            // site.RemoteUsers = remoteUsers;
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateAdministratorAsync(int siteId, HealthAuthoritySiteAdministratorViewModel viewModel)
+        public async Task UpdatePharmanetAdministratorAsync(int siteId, int pharmanetAdministratorId)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO check administrator exists on the HealthAuthority list of administrator(s)
-            _mapper.Map(viewModel, site);
+            site.HealthAuthorityPharmanetAdministratorId = pharmanetAdministratorId;
 
             await _context.SaveChangesAsync();
         }
