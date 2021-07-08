@@ -45,18 +45,11 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM registry.access.redhat.com/ubi8/nginx-118
+FROM public.ecr.aws/bitnami/nginx:1.20
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
-
-# RUN chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
-
-# Create symlinks to redirect nginx logs to stdout and stderr
-RUN bash -xeu -c 'mkdir -p /var/log/nginx'
-RUN  ln -sf /dev/stdout /var/log/nginx/access.log \
-  && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # USER 1001200000
 EXPOSE 80 8080 4200:8080
