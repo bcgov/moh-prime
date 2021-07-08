@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -160,6 +161,7 @@ namespace Prime.Services
 
             // TODO add status change to site (next sprint)
             // TODO add business events (next sprint)
+            site.SubmittedDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
         }
