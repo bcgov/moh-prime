@@ -10,17 +10,14 @@
     </app-page-subheader2>
   </div>
 
-  <!--  <pre>-->
-  <!--    {{ healthAuthoritySite | json }}-->
-  <!--  </pre>-->
-
   <app-vendor-overview [vendor]="healthAuthoritySite"></app-vendor-overview>
   <app-site-information-overview [siteInformation]="healthAuthoritySite"></app-site-information-overview>
   <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"></app-health-auth-care-type-overview>
   <app-site-address-overview [siteAddress]="healthAuthoritySite"></app-site-address-overview>
   <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"></app-hours-operation-overview>
   <app-remote-users-overview [remoteUsers]="healthAuthoritySite"></app-remote-users-overview>
-  <app-administrator-overview [administrator]="healthAuthoritySite"></app-administrator-overview>
+  <app-administrator-overview [administrator]="healthAuthoritySite"
+                              [pharmanetAdministrators]="pharmanetAdministrators"></app-administrator-overview>
 
   <ng-container *ngIf="!healthAuthoritySite?.submittedDate; else showBack">
     <div class="footer mb-4">
