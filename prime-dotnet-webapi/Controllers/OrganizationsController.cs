@@ -27,6 +27,7 @@ namespace Prime.Controllers
         private readonly IDocumentService _documentService;
         private readonly ISiteService _siteService;
         private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IBusinessEventService _businessEventService;
 
         public OrganizationsController(
             IOrganizationService organizationService,
@@ -34,7 +35,8 @@ namespace Prime.Controllers
             IPartyService partyService,
             IDocumentService documentService,
             ISiteService siteService,
-            IOrganizationClaimService organizationClaimService)
+            IOrganizationClaimService organizationClaimService,
+            IBusinessEventService businessEventService)
         {
             _organizationService = organizationService;
             _agreementService = agreementService;
@@ -42,6 +44,7 @@ namespace Prime.Controllers
             _documentService = documentService;
             _siteService = siteService;
             _organizationClaimService = organizationClaimService;
+            _businessEventService = businessEventService;
         }
 
         // GET: api/Organizations
@@ -209,6 +212,7 @@ namespace Prime.Controllers
             {
                 return NotFound("Cannot remove Claim for given SigningAuthority and Organization.");
             }
+            await _businessEventService.CreateOrganizationEventAsync(claimApproval.OrganizationId, claimApproval.PartyId, "Organization Claim Approved");
 
             return NoContent();
         }
