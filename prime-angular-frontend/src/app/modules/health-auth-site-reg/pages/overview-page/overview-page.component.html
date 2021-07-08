@@ -20,7 +20,7 @@
   <app-site-address-overview [siteAddress]="healthAuthoritySite"></app-site-address-overview>
   <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"></app-hours-operation-overview>
   <app-remote-users-overview [remoteUsers]="healthAuthoritySite"></app-remote-users-overview>
-  <app-administrator-overview [administrator]="{ pharmanetAdministrator: healthAuthorityPharmanetAdministrator }"></app-administrator-overview>
+  <app-administrator-overview [administrator]="healthAuthoritySite"></app-administrator-overview>
 
   <ng-container *ngIf="!healthAuthoritySite?.submittedDate; else showBack">
     <div class="footer mb-4">

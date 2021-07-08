@@ -2,17 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Subscription, EMPTY, forkJoin } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-overview-page',
   templateUrl: './overview-page.component.html',
@@ -20,6 +25,7 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
+  public pharmanetAdministrators: Contact[];
   public healthAuthoritySite: HealthAuthoritySite;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
@@ -76,7 +82,17 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
-    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-      .subscribe((healthAuthoritySite: HealthAuthoritySite) => this.healthAuthoritySite = healthAuthoritySite);
+    this.busy = forkJoin({
+      healthAuthority: this.healthAuthorityResource.getHealthAuthorityById(healthAuthId),
+      healthAuthoritySite: this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    })
+      .pipe(untilDestroyed(this))
+      .subscribe(({
+                    healthAuthority: { pharmanetAdministrators },
+                    healthAuthoritySite
+                  }: { healthAuthority: HealthAuthority, healthAuthoritySite: HealthAuthoritySite }) => {
+        this.pharmanetAdministrators = pharmanetAdministrators;
+        this.healthAuthoritySite = healthAuthoritySite;
+      });
   }
 }

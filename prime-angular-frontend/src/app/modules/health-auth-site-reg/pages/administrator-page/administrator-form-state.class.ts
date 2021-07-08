@@ -13,10 +13,6 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
     this.buildForm();
   }
 
-  public get pharmanetAdministratorId(): FormControl {
-    return this.formInstance.get('pharmanetAdministratorId') as FormControl;
-  }
-
   public get json(): AdministratorForm {
     if (!this.formInstance) {
       return;
@@ -35,7 +31,7 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      pharmanetAdministratorId: [null, [Validators.required]]
+      healthAuthorityPharmanetAdministratorId: [null, [Validators.required]]
     });
   }
 }

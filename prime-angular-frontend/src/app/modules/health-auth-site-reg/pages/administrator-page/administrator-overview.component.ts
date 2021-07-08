@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { Contact } from '@lib/models/contact.model';
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
@@ -13,16 +14,15 @@ import { AdministratorForm } from './administrator-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR"
                           (route)="onRoute($event)">
-      <!-- <app-party-review [party]="administrator.pharmanetAdministrator"></app-party-review>-->
-      {{ administrator.pharmanetAdministrator | fullname }}
+      {{ pharmanetAdministrator | fullname }}
     </app-overview-section>
   `,
   styles: [],
   encapsulation: ViewEncapsulation.None
 })
-// TODO refactor party review to be contact review
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;
+  @Input() pharmanetAdministrators: Contact[];
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -30,6 +30,11 @@ export class AdministratorOverviewComponent extends AbstractOverview implements 
     router: Router
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+  }
+
+  public get pharmanetAdministrator(): Contact {
+    return this.pharmanetAdministrators
+      ?.find(pa => pa.id === this.administrator.healthAuthorityPharmanetAdministratorId) ?? null;
   }
 
   public ngOnInit(): void { }

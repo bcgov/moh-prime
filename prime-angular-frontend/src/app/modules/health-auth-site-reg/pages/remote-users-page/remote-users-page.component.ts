@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { KeyValue } from '@angular/common';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-import { noop, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -18,7 +16,6 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { RemoteUsersPageFormState } from './remote-users-form-state.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
@@ -57,7 +54,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.submitButtonText = 'Save and Continue';
   }
 
-  public getRemoteUserProperties(remoteUser: FormGroup) {
+  public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
     const collegeLicence = (remoteUserCertifications.length > 1)
@@ -67,10 +64,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
         : remoteUserCertifications.value[0].licenseNumber;
 
     return [
-      {
-        key: 'College Licence',
-        value: collegeLicence
-      }
+      { key: 'College Licence', value: collegeLicence }
     ];
   }
 
@@ -87,6 +81,8 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
+    console.log(backRoutePath);
+
     this.routeUtils.routeRelativeTo(['../', backRoutePath]);
   }
 
@@ -95,18 +91,18 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.initForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = new RemoteUsersPageFormState(this.fb);
   }
 
-  protected initForm() {
+  protected initForm(): void {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((remoteUsers: RemoteUser[]) => {
+      .subscribe((remoteUsers: RemoteUser[]) =>
         (remoteUsers.length)
           ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
-          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
-      });
+          : this.formState.hasRemoteUsers.enable({ emitEvent: false })
+      );
 
     this.formState.hasRemoteUsers.valueChanges
       .pipe(untilDestroyed(this))

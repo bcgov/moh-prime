@@ -83,13 +83,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
             : EMPTY
         )
       )
-      .subscribe(({ healthAuthorityPharmanetAdministratorId, healthAuthorityPharmanetAdministrator, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityPharmanetAdministratorId, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        // TODO change this to something shorter: pharmanetAdministratorId and pharmanetAdministrator
-        this.formState.patchValue({
-          pharmanetAdministratorId: healthAuthorityPharmanetAdministratorId,
-          pharmanetAdministrator: healthAuthorityPharmanetAdministrator
-        });
+        this.formState.patchValue({ healthAuthorityPharmanetAdministratorId });
       });
   }
 

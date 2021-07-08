@@ -11,7 +11,7 @@ import { SiteInformationForm } from './site-information-form.model';
   template: `
     <app-overview-section title="Site Details"
                           [showEditRedirect]="showEditRedirect"
-                          [editRoute]="[]"
+                          [editRoute]="HealthAuthSiteRegRoutes.SITE_INFORMATION"
                           (route)="onRoute($event)">
       <app-enrollee-property title="Site Name">
         {{ siteInformation?.siteName | default }}
