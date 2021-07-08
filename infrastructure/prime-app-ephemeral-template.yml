@@ -141,10 +141,10 @@ objects:
             volumeMounts:
             - name: vanity-tls-certs
               readOnly: true
-              mountPath: /etc/nginx/certs
+              mountPath: /opt/bitnami/nginx/conf/certs
             - name: plr-integration-volume
               readOnly: true
-              mountPath: /etc/nginx/certs/plr
+              mountPath: /opt/bitnami/nginx/conf/certs/plr
             - name: nginx-config
               readOnly: true
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
@@ -185,7 +185,7 @@ objects:
   data:
     nginx.conf: |-
       # Based on https://www.nginx.com/resources/wiki/start/topics/examples/full/#nginx-conf
-      user              www www;  ## Default: nobody
+      #user              www www;  ## Default: nobody
 
       worker_processes  auto;
       error_log         "/opt/bitnami/nginx/logs/error.log";
@@ -232,7 +232,7 @@ objects:
           root /opt/app-root/src;
           index index.html index.htm;
 
-          include /etc/nginx/mime.types;
+          include mime.types;
           add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
           add_header X-XSS-Protection "1; mode=block" always;
           add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
@@ -281,7 +281,6 @@ objects:
           root /opt/app-root/src;
           index index.html index.htm;
 
-          include /etc/nginx/mime.types;
           add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
           add_header X-XSS-Protection "1; mode=block" always;
           add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
@@ -329,7 +328,6 @@ objects:
           root /opt/app-root/src;
           index index.html index.htm;
 
-          include /etc/nginx/mime.types;
           add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
           add_header X-XSS-Protection "1; mode=block" always;
           add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
@@ -374,7 +372,6 @@ objects:
           root /opt/app-root/src;
           index index.html index.htm;
 
-          include /etc/nginx/mime.types;
           # add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
           # add_header X-XSS-Protection "1; mode=block" always;
           # add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
