@@ -19,7 +19,7 @@ on:
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     env:
       BUILD_LOGLEVEL: "2"
       SERVICE_NAME: document-manager
@@ -51,14 +51,14 @@ jobs:
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
-            --build-arg SVC_NAME="prod" \
+            --build-arg SVC_NAME="demo" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
   build-backend:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
@@ -93,27 +93,27 @@ jobs:
             --build-arg ASPNETCORE_HTTPS_PORT=5001 \
             --build-arg ASPNETCORE_ENVIRONMENT="Development" \
             --build-arg ASPNETCORE_URLS="http://+:8080" \
-            --build-arg DB_CONNECTION_STRING="host=prod-postgres-db;port=5432;database=prime-prod;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
-            --build-arg DB_HOST=prod-postgres-db \
+            --build-arg DB_CONNECTION_STRING="host=demo-postgres-db;port=5432;database=prime-demo;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_HOST=demo-postgres-db \
             --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
             --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
             --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
-            --build-arg POSTGRESQL_DATABASE=prime-prod \
-            --build-arg SVC_NAME="prod" \
+            --build-arg POSTGRESQL_DATABASE=prime-demo \
+            --build-arg SVC_NAME="demo" \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
   build-frontend:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
-      JWT_WELL_KNOWN_CONFIG: "https://oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-      KEYCLOAK_CLIENT_ID: "prime-application-prod"
-      KEYCLOAK_URL: "https://oidc.gov.bc.ca/auth"
+      JWT_WELL_KNOWN_CONFIG: "https://test.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+      KEYCLOAK_CLIENT_ID: "prime-application-test"
+      KEYCLOAK_URL: "https://test.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
     steps:
       - name: "Checkout the repo"
@@ -138,7 +138,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://pharmanetenrolment.gov.bc.ca"       
+          REDIRECT_URL: "https://demo.pharmanetenrolment.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -146,15 +146,15 @@ jobs:
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
             --build-arg OC_APP=${{secrets.OC_APP}} \
-            --build-arg SVC_NAME="prod" \
+            --build-arg SVC_NAME="demo" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:prod
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
 
   apply-oc-template:
     runs-on: ubuntu-20.04
-    environment: Production
+    environment: Test
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
@@ -182,14 +182,14 @@ jobs:
             -p DB_POD=postgres \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
-            -p VANITY_URL=pharmanetenrolment.gov.bc.ca \
-            -p IMAGE_TAG=prod \
-            -p SVC_NAME=prod \
+            -p VANITY_URL=demo.pharmanetenrolment.gov.bc.ca \
+            -p IMAGE_TAG=demo \
+            -p SVC_NAME=demo \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
-            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
+            -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-demo.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -p HPR_URL=prod-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
-            -p MAUTH_URL=prod-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
+            -p HPR_URL=demo-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-demo.apps.silver.devops.gov.bc.ca \
+            -p MAUTH_URL=demo-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-demo.apps.silver.devops.gov.bc.ca \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
