@@ -9,24 +9,18 @@ import { SiteInformationForm } from './site-information-form.model';
 @Component({
   selector: 'app-site-information-overview',
   template: `
-    <app-overview-section title="Site Name"
-                          [showEditRedirect]="showEditRedirect"
-                          [editRoute]="[]"
-                          (route)="onRoute($event)">
-      <app-enrollee-property title="Site Name">
-        {{ siteInformation.siteName }}
-      </app-enrollee-property>
-    </app-overview-section>
-
     <app-overview-section title="Site Details"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="[]"
                           (route)="onRoute($event)">
+      <app-enrollee-property title="Site Name">
+        {{ siteInformation?.siteName | default }}
+      </app-enrollee-property>
       <app-enrollee-property title="Site ID">
-        {{ siteInformation.siteId }}
+        {{ siteInformation?.siteId | default }}
       </app-enrollee-property>
       <app-enrollee-property title="Security Group">
-        {{ siteInformation.securityGroup }}
+        {{ siteInformation?.securityGroup | default }}
       </app-enrollee-property>
     </app-overview-section>
   `,

@@ -11,7 +11,7 @@ import { SiteAddressForm } from './site-address-form.model';
   selector: 'app-site-address-overview',
   template: `
     <app-address-view title="Site Address"
-                      [address]="siteAddress"
+                      [address]="siteAddress?.physicalAddress"
                       [showRedirect]="showEditRedirect"
                       [showIfEmpty]="true"
                       (route)="onRoute(HealthAuthSiteRegRoutes.SITE_ADDRESS)">

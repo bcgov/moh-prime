@@ -6,6 +6,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 
 import { HoursOperationForm } from './hours-operation-form.model';
 
+// TODO add message when no business hours were entered
 @Component({
   selector: 'app-hours-operation-overview',
   template: `
@@ -13,7 +14,7 @@ import { HoursOperationForm } from './hours-operation-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.HOURS_OPERATION"
                           (route)="onRoute($event)">
-      <ng-container *ngFor="let businessDay of hoursOperation.businessHours">
+      <ng-container *ngFor="let businessDay of hoursOperation?.businessHours">
         <app-enrollee-property [title]="businessDay.day | weekday">
           <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
             {{ businessDay.startTime }} to {{ businessDay.endTime }}

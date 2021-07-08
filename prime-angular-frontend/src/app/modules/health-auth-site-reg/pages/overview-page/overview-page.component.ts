@@ -11,7 +11,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 
 @Component({
@@ -31,8 +30,7 @@ export class OverviewPageComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
-    private healthAuthorityResource: HealthAuthorityResource,
-    private healthAuthoritySiteService: HealthAuthSiteRegService
+    private healthAuthorityResource: HealthAuthorityResource
   ) {
     this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.MODULE_PATH));
@@ -72,6 +70,13 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.healthAuthoritySite = this.healthAuthoritySiteService.site;
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
+
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .subscribe((healthAuthoritySite: HealthAuthoritySite) => this.healthAuthoritySite = healthAuthoritySite);
   }
 }

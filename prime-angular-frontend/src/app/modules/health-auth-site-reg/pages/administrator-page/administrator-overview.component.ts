@@ -13,12 +13,14 @@ import { AdministratorForm } from './administrator-form.model';
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR"
                           (route)="onRoute($event)">
-      <!-- <app-party-review [party]="administrator"></app-party-review> -->
+      <!-- <app-party-review [party]="administrator.pharmanetAdministrator"></app-party-review>-->
+      {{ administrator.pharmanetAdministrator | fullname }}
     </app-overview-section>
   `,
   styles: [],
   encapsulation: ViewEncapsulation.None
 })
+// TODO refactor party review to be contact review
 export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
   @Input() administrator: AdministratorForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;

@@ -15,7 +15,6 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
@@ -37,7 +36,6 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     private fb: FormBuilder,
     private configService: ConfigService,
     private healthAuthorityResource: HealthAuthorityResource,
-    private healthAuthoritySiteService: HealthAuthSiteRegService,
     private route: ActivatedRoute,
     router: Router
   ) {

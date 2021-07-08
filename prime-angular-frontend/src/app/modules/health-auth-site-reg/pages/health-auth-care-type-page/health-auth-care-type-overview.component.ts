@@ -14,7 +14,7 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
                           [editRoute]="HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE"
                           (route)="onRoute($event)">
       <app-enrollee-property title="Health Authority Care Type">
-        {{ healthAuthCareType.careType }}
+        {{ healthAuthCareType?.careType | default }}
       </app-enrollee-property>
     </app-overview-section>
   `,

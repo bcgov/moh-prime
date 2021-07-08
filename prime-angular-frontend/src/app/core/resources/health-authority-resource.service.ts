@@ -369,7 +369,7 @@ export class HealthAuthorityResource {
    * Submit the health authority site registration.
    */
   public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submission`)
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submit`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

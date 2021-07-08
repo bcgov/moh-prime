@@ -16,7 +16,6 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { AdministratorFormState } from './administrator-form-state.class';
 
 @Component({
@@ -36,7 +35,6 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private healthAuthorityResource: HealthAuthorityResource,
-    private healthAuthoritySiteService: HealthAuthSiteRegService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -85,9 +83,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
             : EMPTY
         )
       )
-      .subscribe(({ healthAuthorityPharmanetAdministratorId, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityPharmanetAdministratorId, healthAuthorityPharmanetAdministrator, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ pharmanetAdministratorId: healthAuthorityPharmanetAdministratorId });
+        // TODO change this to something shorter: pharmanetAdministratorId and pharmanetAdministrator
+        this.formState.patchValue({
+          pharmanetAdministratorId: healthAuthorityPharmanetAdministratorId,
+          pharmanetAdministrator: healthAuthorityPharmanetAdministrator
+        });
       });
   }
 

@@ -19,6 +19,7 @@ export abstract class AbstractOverview {
     router: Router,
     baseRoute: string | (string | number)[]
   ) {
+    this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, baseRoute);
   }
 
