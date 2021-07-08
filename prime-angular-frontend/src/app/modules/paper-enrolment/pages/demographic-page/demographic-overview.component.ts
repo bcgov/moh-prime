@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { DemographicForm } from './demographic-form.model';
 
 @Component({
   selector: 'app-demographic-overview',
@@ -21,24 +22,24 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
       </app-page-subheader>
 
       <app-enrollee-property title="First Name">
-        {{ firstName | default }}
+        {{ enrollee.firstName | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Middle Name">
-        {{ givenNames | replace: firstName : '' | default }}
+        {{ enrollee.middleName | replace: enrollee.firstName : '' | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Last Name">
-        {{ lastName | default }}
+        {{ enrollee.lastName | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Date of Birth">
-        {{ dateOfBirth | formatDate }}
+        {{ enrollee.dateOfBirth | formatDate }}
       </app-enrollee-property>
     </app-page-section>
 
     <app-address-view title="Physical Address"
-                      [address]="physicalAddress"
+                      [address]="enrollee.physicalAddress"
                       [showRedirect]="true"
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
@@ -56,11 +57,11 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
       </app-page-subheader>
 
       <app-enrollee-property title="Phone Number">
-        {{ phone | phone | default }}
+        {{ enrollee.phone | phone | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Optional Extension Number">
-        {{ phoneExtension | default }}
+        {{ enrollee.phoneExtension | default }}
       </app-enrollee-property>
     </app-page-section>
 
@@ -77,28 +78,21 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
       </app-page-subheader>
 
       <app-enrollee-property title="Email">
-        {{ email | default }}
+        {{ enrollee.email | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Optional SMS Phone Number">
-        {{ smsPhone | phone | default }}
+        {{ enrollee.smsPhone | phone | default }}
       </app-enrollee-property>
     </app-page-section>
   `,
   styles: [
-  ]
+  ],
+  encapsulation: ViewEncapsulation.None
 })
 export class DemographicOverviewComponent implements OnInit {
 
-  @Input() firstName = '';
-  @Input() givenNames = '';
-  @Input() lastName = '';
-  @Input() dateOfBirth = '';
-  @Input() physicalAddress = '';
-  @Input() phone = '';
-  @Input() phoneExtension = '';
-  @Input() email = '';
-  @Input() smsPhone = '';
+  @Input() enrollee: DemographicForm;
   public routeUtils: RouteUtils;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
