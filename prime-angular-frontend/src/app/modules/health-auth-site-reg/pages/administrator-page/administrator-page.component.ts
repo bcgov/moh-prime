@@ -46,6 +46,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   public onBack() {
+    console.log('BACK?');
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.REMOTE_USERS;
