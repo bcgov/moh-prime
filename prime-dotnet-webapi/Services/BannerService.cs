@@ -24,10 +24,20 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<BannerViewModel> GetBannerAsync(BannerLocationCode locationCode)
+        public async Task<IEnumerable<BannerDisplayViewModel>> GetActiveBannersAsync(BannerLocationCode locationCode, DateTime atTime)
+        {
+            atTime = atTime.ToUniversalTime();
+            return await _context.Banners
+                .Where(b => b.BannerLocationCode == locationCode)
+                .Where(b => b.StartTimestamp <= atTime && atTime <= b.EndTimestamp)
+                .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<BannerViewModel> GetBannerAsync(int bannerId)
         {
             var banner = await _context.Banners
-                .Where(b => b.BannerLocationCode == locationCode)
+                .Where(b => b.Id == bannerId)
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
 
@@ -42,35 +52,46 @@ namespace Prime.Services
             return banner;
         }
 
-        public async Task<BannerDisplayViewModel> GetActiveBannerAsync(BannerLocationCode locationCode, DateTime atTime)
+        public async Task<IEnumerable<BannerViewModel>> GetBannersAsync(BannerLocationCode locationCode)
         {
-            atTime = atTime.ToUniversalTime();
-            return await _context.Banners
+            var banners = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
-                .Where(b => b.StartTimestamp <= atTime && atTime <= b.EndTimestamp)
-                .ProjectTo<BannerDisplayViewModel>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
+                .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            banners.ForEach(banner =>
+            {
+                // Banner time stamps are stored as UTC, but are materialized as DateTimeKind.Unspecified
+                // Once we upgrade our EF / Npgsql, we can use NodaTime instead
+                banner.StartTimestamp = DateTime.SpecifyKind(banner.StartTimestamp, DateTimeKind.Utc);
+                banner.EndTimestamp = DateTime.SpecifyKind(banner.EndTimestamp, DateTimeKind.Utc);
+            });
+
+            return banners;
         }
 
-        public async Task<BannerViewModel> SetBannerAsync(BannerLocationCode locationCode, BannerViewModel bannerVM)
+        public async Task DeleteBannerAsync(int bannerId)
         {
             var banner = await _context.Banners
-                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
+                .SingleOrDefaultAsync(b => b.Id == bannerId);
 
-            if (banner == null)
+            if (banner != null)
             {
-                banner = new Banner
-                {
-                    BannerLocationCode = locationCode,
-                };
-                _context.Banners.Add(banner);
+                _context.Banners.Remove(banner);
+                await _context.SaveChangesAsync();
             }
+        }
 
-            banner.BannerType = bannerVM.BannerType;
-            banner.Title = bannerVM.Title;
-            banner.Content = bannerVM.Content;
-            banner.StartTimestamp = bannerVM.StartTimestamp.ToUniversalTime();
-            banner.EndTimestamp = bannerVM.EndTimestamp.ToUniversalTime();
+        public async Task<BannerViewModel> UpdateBannerAsync(int bannerId, BannerViewModel updateModel)
+        {
+            var banner = await _context.Banners
+                .SingleOrDefaultAsync(b => b.Id == bannerId);
+
+            banner.BannerType = updateModel.BannerType;
+            banner.Title = updateModel.Title;
+            banner.Content = updateModel.Content;
+            banner.StartTimestamp = updateModel.StartTimestamp.ToUniversalTime();
+            banner.EndTimestamp = updateModel.EndTimestamp.ToUniversalTime();
 
             try
             {
@@ -83,16 +104,21 @@ namespace Prime.Services
             }
         }
 
-        public async Task DeleteBannerAsync(BannerLocationCode locationCode)
+        public async Task<BannerViewModel> CreateBannerAsync(BannerLocationCode locationCode, BannerViewModel updateModel)
         {
-            var banner = await _context.Banners
-                .SingleOrDefaultAsync(b => b.BannerLocationCode == locationCode);
-
-            if (banner != null)
+            var banner = new Banner
             {
-                _context.Banners.Remove(banner);
-                await _context.SaveChangesAsync();
-            }
+                BannerLocationCode = locationCode,
+                BannerType = updateModel.BannerType,
+                Title = updateModel.Title,
+                Content = updateModel.Content,
+                StartTimestamp = updateModel.StartTimestamp.ToUniversalTime(),
+                EndTimestamp = updateModel.EndTimestamp.ToUniversalTime(),
+            };
+
+            _context.Banners.Add(banner);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<BannerViewModel>(banner);
         }
     }
 }

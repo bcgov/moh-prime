@@ -1,7 +1,7 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
@@ -23,7 +23,7 @@ export class EnrolleeToaMaintenanceViewPageComponent implements OnInit {
   constructor(
     protected route: ActivatedRoute,
     private router: Router,
-    private enrolmentResource: EnrolmentResource
+    private adjudicationResource: AdjudicationResource
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
   }
@@ -37,7 +37,7 @@ export class EnrolleeToaMaintenanceViewPageComponent implements OnInit {
   }
 
   private getAgreementVersion(): void {
-    this.busy = this.enrolmentResource.getAgreementVersion(this.route.snapshot.params.aid)
+    this.busy = this.adjudicationResource.getAgreementVersion(this.route.snapshot.params.aid)
       .subscribe((result: AgreementVersion) => this.enrolleeAgreementVersion = result);
   }
 

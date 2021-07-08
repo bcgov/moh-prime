@@ -56,8 +56,6 @@ import { EnrolleeMaintenancePageComponent } from './pages/enrollee-maintenance-p
 import { SiteMaintenancePageComponent } from './pages/site-maintenance-page/site-maintenance-page.component';
 import { EmailNotificationListPageComponent } from './pages/email-notification-list-page/email-notification-list-page.component';
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
-import { EnrolleeMaintenanceComponent } from './pages/enrollee-maintenance/enrollee-maintenance.component';
-import { EnrolleeToaMaintenancePageComponent } from './pages/enrollee-toa-maintenance-page/enrollee-toa-maintenance-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 
@@ -71,6 +69,11 @@ import { AuthorizedUserPageComponent } from './pages/health-authorities/authoriz
 import { HealthAuthorityTableComponent } from './shared/components/health-authority-table/health-authority-table.component';
 import { HealthAuthAuthorizedUsersViewComponent } from './shared/components/health-auth-authorized-users-view/health-auth-authorized-users-view.component';
 import { AuthorizedUserReviewComponent } from './shared/components/authorized-user-review/authorized-user-review.component';
+import { BannerListViewComponent } from './shared/components/banner-list-view/banner-list-view.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
+import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
+import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
 @NgModule({
   declarations: [
@@ -122,8 +125,6 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     SiteMaintenancePageComponent,
     EmailNotificationListPageComponent,
     EmailNotificationViewPageComponent,
-    EnrolleeMaintenanceComponent,
-    EnrolleeToaMaintenancePageComponent,
     EnrolleeToaMaintenanceListPageComponent,
     EnrolleeToaMaintenanceViewPageComponent,
     HealthAuthCareTypesPageComponent,
@@ -135,7 +136,12 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     AuthorizedUserPageComponent,
     HealthAuthorityTableComponent,
     HealthAuthAuthorizedUsersViewComponent,
-    AuthorizedUserReviewComponent
+    AuthorizedUserReviewComponent,
+    BannerListViewComponent,
+    EnrolleeBannerListPageComponent,
+    SiteBannerListPageComponent,
+    OrganizationToaMaintenanceListPageComponent,
+    OrganizationToaMaintenanceViewPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,
@@ -144,4 +150,4 @@ import { AuthorizedUserReviewComponent } from './shared/components/authorized-us
     EditorModule
   ]
 })
-export class AdjudicationModule {}
+export class AdjudicationModule { }

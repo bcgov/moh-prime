@@ -28,6 +28,8 @@ import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 @Injectable({
   providedIn: 'root'
@@ -266,6 +268,33 @@ export class AdjudicationResource {
   // ---
   // Agreements
   // ---
+
+  public getLatestAgreementVersions(type?: AgreementTypeGroup): Observable<AgreementVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ type });
+    return this.apiResource.get<AgreementVersion[]>('agreements', params)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementVersionId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementVersionId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getAgreementVersion error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
