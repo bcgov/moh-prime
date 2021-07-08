@@ -593,7 +593,7 @@ namespace Prime.Services
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.SiteId == siteId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => e.SiteId == siteId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode) || e.Organization.Sites.Any(s => s.Id == siteId))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
