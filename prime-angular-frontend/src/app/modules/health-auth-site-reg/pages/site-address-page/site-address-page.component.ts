@@ -34,7 +34,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -75,7 +75,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
       return;
     }
 
-    this.busy = this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .subscribe(({ physicalAddress, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
         this.formState.patchValue({ physicalAddress });
@@ -93,7 +93,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthResource.updateHealthAuthoritySitePhysicalAddress(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySitePhysicalAddress(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {

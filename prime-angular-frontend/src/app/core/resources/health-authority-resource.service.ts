@@ -357,15 +357,15 @@ export class HealthAuthorityResource {
 
   /**
    * @description
-   * Finalize the health authority site registration.
+   * Submit the health authority site registration.
    */
-  public finalize(healthAuthCode: number, siteId: number): NoContent {
-    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/finalize`)
+  public healthAuthoritySiteSubmit(healthAuthCode: number, siteId: number): NoContent {
+    return this.apiResource.post<NoContent>(`health-authorities/${healthAuthCode}/sites/${siteId}/submission`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
-          this.toastService.openErrorToast('Health authority site could not be finalized');
-          this.logger.error('[Core] HealthAuthorityResource::finalize error has occurred: ', error);
+          this.toastService.openErrorToast('Health authority site could not be submitted');
+          this.logger.error('[Core] HealthAuthorityResource::healthAuthoritySiteSubmit error has occurred: ', error);
           throw error;
         })
       );

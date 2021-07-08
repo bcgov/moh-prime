@@ -66,7 +66,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router,
   ) {
@@ -136,7 +136,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
       return;
     }
 
-    this.busy = this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .subscribe(({ businessHours, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
         this.formState.patchValue({ businessHours });
@@ -167,7 +167,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthResource.updateHealthAuthoritySiteHoursOperation(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySiteHoursOperation(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {

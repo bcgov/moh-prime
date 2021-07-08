@@ -59,7 +59,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    private siteService: HealthAuthSiteRegService,
+    private healthAuthoritySiteService: HealthAuthSiteRegService,
     // TODO do we need this in health authority?
     // TODO even if we don't move the single method out to @lib/utils and don't use dependencies from other feature modules
     private enrolmentService: EnrolmentService,
@@ -170,7 +170,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected patchForm(): void {
-    const site = this.siteService.site;
+    const site = this.healthAuthoritySiteService.site;
     this.isCompleted = site?.completed;
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly

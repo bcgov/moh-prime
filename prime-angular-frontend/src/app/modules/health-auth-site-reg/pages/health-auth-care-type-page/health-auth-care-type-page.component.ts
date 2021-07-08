@@ -36,9 +36,8 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private siteResource: HealthAuthorityResource,
-    private healthAuthResource: HealthAuthorityResource,
-    private siteService: HealthAuthSiteRegService,
+    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteService: HealthAuthSiteRegService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -72,12 +71,12 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
       return;
     }
 
-    this.busy = this.healthAuthResource.getHealthAuthorityById(healthAuthId)
+    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
       .pipe(
         tap(({ careTypes }: HealthAuthority) => this.careTypes = careTypes),
         exhaustMap((_: HealthAuthority) =>
           (healthAuthSiteId)
-            ? this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+            ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
             : EMPTY
         )
       )
@@ -91,7 +90,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthResource.updateHealthAuthoritySiteCareType(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySiteCareType(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {

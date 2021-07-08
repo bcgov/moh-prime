@@ -36,8 +36,8 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    private siteResource: HealthAuthorityResource,
-    private siteService: HealthAuthSiteRegService,
+    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteService: HealthAuthSiteRegService,
     private route: ActivatedRoute,
     router: Router
   ) {

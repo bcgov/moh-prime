@@ -31,31 +31,30 @@ export class OverviewPageComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
-    private siteResource: HealthAuthorityResource,
-    private siteService: HealthAuthSiteRegService
+    private healthAuthorityResource: HealthAuthorityResource,
+    private healthAuthoritySiteService: HealthAuthSiteRegService
   ) {
     this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.MODULE_PATH));
   }
 
   public onSubmit(): void {
-    // const payload = this.siteService.site;
-    // const data: DialogOptions = {
-    //   title: 'Save Site',
-    //   message: 'When your site is saved, it will be submitted for review.',
-    //   actionText: 'Save Site'
-    // };
-    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //   .afterClosed()
-    //   .pipe(
-    //     // TODO do whatever it is that we'll be doing with health authority submissions
-    //     // exhaustMap((result: boolean) =>
-    //     //   (result)
-    //     //     ? this.siteResource.submitSite(payload)
-    //     //     : EMPTY
-    //     // )
-    //   )
-    //   .subscribe(() => this.nextRoute());
+    const { haid, sid } = this.route.snapshot.params;
+    const data: DialogOptions = {
+      title: 'Save Site',
+      message: 'When your site is saved, it will be submitted for review.',
+      actionText: 'Save Site'
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.healthAuthorityResource.healthAuthoritySiteSubmit(haid, sid)
+            : EMPTY
+        )
+      )
+      .subscribe(() => this.nextRoute());
   }
 
   public onBack(): void {
@@ -66,14 +65,13 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public nextRoute(): void {
-    // this.routeUtils.routeTo([
-    //   HealthAuthSiteRegRoutes.MODULE_PATH,
-    //   HealthAuthSiteRegRoutes.SITE_MANAGEMENT
-    // ], { queryParams: { submitted: true } });
+    this.routeUtils.routeTo([
+      HealthAuthSiteRegRoutes.MODULE_PATH,
+      HealthAuthSiteRegRoutes.SITE_MANAGEMENT
+    ], { queryParams: { submitted: true } });
   }
 
   public ngOnInit(): void {
-    // this.site = this.siteService.site;
-    // this.showSubmissionAction = !this.site?.submittedDate;
+    this.healthAuthoritySite = this.healthAuthoritySiteService.site;
   }
 }

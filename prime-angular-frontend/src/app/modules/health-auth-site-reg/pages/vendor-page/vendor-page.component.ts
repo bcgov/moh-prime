@@ -37,7 +37,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     private fb: FormBuilder,
     private location: Location,
     private configService: ConfigService,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -73,12 +73,12 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
 
     const healthAuthSiteId = +this.route.snapshot.params.sid;
 
-    this.busy = this.healthAuthResource.getHealthAuthorityById(healthAuthId)
+    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
       .pipe(
         tap(({ vendorCodes }: HealthAuthority) => this.vendorCodes = vendorCodes),
         exhaustMap((_: HealthAuthority) =>
           (healthAuthSiteId)
-            ? this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+            ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
             : EMPTY
         )
       )
@@ -103,9 +103,9 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     const { haid, sid } = this.route.snapshot.params;
 
     return (+sid)
-      ? this.healthAuthResource.updateHealthAuthoritySiteVendor(haid, sid, payload)
+      ? this.healthAuthorityResource.updateHealthAuthoritySiteVendor(haid, sid, payload)
         .pipe(map(() => sid))
-      : this.healthAuthResource.createHealthAuthoritySite(haid, payload)
+      : this.healthAuthorityResource.createHealthAuthoritySite(haid, payload)
         .pipe(
           map((site: HealthAuthoritySite) => {
             // Replace the URL with redirection, and prevent initial

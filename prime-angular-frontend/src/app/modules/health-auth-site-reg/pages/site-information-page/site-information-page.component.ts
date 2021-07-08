@@ -30,7 +30,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     protected formUtilsService: FormUtilsService,
     private fb: FormBuilder,
     private configService: ConfigService,
-    private healthAuthResource: HealthAuthorityResource,
+    private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -64,7 +64,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
       return;
     }
 
-    this.busy = this.healthAuthResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .subscribe(({ siteName, siteId, securityGroup, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
         this.formState.patchValue({ siteName, siteId, securityGroup });
@@ -75,7 +75,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthResource.updateHealthAuthoritySiteInfo(haid, sid, payload);
+    return this.healthAuthorityResource.updateHealthAuthoritySiteInfo(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {
