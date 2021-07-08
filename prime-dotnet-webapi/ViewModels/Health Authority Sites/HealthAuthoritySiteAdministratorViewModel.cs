@@ -6,14 +6,14 @@ namespace Prime.ViewModels.HealthAuthoritySites
 {
     public class HealthAuthoritySiteAdministratorViewModel
     {
-        public int PharmanetAdministratorId { get; set; }
+        public int HealthAuthorityPharmanetAdministratorId { get; set; }
     }
 
     public class HealthAuthoritySiteAdministratorValidator : AbstractValidator<HealthAuthoritySiteAdministratorViewModel>
     {
         public HealthAuthoritySiteAdministratorValidator()
         {
-            RuleFor(x => x.PharmanetAdministratorId).NotNull();
+            RuleFor(x => x.HealthAuthorityPharmanetAdministratorId).NotNull();
         }
     }
 }

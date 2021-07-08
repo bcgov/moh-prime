@@ -257,7 +257,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdatePharmanetAdministratorAsync(siteId, payload.PharmanetAdministratorId);
+            await _healthAuthoritySiteService.UpdatePharmanetAdministratorAsync(siteId, payload.HealthAuthorityPharmanetAdministratorId);
 
             return NoContent();
         }
