@@ -24,40 +24,16 @@ parameters:
   displayName: Openshift Environment
   description: dev/test/prod
   required: true
-- name: FRONTEND_POD
-  displayName: Frontend Pod Name
-  description: For naming the web/reverse proxy pod
-  required: true
-  value: frontend
 - name: FRONTEND_URL
   displayName: Frontend URL
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
   required: true
   value: frontend
-- name: API_POD
-  displayName: API Pod Name
-  description: For the .NET API
-  required: true
-  value: webapi
 - name: ASP_ENV
   displayName: ASP.NET Environment
   description: Development or Production
   required: true
   value: Development
-- name: DOCMAN_POD
-  displayName: Document Manager Pod Name
-  description: For other pods to reference it
-  required: true
-  value: document-manager
-- name: DB_POD
-  displayName: Database Pod
-  description: Postgres database
-  required: true
-  value: postgres
-- name: REDIS_POD
-  displayName: Redis Pod
-  description: Redis in-memory database
-  value: redis
 - name: WEB_PORT
   displayName: Web Port for NGINX
   description: Termination port on NGINX (8080 or 8443)
@@ -113,8 +89,8 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}"}]  
-    name: ${SVC_NAME}-${FRONTEND_POD}
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]  
+    name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -123,7 +99,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -132,10 +108,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${FRONTEND_POD}
+          name: ${SVC_NAME}-frontend
       spec:
         containers:
-          - name: ${SVC_NAME}-${FRONTEND_POD}
+          - name: ${SVC_NAME}-frontend
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
@@ -171,8 +147,8 @@ objects:
               mountPath: /etc/nginx/certs/plr
             - name: nginx-config
               readOnly: true
-              mountPath: /etc/nginx/conf.d/prime.conf
-              subPath: prime.conf
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
         volumes:
         - name: vanity-tls-certs
           secret:
@@ -192,7 +168,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${FRONTEND_POD}
+            - ${SVC_NAME}-frontend
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -207,13 +183,138 @@ objects:
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   data:
-    prime.conf: |-
-      server {
+    nginx.conf: |-
+      #user nobody;
+      worker_processes auto;
+      error_log /var/log/nginx/error.log warn;
+      pid /run/nginx.pid;
+
+      events {
+        worker_connections 1024;
+      }
+
+      http {
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+        
+        # w3c standard log format
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for" '
+                        'rt=$request_time urt=$upstream_response_time $pipe';
+
+        access_log /var/log/nginx/access.log main;
+        sendfile on;
+        #tcp_nopush     on;
+        keepalive_timeout 65;
+        #gzip  on;
+        # include /etc/nginx/conf.d/*.conf;
+
+        server {
           listen 8080;
           server_name localhost *.gov.bc.ca;
           server_tokens off;
-          root   /opt/app-root/src;
-          index  index.html index.htm;
+
+          root /opt/app-root/src;
+          index index.html index.htm;
+
+          include /etc/nginx/mime.types;
+          add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
+          add_header X-XSS-Protection "1; mode=block" always;
+          add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
+          add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+          add_header X-Content-Type-Options "nosniff" always;
+          add_header Referrer-Policy "no-referrer-when-downgrade";
+
+          gzip on;
+          gzip_min_length 1000;
+          gzip_proxied expired no-cache no-store private auth;
+          gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+          location / {
+            try_files $uri $uri/ /index.html$args;
+          }
+          location /api/docman/ {
+            proxy_pass http://$SVC_NAME-document-manager:6001/;
+          }
+          location /api/v1/ {
+            proxy_pass http://$SVC_NAME-webapi:8080/api/;
+          }
+          location /api/v1/PLRHL7 {
+            proxy_pass http://$SVC_NAME-webapi:8080/api/PLRHL7;
+            #        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
+          }
+          location /nginx_status {
+            # Enable Nginx stats
+            stub_status on;
+            # Only allow access from localhost
+            allow 127.0.0.1;
+            # Other request should be denied
+            deny all;
+            # No need to log this request, its just noise
+            access_log on;
+          }
+        }
+        server {
+          listen 8443 ssl;
+          server_name *.gov.bc.ca;
+          ssl_password_file certs/passwd.txt;
+          ssl_certificate certs/chained.crt;
+          ssl_certificate_key certs/private.key;
+          server_tokens off;
+          #    ssl_verify_client   optional_no_ca;
+
+          root /opt/app-root/src;
+          index index.html index.htm;
+
+          include /etc/nginx/mime.types;
+          add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
+          add_header X-XSS-Protection "1; mode=block" always;
+          add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
+          add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+          add_header X-Content-Type-Options "nosniff" always;
+          add_header Referrer-Policy "no-referrer-when-downgrade";
+
+          gzip on;
+          gzip_min_length 1000;
+          gzip_proxied expired no-cache no-store private auth;
+          gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+          location / {
+            try_files $uri $uri/ /index.html$args;
+          }
+          location /api/docman/ {
+            proxy_pass http://$SVC_NAME-document-manager:6001/;
+          }
+          location /api/v1/ {
+            proxy_pass http://$SVC_NAME-webapi:8080/api/;
+          }
+          location /api/v1/PLRHL7 {
+            proxy_pass http://$SVC_NAME-webapi:8080/api/PLRHL7;
+            #        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
+          }
+          location /nginx_status {
+            # Enable Nginx stats
+            stub_status on;
+
+            # Only allow access from localhost
+            allow 127.0.0.1;
+
+            # Other request should be denied
+            deny all;
+
+            # No need to log this request, its just noise
+            access_log on;
+          }
+        }
+        server {
+          listen 8888;
+          server_name *.gov.bc.ca;
+          server_tokens off;
+
+          root /opt/app-root/src;
+          index index.html index.htm;
+
           include /etc/nginx/mime.types;
           add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
           add_header X-XSS-Protection "1; mode=block" always;
@@ -227,85 +328,57 @@ objects:
           gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
           location / {
-              try_files $uri $uri/ /index.html$args;
+            try_files $uri $uri/ /index.html$args;
           }
           location /api/docman/ {
-              proxy_pass http://${SVC_NAME}-document-manager:6001/;
+            proxy_pass http://document-manager:6001;
           }
           location /api/v1/ {
-              proxy_pass http://${SVC_NAME}-webapi:8080/api/;
+            proxy_pass http://dotnet-webapi:8080/api/;
           }
+          location /nginx_status {
+            # Enable Nginx stats
+            stub_status on;
+            # Only allow access from localhost
+            allow 127.0.0.1;
+            # Other request should be denied
+            deny all;
+            # No need to log this request, its just noise
+            access_log on;
+          }
+        }
+        server {
+          # Block for API end-points that require a client certificate (Multual Authentication)
+          listen 8890 ssl;
+          server_name *.gov.bc.ca;
+          ssl_password_file certs/passwd.txt;
+          ssl_certificate certs/chained.crt;
+          ssl_certificate_key certs/private.key;
+          server_tokens off;
+          # `ssl_verify_client` should be `on` in production
+          ssl_verify_client optional_no_ca;
+          root /opt/app-root/src;
+          index index.html index.htm;
+
+          include /etc/nginx/mime.types;
+          # add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
+          # add_header X-XSS-Protection "1; mode=block" always;
+          # add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
+          add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
+          add_header X-Content-Type-Options "nosniff" always;
+          # add_header Referrer-Policy "no-referrer-when-downgrade";
+          gzip on;
+          gzip_min_length 1000;
+          gzip_proxied expired no-cache no-store private auth;
+          gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
           location /api/v1/PLRHL7 {
-              proxy_pass http://${SVC_NAME}-webapi:8080/api/PLRHL7;
-              proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
+            proxy_pass http://$SVC_NAME-webapi:8080/api/PLRHL7;
+            proxy_set_header X-SSL-CERT $ssl_client_escaped_cert;
           }
+        }
       }
-      server {
-        listen 8443 ssl;
-        server_name *.gov.bc.ca;
-        ssl_password_file certs/passwd.txt;
-        ssl_certificate certs/chained.crt;
-        ssl_certificate_key certs/private.key;
-        server_tokens off;
-        #    ssl_verify_client   optional_no_ca;
-        root   /opt/app-root/src;
-        index index.html index.htm;
-        include /etc/nginx/mime.types;
-        add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header Referrer-Policy "no-referrer-when-downgrade";
-        gzip on;
-        gzip_min_length 1000;
-        gzip_proxied expired no-cache no-store private auth;
-        gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
-        location / {
-          try_files $uri $uri/ /index.html$args;
-        }
-        # location /api/docman/ {
-        #   proxy_pass http://${SVC_NAME}-document-manager:6001/;
-        # }
-        location /api/v1/ {
-          proxy_pass http://${SVC_NAME}-webapi:8080/api/;
-        }
-        location /api/v1/PLRHL7 {
-          proxy_pass http://${SVC_NAME}-webapi:8080/api/PLRHL7;
-          #        proxy_set_header  X-SSL-CERT $ssl_client_escaped_cert;
-        }
-      }
-      server {
-        # Block for API end-points that require a client certificate (Mutual Authentication)
-        listen 8890 ssl;
-        server_name *.gov.bc.ca;
-        ssl_password_file certs/passwd.txt;
-        ssl_certificate certs/chained.crt;
-        ssl_certificate_key certs/private.key;
-        server_tokens off;
-        # `ssl_verify_client` should be `on` in production
-        ssl_verify_client optional_no_ca;
-        ssl_client_certificate certs/plr/trusted-ca-certs.pem;
-        root   /opt/app-root/src;
-        index index.html index.htm;
-        include /etc/nginx/mime.types;
-        # add_header X-Frame-Options "ALLOW-FROM dev.oidc.gov.bc.ca" always;
-        # add_header X-XSS-Protection "1; mode=block" always;
-        # add_header Content-Security-Policy "frame-ancestors 'self'  dev.oidc.gov.bc.ca; style-src 'unsafe-inline' 'self' https://fonts.googleapis.com https://fonts.gstatic.com ; font-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com" always;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubdomains; preload" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        # add_header Referrer-Policy "no-referrer-when-downgrade";
-        gzip on;
-        gzip_min_length 1000;
-        gzip_proxied expired no-cache no-store private auth;
-        gzip_types text/plain text/css application/json application/javascript application/x-javascript text/xml application/xml application/xml+rss text/javascript;
-
-        location /api/v1/PLRHL7 {
-          proxy_pass http://${SVC_NAME}-webapi:8080/api/PLRHL7;
-          proxy_set_header X-SSL-CERT $ssl_client_escaped_cert;
-        }
-      }
 
 
 #   Frontend Service
@@ -313,7 +386,7 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -332,7 +405,7 @@ objects:
         port: 8890
         targetPort: 8890
     selector:
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
 #   Ingress
 - apiVersion: networking.k8s.io/v1
   kind: Ingress
@@ -380,7 +453,7 @@ objects:
     host: ${SVC_NAME}-mutualauth${URL_STUB}
     to:
       kind: Service
-      name: ${SVC_NAME}-${FRONTEND_POD}
+      name: ${SVC_NAME}-frontend
       weight: 100
     port:
       targetPort: 8890
@@ -400,8 +473,8 @@ objects:
     annotations:
       app.openshift.io/connects-to: >-
         ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${DOCMAN_POD}"}]"]
-    name: ${SVC_NAME}-${API_POD}
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-document-manager"}]"]
+    name: ${SVC_NAME}-webapi
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -410,7 +483,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-webapi
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -419,10 +492,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${API_POD}
+          name: ${SVC_NAME}-webapi
       spec:
         containers:
-          - name: ${SVC_NAME}-${API_POD}
+          - name: ${SVC_NAME}-webapi
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
             env:
@@ -432,7 +505,7 @@ objects:
                     name: document-manager
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
-                value: http://${SVC_NAME}-${DOCMAN_POD}:6001
+                value: http://${SVC_NAME}-document-manager:6001
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
@@ -452,10 +525,7 @@ objects:
                     name: ${SVC_NAME}-postgres
                     key: database-password
               - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -526,7 +596,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${API_POD}
+            - ${SVC_NAME}-webapi
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -537,7 +607,7 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${API_POD}
+    name: ${SVC_NAME}-webapi
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -547,7 +617,7 @@ objects:
         port: 8080
         targetPort: 8080
     selector:
-      name: ${SVC_NAME}-${API_POD}
+      name: ${SVC_NAME}-webapi
 
 ###########################################
 ###      Document Manager (backend)     ###
@@ -557,19 +627,19 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}
+    name: ${SVC_NAME}-document-manager
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-redis"}]
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}
+      name: ${SVC_NAME}-document-manager
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -578,15 +648,15 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}
+          name: ${SVC_NAME}-document-manager
       spec:
         containers:
-          - name: ${SVC_NAME}-${DOCMAN_POD}
+          - name: ${SVC_NAME}-document-manager
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
               - name: CACHE_REDIS_HOST
-                value: ${SVC_NAME}-${REDIS_POD}
+                value: ${SVC_NAME}-redis
               - name: CACHE_REDIS_PASS
                 valueFrom:
                   secretKeyRef:
@@ -653,7 +723,7 @@ objects:
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
-                name: ${SVC_NAME}-${DOCMAN_POD}-data
+                name: ${SVC_NAME}-document-manager-data
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -672,9 +742,9 @@ objects:
               initialDelaySeconds: 5
               periodSeconds: 5
         volumes:
-          - name: ${SVC_NAME}-${DOCMAN_POD}-data
+          - name: ${SVC_NAME}-document-manager-data
             emptyDir: {}
-          - name: ${SVC_NAME}-${DOCMAN_POD}-run
+          - name: ${SVC_NAME}-document-manager-run
             emptyDir: {}
     triggers:
       - type: ConfigChange
@@ -682,7 +752,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}
+            - ${SVC_NAME}-document-manager
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -693,17 +763,17 @@ objects:
   kind: Service
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}
+    name: ${SVC_NAME}-document-manager
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
     ports:
-      - name: "${SVC_NAME}-${DOCMAN_POD}"
+      - name: "${SVC_NAME}-document-manager"
         port: 6001
         targetPort: 6001
     selector:
-      name: ${SVC_NAME}-${DOCMAN_POD}
+      name: ${SVC_NAME}-document-manager
 
 ###########################################
 ###     Document Manager (Migration)    ###
@@ -716,25 +786,25 @@ objects:
   kind: Job
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${DOCMAN_POD}-migration
+    name: ${SVC_NAME}-document-manager-migration
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${REDIS_POD}"}]
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-redis"}]
   spec:
     ttlSecondsAfterFinished: 100
     template:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${DOCMAN_POD}-migration
+          name: ${SVC_NAME}-document-manager-migration
       spec:
         restartPolicy: OnFailure
         containers:
-        - name: ${SVC_NAME}-${DOCMAN_POD}-migration
+        - name: ${SVC_NAME}-document-manager-migration
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
           command:
@@ -745,7 +815,7 @@ objects:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
-              value: ${SVC_NAME}-${REDIS_POD}
+              value: ${SVC_NAME}-redis
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
@@ -758,12 +828,12 @@ objects:
             - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-name
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
             - name: DB_PORT
               valueFrom:
@@ -773,7 +843,7 @@ objects:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-user
             - name: FLASK_ENV
               valueFrom:
@@ -808,7 +878,7 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
     triggers:
       - type: ConfigChange
@@ -816,7 +886,7 @@ objects:
         imageChangeParams:
           automatic: true
           containerNames:
-            - ${SVC_NAME}-${DOCMAN_POD}-migration
+            - ${SVC_NAME}-document-manager-migration
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -859,18 +929,15 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
@@ -912,23 +979,6 @@ objects:
           - name: ${SVC_NAME}-postgres-data
             emptyDir: {}
 
-#   PostgreSQL Secret
-- apiVersion: v1
-  kind: Secret
-  metadata:
-    annotations:
-      template.openshift.io/expose-database_name: '{.data[''database-name'']}'
-      template.openshift.io/expose-password: '{.data[''database-password'']}'
-      template.openshift.io/expose-username: '{.data[''database-user'']}'
-    name: ${SVC_NAME}-postgres
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-  stringData:
-    admin-password: ${POSTGRESQL_ADMIN_PASSWORD}
-    database-name: prime-${SVC_NAME}
-    database-password: ${POSTGRESQL_PASSWORD}
-    database-user: prime-user
-
 #   PostgreSQL Service
 - apiVersion: v1
   kind: Service
@@ -960,7 +1010,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${REDIS_POD}
+    name: ${SVC_NAME}-redis
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -969,7 +1019,7 @@ objects:
     completionDeadlineSeconds: 1200
     replicas: 1
     selector:
-      name: ${SVC_NAME}-${REDIS_POD}
+      name: ${SVC_NAME}-redis
     strategy:
       type: Recreate
       maxSurge: 50%
@@ -981,10 +1031,10 @@ objects:
       metadata:
         labels:
           dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-${REDIS_POD}
+          name: ${SVC_NAME}-redis
       spec:
         volumes:
-          - name: ${SVC_NAME}-${REDIS_POD}-data
+          - name: ${SVC_NAME}-redis-data
             emptyDir: {}
         containers:
           - resources:
@@ -1042,7 +1092,7 @@ objects:
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${SVC_NAME}-${REDIS_POD}
+    name: ${SVC_NAME}-redis
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -1053,4 +1103,4 @@ objects:
         port: 6379
         targetPort: 6379
     selector:
-      name: ${SVC_NAME}-${REDIS_POD}
+      name: ${SVC_NAME}-redis

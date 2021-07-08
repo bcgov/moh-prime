@@ -49,14 +49,10 @@ FROM registry.redhat.io/rhel8/nginx-118
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
 USER 0
-# COPY --from=build-deps /usr/src/app /opt/app-root/
 
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
-# COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
-COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
-RUN sed s/\$SVC_NAME/$SVC_NAME/g /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
-    chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
+
+RUN chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
 
 # Create symlinks to redirect nginx logs to stdout and stderr
 RUN bash -xeu -c 'mkdir -p /var/log/nginx'
