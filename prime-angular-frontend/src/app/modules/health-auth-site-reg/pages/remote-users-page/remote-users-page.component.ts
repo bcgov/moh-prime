@@ -23,6 +23,7 @@ import { RemoteUsersPageFormState } from './remote-users-form-state.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
+// TODO refactor into list/form composite component used in health authority organization information
 @UntilDestroy()
 @Component({
   selector: 'app-remote-users-page',
@@ -86,7 +87,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
-    this.routeUtils.routeRelativeTo(backRoutePath);
+    this.routeUtils.routeRelativeTo(['../', backRoutePath]);
   }
 
   public ngOnInit(): void {
@@ -187,10 +188,11 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected afterSubmitIsSuccessful(): void {
+    // TODO should account for updates which would redirect back to SiteManagement
     const nextRoutePath = (!this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
-    this.routeUtils.routeRelativeTo([nextRoutePath]);
+    this.routeUtils.routeRelativeTo(['../', nextRoutePath]);
   }
 }

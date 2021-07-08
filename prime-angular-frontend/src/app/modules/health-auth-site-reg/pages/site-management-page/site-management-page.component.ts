@@ -65,18 +65,21 @@ export class SiteManagementPageComponent implements OnInit {
 
   public isUnderReview(healthAuthoritySite: HealthAuthoritySite): boolean {
     // TODO what are the status types?
+    // TODO move into template
     // return healthAuthoritySite.submittedDate && healthAuthoritySite.status === SiteStatusType.IN_REVIEW;
     return !!healthAuthoritySite.submittedDate;
   }
 
   public isApproved(healthAuthoritySite: HealthAuthoritySite): boolean {
     // TODO what are the status types?
+    // TODO move into template
     // return healthAuthoritySite.status === SiteStatusType.APPROVED;
     return false;
   }
 
   public isDeclined(healthAuthoritySite: HealthAuthoritySite): boolean {
     // TODO what are the status types?
+    // TODO move into template
     // return healthAuthoritySite.status === SiteStatusType.DECLINED;
     return false;
   }

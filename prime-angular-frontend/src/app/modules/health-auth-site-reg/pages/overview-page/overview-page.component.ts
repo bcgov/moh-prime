@@ -58,7 +58,7 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo([
+    this.routeUtils.routeTo([
       HealthAuthSiteRegRoutes.MODULE_PATH,
       HealthAuthSiteRegRoutes.SITE_MANAGEMENT
     ]);

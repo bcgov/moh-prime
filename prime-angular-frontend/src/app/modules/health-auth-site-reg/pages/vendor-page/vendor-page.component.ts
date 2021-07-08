@@ -49,11 +49,9 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   public onBack() {
-    const backRoutePath = (this.isCompleted)
-      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : ['../../../../', HealthAuthSiteRegRoutes.SITE_MANAGEMENT];
-
-    this.routeUtils.routeRelativeTo(backRoutePath);
+    (this.isCompleted)
+      ? this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW)
+      : this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));
   }
 
   public ngOnInit(): void {
