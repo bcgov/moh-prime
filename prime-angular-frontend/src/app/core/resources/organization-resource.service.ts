@@ -208,7 +208,7 @@ export class OrganizationResource {
     return this.apiResource.post<NoContent>(`organizations/claim/approve`, { organizationId, partyId })
       .pipe(
         NoContentResponse,
-        tap(() => this.toastService.openSuccessToast('Organization Claim has been approved')),
+        tap(() => this.toastService.openSuccessToast('New Signing Authority Approved')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization Claim could not be approved');
           this.logger.error('[Core] OrganizationResource::approveOrganizationClaim error has occurred: ', error);
