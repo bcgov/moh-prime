@@ -41,7 +41,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public viewAuthorizedUser(healthAuthorityId: number) {
+  public viewAuthorizedUser(healthAuthorityId: number): void {
     this.redirectTo(healthAuthorityId, null, HealthAuthSiteRegRoutes.AUTHORIZED_USER);
   }
 

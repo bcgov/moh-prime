@@ -45,7 +45,7 @@ export class HealthAuthCareTypePageComponent extends AbstractEnrolmentPage imple
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public onBack() {
+  public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.SITE_INFORMATION;

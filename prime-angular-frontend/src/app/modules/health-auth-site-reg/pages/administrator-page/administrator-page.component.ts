@@ -42,11 +42,11 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+    // TODO revisit passed subject value type
     this.pharmanetAdministrators = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
-  public onBack() {
-    console.log('BACK?');
+  public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.REMOTE_USERS;
@@ -54,13 +54,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = new AdministratorFormState(this.fb);
   }
 

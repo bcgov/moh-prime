@@ -51,7 +51,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     ];
   }
 
-  public onBack() {
+  public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
@@ -59,12 +59,12 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = new SiteAddressFormState(this.fb, this.formUtilsService);
   }
 

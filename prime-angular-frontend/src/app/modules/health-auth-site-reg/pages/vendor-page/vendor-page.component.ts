@@ -48,7 +48,7 @@ export class VendorPageComponent extends AbstractEnrolmentPage implements OnInit
     this.hasNoVendorError = false;
   }
 
-  public onBack() {
+  public onBack(): void {
     (this.isCompleted)
       ? this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW)
       : this.routeUtils.routeTo(HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.SITE_MANAGEMENT));

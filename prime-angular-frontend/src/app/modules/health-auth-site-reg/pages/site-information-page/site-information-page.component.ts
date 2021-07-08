@@ -40,7 +40,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public onBack() {
+  public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.VENDOR;
@@ -53,7 +53,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     this.patchForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.formState = new SiteInformationFormState(this.fb);
   }
 

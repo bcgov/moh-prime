@@ -74,7 +74,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   // TODO remove this method add to allow routing between pages
-  public onSubmit() {
+  public onSubmit(): void {
     this.hasAttemptedSubmission = true;
 
     if (this.checkValidity()) {
@@ -127,7 +127,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       .map((certification: RemoteUserCertification) => +certification.collegeCode);
   }
 
-  public addCertification() {
+  public addCertification(): void {
     const newRemoteUserCertification = this.formState.remoteUserCertificationFormGroup();
     this.remoteUserCertifications.push(newRemoteUserCertification);
   }
@@ -140,20 +140,20 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    *
    * @param index to be removed
    */
-  public removeCertification(index: number) {
+  public removeCertification(index: number): void {
     this.remoteUserCertifications.removeAt(index);
   }
 
-  public onBack() {
+  public onBack(): void {
     this.routeUtils.routeRelativeTo(['./']);
   }
 
-  public collegeFilterPredicate() {
+  public collegeFilterPredicate(): (collegeConfig: CollegeConfig) => boolean {
     return (collegeConfig: CollegeConfig) =>
       (collegeConfig.code === CollegeLicenceClassEnum.CPSBC || collegeConfig.code === CollegeLicenceClassEnum.BCCNM);
   }
 
-  public licenceFilterPredicate() {
+  public licenceFilterPredicate(): (licenceConfig: LicenseConfig) => boolean {
     return (licenceConfig: LicenseConfig) =>
       this.enrolmentService.hasAllowedRemoteAccessLicences(licenceConfig);
   }
@@ -163,7 +163,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     this.patchForm();
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
     this.formState = null;
@@ -249,7 +249,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Removes incomplete certifications from the list in preparation
    * for submission, and allows for an empty list of certifications.
    */
-  private removeIncompleteCertifications(noEmptyCert: boolean = false) {
+  private removeIncompleteCertifications(noEmptyCert: boolean = false): void {
     this.remoteUserCertifications.controls
       .forEach((control: FormGroup, index: number) => {
         // Remove if college code is "None" or the group is invalid

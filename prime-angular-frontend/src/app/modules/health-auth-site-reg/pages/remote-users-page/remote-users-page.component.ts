@@ -68,15 +68,15 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     ];
   }
 
-  public onRemove(index: number) {
+  public onRemove(index: number): void {
     this.formState.remoteUsers.removeAt(index);
   }
 
-  public onEdit(index: number) {
+  public onEdit(index: number): void {
     this.routeUtils.routeRelativeTo([HealthAuthSiteRegRoutes.REMOTE_USERS, index]);
   }
 
-  public onBack() {
+  public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
