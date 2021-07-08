@@ -70,7 +70,11 @@ namespace Prime.Services
             // TODO: Fix "A second operation started on this context before a previous operation completed." error
             var results = task.Result;
 
-            results.ForEach(async r => r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id));
+            results.ForEach(r =>
+            {
+                var task = _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id);
+                r.IsUnderReview = task.Result;
+            });
 
             return results
                 .Select(r => new OrganizationSearchViewModel
@@ -155,7 +159,7 @@ namespace Prime.Services
             _context.OrganizationClaims.Add(organizationCLaim);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Calim Careted");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Claim Created");
 
             return organization;
         }
