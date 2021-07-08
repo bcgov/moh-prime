@@ -285,7 +285,7 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/health-authorities/5/sites/5/finalize
+        // POST: api/health-authorities/5/sites/5/submit
         /// <summary>
         /// Finalizes a specific health authority site.
         /// </summary>

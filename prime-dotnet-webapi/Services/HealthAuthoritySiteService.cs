@@ -156,7 +156,6 @@ namespace Prime.Services
         public async Task SiteSubmissionAsync(int siteId)
         {
             var site = await _context.HealthAuthoritySites
-                .Include(has => has.Status)
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
             // TODO add status change to site (next sprint)
