@@ -220,13 +220,13 @@ jobs:
           REDIRECT_URL: "https://demo.pharmanetenrolment.gov.bc.ca"       
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg JWT_WELL_KNOWN_CONFIG=${{env.$JWT_WELL_KNOWN_CONFIG}} \
-            --build-arg KEYCLOAK_URL=${{env.$KEYCLOAK_URL}} \
-            --build-arg KEYCLOAK_REALM=${{env.$KEYCLOAK_REALM}} \
-            --build-arg KEYCLOAK_CLIENT_ID=${{env.$KEYCLOAK_CLIENT_ID}} \
+            --build-arg JWT_WELL_KNOWN_CONFIG=${{env.JWT_WELL_KNOWN_CONFIG}} \
+            --build-arg KEYCLOAK_URL=${{env.KEYCLOAK_URL}} \
+            --build-arg KEYCLOAK_REALM=${{env.KEYCLOAK_REALM}} \
+            --build-arg KEYCLOAK_CLIENT_ID=${{env.KEYCLOAK_CLIENT_ID}} \
             --build-arg OC_APP=${{secrets.OC_APP}} \
             --build-arg SVC_NAME="demo" \
-            --build-arg REDIRECT_URL=${{env.$REDIRECT_URL}} \
+            --build-arg REDIRECT_URL=${{env.REDIRECT_URL}} \
             $SERVICE_NAME
           docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo
           docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:demo

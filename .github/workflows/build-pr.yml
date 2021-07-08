@@ -287,9 +287,9 @@ jobs:
           file: prime-angular-frontend/openshift.dockerfile
           build-args: |
             JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG
-            KEYCLOAK_URL=${{env.$KEYCLOAK_URL}}
-            KEYCLOAK_REALM=${{env.$KEYCLOAK_REALM}}
-            KEYCLOAK_CLIENT_ID=${{env.$KEYCLOAK_CLIENT_ID}}
+            KEYCLOAK_URL=${{env.KEYCLOAK_URL}}
+            KEYCLOAK_REALM=${{env.KEYCLOAK_REALM}}
+            KEYCLOAK_CLIENT_ID=${{env.KEYCLOAK_CLIENT_ID}}
             OC_APP=${{secrets.OC_APP}}
             SVC_NAME=pr-${{steps.PR.outputs.number}}
             REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
