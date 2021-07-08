@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter, Input, TemplateRef } from '@angular/core';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-summary-card',
@@ -10,7 +11,7 @@ export class SummaryCardComponent implements OnInit {
   @Input() public title: string;
   @Input() public menu: TemplateRef<any>;
   @Input() public menuOutletContext: { [key: string]: any } | null;
-  @Input() public properties: { key: string, value: string }[];
+  @Input() public properties: KeyValue<string, string>[];
   @Input() public actionButtonTitle: string;
   @Input() public actionDisabled: boolean;
 

@@ -77,7 +77,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * @deprecated
    * Use the formState to access the form
    */
-  public form: number;
+  public form: FormGroup;
   /**
    * @description
    * Form state

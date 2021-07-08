@@ -207,7 +207,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload.BusinessHours);
+            // await _healthAuthoritySiteService.UpdateHoursOperationAsync(siteId, payload.BusinessHours);
 
             return NoContent();
         }
@@ -232,7 +232,7 @@ namespace Prime.Controllers
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload.RemoteUsers);
+            // await _healthAuthoritySiteService.UpdateRemoteUsersAsync(siteId, payload.RemoteUsers);
 
             return NoContent();
         }
