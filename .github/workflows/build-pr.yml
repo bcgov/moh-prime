@@ -80,13 +80,13 @@ jobs:
             BUILD_LOGLEVEL=1
             SVC_NAME=pr-${{steps.PR.outputs.number}}
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/test:buildcache
-          cache-to: type=registry,ref=localhost:5000/test:buildcache,mode=max
+          cache-from: type=registry,ref=localhost:5000/docman:buildcache
+          cache-to: type=registry,ref=localhost:5000/docman:buildcache,mode=max
           push: true
 
       - name: Cleanup Docker build cache if any
         run: |
-          docker buildx imagetools inspect localhost:5000/test:buildcache
+          docker buildx imagetools inspect localhost:5000/docman:buildcache
           echo "======================================================"
           docker buildx prune --filter until=72h --keep-storage 5GB -f
 
@@ -182,13 +182,13 @@ jobs:
             POSTGRESQL_DATABASE=prime-dev
             SVC_NAME=pr-${{steps.PR.outputs.number}}
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/test:buildcache
-          cache-to: type=registry,ref=localhost:5000/test:buildcache,mode=max
+          cache-from: type=registry,ref=localhost:5000/webapi:buildcache
+          cache-to: type=registry,ref=localhost:5000/webapi:buildcache,mode=max
           push: true
 
       - name: Cleanup Docker build cache if any
         run: |
-          docker buildx imagetools inspect localhost:5000/test:buildcache
+          docker buildx imagetools inspect localhost:5000/webapi:buildcache
           echo "======================================================"
           docker buildx prune --filter until=72h --keep-storage 5GB -f
 
@@ -294,13 +294,13 @@ jobs:
             SVC_NAME=pr-${{steps.PR.outputs.number}}
             REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/test:buildcache
-          cache-to: type=registry,ref=localhost:5000/test:buildcache,mode=max
+          cache-from: type=registry,ref=localhost:5000/frontend:buildcache
+          cache-to: type=registry,ref=localhost:5000/frontend:buildcache,mode=max
           push: true
 
       - name: Cleanup Docker build cache if any
         run: |
-          docker buildx imagetools inspect localhost:5000/test:buildcache
+          docker buildx imagetools inspect localhost:5000/frontend:buildcache
           echo "======================================================"
           docker buildx prune --filter until=72h --keep-storage 5GB -f
 
