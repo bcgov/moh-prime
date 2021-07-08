@@ -26,11 +26,11 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> SiteExistsAsync(int siteId)
+        public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId);
+                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)

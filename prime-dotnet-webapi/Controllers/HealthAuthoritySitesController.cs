@@ -101,7 +101,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateVendor(int healthAuthorityId, int siteId, HealthAuthoritySiteVendorViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -126,7 +126,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateSiteInfo(int healthAuthorityId, int siteId, HealthAuthoritySiteInfoViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -152,7 +152,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateCareType(int healthAuthorityId, int siteId, HealthAuthoritySiteCareTypeViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -177,7 +177,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateAddress(int healthAuthorityId, int siteId, AddressViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -202,7 +202,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateHoursOperation(int healthAuthorityId, int siteId, HealthAuthoritySiteHoursOperationViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -227,7 +227,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateRemoteUsers(int healthAuthorityId, int siteId, HealthAuthoritySiteRemoteUsersViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
@@ -252,7 +252,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> UpdateAdministrator(int healthAuthorityId, int siteId, HealthAuthoritySiteAdministratorViewModel payload)
         {
-            if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
