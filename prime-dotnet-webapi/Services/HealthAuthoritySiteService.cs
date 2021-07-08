@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
+using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
@@ -24,11 +26,11 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
-        public async Task<bool> SiteExistsAsync(int siteId)
+        public async Task<bool> SiteExistsAsync(int healthAuthorityId, int siteId)
         {
             return await _context.HealthAuthoritySites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id == siteId);
+                .AnyAsync(s => s.Id == siteId && s.HealthAuthorityOrganizationId == healthAuthorityId);
         }
 
         public async Task<HealthAuthoritySiteViewModel> CreateSiteAsync(int healthAuthorityId, int vendorCode)
@@ -98,12 +100,12 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress)
+        public async Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
 
-            site.PhysicalAddress = physicalAddress;
+            site.PhysicalAddress = _mapper.Map<PhysicalAddress>(physicalAddress);
 
             await _context.SaveChangesAsync();
         }
