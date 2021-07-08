@@ -158,7 +158,13 @@ objects:
               readOnly: true
               mountPath: /etc/nginx/conf.d/prime.conf
               subPath: prime.conf
-            resources: {}
+            resources:
+              requests:
+                memory: "50Mi"
+                cpu: "50m"
+              limits:
+                memory: "128Mi"
+                cpu: "100m"
             envFrom:
               - configMapRef:
                   name: keycloak
@@ -312,6 +318,13 @@ objects:
           - name: ${SVC_NAME}-webapi
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+            resources:
+              requests:
+                memory: "400Mi"
+                cpu: "10m"
+              limits:
+                memory: "1Gi"
+                cpu: "100m"
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
