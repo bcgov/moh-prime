@@ -60,7 +60,8 @@ namespace Prime.HttpClients.Mail
                 return Enumerable.Empty<string>();
             }
 
-            var emails = emailString.Split(",");
+            var emails = emailString.Split(",")
+                .Select(s => s.Trim());
             if (emails.All(e => IsValidEmail(e)))
             {
                 return emails;

@@ -12,4 +12,39 @@ export class ArrayUtils {
   public static insertIf(condition: any, ...elements: any[]): any[] {
     return (condition) ? [].concat(...elements) : [];
   }
+
+  /**
+   * @description
+   * Find the intersection between two arrays.
+   */
+  public static intersection<T>(arrX: T[], arrY: T[]) {
+    return arrX.filter(x => arrY.includes(x));
+  }
+
+  /**
+   * @description
+   * Find the difference between two arrays.
+   */
+  public static difference<T>(arrX: T[], arrY: T[]) {
+    return arrX.filter(x => !arrY.includes(x));
+  }
+
+  /**
+   * @description
+   * Find the union between two arrays.
+   */
+  public static union<T>(arrX: T[], arrY: T[]) {
+    return arrX.concat(arrY);
+  }
+
+  /**
+   * @description
+   * Find outer-section between two arrays.
+   */
+  public static symmetricDifference<T>(arrX: T[], arrY: T[]) {
+    return arrX
+      .filter(x => !arrY.includes(x))
+      .concat(
+        arrY.filter(y => !arrX.includes(y)));
+  }
 }

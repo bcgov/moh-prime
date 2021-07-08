@@ -11,7 +11,7 @@ import { BannerResourceService } from '@shared/services/banner-resource.service'
   styleUrls: ['./banner.component.scss']
 })
 export class BannerComponent implements OnInit {
-  public banner: Banner;
+  public banners: Banner[];
   public locationCode: BannerLocationCode;
 
   constructor(
@@ -22,22 +22,26 @@ export class BannerComponent implements OnInit {
 
   }
 
-  public get type() {
-    return (this.banner)
-      ? BannerType[this.banner.bannerType]?.toLowerCase()
+  public type(banner: Banner) {
+    return (banner)
+      ? BannerType[banner.bannerType]?.toLowerCase()
       : null;
   }
 
   public ngOnInit(): void {
-    this.getBanner();
+    this.getBanners();
   }
 
-  private getBanner(): void {
+  private getBanners(): void {
     if (!this.locationCode) {
       return;
     }
 
-    this.bannerResource.getActiveBannerByLocationCode(this.locationCode)
-      .subscribe((banner: Banner) => this.banner = banner);
+    this.bannerResource.getActiveBannersByLocationCode(this.locationCode)
+      .subscribe((banners: Banner[]) => this.banners = this.sortByUrgancy(banners));
+  }
+
+  private sortByUrgancy(banners: Banner[]): Banner[] {
+    return banners.sort((a: Banner, b: Banner) => b.bannerType - a.bannerType);
   }
 }
