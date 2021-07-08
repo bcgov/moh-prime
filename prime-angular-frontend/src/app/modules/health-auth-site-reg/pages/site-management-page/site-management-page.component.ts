@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -31,6 +31,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 @Component({
   selector: 'app-site-management-page',
@@ -41,6 +42,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public healthAuthority: HealthAuthority;
+  public healthAuthoritySites: HealthAuthoritySite[];
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
   public SiteRoutes = HealthAuthSiteRegRoutes;
@@ -174,8 +176,10 @@ export class SiteManagementPageComponent implements OnInit {
     const healthAuthorityId = this.authorizedUserService.authorizedUser.healthAuthorityCode;
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthorityId)
       .pipe(
-        map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority)
-      ).subscribe();
+        map((healthAuthority: HealthAuthority) => this.healthAuthority = healthAuthority),
+        exhaustMap((healthAuthority: HealthAuthority) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
+      )
+      .subscribe((healthAuthoritySites: HealthAuthoritySite[]) => this.healthAuthoritySites = healthAuthoritySites);
   }
 
   private redirectToSite(healthAuthId: number, healthAuthSiteId: number): void {
