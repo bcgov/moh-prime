@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Prime.Auth;
 using Prime.Services;
 using Prime.Models.HealthAuthorities;
+using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Controllers
@@ -174,14 +175,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateAddress(int healthAuthorityId, int siteId, HealthAuthoritySiteAddressViewModel payload)
+        public async Task<ActionResult> UpdateAddress(int healthAuthorityId, int siteId, AddressViewModel payload)
         {
             if (!await _healthAuthoritySiteService.SiteExistsAsync(siteId))
             {
                 return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload.PhysicalAddress);
+            await _healthAuthoritySiteService.UpdatePhysicalAddressAsync(siteId, payload);
 
             return NoContent();
         }

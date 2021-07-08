@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Services
@@ -19,7 +20,7 @@ namespace Prime.Services
         // TODO should we use a relationship or direct data type?
         // Task UpdateCareTypeAsync(int siteId, int healthAuthorityCareTypeId);
         Task UpdateCareTypeAsync(int siteId, string careType);
-        Task UpdatePhysicalAddressAsync(int siteId, PhysicalAddress physicalAddress);
+        Task UpdatePhysicalAddressAsync(int siteId, AddressViewModel physicalAddress);
         Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
         Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
         // TODO should we use a relationship or direct data type?
