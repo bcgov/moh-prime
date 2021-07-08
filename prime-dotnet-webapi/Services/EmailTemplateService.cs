@@ -23,9 +23,17 @@ namespace Prime.Services
             _mapper = mapper;
         }
 
+        public async Task<bool> EmailTemplateExistsAsync(int id)
+        {
+            return await _context.EmailTemplates
+                .AsNoTracking()
+                .AnyAsync(e => e.Id == id);
+        }
+
         public async Task<EmailTemplate> GetEmailTemplateByTypeAsync(EmailTemplateType type)
         {
-            return await _context.EmailTemplates.Where(t => t.EmailType == type).SingleOrDefaultAsync();
+            return await _context.EmailTemplates
+                .SingleOrDefaultAsync(t => t.EmailType == type);
         }
 
         public async Task<IEnumerable<EmailTemplateListViewModel>> GetEmailTemplatesAsync()
@@ -54,13 +62,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<EmailTemplateViewModel>(emailTemplate);
-        }
-
-        public async Task<bool> EmailTemplateExistsAsync(int id)
-        {
-            return await _context.EmailTemplates
-                .AsNoTracking()
-                .AnyAsync(e => e.Id == id);
         }
     }
 }
