@@ -517,12 +517,12 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: POSTGRESQL_DATABASE
                 value: prime-${SVC_NAME}
@@ -667,21 +667,18 @@ objects:
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: DB_PORT
                 value: "5432"
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-user
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
@@ -718,7 +715,7 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
             volumeMounts:
             # Mount Document Manager to PVC
@@ -826,10 +823,7 @@ objects:
             - name: DB_HOST
               value: ${SVC_NAME}-postgres
             - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: pr-database-secrets
-                  key: database-name
+              value: prime-${SVC_NAME}
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
