@@ -29,7 +29,7 @@ on:
 #       - 'develop'
 
 jobs:
-  build-document-manager-backend:
+  build-document-manager:
     runs-on: ubuntu-20.04
     environment: Development
     env:
@@ -40,6 +40,20 @@ jobs:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+          ${{ runner.os }}-buildx-
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
         with:
@@ -54,30 +68,55 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build, tag and push Document Manager image"
-        id: build-image
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          BUILD_LOGLEVEL: 2
-        run: |
-          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
-            --build-arg SVC_NAME="dev" \
-            $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      - name: "Build and Push: Document Manager"
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: document-manager/backend
+          file: document-manager/backend/openshift.dockerfile
+          build-args: |
+            BUILD_LOGLEVEL=$BUILD_LOGLEVEL
+            SVC_NAME="dev"
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:dev
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          push: true
 
-  build-backend:
+      # - name: "Build, tag and push Document Manager image"
+      #   id: build-image
+      #   env:
+      #     COMPOSE_DOCKER_CLI_BUILD: 1
+      #     DOCKER_BUILDKIT: 1
+      #     BUILD_LOGLEVEL: 2
+      #   run: |
+      #     docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+      #       --build-arg BUILD_LOGLEVEL=$BUILD_LOGLEVEL \
+      #       --build-arg SVC_NAME="dev" \
+      #       $SERVICE_NAME
+      #     docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      #     docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+
+  build-webapi:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: prime-webapi-backend
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+          ${{ runner.os }}-buildx-
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
         with:
@@ -92,37 +131,58 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build, tag and push .NET web API image"
-        id: build-image
-        env:
-          PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
-          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
+      - name: "Build and Push: Webapi"
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: prime-dotnet-webapi/
+          file: prime-dotnet-webapi/openshift.dockerfile
+          build-args: |
+            ASPNETCORE_HTTPS_PORT=5001
+            ASPNETCORE_ENVIRONMENT="Development"
+            ASPNETCORE_URLS="http://+:8080"
+            DB_CONNECTION_STRING="host=dev-postgres;port=5432;database=prime-dev;username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
+            DB_HOST=dev-postgres
+            DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
+            PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}}
+            POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}}
+            POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}}
+            POSTGRESQL_DATABASE=prime-dev
+            SVC_NAME="dev"
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:dev
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          push: true
 
-        run: |
-          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
-            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
-            --build-arg ASPNETCORE_URLS="http://+:8080" \
-            --build-arg DB_CONNECTION_STRING="host=dev-postgres-db;port=5432;database=prime-dev;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
-            --build-arg DB_HOST=dev-postgres-db \
-            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
-            --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
-            --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
-            --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
-            --build-arg POSTGRESQL_DATABASE=prime-dev \
-            --build-arg SVC_NAME="dev" \
-            $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      # - name: "Build, tag and push .NET web API image"
+      #   id: build-image
+      #   env:
+      #     PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
+      #     PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
+      #     COMPOSE_DOCKER_CLI_BUILD: 1
+      #     DOCKER_BUILDKIT: 1
+
+      #   run: |
+      #     docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+      #       --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+      #       --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+      #       --build-arg ASPNETCORE_URLS="http://+:8080" \
+      #       --build-arg DB_CONNECTION_STRING="host=dev-postgres-db;port=5432;database=prime-dev;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+      #       --build-arg DB_HOST=dev-postgres-db \
+      #       --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+      #       --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
+      #       --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
+      #       --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
+      #       --build-arg POSTGRESQL_DATABASE=prime-dev \
+      #       --build-arg SVC_NAME="dev" \
+      #       $SERVICE_NAME
+      #     docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      #     docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
 
   build-frontend:
     runs-on: ubuntu-20.04
     environment: Development
     env:
-      SERVICE_NAME: nginx-angular
-      CONTAINER_NAME: prime-frontend
       JWT_WELL_KNOWN_CONFIG: "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
@@ -131,6 +191,20 @@ jobs:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
 
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+          ${{ runner.os }}-buildx-
+      
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+        with:
+          install: true
+
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
         with:
@@ -145,29 +219,48 @@ jobs:
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
-      - name: "Build, tag & push Angular frontend image"
-        id: build-image
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://develop.pharmanetenrolment.gov.bc.ca"
-        run: |
-          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
-            --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
-            --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
-            --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
-            --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-            --build-arg OC_APP=${{secrets.OC_APP}} \
-            --build-arg SVC_NAME="dev" \
-            --build-arg REDIRECT_URL=$REDIRECT_URL \
-            $SERVICE_NAME
-          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
-          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      - name: "Build and Push: Frontend"
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: prime-angular-frontend/
+          file: prime-angular-frontend/openshift.dockerfile
+          build-args: |
+            JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG
+            KEYCLOAK_URL=$KEYCLOAK_URL
+            KEYCLOAK_REALM=$KEYCLOAK_REALM
+            KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
+            OC_APP=${{secrets.OC_APP}}
+            SVC_NAME="dev"
+            REDIRECT_URL="https://develop.pharmanetenrolment.gov.bc.ca"
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:dev
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+          push: true
+
+      # - name: "Build, tag & push Angular frontend image"
+      #   id: build-image
+      #   env:
+      #     COMPOSE_DOCKER_CLI_BUILD: 1
+      #     DOCKER_BUILDKIT: 1
+      #     REDIRECT_URL: "https://develop.pharmanetenrolment.gov.bc.ca"
+      #   run: |
+      #     docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+      #       --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
+      #       --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
+      #       --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
+      #       --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
+      #       --build-arg OC_APP=${{secrets.OC_APP}} \
+      #       --build-arg SVC_NAME="dev" \
+      #       --build-arg REDIRECT_URL=$REDIRECT_URL \
+      #       $SERVICE_NAME
+      #     docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
+      #     docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:dev
 
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [build-document-manager-backend,build-frontend,build-backend]
+    needs: [build-document-manager,build-frontend,build-webapi]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
