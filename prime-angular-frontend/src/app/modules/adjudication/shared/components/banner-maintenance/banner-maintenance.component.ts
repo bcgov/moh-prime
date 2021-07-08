@@ -129,13 +129,13 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
 
   protected createFormInstance(): void {
     this.formState = new BannerMaintenanceFormState(this.fb, this.formUtilsService, this.locationCode);
-  }
 
-  protected patchForm(): void {
     this.formState.title.valueChanges.subscribe(() => this.internalBanner = this.formState.json);
     this.formState.bannerType.valueChanges.subscribe(() => this.internalBanner = this.formState.json);
     this.formState.bannerLocationCode.setValue(this.locationCode);
+  }
 
+  protected patchForm(): void {
     const bannerId = +this.route.snapshot.params.bid;
     if (!bannerId) {
       return;
@@ -146,7 +146,6 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
         this.formState.patchValue(banner);
         this.internalBanner = this.formState.json;
       })
-
   }
 
   protected performSubmission(): Observable<number> {
