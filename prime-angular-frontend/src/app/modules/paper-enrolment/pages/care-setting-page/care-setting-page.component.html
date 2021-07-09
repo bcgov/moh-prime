@@ -16,12 +16,12 @@
 
       <div class="row">
         <div class="col col-sm-10 py-3"
-             formArrayName="careSettings">
+             formArrayName="enrolleeCareSettings">
 
-          <ng-container *ngFor="let careSetting of formState.careSettings.controls; let i = index;"
+          <ng-container *ngFor="let careSetting of formState.enrolleeCareSettings.controls; let i = index;"
                         [formGroupName]="i">
 
-            <app-form-icon-group [show]="formState.careSettings.length > 1"
+            <app-form-icon-group [show]="formState.enrolleeCareSettings.length > 1"
                                  (event)="formState.removeCareSetting(i)">
               <app-form-icon-group>
                 <mat-form-field class="w-100">
@@ -71,6 +71,14 @@
               {{ healthAuthorities[i].name }}
             </mat-checkbox>
           </div>
+          <app-alert *ngIf="hasNoHealthAuthoritiesError"
+                     type="danger"
+                     icon="warning">
+            <ng-container #alertContent
+                          class="alert-content">
+              No health authority has been chosen.
+            </ng-container>
+          </app-alert>
         </div>
       </div>
     </app-page-section>

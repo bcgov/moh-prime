@@ -15,25 +15,28 @@ import { NgxContextualHelpModule } from '@lib/modules/ngx-contextual-help/ngx-co
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentModule } from '@enrolment/enrolment.module';
 import { ConfigService } from '@config/config.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { ActivatedRoute } from '@angular/router';
 
 describe('SelfDeclarationPageComponent', () => {
   let component: SelfDeclarationPageComponent;
   let fixture: ComponentFixture<SelfDeclarationPageComponent>;
+  const mockActivatedRoute = {
+    snapshot: { params: { eid: 1 } }
+  };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule(
       {
+        declarations: [SelfDeclarationPageComponent],
         imports: [
           HttpClientTestingModule,
           NgxBusyModule,
           NgxContextualHelpModule,
           NgxMaterialModule,
           ReactiveFormsModule,
-          RouterTestingModule,
-          EnrolmentModule
+          RouterTestingModule
         ],
         providers: [
           {
@@ -51,6 +54,10 @@ describe('SelfDeclarationPageComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: ActivatedRoute,
+            useValue: mockActivatedRoute
           },
           KeycloakService
         ]

@@ -1,0 +1,30 @@
+<app-page mode="full"
+          [busy]="busy"
+          [showToolbar]="true"
+          (back)="onBack()">
+  <app-page-header>TOA Maintenance</app-page-header>
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>View TOA</ng-container>
+    <ng-container appPageSubheaderSummary>
+      Select what TOA you would like to view
+    </ng-container>
+  </app-page-subheader>
+
+  <div class="container-fluid">
+    <div class="row">
+      <ng-container *ngFor="let version of orgAgreementVersions">
+        <div class="col-md-6 col-sm-12">
+          <app-summary-card class=""
+                            icon="gavel"
+                            [title]="AgreementType[version.agreementType] | replace: '_':' ' | capitalize: true"
+                            [properties]="getToaCardProperties(version)"
+                            actionButtonTitle="View"
+                            [actionDisabled]="false"
+                            (action)="onView(version.id)">
+          </app-summary-card>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+</app-page>

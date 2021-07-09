@@ -45,6 +45,10 @@ import { TechnicalSupportsPageComponent } from './pages/health-authorities/techn
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
 import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
+import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
+import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
 const routes: Routes = [
   {
@@ -67,9 +71,19 @@ const routes: Routes = [
             data: { title: 'Enrollees' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: EnrolleeBannerPageComponent,
-            data: { title: 'Enrollee Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: EnrolleeBannerListPageComponent,
+                data: { title: 'Enrollee Banners' }
+              },
+              {
+                path: ':bid',
+                component: EnrolleeBannerPageComponent,
+                data: { title: 'Enrollee Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -77,7 +91,7 @@ const routes: Routes = [
               {
                 path: '',
                 component: EnrolleeMaintenancePageComponent,
-                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
+                data: { title: 'Enrollee Maintenance' }
               },
               {
                 path: AdjudicationRoutes.NOTIFICATION_EMAILS,
@@ -187,9 +201,19 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: SiteBannerPageComponent,
-            data: { title: 'Site Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: SiteBannerListPageComponent,
+                data: { title: 'Site Banners' }
+              },
+              {
+                path: ':bid',
+                component: SiteBannerPageComponent,
+                data: { title: 'Site Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -214,6 +238,21 @@ const routes: Routes = [
                   },
                 ]
               },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: OrganizationToaMaintenanceListPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: OrganizationToaMaintenanceViewPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                ]
+              }
             ]
           },
           {
@@ -346,4 +385,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }

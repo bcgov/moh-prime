@@ -12,7 +12,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -46,7 +46,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public hasNoUploadError: boolean;
 
   // Allow the use of enum in the component template
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
   public EnrolleeClassification = EnrolleeClassification;
   public IdentityProviderEnum = IdentityProviderEnum;
 
