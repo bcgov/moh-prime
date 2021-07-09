@@ -1,23 +1,21 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { ApiResource } from '@core/resources/api-resource.service';
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoggerResource {
   constructor(
-    private apiResource: ApiResource,
+    @Inject(APP_CONFIG) private config: AppConfig,
+    private http: HttpClient
   ) { }
 
-  public createErrorLog(log: string): Observable<void> {
-    const payload = { data: log };
-    return this.apiResource.post(`logs/error`, payload)
-      .pipe(
-        map((response: ApiHttpResponse<void>) => response.result),
-      );
+  public createErrorLog(log: { msg: string, data: string }): Observable<HttpResponse<any>> {
+    return this.http
+      .post(`${this.config.apiEndpoint}/logs/error`, log, { observe: 'response' });
   }
+
 }

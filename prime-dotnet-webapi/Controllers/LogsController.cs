@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Services;
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
@@ -28,7 +29,7 @@ namespace Prime.Controllers
         [HttpPost("error", Name = nameof(CreateErrorLog))]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> CreateErrorLog(FromBodyText log)
+        public async Task<ActionResult> CreateErrorLog(FrontEndLogViewModel log)
         {
             await _logService.CreateLogAsync(LogType.Error, log);
             return NoContent();

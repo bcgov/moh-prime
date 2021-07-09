@@ -41,7 +41,7 @@ export class LoggerService {
    */
   public error(msg: string, ...data: any[]) {
     this.print('error', { msg, data });
-    this.loggerResource.createErrorLog(msg).subscribe();
+    this.loggerResource.createErrorLog({ msg, data: JSON.stringify(data) }).subscribe();
   }
 
   /**

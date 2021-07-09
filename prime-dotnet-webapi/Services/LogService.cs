@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -12,12 +13,13 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task CreateLogAsync(LogType logType, string log)
+        public async Task CreateLogAsync(LogType logType, FrontEndLogViewModel log)
         {
             var newLog = new FrontEndLog
             {
                 LogType = logType,
-                Log = log
+                Msg = log.Msg,
+                Data = log.Data
             };
             _context.FrontEndLogs.Add(newLog);
 

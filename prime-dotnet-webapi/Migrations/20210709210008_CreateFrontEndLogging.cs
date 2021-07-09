@@ -1,0 +1,37 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
+namespace Prime.Migrations
+{
+    public partial class CreateFrontEndLogging : Migration
+    {
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "FrontEndLog",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    Msg = table.Column<string>(nullable: false),
+                    Data = table.Column<string>(nullable: true),
+                    LogType = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FrontEndLog", x => x.Id);
+                });
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "FrontEndLog");
+        }
+    }
+}
