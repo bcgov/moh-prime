@@ -4,6 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { CareSettingForm } from './care-setting-form.model';
 
 @Component({
   selector: 'app-care-setting-overview',
@@ -20,7 +21,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
         </button>
       </app-page-subheader>
 
-      <ng-container *ngFor="let careSetting of careSettings">
+      <ng-container *ngFor="let careSetting of careSettings?.enrolleeCareSettings">
 
         <app-enrollee-property title="Care Setting"
                                [makeBold]="true">
@@ -29,14 +30,14 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
       </ng-container>
 
-      <app-enrollee-property *ngIf="!careSettings?.length"
+      <app-enrollee-property *ngIf="!careSettings?.enrolleeCareSettings.length"
                              title="Care Setting"
                              [makeBold]="true">
         None
       </app-enrollee-property>
     </app-page-section>
 
-    <app-page-section *ngIf="healthAuthorities?.length">
+    <app-page-section *ngIf="careSettings?.enrolleeHealthAuthorities.length">
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Health Authority</ng-container>
 
@@ -48,7 +49,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
         </button>
       </app-page-subheader>
 
-      <ng-container *ngFor="let healthAuthority of healthAuthorities">
+      <ng-container *ngFor="let healthAuthority of careSettings?.enrolleeHealthAuthorities">
         <app-enrollee-property title="Health Authority"
                                [makeBold]="true">
           <div class="mb-3">{{ healthAuthority.healthAuthorityCode | configCode: 'healthAuthorities' }}</div>
@@ -61,8 +62,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 })
 export class CareSettingOverviewComponent implements OnInit {
 
-  @Input() careSettings = [];
-  @Input() healthAuthorities = [];
+  @Input() careSettings: CareSettingForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
@@ -74,6 +74,7 @@ export class CareSettingOverviewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    // console.log(`caresettings ${this.careSettings}`);
   }
 
   public onRoute(routePath: string | string[]) {
