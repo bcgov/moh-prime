@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -57,8 +57,8 @@ import { CareSettingForm } from './care-setting-form.model';
       </ng-container>
     </app-page-section>
   `,
-  styles: [
-  ]
+  styles: [],
+  encapsulation: ViewEncapsulation.None
 })
 export class CareSettingOverviewComponent implements OnInit {
 
