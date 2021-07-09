@@ -6,8 +6,6 @@ import { Subscription } from 'rxjs';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { EmailTemplate } from '@adjudication/shared/models/email-template.model';
-import { EmailTemplateResourceService } from '@adjudication/shared/services/email-template-resource.service';
 
 @Component({
   selector: 'app-email-notification-view-page',
@@ -16,12 +14,10 @@ import { EmailTemplateResourceService } from '@adjudication/shared/services/emai
 })
 export class EmailNotificationViewPageComponent implements OnInit {
   public busy: Subscription;
-  public template: EmailTemplate;
 
   private routeUtils: RouteUtils;
 
   constructor(
-    private emailTemplateResource: EmailTemplateResourceService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -32,13 +28,6 @@ export class EmailNotificationViewPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.NOTIFICATION_EMAILS]);
   }
 
-  public ngOnInit(): void {
-    this.getEmailTemplate();
-  }
+  public ngOnInit(): void { }
 
-  public getEmailTemplate() {
-    //TODO: Future filter by url for either enrollee or site
-    this.busy = this.emailTemplateResource.getEmailTemplate(this.route.snapshot.params.eid)
-      .subscribe(template => this.template = template);
-  }
 }

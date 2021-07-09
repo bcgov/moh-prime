@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
@@ -40,8 +40,8 @@ export class EnrolleeEnrolmentsComponent implements OnInit {
   public isUnderAdjudication(enrollee: EnrolleeListViewModel): boolean {
     const currentStatusCode = enrollee?.currentStatusCode;
     const previousStatusCode = enrollee?.previousStatus?.statusCode;
-    return [EnrolmentStatus.UNDER_REVIEW, EnrolmentStatus.REQUIRES_TOA].includes(currentStatusCode) ||
-      (currentStatusCode === EnrolmentStatus.EDITABLE && previousStatusCode === EnrolmentStatus.UNDER_REVIEW);
+    return [EnrolmentStatusEnum.UNDER_REVIEW, EnrolmentStatusEnum.REQUIRES_TOA].includes(currentStatusCode) ||
+      (currentStatusCode === EnrolmentStatusEnum.EDITABLE && previousStatusCode === EnrolmentStatusEnum.UNDER_REVIEW);
   }
 
   public onAction() {

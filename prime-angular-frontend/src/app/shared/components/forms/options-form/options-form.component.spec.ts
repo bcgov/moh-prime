@@ -60,7 +60,7 @@ describe('OptionsFormComponent', () => {
       component = fixture.componentInstance;
       // Add the bound FormGroup to the component
       // component.form = enrolmentFormStateService.buildJobForm();
-      component.jobNames = new BehaviorSubject(configService.jobNames);
+      // component.jobNames = new BehaviorSubject(configService.jobNames);
       fixture.detectChanges();
     }
   ));
