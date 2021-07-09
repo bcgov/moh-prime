@@ -449,8 +449,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.enrolleeNavigation =
           [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
           AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
-          AdjudicationRoutes.EVENT_LOG,
-          AdjudicationRoutes.ADJUDICATOR_NOTES]
+          AdjudicationRoutes.EVENT_LOG]
             .includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
       });
   }
@@ -525,6 +524,8 @@ export class AdjudicationContainerComponent implements OnInit {
       alwaysManual,
       enrolleeRemoteUsers,
       enrolleeCareSettings,
+      requiresConfirmation,
+      confirmed
     } = enrollee;
 
     return {
@@ -546,8 +547,8 @@ export class AdjudicationContainerComponent implements OnInit {
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
-      requiresConfirmation: false,
-      confirmed: false
+      requiresConfirmation,
+      confirmed,
     };
   }
 }
