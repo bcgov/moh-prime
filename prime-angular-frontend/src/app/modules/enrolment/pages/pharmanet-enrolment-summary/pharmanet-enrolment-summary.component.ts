@@ -19,7 +19,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -31,7 +31,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public enrolment: Enrolment;
 
   public CareSettingEnum = CareSettingEnum;
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
