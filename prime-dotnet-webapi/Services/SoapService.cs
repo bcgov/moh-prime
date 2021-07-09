@@ -48,20 +48,20 @@ namespace Prime.Services
 
         public async Task AddBcProviderAsync()
         {
-            _logger.LogInformation("Add BC Provider");
+            _logger.LogInformation("Add BC Provider message received.");
 
             var plrProvider = ReadDistributionMessage(DocumentRoot.ToString());
             var objectId = await _dbService.CreateOrUpdatePlrProviderAsync(plrProvider);
-            _logger.LogDebug("objectId=" + objectId);
+            _logger.LogDebug("Id of row created: " + objectId);
         }
 
         public async Task UpdateBcProviderAsync()
         {
-            _logger.LogInformation("Update BC Provider");
+            _logger.LogInformation("Update BC Provider message received.");
 
             var plrProvider = ReadDistributionMessage(DocumentRoot.ToString());
             var objectId = await _dbService.CreateOrUpdatePlrProviderAsync(plrProvider, true);
-            _logger.LogDebug("objectId=" + objectId);
+            _logger.LogDebug("Id of row updated: " + objectId);
 
         }
 
@@ -89,12 +89,13 @@ namespace Prime.Services
                 _logger.LogError("Mandatory IPC was not found for the message '{id}'", messageId);
                 throw new ArgumentNullException("IPC missing.");
             }
+            _logger.LogInformation($"Message received with ID {messageId} for provider with IPC of {internalProviderCode}.");
 
             // Ignore CPN, IPC, and MPID respectively
             const string nonCollegeIdXPathExpr = "not (@root='2.16.840.1.113883.3.40.2.3') and not (@root='2.16.840.1.113883.3.40.2.8') and not (@root='2.16.840.1.113883.3.40.2.11')";
             const string postalWorkplaceUseExpr = "@use='PST WP'";
             var result = new PlrProvider();
-            // Not using C# object initializer syntax due to complexity
+            // Not using C# object initializer syntax due to complexity of following statements
 
             // Primary attributes for PRIME
             result.Ipc = internalProviderCode;
@@ -212,7 +213,7 @@ namespace Prime.Services
             XmlNode node = documentRoot.SelectSingleNode(xPath, _nsManager);
             if (node != null)
             {
-                _logger.LogInformation(node.InnerXml);
+                _logger.LogDebug(node.InnerXml);
                 return node.InnerXml;
             }
             else
@@ -230,7 +231,7 @@ namespace Prime.Services
                 List<string> results = new List<string>();
                 foreach (XmlNode node in nodes)
                 {
-                    _logger.LogInformation(node.InnerXml);
+                    _logger.LogDebug(node.InnerXml);
                     results.Add(node.InnerXml);
                 }
                 return results.ToArray();
