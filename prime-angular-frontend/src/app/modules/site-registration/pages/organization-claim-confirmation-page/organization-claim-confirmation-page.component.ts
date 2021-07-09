@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { RouteUtils } from '@lib/utils/route-utils.class';
-
-import { OrganizationService } from '@registration/shared/services/organization.service';
-import { SiteRoutes } from '@registration/site-registration.routes';
-
 @Component({
   selector: 'app-organization-claim-confirmation-page',
   templateUrl: './organization-claim-confirmation-page.component.html',

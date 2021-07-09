@@ -128,10 +128,21 @@ export class OrganizationGuard extends BaseGuard {
    * registration has not been completed.
    */
   private manageNoOrganizationRouting(routePath: string, queryParams: Params) {
-    // First time check, confirm whether to claim existing organization
-    if (queryParams?.claimOrg === undefined) {
-      return this.navigate(routePath, SiteRoutes.ORGANIZATION_CLAIM);
-    }
+    this.authService.getUser$()
+      .pipe(
+        exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationClaim({ userId: user.userId }))
+      )
+      .subscribe((result: number) => {
+        // Goto 'next step' page if has existing org claim
+        if (result > 0) {
+          return this.navigate(routePath, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION);
+        }
+        // otherwise goto the claim page for the first time visiter
+        else if (queryParams?.claimOrg === undefined) {
+          return this.navigate(routePath, SiteRoutes.ORGANIZATION_CLAIM);
+        }
+      });
+
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
     return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY, 0, queryParams);

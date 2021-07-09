@@ -56,7 +56,6 @@ const routes: Routes = [
       {
         path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
         component: OrganizationClaimConfirmationPageComponent,
-        canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'Next Steps' }
       },
       {

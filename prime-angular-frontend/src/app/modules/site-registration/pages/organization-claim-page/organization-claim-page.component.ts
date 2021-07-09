@@ -86,16 +86,6 @@ export class OrganizationClaimPageComponent implements OnInit {
   public ngOnInit(): void {
     this.createFormInstance();
     this.isClaimExistingOrg = !!this.formState.json.pec && !!this.formState.json.claimDetail;
-    this.authService.getUser$()
-      .pipe(
-        exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationClaim({ userId: user.userId }))
-      )
-      .subscribe((result: number) => {
-        // if there is existing org claim with the user, navigate to the 'next step' page
-        if (result) {
-          this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]);
-        }
-      });
   }
 
   protected createFormInstance(): void {

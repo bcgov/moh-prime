@@ -164,7 +164,7 @@ namespace Prime.Services
             return organization;
         }
 
-        public async Task<int> GetOrganizationClaimAsync(OrganizationClaimSearchOptions searchOptions)
+        public async Task<int> GetOrganizationClaimCountAsync(OrganizationClaimSearchOptions searchOptions)
         {
             // return 0 if searchOptions is invalid
             if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && string.IsNullOrEmpty(searchOptions.UserId))
