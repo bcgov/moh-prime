@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { OboSitesFormModel } from './obo-sites-form.model';
 
 @Component({
   selector: 'app-obo-sites-overview',
@@ -21,31 +22,31 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
       </button>
     </app-page-subheader>
 
-    <ng-container *ngFor="let careSetting of careSettings">
+    <ng-container *ngFor="let careSetting of oboSiteForm?.enrolleeCareSettings">
 
-      <ng-container *ngFor="let oboSite of oboSites">
-        <ng-container *ngIf="oboSite.careSettingCode === careSetting.careSettingCode">
+      <ng-container *ngFor="let oboSite of oboSiteForm?.oboSites">
+        <ng-container *ngIf="oboSite?.careSettingCode === careSetting?.careSettingCode">
           <app-enrollee-property title="Care Setting"
                                  [makeBold]="true">
             <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
-              <span *ngIf="oboSite.careSettingCode === healthAuthority">
-                  ({{ oboSite.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
+              <span *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode">
+                  ({{ oboSite?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
                 </span>
             </div>
 
-            <app-enrollee-property *ngIf="oboSite.careSettingCode !== healthAuthority"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Site Name"
                                    [makeBold]="true">
               {{ oboSite.siteName | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property *ngIf="oboSite.careSettingCode === healthAuthority"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Facility Name"
                                    [makeBold]="true">
               {{ oboSite.facilityName | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property *ngIf="oboSite.careSettingCode !== healthAuthority"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Site ID"
                                    [makeBold]="true">
               {{ oboSite.pec | default }}
@@ -82,14 +83,12 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
     </app-page-section>
   `,
-  styles: [
-  ]
+  styles: [],
+  encapsulation: ViewEncapsulation.None
 })
 export class OboSitesOverviewComponent implements OnInit {
 
-  @Input() careSettings = [];
-  @Input() oboSites = [];
-  @Input() healthAuthority = null;
+  @Input() oboSiteForm: OboSitesFormModel;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 

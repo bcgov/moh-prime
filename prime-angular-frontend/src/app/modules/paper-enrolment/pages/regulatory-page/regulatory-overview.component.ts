@@ -1,9 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { RegulatoryForm } from './regulatory-form.model';
 
 @Component({
   selector: 'app-regulatory-overview',
@@ -20,48 +21,48 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
         </button>
       </app-page-subheader>
 
-      <ng-container *ngFor="let certification of certifications; let i = index;">
+      <ng-container *ngFor="let certification of regulatory?.certifications; let i = index;">
 
         <app-enrollee-property title="College Licence"
                                [makeBold]="true">
-          {{ certification.collegeCode | configCode: 'colleges' | default }}
+          {{ certification?.collegeCode | configCode: 'colleges' | default }}
         </app-enrollee-property>
 
         <app-enrollee-property title="Licence Class">
-          {{ certification.licenseCode | configCode: 'licenses' | default }}
+          {{ certification?.licenseCode | configCode: 'licenses' | default }}
         </app-enrollee-property>
 
         <app-enrollee-property title="Licence Number">
-          {{ certification.licenseNumber | default }}
+          {{ certification?.licenseNumber | default }}
         </app-enrollee-property>
 
         <app-enrollee-property title="Prescriber ID">
-          {{ certification.practitionerId | default }}
+          {{ certification?.practitionerId | default }}
         </app-enrollee-property>
 
         <app-enrollee-property title="Renewal Date">
-          {{ certification.renewalDate | formatDate | default }}
+          {{ certification?.renewalDate | formatDate | default }}
         </app-enrollee-property>
 
         <app-enrollee-property title="Advanced Practices">
-          {{ certification.practiceCode | configCode: 'practices' | default }}
+          {{ certification?.practiceCode | configCode: 'practices' | default }}
         </app-enrollee-property>
 
       </ng-container>
 
-      <app-enrollee-property *ngIf="!certifications?.length"
+      <app-enrollee-property *ngIf="!regulatory?.certifications?.length"
                              title="College Certification"
                              [makeBold]="true">
         None
       </app-enrollee-property>
     </app-page-section>
   `,
-  styles: [
-  ]
+  styles: [],
+  encapsulation: ViewEncapsulation.None
 })
 export class RegulatoryOverviewComponent implements OnInit {
 
-  @Input() certifications = [];
+  @Input() regulatory: RegulatoryForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
