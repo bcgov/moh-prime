@@ -71,6 +71,7 @@ namespace Prime
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<ILogService, LogService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<IOrganizationService, OrganizationService>();

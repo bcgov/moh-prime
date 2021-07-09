@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { LoggerResource } from '@core/resources/logger-resource.service';
 
 import { environment } from '@env/environment';
 
@@ -6,7 +7,9 @@ import { environment } from '@env/environment';
   providedIn: 'root'
 })
 export class LoggerService {
-  constructor() { }
+  constructor(
+    private loggerResource: LoggerResource
+  ) { }
 
   /**
    * @description
@@ -38,6 +41,7 @@ export class LoggerService {
    */
   public error(msg: string, ...data: any[]) {
     this.print('error', { msg, data });
+    this.loggerResource.createErrorLog(msg).subscribe();
   }
 
   /**
