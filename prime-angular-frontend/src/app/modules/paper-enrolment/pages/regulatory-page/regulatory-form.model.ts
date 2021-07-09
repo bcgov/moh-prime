@@ -1,3 +1,5 @@
-import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
-export interface RegulatoryForm extends Pick<HttpEnrollee, 'certifications'> { }
+export interface RegulatoryForm {
+  certifications: CollegeCertification[];
+}
