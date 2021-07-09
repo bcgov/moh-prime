@@ -10,7 +10,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -34,12 +34,12 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public currentStatus: EnrolmentStatus;
+  public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
   public within90DaysOfRenewal: boolean;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
 
   protected allowRoutingWhenDirty: boolean;
 
