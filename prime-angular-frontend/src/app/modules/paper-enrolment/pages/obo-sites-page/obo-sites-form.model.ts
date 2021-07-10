@@ -4,6 +4,6 @@ import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authorit
 
 export interface OboSitesFormModel {
   oboSites: OboSite[];
-  enrolleeCareSettings: CareSetting[];
-  enrolleeHealthAuthorities: EnrolleeHealthAuthority[];
+  enrolleeCareSettings?: CareSetting[];
+  enrolleeHealthAuthorities?: EnrolleeHealthAuthority[];
 }
