@@ -4,7 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
@@ -86,11 +87,12 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public onApproveOrgClaim() {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.organization.id, this.newSigningAuthority.id)
-      .subscribe(() => {
+      .pipe(
+        exhaustMap(() => this.organizationResource.getOrganizationById(this.organization.id))
+      )
+      .subscribe((organization: Organization) => {
         this.refresh.next(true);
-        // TODO: Better way to refresh organization?
-        this.organizationResource.getOrganizationById(this.organization.id)
-          .subscribe((organization: Organization) => this.organization = organization);
+        this.organization = organization;
       });
   }
 
@@ -105,16 +107,18 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       organization: this.organizationResource.getOrganizationById(oid),
       site: this.siteResource.getSiteById(sid),
       orgClaim: this.organizationResource.getOrganizationClaimByOrgId(oid)
-    }).subscribe(({ organization, site, orgClaim }) => {
-      this.organization = organization;
-      this.site = site;
-      this.orgClaim = orgClaim;
-      // TODO: Remove hack
-      if (this.orgClaim.organizationId > 0) {
-        this.busy = this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim.partyId}`)
-          .subscribe((signingAuthority: Party) => this.newSigningAuthority = signingAuthority);
-      }
-      this.form.get('pec').setValue(site.pec);
+    }).pipe(
+      exhaustMap(({ organization, site, orgClaim }) => {
+        this.organization = organization;
+        this.site = site;
+        this.orgClaim = orgClaim;
+        this.form.get('pec').setValue(site.pec);
+        return of(null);
+      }),
+      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.partyId}`))
+    ).subscribe((signingAuthority: Party) => {
+      // Note if orgClaim is null, signingAuthority will be null too
+      this.newSigningAuthority = signingAuthority;
     });
   }
 

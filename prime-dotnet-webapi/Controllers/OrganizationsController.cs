@@ -175,9 +175,7 @@ namespace Prime.Controllers
             var claim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
             if (claim == null)
             {
-                // TODO: Remove hack
-                //                return NotFound("No claim by a SigningAuthority exists for given Organization.");
-                return Ok(new OrganizationClaim { PartyId = -1, OrganizationId = -1 });
+                return NotFound("No claim by a SigningAuthority exists for given Organization.");
             }
             else
             {

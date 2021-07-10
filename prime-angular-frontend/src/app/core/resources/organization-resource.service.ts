@@ -167,7 +167,10 @@ export class OrganizationResource {
         map((response: ApiHttpResponse<OrganizationClaim>) => response.result),
         tap((orgClaim: OrganizationClaim) => this.logger.info('OrganizationClaim', orgClaim)),
         catchError((error: any) => {
-          // TODO: How to return null on 404 error?
+          if (error.status === 404) {
+            return of(null);
+          }
+
           this.toastService.openErrorToast('OrganizationClaim could not be retrieved');
           this.logger.error('[Core] OrganizationResource::getOrganizationClaimByOrgId error has occurred: ', error);
           throw error;
