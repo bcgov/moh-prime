@@ -30,23 +30,23 @@ import { OboSitesFormModel } from './obo-sites-form.model';
                                  [makeBold]="true">
             <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
               <span *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode">
-                  ({{ oboSite?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
+                  ({{ careSetting?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
                 </span>
             </div>
 
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Site Name"
                                    [makeBold]="true">
               {{ oboSite.siteName | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Facility Name"
                                    [makeBold]="true">
               {{ oboSite.facilityName | default }}
             </app-enrollee-property>
 
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode"
+            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
                                    title="Site ID"
                                    [makeBold]="true">
               {{ oboSite.pec | default }}
