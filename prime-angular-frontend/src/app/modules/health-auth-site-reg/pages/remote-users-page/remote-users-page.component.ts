@@ -81,8 +81,6 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
-    console.log(backRoutePath);
-
     this.routeUtils.routeRelativeTo(['../', backRoutePath]);
   }
 

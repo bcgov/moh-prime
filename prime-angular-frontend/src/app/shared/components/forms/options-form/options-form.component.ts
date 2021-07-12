@@ -103,8 +103,6 @@ export class OptionsFormComponent implements OnInit {
         if (this.selectOrAutocomplete === 'select') {
           // Add in the currently selected option that would be filtered
           // out of the available options so it can be displayed
-          console.log('VALUE', currentOption[this.controlName], availableOptions);
-          console.log((currentOption[this.controlName]) ? [currentOption[this.controlName], ...availableOptions] : availableOptions);
           return (currentOption[this.controlName])
             ? [currentOption[this.controlName], ...availableOptions]
             : availableOptions;
