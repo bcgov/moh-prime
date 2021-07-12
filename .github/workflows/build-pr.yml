@@ -313,11 +313,11 @@ jobs:
           cache-to: type=gha
           push: true
 
-      - name: Cleanup Docker build cache if any
-        run: |
-          docker buildx imagetools inspect localhost:5000/frontend:buildcache
-          echo "======================================================"
-          docker buildx prune --filter until=72h --keep-storage 5GB -f
+      # - name: Cleanup Docker build cache if any
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/frontend:buildcache
+      #     echo "======================================================"
+      #     docker buildx prune --filter until=72h --keep-storage 5GB -f
 
       # - name: "Build, tag & push Angular frontend image"
       #   id: build-image
