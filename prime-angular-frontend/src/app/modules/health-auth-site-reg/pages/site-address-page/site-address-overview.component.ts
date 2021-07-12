@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -18,7 +18,7 @@ import { SiteAddressForm } from './site-address-form.model';
     </app-address-view>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SiteAddressOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public siteAddress: SiteAddressForm;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -19,7 +19,7 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
     </app-overview-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HealthAuthCareTypeOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public healthAuthCareType: HealthAuthCareTypeForm;

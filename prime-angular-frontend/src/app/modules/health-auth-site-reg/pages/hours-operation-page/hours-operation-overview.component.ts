@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -24,7 +24,7 @@ import { HoursOperationForm } from './hours-operation-form.model';
     </app-overview-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HoursOperationOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public hoursOperation: HoursOperationForm;
