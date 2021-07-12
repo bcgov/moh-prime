@@ -21,9 +21,7 @@
 
   <app-regulatory-overview [regulatory]="enrollee"></app-regulatory-overview>
 
-  <app-obo-sites-overview *ngIf="enrollee?.oboSites?.length"
-                          [oboSiteForm]="enrollee">
-  </app-obo-sites-overview>
+  <app-obo-sites-overview [oboSiteForm]="enrollee"></app-obo-sites-overview>
 
   <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations"
                                   [enrolment]="enrollee"

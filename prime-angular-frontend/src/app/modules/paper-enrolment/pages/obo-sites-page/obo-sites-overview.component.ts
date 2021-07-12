@@ -9,77 +9,77 @@ import { OboSitesFormModel } from './obo-sites-form.model';
 @Component({
   selector: 'app-obo-sites-overview',
   template: `
-    <app-page-section>
+    <app-page-section *ngIf="oboSiteForm?.oboSites?.length">
 
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
-      <button *ngIf="true"
-              mat-icon-button
-              matTooltip="Edit Job Site Information"
-              (click)="onRoute(PaperEnrolmentRoutes.OBO_SITES)">
-        <mat-icon>edit</mat-icon>
-      </button>
-    </app-page-subheader>
+        <button *ngIf="true"
+                mat-icon-button
+                matTooltip="Edit Job Site Information"
+                (click)="onRoute(PaperEnrolmentRoutes.OBO_SITES)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </app-page-subheader>
 
-    <ng-container *ngFor="let careSetting of oboSiteForm?.enrolleeCareSettings">
+      <ng-container *ngFor="let careSetting of oboSiteForm?.enrolleeCareSettings">
 
-      <ng-container *ngFor="let oboSite of oboSiteForm?.oboSites">
-        <ng-container *ngIf="oboSite?.careSettingCode === careSetting?.careSettingCode">
-          <app-enrollee-property title="Care Setting"
-                                 [makeBold]="true">
-            <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
-              <span *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode">
-                  ({{ careSetting?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
-                </span>
-            </div>
-
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
-                                   title="Site Name"
+        <ng-container *ngFor="let oboSite of oboSiteForm?.oboSites">
+          <ng-container *ngIf="oboSite?.careSettingCode === careSetting?.careSettingCode">
+            <app-enrollee-property title="Care Setting"
                                    [makeBold]="true">
-              {{ oboSite.siteName | default }}
-            </app-enrollee-property>
+              <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
+                <span *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode">
+                    ({{ careSetting?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
+                  </span>
+              </div>
 
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
-                                   title="Facility Name"
-                                   [makeBold]="true">
-              {{ oboSite.facilityName | default }}
-            </app-enrollee-property>
-
-            <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
-                                   title="Site ID"
-                                   [makeBold]="true">
-              {{ oboSite.pec | default }}
-            </app-enrollee-property>
-
-            <app-enrollee-property title="Job Title"
-                                   [makeBold]="true">
-              {{ oboSite.jobTitle | default }}
-            </app-enrollee-property>
-
-            <app-enrollee-property title="Site Address"
-                                   [makeBold]="true">
-              <app-enrollee-property title="Street">
-                {{ oboSite.physicalAddress?.street | default }}
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+                                     title="Site Name"
+                                     [makeBold]="true">
+                {{ oboSite.siteName | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property title="City">
-                {{ oboSite.physicalAddress?.city | default }}
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+                                     title="Facility Name"
+                                     [makeBold]="true">
+                {{ oboSite.facilityName | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property title="Province">
-                {{ oboSite.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+                                     title="Site ID"
+                                     [makeBold]="true">
+                {{ oboSite.pec | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property title="Postal Code">
-                {{ oboSite.physicalAddress?.postal | postal | default }}
+              <app-enrollee-property title="Job Title"
+                                     [makeBold]="true">
+                {{ oboSite.jobTitle | default }}
               </app-enrollee-property>
 
+              <app-enrollee-property title="Site Address"
+                                     [makeBold]="true">
+                <app-enrollee-property title="Street">
+                  {{ oboSite.physicalAddress?.street | default }}
+                </app-enrollee-property>
+
+                <app-enrollee-property title="City">
+                  {{ oboSite.physicalAddress?.city | default }}
+                </app-enrollee-property>
+
+                <app-enrollee-property title="Province">
+                  {{ oboSite.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+                </app-enrollee-property>
+
+                <app-enrollee-property title="Postal Code">
+                  {{ oboSite.physicalAddress?.postal | postal | default }}
+                </app-enrollee-property>
+
+              </app-enrollee-property>
             </app-enrollee-property>
-          </app-enrollee-property>
+          </ng-container>
         </ng-container>
       </ng-container>
-    </ng-container>
 
     </app-page-section>
   `,
