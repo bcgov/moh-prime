@@ -22,24 +22,24 @@ import { DemographicForm } from './demographic-form.model';
       </app-page-subheader>
 
       <app-enrollee-property title="First Name">
-        {{ enrollee?.firstName | default }}
+        {{ demographic?.firstName | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Middle Name">
-        {{ enrollee?.middleName | replace: enrollee?.firstName : '' | default }}
+        {{ demographic?.middleName | replace: demographic?.firstName : '' | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Last Name">
-        {{ enrollee?.lastName | default }}
+        {{ demographic?.lastName | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Date of Birth">
-        {{ enrollee?.dateOfBirth | formatDate }}
+        {{ demographic?.dateOfBirth | formatDate }}
       </app-enrollee-property>
     </app-page-section>
 
     <app-address-view title="Physical Address"
-                      [address]="enrollee?.physicalAddress"
+                      [address]="demographic?.physicalAddress"
                       [showRedirect]="true"
                       [showIfEmpty]="true"
                       (route)="onRoute(PaperEnrolmentRoutes.DEMOGRAPHIC)"></app-address-view>
@@ -57,11 +57,11 @@ import { DemographicForm } from './demographic-form.model';
       </app-page-subheader>
 
       <app-enrollee-property title="Phone Number">
-        {{ enrollee?.phone | phone | default }}
+        {{ demographic?.phone | phone | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Optional Extension Number">
-        {{ enrollee?.phoneExtension | default }}
+        {{ demographic?.phoneExtension | default }}
       </app-enrollee-property>
     </app-page-section>
 
@@ -78,11 +78,11 @@ import { DemographicForm } from './demographic-form.model';
       </app-page-subheader>
 
       <app-enrollee-property title="Email">
-        {{ enrollee?.email | default }}
+        {{ demographic?.email | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Optional SMS Phone Number">
-        {{ enrollee?.smsPhone | phone | default }}
+        {{ demographic?.smsPhone | phone | default }}
       </app-enrollee-property>
     </app-page-section>
   `,
@@ -90,7 +90,7 @@ import { DemographicForm } from './demographic-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class DemographicOverviewComponent implements OnInit {
-  @Input() public enrollee: DemographicForm;
+  @Input() public demographic: DemographicForm;
   public routeUtils: RouteUtils;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
