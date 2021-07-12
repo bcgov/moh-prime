@@ -2,11 +2,11 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { OboSitesFormModel } from './obo-sites-form.model';
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-obo-sites-overview',

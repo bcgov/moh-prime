@@ -18,10 +18,10 @@ import { RegulatoryOverviewComponent } from './pages/regulatory-page/regulatory-
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
 import { OboSitesOverviewComponent } from './pages/obo-sites-page/obo-sites-overview.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
+import { SelfDeclarationOverviewComponent } from './pages/self-declaration-page/self-declaration-overview.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
-import { SelfDeclarationOverviewComponent } from './pages/self-declaration-page/self-declaration-overview.component';
 
 @NgModule({
   declarations: [
@@ -36,10 +36,10 @@ import { SelfDeclarationOverviewComponent } from './pages/self-declaration-page/
     OboSitesPageComponent,
     OboSitesOverviewComponent,
     SelfDeclarationPageComponent,
+    SelfDeclarationOverviewComponent,
     OverviewPageComponent,
     UploadPageComponent,
-    NextStepsPageComponent,
-    SelfDeclarationOverviewComponent
+    NextStepsPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,

@@ -41,5 +41,4 @@ export class SelfDeclarationOverviewComponent implements OnInit {
     routePath = (Array.isArray(routePath)) ? routePath : [routePath];
     this.routeUtils.routeRelativeTo(routePath);
   }
-
 }
