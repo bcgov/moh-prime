@@ -14,63 +14,66 @@ on:
 jobs:
   build-document-manager:
     runs-on: ubuntu-20.04
-    services:
-      registry:
-        image: zero88/gh-registry:latest
-        ports:
-          - 5000:5000
-        options: >-
-          -v /home/runner:/var/lib/registry
-          --name registry
     environment: Development
     env:
       BUILD_LOGLEVEL: "2"
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
+      LOCAL_SLUG: localhost:5000/prime/docman
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
-      - name: "Checkout the repo"
+      -
+        name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Set up Docker Buildx
-        id: buildx
+       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.LOCAL_SLUG }}
+      -
+        name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          driver-opts: network=host
-        
-      - name: Cache Docker layers
+          version: https://github.com/docker/buildx.git#master
+          driver-opts: |
+            image=moby/buildkit:master
+            network=host
+      -
+        name: Cache Docker layers docman
         uses: actions/cache@v2
         with:
-          path: /home/runner/docker
-          key: ${{ runner.os }}-docker-${{ github.sha }}
+          path: /tmp/.buildx-docman-cache
+          key: ${{ runner.os }}-buildx-docman-{{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-docker-
-
-      - name: Validate cache
-        run: |
-          docker buildx imagetools inspect localhost:5000/docman:buildcache || echo "Not Found"
-
-      - name: "Login to OpenShift repository"
+            ${{ runner.os }}-buildx-docman-
+      - 
+        name: "Login to OpenShift repository"
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-
-      - name: "Login to RedHat container repository"
+      - 
+        name: "Login to RedHat container repository"
         uses: docker/login-action@v1
         with:
           registry: ${{secrets.REDHAT_REGISTRY_URL}}
           username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
           password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
-
-      - name: "Get current pull request"
+      - 
+        name: "Get current pull request"
         id: PR
         uses: 8BitJonny/gh-get-current-pr@1.0.1
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
-
-      - name: "Build and Push: Document Manager"
+      - 
+        name: "Build and Push: Document Manager"
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -80,15 +83,15 @@ jobs:
             BUILD_LOGLEVEL=1
             SVC_NAME=pr-${{steps.PR.outputs.number}}
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/docman:buildcache
-          cache-to: type=registry,ref=localhost:5000/docman:buildcache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha
           push: true
-
-      - name: Cleanup Docker build cache if any
-        run: |
-          docker buildx imagetools inspect localhost:5000/docman:buildcache
-          echo "======================================================"
-          docker buildx prune --filter until=72h --keep-storage 5GB -f
+      # - 
+      #   name: Cleanup Docker build cache if any
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/docman:buildcache
+      #     echo "======================================================"
+      #     docker buildx prune --filter until=72h --keep-storage 5GB -f
 
       # - name: "Build, tag and push Document Manager image"
       #   id: build-image
@@ -120,23 +123,38 @@ jobs:
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
+      LOCAL_SLUG: localhost:5000/prime/webapi
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
-      - name: "Checkout the repo"
+      -
+        name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Set up Docker Buildx
-        id: buildx
+       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.LOCAL_SLUG }}
+      -
+        name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          driver-opts: network=host
-        
-      - name: Cache Docker layers
+          version: https://github.com/docker/buildx.git#master
+          driver-opts: |
+            image=moby/buildkit:master
+            network=host
+      -
+        name: Cache Docker layers webapi
         uses: actions/cache@v2
         with:
-          path: /home/runner/docker
-          key: ${{ runner.os }}-docker-${{ github.sha }}
+          path: /tmp/.buildx-webapi-cache
+          key: ${{ runner.os }}-buildx-webapi-{{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-docker-
+            ${{ runner.os }}-buildx-webapi-
 
       - name: Validate cache
         run: |
@@ -182,15 +200,15 @@ jobs:
             POSTGRESQL_DATABASE=prime-dev
             SVC_NAME=pr-${{steps.PR.outputs.number}}
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/webapi:buildcache
-          cache-to: type=registry,ref=localhost:5000/webapi:buildcache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha
           push: true
 
-      - name: Cleanup Docker build cache if any
-        run: |
-          docker buildx imagetools inspect localhost:5000/webapi:buildcache
-          echo "======================================================"
-          docker buildx prune --filter until=72h --keep-storage 5GB -f
+      # - name: Cleanup Docker build cache if any
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/webapi:buildcache
+      #     echo "======================================================"
+      #     docker buildx prune --filter until=72h --keep-storage 5GB -f
 
       # - name: "Build, tag and push .NET web API image"
       #   id: build-image
@@ -236,28 +254,41 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
+      LOCAL_SLUG: localhost:5000/prime/docman
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
     steps:
-      - name: "Checkout the repo"
+      -
+        name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Set up Docker Buildx
-        id: buildx
+       -
+        name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.LOCAL_SLUG }}
+      -
+        name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          driver-opts: network=host
-        
-      - name: Cache Docker layers
+          version: https://github.com/docker/buildx.git#master
+          driver-opts: |
+            image=moby/buildkit:master
+            network=host
+      -
+        name: Cache Docker layers docman
         uses: actions/cache@v2
         with:
-          path: /home/runner/docker
-          key: ${{ runner.os }}-docker-${{ github.sha }}
+          path: /tmp/.buildx-docman-cache
+          key: ${{ runner.os }}-buildx-docman-{{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-docker-
-
-      - name: Validate cache
-        run: |
-          docker buildx imagetools inspect localhost:5000/frontend:buildcache || echo "Not Found"
-
+            ${{ runner.os }}-buildx-docman-
+      # - name: Validate cache
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/frontend:buildcache || echo "Not Found"
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
         with:
@@ -294,15 +325,15 @@ jobs:
             SVC_NAME=pr-${{steps.PR.outputs.number}}
             REDIRECT_URL=https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          cache-from: type=registry,ref=localhost:5000/frontend:buildcache
-          cache-to: type=registry,ref=localhost:5000/frontend:buildcache,mode=max
+          cache-from: type=gha
+          cache-to: type=gha
           push: true
 
-      - name: Cleanup Docker build cache if any
-        run: |
-          docker buildx imagetools inspect localhost:5000/frontend:buildcache
-          echo "======================================================"
-          docker buildx prune --filter until=72h --keep-storage 5GB -f
+      # - name: Cleanup Docker build cache if any
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/frontend:buildcache
+      #     echo "======================================================"
+      #     docker buildx prune --filter until=72h --keep-storage 5GB -f
 
       # - name: "Build, tag & push Angular frontend image"
       #   id: build-image
