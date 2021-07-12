@@ -29,6 +29,7 @@ namespace Prime.Controllers
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
 
 
         public OrganizationsController(
@@ -39,7 +40,8 @@ namespace Prime.Controllers
             ISiteService siteService,
             IOrganizationClaimService organizationClaimService,
             IBusinessEventService businessEventService,
-            IAdminService adminService)
+            IAdminService adminService,
+            IEmailService emailService)
         {
             _organizationService = organizationService;
             _agreementService = agreementService;
@@ -49,6 +51,7 @@ namespace Prime.Controllers
             _organizationClaimService = organizationClaimService;
             _businessEventService = businessEventService;
             _adminService = adminService;
+            _emailService = emailService;
         }
 
         // GET: api/Organizations
@@ -217,6 +220,8 @@ namespace Prime.Controllers
                 // TODO: Properly communicate error
                 return BadRequest("Could not assign Organization to new SigningAuthority.");
             }
+
+            await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
 
             await _businessEventService.CreateOrganizationEventAsync(claimApproval.OrganizationId, claimApproval.PartyId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved by {admin.LastName}, {admin.FirstName}");
 
