@@ -8,13 +8,14 @@ import {
   UrlTree,
   UrlSegment
 } from '@angular/router';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+
 import { Observable, of } from 'rxjs';
-import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { map } from 'rxjs/operators';
 
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -72,5 +73,4 @@ export class FinalizedEnrolmentGuard implements CanActivateChild {
       return false;
     }
   }
-
 }
