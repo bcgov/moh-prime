@@ -61,8 +61,7 @@ import { CareSettingForm } from './care-setting-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class CareSettingOverviewComponent implements OnInit {
-
-  @Input() careSettings: CareSettingForm;
+  @Input() public careSettings: CareSettingForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
