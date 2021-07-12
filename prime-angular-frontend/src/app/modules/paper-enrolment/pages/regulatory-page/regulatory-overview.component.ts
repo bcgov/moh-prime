@@ -61,7 +61,6 @@ import { RegulatoryForm } from './regulatory-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class RegulatoryOverviewComponent implements OnInit {
-
   @Input() regulatory: RegulatoryForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
@@ -73,12 +72,10 @@ export class RegulatoryOverviewComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public onRoute(routePath: string | string[]) {
     routePath = (Array.isArray(routePath)) ? routePath : [routePath];
     this.routeUtils.routeRelativeTo(routePath);
   }
-
 }
