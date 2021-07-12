@@ -22,7 +22,7 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class HealthAuthCareTypeOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() healthAuthCareType: HealthAuthCareTypeForm;
+  @Input() public healthAuthCareType: HealthAuthCareTypeForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(

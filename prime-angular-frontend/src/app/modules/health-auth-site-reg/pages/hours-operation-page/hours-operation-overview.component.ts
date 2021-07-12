@@ -27,7 +27,7 @@ import { HoursOperationForm } from './hours-operation-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class HoursOperationOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() hoursOperation: HoursOperationForm;
+  @Input() public hoursOperation: HoursOperationForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   public demo: HoursOperationForm;

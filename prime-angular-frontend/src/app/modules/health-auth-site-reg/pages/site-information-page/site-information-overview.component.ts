@@ -28,7 +28,7 @@ import { SiteInformationForm } from './site-information-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class SiteInformationOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() siteInformation: SiteInformationForm;
+  @Input() public siteInformation: SiteInformationForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(

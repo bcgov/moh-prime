@@ -22,7 +22,7 @@ import { VendorForm } from './vendor-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class VendorOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() vendor: VendorForm;
+  @Input() public vendor: VendorForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(

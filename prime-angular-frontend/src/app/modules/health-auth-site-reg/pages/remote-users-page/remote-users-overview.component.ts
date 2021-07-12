@@ -20,7 +20,7 @@ import { RemoteUsersForm } from './remote-users-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class RemoteUsersOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() remoteUsers: RemoteUsersForm;
+  @Input() public remoteUsers: RemoteUsersForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(

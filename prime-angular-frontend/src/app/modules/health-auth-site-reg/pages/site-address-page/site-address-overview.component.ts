@@ -21,7 +21,7 @@ import { SiteAddressForm } from './site-address-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class SiteAddressOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() siteAddress: SiteAddressForm;
+  @Input() public siteAddress: SiteAddressForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
