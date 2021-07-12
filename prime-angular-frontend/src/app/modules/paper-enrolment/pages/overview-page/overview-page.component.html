@@ -23,16 +23,7 @@
 
   <app-obo-sites-overview [oboSiteForm]="enrollee"></app-obo-sites-overview>
 
-  <app-enrollee-self-declarations *ngIf="enrollee?.selfDeclarations"
-                                  [enrolment]="enrollee"
-                                  [showAllSelfDeclarationsQuestions]="true">
-    <button *ngIf="true"
-            mat-icon-button
-            matTooltip="Edit Self-declaration"
-            (click)="onRoute(PaperEnrolmentRoutes.SELF_DECLARATION)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-enrollee-self-declarations>
+  <app-self-declaration-overview [selfDeclarations]="enrollee"></app-self-declaration-overview>
 
   <app-page-section>
     <app-page-subheader>
