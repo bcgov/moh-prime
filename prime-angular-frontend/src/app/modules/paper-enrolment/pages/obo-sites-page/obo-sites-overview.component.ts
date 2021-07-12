@@ -93,7 +93,7 @@ export class OboSitesOverviewComponent implements OnInit {
   @Input() public enrolleeCareSettings: CareSetting[];
   public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public routeUtils: RouteUtils;
+  private routeUtils: RouteUtils;
 
   constructor(
     private route: ActivatedRoute,

@@ -91,8 +91,8 @@ import { DemographicForm } from './demographic-form.model';
 })
 export class DemographicOverviewComponent implements OnInit {
   @Input() public demographic: DemographicForm;
-  public routeUtils: RouteUtils;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
+  private routeUtils: RouteUtils;
 
   constructor(
     private route: ActivatedRoute,

@@ -63,7 +63,7 @@ import { CareSettingForm } from './care-setting-form.model';
 export class CareSettingOverviewComponent implements OnInit {
   @Input() public careSettings: CareSettingForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public routeUtils: RouteUtils;
+  private routeUtils: RouteUtils;
 
   constructor(
     private route: ActivatedRoute,

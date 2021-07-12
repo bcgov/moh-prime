@@ -26,7 +26,7 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
 export class SelfDeclarationOverviewComponent implements OnInit {
   @Input() public selfDeclarations: SelfDeclarationForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public routeUtils: RouteUtils;
+  private routeUtils: RouteUtils;
 
   constructor(
     private route: ActivatedRoute,
