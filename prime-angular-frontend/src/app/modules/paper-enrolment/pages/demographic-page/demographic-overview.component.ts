@@ -86,7 +86,7 @@ import { DemographicForm } from './demographic-form.model';
       </app-enrollee-property>
     </app-page-section>
   `,
-  styles: [],
+  styles: ['mat-icon { font-size: 1.2em; }'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class DemographicOverviewComponent implements OnInit {

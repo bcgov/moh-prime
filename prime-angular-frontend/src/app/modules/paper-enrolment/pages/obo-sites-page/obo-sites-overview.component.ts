@@ -85,7 +85,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
 
     </app-page-section>
   `,
-  styles: [],
+  styles: ['mat-icon { font-size: 1.2em; }'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class OboSitesOverviewComponent implements OnInit {

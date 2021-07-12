@@ -57,7 +57,7 @@ import { CareSettingForm } from './care-setting-form.model';
       </ng-container>
     </app-page-section>
   `,
-  styles: [],
+  styles: ['mat-icon { font-size: 1.2em; }'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class CareSettingOverviewComponent implements OnInit {
