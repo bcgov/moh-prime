@@ -29,8 +29,8 @@ export class SelfDeclarationOverviewComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router
+    route: ActivatedRoute,
+    router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
