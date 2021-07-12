@@ -61,7 +61,7 @@ import { RegulatoryForm } from './regulatory-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class RegulatoryOverviewComponent implements OnInit {
-  @Input() regulatory: RegulatoryForm;
+  @Input() public regulatory: RegulatoryForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
