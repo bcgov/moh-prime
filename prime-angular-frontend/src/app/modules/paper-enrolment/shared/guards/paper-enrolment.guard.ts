@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
@@ -10,6 +10,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 @Injectable({
   providedIn: 'root'
@@ -26,29 +27,36 @@ export class PaperEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const enrolleeId = params.eid;
-    if (!enrolleeId) {
+    const enrolleeId = +params.eid;
+    if (enrolleeId) {
       return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
-          map((enrollee: HttpEnrollee) => {
-            // Store the enrollee for access throughout creation and updating of a
-            // site, which will allows provide the most up-to-date site
-            // TODO replace each enrollee GET for the service
-            // this.paperEnrolmentService.enrollee = enrollee;
-
-            return this.routeDestination(routePath, enrollee);
-          })
+          map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
         );
-    } else {
-      return new Promise(async (resolve, reject) => resolve(true));
     }
+    return of(true);
   }
 
   /**
    * @description
    * Determine the route destination based on the enrolment.
    */
-  private routeDestination(routePath: string, enrolment: HttpEnrollee) {
-    return !!enrolment;
+  private routeDestination(routePath: string, httpEnrollee: HttpEnrollee, params: Params) {
+    if (!httpEnrollee?.approvedDate) {
+      return true;
+    } else return this.navigate(PaperEnrolmentRoutes.NEXT_STEPS, params);
   }
+
+  private navigate(routePath: string, params: Params): boolean {
+    const modulePath = this.config.routes.paperEnrolment;
+    const comparePath = `/${modulePath}/${params}/${routePath}`;
+
+    if (routePath === comparePath) {
+      return true;
+    } else {
+      this.router.navigate([comparePath]);
+      return false;
+    }
+  }
+
 }
