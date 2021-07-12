@@ -292,7 +292,7 @@ jobs:
             KEYCLOAK_CLIENT_ID=${{env.KEYCLOAK_CLIENT_ID}}
             OC_APP=${{secrets.OC_APP}}
             SVC_NAME=pr-${{steps.PR.outputs.number}}
-            REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
+            REDIRECT_URL=https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
           cache-from: type=registry,ref=localhost:5000/frontend:buildcache
           cache-to: type=registry,ref=localhost:5000/frontend:buildcache,mode=max
