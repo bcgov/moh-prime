@@ -10,34 +10,34 @@ import { PaperEnrolmentProgressIndicatorComponent } from './shared/components/pa
 
 import { PaperEnrolmentRoutingModule } from './paper-enrolment-routing.module';
 import { DemographicPageComponent } from './pages/demographic-page/demographic-page.component';
+import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview.component';
 import { CareSettingPageComponent } from './pages/care-setting-page/care-setting-page.component';
+import { CareSettingOverviewComponent } from './pages/care-setting-page/care-setting-overview.component';
 import { RegulatoryPageComponent } from './pages/regulatory-page/regulatory-page.component';
+import { RegulatoryOverviewComponent } from './pages/regulatory-page/regulatory-overview.component';
 import { OboSitesPageComponent } from './pages/obo-sites-page/obo-sites-page.component';
+import { OboSitesOverviewComponent } from './pages/obo-sites-page/obo-sites-overview.component';
 import { SelfDeclarationPageComponent } from './pages/self-declaration-page/self-declaration-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
-import { DemographicOverviewComponent } from './pages/demographic-page/demographic-overview.component';
-import { CareSettingOverviewComponent } from './pages/care-setting-page/care-setting-overview.component';
-import { OboSitesOverviewComponent } from './pages/obo-sites-page/obo-sites-overview.component';
-import { RegulatoryOverviewComponent } from './pages/regulatory-page/regulatory-overview.component';
 
 @NgModule({
   declarations: [
     PaperEnrolmentDashboardComponent,
     PaperEnrolmentProgressIndicatorComponent,
     DemographicPageComponent,
+    DemographicOverviewComponent,
     CareSettingPageComponent,
+    CareSettingOverviewComponent,
     RegulatoryPageComponent,
+    RegulatoryOverviewComponent,
     OboSitesPageComponent,
+    OboSitesOverviewComponent,
     SelfDeclarationPageComponent,
     OverviewPageComponent,
     UploadPageComponent,
-    NextStepsPageComponent,
-    DemographicOverviewComponent,
-    CareSettingOverviewComponent,
-    OboSitesOverviewComponent,
-    RegulatoryOverviewComponent
+    NextStepsPageComponent
   ],
   imports: [
     PaperEnrolmentRoutingModule,
