@@ -90,7 +90,6 @@ import { DemographicForm } from './demographic-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class DemographicOverviewComponent implements OnInit {
-
   @Input() enrollee: DemographicForm;
   public routeUtils: RouteUtils;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
@@ -102,9 +101,7 @@ export class DemographicOverviewComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public onRoute(routePath: string | string[]) {
     routePath = (Array.isArray(routePath)) ? routePath : [routePath];
