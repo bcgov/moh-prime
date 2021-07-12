@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core';
 
 import { environment } from '@env/environment';
+import { AbstractLogger } from '@shared/classes/abstract-logger';
+import { ConsoleLogger } from '@shared/classes/console-logger';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoggerService {
-  constructor() { }
+  private loggers: AbstractLogger[] = [];
+
+  constructor() {
+    // If there is no logger configured, always default to the console logger
+    if (this.loggers.length == 0) {
+      this.loggers.push(new ConsoleLogger());
+    }
+  }
 
   /**
    * @description
@@ -61,49 +70,8 @@ export class LoggerService {
    * Prints the logging information, but ONLY if not in production.
    */
   private print(type: string, params: { msg?: string, data?: any[] }) {
-    if (!environment.production || type === 'error' || type === 'warn') {
-
-      const message = this.colorize(type, params.msg);
-
-      if (params.msg && params.data.length) {
-        console[type](...message, ...params.data);
-      } else if (!params.msg && params.data.length) {
-        console[type](params.data);
-      } else if (params.msg && !params.data.length) {
-        console[type](...message);
-      } else {
-        console.error('Logger parameters are invalid: ', params);
-      }
+    for (let logger of this.loggers) {
+      logger.log(type, params).subscribe(result => console.log(result));
     }
-  }
-
-  /**
-   * @description
-   * Apply colour to the console message, otherwise the use
-   * the default.
-   */
-  private colorize(type: string, msg: string): string[] {
-    let color = '';
-
-    switch (type) {
-      case 'log':
-        color = 'Yellow';
-        break;
-      case 'info':
-        color = 'DodgerBlue';
-        break;
-      case 'error':
-        color = 'Red';
-        break;
-      case 'warning':
-        color = 'Orange';
-        break;
-    }
-
-    if (color) {
-      color = `color:${color}`;
-    }
-
-    return [`%c${msg}`, color];
   }
 }
