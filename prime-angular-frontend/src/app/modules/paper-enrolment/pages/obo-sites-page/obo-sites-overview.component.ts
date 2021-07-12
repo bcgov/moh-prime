@@ -93,7 +93,7 @@ export class OboSitesOverviewComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    router: Router
+    private router: Router
   ) {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
