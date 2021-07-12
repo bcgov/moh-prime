@@ -132,12 +132,10 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     const authorizedUserId = this.authorizedUserService.authorizedUser?.id;
     const payload = this.formState.json;
 
-    if (!authorizedUserId) {
-      return this.healthAuthorityResource.createAuthorizedUser({ ...payload, ...this.bcscUser })
-        .pipe(NoContentResponse);
-    }
-
-    return this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
+    return (!authorizedUserId)
+      ? this.healthAuthorityResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
+        .pipe(NoContentResponse)
+      : this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
   }
 
   protected afterSubmitIsSuccessful(): void {
