@@ -74,6 +74,7 @@ import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-pa
 import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
 import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
+import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 
 @NgModule({
   declarations: [
@@ -141,7 +142,8 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
     EnrolleeBannerListPageComponent,
     SiteBannerListPageComponent,
     OrganizationToaMaintenanceListPageComponent,
-    OrganizationToaMaintenanceViewPageComponent
+    OrganizationToaMaintenanceViewPageComponent,
+    LicenseClassesMaintenancePageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

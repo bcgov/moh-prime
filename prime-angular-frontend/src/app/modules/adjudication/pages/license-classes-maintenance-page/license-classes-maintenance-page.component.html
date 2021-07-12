@@ -1,0 +1,106 @@
+<div class="row">
+  <div class="col">
+    <table mat-table
+           matSort
+           class="w-100"
+           [dataSource]="dataSource">
+
+      <ng-container matColumnDef="code">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"
+            class="prefix-header pl-0">
+          Licence Class
+        </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          {{ row.code | configCode: 'licenses' }}
+        </td>
+      </ng-container>
+
+      <!-- <ng-container matColumnDef="displayId">
+        <th mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            scope="col"> Reference ID
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.displayId }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Enrollee Name
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row | fullname }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="givenNames">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Given Names
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.givenNames | default }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="currentTOA">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Current ToA
+        </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          <mat-chip-list [selectable]="false">
+            <mat-chip [disableRipple]="true">{{ row.currentTOAStatus | default }}</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> State
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"
+            class="status"
+            [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remoteAccess">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Remote Access
+        </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          <mat-chip-list [selectable]="false">
+            <mat-chip [disableRipple]="true">{{ row.remoteAccess ? "Yes" : "No" | default }}</mat-chip>
+          </mat-chip-list>
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="careSetting">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Care Setting
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"> {{ row.careSettingCodes | careSetting: 'abbr' | join | default }} </td>
+      </ng-container> -->
+
+
+      <tr mat-header-row
+          *matHeaderRowDef="columns; sticky: true"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: columns;"></tr>
+    </table>
+
+  </div>
+</div>
