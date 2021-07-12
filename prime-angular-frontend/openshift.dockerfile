@@ -28,8 +28,6 @@ ENV NODE_ROOT /usr/src/app
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-RUN echo ${REDIRECT_URL}
-
 # Set environment variables
 COPY package.json package-lock.json ./
 
