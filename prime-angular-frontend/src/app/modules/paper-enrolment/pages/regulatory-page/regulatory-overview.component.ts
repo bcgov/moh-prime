@@ -58,7 +58,7 @@ import { RegulatoryForm } from './regulatory-form.model';
     </app-page-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class RegulatoryOverviewComponent implements OnInit {
   @Input() public regulatory: RegulatoryForm;

@@ -87,7 +87,7 @@ import { DemographicForm } from './demographic-form.model';
     </app-page-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class DemographicOverviewComponent implements OnInit {
   @Input() public demographic: DemographicForm;

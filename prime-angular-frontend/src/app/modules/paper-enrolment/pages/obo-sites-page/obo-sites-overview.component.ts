@@ -86,7 +86,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
     </app-page-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class OboSitesOverviewComponent implements OnInit {
   @Input() public oboSiteForm: OboSitesFormModel;

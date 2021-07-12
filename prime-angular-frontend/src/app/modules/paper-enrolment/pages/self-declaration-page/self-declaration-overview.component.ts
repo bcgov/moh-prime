@@ -21,7 +21,7 @@ import { SelfDeclarationForm } from './self-declaration-form.model';
       </app-enrollee-self-declarations>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class SelfDeclarationOverviewComponent implements OnInit {
   @Input() public selfDeclarations: SelfDeclarationForm;

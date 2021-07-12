@@ -58,7 +58,7 @@ import { CareSettingForm } from './care-setting-form.model';
     </app-page-section>
   `,
   styles: [],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.Emulated
 })
 export class CareSettingOverviewComponent implements OnInit {
   @Input() public careSettings: CareSettingForm;
