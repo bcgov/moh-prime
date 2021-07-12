@@ -75,7 +75,8 @@
 
               <mat-checkbox [class.hide]="!hasDay(businessDay)"
                             [checked]="is24Hours(businessDay)"
-                            (change)="on24Hours($event, businessDay)">24 hours</mat-checkbox>
+                            (change)="on24Hours($event, businessDay)">24 hours
+              </mat-checkbox>
             </ng-container>
 
           </div>
@@ -90,6 +91,7 @@
                    [hasSecondaryAction]="true"
                    primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
+                   (back)="onBack()"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-page>

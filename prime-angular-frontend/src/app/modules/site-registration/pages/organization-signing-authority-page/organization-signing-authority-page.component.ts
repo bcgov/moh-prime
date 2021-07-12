@@ -29,7 +29,6 @@ import { OrganizationSigningAuthorityPageFormState } from './organization-signin
 export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationSigningAuthorityPageFormState;
   public title: string;
-  public routeUtils: RouteUtils;
   public isCompleted: boolean;
   public organization: Organization;
   public SiteRoutes = SiteRoutes;
@@ -43,6 +42,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
+  private routeUtils: RouteUtils;
 
   constructor(
     protected dialog: MatDialog,

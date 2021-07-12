@@ -72,6 +72,7 @@
           type="button"
           color="primary"
           class="mb-3"
+          [disabled]="true"
           [routerLink]="['new']">
     <mat-icon class="add-icon">add</mat-icon>
     Add Remote Practitioners
@@ -81,6 +82,7 @@
                    [hasSecondaryAction]="true"
                    [primaryActionLabel]="submitButtonText"
                    (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
+                   (back)="onBack()"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-page>

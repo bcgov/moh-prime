@@ -2,9 +2,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
+import { SiteAddressForm } from './site-address-form.model';
 
-export class SiteAddressPageFormState extends AbstractFormState<Address> {
+export class SiteAddressFormState extends AbstractFormState<SiteAddressForm> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -14,28 +14,24 @@ export class SiteAddressPageFormState extends AbstractFormState<Address> {
     this.buildForm();
   }
 
-  public get name(): FormGroup {
-    return this.formInstance.get('name') as FormGroup;
-  }
-
   public get physicalAddress(): FormGroup {
     return this.formInstance.get('physicalAddress') as FormGroup;
   }
 
-  public get json(): Address {
+  public get json(): SiteAddressForm {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formInstance.getRawValue().physicalAddress;
+    return this.formInstance.getRawValue();
   }
 
-  public patchValue(physicalAddress: Address): void {
-    if (!this.formInstance || !physicalAddress) {
+  public patchValue(model: SiteAddressForm): void {
+    if (!this.formInstance || !model?.physicalAddress) {
       return;
     }
 
-    this.formInstance.patchValue({ physicalAddress });
+    this.formInstance.patchValue(model);
   }
 
   public buildForm(): void {
