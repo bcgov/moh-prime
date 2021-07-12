@@ -4,10 +4,6 @@
     {{ user | fullname | default }}
   </app-enrollee-property>
 
-  <app-enrollee-property title="Email">
-    {{ user.email | default }}
-  </app-enrollee-property>
-
   <app-enrollee-property title="Date of Birth">
     {{ user?.dateOfBirth | formatDate | default }}
   </app-enrollee-property>
