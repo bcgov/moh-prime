@@ -87,7 +87,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
   encapsulation: ViewEncapsulation.None
 })
 export class OboSitesOverviewComponent implements OnInit {
-  @Input() oboSiteForm: OboSitesFormModel;
+  @Input() public oboSiteForm: OboSitesFormModel;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
