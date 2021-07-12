@@ -73,7 +73,6 @@ export class CareSettingOverviewComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // console.log(`caresettings ${this.careSettings}`);
   }
 
   public onRoute(routePath: string | string[]) {
