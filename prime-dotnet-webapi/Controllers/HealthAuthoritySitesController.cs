@@ -15,6 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/health-authorities/{healthAuthorityId}/sites")]
     [ApiController]
+    [Authorize(Roles = Roles.PrimeEnrollee)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
@@ -31,8 +32,6 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="payload"></param>
         [HttpPost(Name = nameof(CreateHealthAuthoritySite))]
-        // TODO should the authorize be EditSite for creation?
-        // [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -54,7 +53,6 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet(Name = nameof(GetHealthAuthoritySites))]
-        // [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
@@ -70,20 +68,20 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         [HttpGet("{siteId}", Name = nameof(GetHealthAuthoritySiteById))]
-        // [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<HealthAuthoritySiteViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetHealthAuthoritySiteById(int healthAuthorityId, int siteId)
         {
-            var healthAuthority = await _healthAuthoritySiteService.GetSiteAsync(siteId);
-            if (healthAuthority == null)
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
             {
-                return NotFound();
+                return NotFound($"Health authority site not found with id {siteId}");
             }
 
-            return Ok(healthAuthority);
+            var site = await _healthAuthoritySiteService.GetSiteAsync(siteId);
+
+            return Ok(site);
         }
 
         // PUT: api/health-authorities/5/sites/5/vendor
@@ -94,7 +92,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/vendor", Name = nameof(UpdateVendor))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -119,7 +116,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/site-info", Name = nameof(UpdateSiteInfo))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -144,7 +140,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/care-type", Name = nameof(UpdateCareType))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -170,7 +165,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/address", Name = nameof(UpdateAddress))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -195,7 +189,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/hours-operation", Name = nameof(UpdateHoursOperation))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -220,7 +213,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/remote-users", Name = nameof(UpdateRemoteUsers))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -245,7 +237,6 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
         [HttpPut("{siteId}/administrator", Name = nameof(UpdateAdministrator))]
-        //[Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
