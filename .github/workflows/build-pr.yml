@@ -111,14 +111,6 @@ jobs:
 
   build-webapi:
     runs-on: ubuntu-20.04
-    services:
-      registry:
-        image: zero88/gh-registry:latest
-        ports:
-          - 5000:5000
-        options: >-
-          -v /home/runner:/var/lib/registry
-          --name registry
     environment: Development
     env:
       SERVICE_NAME: dotnet-webapi
@@ -156,9 +148,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-webapi-
 
-      - name: Validate cache
-        run: |
-          docker buildx imagetools inspect localhost:5000/webapi:buildcache || echo "Not Found"
+      # - name: Validate cache
+      #   run: |
+      #     docker buildx imagetools inspect localhost:5000/webapi:buildcache || echo "Not Found"
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -238,14 +230,6 @@ jobs:
 
   build-frontend:
     runs-on: ubuntu-20.04
-    services:
-      registry:
-        image: zero88/gh-registry:latest
-        ports:
-          - 5000:5000
-        options: >-
-          -v /home/runner:/var/lib/registry
-          --name registry
     environment: Development
     env:
       SERVICE_NAME: nginx-angular
@@ -254,7 +238,7 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
-      LOCAL_SLUG: localhost:5000/prime/docman
+      LOCAL_SLUG: localhost:5000/prime/frontend
     services:
       registry:
         image: registry:2
@@ -279,13 +263,13 @@ jobs:
             image=moby/buildkit:master
             network=host
       -
-        name: Cache Docker layers docman
+        name: Cache Docker layers frontend
         uses: actions/cache@v2
         with:
-          path: /tmp/.buildx-docman-cache
-          key: ${{ runner.os }}-buildx-docman-{{ github.sha }}
+          path: /tmp/.buildx-frontend-cache
+          key: ${{ runner.os }}-buildx-frontend-{{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-docman-
+            ${{ runner.os }}-buildx-frontend-
       # - name: Validate cache
       #   run: |
       #     docker buildx imagetools inspect localhost:5000/frontend:buildcache || echo "Not Found"
