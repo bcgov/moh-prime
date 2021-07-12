@@ -22,7 +22,7 @@ namespace Prime.Controllers
     {
         private readonly IOrganizationService _organizationService;
 
-        private readonly IAgreementService _agreementService;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IPartyService _partyService;
         private readonly IDocumentService _documentService;
         private readonly ISiteService _siteService;
@@ -34,7 +34,7 @@ namespace Prime.Controllers
 
         public OrganizationsController(
             IOrganizationService organizationService,
-            IAgreementService agreementService,
+            IOrganizationAgreementService organizationAgreementService,
             IPartyService partyService,
             IDocumentService documentService,
             ISiteService siteService,
@@ -44,7 +44,7 @@ namespace Prime.Controllers
             IEmailService emailService)
         {
             _organizationService = organizationService;
-            _agreementService = agreementService;
+            _organizationAgreementService = organizationAgreementService;
             _partyService = partyService;
             _documentService = documentService;
             _siteService = siteService;
@@ -326,7 +326,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AgreementViewModel>>> GetOrganizationAgreements(int organizationId)
         {
-            var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
+            var agreements = await _organizationAgreementService.GetOrgAgreementsAsync(organizationId);
 
             return Ok(agreements);
         }
@@ -397,7 +397,7 @@ namespace Prime.Controllers
                 return NotFound($"Organization not found with id {organizationId}");
             }
 
-            var agreement = await _agreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
+            var agreement = await _organizationAgreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
             if (agreement == null)
             {
                 return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
@@ -426,12 +426,12 @@ namespace Prime.Controllers
                 return NotFound($"Organization not found with id {organizationId}");
             }
 
-            if (agreementType.IsEnrolleeAgreement())
+            if (!agreementType.IsOrganizationAgreement())
             {
                 return BadRequest($"Agreement with type {agreementType} not allowed");
             }
 
-            var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
+            var pdf = await _organizationAgreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
 
             return Ok(pdf);
         }
