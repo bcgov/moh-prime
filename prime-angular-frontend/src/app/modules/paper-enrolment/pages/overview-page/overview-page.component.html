@@ -21,7 +21,9 @@
 
   <app-regulatory-overview [regulatory]="enrollee"></app-regulatory-overview>
 
-  <app-obo-sites-overview [oboSiteForm]="enrollee"></app-obo-sites-overview>
+  <app-obo-sites-overview [oboSiteForm]="enrollee"
+                          [enrolleeCareSettings]="enrollee?.enrolleeCareSettings">
+  </app-obo-sites-overview>
 
   <app-self-declaration-overview [selfDeclarations]="enrollee"></app-self-declaration-overview>
 

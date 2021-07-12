@@ -5,6 +5,8 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { OboSitesFormModel } from './obo-sites-form.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-obo-sites-overview',
@@ -22,31 +24,31 @@ import { OboSitesFormModel } from './obo-sites-form.model';
         </button>
       </app-page-subheader>
 
-      <ng-container *ngFor="let careSetting of oboSiteForm?.enrolleeCareSettings">
+      <ng-container *ngFor="let careSetting of enrolleeCareSettings">
 
         <ng-container *ngFor="let oboSite of oboSiteForm?.oboSites">
           <ng-container *ngIf="oboSite?.careSettingCode === careSetting?.careSettingCode">
             <app-enrollee-property title="Care Setting"
                                    [makeBold]="true">
               <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
-                <span *ngIf="oboSite?.careSettingCode === oboSite?.enrolleeHealthAuthorities?.healthAuthorityCode">
+                <span *ngIf="oboSite?.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">
                     ({{ careSetting?.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
                   </span>
               </div>
 
-              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
                                      title="Site Name"
                                      [makeBold]="true">
                 {{ oboSite.siteName | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property *ngIf="oboSite?.careSettingCode === oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
                                      title="Facility Name"
                                      [makeBold]="true">
                 {{ oboSite.facilityName | default }}
               </app-enrollee-property>
 
-              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== oboSiteForm?.enrolleeHealthAuthorities?.healthAuthorityCode"
+              <app-enrollee-property *ngIf="oboSite?.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
                                      title="Site ID"
                                      [makeBold]="true">
                 {{ oboSite.pec | default }}
@@ -88,6 +90,8 @@ import { OboSitesFormModel } from './obo-sites-form.model';
 })
 export class OboSitesOverviewComponent implements OnInit {
   @Input() public oboSiteForm: OboSitesFormModel;
+  @Input() public enrolleeCareSettings: CareSetting[];
+  public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public routeUtils: RouteUtils;
 
