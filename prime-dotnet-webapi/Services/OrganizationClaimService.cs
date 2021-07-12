@@ -21,7 +21,7 @@ namespace Prime.Services
         public async Task<bool> DeleteClaimAsync(int organizationId, int partyId)
         {
             var claim = await _context.OrganizationClaims
-                .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId && oc.PartyId == partyId);
+                .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId && oc.NewSigningAuthorityId == partyId);
             if (claim == null)
             {
                 return false;

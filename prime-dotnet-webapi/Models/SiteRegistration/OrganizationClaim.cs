@@ -15,10 +15,12 @@ namespace Prime.Models
         [JsonIgnore]
         public Organization Organization { get; set; }
 
-        public int PartyId { get; set; }
+        public int NewSigningAuthorityId { get; set; }
 
         [JsonIgnore]
-        public Party Party { get; set; }
+        public Party NewSigningAuthority { get; set; }
+
+        public string ProvidedSiteId { get; set; }
 
         public string Details { get; set; }
     }

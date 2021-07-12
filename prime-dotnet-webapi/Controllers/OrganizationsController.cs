@@ -28,6 +28,8 @@ namespace Prime.Controllers
         private readonly ISiteService _siteService;
         private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IBusinessEventService _businessEventService;
+        private readonly IAdminService _adminService;
+
 
         public OrganizationsController(
             IOrganizationService organizationService,
@@ -36,7 +38,8 @@ namespace Prime.Controllers
             IDocumentService documentService,
             ISiteService siteService,
             IOrganizationClaimService organizationClaimService,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            IAdminService adminService)
         {
             _organizationService = organizationService;
             _agreementService = agreementService;
@@ -45,6 +48,7 @@ namespace Prime.Controllers
             _siteService = siteService;
             _organizationClaimService = organizationClaimService;
             _businessEventService = businessEventService;
+            _adminService = adminService;
         }
 
         // GET: api/Organizations
@@ -200,17 +204,26 @@ namespace Prime.Controllers
             {
                 return BadRequest("Could not approve claim for an organization, as the given SigningAuthority or Organization does not exist.");
             }
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimApproval.OrganizationId);
+            if (orgClaim == null)
+            {
+                return NotFound("Cannot locate Claim for given Organization.");
+            }
+            var userId = HttpContext.User.GetPrimeUserId();
+            Admin admin = await _adminService.GetAdminAsync(userId);
 
             if (!await _organizationService.SwitchSigningAuthorityAsync(claimApproval.OrganizationId, claimApproval.PartyId))
             {
                 // TODO: Properly communicate error
                 return BadRequest("Could not assign Organization to new SigningAuthority.");
             }
+
+            await _businessEventService.CreateOrganizationEventAsync(claimApproval.OrganizationId, claimApproval.PartyId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved by {admin.LastName}, {admin.FirstName}");
+
             if (!await _organizationClaimService.DeleteClaimAsync(claimApproval.OrganizationId, claimApproval.PartyId))
             {
                 return NotFound("Cannot remove Claim for given SigningAuthority and Organization.");
             }
-            await _businessEventService.CreateOrganizationEventAsync(claimApproval.OrganizationId, claimApproval.PartyId, "Organization Claim Approved");
 
             return NoContent();
         }

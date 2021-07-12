@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210706181812_AddOrganizationClaim")]
+    [Migration("20210711143345_AddOrganizationClaim")]
     partial class AddOrganizationClaim
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -13701,11 +13701,14 @@ namespace Prime.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("text");
 
+                    b.Property<int>("NewSigningAuthorityId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("PartyId")
-                        .HasColumnType("integer");
+                    b.Property<string>("ProvidedSiteId")
+                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
@@ -13715,9 +13718,9 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId");
+                    b.HasIndex("NewSigningAuthorityId");
 
-                    b.HasIndex("PartyId");
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("OrganizationClaim");
                 });
@@ -16270,15 +16273,15 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.OrganizationClaim", b =>
                 {
-                    b.HasOne("Prime.Models.Organization", "Organization")
+                    b.HasOne("Prime.Models.Party", "NewSigningAuthority")
                         .WithMany()
-                        .HasForeignKey("OrganizationId")
+                        .HasForeignKey("NewSigningAuthorityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Prime.Models.Party", "Party")
+                    b.HasOne("Prime.Models.Organization", "Organization")
                         .WithMany()
-                        .HasForeignKey("PartyId")
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

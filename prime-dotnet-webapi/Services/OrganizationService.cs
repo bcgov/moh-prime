@@ -152,7 +152,8 @@ namespace Prime.Services
             var organizationCLaim = new OrganizationClaim
             {
                 OrganizationId = organization.Id,
-                PartyId = partyId,
+                NewSigningAuthorityId = partyId,
+                ProvidedSiteId = pec,
                 Details = claimDetail
             };
 
@@ -181,7 +182,7 @@ namespace Prime.Services
                     .Where(o => o.Organization.Sites.Any(s => s.PEC == searchOptions.Pec))
                 )
                 .If(userId != Guid.Empty, q => q
-                    .Where(o => o.Party.UserId == userId)
+                    .Where(o => o.NewSigningAuthority.UserId == userId)
                 )
                 .CountAsync();
         }

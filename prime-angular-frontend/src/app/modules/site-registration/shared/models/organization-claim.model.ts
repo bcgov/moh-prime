@@ -1,6 +1,6 @@
 // TODO: Somehow combine with OrganizationClaimFormModel?
 export interface OrganizationClaim {
-  partyId: number;
+  newSigningAuthorityId: number;
   organizationId: number;
   details: string;
 }

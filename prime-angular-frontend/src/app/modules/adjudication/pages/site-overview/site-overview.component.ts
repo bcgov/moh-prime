@@ -115,7 +115,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.form.get('pec').setValue(site.pec);
         return of(null);
       }),
-      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.partyId}`))
+      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
     ).subscribe((signingAuthority: Party) => {
       // Note if orgClaim is null, signingAuthority will be null too
       this.newSigningAuthority = signingAuthority;
