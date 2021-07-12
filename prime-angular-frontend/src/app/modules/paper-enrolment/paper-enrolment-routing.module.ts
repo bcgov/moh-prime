@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+import { AdjudicationGuard } from '@adjudication/shared/guards/adjudication.guard';
 
 import { PaperEnrolmentRoutes } from './paper-enrolment.routes';
 import { PaperEnrolmentGuard } from './shared/guards/paper-enrolment.guard';
@@ -16,8 +18,6 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { FinalizedEnrolmentGuard } from './shared/guards/finalized-enrolment.guard';
-import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
-import { AdjudicationGuard } from '@adjudication/shared/guards/adjudication.guard';
 
 const routes: Routes = [
   {
