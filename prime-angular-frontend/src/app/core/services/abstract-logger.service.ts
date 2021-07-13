@@ -37,7 +37,6 @@ export abstract class AbstractLoggerService {
    */
   public error(msg: string, ...data: any[]) {
     this.print('error', { msg, data });
-    // this.loggerResource.createErrorLog({ message: msg, data: JSON.stringify(data), logType: LogType.ERROR }).subscribe();
   }
 
   /**
