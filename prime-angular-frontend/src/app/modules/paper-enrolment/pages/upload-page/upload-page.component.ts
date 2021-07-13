@@ -87,7 +87,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe(({ assignedTOAType }: HttpEnrollee) => {
         if (assignedTOAType) {
-          this.formState.patchValue({ agreementType: assignedTOAType });
+          this.formState.patchValue({ assignedTOAType });
         }
       });
 
@@ -106,7 +106,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     this.formState.form.markAsPristine();
 
     const enrolleeId = +this.route.snapshot.params.eid;
-    return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.agreementType)
+    return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.assignedTOAType)
       .pipe(
         exhaustMap(() =>
           (this.documentGuids.length > 0)

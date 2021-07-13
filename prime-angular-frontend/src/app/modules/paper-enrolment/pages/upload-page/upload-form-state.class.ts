@@ -12,8 +12,8 @@ export class UploadFormState extends AbstractFormState<UploadForm> {
     this.buildForm();
   }
 
-  public get agreementType(): FormControl {
-    return this.form.get('agreementType') as FormControl;
+  public get assignedTOAType(): FormControl {
+    return this.form.get('assignedTOAType') as FormControl;
   }
 
   public get json(): UploadForm {
@@ -34,7 +34,7 @@ export class UploadFormState extends AbstractFormState<UploadForm> {
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      agreementType: [null, [Validators.required]],
+      assignedTOAType: [null, [Validators.required]],
     });
   }
 }
