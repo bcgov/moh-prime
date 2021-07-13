@@ -3,31 +3,21 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { Address, AddressType, addressTypes } from '@shared/models/address.model';
-import { EnrolleeAgreement } from '@shared/models/agreement.model';
-import { Enrollee } from '@shared/models/enrollee.model';
-import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
-import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
-import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import { AgreementVersion } from '@shared/models/agreement-version.model';
-
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+// TODO move to lib
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
-import { CareSetting } from '@enrolment/shared/models/care-setting.model';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { Job } from '@enrolment/shared/models/job.model';
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
-import { OboSite } from '@enrolment/shared/models/obo-site.model';
-import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
 
 @Injectable({
