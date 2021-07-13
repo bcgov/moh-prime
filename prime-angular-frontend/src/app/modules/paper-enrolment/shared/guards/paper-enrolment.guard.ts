@@ -49,6 +49,11 @@ export class PaperEnrolmentGuard extends BaseGuard {
     }
   }
 
+  /**
+   * @description
+   * Prevent infinite route loops by navigating to a route only
+   * when the current route path is not the destination path.
+   */
   private navigate(routePath: string, destinationPath: string, params: Params): boolean {
     if (routePath === destinationPath) {
       return true;
