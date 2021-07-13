@@ -8,6 +8,7 @@ using Prime.ViewModels;
 using Prime.ViewModels.Emails;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 /**
  * Automapper Documentation

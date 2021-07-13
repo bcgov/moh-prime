@@ -19,7 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
-import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.class';
+import { AuthorizedUserFormState } from './authorized-user-form-state.class';
 
 @Component({
   selector: 'app-authorized-user-page',
@@ -27,7 +27,7 @@ import { AuthorizedUserPageFormState } from './authorized-user-page-form-state.c
   styleUrls: ['./authorized-user-page.component.scss']
 })
 export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: AuthorizedUserPageFormState;
+  public formState: AuthorizedUserFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isApproved: boolean;
@@ -102,7 +102,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
   }
 
   protected createFormInstance(): void {
-    this.formState = new AuthorizedUserPageFormState(this.fb, this.formUtilsService);
+    this.formState = new AuthorizedUserFormState(this.fb, this.formUtilsService);
   }
 
   protected patchForm(): void {
@@ -132,16 +132,13 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
     const authorizedUserId = this.authorizedUserService.authorizedUser?.id;
     const payload = this.formState.json;
 
-    if (!authorizedUserId) {
-      return this.healthAuthorityResource.createAuthorizedUser({ ...payload, ...this.bcscUser })
-        .pipe(NoContentResponse);
-    }
-
-    return this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
+    return (!authorizedUserId)
+      ? this.healthAuthorityResource.createAuthorizedUser({ ...this.bcscUser, ...payload })
+        .pipe(NoContentResponse)
+      : this.healthAuthorityResource.updateAuthorizedUser({ ...payload, id: authorizedUserId });
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.ACCESS_REQUESTED);
   }
 
