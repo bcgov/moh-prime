@@ -732,7 +732,7 @@ namespace Prime.Services
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
-                .Include(s => s.BusinessLicence)
+                .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
                 .Include(s => s.SiteStatuses);

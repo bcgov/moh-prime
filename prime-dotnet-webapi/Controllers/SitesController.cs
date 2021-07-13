@@ -360,10 +360,10 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (site.BusinessLicence != null)
-            {
-                return Conflict($"Business Licence exists for site with id {siteId}");
-            }
+            // if (site.BusinessLicence != null)
+            // {
+            //     return Conflict($"Business Licence exists for site with id {siteId}");
+            // }
 
             var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
             if (licence == null)
@@ -428,7 +428,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (site.BusinessLicence == null)
+            if (site.BusinessLicences == null)
             {
                 return NotFound($"Business Licence not found on site with id {siteId}");
             }
