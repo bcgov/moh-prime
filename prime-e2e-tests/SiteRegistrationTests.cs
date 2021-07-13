@@ -46,8 +46,14 @@ namespace TestPrimeE2E.SiteRegistration
             }
             else
             {
+                Assert.AreEqual("Create or Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
+                // Choosing to create organization
+                ClickButton("Continue");
+
                 //Signing Authority Information
                 Assert.AreEqual("PharmaNet Site Registration", _driver.FindPatiently("//h1[@class='mb-4']").Text);
+                // Wait for page to fully load
+                _driver.FindPatiently("//input[@formControlName='phone']");
                 Assert.AreEqual("Signing Authority Information", _driver.FindPatiently("//h2[@class='title']").Text);
                 TypeIntoField("Job Title", _name.JobTitle());
                 TypeIntoField("Phone Number", "5555555555");
