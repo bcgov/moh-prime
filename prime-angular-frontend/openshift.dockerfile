@@ -5,7 +5,7 @@ FROM public.ecr.aws/bitnami/node:14.17.0-prod AS build-deps
 
 
 ## Everything should be proxied through nginx now, no separate url
-# ARG DOCUMENT_MANAGER_URL 
+# ARG DOCUMENT_MANAGER_URL
 ARG JWT_WELL_KNOWN_CONFIG
 ARG KEYCLOAK_CLIENT_ID
 ARG KEYCLOAK_REALM
@@ -32,6 +32,8 @@ WORKDIR /usr/src/app
 COPY package.json package-lock.json ./
 
 COPY . .
+
+RUN echo $REDIRECT_URL
 
 # Fill template with environment variables
 RUN (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
