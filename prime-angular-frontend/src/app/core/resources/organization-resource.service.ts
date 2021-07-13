@@ -162,7 +162,7 @@ export class OrganizationResource {
   }
 
   public getOrganizationClaimByOrgId(organizationId: number): Observable<OrganizationClaim> {
-    return this.apiResource.get<OrganizationClaim>(`organizations/claim/${organizationId}`)
+    return this.apiResource.get<OrganizationClaim>(`organizations/${organizationId}/claims`)
       .pipe(
         map((response: ApiHttpResponse<OrganizationClaim>) => response.result),
         tap((orgClaim: OrganizationClaim) => this.logger.info('OrganizationClaim', orgClaim)),

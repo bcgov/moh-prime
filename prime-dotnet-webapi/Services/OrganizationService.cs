@@ -52,7 +52,7 @@ namespace Prime.Services
         {
             searchOptions ??= new OrganizationSearchOptions();
 
-            var task = _context.Organizations
+            var results = await _context.Organizations
                 .AsNoTracking()
                 .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
                     .Search(
@@ -67,13 +67,12 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
 
-            // TODO: Fix "A second operation started on this context before a previous operation completed." error
-            var results = task.Result;
-
             results.ForEach(r =>
             {
                 var task = _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id);
+                // TODO: Better way to address "A second operation started on this context before a previous operation completed." error
                 r.IsUnderReview = task.Result;
+                //                r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id);
             });
 
             return results

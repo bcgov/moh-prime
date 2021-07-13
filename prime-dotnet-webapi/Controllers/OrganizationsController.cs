@@ -175,11 +175,11 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
-        // GET: api/Organizations/claim/5
+        // GET: api/Organizations/5/claims
         /// <summary>
         /// Find OrganizationClaim by Organization ID.
         /// </summary>
-        [HttpGet("claim/{organizationId}", Name = nameof(GetOrganizationClaimByOrgId))]
+        [HttpGet("{organizationId}/claims", Name = nameof(GetOrganizationClaimByOrgId))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
