@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { IDashboard } from '@lib/modules/dashboard/interfaces/dashboard.interface';
 import { DashboardMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-item.model';
