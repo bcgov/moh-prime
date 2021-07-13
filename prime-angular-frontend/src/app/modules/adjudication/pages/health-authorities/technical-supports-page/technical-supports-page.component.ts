@@ -47,6 +47,6 @@ export class TechnicalSupportsPageComponent extends AbstractContactsPage impleme
   }
 
   protected performSubmissionRequest(contact: Contact[]): NoContent {
-    return this.healthAuthResource.updateTechnicalSupports(this.route.snapshot.params.haid, contact);
+    return this.healthAuthResource.updateHealthAuthorityTechnicalSupports(this.route.snapshot.params.haid, contact);
   }
 }

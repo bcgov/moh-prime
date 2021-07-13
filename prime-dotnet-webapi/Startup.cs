@@ -33,6 +33,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
@@ -71,6 +72,7 @@ namespace Prime
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<ILogService, LogService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
@@ -79,6 +81,7 @@ namespace Prime
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
