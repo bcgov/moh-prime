@@ -131,7 +131,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
-
         public async Task<ActionResult<Organization>> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
         {
             if (!await _partyService.PartyExistsAsync(claimOrganization.PartyId, PartyType.SigningAuthority))
