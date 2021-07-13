@@ -141,7 +141,7 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task<Organization> ClaimOrganizationAsync(ClaimOrganizationViewModel claimOrganization)
+        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization)
         {
             var organization = await GetOrganizationByPecAsync(claimOrganization.PEC);
             if (organization == null)

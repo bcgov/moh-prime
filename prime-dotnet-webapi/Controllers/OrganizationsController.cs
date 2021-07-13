@@ -132,7 +132,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
+        public async Task<ActionResult> ClaimOrganization(OrganizationClaimViewModel claimOrganization)
         {
             var party = await _partyService.GetPartyAsync(claimOrganization.PartyId, PartyType.SigningAuthority);
             if (party == null)

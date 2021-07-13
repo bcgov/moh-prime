@@ -1,6 +1,6 @@
 namespace Prime.ViewModels
 {
-    public class ClaimOrganizationViewModel
+    public class OrganizationClaimViewModel
     {
         public int PartyId { get; set; }
         public string PEC { get; set; }
