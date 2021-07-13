@@ -12,7 +12,7 @@
         <td mat-cell
             *matCellDef="let row;">
           <div class="flex-container flex-wrap d-flex">
-            <button *ngIf="row.isUnderReview"
+            <button *ngIf="row.hasClaim"
                     mat-icon-button
                     color="warn"
                     (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">

@@ -57,7 +57,7 @@ namespace Prime.Models
 
         // TODO: Way to not duplicate in Organization and OrganizationListViewModel?
         [NotMapped]
-        public bool IsUnderReview { get; set; }
+        public bool HasClaim { get; set; }
 
     }
 }

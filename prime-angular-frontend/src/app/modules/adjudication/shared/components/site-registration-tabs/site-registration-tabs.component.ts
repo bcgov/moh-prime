@@ -426,7 +426,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthority,
         name,
         doingBusinessAs,
-        isUnderReview
+        hasClaim
       } = organization;
 
       return [{
@@ -436,7 +436,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
-        isUnderReview,
+        hasClaim,
         ...this.toSiteViewModelPartial(site)
       }];
     };

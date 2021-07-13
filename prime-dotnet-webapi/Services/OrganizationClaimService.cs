@@ -11,7 +11,7 @@ namespace Prime.Services
             IHttpContextAccessor httpContext)
             : base(context, httpContext) { }
 
-        public async Task<bool> IsOrganizationUnderReviewAsync(int organizationId)
+        public async Task<bool> DoesOrganizationHaveClaimAsync(int organizationId)
         {
             return await _context.OrganizationClaims
                 .AsNoTracking()
