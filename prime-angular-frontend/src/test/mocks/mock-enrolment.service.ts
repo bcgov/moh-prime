@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { Enrolment } from '@shared/models/enrolment.model';
 import { IEnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Address } from '@shared/models/address.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
@@ -73,7 +73,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         enrolmentId,
         statusCode: null,
         status: {
-          code: EnrolmentStatus.EDITABLE,
+          code: EnrolmentStatusEnum.EDITABLE,
           name: null
         },
         statusDate: null,
@@ -97,7 +97,7 @@ export class MockEnrolmentService implements IEnrolmentService {
         enrolmentId,
         statusCode: null,
         status: {
-          code: EnrolmentStatus.EDITABLE,
+          code: EnrolmentStatusEnum.EDITABLE,
           name: null
         },
         statusDate: null,

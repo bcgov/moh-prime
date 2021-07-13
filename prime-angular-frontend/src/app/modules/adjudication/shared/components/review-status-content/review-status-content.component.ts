@@ -6,7 +6,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentStatusReason } from '@shared/models/enrolment-status-reason.model';
 import { EnrolmentStatusReason as EnrolmentStatusReasonEnum } from '@shared/enums/enrolment-status-reason.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import { EnrolmentStatus as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum as EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';

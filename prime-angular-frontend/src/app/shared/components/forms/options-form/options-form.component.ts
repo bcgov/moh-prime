@@ -35,10 +35,12 @@ export class OptionsFormComponent implements OnInit {
   @Input() public controlName: string;
   /**
    * @description
+   * Key for accessing the option value.
+   */
+  @Input() public optionKey: string;
+  /**
+   * @description
    * Key for accessing the option display value.
-   *
-   * NOTE: Only used with autocomplete, and if omitted the
-   * value is considered to be a primitive data type.
    */
   @Input() public optionLabel: string;
   /**
