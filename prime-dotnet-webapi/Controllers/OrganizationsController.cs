@@ -154,12 +154,12 @@ namespace Prime.Controllers
         /// <summary>
         /// Check if organization claim exists by a given search criteria.
         /// </summary>
-        [HttpGet("claims", Name = nameof(GetOrganizationClaimCount))]
+        [HttpGet("claims", Name = nameof(OrganizationClaimExists))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetOrganizationClaimCount([FromQuery] OrganizationClaimSearchOptions search)
+        public async Task<ActionResult> OrganizationClaimExists([FromQuery] OrganizationClaimSearchOptions search)
         {
             // check if the organization exists with the given PEC
             if (!string.IsNullOrEmpty(search.Pec))
