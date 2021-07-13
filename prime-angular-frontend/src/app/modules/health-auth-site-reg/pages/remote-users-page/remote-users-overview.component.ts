@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -19,7 +19,7 @@ import { RemoteUsersForm } from './remote-users-form.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RemoteUsersOverviewComponent extends AbstractOverview implements OnInit {
+export class RemoteUsersOverviewComponent extends AbstractOverview {
   @Input() public remoteUsers: RemoteUsersForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
@@ -29,6 +29,4 @@ export class RemoteUsersOverviewComponent extends AbstractOverview implements On
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
-
-  public ngOnInit(): void { }
 }
