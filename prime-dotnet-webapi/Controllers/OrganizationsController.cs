@@ -144,7 +144,7 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
 
-            var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
+            var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization);
 
             return Ok(organization);
         }

@@ -141,9 +141,9 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task<Organization> ClaimOrganizationAsync(int partyId, string pec, string claimDetail)
+        public async Task<Organization> ClaimOrganizationAsync(ClaimOrganizationViewModel claimOrganization)
         {
-            var organization = await GetOrganizationByPecAsync(pec);
+            var organization = await GetOrganizationByPecAsync(claimOrganization.PEC);
             if (organization == null)
             {
                 return null;
@@ -152,15 +152,15 @@ namespace Prime.Services
             var organizationCLaim = new OrganizationClaim
             {
                 OrganizationId = organization.Id,
-                NewSigningAuthorityId = partyId,
-                ProvidedSiteId = pec,
-                Details = claimDetail
+                NewSigningAuthorityId = claimOrganization.PartyId,
+                ProvidedSiteId = claimOrganization.PEC,
+                Details = claimOrganization.ClaimDetail
             };
 
             _context.OrganizationClaims.Add(organizationCLaim);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, partyId, "Organization Claim Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, claimOrganization.PartyId, "Organization Claim Created");
 
             return organization;
         }
