@@ -17,41 +17,11 @@
   <app-care-setting-overview [careSettings]="enrollee"></app-care-setting-overview>
   <app-regulatory-overview [regulatory]="enrollee"></app-regulatory-overview>
   <app-obo-sites-overview [oboSiteForm]="enrollee"
-                          [enrolleeCareSettings]="enrollee?.enrolleeCareSettings">
-  </app-obo-sites-overview>
+                          [enrolleeCareSettings]="enrollee?.enrolleeCareSettings"></app-obo-sites-overview>
   <app-self-declaration-overview [selfDeclarations]="enrollee"></app-self-declaration-overview>
-
-  <app-page-section>
-    <app-page-subheader>
-      <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
-
-      <button *ngIf="true"
-              mat-icon-button
-              matTooltip="Edit Upload Information"
-              (click)="onRoute(PaperEnrolmentRoutes.UPLOAD)">
-        <mat-icon>edit</mat-icon>
-      </button>
-    </app-page-subheader>
-    <app-enrollee-property title="TOA Type">
-      {{ AgreementTypeNameMap[enrollee?.assignedTOAType] }}
-    </app-enrollee-property>
-
-    <ng-container *ngIf="savedDocuments?.length">
-
-      <app-enrollee-property title="Filename">
-        <div *ngFor="let document of savedDocuments"
-             class="mb-2">
-          <button mat-stroked-button
-                  color="primary"
-                  (click)="getDocument(document.id)">
-            <mat-icon class="upload mr-2">attachment</mat-icon>
-            {{ document.filename | default }}
-          </button>
-        </div>
-      </app-enrollee-property>
-
-    </ng-container>
-  </app-page-section>
+  <app-upload-overview [upload]="enrollee"
+                       [documents]="documents"
+                       (download)="onDownload($event)"></app-upload-overview>
 
   <app-page-footer [isInitialEnrolment]="true"
                    primaryActionLabel="Submit Enrolment"
