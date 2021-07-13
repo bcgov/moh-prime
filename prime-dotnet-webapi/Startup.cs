@@ -33,6 +33,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
@@ -71,25 +72,23 @@ namespace Prime
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
-            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
+            services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
-            services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
-            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
-            services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
-            services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
-            services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
-            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
-            services.AddScoped<ISubmissionService, SubmissionService>();
-            services.AddScoped<ISoapService, SoapService>();
-            services.AddScoped<ISiteService, SiteService>();
-            services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
+            services.AddScoped<IRazorConverterService, RazorConverterService>();
+            services.AddScoped<ISiteService, SiteService>();
+            services.AddScoped<ISoapService, SoapService>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

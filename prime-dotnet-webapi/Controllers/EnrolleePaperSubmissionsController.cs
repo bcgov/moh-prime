@@ -254,7 +254,7 @@ namespace Prime.Controllers
                 return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
-            await _enrolleeService.FinailizeSubmissionAsync(enrolleeId);
+            await _enrolleeService.FinalizeSubmissionAsync(enrolleeId);
 
             return Ok();
         }

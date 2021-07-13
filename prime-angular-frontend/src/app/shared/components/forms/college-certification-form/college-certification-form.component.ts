@@ -155,6 +155,9 @@ export class CollegeCertificationFormComponent implements OnInit {
       .subscribe((collegeCode: number) => {
         this.resetCollegeCertification();
         this.setCollegeCertification(collegeCode);
+        if (!this.condensed) {
+          this.loadPractices(collegeCode);
+        }
       });
 
     if (!this.condensed) {

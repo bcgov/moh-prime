@@ -15,6 +15,7 @@ namespace Prime.Models.HealthAuthorities
         [JsonIgnore]
         public HealthAuthorityOrganization HealthAuthorityOrganization { get; set; }
 
+        [Required]
         public int VendorCode { get; set; }
 
         [JsonIgnore]

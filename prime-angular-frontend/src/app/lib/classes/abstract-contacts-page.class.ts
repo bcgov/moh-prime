@@ -10,12 +10,12 @@ import { Contact } from '@lib/models/contact.model';
 import { ContactFormState } from '@lib/classes/contact-form-state.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
+import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { CardListItem } from '@shared/components/card-list/card-list.component';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { HealthAuthority } from '@shared/models/health-authority.model';
-import { UtilsService } from '@core/services/utils.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 // TODO step this back to something more generic, and refine to
 // accommodate other list form combinations like remote users
