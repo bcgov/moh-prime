@@ -1,106 +1,128 @@
-<div class="row">
-  <div class="col">
-    <table mat-table
-           matSort
-           class="w-100"
-           [dataSource]="dataSource">
+<app-page>
 
-      <ng-container matColumnDef="code">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"
-            class="prefix-header pl-0">
-          Licence Class
-        </th>
-        <td mat-cell
-            *matCellDef="let row;">
-          {{ row.code | configCode: 'licenses' }}
-        </td>
-      </ng-container>
-
-      <!-- <ng-container matColumnDef="displayId">
-        <th mat-header-cell
-            *matHeaderCellDef
-            mat-sort-header
-            scope="col"> Reference ID
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.displayId }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="name">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Enrollee Name
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row | fullname }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="givenNames">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Given Names
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.givenNames | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="currentTOA">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Current ToA
-        </th>
-        <td mat-cell
-            *matCellDef="let row;">
-          <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ row.currentTOAStatus | default }}</mat-chip>
-          </mat-chip-list>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> State
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"
-            class="status"
-            [class]="row.currentStatusCode | configCode: 'statuses' | case: 'space' : 'kebab'">
-
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="remoteAccess">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Remote Access
-        </th>
-        <td mat-cell
-            *matCellDef="let row;">
-          <mat-chip-list [selectable]="false">
-            <mat-chip [disableRipple]="true">{{ row.remoteAccess ? "Yes" : "No" | default }}</mat-chip>
-          </mat-chip-list>
-        </td>
-      </ng-container>
+  <app-page-header>License Classes</app-page-header>
 
 
-      <ng-container matColumnDef="careSetting">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Care Setting
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.careSettingCodes | careSetting: 'abbr' | join | default }} </td>
-      </ng-container> -->
+  <table mat-table
+         matSort
+         [dataSource]="dataSource">
 
+    <ng-container matColumnDef="collegeName">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header">
+        College Name
+      </th>
+      <td mat-cell
+          *matCellDef="let row;">
+        {{ row.collegeName | default }}
+      </td>
+    </ng-container>
 
-      <tr mat-header-row
-          *matHeaderRowDef="columns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: columns;"></tr>
-    </table>
+    <ng-container matColumnDef="licenseCode">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-2">
+        Licence Class
+      </th>
+      <td mat-cell
+          class="pl-2"
+          *matCellDef="let row;">
+        {{ row.licenseCode | configCode: 'licenses' | default }}
+      </td>
+    </ng-container>
 
-  </div>
-</div>
+    <ng-container matColumnDef="prefix">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-2">
+        Pract Ref Id
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.prefix | default }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="namedInImReg">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        NIMR
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.namedInImReg }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="licensedToProvideCare">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        LPC
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.licensedToProvideCare }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="manual">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        Force Manual
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.manual }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="validate">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        Validate (PNET)
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ row.validate }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="prescriberIdType">
+      <th mat-header-cell
+          *matHeaderCellDef
+          scope="col"
+          class="prefix-header pl-3">
+        PractId
+      </th>
+      <td mat-cell
+          class="pl-3"
+          *matCellDef="let row;">
+        {{ PrescriberIdTypeEnum[row.prescriberIdType] }}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row
+        *matHeaderRowDef="columns; sticky: true"></tr>
+    <tr mat-row
+        *matRowDef="let row; columns: columns;"></tr>
+
+  </table>
+
+</app-page>
