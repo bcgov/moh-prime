@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
@@ -16,8 +16,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
-        <button *ngIf="true"
-                mat-icon-button
+        <button mat-icon-button
                 matTooltip="Edit Job Site Information"
                 (click)="onRoute(PaperEnrolmentRoutes.OBO_SITES)">
           <mat-icon>edit</mat-icon>
@@ -86,26 +85,18 @@ import { OboSitesFormModel } from './obo-sites-form.model';
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
-  encapsulation: ViewEncapsulation.Emulated
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OboSitesOverviewComponent implements OnInit {
+export class OboSitesOverviewComponent extends AbstractOverview {
   @Input() public oboSiteForm: OboSitesFormModel;
   @Input() public enrolleeCareSettings: CareSetting[];
   public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  private routeUtils: RouteUtils;
 
   constructor(
     route: ActivatedRoute,
     router: Router
   ) {
-    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-  }
-
-  public ngOnInit(): void { }
-
-  public onRoute(routePath: string | string[]) {
-    routePath = (Array.isArray(routePath)) ? routePath : [routePath];
-    this.routeUtils.routeRelativeTo(routePath);
+    super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 }
