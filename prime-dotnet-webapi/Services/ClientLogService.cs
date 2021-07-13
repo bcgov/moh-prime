@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Prime.Models;
@@ -5,22 +6,24 @@ using Prime.ViewModels;
 
 namespace Prime.Services
 {
-    public class LogService : BaseService, ILogService
+    public class ClientLogService : BaseService, IClientLogService
     {
-        public LogService(
+        public ClientLogService(
             ApiDbContext context,
             IHttpContextAccessor httpContext)
             : base(context, httpContext)
         { }
 
-        public async Task CreateLogAsync(LogType logType, FrontEndLogViewModel log)
+        public async Task CreateLogAsync(ClientLogViewModel log)
         {
-            var newLog = new FrontEndLog
+            var newLog = new ClientLog
             {
-                LogType = logType,
-                Msg = log.Msg,
-                Data = log.Data
+                LogType = log.LogType,
+                Msg = log.Message,
+                Data = log.Data,
+                CreatedDate = DateTime.Now
             };
+
             _context.FrontEndLogs.Add(newLog);
 
             await _context.SaveChangesAsync();

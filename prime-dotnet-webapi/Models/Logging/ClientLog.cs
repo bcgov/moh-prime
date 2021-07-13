@@ -1,12 +1,12 @@
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Prime.Models
 {
 
-    [Table("FrontEndLog")]
-    public class FrontEndLog : BaseAuditable
+    [Table("ClientLog")]
+    public class ClientLog : BaseAuditable
     {
         [Key]
         public int Id { get; set; }
@@ -18,5 +18,8 @@ namespace Prime.Models
 
         [Required]
         public LogType LogType { get; set; }
+
+        [Required]
+        public DateTime CreatedDate { get; set; }
     }
 }

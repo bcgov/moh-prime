@@ -9,7 +9,7 @@ import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
@@ -50,7 +50,7 @@ export class SiteManagementPageComponent implements OnInit {
     private siteResource: SiteResource,
     private utilsService: UtilsService,
     private authService: AuthService,
-    private logger: LoggerService,
+    private logger: ConsoleLoggerService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe

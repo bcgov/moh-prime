@@ -5,33 +5,32 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Services;
 using Prime.Models;
-using Prime.Models.Api;
 using Prime.ViewModels;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api/client-logs")]
     [ApiController]
-    public class LogsController : PrimeControllerBase
+    public class ClientLogsController : PrimeControllerBase
     {
-        private readonly ILogService _logService;
+        private readonly IClientLogService _logService;
 
-        public LogsController(ILogService logService)
+        public ClientLogsController(IClientLogService logService)
         {
             _logService = logService;
         }
 
-        // POST /api/logs/error
+        // POST /api/client-logs
         /// <summary>
-        /// Creates an error log
+        /// Creates a client log
         /// </summary>
-        [HttpPost("error", Name = nameof(CreateErrorLog))]
+        [HttpPost("", Name = nameof(CreateLog))]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> CreateErrorLog(FrontEndLogViewModel log)
+        public async Task<ActionResult> CreateLog(ClientLogViewModel log)
         {
-            await _logService.CreateLogAsync(LogType.Error, log);
+            await _logService.CreateLogAsync(log);
             return NoContent();
         }
     }

@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
-import { LoggerService } from '@core/services/logger.service';
+import { AbstractLoggerService } from '@core/services/abstract-logger.service';
 
 // Type for NoContent responses from the API
 export type NoContent = Observable<void>;
@@ -13,7 +13,7 @@ export const NoContentResponse = pipe(map(() => void 0));
 
 export abstract class AbstractResource {
   constructor(
-    protected logger: LoggerService
+    protected logger: AbstractLoggerService
   ) { }
 
   public abstract get(
@@ -68,7 +68,7 @@ export abstract class AbstractResource {
    */
   protected handleSuccess<T>(): (response: HttpResponse<ApiHttpResponse<T>>) => ApiHttpResponse<T> {
     return ({ headers, status, body }: HttpResponse<ApiHttpResponse<T>>): ApiHttpResponse<T> => {
-      this.logger.info(`RESPONSE: ${ status }`, body);
+      this.logger.info(`RESPONSE: ${status}`, body);
 
       return { headers, status, ...body };
     };
@@ -85,7 +85,7 @@ export abstract class AbstractResource {
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      console.error(`Backend returned code ${ status }, body was:`, error);
+      console.error(`Backend returned code ${status}, body was:`, error);
     }
 
     return throwError(new ApiHttpErrorResponse(status, error, message));

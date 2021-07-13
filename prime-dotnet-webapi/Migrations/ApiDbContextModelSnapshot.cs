@@ -8907,6 +8907,43 @@ namespace Prime.Migrations
                     b.ToTable("Certification");
                 });
 
+            modelBuilder.Entity("Prime.Models.ClientLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LogType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Msg")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientLog");
+                });
+
             modelBuilder.Entity("Prime.Models.College", b =>
                 {
                     b.Property<int>("Code")
@@ -12230,40 +12267,6 @@ namespace Prime.Migrations
                             Code = 5,
                             Name = "Outpatient or community-based clinic"
                         });
-                });
-
-            modelBuilder.Entity("Prime.Models.FrontEndLog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Data")
-                        .HasColumnType("text");
-
-                    b.Property<int>("LogType")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Msg")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("FrontEndLog");
                 });
 
             modelBuilder.Entity("Prime.Models.GisEnrolment", b =>

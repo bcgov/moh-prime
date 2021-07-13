@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup, FormControl, ValidatorFn, FormArray, FormBuilder, Validators } from '@angular/forms';
 
 import { Person } from '@lib/models/person.model';
-import { LoggerService } from '@core/services/logger.service';
 import { Country } from '@shared/enums/country.enum'; // TODO move into @lib
 import { Province } from '@shared/enums/province.enum'; // TODO move into @lib
 import { AddressLine } from '@shared/models/address.model';
+import { ConsoleLoggerService } from './console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import { AddressLine } from '@shared/models/address.model';
 export class FormUtilsService {
   constructor(
     private fb: FormBuilder,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   /**

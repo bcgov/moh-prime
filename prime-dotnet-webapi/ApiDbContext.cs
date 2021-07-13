@@ -51,7 +51,7 @@ namespace Prime
             _context = context;
         }
 
-        public DbSet<FrontEndLog> FrontEndLogs { get; set; }
+        public DbSet<ClientLog> FrontEndLogs { get; set; }
 
         // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }

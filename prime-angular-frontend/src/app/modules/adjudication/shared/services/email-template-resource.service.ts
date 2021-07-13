@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ export class EmailTemplateResourceService {
   constructor(
     private apiResource: ApiResource,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getEmailTemplates(): Observable<EmailTemplate[]> {

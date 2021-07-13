@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Log } from '@core/models/log.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class LoggerResource {
     private http: HttpClient
   ) { }
 
-  public createErrorLog(log: { msg: string, data: string }): Observable<HttpResponse<any>> {
+  public createErrorLog(log: Log): Observable<HttpResponse<any>> {
     return this.http
-      .post(`${this.config.apiEndpoint}/logs/error`, log, { observe: 'response' });
+      .post(`${this.config.apiEndpoint}/client-logs`, log, { observe: 'response' });
   }
 
 }

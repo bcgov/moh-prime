@@ -4,12 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class CreateFrontEndLogging : Migration
+    public partial class CreateClientLogs : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "FrontEndLog",
+                name: "ClientLog",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -20,18 +20,19 @@ namespace Prime.Migrations
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     Msg = table.Column<string>(nullable: false),
                     Data = table.Column<string>(nullable: true),
-                    LogType = table.Column<int>(nullable: false)
+                    LogType = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FrontEndLog", x => x.Id);
+                    table.PrimaryKey("PK_ClientLog", x => x.Id);
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FrontEndLog");
+                name: "ClientLog");
         }
     }
 }

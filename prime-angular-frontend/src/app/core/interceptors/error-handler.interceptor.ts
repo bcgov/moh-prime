@@ -6,7 +6,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { LoggerService } from '@core/services/logger.service';
+import { HttpLoggerService } from '@core/services/http-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class ErrorHandlerInterceptor {
   constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
-    private logger: LoggerService
+    private logger: HttpLoggerService
   ) { }
 
   /**

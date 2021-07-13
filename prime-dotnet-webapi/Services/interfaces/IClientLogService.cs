@@ -4,8 +4,8 @@ using Prime.ViewModels;
 
 namespace Prime.Services
 {
-    public interface ILogService
+    public interface IClientLogService
     {
-        Task CreateLogAsync(LogType logType, FrontEndLogViewModel log);
+        Task CreateLogAsync(ClientLogViewModel log);
     }
 }

@@ -7,7 +7,6 @@ import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
@@ -64,7 +63,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     private toastService: ToastService,
     private utilsService: UtilsService,
     private viewportService: ViewportService,
-    private logger: LoggerService,
     private authService: AuthService
   ) {
     super(route, router);
