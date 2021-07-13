@@ -232,7 +232,7 @@ jobs:
             KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
             OC_APP=${{secrets.OC_APP}}
             SVC_NAME="dev"
-            REDIRECT_URL="https://develop.pharmanetenrolment.gov.bc.ca"
+            REDIRECT_URL="https://dev.pharmanetenrolment.gov.bc.ca"
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:dev
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
@@ -282,7 +282,7 @@ jobs:
             -p ASP_ENV=Development \
             -p IMAGE_TAG=dev \
             -p SVC_NAME=dev \
-            -p VANITY_URL=develop.pharmanetenrolment.gov.bc.ca \
+            -p VANITY_URL=dev.pharmanetenrolment.gov.bc.ca \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
