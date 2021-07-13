@@ -6,7 +6,7 @@ namespace Prime.Services
 {
     public interface IOrganizationClaimService
     {
-        Task<bool> DoesOrganizationHaveClaimAsync(int organizationId);
+        Task<bool> HasClaimAsync(int organizationId);
 
         /// <summary>
         ///

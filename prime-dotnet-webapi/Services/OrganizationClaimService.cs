@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Prime.Models;
 
 namespace Prime.Services
 {
@@ -11,7 +12,7 @@ namespace Prime.Services
             IHttpContextAccessor httpContext)
             : base(context, httpContext) { }
 
-        public async Task<bool> DoesOrganizationHaveClaimAsync(int organizationId)
+        public async Task<bool> HasClaimAsync(int organizationId)
         {
             return await _context.OrganizationClaims
                 .AsNoTracking()
@@ -32,7 +33,7 @@ namespace Prime.Services
             return (numAffected == 1);
         }
 
-        public Task<Models.OrganizationClaim> GetOrganizationClaimAsync(int organizationId)
+        public Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId)
         {
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);

@@ -69,7 +69,7 @@ namespace Prime.Services
 
             results.ForEach(r =>
             {
-                var task = _organizationClaimService.DoesOrganizationHaveClaimAsync(r.Id);
+                var task = _organizationClaimService.HasClaimAsync(r.Id);
                 // TODO: Better way to address "A second operation started on this context before a previous operation completed." error
                 r.HasClaim = task.Result;
                 //                r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id);
@@ -102,7 +102,7 @@ namespace Prime.Services
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
             // TODO: Simplify using Linq?
-            organization.HasClaim = await _organizationClaimService.DoesOrganizationHaveClaimAsync(organizationId);
+            organization.HasClaim = await _organizationClaimService.HasClaimAsync(organizationId);
             return organization;
         }
 

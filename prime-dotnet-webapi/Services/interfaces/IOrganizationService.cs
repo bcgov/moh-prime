@@ -30,11 +30,8 @@ namespace Prime.Services
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
 
         /// <summary>
-        ///
+        /// Returns <c>true</c> if can successfully switch signing authority, <c>false</c> otherwise.
         /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="newSigningAuthorityId"></param>
-        /// <returns><c>true</c> if can successfully switch signing authority, <c>false</c> otherwise.</returns>
         Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
     }
 }
