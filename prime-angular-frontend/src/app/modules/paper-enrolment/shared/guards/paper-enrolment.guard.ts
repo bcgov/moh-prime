@@ -44,17 +44,16 @@ export class PaperEnrolmentGuard extends BaseGuard {
   private routeDestination(routePath: string, httpEnrollee: HttpEnrollee, params: Params) {
     if (!httpEnrollee?.approvedDate) {
       return true;
-    } else return this.navigate(PaperEnrolmentRoutes.NEXT_STEPS, params);
+    } else {
+      return this.navigate(`/${this.config.routes.paperEnrolment}/${+params.eid}/${PaperEnrolmentRoutes.NEXT_STEPS}`, `${routePath}`, params);
+    }
   }
 
-  private navigate(routePath: string, params: Params): boolean {
-    const modulePath = this.config.routes.paperEnrolment;
-    const comparePath = `/${modulePath}/${params}/${routePath}`;
-
-    if (routePath === comparePath) {
+  private navigate(routePath: string, destinationPath: string, params: Params): boolean {
+    if (routePath === destinationPath) {
       return true;
     } else {
-      this.router.navigate([comparePath]);
+      this.router.navigate([routePath]);
       return false;
     }
   }
