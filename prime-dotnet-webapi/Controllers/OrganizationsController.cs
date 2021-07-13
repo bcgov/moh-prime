@@ -133,9 +133,15 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
         public async Task<ActionResult> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
         {
-            if (!await _partyService.PartyExistsAsync(claimOrganization.PartyId, PartyType.SigningAuthority))
+            var party = await _partyService.GetPartyAsync(claimOrganization.PartyId, PartyType.SigningAuthority);
+            if (party == null)
             {
                 return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
+            }
+
+            if (party.UserId != HttpContext.User.GetPrimeUserId())
+            {
+                return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
 
             var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization.PartyId, claimOrganization.PEC, claimOrganization.ClaimDetail);
