@@ -131,7 +131,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
+        public async Task<ActionResult> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
         {
             if (!await _partyService.PartyExistsAsync(claimOrganization.PartyId, PartyType.SigningAuthority))
             {
@@ -147,7 +147,7 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets organization claim count by a given search criteria.
         /// </summary>
-        [HttpGet("claim", Name = nameof(GetOrganizationClaimCount))]
+        [HttpGet("claims", Name = nameof(GetOrganizationClaimCount))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]

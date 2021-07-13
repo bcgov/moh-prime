@@ -149,7 +149,7 @@ export class OrganizationResource {
     queryParam: { pec?: string, userId?: string }
   ): Observable<number> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
-    return this.apiResource.get<number>(`organizations/claim`, params)
+    return this.apiResource.get<number>(`organizations/claims`, params)
       .pipe(
         map((response: ApiHttpResponse<number>) => response.result),
         tap((result: number) => this.logger.info('ORGANIZATIONCLAIM', result)),
