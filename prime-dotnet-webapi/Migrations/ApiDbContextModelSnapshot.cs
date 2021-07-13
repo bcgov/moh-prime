@@ -8597,6 +8597,9 @@ namespace Prime.Migrations
                     b.Property<TimeSpan>("EndTime")
                         .HasColumnType("interval");
 
+                    b.Property<int?>("HealthAuthoritySiteId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -8610,6 +8613,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -9249,12 +9254,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 38,
-                            CollegeLicenseGroupingCode = 2
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 39,
                             CollegeLicenseGroupingCode = 2
                         },
@@ -9280,12 +9279,6 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 43,
-                            CollegeLicenseGroupingCode = 3
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 44,
                             CollegeLicenseGroupingCode = 3
                         },
                         new
@@ -9321,12 +9314,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 50,
-                            CollegeLicenseGroupingCode = 4
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 51,
                             CollegeLicenseGroupingCode = 4
                         },
@@ -9357,24 +9344,6 @@ namespace Prime.Migrations
                         new
                         {
                             CollegeCode = 3,
-                            LicenseCode = 56,
-                            CollegeLicenseGroupingCode = 1
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 57,
-                            CollegeLicenseGroupingCode = 1
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
-                            LicenseCode = 58,
-                            CollegeLicenseGroupingCode = 4
-                        },
-                        new
-                        {
-                            CollegeCode = 3,
                             LicenseCode = 60,
                             CollegeLicenseGroupingCode = 5
                         },
@@ -9394,6 +9363,12 @@ namespace Prime.Migrations
                         {
                             CollegeCode = 3,
                             LicenseCode = 63,
+                            CollegeLicenseGroupingCode = 5
+                        },
+                        new
+                        {
+                            CollegeCode = 3,
+                            LicenseCode = 69,
                             CollegeLicenseGroupingCode = 5
                         },
                         new
@@ -11344,66 +11319,6 @@ namespace Prime.Migrations
                         new
                         {
                             PrivilegeId = 5,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 6,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 7,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 8,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 9,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 10,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 11,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 12,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 13,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 14,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 15,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 16,
-                            LicenseCode = 50
-                        },
-                        new
-                        {
-                            PrivilegeId = 5,
                             LicenseCode = 51
                         },
                         new
@@ -11465,66 +11380,6 @@ namespace Prime.Migrations
                         {
                             PrivilegeId = 19,
                             LicenseCode = 51
-                        },
-                        new
-                        {
-                            PrivilegeId = 5,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 6,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 7,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 8,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 9,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 10,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 11,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 12,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 13,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 14,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 15,
-                            LicenseCode = 58
-                        },
-                        new
-                        {
-                            PrivilegeId = 16,
-                            LicenseCode = 58
                         });
                 });
 
@@ -12602,6 +12457,83 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthoritySite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AdjudicatorId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("ApprovedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CareType")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("Completed")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("HealthAuthorityOrganizationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("PEC")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("PhysicalAddressId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ProvisionerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SecurityGroup")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SiteId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SiteName")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("SubmittedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("VendorCode")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("HealthAuthorityOrganizationId");
+
+                    b.HasIndex("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasIndex("PhysicalAddressId");
+
+                    b.ToTable("HealthAuthoritySite");
+                });
+
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
                 {
                     b.Property<int>("Id")
@@ -13421,18 +13353,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 50,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Nurse Practitioner (Special Event)",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            PrescriberIdType = 2,
-                            Validate = true,
-                            Weight = 3
-                        },
-                        new
-                        {
                             Code = 51,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13476,18 +13396,6 @@ namespace Prime.Migrations
                             Prefix = "R9",
                             Validate = false,
                             Weight = 7
-                        },
-                        new
-                        {
-                            Code = 38,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Registered Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "R9",
-                            PrescriberIdType = 1,
-                            Validate = false,
-                            Weight = 8
                         },
                         new
                         {
@@ -13582,18 +13490,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 44,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Registered Psychiatric Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "Y9",
-                            PrescriberIdType = 1,
-                            Validate = false,
-                            Weight = 17
-                        },
-                        new
-                        {
                             Code = 45,
                             LicensedToProvideCare = true,
                             Manual = false,
@@ -13661,17 +13557,6 @@ namespace Prime.Migrations
                         },
                         new
                         {
-                            Code = 56,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Licensed Practical Nurse (Special Event)",
-                            NamedInImReg = false,
-                            Prefix = "L9",
-                            Validate = false,
-                            Weight = 24
-                        },
-                        new
-                        {
                             Code = 54,
                             LicensedToProvideCare = false,
                             Manual = true,
@@ -13680,28 +13565,6 @@ namespace Prime.Migrations
                             Prefix = "L9",
                             Validate = false,
                             Weight = 25
-                        },
-                        new
-                        {
-                            Code = 57,
-                            LicensedToProvideCare = false,
-                            Manual = true,
-                            Name = "Non-Practicing Licensed Nurse Practitioner",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            Validate = true,
-                            Weight = 26
-                        },
-                        new
-                        {
-                            Code = 58,
-                            LicensedToProvideCare = true,
-                            Manual = true,
-                            Name = "Temporary Nurse Practitioner (time-limited)",
-                            NamedInImReg = true,
-                            Prefix = "96",
-                            Validate = true,
-                            Weight = 27
                         },
                         new
                         {
@@ -13746,6 +13609,17 @@ namespace Prime.Migrations
                             Prefix = "98",
                             Validate = false,
                             Weight = 31
+                        },
+                        new
+                        {
+                            Code = 69,
+                            LicensedToProvideCare = true,
+                            Manual = true,
+                            Name = "Student Midwife",
+                            NamedInImReg = false,
+                            Prefix = "98",
+                            Validate = false,
+                            Weight = 32
                         },
                         new
                         {
@@ -15018,6 +14892,9 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int?>("HealthAuthoritySiteId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -15032,6 +14909,8 @@ namespace Prime.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -15284,9 +15163,6 @@ namespace Prime.Migrations
                     b.Property<int?>("ProvisionerId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -15342,6 +15218,9 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
+                    b.Property<int?>("HealthAuthoritySiteId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -15357,6 +15236,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -15419,6 +15300,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("CreatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<int?>("HealthAuthoritySiteId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("text");
@@ -15438,6 +15322,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AdjudicatorId");
+
+                    b.HasIndex("HealthAuthoritySiteId");
 
                     b.HasIndex("SiteId");
 
@@ -15463,6 +15349,9 @@ namespace Prime.Migrations
                     b.Property<string>("Filename")
                         .HasColumnType("text");
 
+                    b.Property<int?>("HealthAuthoritySiteId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -15477,9 +15366,46 @@ namespace Prime.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("HealthAuthoritySiteId");
+
                     b.HasIndex("SiteId");
 
                     b.ToTable("SiteRegistrationReviewDocument");
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("SiteId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("StatusDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("StatusType")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SiteId");
+
+                    b.ToTable("SiteStatus");
                 });
 
             modelBuilder.Entity("Prime.Models.SiteVendor", b =>
@@ -15657,6 +15583,11 @@ namespace Prime.Migrations
                         {
                             Code = 17,
                             Name = "No address from BCSC. Enrollee entered address."
+                        },
+                        new
+                        {
+                            Code = 18,
+                            Name = "Manually entered paper enrolment"
                         });
                 });
 
@@ -15969,6 +15900,10 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.BusinessDay", b =>
                 {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
+                        .WithMany("BusinessHours")
+                        .HasForeignKey("HealthAuthoritySiteId");
+
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("BusinessHours")
                         .HasForeignKey("SiteId")
@@ -16320,6 +16255,27 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthoritySite", b =>
+                {
+                    b.HasOne("Prime.Models.Admin", "Adjudicator")
+                        .WithMany()
+                        .HasForeignKey("AdjudicatorId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "Organization")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityOrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
+                        .WithMany()
+                        .HasForeignKey("PhysicalAddressId");
+                });
+
             modelBuilder.Entity("Prime.Models.HealthAuthorities.HealthAuthorityVendor", b =>
                 {
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityOrganization", "HealthAuthorityOrganization")
@@ -16483,6 +16439,10 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.RemoteUser", b =>
                 {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
+                        .WithMany("RemoteUsers")
+                        .HasForeignKey("HealthAuthoritySiteId");
+
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("RemoteUsers")
                         .HasForeignKey("SiteId")
@@ -16595,6 +16555,10 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
+                        .WithMany("SiteAdjudicationDocuments")
+                        .HasForeignKey("HealthAuthoritySiteId");
+
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteAdjudicationDocuments")
                         .HasForeignKey("SiteId")
@@ -16631,6 +16595,10 @@ namespace Prime.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
+                        .WithMany("SiteRegistrationNotes")
+                        .HasForeignKey("HealthAuthoritySiteId");
+
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteRegistrationNotes")
                         .HasForeignKey("SiteId")
@@ -16640,8 +16608,21 @@ namespace Prime.Migrations
 
             modelBuilder.Entity("Prime.Models.SiteRegistrationReviewDocument", b =>
                 {
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthoritySite", null)
+                        .WithMany("SiteRegistrationReviewDocuments")
+                        .HasForeignKey("HealthAuthoritySiteId");
+
                     b.HasOne("Prime.Models.Site", "Site")
                         .WithMany("SiteRegistrationReviewDocuments")
+                        .HasForeignKey("SiteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.SiteStatus", b =>
+                {
+                    b.HasOne("Prime.Models.Site", "Site")
+                        .WithMany("SiteStatuses")
                         .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

@@ -58,22 +58,31 @@
           </ng-template>
         </app-overview-section>
 
+        <app-overview-section title="Privacy Office"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
+                              (route)="onRouteRelative($event)">
+          <app-enrollee-property title="Email">
+            {{ healthAuthority?.privacyOffice?.email | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Phone">
+            {{ healthAuthority?.privacyOffice?.phone | phone | default }}
+          </app-enrollee-property>
+        </app-overview-section>
+
+        <app-address-view title="Privacy Office Address"
+                          [address]="healthAuthority?.privacyOffice?.physicalAddress"
+                          [showRedirect]="true"
+                          [showIfEmpty]="true"
+                          (route)="onRoute(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE)"></app-address-view>
+
         <app-overview-section title="Privacy Officer"
                               [showEditRedirect]="true"
-                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
                               (route)="onRouteRelative($event)">
-          <ng-container *ngIf="healthAuthority?.privacyOfficers.length; else noPrivacyOfficers">
-            <ng-container *ngFor="let privacyOfficer of healthAuthority.privacyOfficers">
-              <!-- Only one privacy officer so omitted enrollee property -->
-              <app-party-review [party]="privacyOfficer"></app-party-review>
-            </ng-container>
-          </ng-container>
-
-          <ng-template #noPrivacyOfficers>
-            <app-enrollee-property>
-              None
-            </app-enrollee-property>
-          </ng-template>
+          <app-party-review [party]="healthAuthority?.privacyOffice?.privacyOfficer"
+                            [excludeList]="['fax', 'smsPhone', 'jobRoleTitle', 'mailingAddress']"></app-party-review>
         </app-overview-section>
 
         <app-overview-section title="Technical Support Contacts"

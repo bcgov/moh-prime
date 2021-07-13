@@ -49,7 +49,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   ) {
     super(dialog, formUtilsService);
 
-    this.canDeactivateWhitelist = ['hasRemoteUsers'];
+    this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);

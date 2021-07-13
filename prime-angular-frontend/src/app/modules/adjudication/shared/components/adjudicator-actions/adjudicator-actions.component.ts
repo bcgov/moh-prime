@@ -1,28 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+
+import { noop } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
-import { Role } from '@auth/shared/enum/role.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
+import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
-import { exhaustMap } from 'rxjs/operators';
-import { noop } from 'rxjs';
 
 @Component({
   selector: 'app-adjudicator-actions',
   templateUrl: './adjudicator-actions.component.html',
   styleUrls: ['./adjudicator-actions.component.scss']
 })
-export class AdjudicatorActionsComponent implements OnInit {
+export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
   @Output() public approve: EventEmitter<{ enrolleeId: number, agreementName: string }>;
   @Output() public decline: EventEmitter<number>;
@@ -41,7 +42,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   public form: FormGroup;
   public termsOfAccessAgreements: { type: AgreementType, name: string }[];
 
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
   public Role = Role;
 
@@ -79,7 +80,7 @@ export class AdjudicatorActionsComponent implements OnInit {
   }
 
   public get isUnderReview(): boolean {
-    return (this.enrollee && this.enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW);
+    return (this.enrollee && this.enrollee.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW);
   }
 
   public onApprove() {
@@ -163,6 +164,22 @@ export class AdjudicatorActionsComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (this.form && changes.enrollee) {
+      // Update selector value when parent changes value
+      if (changes.enrollee.currentValue?.assignedTOAType !== changes.enrollee.previousValue?.assignedTOAType) {
+        this.assignedTOAType.patchValue(changes.enrollee.currentValue?.assignedTOAType ?? 0, { emitEvent: false });
+      }
+
+      // Disable or enable based on enrollee status
+      if (changes.enrollee.currentValue.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW) {
+        this.assignedTOAType.enable({ emitEvent: false });
+      } else {
+        this.assignedTOAType.disable({ emitEvent: false });
+      }
+    }
   }
 
   public ngOnInit() {

@@ -36,14 +36,19 @@ import { EmailNotificationListPageComponent } from './pages/email-notification-l
 import { EmailNotificationViewPageComponent } from './pages/email-notification-view-page/email-notification-view-page.component';
 import { EnrolleeToaMaintenanceViewPageComponent } from './pages/enrollee-toa-maintenance-view-page/enrollee-toa-maintenance-view-page.component';
 import { EnrolleeToaMaintenanceListPageComponent } from './pages/enrollee-toa-maintenance-list-page/enrollee-toa-maintenance-list-page.component';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 import { HealthAuthCareTypesPageComponent } from './pages/health-authorities/health-auth-care-types-page/health-auth-care-types-page.component';
 import { VendorsPageComponent } from './pages/health-authorities/vendors-page/vendors-page.component';
-import { PrivacyOfficerPageComponent } from './pages/health-authorities/privacy-officer-page/privacy-officer-page.component';
+import { PrivacyOfficePageComponent } from './pages/health-authorities/privacy-office-page/privacy-office-page.component';
 import { TechnicalSupportsPageComponent } from './pages/health-authorities/technical-supports-page/technical-supports-page.component';
 import { AdministratorsPageComponent } from './pages/health-authorities/administrators-page/administrators-page.component';
 import { AuthorizedUsersPageComponent } from './pages/health-authorities/authorized-users-page/authorized-users-page.component';
 import { AuthorizedUserPageComponent } from './pages/health-authorities/authorized-user-page/authorized-user-page.component';
+import { EnrolleeBannerListPageComponent } from './pages/enrollee-banner-list-page/enrollee-banner-list-page.component';
+import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-banner-list-page.component';
+import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
+import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 
 const routes: Routes = [
   {
@@ -66,9 +71,19 @@ const routes: Routes = [
             data: { title: 'Enrollees' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: EnrolleeBannerPageComponent,
-            data: { title: 'Enrollee Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: EnrolleeBannerListPageComponent,
+                data: { title: 'Enrollee Banners' }
+              },
+              {
+                path: ':bid',
+                component: EnrolleeBannerPageComponent,
+                data: { title: 'Enrollee Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -76,7 +91,7 @@ const routes: Routes = [
               {
                 path: '',
                 component: EnrolleeMaintenancePageComponent,
-                data: { title: 'Enrollee Maintenance', filterBy: 'enrollee' }
+                data: { title: 'Enrollee Maintenance' }
               },
               {
                 path: AdjudicationRoutes.NOTIFICATION_EMAILS,
@@ -186,9 +201,19 @@ const routes: Routes = [
             data: { title: 'Site Registrations' }
           },
           {
-            path: AdjudicationRoutes.BANNER,
-            component: SiteBannerPageComponent,
-            data: { title: 'Site Banner' }
+            path: AdjudicationRoutes.BANNERS,
+            children: [
+              {
+                path: '',
+                component: SiteBannerListPageComponent,
+                data: { title: 'Site Banners' }
+              },
+              {
+                path: ':bid',
+                component: SiteBannerPageComponent,
+                data: { title: 'Site Banners' }
+              }
+            ]
           },
           {
             path: AdjudicationRoutes.MAINTENANCE,
@@ -213,6 +238,21 @@ const routes: Routes = [
                   },
                 ]
               },
+              {
+                path: AdjudicationRoutes.TOA,
+                children: [
+                  {
+                    path: '',
+                    component: OrganizationToaMaintenanceListPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                  {
+                    path: ':aid',
+                    component: OrganizationToaMaintenanceViewPageComponent,
+                    data: { title: 'Organization Agreement Maintenance' }
+                  },
+                ]
+              }
             ]
           },
           {
@@ -278,19 +318,19 @@ const routes: Routes = [
                 data: { title: 'Vendors' }
               },
               {
-                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICER,
-                component: PrivacyOfficerPageComponent,
-                data: { title: 'Privacy Officer' }
+                path: AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE,
+                component: PrivacyOfficePageComponent,
+                data: { title: 'Privacy Office' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
                 component: TechnicalSupportsPageComponent,
-                data: { title: 'Technical Support Contacts' }
+                data: { title: 'Technical Support Contact(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,
                 component: AdministratorsPageComponent,
-                data: { title: 'Administrator Contacts' }
+                data: { title: 'PharmaNet Administrator(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS,
@@ -345,4 +385,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }

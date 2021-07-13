@@ -2,7 +2,7 @@
   <app-page-header>PharmaNet Site Registration</app-page-header>
   <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
 
-  <form [formGroup]="form"
+  <form [formGroup]="formState.form"
         (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
@@ -88,7 +88,8 @@
     <app-page-footer primaryActionLabel="Continue"
                      [hasSecondaryAction]="true"
                      (save)="onSubmit()"
-                     (back)="onBack()"></app-page-footer>
+                     (back)="onBack()"
+                     (continue)="onBack()"></app-page-footer>
 
   </form>
 

@@ -1,90 +1,51 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
-import { Subject, Subscription } from 'rxjs';
+import { Observable, pipe, UnaryFunction } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { ContactFormState } from '@lib/classes/contact-form-state.class';
-
-import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { AbstractContactsPage } from '@lib/classes/abstract-contacts-page.class';
+import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { UtilsService } from '@core/services/utils.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 
 @Component({
   selector: 'app-administrators-page',
   templateUrl: './administrators-page.component.html',
   styleUrls: ['./administrators-page.component.scss']
 })
-export class AdministratorsPageComponent implements OnInit {
-  public busy: Subscription;
-  public title: string;
-  public form: FormGroup;
-  public isInitialEntry: boolean;
-  public contacts: Contact[];
-  public formSubmittingEvent: Subject<void>;
-
-  private routeUtils: RouteUtils;
-
+export class AdministratorsPageComponent extends AbstractContactsPage implements OnInit {
   constructor(
-    private fb: FormBuilder,
-    private healthAuthResource: HealthAuthorityResource,
-    private formUtilsService: FormUtilsService,
-    private route: ActivatedRoute,
+    protected route: ActivatedRoute,
+    protected dialog: MatDialog,
+    protected formUtilsService: FormUtilsService,
+    protected fb: FormBuilder,
+    protected healthAuthResource: HealthAuthorityResource,
+    protected utilsService: UtilsService,
     router: Router
   ) {
-    this.title = route.snapshot.data.title;
-    this.isInitialEntry = !!this.route.snapshot.queryParams.initial;
-    this.routeUtils = new RouteUtils(route, router, [
-      AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS),
-      AdjudicationRoutes.SITE_REGISTRATIONS,
-      AdjudicationRoutes.HEALTH_AUTHORITIES,
-      this.route.snapshot.params.haid
-    ]);
-    this.formSubmittingEvent = new Subject<void>();
-  }
+    super(route, dialog, formUtilsService, fb, healthAuthResource, utilsService, router);
 
-  public onSubmit(): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      const pharmanetAdministrators: Contact[] = [this.form.value];
-      this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, pharmanetAdministrators)
-        .subscribe(() => this.nextRouteAfterSubmit());
-    }
-  }
-
-  public onBack(): void {
-    this.routeTo(AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS);
+    this.backRoute = AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS;
   }
 
   public ngOnInit(): void {
-    this.createFormInstance();
-    this.initForm();
+    this.cardTitlePrefix = 'PharmaNet Admin: ';
+    this.init();
   }
 
-  private createFormInstance() {
-    this.form = new ContactFormState(this.fb, this.formUtilsService).form;
+  protected getContactsPipe(): UnaryFunction<Observable<HealthAuthority>, Observable<Contact[]>> {
+    return pipe(map(({ pharmanetAdministrators }: HealthAuthority) => pharmanetAdministrators));
   }
 
-  private initForm() {
-    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
-      .subscribe(({ pharmanetAdministrators }: HealthAuthority) => {
-        if (pharmanetAdministrators.length) {
-          this.form.patchValue(pharmanetAdministrators[0]);
-        }
-      });
-  }
-
-  private nextRouteAfterSubmit() {
-    this.routeTo();
-  }
-
-  private routeTo(routeSegment?: string) {
-    const routePath = (this.isInitialEntry && routeSegment)
-      ? routeSegment
-      : AdjudicationRoutes.ORGANIZATION_INFORMATION;
-    this.routeUtils.routeRelativeTo(routePath, { queryParamsHandling: 'preserve' });
+  protected performSubmissionRequest(contact: Contact[]): NoContent {
+    return this.healthAuthResource.updateHealthAuthorityPharmanetAdministrators(this.route.snapshot.params.haid, contact);
   }
 }

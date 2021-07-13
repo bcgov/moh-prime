@@ -150,7 +150,7 @@ jobs:
         env:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
-          REDIRECT_URL: "https://develop.pharmanetenrolment.gov.bc.ca"
+          REDIRECT_URL: "https://dev.pharmanetenrolment.gov.bc.ca"
         run: |
           docker-compose -f oc4-compose.yml build --force-rm --no-cache \
             --build-arg JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG \
@@ -193,7 +193,7 @@ jobs:
             -p FRONTEND_POD=frontend \
             -p IMAGE_TAG=dev \
             -p SVC_NAME=dev \
-            -p VANITY_URL=develop.pharmanetenrolment.gov.bc.ca \
+            -p VANITY_URL=dev.pharmanetenrolment.gov.bc.ca \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
@@ -201,6 +201,8 @@ jobs:
             -p WEB_PORT=8080 \
             -p HPR_URL=dev-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=dev-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-dev.apps.silver.devops.gov.bc.ca \
+            -p FRONTEND_REPLICAS=1 \
+            -p BACKEND_REPLICAS=1 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
 
 #          oc process -f infrastructure/mailhog-template.yml \

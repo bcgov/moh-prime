@@ -75,9 +75,9 @@
         <td mat-cell
             *matCellDef="let row;"
             class="status"
-            [class.under-review]="row.status === SiteStatusType.UNDER_REVIEW"
+            [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
             [class.approved]="row.status === SiteStatusType.APPROVED"
-            [class.declined]="row.status === SiteStatusType.DECLINED">
+            [class.declined]="row.status === SiteStatusType.LOCKED">
           {{ displayStatus(row.status) | capitalize: true | default }}
         </td>
       </ng-container>
@@ -150,9 +150,9 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.BANNER])">
+                (click)="onRoute([AdjudicationRoutes.BANNERS])">
           <mat-icon>bookmark</mat-icon>
-          <span>Create Banner</span>
+          <span>Site Banners</span>
         </button>
         <button mat-menu-item
                 (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">

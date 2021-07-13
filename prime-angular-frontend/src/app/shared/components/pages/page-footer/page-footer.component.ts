@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 
 // TODO footer is too stringent make it more generic and wrap to apply logic
 @Component({
@@ -6,7 +6,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   templateUrl: './page-footer.component.html',
   styleUrls: ['./page-footer.component.scss']
 })
-export class PageFooterComponent implements OnInit {
+export class PageFooterComponent implements OnInit, OnChanges {
   // TODO update not to use the word enrolment
   @Input() public isInitialEnrolment: boolean;
   @Input() public hasSecondaryAction: boolean;
@@ -33,6 +33,8 @@ export class PageFooterComponent implements OnInit {
     this.back = new EventEmitter<void>();
   }
 
+  // TODO change button labels based on input binding
+
   public onSave() {
     this.save.emit();
   }
@@ -41,6 +43,16 @@ export class PageFooterComponent implements OnInit {
     (this.isInitialEnrolment)
       ? this.back.emit()
       : this.continue.emit();
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (changes.primaryActionLabel) {
+      this.saveButtonLabel = changes.primaryActionLabel.currentValue;
+    }
+
+    if (changes.secondaryActionLabel) {
+      this.secondaryActionButtonLabel = changes.secondaryActionLabel.currentValue;
+    }
   }
 
   public ngOnInit() {

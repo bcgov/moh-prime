@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -16,6 +15,7 @@ namespace Prime.Services
     public class SubmissionService : BaseService, ISubmissionService
     {
         private readonly IAgreementService _agreementService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
@@ -29,6 +29,7 @@ namespace Prime.Services
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IAgreementService agreementService,
+            IEnrolleeAgreementService enrolleeAgreementService,
             ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
@@ -40,6 +41,7 @@ namespace Prime.Services
             : base(context, httpContext)
         {
             _agreementService = agreementService;
+            _enrolleeAgreementService = enrolleeAgreementService;
             _submissionRulesService = submissionRulesService;
             _businessEventService = businessEventService;
             _emailService = emailService;
@@ -195,7 +197,7 @@ namespace Prime.Services
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
             newStatus.AddStatusReason(StatusReasonType.Manual);
 
-            await _agreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
+            await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
 
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Manually Approved");
             await _context.SaveChangesAsync();
@@ -213,7 +215,7 @@ namespace Prime.Services
                 // Enrollees with lower assurance levels cannot electronically sign, and so must upload a signed Agreement
                 if (additionalParameters is Guid documentGuid)
                 {
-                    var agreement = await _agreementService.GetCurrentAgreementAsync(enrollee.Id);
+                    var agreement = await _enrolleeAgreementService.GetCurrentAgreementAsync(enrollee.Id);
                     var agreementDocument = await _agreementService.AddSignedAgreementDocumentAsync(agreement.Id, documentGuid);
                     if (agreementDocument == null)
                     {
@@ -228,7 +230,7 @@ namespace Prime.Services
 
             enrollee.AddEnrolmentStatus(StatusType.Editable);
             await SetGpid(enrollee);
-            await _agreementService.AcceptCurrentEnrolleeAgreementAsync(enrollee.Id);
+            await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrollee.Id);
             await _privilegeService.AssignPrivilegesToEnrolleeAsync(enrollee.Id, enrollee);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Accepted TOA");
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
@@ -277,7 +279,7 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.Declined);
             await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Declined");
             await _context.SaveChangesAsync();
-            await _agreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
+            await _enrolleeAgreementService.ExpireCurrentEnrolleeAgreementAsync(enrollee.Id);
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
 
             if (_httpContext.HttpContext.User.HasVCIssuance())
@@ -319,21 +321,10 @@ namespace Prime.Services
             {
                 do
                 {
-                    enrollee.GPID = GenerateGpid();
+                    enrollee.GPID = Gpid.NewGpid();
                 }
                 while (await _enrolleeService.GpidExistsAsync(enrollee.GPID));
             }
-        }
-
-        private static string GenerateGpid()
-        {
-            Random r = new Random();
-            int length = 20;
-            string characterSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.,?!@#$%*";
-
-            IEnumerable<char> chars = Enumerable.Repeat(characterSet, length).Select(s => s[r.Next(s.Length)]);
-
-            return new string(chars.ToArray());
         }
 
         private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
@@ -355,7 +346,7 @@ namespace Prime.Services
                 var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
                 newStatus.AddStatusReason(StatusReasonType.Automatic);
 
-                await _agreementService.CreateEnrolleeAgreementAsync(enrolleeId);
+                await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrolleeId);
                 await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
             }
         }

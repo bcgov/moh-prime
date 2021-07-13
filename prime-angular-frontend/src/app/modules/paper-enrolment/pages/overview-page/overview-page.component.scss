@@ -1,0 +1,30 @@
+@import 'palette';
+
+.text-green {
+  color: theme_palette(green);
+}
+
+.upload.mat-icon {
+  color: theme-palette(blue);
+  cursor: pointer;
+  font-size: 1.35rem;
+}
+
+.red {
+  color: theme-palette(red);
+}
+
+.footer {
+  border-top: 2px solid theme-palette(grey, lighter);
+  padding-top: 1rem;
+}
+
+.mat-checkbox-inner-container {
+  margin-right: 1.5rem !important;
+}
+
+.mat-icon {
+  cursor: pointer;
+  font-size: 1.2em;
+  position: relative;
+}

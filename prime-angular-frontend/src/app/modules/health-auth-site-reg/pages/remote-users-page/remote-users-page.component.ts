@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { KeyValue } from '@angular/common';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
-import { noop, of } from 'rxjs';
-import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
@@ -18,11 +16,11 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { RemoteUsersPageFormState } from './remote-users-page-form-state.class';
+import { RemoteUsersPageFormState } from './remote-users-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
+// TODO refactor into list/form composite component used in health authority organization information
 @UntilDestroy()
 @Component({
   selector: 'app-remote-users-page',
@@ -42,27 +40,21 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
-    private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
+    private fb: FormBuilder,
+    private healthAuthorityResource: HealthAuthorityResource,
     private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
 
-    this.canDeactivateWhitelist = ['hasRemoteUsers'];
+    this.canDeactivateAllowlist = ['hasRemoteUsers'];
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
     this.submitButtonText = 'Save and Continue';
   }
 
-  // TODO remove this method add to allow routing between pages
-  public onSubmit() {
-    this.afterSubmitIsSuccessful();
-  }
-
-  public getRemoteUserProperties(remoteUser: FormGroup) {
+  public getRemoteUserProperties(remoteUser: FormGroup): KeyValue<string, string>[] {
     const remoteUserCertifications = remoteUser.controls?.remoteUserCertifications as FormArray;
 
     const collegeLicence = (remoteUserCertifications.length > 1)
@@ -72,58 +64,43 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
         : remoteUserCertifications.value[0].licenseNumber;
 
     return [
-      {
-        key: 'College Licence',
-        value: collegeLicence
-      }
+      { key: 'College Licence', value: collegeLicence }
     ];
   }
 
-  public onRemove(index: number) {
+  public onRemove(index: number): void {
     this.formState.remoteUsers.removeAt(index);
   }
 
-  public onEdit(index: number) {
-    this.routeUtils.routeRelativeTo(['../', HealthAuthSiteRegRoutes.REMOTE_USERS, index]);
+  public onEdit(index: number): void {
+    this.routeUtils.routeRelativeTo([HealthAuthSiteRegRoutes.REMOTE_USERS, index]);
   }
 
-  public onBack() {
-    this.routeUtils.routeRelativeTo(['../', HealthAuthSiteRegRoutes.HOURS_OPERATION]);
+  public onBack(): void {
+    const backRoutePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.HOURS_OPERATION;
+
+    this.routeUtils.routeRelativeTo(['../', backRoutePath]);
   }
 
   public ngOnInit(): void {
     this.createFormInstance();
     this.initForm();
-
-    if (this.siteService.site?.submittedDate) {
-      this.submitButtonText = 'Save and Submit';
-    }
   }
 
-  protected createFormInstance() {
-    this.formState = this.formStateService.remoteUsersPageFormState;
+  protected createFormInstance(): void {
+    this.formState = new RemoteUsersPageFormState(this.fb);
   }
 
-  protected patchForm(): void {
-    const site = this.siteService.site;
-    this.isCompleted = site?.completed;
-    // Inform the parent not to patch the form as there are outstanding changes
-    // to the remote users that need to be persisted
-    const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
-    // Remove query param from URL without refreshing
-    this.routeUtils.removeQueryParams({ fromRemoteUser: null });
-    this.formStateService.setForm(site, !fromRemoteUser);
-    this.formState.form.markAsPristine();
-  }
-
-  protected initForm() {
+  protected initForm(): void {
     this.formState.remoteUsers.valueChanges
       .pipe(untilDestroyed(this))
-      .subscribe((remoteUsers: RemoteUser[]) => {
+      .subscribe((remoteUsers: RemoteUser[]) =>
         (remoteUsers.length)
           ? this.formState.hasRemoteUsers.disable({ emitEvent: false })
-          : this.formState.hasRemoteUsers.enable({ emitEvent: false });
-      });
+          : this.formState.hasRemoteUsers.enable({ emitEvent: false })
+      );
 
     this.formState.hasRemoteUsers.valueChanges
       .pipe(untilDestroyed(this))
@@ -139,6 +116,29 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
     this.patchForm();
   }
 
+  protected patchForm(): void {
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
+
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .subscribe(({ remoteUsers, completed, submittedDate }: HealthAuthoritySite) => {
+        this.isCompleted = completed;
+        // Inform the parent not to patch the form as there are outstanding changes
+        // to the remote users that need to be persisted
+        const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
+        // Remove query param from URL without refreshing
+        this.routeUtils.removeQueryParams({ fromRemoteUser: null });
+        this.formState.patchValue({ remoteUsers });
+
+        if (submittedDate) {
+          this.submitButtonText = 'Save and Submit';
+        }
+      });
+  }
+
   protected onSubmitFormIsValid(): void {
     this.hasNoRemoteUserError = false;
   }
@@ -148,42 +148,45 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
-    const site = this.siteService.site;
-    const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
-      .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
-        if (!site.remoteUsers.find((current: RemoteUser) =>
-          current.firstName === updated.firstName &&
-          current.lastName === updated.lastName &&
-          current.email === updated.email
-        )) {
-          newRemoteUsersAcc.push(updated);
-        }
-        return newRemoteUsersAcc;
-      }, []);
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
 
-    return this.siteResource.updateSite(payload)
-      .pipe(
-        exhaustMap(() =>
-          (site.submittedDate)
-            ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
-            : of(noop())
-        ),
-        exhaustMap(() =>
-          (site.submittedDate && newRemoteUsers)
-            ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
-            : of(noop())
-        )
-      );
+    return this.healthAuthorityResource.updateHealthAuthoritySiteRemoteUsers(haid, sid, payload);
+
+    // TODO do we need to send emails to remote users?
+    // const newRemoteUsers = this.formStateService.remoteUsersPageFormState.json
+    //   .reduce((newRemoteUsersAcc: RemoteUser[], updated: RemoteUser) => {
+    //     if (!site.remoteUsers.find((current: RemoteUser) =>
+    //       current.firstName === updated.firstName &&
+    //       current.lastName === updated.lastName &&
+    //       current.email === updated.email
+    //     )) {
+    //       newRemoteUsersAcc.push(updated);
+    //     }
+    //     return newRemoteUsersAcc;
+    //   }, []);
+
+    // return this.siteResource.updateSite(payload)
+    //   .pipe(
+    //     exhaustMap(() =>
+    //       (site.submittedDate)
+    //         ? this.siteResource.sendRemoteUsersEmailAdmin(site.id)
+    //         : of(noop())
+    //     ),
+    //     exhaustMap(() =>
+    //       (site.submittedDate && newRemoteUsers)
+    //         ? this.siteResource.sendRemoteUsersEmailUser(site.id, newRemoteUsers)
+    //         : of(noop())
+    //     )
+    //   );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
-    const routePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
+    // TODO should account for updates which would redirect back to SiteManagement
+    const nextRoutePath = (!this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
-    this.routeUtils.routeRelativeTo(['../', routePath]);
+    this.routeUtils.routeRelativeTo(['../', nextRoutePath]);
   }
 }

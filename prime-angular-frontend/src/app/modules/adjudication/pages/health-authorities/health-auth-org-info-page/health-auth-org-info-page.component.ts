@@ -57,7 +57,8 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
         this.isInitial = !!(
           healthAuthority?.careTypes.length &&
           healthAuthority?.vendorCodes.length &&
-          healthAuthority?.privacyOfficers.length &&
+          // Check one of the required fields
+          healthAuthority?.privacyOffice?.email &&
           healthAuthority?.technicalSupports.length &&
           healthAuthority?.pharmanetAdministrators.length
         );

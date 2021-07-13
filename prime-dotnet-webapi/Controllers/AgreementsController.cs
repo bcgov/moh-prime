@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
+using Prime.Models;
 using Prime.Services;
 using Prime.ViewModels;
 
@@ -23,32 +24,32 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Get a list of the latest enrollee Agreement Versions
+        /// Get a list of the latest Agreement Versions
         /// </summary>
-        [HttpGet("enrollee/latest", Name = nameof(GetLatestEnrolleeAgreementVersions))]
+        [HttpGet(Name = nameof(GetLatestAgreementVersions))]
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetLatestEnrolleeAgreementVersions()
+        public async Task<ActionResult> GetLatestAgreementVersions([FromQuery] AgreementGroup? type)
         {
-            var agreements = await _agreementService.GetLatestEnrolleeAgreementVersionsAsync();
+            var agreements = await _agreementService.GetLatestAgreementVersionsAsync(type);
             return Ok(agreements);
         }
 
         /// /api/agreements/2
         /// <summary>
-        /// Get an enrollee Agreement Version by id
+        /// Get an Agreement Version by id
         /// </summary>
-        /// <param name="agreementId"></param>
-        [HttpGet("{agreementId}", Name = nameof(GetAgreementVersionById))]
+        /// <param name="agreementVersionId"></param>
+        [HttpGet("{agreementVersionId}", Name = nameof(GetAgreementVersionById))]
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<AgreementVersionViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetAgreementVersionById(int agreementId)
+        public async Task<ActionResult> GetAgreementVersionById(int agreementVersionId)
         {
-            var agreement = await _agreementService.GetAgreementVersionById(agreementId);
+            var agreement = await _agreementService.GetAgreementVersionAsync(agreementVersionId);
             return Ok(agreement);
         }
     }

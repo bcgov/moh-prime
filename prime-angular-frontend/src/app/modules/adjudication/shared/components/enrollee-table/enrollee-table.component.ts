@@ -12,14 +12,17 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { UtilsService } from '@core/services/utils.service';
+import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { EnrolleeListViewModel } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 @UntilDestroy()
 @Component({
@@ -50,7 +53,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public hasRenewalDateRange: boolean;
   public hasAssignedToFilter$: BehaviorSubject<boolean>;
   public AdjudicationRoutes = AdjudicationRoutes;
-  public EnrolmentStatus = EnrolmentStatus;
+  public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
+  public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
 
   constructor(
@@ -86,8 +90,8 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
 
   public canReviewStatusReasons(enrollee: EnrolleeListViewModel): boolean {
     return (
-      enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW ||
-      enrollee.previousStatus?.statusCode === EnrolmentStatus.UNDER_REVIEW
+      enrollee.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW ||
+      enrollee.previousStatus?.statusCode === EnrolmentStatusEnum.UNDER_REVIEW
     );
   }
 

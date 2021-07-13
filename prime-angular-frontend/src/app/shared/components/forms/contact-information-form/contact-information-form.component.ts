@@ -13,13 +13,14 @@ import { NotificationInfoSummaryDirective } from './notification-info-summary.di
 export class ContactInformationFormComponent implements OnInit {
   @Input() public form: FormGroup;
   @Input() public showSmsPhone: boolean;
+  @Input() public contactDescription: string;
 
   @ContentChildren(NotificationInfoSummaryDirective, { descendants: true })
   public notificationInfoSummaryChildren: QueryList<NotificationInfoSummaryDirective>;
 
   constructor() {
-    // Defaults
     this.showSmsPhone = true;
+    this.contactDescription = 'Provide a phone number that may be used to contact you.';
   }
 
   public get phone(): FormControl {

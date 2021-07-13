@@ -126,9 +126,12 @@ export class EnrolmentResource {
   // Provisioner Access
   // ---
 
-  public sendProvisionerAccessLink(emails: string = null, careSettingCode: number): Observable<EnrolmentCertificateAccessToken> {
+  public sendProvisionerAccessLink(
+    emails: string = null, enrolleeId: number, careSettingCode: number
+  ): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: emails };
-    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${careSettingCode}`, payload)
+    return this.apiResource
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
@@ -201,36 +204,6 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  // ---
-  // Agreement Versions
-  // ---
-
-  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
-    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
-      .pipe(
-        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
-        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement versions could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
-    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
-      .pipe(
-        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
-        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement version could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
           throw error;
         })
       );

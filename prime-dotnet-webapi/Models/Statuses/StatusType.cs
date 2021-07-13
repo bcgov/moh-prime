@@ -8,11 +8,4 @@ namespace Prime.Models
         Locked = 4,
         Declined = 5,
     }
-
-    public enum SiteStatusType
-    {
-        UnderReview = 1,
-        Approved = 2,
-        Declined = 3
-    }
 }

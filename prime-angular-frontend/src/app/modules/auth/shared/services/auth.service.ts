@@ -12,7 +12,6 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
 import { BrokerProfile } from '@auth/shared/models/broker-profile.model';
 import { AccessTokenParsed } from '@auth/shared/models/access-token-parsed.model';
-import { Role } from '@auth/shared/enum/role.enum';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 

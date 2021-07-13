@@ -1,41 +1,89 @@
-import { Component, OnInit, Input, ContentChildren, QueryList, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  ContentChildren,
+  QueryList,
+  ContentChild,
+  AfterContentInit,
+  ViewChild
+} from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-toggle';
 
-import { Observable, Subject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { PageSubheader2MoreInfoDirective } from '@shared/components/pages/page-subheader2/page-subheader2-more-info.directive';
+import { SameAsComponent } from '@shared/components/site/same-as/same-as.component';
+import { Address } from '@shared/models/address.model';
 import { Contact } from '@lib/models/contact.model';
+import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
 
-@UntilDestroy()
 @Component({
   selector: 'app-contact-profile-form',
   templateUrl: './contact-profile-form.component.html',
   styleUrls: ['./contact-profile-form.component.scss']
 })
-export class ContactProfileFormComponent implements OnInit {
+export class ContactProfileFormComponent implements OnInit, AfterContentInit {
+  /**
+   * @description
+   * Title of the contact profile section.
+   */
   @Input() public title: string;
+  /**
+   * @description
+   * Instance of the contact profile form.
+   */
   @Input() public form: FormGroup;
-  @Input() public showFax: boolean;
-  @Input() public showAddButton: boolean;
-  @Input() public contacts: Contact[];
-  @Input() public formSubmitting: Observable<void> = new Observable<void>();
-  public showFormFields: boolean;
-  public hasPhysicalAddress: boolean;
-  public showAddressFields: boolean;
-  @ContentChildren(PageSubheader2MoreInfoDirective, { descendants: true })
+  /**
+   * @description
+   * List of fields that should be excluded.
+   */
+  @Input() public excludeList: ('fax' | 'jobRoleTitle' | 'physicalAddress')[];
+  /**
+   * @description
+   * Whether access to the address should be gated
+   * by a toggle (default: true).
+   *
+   * NOTE: Makes the address required when no toggle exists.
+   */
+  @Input() public hasAddressToggle: boolean;
+  /**
+   * @description
+   * Pass control of the address line fields being
+   * displayed to the parent component.
+   */
+  @Input() public showAddressFields: boolean;
+  /**
+   * @description
+   * Reference to the address toggle.
+   */
+  @ViewChild(MatSlideToggle, { static: true }) public toggle: MatSlideToggle;
+  /**
+   * @description
+   * Optional projection of the SameAsComponent for
+   * auto-filling in the contact profile form.
+   */
+  @ContentChild(SameAsComponent) public sameAs: SameAsComponent;
+  /**
+   * @description
+   * Contact specific profile information.
+   */
+  @ContentChildren(PageSubheader2MoreInfoDirective)
   public pageSubheaderMoreInfoChildren: QueryList<PageSubheader2MoreInfoDirective>;
-  @ViewChild('sameAddressSlideToggle')
-  public sameAddressSlideToggle: MatSlideToggle;
+  /**
+   * @description
+   * Reference to page footer.
+   *
+   * NOTE: Projected to allow for listening to the
+   * triggered save (aka submission) event.
+   */
+  @ContentChild(PageFooterComponent) public pageFooter: PageFooterComponent;
 
   constructor(
     private formUtilsService: FormUtilsService
   ) {
-    this.showFax = true;
-    this.showAddButton = false;
+    this.hasAddressToggle = true;
+    this.excludeList = [];
   }
 
   public get hasPageSubheaderMoreInfo(): boolean {
@@ -62,64 +110,101 @@ export class ContactProfileFormComponent implements OnInit {
     return this.form.get('physicalAddress') as FormGroup;
   }
 
-  public onPhysicalAddressChange({ checked }: MatSlideToggleChange) {
-    if (checked) {
+  /**
+   * @description
+   * Event handler for the address toggle.
+   */
+  public onAddressChange({ checked }: MatSlideToggleChange) {
+    if (!checked) {
       this.physicalAddress.reset();
     }
 
-    this.hasPhysicalAddress = !this.hasPhysicalAddress;
-    this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
+    this.changeAddressValidators(this.physicalAddress);
   }
 
-  public updateContact(contact: Contact): void {
-    this.form.patchValue(contact);
-    this.showFormFields = true;
-  }
+  public ngOnInit(): void {
+    this.changeAddressValidators(this.physicalAddress);
 
-  public addContact(): void {
-    this.showFormFields = true;
-  }
+    if (this.toggle) {
+      // Check for profile information outside of the address to
+      // determine if this is an update, and the address is empty
+      // in order to set the toggle appropriately
+      const { physicalAddress, ...profile } = this.form.value;
+      const isUpdate = Object.keys(profile).some(k => profile[k]);
 
-  public ngOnInit() {
-    // When the street is populated ensure the address is shown
-    this.physicalAddress.get('street')
-      .valueChanges
-      .pipe(distinctUntilChanged())
-      .subscribe((value: string) => (value) ? this.togglePhysicalAddress() : null);
-
-    // If first time loading, force address slider to be 'off' by default
-    if (!this.form.get('firstName').value) {
-      this.togglePhysicalAddress(true);
+      if (isUpdate && Address.isEmpty(physicalAddress)) {
+        // Assumed that on update and no address that address
+        // is the same as the site address
+        this.toggleAddress(true);
+      }
     }
-    else {
-      this.togglePhysicalAddress();
+  }
+
+  public ngAfterContentInit(): void {
+    if (this.sameAs) {
+      // Ensure the address line fields are displayed after
+      // being patched by same-as
+      this.sameAs.selected
+        .subscribe((contact: Contact) => {
+          if (Address.isNotEmpty(contact.physicalAddress)) {
+            // Change the validators based on the toggled value, otherwise
+            // the default is required so the address should be displayed
+            this.toggleAddress(true);
+            this.expandAddressFields();
+          }
+        });
     }
 
-    this.formSubmitting.pipe(untilDestroyed(this))
-      .subscribe(() => {
-        // force show address fields if address form is invalid
-        this.showAddressFields = !this.sameAddressSlideToggle.checked && this.physicalAddress.invalid;
-      });
-
-    this.showFormFields = !this.contacts?.length || !this.hasPhysicalAddress;
+    if (this.pageFooter) {
+      this.pageFooter.save
+        .subscribe(() => {
+          // Change the validators based on the toggled value, otherwise
+          // the default is required so the address should be displayed
+          if (!this.toggle.checked) {
+            this.changeAddressValidators(this.physicalAddress);
+          }
+          this.expandAddressFields();
+        });
+    }
   }
 
-  private togglePhysicalAddress(forceDefault?: boolean) {
-    this.hasPhysicalAddress = !!(
-      this.physicalAddress.get('countryCode').value ||
-      this.physicalAddress.get('provinceCode').value ||
-      this.physicalAddress.get('street').value ||
-      this.physicalAddress.get('street2').value ||
-      this.physicalAddress.get('city').value ||
-      this.physicalAddress.get('postal').value
-    ) || forceDefault;
-
-    this.togglePhysicalAddressValidators(this.physicalAddress, ['id', 'street2']);
+  /**
+   * @description
+   * Expand the visibility of the address fields
+   * beyond autocomplete.
+   */
+  private expandAddressFields() {
+    if (!this.excludeList.includes('physicalAddress')) {
+      this.showAddressFields = true;
+    }
   }
 
-  private togglePhysicalAddressValidators(separateAddress: FormGroup, blacklist: string[] = []) {
-    (!this.hasPhysicalAddress)
-      ? this.formUtilsService.resetAndClearValidators(separateAddress)
-      : this.formUtilsService.setValidators(separateAddress, [Validators.required], blacklist);
+  /**
+   * @description
+   * Change the toggled visibility of the address fields based
+   * on the toggled value, otherwise NOOP.
+   */
+  private toggleAddress(toggleAddress: boolean = false) {
+    if (this.toggle && !this.excludeList.includes('physicalAddress')) {
+      this.toggle.checked = toggleAddress;
+      this.changeAddressValidators(this.physicalAddress);
+    }
+  }
+
+  /**
+   * @description
+   * Apply or reset address validators based on the toggle existence.
+   */
+  private changeAddressValidators(address: FormGroup, blacklist: string[] = ['id', 'street2']) {
+    if (!this.excludeList.includes('physicalAddress')) {
+      if (this.toggle) {
+        (this.toggle.checked)
+          ? this.formUtilsService.resetAndClearValidators(address)
+          : this.formUtilsService.setValidators(address, [Validators.required], blacklist);
+      } else if (!this.hasAddressToggle) {
+        this.formUtilsService.setValidators(address, [Validators.required], blacklist);
+      }
+    }
   }
 }
+

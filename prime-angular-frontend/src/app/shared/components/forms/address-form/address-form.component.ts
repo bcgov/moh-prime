@@ -132,14 +132,15 @@ export class AddressFormComponent implements OnInit {
         this.setAddress(nextCountry);
       });
 
-    this.showAddressFields = (this.showManualButton)
-      ? this.form.valid
-      : true;
+    if (Address.isNotEmpty(this.form.value)) {
+      // Only every set to true when the address is not empty, otherwise
+      // leave control in the hands of the component or input bindings
+      this.showAddressFields = true;
+    }
   }
 
   private setAddress(countryCode: string): void {
     this.filteredProvinces = this.provinces.filter(p => p.countryCode === this.countryCode.value);
-
     this.setAddressLabels(countryCode);
   }
 

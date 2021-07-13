@@ -2,6 +2,7 @@ import { BannerType } from '@shared/enums/banner-type.enum';
 import moment, { Moment } from 'moment';
 
 export interface Banner {
+  id: number;
   bannerType: BannerType;
   title: string;
   content: string; // HTML markup
@@ -13,12 +14,14 @@ export interface Banner {
 
 export class BannerViewModel {
   public constructor(
+    public id: number,
     public bannerType: BannerType,
     public title: string,
     public content: string,
     public startTimestamp: Moment,
     public endTimestamp: Moment
   ) {
+    this.id = id;
     this.bannerType = bannerType;
     this.title = title;
     this.content = content;
@@ -35,6 +38,7 @@ export class BannerViewModel {
     const end = moment(bannerVm.endTimestamp).local();
 
     return {
+      id: bannerVm.id,
       bannerType: bannerVm.bannerType,
       title: bannerVm.title,
       content: bannerVm.content,
@@ -45,7 +49,7 @@ export class BannerViewModel {
     };
   }
 
-  public static fromBanner({ bannerType, title, content, startDate, startTime, endDate, endTime }: Banner): BannerViewModel {
+  public static fromBanner({ id, bannerType, title, content, startDate, startTime, endDate, endTime }: Banner): BannerViewModel {
     const parsedStartTime = moment(startTime, 'HHmm');
     const parsedEndTime = moment(endTime, 'HHmm');
 
@@ -58,6 +62,6 @@ export class BannerViewModel {
       minute: parsedEndTime.get('minute')
     });
 
-    return new BannerViewModel(bannerType, title, content, startDateTime, endDateTime);
+    return new BannerViewModel(id, bannerType, title, content, startDateTime, endDateTime);
   }
 }

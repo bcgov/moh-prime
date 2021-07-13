@@ -1,0 +1,92 @@
+<app-page [busy]="busy">
+  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formState.form"
+        novalidate>
+
+    <app-page-section>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>Care Setting</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Identify all of the care settings where the enrollee will be accessing PharmaNet.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3"
+             formArrayName="enrolleeCareSettings">
+
+          <ng-container *ngFor="let careSetting of formState.enrolleeCareSettings.controls; let i = index;"
+                        [formGroupName]="i">
+
+            <app-form-icon-group [show]="formState.enrolleeCareSettings.length > 1"
+                                 (event)="formState.removeCareSetting(i)">
+              <app-form-icon-group>
+                <mat-form-field class="w-100">
+                  <mat-label>Care Setting</mat-label>
+                  <mat-select formControlName="careSettingCode">
+                    <mat-option *ngFor="let careSettingType of formState.filterCareSettingTypes(careSetting)"
+                                [value]="careSettingType.code"
+                                [disabled]="formState.disableCareSetting(careSettingType.code)">
+                      {{ careSettingType.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="careSetting.get('careSettingCode').hasError('required')">
+                    Required
+                  </mat-error>
+                </mat-form-field>
+
+                <ng-container appContextualContent>
+                  Care setting is the location where you access PharmaNet to deliver patient care.
+                </ng-container>
+              </app-form-icon-group>
+            </app-form-icon-group>
+
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  (click)="formState.addCareSetting()">
+            <mat-icon>add</mat-icon>
+            Add Additional Care Setting
+          </button>
+
+        </div>
+        <div *ngIf="formState.hasSelectedHACareSetting()"
+             class="col col-sm-10 py-3">
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>Health Authority</ng-container>
+            <ng-container appPageSubheaderSummary>
+              Please select all the health authorities in which you work.
+            </ng-container>
+          </app-page-subheader>
+
+          <div formArrayName="enrolleeHealthAuthorities"
+               class="mb-3"
+               *ngFor="let eha of formState.enrolleeHealthAuthorities.controls; let i = index">
+            <mat-checkbox [formControl]="eha">
+              {{ healthAuthorities[i].name }}
+            </mat-checkbox>
+          </div>
+          <app-alert *ngIf="hasNoHealthAuthoritiesError"
+                     type="danger"
+                     icon="warning">
+            <ng-container #alertContent
+                          class="alert-content">
+              No health authority has been chosen.
+            </ng-container>
+          </app-alert>
+        </div>
+      </div>
+    </app-page-section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="true"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>
