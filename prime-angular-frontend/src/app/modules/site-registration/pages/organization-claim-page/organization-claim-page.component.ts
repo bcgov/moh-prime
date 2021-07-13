@@ -57,7 +57,7 @@ export class OrganizationClaimPageComponent implements OnInit {
       if (this.formUtilsService.checkValidity(this.formState.form)) {
         // check if the organization w/ the PEC has already been claimed
         this.busy = this.organizationResource.getOrganizationClaim({ pec: this.formState.json.pec })
-          .subscribe((result: number) => {
+          .subscribe((result: boolean) => {
             if (result) {
               this.toastService.openErrorToast(`The organization associated the site of PEC code ${this.formState.json.pec} cannot be claimed.`);
             }

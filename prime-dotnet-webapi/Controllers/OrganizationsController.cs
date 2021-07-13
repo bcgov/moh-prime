@@ -130,6 +130,7 @@ namespace Prime.Controllers
         [HttpPost("claim", Name = nameof(ClaimOrganization))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
         public async Task<ActionResult> ClaimOrganization(ClaimOrganizationViewModel claimOrganization)
         {
@@ -151,13 +152,14 @@ namespace Prime.Controllers
 
         // GET: api/Organizations/claim
         /// <summary>
-        /// Gets organization claim count by a given search criteria.
+        /// Check if organization claim exists by a given search criteria.
         /// </summary>
         [HttpGet("claims", Name = nameof(GetOrganizationClaimCount))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<int>> GetOrganizationClaimCount([FromQuery] OrganizationClaimSearchOptions search)
+        public async Task<ActionResult> GetOrganizationClaimCount([FromQuery] OrganizationClaimSearchOptions search)
         {
             // check if the organization exists with the given PEC
             if (!string.IsNullOrEmpty(search.Pec))
@@ -168,7 +170,7 @@ namespace Prime.Controllers
                     return BadRequest("Organization does not exist with the passed in site PEC.");
                 }
             }
-            var result = await _organizationService.GetOrganizationClaimCountAsync(search);
+            var result = await _organizationService.OrganizationClaimExistsAsync(search);
 
             return Ok(result);
         }

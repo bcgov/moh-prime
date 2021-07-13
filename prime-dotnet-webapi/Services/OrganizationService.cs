@@ -165,12 +165,12 @@ namespace Prime.Services
             return organization;
         }
 
-        public async Task<int> GetOrganizationClaimCountAsync(OrganizationClaimSearchOptions searchOptions)
+        public async Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions searchOptions)
         {
-            // return 0 if searchOptions is invalid
+            // return false if searchOptions is invalid
             if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && string.IsNullOrEmpty(searchOptions.UserId))
             {
-                return 0;
+                return false;
             }
 
             var userId = Guid.Empty;
@@ -184,7 +184,7 @@ namespace Prime.Services
                 .If(userId != Guid.Empty, q => q
                     .Where(o => o.NewSigningAuthority.UserId == userId)
                 )
-                .CountAsync();
+                .AnyAsync();
         }
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)

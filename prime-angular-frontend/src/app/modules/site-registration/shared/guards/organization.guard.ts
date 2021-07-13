@@ -132,9 +132,9 @@ export class OrganizationGuard extends BaseGuard {
       .pipe(
         exhaustMap((user: BcscUser) => this.organizationResource.getOrganizationClaim({ userId: user.userId }))
       )
-      .subscribe((result: number) => {
+      .subscribe((result: boolean) => {
         // Goto 'next step' page if has existing org claim
-        if (result > 0) {
+        if (result) {
           return this.navigate(routePath, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION);
         }
         // otherwise goto the claim page for the first time visiter

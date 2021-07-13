@@ -147,12 +147,12 @@ export class OrganizationResource {
 
   public getOrganizationClaim(
     queryParam: { pec?: string, userId?: string }
-  ): Observable<number> {
+  ): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
-    return this.apiResource.get<number>(`organizations/claims`, params)
+    return this.apiResource.get<boolean>(`organizations/claims`, params)
       .pipe(
-        map((response: ApiHttpResponse<number>) => response.result),
-        tap((result: number) => this.logger.info('ORGANIZATIONCLAIM', result)),
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        tap((result: boolean) => this.logger.info('ORGANIZATIONCLAIM', result)),
         catchError((error: any) => {
           this.toastService.openErrorToast(error.errors.message);
           this.logger.error('[Core] OrganizationResource::getOrganizationClaim error has occurred: ', error);
