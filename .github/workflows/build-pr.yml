@@ -19,7 +19,6 @@ jobs:
       BUILD_LOGLEVEL: "2"
       SERVICE_NAME: document-manager
       CONTAINER_NAME: prime-document-manager
-      LOCAL_SLUG: localhost:5000/prime/docman
     services:
       registry:
         image: registry:2
@@ -30,27 +29,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.LOCAL_SLUG }}
-      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          version: https://github.com/docker/buildx.git#master
-          driver-opts: |
-            image=moby/buildkit:master
-            network=host
-      -
-        name: Cache Docker layers docman
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-docman-cache
-          key: ${{ runner.os }}-buildx-docman-{{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-docman-
+          version: "https://github.com/docker/buildx.git#67bd6f4dc82a9cd96f34133dab3f6f7af803bb14"
+          driver-opts: image=moby/buildkit:master
+          buildkitd-flags: --debug
       - 
         name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -115,7 +99,6 @@ jobs:
     env:
       SERVICE_NAME: dotnet-webapi
       CONTAINER_NAME: prime-webapi-backend
-      LOCAL_SLUG: localhost:5000/prime/webapi
     services:
       registry:
         image: registry:2
@@ -126,31 +109,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.LOCAL_SLUG }}
-      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          version: https://github.com/docker/buildx.git#master
-          driver-opts: |
-            image=moby/buildkit:master
-            network=host
-      -
-        name: Cache Docker layers webapi
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-webapi-cache
-          key: ${{ runner.os }}-buildx-webapi-{{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-webapi-
-
-      # - name: Validate cache
-      #   run: |
-      #     docker buildx imagetools inspect localhost:5000/webapi:buildcache || echo "Not Found"
+          version: "https://github.com/docker/buildx.git#67bd6f4dc82a9cd96f34133dab3f6f7af803bb14"
+          driver-opts: image=moby/buildkit:master
+          buildkitd-flags: --debug
 
       - name: "Login to OpenShift repository"
         uses: docker/login-action@v1
@@ -238,7 +202,6 @@ jobs:
       KEYCLOAK_CLIENT_ID: "prime-application-dev"
       KEYCLOAK_URL: "https://dev.oidc.gov.bc.ca/auth"
       KEYCLOAK_REALM: "v4mbqqas"
-      LOCAL_SLUG: localhost:5000/prime/frontend
     services:
       registry:
         image: registry:2
@@ -249,27 +212,12 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v3
-        with:
-          images: ${{ env.LOCAL_SLUG }}
-      -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
         with:
-          version: https://github.com/docker/buildx.git#master
-          driver-opts: |
-            image=moby/buildkit:master
-            network=host
-      -
-        name: Cache Docker layers frontend
-        uses: actions/cache@v2
-        with:
-          path: /tmp/.buildx-frontend-cache
-          key: ${{ runner.os }}-buildx-frontend-{{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-frontend-
+          version: "https://github.com/docker/buildx.git#67bd6f4dc82a9cd96f34133dab3f6f7af803bb14"
+          driver-opts: image=moby/buildkit:master
+          buildkitd-flags: --debug
       # - name: Validate cache
       #   run: |
       #     docker buildx imagetools inspect localhost:5000/frontend:buildcache || echo "Not Found"
