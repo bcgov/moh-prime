@@ -16,7 +16,7 @@ namespace Prime.Services
         Task<bool> DeleteClaimAsync(int claimId);
 
         Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId);
-        Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization);
+        Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization, Organization organization);
         Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions search);
     }
 }
