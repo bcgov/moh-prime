@@ -21,10 +21,10 @@ namespace Prime.Services
                 LogType = log.LogType,
                 Msg = log.Message,
                 Data = log.Data,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.UtcNow
             };
 
-            _context.FrontEndLogs.Add(newLog);
+            _context.ClientLogs.Add(newLog);
 
             await _context.SaveChangesAsync();
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Prime.Services;
 using Prime.Models;
 using Prime.ViewModels;
+using System;
 
 namespace Prime.Controllers
 {
@@ -30,7 +31,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> CreateLog(ClientLogViewModel log)
         {
-            await _logService.CreateLogAsync(log);
+            try
+            {
+                await _logService.CreateLogAsync(log);
+            }
+            catch (Exception)
+            {
+                // Do Nothing
+            }
             return NoContent();
         }
     }
