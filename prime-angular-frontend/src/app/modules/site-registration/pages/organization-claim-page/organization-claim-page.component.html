@@ -14,16 +14,25 @@
     <mat-slide-toggle #claimExistingOrg
                       color="primary"
                       [checked]="isClaimExistingOrg"
-                      (change)="onChange($event)">
+                      (change)="onClaimOrgChange($event)">
       Claim an existing organization.
     </mat-slide-toggle>
   </section>
 
   <form *ngIf="claimExistingOrg.checked"
         [formGroup]="formState.form"
-        (ngSubmit)="onContinue()"
+        (ngSubmit)="onSubmit()"
         novalidate
         autocomplete="off">
+    <app-alert *ngIf="hasOrgClaimError"
+               type="danger"
+               icon="error_outline"
+               class="mb-4">
+      <ng-container #alertContent
+                    class="alert-content">
+        Could not claim the organization.
+      </ng-container>
+    </app-alert>
     <section class="mb-3">
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Site ID/PEC Code</ng-container>
@@ -40,7 +49,7 @@
       </mat-form-field>
     </section>
 
-    <section class="mb-3">
+    <app-page-section>
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Change/Claim Details</ng-container>
         <ng-container appPageSubheader2Summary>
@@ -55,14 +64,13 @@
                   formControlName="claimDetail"></textarea>
         <mat-error>Required</mat-error>
       </mat-form-field>
-    </section>
+    </app-page-section>
 
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
-                   [hasSecondaryAction]="true"
+                   [hasSecondaryAction]="false"
                    [primaryActionLabel]="claimExistingOrg.checked ? 'Save and Continue' : 'Continue'"
-                   (save)="onContinue()"
-                   (back)="onBack()"></app-page-footer>
+                   (save)="onSubmit()"></app-page-footer>
 
 </app-page>

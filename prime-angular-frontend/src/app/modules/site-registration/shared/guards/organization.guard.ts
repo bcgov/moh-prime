@@ -234,10 +234,11 @@ export class OrganizationGuard extends BaseGuard {
       ? `/${modulePath}/${loopPath}/${oid}/${destinationPath}`
       : `/${modulePath}/${loopPath}`;
 
-    if (new URL(routePath, window.location.href).pathname === new URL(comparePath, window.location.href).pathname) {
+    // path URLs could contain query params, so only compare the pathname
+    if (routePath.split(/[?#]/)[0] === comparePath.split(/[?#]/)[0]) {
       return true;
     } else {
-      this.router.navigate([comparePath], { queryParams: queryParams });
+      this.router.navigate([comparePath], { queryParams });
       return false;
     }
   }

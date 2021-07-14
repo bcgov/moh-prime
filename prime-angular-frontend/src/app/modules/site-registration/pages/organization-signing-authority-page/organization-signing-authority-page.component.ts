@@ -156,15 +156,11 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
               // signing authority data is resubmitted possibly with alteration
               : updateSigningAuthority$
           ),
-          exhaustMap((party: Party) => {
-            if (this.route.snapshot.queryParams.claimOrg === 'true') {
-              var claimData = this.organizationFormStateService.organizationClaimPageFormState.json;
-              return this.organizationResource.claimOrganization(party.id, claimData.pec, claimData.claimDetail);
-            }
-            else {
-              return this.organizationResource.createOrganization(party.id);
-            }
-          })
+          exhaustMap((party: Party) =>
+            this.route.snapshot.queryParams.claimOrg === 'true'
+              ? this.organizationResource.claimOrganization(party.id, this.organizationFormStateService.organizationClaimPageFormState.json)
+              : this.organizationResource.createOrganization(party.id)
+          )
         );
     }
 
