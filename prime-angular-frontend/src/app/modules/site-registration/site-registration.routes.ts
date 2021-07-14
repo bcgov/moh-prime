@@ -34,7 +34,7 @@ export class SiteRoutes {
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${ SiteRoutes.MODULE_PATH }/${ route }`;
+    return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }
 
   // Used to indicate the routes and order of registration for an initial
@@ -85,6 +85,7 @@ export class SiteRoutes {
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
       this.CARE_SETTING,
+      this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,

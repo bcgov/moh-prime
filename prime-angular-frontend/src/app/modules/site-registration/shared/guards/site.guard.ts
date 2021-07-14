@@ -75,11 +75,7 @@ export class SiteGuard extends BaseGuard {
 
     const allowlistRoutes = site.submittedDate
       ? [
-        ...SiteRoutes.editRegistrationRouteAccess(),
-        ...ArrayUtils.insertIf(
-          !site.businessLicence.completed,
-          SiteRoutes.BUSINESS_LICENCE
-        )
+        ...SiteRoutes.editRegistrationRouteAccess()
       ]
       : SiteRoutes.siteRegistrationRoutes();
 

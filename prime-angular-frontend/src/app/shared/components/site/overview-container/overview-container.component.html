@@ -68,7 +68,7 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="!site.submittedDate || !site.businessLicence?.completed"
+                        [showEditRedirect]="site.submittedDate || !site.businessLicence?.completed"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Doing Business As">
