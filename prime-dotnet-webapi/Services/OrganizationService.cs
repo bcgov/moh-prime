@@ -315,7 +315,7 @@ namespace Prime.Services
 
         public async Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
         {
-            var organization = await GetOrganizationAsync(organizationId);
+            var organization = await _context.Organizations.Where(o => o.Id == organizationId).SingleAsync();
             organization.SigningAuthorityId = newSigningAuthorityId;
             return await _context.SaveChangesAsync() == 1;
         }

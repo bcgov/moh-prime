@@ -48,33 +48,20 @@ namespace Prime.Services
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
-
-        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization)
+        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
         {
-            // try to find the organization with the provided info
-            var organization = await _context.Organizations
-                .Include(o => o.Sites)
-                .Where(o => o.Sites.Any(s => s.PEC == claimOrganization.PEC))
-                .SingleOrDefaultAsync();
-
-            // return null if the organization does not exist
-            if (organization == null)
-            {
-                return null;
-            }
-
             var organizationCLaim = new OrganizationClaim
             {
                 OrganizationId = organization.Id,
-                NewSigningAuthorityId = claimOrganization.PartyId,
-                ProvidedSiteId = claimOrganization.PEC,
-                Details = claimOrganization.ClaimDetail
+                NewSigningAuthorityId = organizationClaim.PartyId,
+                ProvidedSiteId = organizationClaim.PEC,
+                Details = organizationClaim.ClaimDetail
             };
 
             _context.OrganizationClaims.Add(organizationCLaim);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, claimOrganization.PartyId, "Organization Claim Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, organizationClaim.PartyId, "Organization Claim Created");
 
             return organization;
         }
