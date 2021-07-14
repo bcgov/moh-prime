@@ -4,11 +4,10 @@ namespace Prime.Services
 {
     public abstract class BaseService
     {
-        protected readonly ApiDbContext _context;
-
-        protected readonly IHttpContextAccessor _httpContext;
-
         protected const int InvalidId = -1;
+
+        protected readonly ApiDbContext _context;
+        protected readonly IHttpContextAccessor _httpContext;
 
         protected BaseService(ApiDbContext context, IHttpContextAccessor httpContext)
         {

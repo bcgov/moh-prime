@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
@@ -29,10 +29,5 @@ export class AuthorizedUserService {
     // Allow access to current value, but prevent updates by reference
     const value = this._authorizedUser.value;
     return (value) ? { ...this._authorizedUser.value } : null;
-  }
-
-  public get authorizedUser$(): Observable<AuthorizedUser | null> {
-    // Allow subscriptions, but make immutable
-    return this._authorizedUser.asObservable();
   }
 }

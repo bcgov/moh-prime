@@ -1,4 +1,3 @@
-using System.Linq;
 using AutoMapper;
 using Prime.Models;
 using Prime.ViewModels.PaperEnrollees;

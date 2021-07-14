@@ -18,7 +18,7 @@ export class AuthorizedUserApprovedPageComponent implements OnInit {
     private healthAuthorityResource: HealthAuthorityResource
   ) { }
 
-  public onContinue() {
+  public onContinue(): void {
     const authorizedUserId = this.authorizedUserService.authorizedUser.id;
     this.healthAuthorityResource.activateAuthorizedUser(authorizedUserId)
       .subscribe(() => this.router.navigate([HealthAuthSiteRegRoutes.MODULE_PATH]));
