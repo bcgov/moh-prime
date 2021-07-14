@@ -11,8 +11,8 @@ import { AppEnvironment } from '@env/environment.model';
  */
 export const environment: AppEnvironment = {
   production: true,
-  environmentName: '$OC_APP',
   version: '1.0.0',
+  environmentName: '$OC_APP',
   apiEndpoint: '$REDIRECT_URL/api/v1',
   loginRedirectUrl: '$REDIRECT_URL',
   documentManagerUrl: '$REDIRECT_URL/api/docman',
@@ -20,7 +20,7 @@ export const environment: AppEnvironment = {
     displayPhone: '1-844-39PRIME',
     phone: '1-844-397-7463',
     email: 'prime@gov.bc.ca',
-    supportEmail: 'primesupport@gov.bc.ca',
+    supportEmail: 'primesupport@gov.bc.ca'
   },
   phoneNumbers: { director: '236-478-0282' },
   keycloakConfig: {

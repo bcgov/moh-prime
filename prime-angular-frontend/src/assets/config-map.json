@@ -1,0 +1,13 @@
+{
+  "environmentName": "$OC_APP",
+  "apiEndpoint": "$REDIRECT_URL/api/v1",
+  "loginRedirectUrl": "$REDIRECT_URL",
+  "documentManagerUrl": "$REDIRECT_URL/api/docman",
+  "keycloakConfig": {
+    "config": {
+      "url": "$KEYCLOAK_URL",
+      "realm": "$KEYCLOAK_REALM",
+      "clientId": "$KEYCLOAK_CLIENT_ID"
+    }
+  }
+}

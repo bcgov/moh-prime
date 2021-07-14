@@ -4,7 +4,10 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
-import { Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig, LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig } from '@config/config.model';
+import {
+  Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
+  LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig
+} from '@config/config.model';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -21,7 +24,6 @@ export class ConfigService implements IConfigService {
   protected configuration: Configuration;
 
   constructor(
-    @Inject(APP_CONFIG) protected config: AppConfig,
     protected apiResource: ApiResource,
     protected utilsService: UtilsService
   ) { }
