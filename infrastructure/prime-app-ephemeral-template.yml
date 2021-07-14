@@ -451,7 +451,7 @@ objects:
             command:
               - bash
               - '-c'
-              - dotnet ./prime.dll -v 2>&1> prime.logfile.out
+              - dotnet ./prime.dll -v 2>&1> /dev/stdout
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
