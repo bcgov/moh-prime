@@ -195,6 +195,13 @@ objects:
                 port: 8080
               initialDelaySeconds: 5
               periodSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 5
+              failureThreshold: 1
+              periodSeconds: 5
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -402,6 +409,12 @@ objects:
                 path: /api/healthcheck
                 port: 8080
               initialDelaySeconds: 5
+              periodSeconds: 5
+            livenessProbe:
+              httpGet:
+                path: /api/healthcheck
+                port: 8080
+              failureThreshold: 1
               periodSeconds: 5
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
