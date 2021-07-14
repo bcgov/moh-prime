@@ -132,9 +132,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> ClaimOrganization(OrganizationClaimViewModel claimOrganization)
+        public async Task<ActionResult> ClaimOrganization(OrganizationClaimViewModel organizationClaim)
         {
-            var party = await _partyService.GetPartyAsync(claimOrganization.PartyId, PartyType.SigningAuthority);
+            var party = await _partyService.GetPartyAsync(organizationClaim.PartyId, PartyType.SigningAuthority);
             if (party == null)
             {
                 return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
@@ -145,7 +145,12 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
 
-            var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization);
+            var organization = await _organizationService.GetOrganizationByPecAsync(organizationClaim.PEC);
+            if (organization == null)
+            {
+                return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
+            }
+            organization = await _organizationClaimService.ClaimOrganizationAsync(organizationClaim, organization);
 
             return Ok(organization);
         }
@@ -170,7 +175,7 @@ namespace Prime.Controllers
                     return BadRequest("Organization does not exist with the passed in site PEC.");
                 }
             }
-            var result = await _organizationService.OrganizationClaimExistsAsync(search);
+            var result = await _organizationClaimService.OrganizationClaimExistsAsync(search);
 
             return Ok(result);
         }

@@ -1,16 +1,26 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models;
+using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class OrganizationClaimService : BaseService, IOrganizationClaimService
     {
+        private readonly IBusinessEventService _businessEventService;
+
         public OrganizationClaimService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext) { }
+            IHttpContextAccessor httpContext,
+            IBusinessEventService businessEventService)
+            : base(context, httpContext)
+        {
+            this._businessEventService = businessEventService;
+        }
 
         public async Task<bool> HasClaimAsync(int organizationId)
         {
@@ -37,6 +47,46 @@ namespace Prime.Services
         {
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
+        }
+
+        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
+        {
+            var organizationCLaim = new OrganizationClaim
+            {
+                OrganizationId = organization.Id,
+                NewSigningAuthorityId = organizationClaim.PartyId,
+                ProvidedSiteId = organizationClaim.PEC,
+                Details = organizationClaim.ClaimDetail
+            };
+
+            _context.OrganizationClaims.Add(organizationCLaim);
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, organizationClaim.PartyId, "Organization Claim Created");
+
+            return organization;
+        }
+
+        public async Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions searchOptions)
+        {
+            // return false if searchOptions is invalid
+            if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && string.IsNullOrEmpty(searchOptions.UserId))
+            {
+                return false;
+            }
+
+            var userId = Guid.Empty;
+            Guid.TryParse(searchOptions.UserId, out userId);
+
+            return await _context.OrganizationClaims
+                .AsNoTracking()
+                .If(!string.IsNullOrEmpty(searchOptions.Pec), q => q
+                    .Where(o => o.Organization.Sites.Any(s => s.PEC == searchOptions.Pec))
+                )
+                .If(userId != Guid.Empty, q => q
+                    .Where(o => o.NewSigningAuthority.UserId == userId)
+                )
+                .AnyAsync();
         }
     }
 }
