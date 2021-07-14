@@ -40,8 +40,8 @@ export class PaperEnrolmentGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the enrolment.
    */
-  private routeDestination(routePath: string, httpEnrollee: HttpEnrollee, params: Params) {
-    return (httpEnrollee?.approvedDate)
+  private routeDestination(routePath: string, enrollee: HttpEnrollee, params: Params): boolean {
+    return (enrollee?.approvedDate)
       ? this.navigate(`/${this.config.routes.paperEnrolment}/${+params.eid}/${PaperEnrolmentRoutes.NEXT_STEPS}`, `${routePath}`, params)
       : true;
   }
