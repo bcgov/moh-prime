@@ -5,7 +5,6 @@ import { ActivatedRoute } from '@angular/router';
 import { forkJoin, Observable, Subscription } from 'rxjs';
 
 import { UtilsService } from '@core/services/utils.service';
-import { ToastService } from '@core/services/toast.service';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -18,47 +17,46 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
   public documents$: Observable<EnrolleeAdjudicationDocument[]>;
   public busy: Subscription;
-  private enrolleeId: number;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
 
   constructor(
     private enrolmentResource: EnrolmentResource,
     private route: ActivatedRoute,
-    private utilsService: UtilsService,
-    private toastService: ToastService
-  ) {
-    this.enrolleeId = this.route.snapshot.params.id;
-  }
+    private utilsService: UtilsService
+  ) { }
 
   public onSaveDocuments(documentGuids: string[]) {
+    const enrolleeId = this.route.snapshot.params.id;
     const documentGuids$ = documentGuids.map(guid =>
-      this.enrolmentResource.createEnrolleeAdjudicationDocument(this.enrolleeId, guid));
+      this.enrolmentResource.createEnrolleeAdjudicationDocument(enrolleeId, guid));
 
     forkJoin(documentGuids$)
       .subscribe(val => {
-        this.getDocuments();
+        this.getDocuments(enrolleeId);
         this.adjudicatorDocumentsComponent.removeFiles();
       });
   }
 
   public onGetDocumentByGuid(documentId: number) {
-    this.enrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(this.enrolleeId, documentId)
+    this.enrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(this.route.snapshot.params.id, documentId)
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }
 
   public onDeleteDocumentById(documentId: number) {
-    this.busy = this.enrolmentResource.deleteEnrolleeAdjudicationDocument(this.enrolleeId, documentId)
-      .subscribe((document: EnrolleeAdjudicationDocument) => this.getDocuments());
+    const enrolleeId = this.route.snapshot.params.id;
+    this.busy = this.enrolmentResource.deleteEnrolleeAdjudicationDocument(enrolleeId, documentId)
+      .subscribe((document: EnrolleeAdjudicationDocument) => this.getDocuments(enrolleeId));
   }
 
   ngOnInit(): void {
-    this.getDocuments();
+    this.getDocuments(this.route.snapshot.params.id);
+    this.route.params.subscribe(params => this.getDocuments(params.id));
   }
 
-  private getDocuments() {
+  private getDocuments(enrolleeId: number) {
     this.documents$ = this.enrolmentResource
-      .getEnrolleeAdjudicationDocuments(this.enrolleeId);
+      .getEnrolleeAdjudicationDocuments(enrolleeId);
   }
 }
