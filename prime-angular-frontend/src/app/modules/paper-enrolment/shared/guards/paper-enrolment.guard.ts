@@ -28,13 +28,12 @@ export class PaperEnrolmentGuard extends BaseGuard {
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
     const enrolleeId = +params.eid;
-    if (enrolleeId) {
-      return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    return (enrolleeId)
+      ? this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
           map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
-        );
-    }
-    return of(true);
+        )
+      : of(true);
   }
 
   /**
