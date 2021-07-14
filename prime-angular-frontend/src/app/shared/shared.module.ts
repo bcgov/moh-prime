@@ -105,6 +105,7 @@ import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fiel
 import { CardListComponent } from '@shared/components/card-list/card-list.component';
 import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
 import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.component';
+import { ErrorDialogComponent } from './components/dialogs/content/error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -192,7 +193,8 @@ import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.c
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
     OptionsFormComponent,
-    OboSiteFormComponent
+    OboSiteFormComponent,
+    ErrorDialogComponent
   ],
   imports: [
     CommonModule,

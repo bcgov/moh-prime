@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { environment } from '@env/environment';
 import { AbstractLogger } from '@shared/classes/abstract-logger';
 import { ConsoleLogger } from '@shared/classes/console-logger';
+import { DialogLogger } from '@shared/classes/dialog-logger';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +13,13 @@ import { ConsoleLogger } from '@shared/classes/console-logger';
 export class LoggerService {
   private loggers: AbstractLogger[] = [];
 
-  constructor() {
+  constructor(
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
+  ) {
+    // TODO: use configs to add loggers
+    this.loggers.push(new DialogLogger(this.dialog, this.snackBar));
+    this.loggers.push(new ConsoleLogger());
     // If there is no logger configured, always default to the console logger
     if (this.loggers.length == 0) {
       this.loggers.push(new ConsoleLogger());
@@ -71,7 +80,7 @@ export class LoggerService {
    */
   private print(type: string, params: { msg?: string, data?: any[] }) {
     for (let logger of this.loggers) {
-      logger.log(type, params).subscribe(result => console.log(result));
+      logger.log(type, params).subscribe(result => { });
     }
   }
 }

@@ -1,0 +1,29 @@
+@import 'palette';
+
+h2 {
+  color: theme-palette(blue);
+
+  .mat-icon {
+    font-size: 3rem;
+  }
+  img,
+  .mat-icon {
+    margin-right: 15px;
+    width: 50px;
+    height: 50px;
+  }
+  span {
+    border-bottom: 1px solid #eeee;
+    font-size: 1.75rem;
+    line-height: 3rem;
+  }
+}
+
+p {
+  color: theme-palette(blue);
+}
+
+a {
+  color: theme-palette(blue, light);
+  text-decoration: underline;
+}

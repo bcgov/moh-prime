@@ -1,0 +1,46 @@
+<h2 mat-dialog-title
+    class="d-flex align-items-stretch">
+  <mat-icon *ngIf="options.icon && !options.imageSrc"
+            [color]="options.actionType">{{ options.icon }}</mat-icon>
+  <img *ngIf="options.imageSrc"
+       [attr.src]="options.imageSrc"
+       alt="">
+  <span class="flex-grow-1">
+    {{ options.title }}
+  </span>
+</h2>
+<mat-dialog-content>
+  <p *ngIf="options.message">{{ options.message }}</p>
+  <div *ngIf="options.data?.length">
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let log of options.data">
+        <mat-expansion-panel-header>{{ log.title }}</mat-expansion-panel-header>
+        <ng-template matExpansionPanelContent>
+          {{ log.detail[0].stack }} {{ log.detail[0].message }}
+        </ng-template>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+  <ng-template appDialogContent></ng-template>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button *ngIf="!options.cancelHide"
+          mat-stroked-button
+          [mat-dialog-close]="false"
+          cdkFocusInitial
+          class="my-2 mr-2">{{ options.cancelText }}</button>
+  <button *ngIf="!options.actionHide"
+          mat-flat-button
+          [color]="options.actionType"
+          (click)="onConfirm()"
+          class="my-2 mr-1">{{ options.actionText }}</button>
+
+  <span class="flex-grow-1"></span>
+
+  <a *ngIf="options.actionLink"
+     [attr.href]="options.actionLink.href"
+     [attr.target]="options.actionLink.target">
+    {{ options.actionLink.text }}
+  </a>
+
+</mat-dialog-actions>
