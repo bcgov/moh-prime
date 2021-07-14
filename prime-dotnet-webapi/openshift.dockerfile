@@ -77,7 +77,5 @@ RUN apt-get update && \
     chmod -R 777 /opt/app-root && \
     chmod -R 777 /opt/app-root/.*
 
-RUN  ln -sf /dev/stdout /opt/app-root/app/prime.logfile.out
-
 EXPOSE 8080 5001 1025
 ENTRYPOINT [ "./entrypoint.sh" ]
