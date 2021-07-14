@@ -62,5 +62,4 @@ export class PaperEnrolmentGuard extends BaseGuard {
       return false;
     }
   }
-
 }
