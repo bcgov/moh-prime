@@ -6,7 +6,7 @@ import { debounceTime } from 'rxjs/operators';
 
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-search-form',
@@ -16,7 +16,7 @@ import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
   @Output() public search: EventEmitter<string>;
-  @Output() public filter: EventEmitter<EnrolmentStatus>;
+  @Output() public filter: EventEmitter<EnrolmentStatusEnum>;
   @Output() public refresh: EventEmitter<void>;
 
   public form: FormGroup;
@@ -29,7 +29,7 @@ export class SearchFormComponent implements OnInit {
   ) {
     this.statuses = this.configService.statuses;
     this.search = new EventEmitter<string>();
-    this.filter = new EventEmitter<EnrolmentStatus>();
+    this.filter = new EventEmitter<EnrolmentStatusEnum>();
     this.refresh = new EventEmitter<void>();
   }
 
@@ -69,6 +69,6 @@ export class SearchFormComponent implements OnInit {
     this.statusCode.valueChanges
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
-      .subscribe((enrolmentStatus: EnrolmentStatus) => this.filter.emit(enrolmentStatus || null));
+      .subscribe((enrolmentStatus: EnrolmentStatusEnum) => this.filter.emit(enrolmentStatus || null));
   }
 }

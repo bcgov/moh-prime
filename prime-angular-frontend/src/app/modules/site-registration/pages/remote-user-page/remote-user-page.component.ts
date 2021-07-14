@@ -77,6 +77,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
    * Remote user certifications specific to the local form.
    */
   public get remoteUserCertifications(): FormArray {
+    // TODO use formState
     return this.form.get('remoteUserCertifications') as FormArray;
   }
 
@@ -145,6 +146,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     }
 
     // Create a local form group for creating or updating remote users
+    // TODO use formState
     this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
 
     // Must always have at least one certification
@@ -156,6 +158,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected checkValidity(): boolean {
     // Pass the local form for validation and submission instead
     // of using the default form from the form state
+    // TODO use formState
     return super.checkValidity(this.form);
   }
 
@@ -184,9 +187,11 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       }
 
       // Replace the updated remote user in the parent form for submission
+      // TODO use formState
       remoteUserFormGroup.reset(this.form.getRawValue());
     } else {
       // Store the new remote user in the parent form for submission
+      // TODO use formState
       remoteUsersFormArray.push(this.form);
     }
 
@@ -196,8 +201,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.form.markAsPristine();
-
     // Inform the remote users view not to patch the form, otherwise updates will be lost
     this.routeUtils.routeRelativeTo(['./'], { queryParams: { fromRemoteUser: true } });
   }

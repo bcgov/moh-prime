@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { Subscription, EMPTY } from 'rxjs';
+import { Subscription, EMPTY, forkJoin } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+
+import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
 
+@UntilDestroy()
 @Component({
   selector: 'app-overview-page',
   templateUrl: './overview-page.component.html',
@@ -21,7 +25,8 @@ import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-
 })
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
-  public site: HealthAuthSite;
+  public pharmanetAdministrators: Contact[];
+  public healthAuthoritySite: HealthAuthoritySite;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
   public routeUtils: RouteUtils;
@@ -31,15 +36,14 @@ export class OverviewPageComponent implements OnInit {
     protected route: ActivatedRoute,
     protected router: Router,
     private dialog: MatDialog,
-    private siteResource: HealthAuthSiteRegResource,
-    private siteService: HealthAuthSiteRegService
+    private healthAuthorityResource: HealthAuthorityResource
   ) {
     this.showEditRedirect = true;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.routePath(HealthAuthSiteRegRoutes.MODULE_PATH));
   }
 
   public onSubmit(): void {
-    const payload = this.siteService.site;
+    const { haid, sid } = this.route.snapshot.params;
     const data: DialogOptions = {
       title: 'Save Site',
       message: 'When your site is saved, it will be submitted for review.',
@@ -48,18 +52,13 @@ export class OverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        // TODO do whatever it is that we'll be doing with health authority submissions
-        // exhaustMap((result: boolean) =>
-        //   (result)
-        //     ? this.siteResource.submitSite(payload)
-        //     : EMPTY
-        // )
+        exhaustMap((result: boolean) =>
+          (result)
+            ? this.healthAuthorityResource.healthAuthoritySiteSubmit(haid, sid)
+            : EMPTY
+        )
       )
       .subscribe(() => this.nextRoute());
-  }
-
-  public onRoute(routePath: string): void {
-    this.routeUtils.routeRelativeTo(routePath);
   }
 
   public onBack(): void {
@@ -77,7 +76,23 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.site = this.siteService.site;
-    this.showSubmissionAction = !this.site?.submittedDate;
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
+
+    this.busy = forkJoin({
+      healthAuthority: this.healthAuthorityResource.getHealthAuthorityById(healthAuthId),
+      healthAuthoritySite: this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+    })
+      .pipe(untilDestroyed(this))
+      .subscribe(({
+                    healthAuthority: { pharmanetAdministrators },
+                    healthAuthoritySite
+                  }: { healthAuthority: HealthAuthority, healthAuthoritySite: HealthAuthoritySite }) => {
+        this.pharmanetAdministrators = pharmanetAdministrators;
+        this.healthAuthoritySite = healthAuthoritySite;
+      });
   }
 }
