@@ -75,13 +75,12 @@ namespace Prime
             services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
             services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
-            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
-            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();

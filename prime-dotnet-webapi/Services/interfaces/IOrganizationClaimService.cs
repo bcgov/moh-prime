@@ -1,6 +1,8 @@
 
 using System.Threading.Tasks;
 using Prime.Models;
+using Prime.ViewModels;
+using Prime.Models.Api;
 
 namespace Prime.Services
 {
@@ -14,5 +16,7 @@ namespace Prime.Services
         Task<bool> DeleteClaimAsync(int claimId);
 
         Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId);
+        Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization);
+        Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions search);
     }
 }

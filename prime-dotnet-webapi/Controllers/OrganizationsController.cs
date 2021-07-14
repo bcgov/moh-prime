@@ -145,7 +145,7 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in party does not match current user.");
             }
 
-            var organization = await _organizationService.ClaimOrganizationAsync(claimOrganization);
+            var organization = await _organizationClaimService.ClaimOrganizationAsync(claimOrganization);
 
             return Ok(organization);
         }
@@ -170,7 +170,7 @@ namespace Prime.Controllers
                     return BadRequest("Organization does not exist with the passed in site PEC.");
                 }
             }
-            var result = await _organizationService.OrganizationClaimExistsAsync(search);
+            var result = await _organizationClaimService.OrganizationClaimExistsAsync(search);
 
             return Ok(result);
         }

@@ -140,51 +140,6 @@ namespace Prime.Services
             return organization.Id;
         }
 
-        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel claimOrganization)
-        {
-            var organization = await GetOrganizationByPecAsync(claimOrganization.PEC);
-            if (organization == null)
-            {
-                return null;
-            }
-
-            var organizationCLaim = new OrganizationClaim
-            {
-                OrganizationId = organization.Id,
-                NewSigningAuthorityId = claimOrganization.PartyId,
-                ProvidedSiteId = claimOrganization.PEC,
-                Details = claimOrganization.ClaimDetail
-            };
-
-            _context.OrganizationClaims.Add(organizationCLaim);
-            await _context.SaveChangesAsync();
-
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, claimOrganization.PartyId, "Organization Claim Created");
-
-            return organization;
-        }
-
-        public async Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions searchOptions)
-        {
-            // return false if searchOptions is invalid
-            if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && string.IsNullOrEmpty(searchOptions.UserId))
-            {
-                return false;
-            }
-
-            var userId = Guid.Empty;
-            Guid.TryParse(searchOptions.UserId, out userId);
-
-            return await _context.OrganizationClaims
-                .AsNoTracking()
-                .If(!string.IsNullOrEmpty(searchOptions.Pec), q => q
-                    .Where(o => o.Organization.Sites.Any(s => s.PEC == searchOptions.Pec))
-                )
-                .If(userId != Guid.Empty, q => q
-                    .Where(o => o.NewSigningAuthority.UserId == userId)
-                )
-                .AnyAsync();
-        }
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
