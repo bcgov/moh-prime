@@ -78,9 +78,11 @@ export class AdjudicatorNotesComponent implements OnInit {
     switch (this.noteType) {
       case NoteType.EnrolleeAdjudicationNote:
         this.getAdjudicatorNotes(this.route.snapshot.params.id);
+        this.route.params.subscribe(params => this.getAdjudicatorNotes(params.id));
         break;
       case NoteType.SiteRegistrationNote:
         this.getSiteRegistrationNotes(this.route.snapshot.params.sid);
+        this.route.params.subscribe(params => this.getSiteRegistrationNotes(params.id));
         break;
       default:
         break;
