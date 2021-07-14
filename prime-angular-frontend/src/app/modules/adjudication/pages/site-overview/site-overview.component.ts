@@ -86,7 +86,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
   public onApproveOrgClaim() {
     this.busy = this.organizationResource
-      .approveOrganizationClaim(this.organization.id, this.newSigningAuthority.id)
+      .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .pipe(
         exhaustMap(() => this.organizationResource.getOrganizationById(this.organization.id))
       )

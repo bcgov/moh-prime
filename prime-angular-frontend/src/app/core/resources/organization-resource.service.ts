@@ -207,8 +207,8 @@ export class OrganizationResource {
       );
   }
 
-  public approveOrganizationClaim(organizationId: number, partyId: number): NoContent {
-    return this.apiResource.post<NoContent>(`organizations/claim/approve`, { organizationId, partyId })
+  public approveOrganizationClaim(organizationId: number, claimId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/claims/${claimId}/approve`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('New Signing Authority Approved')),

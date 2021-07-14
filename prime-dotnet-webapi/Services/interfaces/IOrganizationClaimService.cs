@@ -9,12 +9,9 @@ namespace Prime.Services
         Task<bool> HasClaimAsync(int organizationId);
 
         /// <summary>
-        ///
+        /// Returns <c>true</c> if can successfully delete claim, <c>false</c> otherwise.
         /// </summary>
-        /// <param name="organizationId"></param>
-        /// <param name="partyId"></param>
-        /// <returns><c>true</c> if can successfully delete claim, <c>false</c> otherwise.</returns>
-        Task<bool> DeleteClaimAsync(int organizationId, int partyId);
+        Task<bool> DeleteClaimAsync(int claimId);
 
         Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId);
     }

@@ -191,38 +191,30 @@ namespace Prime.Controllers
             {
                 return NotFound("No claim by a SigningAuthority exists for given Organization.");
             }
-            else
-            {
-                return Ok(claim);
-            }
+            return Ok(claim);
         }
 
-        // POST: api/Organizations/claim/approve
+        // POST: api/Organizations/5/claims/1/approve
         /// <summary>
         /// Approve claim for an existing Organization.
         /// </summary>
-        [HttpPost("claim/approve", Name = nameof(ApproveOrganizationClaim))]
+        [HttpPost("{organizationId}/claims/{claimId}/approve", Name = nameof(ApproveOrganizationClaim))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> ApproveOrganizationClaim(OrganizationClaimApprovalViewModel claimApproval)
+        public async Task<IActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
         {
-            if (!await _partyService.PartyExistsAsync(claimApproval.PartyId, PartyType.SigningAuthority) ||
-                !await _organizationService.OrganizationExistsAsync(claimApproval.OrganizationId))
-            {
-                return BadRequest("Could not approve claim for an organization, as the given SigningAuthority or Organization does not exist.");
-            }
-            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimApproval.OrganizationId);
-            if (orgClaim == null)
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
+            if (orgClaim == null || (orgClaim.Id != claimId))
             {
                 return NotFound("Cannot locate Claim for given Organization.");
             }
             var userId = HttpContext.User.GetPrimeUserId();
             Admin admin = await _adminService.GetAdminAsync(userId);
 
-            if (!await _organizationService.SwitchSigningAuthorityAsync(claimApproval.OrganizationId, claimApproval.PartyId))
+            if (!await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId))
             {
                 // TODO: Properly communicate error
                 return BadRequest("Could not assign Organization to new SigningAuthority.");
@@ -230,12 +222,9 @@ namespace Prime.Controllers
 
             await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
 
-            await _businessEventService.CreateOrganizationEventAsync(claimApproval.OrganizationId, claimApproval.PartyId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved by {admin.LastName}, {admin.FirstName}");
+            await _businessEventService.CreateOrganizationEventAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved by {admin.LastName}, {admin.FirstName}");
 
-            if (!await _organizationClaimService.DeleteClaimAsync(claimApproval.OrganizationId, claimApproval.PartyId))
-            {
-                return NotFound("Cannot remove Claim for given SigningAuthority and Organization.");
-            }
+            await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
             return NoContent();
         }
