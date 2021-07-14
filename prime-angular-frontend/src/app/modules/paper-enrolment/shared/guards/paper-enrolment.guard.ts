@@ -42,7 +42,7 @@ export class PaperEnrolmentGuard extends BaseGuard {
    */
   private routeDestination(routePath: string, enrollee: HttpEnrollee, params: Params): boolean {
     return (enrollee?.approvedDate)
-      ? this.navigate(`/${this.config.routes.paperEnrolment}/${+params.eid}/${PaperEnrolmentRoutes.NEXT_STEPS}`, `${routePath}`, params)
+      ? this.navigate(`/${this.config.routes.paperEnrolment}/${+params.eid}/${PaperEnrolmentRoutes.NEXT_STEPS}`, `${routePath}`)
       : true;
   }
 
@@ -51,7 +51,7 @@ export class PaperEnrolmentGuard extends BaseGuard {
    * Prevent infinite route loops by navigating to a route only
    * when the current route path is not the destination path.
    */
-  private navigate(routePath: string, destinationPath: string, params: Params): boolean {
+  private navigate(routePath: string, destinationPath: string): boolean {
     if (routePath === destinationPath) {
       return true;
     } else {
