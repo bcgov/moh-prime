@@ -347,10 +347,37 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-${API_POD}
       spec:
+        initContainers:
+        - name: run-migrations
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+          env:
+          - name: PGHOST
+            value: ${SVC_NAME}-postgres
+          - name: PGUSER
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-postgres                    
+                key: database-user
+          - name: PGPASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-postgres
+                key: database-password
+          - name: PGDATABASE
+            valueFrom:
+              secretKeyRef:
+                name: ${SVC_NAME}-postgres
+                key: database-name
+          command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
           - name: ${SVC_NAME}-${API_POD}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+            command:
+              - bash
+              - '-c'
+              - dotnet ./prime.dll -v 2>&1> /dev/stdout
             env:
               - name: DOCUMENT_MANAGER_CLIENT_ID
                 valueFrom:
@@ -384,6 +411,8 @@ objects:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-name
+              - name: DB_CONNECTION_STRING
+                value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
             ports:
               - containerPort: 1025
                 protocol: TCP
