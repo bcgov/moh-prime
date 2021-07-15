@@ -23,7 +23,7 @@ jobs:
 
       - name: "Delete Artifacts for closed PR"
         run: |
-          oc delete all,pvc,secrets,route,ingress,configmaps -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -l app.kubernetes.io/part-of=${{ github.event.number }}
+          oc delete all,pvc,secrets,route,ingress,configmaps -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -l app.kubernetes.io/part-of=pr-${{ github.event.number }}
       
       - name: "Cleanup old pods"
         run: |
