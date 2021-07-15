@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValue } from '@angular/common';
 
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -98,7 +99,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
+  public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -106,11 +107,14 @@ export class SiteManagementPageComponent implements OnInit {
     ];
   }
 
-  public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
+  public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
+      {
+        key: 'Site Address',
+        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+      },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }

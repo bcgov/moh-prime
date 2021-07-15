@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
+import { AdjudicationGuard } from '@adjudication/shared/guards/adjudication.guard';
 
 import { PaperEnrolmentRoutes } from './paper-enrolment.routes';
 import { PaperEnrolmentGuard } from './shared/guards/paper-enrolment.guard';
@@ -25,7 +27,11 @@ const routes: Routes = [
         // During initial registration the ID will be set to
         // zero indicating the organization does not exist
         path: ':eid',
-        canActivateChild: [PaperEnrolmentGuard],
+        canActivateChild: [
+          PaperEnrolmentGuard,
+          AuthenticationGuard,
+          AdjudicationGuard
+        ],
         children: [
           {
             path: PaperEnrolmentRoutes.DEMOGRAPHIC,
@@ -90,4 +96,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PaperEnrolmentRoutingModule {}
+export class PaperEnrolmentRoutingModule { }

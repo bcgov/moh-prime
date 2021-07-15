@@ -8,8 +8,6 @@ import { DashboardMenuItem } from '@lib/modules/dashboard/models/dashboard-menu-
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
-
-
 @Component({
   selector: 'app-paper-enrolment-dashboard',
   templateUrl: './paper-enrolment-dashboard.component.html',
