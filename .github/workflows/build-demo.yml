@@ -1,4 +1,6 @@
 name: Build Demo
+description: Build all of the necessary components for the PRIME application from `master` branch. Images are then deployed to Demo environment via the prime-app-template.yml in the infrastructure folder
+
 on:
   push:
     branches:

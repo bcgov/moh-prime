@@ -1,4 +1,5 @@
-name: Build PRIME from Tools Branch and Deploy to OpenShift Image Registry
+name: Build Tools
+
 on:
   push:
     branches:

@@ -1,4 +1,5 @@
-name: Build PRIME from Test Branch and Deploy to OpenShift Image Registry
+name: Build Test
+description: Build all of the necessary components for the PRIME application from `test` branch. Images are then deployed to Test environment via the prime-app-template.yml in the infrastructure folder
 on:
   push:
     branches:

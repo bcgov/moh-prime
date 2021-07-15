@@ -1,11 +1,5 @@
-# This workflow will build all of the necessary components for the PRIME 
-# application, with the respective images pushed and stored in the project's
-# tools namespace.
-#
-# Images are then deployed to the respective OpenShift namespace via the
-# prime-app-template.yml in the infrastructure folder.
-
-name: Build PRIME from Master branch and Deploy to OpenShift Image Registry
+name: Build Main
+description: Build all of the necessary components for the PRIME application from `master` branch. Images are then deployed to Production environment via the prime-app-template.yml in the infrastructure folder
 
 on:
   push:
