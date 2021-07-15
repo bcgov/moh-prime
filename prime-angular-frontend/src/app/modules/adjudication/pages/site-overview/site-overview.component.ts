@@ -103,12 +103,12 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     const { oid, sid } = this.route.snapshot.params;
 
-    this.busy = forkJoin({
-      organization: this.organizationResource.getOrganizationById(oid),
-      site: this.siteResource.getSiteById(sid),
-      orgClaim: this.organizationResource.getOrganizationClaimByOrgId(oid)
-    }).pipe(
-      exhaustMap(({ organization, site, orgClaim }) => {
+    this.busy = forkJoin([
+      this.organizationResource.getOrganizationById(oid),
+      this.siteResource.getSiteById(sid),
+      this.organizationResource.getOrganizationClaimByOrgId(oid)
+    ]).pipe(
+      exhaustMap(([organization, site, orgClaim]: [Organization, Site, OrganizationClaim]) => {
         this.organization = organization;
         this.site = site;
         this.orgClaim = orgClaim;
@@ -116,8 +116,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         return of(null);
       }),
       exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
-    ).subscribe((signingAuthority: Party) => {
-      // Note if orgClaim is null, signingAuthority will be null too
+    ).subscribe((signingAuthority: Party | null) => {
       this.newSigningAuthority = signingAuthority;
     });
   }

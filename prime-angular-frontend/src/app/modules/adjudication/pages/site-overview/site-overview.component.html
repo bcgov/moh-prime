@@ -13,7 +13,7 @@
   <div class="row mt-4">
 
     <div class="col-6 mb-3">
-      <div *ngIf="organization?.hasClaim">
+      <ng-container *ngIf="organization?.hasClaim">
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>
             <mat-icon class="mr-2">front_hand</mat-icon>
@@ -34,13 +34,12 @@
               <app-bcsc-profile [user]="newSigningAuthority"></app-bcsc-profile>
             </app-overview-section>
 
-            <!-- TODO: Change color and position properly -->
             <button mat-flat-button
                     color="primary"
                     (click)="onApproveOrgClaim()">Approve Change</button>
           </mat-card-content>
         </mat-card>
-      </div>
+      </ng-container>
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>
