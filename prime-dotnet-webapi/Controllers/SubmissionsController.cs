@@ -42,7 +42,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
+        public async Task<ActionResult> Submit(int enrolleeId, EnrolleeUpdateModel updatedProfile)
         {
             if (updatedProfile == null)
             {
@@ -249,7 +249,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolleeViewModel>> AssignToaAgreementType(int enrolleeId, [FromBody] AgreementType agreementType)
+        public async Task<ActionResult> AssignToaAgreementType(int enrolleeId, [FromBody] AgreementType agreementType)
         {
             if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
