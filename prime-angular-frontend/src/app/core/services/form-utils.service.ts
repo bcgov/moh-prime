@@ -144,8 +144,7 @@ export class FormUtilsService {
   public logFormErrors(form: FormGroup | FormArray) {
     const formErrors = this.getFormErrors(form);
     if (formErrors) {
-      // Do we need to log every INVALID FROM error?
-      this.logger.warn('FORM_INVALID', formErrors);
+      this.logger.error('FORM_INVALID', formErrors);
     }
   }
 

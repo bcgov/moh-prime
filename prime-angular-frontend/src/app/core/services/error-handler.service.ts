@@ -3,6 +3,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { LoggerService } from '@core/services/logger.service';
+import { DialogLogger } from '@shared/classes/dialog-logger';
+import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
   public handleError(error: Error | HttpErrorResponse) {
     const logger = this.injector.get(LoggerService);
+    const dialogLogger = this.injector.get(DialogLogger);
     const router = this.injector.get(Router);
 
     if (error instanceof HttpErrorResponse) {
@@ -29,6 +32,7 @@ export class ErrorHandlerService implements ErrorHandler {
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
+      dialogLogger.log(`Error "${ error.message } " occurred at URL ${ router.url } in ${ environment.environmentName } environment version ${ environment.version }`, error.stack);
     }
 
     const message = (error.message)
