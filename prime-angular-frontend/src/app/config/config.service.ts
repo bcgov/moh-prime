@@ -3,7 +3,6 @@ import { Injectable, Inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import {
   Configuration, Config, PracticeConfig, CollegeConfig, ProvinceConfig,
   LicenseConfig, VendorConfig, CollegeLicenseGroupingConfig

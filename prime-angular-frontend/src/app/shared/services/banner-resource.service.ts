@@ -67,7 +67,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap((banners: Banner) => this.logger.info('BANNER', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Banner could not be retrieved');
           this.logger.error('[Banner] BannerResource::getBanner error has occurred: ', error);
           throw error;
         })
@@ -80,7 +79,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('ENROLMENT_LANDING_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment Landing Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getEnrolmentLandingBanners error has occurred: ', error);
           throw error;
         })
@@ -93,7 +91,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('SITE_LANDING_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site Landing Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getSiteLandingBanners error has occurred: ', error);
           throw error;
         })
@@ -107,7 +104,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('ACTIVE_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getActiveBannersByLocationCode error has occurred: ', error);
           throw error;
         })
