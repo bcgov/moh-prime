@@ -10,107 +10,16 @@
     </app-page-subheader2>
   </div>
 
-  <!--
-  TODO update overview section to take configuration to completely populate, or
-       create individual overview sections for each page
-  -->
-  <app-overview-section title="Organization Agreement"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Organization Agreement">
-      Name of organization agreement
-    </app-enrollee-property>
-  </app-overview-section>
+  <app-vendor-overview [vendor]="healthAuthoritySite"></app-vendor-overview>
+  <app-site-information-overview [siteInformation]="healthAuthoritySite"></app-site-information-overview>
+  <app-health-auth-care-type-overview [healthAuthCareType]="healthAuthoritySite"></app-health-auth-care-type-overview>
+  <app-site-address-overview [siteAddress]="healthAuthoritySite"></app-site-address-overview>
+  <app-hours-operation-overview [hoursOperation]="healthAuthoritySite"></app-hours-operation-overview>
+  <app-remote-users-overview [remoteUsers]="healthAuthoritySite"></app-remote-users-overview>
+  <app-administrator-overview [administrator]="healthAuthoritySite"
+                              [pharmanetAdministrators]="pharmanetAdministrators"></app-administrator-overview>
 
-  <app-overview-section title="Vendor"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Vendor">
-      Cerner
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="Site Name"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Site Name">
-      Name of site
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="Site Details"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Site ID">
-      9520
-    </app-enrollee-property>
-    <app-enrollee-property title="Security Group">
-      Name of security group
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="Health Authority Care Type"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Health Authority Care Type">
-      Acute Care
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="Site Address"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Address">
-      65 Pine Crescent, Vancouver BC V5N 5FG
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="Hours of Operation"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property>
-      Mon - Fri: 7:00 - 20:00
-    </app-enrollee-property>
-    <app-enrollee-property>
-      Sat - Sun: 9:00 - 18:00
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <app-overview-section title="PharmaNet Administrator"
-                        [showEditRedirect]="showEditRedirect"
-                        [editRoute]="[]"
-                        (route)="onRoute($event)">
-    <app-enrollee-property title="Name">
-      Name of the administrator
-    </app-enrollee-property>
-    <app-enrollee-property title="Job or role title">
-      Role of administrator
-    </app-enrollee-property>
-    <app-enrollee-property title="Phone">
-      (778) 849-3732
-    </app-enrollee-property>
-    <app-enrollee-property title="Fax">
-      (849) 748-2235
-    </app-enrollee-property>
-    <app-enrollee-property title="Mobile Phone">
-      (482) 542-4295
-    </app-enrollee-property>
-    <app-enrollee-property title="Email">
-      email@email.com
-    </app-enrollee-property>
-    <app-enrollee-property title="Address">
-      432 Oak St, Vancouver BC V5N 5FG
-    </app-enrollee-property>
-  </app-overview-section>
-
-  <ng-container *ngIf="showSubmissionAction; else showBack">
+  <ng-container *ngIf="!healthAuthoritySite?.submittedDate; else showBack">
     <div class="footer mb-4">
       <mat-checkbox #accept>
         <div class="pl-3">

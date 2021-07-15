@@ -36,6 +36,6 @@ export class CollectionNoticePageComponent implements OnInit {
   private nextRoute(): void {
     // Redirect to site management and allow the guards to
     // figure out the proper routing
-    this.router.navigate([HealthAuthSiteRegRoutes.SITE_MANAGEMENT], { relativeTo: this.route.parent });
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_MANAGEMENT);
   }
 }

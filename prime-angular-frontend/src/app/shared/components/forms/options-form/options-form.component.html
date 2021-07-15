@@ -12,7 +12,7 @@
                         [displayWith]="displayWith.bind(this)"
                         autoActiveFirstOption>
         <mat-option *ngFor="let option of filteredOptions | async"
-                    [value]="option">
+                    [value]="(optionKey) ? option[optionKey] : option">
           {{ (optionLabel) ? option[optionLabel] : option }}
         </mat-option>
       </mat-autocomplete>
@@ -21,9 +21,8 @@
     <ng-template #select>
       <mat-select [placeholder]="fieldLabel"
                   [formControlName]="controlName">
-        <mat-option></mat-option>
         <mat-option *ngFor="let option of filteredOptions | async"
-                    [value]="option">
+                    [value]="(optionKey) ? option[optionKey] : option">
           {{ (optionLabel) ? option[optionLabel] : option }}
         </mat-option>
       </mat-select>
