@@ -31,4 +31,4 @@ jobs:
 
       - name: "Cleanup old rcs"
         run: |
-           oc adm prune deployments -n -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} --keep-complete=1
+           oc adm prune deployments -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} --keep-complete=1
