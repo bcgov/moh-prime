@@ -44,7 +44,7 @@ namespace Prime.Controllers
         [AllowAnonymous]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificate>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<EnrolmentCertificate>> GetEnrolmentCertificate(Guid accessTokenId)
+        public async Task<ActionResult> GetEnrolmentCertificate(Guid accessTokenId)
         {
             var certificate = await _certificateService.GetEnrolmentCertificateAsync(accessTokenId);
             if (certificate == null)
@@ -64,7 +64,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCertificateAccessToken>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolmentCertificateAccessToken>>> GetAccessTokens()
+        public async Task<ActionResult> GetAccessTokens()
         {
             var tokens = await _certificateService.GetCertificateAccessTokensForUserIdAsync(User.GetPrimeUserId());
 
@@ -85,7 +85,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolmentCertificateAccessToken>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EnrolmentCertificateAccessToken>> SendProvisionerLink(int enrolleeId, int careSettingCode, FromBodyText providedEmails)
+        public async Task<ActionResult> SendProvisionerLink(int enrolleeId, int careSettingCode, FromBodyText providedEmails)
         {
             var emails = Email.ParseCommaSeparatedEmails(providedEmails);
             if (!emails.Any())
@@ -130,7 +130,7 @@ namespace Prime.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetGpid()
+        public async Task<ActionResult> GetGpid()
         {
             var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
 
@@ -146,7 +146,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HpdidLookup>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> HpdidLookup([FromQuery] string[] hpdids)
+        public async Task<ActionResult> HpdidLookup([FromQuery] string[] hpdids)
         {
             var result = await _enrolleeService.HpdidLookupAsync(hpdids);
 
@@ -164,7 +164,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<GpidValidationResponse>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<GpidValidationResponse>> ValidateGpid(string gpid, GpidValidationParameters parameters)
+        public async Task<ActionResult> ValidateGpid(string gpid, GpidValidationParameters parameters)
         {
             if (parameters == null)
             {
