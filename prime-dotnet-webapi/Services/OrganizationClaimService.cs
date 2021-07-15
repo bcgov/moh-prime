@@ -48,7 +48,7 @@ namespace Prime.Services
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
-        public async Task<Organization> ClaimOrganizationAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
+        public async Task<Organization> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
         {
             var organizationCLaim = new OrganizationClaim
             {

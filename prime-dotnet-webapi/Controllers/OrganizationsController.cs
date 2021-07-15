@@ -150,7 +150,7 @@ namespace Prime.Controllers
             {
                 return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
             }
-            organization = await _organizationClaimService.ClaimOrganizationAsync(organizationClaim, organization);
+            organization = await _organizationClaimService.CreateOrganizationClaimAsync(organizationClaim, organization);
 
             return Ok(organization);
         }
