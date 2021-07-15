@@ -172,14 +172,14 @@ objects:
             volumeMounts:
             - name: vanity-tls-certs
               readOnly: true
-              mountPath: /etc/nginx/certs
+              mountPath: /opt/bitnami/nginx/conf/certs
             - name: plr-integration-volume
               readOnly: true
-              mountPath: /etc/nginx/certs/plr
+              mountPath: /opt/bitnami/nginx/conf/certs/plr
             - name: nginx-config
               readOnly: true
-              mountPath: /etc/nginx/conf.d/prime.conf
-              subPath: prime.conf
+              mountPath: /opt/bitnami/nginx/conf/nginx.conf
+              subPath: nginx.conf
         volumes:
         - name: vanity-tls-certs
           secret:
