@@ -208,30 +208,3 @@ jobs:
 #          oc process -f infrastructure/metabase-template.yml \
 #            -p OC_APP=${{secrets.OC_APP}} \
 #            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-
-  garbage-cleanup:
-    runs-on: ubuntu-20.04
-    environment: Development
-    needs: [apply-oc-template]
-    steps:
-      - name: "Use the OpenShift template"
-        uses: actions/checkout@v2
-
-      - name: Install OC
-        uses: redhat-actions/oc-installer@v1
-
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
-
-      - name: "Cleanup"
-        id: cleanup
-        env:
-          PROJECT_OWNER: bcgov
-          PROJECT_NAME: moh-prime
-          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
-        run: |
-          ./devops/OC4/player.sh occleanup
