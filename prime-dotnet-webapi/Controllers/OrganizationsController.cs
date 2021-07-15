@@ -63,7 +63,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationSearchViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationSearchViewModel>>> GetOrganizations([FromQuery] OrganizationSearchOptions search)
+        public async Task<ActionResult> GetOrganizations([FromQuery] OrganizationSearchOptions search)
         {
             var organizations = await _organizationService.GetOrganizationsAsync(search);
 
@@ -85,7 +85,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId)
+        public async Task<ActionResult> GetOrganizationById(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
@@ -106,7 +106,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(CreateOrganizationViewModel createOrganization)
+        public async Task<ActionResult> CreateOrganization(CreateOrganizationViewModel createOrganization)
         {
             if (!await _partyService.PartyExistsAsync(createOrganization.PartyId, PartyType.SigningAuthority))
             {
@@ -189,7 +189,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<OrganizationClaim>> GetOrganizationClaimByOrgId(int organizationId)
+        public async Task<ActionResult> GetOrganizationClaimByOrgId(int organizationId)
         {
             var claim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
             if (claim == null)
@@ -209,7 +209,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
+        public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
         {
             var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
             if (orgClaim == null || (orgClaim.Id != claimId))
@@ -244,7 +244,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
+        public async Task<ActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -270,7 +270,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganizationCompleted(int organizationId)
+        public async Task<ActionResult> UpdateOrganizationCompleted(int organizationId)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -296,7 +296,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> DeleteOrganization(int organizationId)
+        public async Task<ActionResult> DeleteOrganization(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -323,7 +323,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AgreementViewModel>>> GetOrganizationAgreements(int organizationId)
+        public async Task<ActionResult> GetOrganizationAgreements(int organizationId)
         {
             var agreements = await _organizationAgreementService.GetOrgAgreementsAsync(organizationId);
 
@@ -389,7 +389,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
+        public async Task<ActionResult> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -418,7 +418,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
+        public async Task<ActionResult> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -448,7 +448,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? organizationAgreementGuid)
+        public async Task<ActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? organizationAgreementGuid)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -485,7 +485,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignedAgreementToken(int organizationId, int agreementId)
+        public async Task<ActionResult> GetSignedAgreementToken(int organizationId, int agreementId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
