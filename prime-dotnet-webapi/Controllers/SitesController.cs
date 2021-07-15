@@ -360,10 +360,6 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            // if (site.BusinessLicence != null)
-            // {
-            //     return Conflict($"Business Licence exists for site with id {siteId}");
-            // }
 
             var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
             if (licence == null)

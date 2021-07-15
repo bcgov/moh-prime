@@ -68,9 +68,18 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="site.submittedDate || !site.businessLicence?.completed"
+                        [showEditRedirect]="!site.submittedDate || !site.businessLicence?.completed"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
+
+    <button *ngIf="site.submittedDate && site.approvedDate"
+            mat-stroked-button
+            color="danger"
+            class="mb-4"
+            (click)="routeRelativeTo(['./', SiteRoutes.BUSINESS_LICENCE_RENEWAL])">
+      Update Business Licence
+    </button>
+
     <app-enrollee-property title="Doing Business As">
       {{ site?.doingBusinessAs | default }}
     </app-enrollee-property>

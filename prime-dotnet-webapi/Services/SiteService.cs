@@ -429,6 +429,7 @@ namespace Prime.Services
         public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid)
         {
             businessLicence.SiteId = siteId;
+            businessLicence.UploadedDate = DateTimeOffset.Now;
 
             if (documentGuid != Guid.Empty)
             {
@@ -511,8 +512,9 @@ namespace Prime.Services
 
         public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId)
         {
-            return await _context.BusinessLicences
-                .Where(bl => bl.SiteId == siteId)
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.BusinessLicence)
                 .SingleOrDefaultAsync();
         }
 

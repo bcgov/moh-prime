@@ -1,0 +1,57 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="formState.form"
+        novalidate
+        autocomplete="off">
+
+    <section class="mb-4">
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Scan and upload a single file of the business licence
+        </ng-container>
+      </app-page-subheader2>
+
+      <app-document-upload #documentUpload
+                           componentName="business-licence"
+                           labelMessage="Drag and drop your business licence or browse"
+                           [multiple]="false"
+                           (completed)="onUpload($event)"
+                           (remove)="onRemoveDocument($event)"></app-document-upload>
+
+      <app-alert *ngIf="hasNoBusinessLicenceError"
+                 type="danger"
+                 icon="warning">
+        <ng-container #alertContent
+                      class="alert-content">
+          No business licence has been uploaded.
+        </ng-container>
+      </app-alert>
+
+      <ng-container *ngIf="businessLicence.businessLicenceDocument">
+
+        <app-enrollee-property title="Previous Business Licence">
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="downloadBusinessLicence($event)">
+            <mat-icon class="mr-1">attachment</mat-icon>
+            {{ businessLicence.businessLicenceDocument.filename | default }}
+          </button>
+        </app-enrollee-property>
+
+      </ng-container>
+
+    </section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

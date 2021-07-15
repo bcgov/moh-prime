@@ -79,6 +79,10 @@ export class SiteGuard extends BaseGuard {
       ]
       : SiteRoutes.siteRegistrationRoutes();
 
+    if (site.approvedDate) {
+      allowlistRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
+    }
+
     // Redirect to an appropriate default route
     if (!allowlistRoutes.includes(childRoute)) {
       return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT);
