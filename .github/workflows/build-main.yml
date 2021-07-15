@@ -1,5 +1,5 @@
 name: Build Main
-description: Build all of the necessary components for the PRIME application from `master` branch. Images are then deployed to Production environment via the prime-app-template.yml in the infrastructure folder
+# Build all of the necessary components for the PRIME application from `master` branch. Images are then deployed to Production environment via the prime-app-template.yml in the infrastructure folder
 
 on:
   push:

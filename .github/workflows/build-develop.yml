@@ -1,5 +1,5 @@
 name: Build Develop
-description: Build all of the necessary components for the PRIME application from `develop` branch. Images are then deployed to Dev environment via the prime-app-template.yml in the infrastructure folder
+# Build all of the necessary components for the PRIME application from `develop` branch. Images are then deployed to Dev environment via the prime-app-template.yml in the infrastructure folder
 
 # ##### Uncomment on merge to dev
 on:
