@@ -8929,7 +8929,7 @@ namespace Prime.Migrations
                     b.Property<int>("LogType")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Msg")
+                    b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("text");
 

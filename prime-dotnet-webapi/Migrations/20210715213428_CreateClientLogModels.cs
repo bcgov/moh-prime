@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class CreateClientLogs : Migration
+    public partial class CreateClientLogModels : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -18,7 +18,7 @@ namespace Prime.Migrations
                     CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
-                    Msg = table.Column<string>(nullable: false),
+                    Message = table.Column<string>(nullable: false),
                     Data = table.Column<string>(nullable: true),
                     LogType = table.Column<int>(nullable: false),
                     CreatedDate = table.Column<DateTime>(nullable: false)

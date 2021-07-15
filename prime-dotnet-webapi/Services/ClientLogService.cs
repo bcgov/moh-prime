@@ -19,7 +19,7 @@ namespace Prime.Services
             var newLog = new ClientLog
             {
                 LogType = log.LogType,
-                Msg = log.Message,
+                Message = log.Message,
                 Data = log.Data,
                 CreatedDate = DateTime.UtcNow
             };

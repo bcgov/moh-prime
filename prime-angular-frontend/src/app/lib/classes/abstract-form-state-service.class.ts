@@ -5,7 +5,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { RouteStateService } from '@core/services/route-state.service';
-import { AbstractLoggerService } from '@core/services/abstract-logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 /**
  * @description
@@ -19,7 +19,7 @@ export abstract class AbstractFormStateService<T> {
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: AbstractLoggerService
+    protected logger: ConsoleLoggerService
   ) { }
 
   /**

@@ -7,7 +7,7 @@ import {
 import { Observable } from 'rxjs';
 
 import { AuthService } from '@auth/shared/services/auth.service';
-import { AbstractLoggerService } from '@core/services/abstract-logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
 
   constructor(
     protected authService: AuthService,
-    protected logger: AbstractLoggerService
+    protected logger: ConsoleLoggerService
   ) { }
 
   public get isAuthenticated(): boolean {

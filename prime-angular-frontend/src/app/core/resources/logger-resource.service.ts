@@ -1,8 +1,9 @@
 import { Inject, Injectable } from '@angular/core';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+
 import { Log } from '@core/models/log.model';
 
 @Injectable({
@@ -14,9 +15,8 @@ export class LoggerResource {
     private http: HttpClient
   ) { }
 
-  public createErrorLog(log: Log): Observable<HttpResponse<any>> {
+  public createLog(log: Log): Observable<HttpResponse<any>> {
     return this.http
       .post(`${this.config.apiEndpoint}/client-logs`, log, { observe: 'response' });
   }
-
 }

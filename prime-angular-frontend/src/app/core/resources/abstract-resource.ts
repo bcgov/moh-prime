@@ -5,7 +5,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
-import { AbstractLoggerService } from '@core/services/abstract-logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 // Type for NoContent responses from the API
 export type NoContent = Observable<void>;
@@ -13,7 +13,7 @@ export const NoContentResponse = pipe(map(() => void 0));
 
 export abstract class AbstractResource {
   constructor(
-    protected logger: AbstractLoggerService
+    protected logger: ConsoleLoggerService
   ) { }
 
   public abstract get(

@@ -12,7 +12,7 @@ namespace Prime.Models
         public int Id { get; set; }
 
         [Required]
-        public string Msg { get; set; }
+        public string Message { get; set; }
 
         public string Data { get; set; }
 

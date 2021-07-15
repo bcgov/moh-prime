@@ -1,26 +1,73 @@
 import { Injectable } from '@angular/core';
 
-import { LogType } from '@core/models/log-type.enum';
-import { LoggerResource } from '@core/resources/logger-resource.service';
 import { AbstractLoggerService } from '@core/services/abstract-logger.service';
+import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsoleLoggerService extends AbstractLoggerService {
 
-  constructor(
-    private loggerResource: LoggerResource,
-  ) {
+  constructor() {
     super();
   }
 
   /**
    * @description
-   * Outputs an error message.
+   * Pretty print JSON.
    */
-  public error(msg: string, ...data: any[]) {
-    this.print('error', { msg, data });
-    this.loggerResource.createErrorLog({ message: msg, data: JSON.stringify(data), logType: LogType.ERROR }).subscribe();
+  public pretty(msg: string, ...data: any[]) {
+    this.send('log', { msg, data: [JSON.stringify(data, null, '\t')] });
+  }
+
+  /**
+   * @description
+   * Prints the logging information, but ONLY if not in production.
+   */
+  protected send(type: string, params: { msg?: string, data?: any[] }) {
+    if (!environment.production || type === 'error' || type === 'warn') {
+
+      const message = this.colorize(type, params.msg);
+
+      if (params.msg && params.data.length) {
+        console[type](...message, ...params.data);
+      } else if (!params.msg && params.data.length) {
+        console[type](params.data);
+      } else if (params.msg && !params.data.length) {
+        console[type](...message);
+      } else {
+        console.error('Logger parameters are invalid: ', params);
+      }
+    }
+  }
+
+  /**
+   * @description
+   * Apply colour to the console message, otherwise the use
+   * the default.
+   */
+  protected colorize(type: string, msg: string): string[] {
+    let color = '';
+
+    switch (type) {
+      case 'log':
+        color = 'Yellow';
+        break;
+      case 'info':
+        color = 'DodgerBlue';
+        break;
+      case 'error':
+        color = 'Red';
+        break;
+      case 'warning':
+        color = 'Orange';
+        break;
+    }
+
+    if (color) {
+      color = `color:${color}`;
+    }
+
+    return [`%c${msg}`, color];
   }
 }
