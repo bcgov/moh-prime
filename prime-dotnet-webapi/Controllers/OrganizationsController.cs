@@ -189,7 +189,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<OrganizationClaim>> GetOrganizationClaimByOrgId(int organizationId)
+        public async Task<ActionResult> GetOrganizationClaimByOrgId(int organizationId)
         {
             var claim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
             if (claim == null)
@@ -209,7 +209,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
+        public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
         {
             var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
             if (orgClaim == null || (orgClaim.Id != claimId))
