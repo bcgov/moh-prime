@@ -183,10 +183,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install OC
-        uses: redhat-actions/oc-installer@v1
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.6"
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
+        uses: redhat-actions/oc-login@v1.1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
