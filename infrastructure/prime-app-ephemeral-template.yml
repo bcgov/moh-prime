@@ -520,21 +520,18 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres                    
+                name: pr-database-secrets                    
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres
+                name: pr-database-secrets
                 key: database-password
           - name: PGDATABASE
-            valueFrom:
-              secretKeyRef:
-                name: ${SVC_NAME}-postgres
-                key: database-name
+            value: prime-${SVC_NAME}
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
-          - name: ${SVC_NAME}-${API_POD}
+          - name: ${SVC_NAME}-webapi
             image: >-
               image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
             command:
@@ -560,18 +557,15 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
+                    name: pr-database-secrets                    
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
               - name: DB_CONNECTION_STRING
                 value: "host=$(DB_HOST);port=5432;database=$(POSTGRESQL_DATABASE);username=$(POSTGRESQL_USER);password=$(POSTGRESQL_PASSWORD)"
             ports:
@@ -721,21 +715,18 @@ objects:
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
               - name: DB_PASS
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: DB_PORT
                 value: "5432"
               - name: DB_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-user
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
@@ -772,12 +763,12 @@ objects:
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
-                name: ${SVC_NAME}-${DOCMAN_POD}-data
+                name: ${SVC_NAME}-document-manager-data
             ports:
               - containerPort: 6001
                 protocol: TCP
@@ -869,7 +860,7 @@ objects:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
-              value: ${SVC_NAME}-${REDIS_POD}
+              value: ${SVC_NAME}-redis
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
@@ -880,14 +871,11 @@ objects:
             - name: DB_HOST
               value: ${SVC_NAME}-postgres
             - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-name
+              value: prime-${SVC_NAME}
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
             - name: DB_PORT
               valueFrom:
@@ -897,7 +885,7 @@ objects:
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-user
             - name: FLASK_ENV
               valueFrom:
@@ -932,7 +920,7 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
     triggers:
       - type: ConfigChange
@@ -983,18 +971,15 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
+                    name: pr-database-secrets                    
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres
+                    name: pr-database-secrets
                     key: database-password
               - name: POSTGRESQL_DATABASE
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
+                value: prime-${SVC_NAME}
             image: >-
               image-registry.openshift-image-registry.svc:5000/${POSTGRES_NAMESPACE}/postgresql:${POSTGRESQL_VERSION}
             imagePullPolicy: IfNotPresent
