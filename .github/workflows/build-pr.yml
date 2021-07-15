@@ -208,11 +208,7 @@ jobs:
         run: |
           echo PR_NUMBER=$PR_NUMBER
           oc process -f infrastructure/prime-app-ephemeral-template.yml \
-            -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres-db \
-            -p DOCMAN_POD=document-manager \
-            -p FRONTEND_POD=frontend \
             -p FRONTEND_URL=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p SVC_NAME=pr-$PR_NUMBER \
@@ -220,7 +216,6 @@ jobs:
             -p OC_APP=${{secrets.OC_APP}} \
             -p POSTGRESQL_USER=${{secrets.PRIME_DB_USER}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
-            -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
 
