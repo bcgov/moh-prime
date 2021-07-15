@@ -11,19 +11,16 @@ import { DialogLogger } from '@shared/classes/dialog-logger';
   providedIn: 'root'
 })
 export class LoggerService {
-  private loggers: AbstractLogger[] = [];
+  private loggers: AbstractLogger[];
 
   constructor(
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
+    this.loggers = [];
     // TODO: use configs to add loggers
     this.loggers.push(new DialogLogger(this.dialog, this.snackBar));
     this.loggers.push(new ConsoleLogger());
-    // If there is no logger configured, always default to the console logger
-    if (this.loggers.length == 0) {
-      this.loggers.push(new ConsoleLogger());
-    }
   }
 
   /**
