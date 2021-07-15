@@ -8,16 +8,14 @@ jobs:
   cleanup:
     runs-on: ubuntu-20.04
     environment: Development
-    needs: [apply-oc-template]
     steps:
-      - name: "Use the OpenShift template"
-        uses: actions/checkout@v2
-
       - name: Install OC
-        uses: redhat-actions/oc-installer@v1
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.6"
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
+        uses: redhat-actions/oc-login@v1.1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
@@ -25,9 +23,5 @@ jobs:
 
       - name: "Cleanup"
         id: cleanup
-        env:
-          PROJECT_OWNER: bcgov
-          PROJECT_NAME: moh-prime
-          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
         run: |
-          ./devops/OC4/player.sh occleanup
+          oc delete all,pvc,secrets,route,ingress,configmaps -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -l app.kubernetes.io/part-of=${{ github.event.number }}
