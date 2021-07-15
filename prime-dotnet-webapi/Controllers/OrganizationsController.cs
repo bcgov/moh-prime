@@ -216,8 +216,6 @@ namespace Prime.Controllers
             {
                 return NotFound("Cannot locate Claim for given Organization.");
             }
-            var userId = HttpContext.User.GetPrimeUserId();
-            Admin admin = await _adminService.GetAdminAsync(userId);
 
             if (!await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId))
             {
@@ -227,7 +225,7 @@ namespace Prime.Controllers
 
             await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
 
-            await _businessEventService.CreateOrganizationEventAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved by {admin.LastName}, {admin.FirstName}");
+            await _businessEventService.CreateOrganizationEventAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
 
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
