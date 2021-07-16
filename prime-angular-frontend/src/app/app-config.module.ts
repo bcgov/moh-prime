@@ -27,7 +27,7 @@ export class AppConfig {
   phoneNumbers: {
     director: string;
   };
-  environmentName: environmentName;
+  environmentName: string;
   routes: {
     denied: string;
     maintenance: string;
@@ -38,6 +38,20 @@ export class AppConfig {
     phsa: string;
     gis: string;
     paperEnrolment: string;
+  };
+}
+
+export interface ConfigMap {
+  environmentName: string;
+  apiEndpoint: string;
+  loginRedirectUrl: string;
+  documentManagerUrl: string;
+  keycloakConfig: {
+    config: {
+      url: string;
+      realm: string;
+      clientId: string;
+    }
   };
 }
 
@@ -68,10 +82,20 @@ export const APP_DI_CONFIG: AppConfig = {
   }
 };
 
-@NgModule({
-  providers: [{
-    provide: APP_CONFIG,
-    useValue: APP_DI_CONFIG
-  }]
-})
+export const defaultAppConfig = {
+  ...environment,
+  routes: {
+    denied: AppRoutes.DENIED,
+    maintenance: AppRoutes.MAINTENANCE,
+    auth: AuthRoutes.MODULE_PATH,
+    enrolment: EnrolmentRoutes.MODULE_PATH,
+    adjudication: AdjudicationRoutes.MODULE_PATH,
+    site: SiteRoutes.MODULE_PATH,
+    phsa: PhsaEformsRoutes.MODULE_PATH,
+    gis: GisEnrolmentRoutes.MODULE_PATH,
+    paperEnrolment: PaperEnrolmentRoutes.MODULE_PATH
+  }
+};
+
+@NgModule({})
 export class AppConfigModule {}
