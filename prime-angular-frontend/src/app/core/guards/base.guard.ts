@@ -35,14 +35,14 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
-    return this.checkAccess(url, next.params, next.queryParams);
+    return this.checkAccess(url, next.params);
   }
 
   public canActivateChild(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const url = this.getUrl(state);
-    return this.checkAccess(url, next.params, next.queryParams);
+    return this.checkAccess(url, next.params);
   }
 
   /**
@@ -50,7 +50,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * Hook for customizing access, which defaults to validating
    * access based on authentication.
    */
-  protected canAccess(authenticated: boolean, routePath: string = null, params?: Params, queryParams?: Params): Promise<boolean> {
+  protected canAccess(authenticated: boolean, routePath: string = null, params?: Params): Promise<boolean> {
     return new Promise((resolve, reject) => (authenticated) ? resolve(true) : reject(false));
   }
 
@@ -58,11 +58,11 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    * @description
    * Check the access of a user based on the resolution of a hook.
    */
-  protected checkAccess(routePath: string = null, params?: Params, queryParams?: Params): Observable<boolean> | Promise<boolean> {
+  protected checkAccess(routePath: string = null, params?: Params): Observable<boolean> | Promise<boolean> {
     return new Promise(async (resolve, reject) => {
       try {
         this.authenticated = await this.authService.isLoggedIn();
-        const result = await this.canAccess(this.authenticated, routePath, params, queryParams);
+        const result = await this.canAccess(this.authenticated, routePath, params);
         resolve(result);
       } catch (error) {
         const destination = (routePath) ? ` to ${ routePath } ` : ' ';

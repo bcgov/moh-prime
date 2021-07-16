@@ -155,7 +155,7 @@ namespace Prime.Controllers
             return Ok(organization);
         }
 
-        // GET: api/Organizations/claim
+        // GET: api/Organizations/claims
         /// <summary>
         /// Check if organization claim exists by a given search criteria.
         /// </summary>

@@ -9,14 +9,17 @@ import { OrganizationResource } from '@core/resources/organization-resource.serv
 import { ToastService } from '@core/services/toast.service';
 
 import { Observable, of, Subscription } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Party } from '@lib/models/party.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
+import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
 
 @Component({
@@ -47,7 +50,6 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.isClaimExistingOrg = false;
   }
 
   public onClaimOrgChange(event: MatSlideToggleChange): void {
@@ -68,29 +70,41 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   protected patchForm(): void {
   }
 
-  protected performSubmission(): Observable<boolean> {
-    if (this.isClaimExistingOrg) {
-      this.hasOrgClaimError = false;
-      return this.organizationResource.getOrganizationClaim({ pec: this.formState.json.pec })
-        .pipe(
-          map((orgClaimExists: boolean) => {
-            this.hasOrgClaimError = orgClaimExists;
-            return !orgClaimExists;
-          }),
-          catchError((error, caught) => {
-            this.hasOrgClaimError = true;
-            return of(false);
-          })
-        );
-    }
-    return of(true);
+  protected performSubmission(): Observable<Organization> {
+    return this.authService.getUser$()
+      .pipe(
+        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
+        exhaustMap((party: Party) => {
+          if (this.isClaimExistingOrg) {
+            this.hasOrgClaimError = false;
+            return this.organizationResource.getOrganizationClaim({ pec: this.formState.json.pec })
+              .pipe(
+                exhaustMap((orgClaimExists: boolean) => {
+                  this.hasOrgClaimError = orgClaimExists;
+                  if (!orgClaimExists) {
+                    return this.organizationResource.claimOrganization(party.id, this.formState.json);
+                  }
+                  return of(null);
+                }),
+                catchError((error, caught) => {
+                  this.hasOrgClaimError = true;
+                  return of(null);
+                })
+            )
+          }
+          return this.organizationResource.createOrganization(party.id);
+        })
+      )
   }
 
-  protected afterSubmitIsSuccessful(response: boolean): void {
-    // the form submission only returns false when organization claim exists
-    if (response) {
-      this.routeUtils.routeRelativeTo([SiteRoutes.SITE_MANAGEMENT], { queryParams: { claimOrg: this.isClaimExistingOrg } });
+  protected afterSubmitIsSuccessful(organization: Organization): void {
+    if (!organization) {
+      return;
     }
+    const routePath = this.isClaimExistingOrg
+      ? ['../', 0, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]
+      : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
+    this.routeUtils.routeRelativeTo(routePath);
   }
 
   private toggleClaimFormValidators(isOrgClaim: boolean): void {

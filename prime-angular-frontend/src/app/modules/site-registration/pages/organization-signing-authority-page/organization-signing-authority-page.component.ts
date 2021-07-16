@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, Observable, of } from 'rxjs';
-import { exhaustMap, map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -21,6 +21,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
+
 
 @Component({
   selector: 'app-organization-signing-authority-page',
@@ -137,57 +138,26 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     this.toggleAddressLineValidators(this.hasMailingAddress, this.formState.mailingAddress, this.hasVerifiedAddress);
   }
 
-  protected performSubmission(): Observable<Organization> {
+  protected performSubmission(): Observable<Party> {
     const payload = this.formState.json;
-    const updateSigningAuthority$ = this.organizationResource.updateSigningAuthority(payload);
-    let request$ = updateSigningAuthority$
-      .pipe(map(() => this.organizationService.organization));
-
-    if (!this.organizationService.organization) {
-      // No organization indicates the possibility of no signing authority
-      request$ = this.organizationResource.getSigningAuthorityByUserId(this.bcscUser.userId)
-        .pipe(
-          exhaustMap((party: Party | null) =>
-            (!party)
-              // TODO BCSC email not sent and shouldn't be included in BcscUser model to prevent issues
-              // Allow override of BCSC email, but otherwise no other overlap exists
-              ? this.organizationResource.createSigningAuthority({ ...this.bcscUser, ...payload })
-              // Prevent issue where the creation of an organization fails, but the
-              // signing authority data is resubmitted possibly with alteration
-              : updateSigningAuthority$
-          ),
-          exhaustMap((party: Party) =>
-            this.route.snapshot.queryParams.claimOrg === 'true'
-              ? this.organizationResource.claimOrganization(party.id, this.organizationFormStateService.organizationClaimPageFormState.json)
-              : this.organizationResource.createOrganization(party.id)
-          )
-        );
-    }
-
-    return request$;
+    return this.organizationResource.createSigningAuthority(payload);
   }
 
-  protected afterSubmitIsSuccessful(organization: Organization): void {
+  protected afterSubmitIsSuccessful(party: Party): void {
     this.formState.form.markAsPristine();
 
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: (string | number)[];
+    const organization = this.organizationService.organization;
 
     if (redirectPath) {
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
-    }
-    else if (this.route.snapshot.queryParams.claimOrg === 'true') {
-      if (organization) {
-        routePath = ['../../', SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION];
-      }
-      else {
-        this.toastService.openErrorToast('Could not claim the organization.');
-      }
-    }
-    else {
+    } else {
       routePath = (this.isCompleted)
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
-        : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
+        : organization
+          ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
+          : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }
