@@ -145,9 +145,7 @@ export class OrganizationResource {
       );
   }
 
-  public getOrganizationClaim(
-    queryParam: { pec?: string, userId?: string }
-  ): Observable<boolean> {
+  public getOrganizationClaim(queryParam: { pec?: string, userId?: string }): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
     return this.apiResource.get<boolean>(`organizations/claims`, params)
       .pipe(
