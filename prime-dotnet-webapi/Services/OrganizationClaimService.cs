@@ -48,7 +48,7 @@ namespace Prime.Services
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
-        public async Task<Organization> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
+        public async Task<int> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
         {
             var organizationCLaim = new OrganizationClaim
             {
@@ -63,7 +63,7 @@ namespace Prime.Services
 
             await _businessEventService.CreateOrganizationEventAsync(organization.Id, organizationClaim.PartyId, "Organization Claim Created");
 
-            return organization;
+            return organization.Id;
         }
 
         public async Task<bool> OrganizationClaimExistsAsync(OrganizationClaimSearchOptions searchOptions)
@@ -72,6 +72,16 @@ namespace Prime.Services
             if (searchOptions == null || string.IsNullOrEmpty(searchOptions.Pec) && searchOptions.UserId == Guid.Empty)
             {
                 return false;
+            }
+
+            // return false if orgnization does not exists,
+            if (!string.IsNullOrEmpty(searchOptions.Pec))
+            {
+                var orgExists = await _context.Organizations.AnyAsync(o => o.Sites.Any(s => s.PEC == searchOptions.Pec));
+                if (!orgExists)
+                {
+                    return false;
+                }
             }
 
             return await _context.OrganizationClaims

@@ -21,6 +21,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
+import { OrgnizationType } from '@registration/shared/models/organization-type-model';
 
 @Component({
   selector: 'app-organization-claim-page',
@@ -70,40 +71,35 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   protected patchForm(): void {
   }
 
-  protected performSubmission(): Observable<Organization> {
+  protected performSubmission(): Observable<number> {
     return this.authService.getUser$()
       .pipe(
         exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
         exhaustMap((party: Party) => {
           if (this.isClaimExistingOrg) {
-            this.hasOrgClaimError = false;
-            return this.organizationResource.getOrganizationClaim({ pec: this.formState.json.pec })
+            return this.organizationResource.claimOrganization(party.id, this.formState.json)
               .pipe(
-                exhaustMap((orgClaimExists: boolean) => {
-                  this.hasOrgClaimError = orgClaimExists;
-                  if (!orgClaimExists) {
-                    return this.organizationResource.claimOrganization(party.id, this.formState.json);
-                  }
-                  return of(null);
-                }),
                 catchError((error, caught) => {
                   this.hasOrgClaimError = true;
-                  return of(null);
+                  return of(0);
                 })
-            )
+            );
           }
-          return this.organizationResource.createOrganization(party.id);
+          return this.organizationResource.createOrganization(party.id)
+            .pipe(
+              map((org: Organization) => org.id)
+            );
         })
       )
   }
 
-  protected afterSubmitIsSuccessful(organization: Organization): void {
-    if (!organization) {
+  protected afterSubmitIsSuccessful(organizationId: number): void {
+    if (!organizationId) {
       return;
     }
     const routePath = this.isClaimExistingOrg
       ? ['../', 0, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]
-      : ['../', organization.id, SiteRoutes.ORGANIZATION_NAME];
+      : ['../', organizationId, SiteRoutes.ORGANIZATION_NAME];
     this.routeUtils.routeRelativeTo(routePath);
   }
 

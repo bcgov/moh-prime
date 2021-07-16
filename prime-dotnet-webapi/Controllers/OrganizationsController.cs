@@ -150,9 +150,16 @@ namespace Prime.Controllers
             {
                 return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
             }
-            organization = await _organizationClaimService.CreateOrganizationClaimAsync(organizationClaim, organization);
 
-            return Ok(organization);
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organization.Id);
+            if (orgClaim != null)
+            {
+                return BadRequest("Could not claim an organization which has already been claimed.");
+            }
+
+            var organizationId = await _organizationClaimService.CreateOrganizationClaimAsync(organizationClaim, organization);
+
+            return Ok(organizationId);
         }
 
         // GET: api/Organizations/claims
@@ -162,19 +169,9 @@ namespace Prime.Controllers
         [HttpGet("claims", Name = nameof(OrganizationClaimExists))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
         public async Task<ActionResult> OrganizationClaimExists([FromQuery] OrganizationClaimSearchOptions search)
         {
-            // check if the organization exists with the given PEC
-            if (!string.IsNullOrEmpty(search.Pec))
-            {
-                var organization = await _organizationService.GetOrganizationByPecAsync(search.Pec);
-                if (organization == null)
-                {
-                    return BadRequest("Organization does not exist with the passed in site PEC.");
-                }
-            }
             var result = await _organizationClaimService.OrganizationClaimExistsAsync(search);
 
             return Ok(result);

@@ -192,10 +192,10 @@ export class OrganizationResource {
       );
   }
 
-  public claimOrganization(partyId: number, orgClaim: OrganizationClaimFormModel): Observable<Organization> {
-    return this.apiResource.post<Organization>(`organizations/claims`, { partyId, ...orgClaim })
+  public claimOrganization(partyId: number, orgClaim: OrganizationClaimFormModel): Observable<number> {
+    return this.apiResource.post<number>(`organizations/claims`, { partyId, ...orgClaim })
       .pipe(
-        map((response: ApiHttpResponse<Organization>) => response.result),
+        map((response: ApiHttpResponse<number>) => response.result),
         tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be claimed');
