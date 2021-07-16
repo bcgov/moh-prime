@@ -118,8 +118,9 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
 
     // Create or update the business licence with an uploaded document
     const businessLicenceGuid = this.formState.businessLicenceGuid.value;
+    const expiryDate = this.formState.businessLicenceExpiry.value;
 
-    return this.siteResource.createBusinessLicence(siteId, new BusinessLicence(siteId), businessLicenceGuid);
+    return this.siteResource.createBusinessLicence(siteId, new BusinessLicence(siteId, expiryDate), businessLicenceGuid);
   }
 
   protected afterSubmitIsSuccessful(): void {

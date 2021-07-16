@@ -19,6 +19,14 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
     return this.formInstance.get('businessLicenceGuid') as FormControl;
   }
 
+  public get doingBusinessAs(): FormControl {
+    return this.formInstance.get('doingBusinessAs') as FormControl;
+  }
+
+  public get businessLicenceExpiry(): FormControl {
+    return this.formInstance.get('businessLicenceExpiry') as FormControl;
+  }
+
   /**
    * @description
    * Access to doingBusinessAs and pec, but prevents transmission
@@ -49,6 +57,7 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
   public buildForm(): void {
     this.formInstance = this.fb.group({
       businessLicenceGuid: ['', [Validators.required]],
+      businessLicenceExpiry: ['', [Validators.required]]
     });
   }
 }
