@@ -8,6 +8,7 @@ import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
 import { LoggerService } from '@core/services/logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { Party } from '@lib/models/party.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -39,13 +40,14 @@ export class OrganizationGuard extends BaseGuard {
         exhaustMap((user: BcscUser) =>
           forkJoin([
             this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId),
-            this.organizationResource.getOrganizationClaim({ userId: user.userId }),
+            this.organizationResource.getSigningAuthorityByUserId(user.userId),
+            this.organizationResource.getOrganizationClaim({ userId: user.userId })
           ])
         ),
-        map((result: [Organization[] | null, boolean]) =>
-          [result[0]?.length ? result[0].shift() : null, result[1]]
+        map((result: [Organization[] | null, Party, boolean]) =>
+          [result[0]?.length ? result[0].shift() : null, result[1], result[2]]
         ),
-        map((result: [Organization | null, boolean]) => {
+        map((result: [Organization | null, Party, boolean]) => {
           // Store the organization for access throughout registration, which
           // will allows be the most up-to-date organization
           this.organizationService.organization = result[0];
@@ -53,7 +55,7 @@ export class OrganizationGuard extends BaseGuard {
           // Determine the next route based on whether this is the initial
           // registration of an organization and site, or subsequent
           // registration of sites under an existing organization
-          return this.routeDestination(routePath, params, result[0], result[1]);
+          return this.routeDestination(routePath, params, result[0], result[1], result[2]);
         })
       );
   }
@@ -62,7 +64,7 @@ export class OrganizationGuard extends BaseGuard {
    * @description
    * Determine the route destination based on the organization status.
    */
-  private routeDestination(routePath: string, params: Params, organization: Organization | null, hasOrgClaim: boolean) {
+  private routeDestination(routePath: string, params: Params, organization: Organization | null, party: Party, hasOrgClaim: boolean) {
     // On login the user will always be redirected to the collection notice
     if (routePath.includes(SiteRoutes.COLLECTION_NOTICE)) {
       return true;
@@ -83,7 +85,7 @@ export class OrganizationGuard extends BaseGuard {
     }
 
     // Otherwise, no organization exists
-    return this.manageNoOrganizationRouting(routePath, hasOrgClaim);
+    return this.manageNoOrganizationRouting(routePath, party, hasOrgClaim);
   }
 
   /**
@@ -128,13 +130,14 @@ export class OrganizationGuard extends BaseGuard {
    * Manage routing when an organization does not exist, or initial
    * registration has not been completed.
    */
-  private manageNoOrganizationRouting(routePath: string, hasOrgClaim: boolean) {
-    if (hasOrgClaim) {
-      return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION, 0);
-    }
+  private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
+    const destPath = hasOrgClaim ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION :
+      party ? SiteRoutes.ORGANIZATION_CLAIM : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+
+    console.log('destPath', destPath);
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
-    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, SiteRoutes.ORGANIZATION_CLAIM, 0);
+    return this.navigate(routePath, SiteRoutes.SITE_MANAGEMENT, destPath, 0);
   }
 
   private manageRouting(routePath: string, defaultRoute: string, organization: Organization): boolean {
