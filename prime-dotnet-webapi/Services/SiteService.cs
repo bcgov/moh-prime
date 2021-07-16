@@ -442,9 +442,11 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(int siteId, BusinessLicence updateBusinessLicence)
+        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(int businessLicenceId, BusinessLicence updateBusinessLicence)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences
+                .Where(bl => bl.Id == businessLicenceId)
+                .SingleOrDefaultAsync();
 
             businessLicence.DeferredLicenceReason = updateBusinessLicence.DeferredLicenceReason;
             businessLicence.ExpiryDate = updateBusinessLicence.ExpiryDate;
@@ -485,9 +487,9 @@ namespace Prime.Services
             return bld;
         }
 
-        public async Task DeleteBusinessLicenceDocumentAsync(int siteId)
+        public async Task DeleteBusinessLicenceDocumentAsync(int businessLicenceId)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences.Where(bl => bl.Id == businessLicenceId).SingleOrDefaultAsync();
             if (businessLicence.BusinessLicenceDocument != null)
             {
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
@@ -511,7 +513,14 @@ namespace Prime.Services
             };
         }
 
-        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId)
+        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
+        {
+            return await _context.BusinessLicences
+                .Where(bl => bl.SiteId == siteId)
+                .ToListAsync();
+        }
+
+        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
         {
             return await _context.Sites
                 .Where(s => s.Id == siteId)

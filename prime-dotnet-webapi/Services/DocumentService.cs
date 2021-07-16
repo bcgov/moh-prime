@@ -29,7 +29,7 @@ namespace Prime.Services
 
         public async Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId)
         {
-            var licence = await _siteService.GetBusinessLicenceAsync(siteId);
+            var licence = await _siteService.GetLatestBusinessLicenceAsync(siteId);
             return await _documentManagerClient.CreateDownloadTokenAsync(licence.BusinessLicenceDocument.DocumentGuid);
         }
 

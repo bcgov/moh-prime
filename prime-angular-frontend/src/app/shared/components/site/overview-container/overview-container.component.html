@@ -72,7 +72,7 @@
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
-    <button *ngIf="site.submittedDate && site.approvedDate"
+    <button *ngIf="site.submittedDate && site.approvedDate && !admin"
             mat-stroked-button
             color="danger"
             class="mb-4"

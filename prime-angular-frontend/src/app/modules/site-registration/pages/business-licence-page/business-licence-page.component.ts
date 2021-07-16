@@ -83,7 +83,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   public downloadBusinessLicence(event: Event): void {
     event.preventDefault();
-    this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id)
+    this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id, this.siteService.site.businessLicence.id)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
@@ -149,7 +149,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
         // Perform an update by removing an existing business licence document
         // and/or update the deferred reason
         if (this.businessLicence.businessLicenceDocument) {
-          requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId));
+          requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId, this.businessLicence.id));
         }
         requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
       }
@@ -160,7 +160,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
         requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
       } else {
         if (this.uploadedFile) {
-          requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, businessLicenceGuid));
+          requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, this.businessLicence.id, businessLicenceGuid));
         }
         requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
       }

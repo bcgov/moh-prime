@@ -73,7 +73,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
 
   public downloadBusinessLicence(event: Event): void {
     event.preventDefault();
-    this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id)
+    this.siteResource.getBusinessLicenceDocumentToken(this.siteService.site.id, this.siteService.site.businessLicence.id)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 

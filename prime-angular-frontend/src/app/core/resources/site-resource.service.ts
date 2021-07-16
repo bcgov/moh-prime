@@ -236,7 +236,7 @@ export class SiteResource {
 
   public createBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
     const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
-    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
+    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licences`, businessLicence, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -247,7 +247,7 @@ export class SiteResource {
   }
 
   public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence): Observable<BusinessLicence> {
-    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence)
+    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licences/${businessLicence.id}`, businessLicence)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -257,9 +257,9 @@ export class SiteResource {
       );
   }
 
-  public createBusinessLicenceDocument(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
+  public createBusinessLicenceDocument(siteId: number, businessLicenceId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, null, params)
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licences/${businessLicenceId}/document`, null, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
         catchError((error: any) => {
@@ -269,8 +269,8 @@ export class SiteResource {
       );
   }
 
-  public removeBusinessLicenceDocument(siteId: number): NoContent {
-    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`)
+  public removeBusinessLicenceDocument(siteId: number, businessLicenceId: number): NoContent {
+    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licences/${businessLicenceId}/document`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -280,8 +280,8 @@ export class SiteResource {
       );
   }
 
-  public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
-    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licence`)
+  public getBusinessLicence(siteId: number): Observable<BusinessLicence | BusinessLicence[]> {
+    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licences?latest=true`)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -292,8 +292,8 @@ export class SiteResource {
       );
   }
 
-  public getBusinessLicenceDocumentToken(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document/token`)
+  public getBusinessLicenceDocumentToken(siteId: number, businessLicenceId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/business-licences/${businessLicenceId}/document/token`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {

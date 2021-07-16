@@ -9,6 +9,7 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-overview-container',
@@ -19,9 +20,11 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   @Input() public site: Site;
   @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
+  @Input() public admin: boolean;
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
+  public businessLicences: BusinessLicence[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -31,6 +34,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   ) {
     super(route, router);
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.admin = false;
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -52,5 +56,10 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
       });
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    if (this.admin) {
+      this.siteResource.getBusinessLicence(this.site.id)
+        .subscribe((businessLicences: BusinessLicence[]) => this.businessLicences = businessLicences)
+    }
+  }
 }
