@@ -68,16 +68,47 @@
           <div class="row">
             <div class="col">
               <mat-form-field class="w-100">
-              <textarea matInput
-                        rows="5"
-                        placeholder="Write here"
-                        formControlName="deferredLicenceReason"></textarea>
+                <textarea matInput
+                          rows="5"
+                          placeholder="Write here"
+                          formControlName="deferredLicenceReason"></textarea>
                 <mat-error>Required</mat-error>
               </mat-form-field>
             </div>
           </div>
         </section>
       </ng-container>
+    </section>
+
+    <section class="mb-4">
+
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Business Licence Expiry Date</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Use the calendar option below to tell us when this business licence expires.
+        </ng-container>
+      </app-page-subheader2>
+
+      <div class="row">
+        <div class="col">
+
+          <mat-form-field class="w-100">
+
+            <input matInput
+                   placeholder="Expiry Date"
+                   [matDatepicker]="expiryDatePicker"
+                   formControlName="businessLicenceExpiry"
+                   (click)="expiryDatePicker.open()"
+                   readonly>
+
+            <mat-datepicker #expiryDatePicker
+                            startView="multi-year"
+                            disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+        </div>
+      </div>
+
     </section>
 
     <app-site-information-form [form]="formState.form"

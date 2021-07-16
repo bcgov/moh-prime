@@ -394,10 +394,6 @@ namespace Prime.Controllers
             {
                 return Forbid();
             }
-            if (site.BusinessLicence.BusinessLicenceDocument != null)
-            {
-                return Conflict($"Business licence already uploaded, update not allowed.");
-            }
 
             var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
 

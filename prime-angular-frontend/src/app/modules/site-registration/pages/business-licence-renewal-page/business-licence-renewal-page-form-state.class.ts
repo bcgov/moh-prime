@@ -19,10 +19,6 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
     return this.formInstance.get('businessLicenceGuid') as FormControl;
   }
 
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
-  }
-
   public get businessLicenceExpiry(): FormControl {
     return this.formInstance.get('businessLicenceExpiry') as FormControl;
   }

@@ -447,6 +447,7 @@ namespace Prime.Services
             var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
 
             businessLicence.DeferredLicenceReason = updateBusinessLicence.DeferredLicenceReason;
+            businessLicence.ExpiryDate = updateBusinessLicence.ExpiryDate;
 
             _context.BusinessLicences.Update(businessLicence);
             await _context.SaveChangesAsync();

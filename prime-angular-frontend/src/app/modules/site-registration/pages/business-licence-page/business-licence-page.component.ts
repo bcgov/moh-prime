@@ -136,6 +136,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     ];
     const siteId = this.route.snapshot.params.sid;
     const hasBusinessLicence = !!this.businessLicence.id;
+    this.businessLicence.expiryDate = this.formState.businessLicenceExpiry.value;
 
     // Create or update the business licence with an uploaded document, otherwise
     // with a deferred licence reason
@@ -157,8 +158,11 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
       if (!hasBusinessLicence) {
         requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
-      } else if (this.uploadedFile) {
-        requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, businessLicenceGuid));
+      } else {
+        if (this.uploadedFile) {
+          requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, businessLicenceGuid));
+        }
+        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
       }
     }
 
@@ -182,6 +186,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.siteResource.getBusinessLicence(site.id)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
+
+        this.formState.businessLicenceExpiry.setValue(businessLicense?.expiryDate);
 
         if (businessLicense && !businessLicense.completed) {
           // Business licence may exist, but the deferred licence toggle may be
