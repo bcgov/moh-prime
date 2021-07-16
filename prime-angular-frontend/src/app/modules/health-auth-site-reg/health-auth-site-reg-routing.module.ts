@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { CanDeactivateFormGuard } from '@core/guards/can-deactivate-form.guard';
+import { AuthenticationGuard } from '@auth/shared/guards/authentication.guard';
 
 import { HealthAuthSiteRegRoutes } from './health-auth-site-reg.routes';
 import { HealthAuthSiteRegGuard } from './shared/guards/health-auth-site-reg.guard';
@@ -14,7 +15,6 @@ import { AuthorizedUserNextStepsPageComponent } from '@health-auth/pages/authori
 import { AuthorizedUserApprovedPageComponent } from '@health-auth/pages/authorized-user-approved-page/authorized-user-approved-page.component';
 import { AuthorizedUserDeclinedPageComponent } from '@health-auth/pages/authorized-user-declined-page/authorized-user-declined-page.component';
 import { SiteManagementPageComponent } from '@health-auth/pages/site-management-page/site-management-page.component';
-import { OrganizationAgreementPageComponent } from '@health-auth/pages/organization-agreement-page/organization-agreement-page.component';
 import { HealthAuthCareTypePageComponent } from '@health-auth/pages/health-auth-care-type-page/health-auth-care-type-page.component';
 import { SiteInformationPageComponent } from '@health-auth/pages/site-information-page/site-information-page.component';
 import { VendorPageComponent } from '@health-auth/pages/vendor-page/vendor-page.component';
@@ -29,13 +29,10 @@ const routes: Routes = [
   {
     path: '',
     component: HealthAuthSiteRegDashboardComponent,
-    canLoad: [
-      HealthAuthSiteRegGuard
-    ],
-    canActivate: [],
-    canActivateChild: [
-      HealthAuthSiteRegGuard
-    ],
+    // TODO add registration related guards
+    canActivate: [AuthenticationGuard],
+    canActivateChild: [AuthenticationGuard],
+    // TODO add proper default route when accessing module
     children: [
       {
         path: HealthAuthSiteRegRoutes.COLLECTION_NOTICE,
@@ -85,7 +82,7 @@ const routes: Routes = [
       // Viewing and editing route for an existing and
       // approved authorized user
       {
-        path: `${ HealthAuthSiteRegRoutes.AUTHORIZED_USER }/:auid`,
+        path: `${HealthAuthSiteRegRoutes.AUTHORIZED_USER}/:auid`,
         component: AuthorizedUserPageComponent,
         canActivate: [AuthorizedUserGuard],
         canDeactivate: [CanDeactivateFormGuard],
@@ -94,15 +91,9 @@ const routes: Routes = [
       // Site registration and maintenance routes for administration
       // of health authority information
       {
-        path: `${ HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES }/:haid`,
-        canActivate: [AuthorizedUserGuard],
+        path: `${HealthAuthSiteRegRoutes.HEALTH_AUTHORITIES}/:haid/${HealthAuthSiteRegRoutes.SITES}/:sid`,
+        canActivateChild: [AuthorizedUserGuard],
         children: [
-          {
-            path: HealthAuthSiteRegRoutes.ORGANIZATION_AGREEMENT,
-            component: OrganizationAgreementPageComponent,
-            canDeactivate: [CanDeactivateFormGuard],
-            data: { title: 'Organization Agreement' }
-          },
           {
             path: HealthAuthSiteRegRoutes.VENDOR,
             component: VendorPageComponent,
@@ -151,7 +142,7 @@ const routes: Routes = [
             ]
           },
           {
-            path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
+            path: HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR,
             component: AdministratorPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PharmaNet Administrator' }
@@ -160,6 +151,11 @@ const routes: Routes = [
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,
             component: OverviewPageComponent,
             data: { title: 'Information Review' }
+          },
+          {
+            path: '', // Equivalent to `/` and alias for default view
+            redirectTo: HealthAuthSiteRegRoutes.VENDOR,
+            pathMatch: 'full'
           }
         ]
       },

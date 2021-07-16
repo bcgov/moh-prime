@@ -226,7 +226,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAdjudicationDocument>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolleeAdjudicationDocument>>> GetAdjudicationDocuments(int enrolleeId)
+        public async Task<ActionResult> GetAdjudicationDocuments(int enrolleeId)
         {
             if (!await _enrolleeService.PaperSubmissionIsEditableAsync(enrolleeId))
             {
@@ -254,7 +254,7 @@ namespace Prime.Controllers
                 return NotFound($"No Editable Paper Submission found with Enrollee Id {enrolleeId}");
             }
 
-            await _enrolleeService.FinailizeSubmissionAsync(enrolleeId);
+            await _enrolleeService.FinalizeSubmissionAsync(enrolleeId);
 
             return Ok();
         }

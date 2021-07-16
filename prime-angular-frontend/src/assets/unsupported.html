@@ -1,139 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-    <title>Unsupported Browser</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+  <title>Unsupported Browser</title>
 
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-          crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+        crossorigin="anonymous">
 
-    <script>
-      /**
-       * TEMPORARY FIX
-       * Currently Angular is not bootstrapping in Internet Explorer, and this is
-       * a work around to patch and provide time until it can be resolved allowing
-       * the guards to redirect users.
-       */
-    </script>
+  <script>
+    /**
+     * TEMPORARY FIX
+     * Currently Angular is not bootstrapping in Internet Explorer, and this is
+     * a work around to patch and provide time until it can be resolved allowing
+     * the guards to redirect users.
+     */
+  </script>
 
-    <style>
-      .logo-fill-light g:not(.logo-fill-yellow) path,
-      .logo-fill-light g:not(.logo-fill-yellow) polygon {
-        fill: white;
-      }
+  <style>
+    .logo-fill-light g:not(.logo-fill-yellow) path,
+    .logo-fill-light g:not(.logo-fill-yellow) polygon {
+      fill: white;
+    }
 
-      .logo-fill-dark g:not(.logo-fill-yellow) path,
-      .logo-fill-dark g:not(.logo-fill-yellow) polygon {
-        fill: #224176;
-      }
+    .logo-fill-dark g:not(.logo-fill-yellow) path,
+    .logo-fill-dark g:not(.logo-fill-yellow) polygon {
+      fill: #224176;
+    }
 
-      .logo-fill-yellow path,
-      .logo-fill-yellow polygon {
-        fill: #e3a92b;
-      }
+    .logo-fill-yellow path,
+    .logo-fill-yellow polygon {
+      fill: #e3a92b;
+    }
 
-      .logo-position-right {
-        transform: translate(114px, -82px);
-      }
+    .logo-position-right {
+      transform: translate(114px, -82px);
+    }
 
+    .wrapper {
+      min-height: 100vh;
+      background-color: #003366;
+    }
+
+    @media screen and (min-width: 600px) {
       .wrapper {
-        min-height: 100vh;
-        background-color: #003366;
+        background-color: #ffb200;
       }
+    }
 
-      @media screen and (min-width: 600px) {
-        .wrapper {
-          background-color: #ffb200;
-        }
-      }
+    .wrapper .header {
+      min-height: 15vh;
+      background-color: #003366;
+    }
 
-      .wrapper .header {
-        min-height: 15vh;
-        background-color: #003366;
-      }
+    .wrapper .container-fluid {
+      min-height: 70vh;
+      background-color: #003366;
+    }
 
-      .wrapper .container-fluid {
-        min-height: 70vh;
-        background-color: #003366;
-      }
+    h1 {
+      color: white;
+      font-size: 5rem;
+      margin-top: 6%;
+      line-height: 3rem;
+    }
 
-      h1 {
-        color: white;
-        font-size: 5rem;
-        margin-top: 6%;
-        line-height: 3rem;
-      }
+    h1 span {
+      font-size: 2.75rem !important;
+    }
+  </style>
 
-      h1 span {
-        font-size: 2.75rem !important;
-      }
-    </style>
+</head>
 
-  </head>
+<body>
 
-  <body>
+<div class="wrapper">
+  <div class="header p-3 p-md-5">
 
-    <div class="wrapper">
-      <div class="header p-3 p-md-5">
+    <app-prime-logo fill="light"
+                    label="right"
+                    size="medium"></app-prime-logo>
 
-        <app-prime-logo fill="light"
-                        label="right"
-                        size="medium"></app-prime-logo>
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="210px"
+         height="100px"
+         viewBox="-2 -2 212 100"
+         class="logo-fill-light">
+      <g>
+        <path d="M63,75a15,15,0,0,1-30,0V57h6V51H27V75a21,21,0,0,0,42,0V69H63Z"/>
+        <path d="M45,51v6H63v6h6V51Z"/>
+      </g>
+      <g>
+        <path d="M33,39V33H27V45H51V39Z"/>
+        <path d="M48,0A21,21,0,0,0,27,21v6h6V21a15,15,0,0,1,30,0V39H57v6H69V21A21,21,0,0,0,48,0Z"/>
+      </g>
+      <g class="logo-fill-yellow">
+        <path d="M57,33h6V27H51V51h6Z"/>
+        <path d="M75,27H69v6h6a15,15,0,0,1,0,30H57V57H51V69H75A21,21,0,0,0,96,48h0A21,21,0,0,0,75,27Z"/>
+      </g>
+      <g class="logo-fill-yellow">
+        <path d="M39,63H33v6H45V45H39Z"/>
+        <path d="M21,27A21,21,0,0,0,0,48H0A21,21,0,0,0,21,69h6V63H21a15,15,0,0,1,0-30H39v6h6V27Z"/>
+      </g>
+      <g class="logo-position-right">
+        <path
+          d="M6.98,133.9V142H2V119h8.45a10.214,10.214,0,0,1,4.51.95,6.927,6.927,0,0,1,2.99,2.69A7.549,7.549,0,0,1,19,126.61a6.626,6.626,0,0,1-2.29,5.33,9.482,9.482,0,0,1-6.34,1.95H6.98Zm0-3.84h3.47a4.111,4.111,0,0,0,2.84-.88,3.24,3.24,0,0,0,.98-2.53,3.436,3.436,0,0,0-.98-2.57,3.634,3.634,0,0,0-2.72-1.07H6.98Z"/>
+        <path
+          d="M29.42,133.58H25.96V142H21V119h8.45a9.492,9.492,0,0,1,6.22,1.82,6.29,6.29,0,0,1,2.19,5.13,7.171,7.171,0,0,1-1.01,3.93,6.861,6.861,0,0,1-3.05,2.5l4.92,9.4V142H33.69Zm-3.46-3.52h3.5a3.8,3.8,0,0,0,2.73-.91,4.028,4.028,0,0,0,.97-2.82,3.121,3.121,0,0,0-.91-2.4,3.768,3.768,0,0,0-2.8-.93H25.96v7.06Z"/>
+        <path d="M47,142H42V119h5Z"/>
+        <path
+          d="M57.13,119l5.84,16.68L68.78,119h6.16v23H70.02v-6.29l.32-10.69L64.56,142H61.34l-5.68-16.95.3,10.66V142H51V119Z"/>
+        <path d="M91.93,131.91l-8.05.02.07,6.28L94,138.19V142H79V119H93.97l.03,3.96-10.02.02-.03,5.07,8.05-.02Z"/>
+      </g>
+    </svg>
 
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="210px"
-             height="100px"
-             viewBox="-2 -2 212 100"
-             class="logo-fill-light">
-          <g>
-            <path d="M63,75a15,15,0,0,1-30,0V57h6V51H27V75a21,21,0,0,0,42,0V69H63Z" />
-            <path d="M45,51v6H63v6h6V51Z" />
-          </g>
-          <g>
-            <path d="M33,39V33H27V45H51V39Z" />
-            <path d="M48,0A21,21,0,0,0,27,21v6h6V21a15,15,0,0,1,30,0V39H57v6H69V21A21,21,0,0,0,48,0Z" />
-          </g>
-          <g class="logo-fill-yellow">
-            <path d="M57,33h6V27H51V51h6Z" />
-            <path d="M75,27H69v6h6a15,15,0,0,1,0,30H57V57H51V69H75A21,21,0,0,0,96,48h0A21,21,0,0,0,75,27Z" />
-          </g>
-          <g class="logo-fill-yellow">
-            <path d="M39,63H33v6H45V45H39Z" />
-            <path d="M21,27A21,21,0,0,0,0,48H0A21,21,0,0,0,21,69h6V63H21a15,15,0,0,1,0-30H39v6h6V27Z" />
-          </g>
-          <g class="logo-position-right">
-            <path
-                  d="M6.98,133.9V142H2V119h8.45a10.214,10.214,0,0,1,4.51.95,6.927,6.927,0,0,1,2.99,2.69A7.549,7.549,0,0,1,19,126.61a6.626,6.626,0,0,1-2.29,5.33,9.482,9.482,0,0,1-6.34,1.95H6.98Zm0-3.84h3.47a4.111,4.111,0,0,0,2.84-.88,3.24,3.24,0,0,0,.98-2.53,3.436,3.436,0,0,0-.98-2.57,3.634,3.634,0,0,0-2.72-1.07H6.98Z" />
-            <path
-                  d="M29.42,133.58H25.96V142H21V119h8.45a9.492,9.492,0,0,1,6.22,1.82,6.29,6.29,0,0,1,2.19,5.13,7.171,7.171,0,0,1-1.01,3.93,6.861,6.861,0,0,1-3.05,2.5l4.92,9.4V142H33.69Zm-3.46-3.52h3.5a3.8,3.8,0,0,0,2.73-.91,4.028,4.028,0,0,0,.97-2.82,3.121,3.121,0,0,0-.91-2.4,3.768,3.768,0,0,0-2.8-.93H25.96v7.06Z" />
-            <path d="M47,142H42V119h5Z" />
-            <path
-                  d="M57.13,119l5.84,16.68L68.78,119h6.16v23H70.02v-6.29l.32-10.69L64.56,142H61.34l-5.68-16.95.3,10.66V142H51V119Z" />
-            <path d="M91.93,131.91l-8.05.02.07,6.28L94,138.19V142H79V119H93.97l.03,3.96-10.02.02-.03,5.07,8.05-.02Z" />
-          </g>
-        </svg>
+  </div>
+  <div class="container-fluid">
 
-      </div>
-      <div class="container-fluid">
-
-        <div class="row justify-content-center">
-          <div class="col-sm-12 col-md-10 col-lg-8 text-center">
-            <h1 class="mb-5">
-              PRIME
-              <span class="d-block d-lg-inline">does not support Internet Explorer.</span>
-              <span class="d-block">Use Chrome, Firefox, Safari, or the lastest version of Edge.</span>
-            </h1>
-          </div>
-        </div>
-
+    <div class="row justify-content-center">
+      <div class="col-sm-12 col-md-10 col-lg-8 text-center">
+        <h1 class="mb-5">
+          PRIME
+          <span class="d-block d-lg-inline">does not support Internet Explorer.</span>
+          <span class="d-block">Use Chrome, Firefox, Safari, or the latest version of Edge.</span>
+        </h1>
       </div>
     </div>
 
-  </body>
+  </div>
+</div>
+
+</body>
 
 </html>
