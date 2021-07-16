@@ -1,9 +1,10 @@
 import { KeycloakOptions } from 'keycloak-angular';
+import { ConfigMap } from '@env/config-map.model';
 
-export interface AppEnvironment {
+export class AppEnvironment extends ConfigMap {
   production: boolean;
-  environmentName: string;
   version: string;
+  environmentName: 'prod' | 'test' | 'dev' | 'local';
   apiEndpoint: string;
   loginRedirectUrl: string;
   documentManagerUrl: string;
