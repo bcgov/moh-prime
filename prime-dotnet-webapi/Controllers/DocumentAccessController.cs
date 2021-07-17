@@ -35,7 +35,7 @@ namespace Prime.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetDocumentByAccessToken(Guid accessTokenId)
+        public async Task<ActionResult> GetDocumentByAccessToken(Guid accessTokenId)
         {
             var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
             if (documentAccessToken == null)
@@ -62,7 +62,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> DeleteDocumentAccessToken(Guid accessTokenId)
+        public async Task<ActionResult> DeleteDocumentAccessToken(Guid accessTokenId)
         {
             var documentAccessToken = await _documentAccessTokenService.GetDocumentAccessTokenAsync(accessTokenId);
 
