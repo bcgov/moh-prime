@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 
+import moment from 'moment';
+
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
@@ -36,6 +39,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
+  public organizationSitesExpiryDates: moment.Moment[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
@@ -172,7 +176,17 @@ export class SiteManagementPageComponent implements OnInit {
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
         ),
-        map((organizations: Organization[]) => this.organizations = organizations),
+        map((organizations: Organization[]) => {
+          this.organizationSitesExpiryDates = organizations[0].sites
+            .map(s =>
+              // Expiry based on business licence expiry date, unless
+              // not present or deferred, which defaults to using the
+              // submitted date of the site
+              DateUtils.toMoment(s.businessLicence.expiryDate) ??
+              DateUtils.toMoment(s.submittedDate).add(1, 'year')
+            );
+          return this.organizations = organizations;
+        }),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )
