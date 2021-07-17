@@ -50,16 +50,14 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   }
 
   public getBusinessLicence() {
-    this.siteResource.getBusinessLicenceDocumentToken(this.site.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+    this.siteResource.getBusinessLicenceDocumentToken(this.site.id, this.site.businessLicence.id)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public ngOnInit(): void {
     if (this.admin) {
       this.siteResource.getBusinessLicence(this.site.id)
-        .subscribe((businessLicences: BusinessLicence[]) => this.businessLicences = businessLicences)
+        .subscribe((businessLicences: BusinessLicence[]) => this.businessLicences = businessLicences);
     }
   }
 }

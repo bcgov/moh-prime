@@ -1,3 +1,5 @@
+import moment, { Moment } from 'moment';
+
 import { Party } from '@lib/models/party.model';
 import { Contact } from '@lib/models/contact.model';
 import { Address } from '@shared/models/address.model';
@@ -9,7 +11,7 @@ import { BusinessDay } from './business-day.model';
 import { BusinessLicence } from './business-licence.model';
 import { SiteStatusType } from '../enum/site-status.enum';
 
-export interface Site {
+export class Site {
   id?: number;
   organizationId: number;
   // Provision is aka the Signing Authority
@@ -41,6 +43,16 @@ export interface Site {
   adjudicator: Admin;
   status: SiteStatusType;
   pec: string;
+
+  public static getExpiryDate(site: Site): string | Moment | null {
+    // Expiry based on business licence expiry date, unless not present
+    // or deferred, which defaults to using the submitted date of the site
+    return (site.businessLicence?.expiryDate)
+      ? site.businessLicence?.expiryDate
+      : (site.submittedDate)
+        ? moment(site.submittedDate).add(1, 'year')
+        : null;
+  }
 }
 
 export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence'> {

@@ -6,12 +6,16 @@ export class DateUtils {
    * Check that a date is within a number of days before another date.
    */
   public static withinDaysBeforeDate(
-    date: string | Moment,
+    date: string | Moment | null,
     daysBeforeDate: number,
     todayOrOtherDate: string | Moment = moment()
-  ) {
-    const minusDaysBeforeDate = this.toMoment(date).subtract(daysBeforeDate, 'days');
-    return this.toMoment(todayOrOtherDate).isAfter(minusDaysBeforeDate);
+  ): boolean {
+    if (!date || !todayOrOtherDate) {
+      return false;
+    }
+
+    const minusDaysBeforeDate = moment(date).subtract(daysBeforeDate, 'days');
+    return moment(todayOrOtherDate).isAfter(minusDaysBeforeDate);
   }
 
   /**
@@ -38,14 +42,5 @@ export class DateUtils {
     endDate = endDate.clone().endOf('day').add(1, 'second');
 
     return date.isBetween(startDate, endDate);
-  }
-
-  /**
-   * @description
-   * When a date is not already a moment then convert it
-   * to a moment to allow for method chaining.
-   */
-  public static toMoment(date: string | Moment): Moment {
-    return (typeof date === 'string') ? moment(date) : date;
   }
 }

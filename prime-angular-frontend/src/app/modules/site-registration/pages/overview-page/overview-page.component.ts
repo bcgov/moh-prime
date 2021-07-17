@@ -3,7 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Observable, Subscription, EMPTY } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap, map } from 'rxjs/operators';
+
+import { Moment } from 'moment';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -26,6 +28,7 @@ export class OverviewPageComponent implements OnInit {
   public site: Site;
   public organization: Organization;
   public showSubmissionAction: boolean;
+  public siteExpiryDate: string | Moment | null;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
 
@@ -93,6 +96,7 @@ export class OverviewPageComponent implements OnInit {
       this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
+      this.siteExpiryDate = Site.getExpiryDate(this.site);
       this.showSubmissionAction = !this.site.submittedDate;
     }
   }
