@@ -25,7 +25,7 @@ import { DemographicForm } from './demographic-form.model';
       </app-enrollee-property>
 
       <app-enrollee-property title="Middle Name">
-        {{ demographic?.middleName | replace: demographic?.firstName : '' | default }}
+        {{ demographic?.givenNames | replace: demographic?.firstName : '' | default }}
       </app-enrollee-property>
 
       <app-enrollee-property title="Last Name">

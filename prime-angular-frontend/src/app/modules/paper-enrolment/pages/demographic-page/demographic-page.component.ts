@@ -82,12 +82,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             smsPhone
           } = enrollee;
 
-          const middleName = givenNames.replace(firstName, '').trim();
-
           // Attempt to patch the form if not already patched
           this.formState.patchValue({
             firstName,
-            middleName,
+            givenNames,
             lastName,
             dateOfBirth,
             physicalAddress,
