@@ -6,12 +6,12 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { OboSitesFormModel } from './obo-sites-form.model';
+import { OboSitesForm } from './obo-sites-form.model';
 
 @Component({
   selector: 'app-obo-sites-overview',
   template: `
-    <app-page-section *ngIf="oboSiteForm?.oboSites?.length">
+    <app-page-section *ngIf="oboSites?.oboSites?.length">
 
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
@@ -25,7 +25,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
 
       <ng-container *ngFor="let careSetting of enrolleeCareSettings">
 
-        <ng-container *ngFor="let oboSite of oboSiteForm?.oboSites">
+        <ng-container *ngFor="let oboSite of oboSites?.oboSites">
           <ng-container *ngIf="oboSite?.careSettingCode === careSetting?.careSettingCode">
             <app-enrollee-property title="Care Setting"
                                    [makeBold]="true">
@@ -88,7 +88,7 @@ import { OboSitesFormModel } from './obo-sites-form.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OboSitesOverviewComponent extends AbstractOverview {
-  @Input() public oboSiteForm: OboSitesFormModel;
+  @Input() public oboSites: OboSitesForm;
   @Input() public enrolleeCareSettings: CareSetting[];
   public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;

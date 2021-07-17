@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { EMPTY, forkJoin, pipe, Subscription } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -12,7 +12,6 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
