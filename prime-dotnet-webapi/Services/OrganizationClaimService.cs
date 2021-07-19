@@ -40,14 +40,21 @@ namespace Prime.Services
 
             _context.OrganizationClaims.Remove(claim);
             int numAffected = await _context.SaveChangesAsync();
-            return (numAffected == 1);
+            return numAffected == 1;
         }
 
-        public Task<OrganizationClaim> GetOrganizationClaimAsync(int organizationId)
+        public Task<OrganizationClaim> GetOrganizationClaimAsync(int claimId)
+        {
+            return _context.OrganizationClaims
+                .SingleOrDefaultAsync(oc => oc.Id == claimId);
+        }
+
+        public Task<OrganizationClaim> GetOrganizationClaimByOrgIdAsync(int organizationId)
         {
             return _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
+
         public async Task<int> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
         {
             var organizationCLaim = new OrganizationClaim

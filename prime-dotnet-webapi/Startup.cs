@@ -54,6 +54,7 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // The services are ordered alphabetically assuming the word "Service" is not included
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();

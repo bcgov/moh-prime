@@ -151,7 +151,7 @@ namespace Prime.Controllers
                 return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
             }
 
-            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organization.Id);
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organization.Id);
             if (orgClaim != null)
             {
                 return BadRequest("Could not claim an organization which has already been claimed.");
@@ -188,7 +188,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetOrganizationClaimByOrgId(int organizationId)
         {
-            var claim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
+            var claim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organizationId);
             if (claim == null)
             {
                 return NotFound("No claim by a SigningAuthority exists for given Organization.");
@@ -208,8 +208,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
         {
-            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(organizationId);
-            if (orgClaim == null || (orgClaim.Id != claimId))
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimId);
+            if (orgClaim == null || (orgClaim.OrganizationId != organizationId))
             {
                 return NotFound("Cannot locate Claim for given Organization.");
             }
