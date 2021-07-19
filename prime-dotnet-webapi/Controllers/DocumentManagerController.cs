@@ -74,7 +74,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpGet("{documentGuid}", Name = nameof(GetFileFromDocumentManager))]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetFileFromDocumentManager(Guid documentGuid)
+        public async Task<ActionResult> GetFileFromDocumentManager(Guid documentGuid)
         {
             var token = await _client.CreateDownloadTokenAsync(documentGuid);
 

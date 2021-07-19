@@ -45,24 +45,12 @@ RUN ng build --prod
 ########################################
 ### Stage 2 - Production environment ###
 ########################################
-FROM registry.redhat.io/rhel8/nginx-118
+FROM public.ecr.aws/bitnami/nginx:1.20
 ARG SVC_NAME
 ENV SVC_NAME ${SVC_NAME}
-USER 0
-# COPY --from=build-deps /usr/src/app /opt/app-root/
 
-COPY --from=build-deps /usr/src/app/nginx.conf /etc/nginx/nginx.conf
-# COPY --from=build-deps /usr/src/app/dist/angular-frontend /usr/share/nginx/html
 COPY --from=build-deps /usr/src/app/dist/angular-frontend /opt/app-root/src
-COPY --from=build-deps /usr/src/app/openshift.nginx.conf /tmp/openshift.nginx.conf 
-RUN sed s/\$SVC_NAME/$SVC_NAME/g /tmp/openshift.nginx.conf > /etc/nginx/conf.d/prime.conf && \
-    chown -R 1001200000:1001200000 /etc/nginx /opt/app-root/ 
 
-# Create symlinks to redirect nginx logs to stdout and stderr
-RUN bash -xeu -c 'mkdir -p /var/log/nginx'
-RUN  ln -sf /dev/stdout /var/log/nginx/access.log \
-  && ln -sf /dev/stderr /var/log/nginx/error.log
-
-USER 1001200000
+# USER 1001200000
 EXPOSE 80 8080 4200:8080
 CMD ["sh","-c","nginx -g 'daemon off;'"]
