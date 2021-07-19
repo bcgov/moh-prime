@@ -71,36 +71,32 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   protected patchForm(): void {
   }
 
-  protected performSubmission(): Observable<number> {
-    return this.authService.getUser$()
-      .pipe(
-        exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
-        exhaustMap((party: Party) => {
-          if (this.isClaimExistingOrg) {
-            return this.organizationResource.claimOrganization(party.id, this.formState.json)
+  protected performSubmission(): Observable<boolean> {
+    if (this.isClaimExistingOrg) {
+      return this.authService.getUser$()
+        .pipe(
+          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
+          exhaustMap((party: Party) => this.organizationResource.claimOrganization(party.id, this.formState.json)
               .pipe(
+                map((organizationId: number) => !!organizationId),
                 catchError((error, caught) => {
                   this.hasOrgClaimError = true;
-                  return of(0);
+                  return of(false);
                 })
-            );
-          }
-          return this.organizationResource.createOrganization(party.id)
-            .pipe(
-              map((org: Organization) => org.id)
-            );
-        })
-      )
+          ))
+        )
+    }
+    return of(true);
   }
 
-  protected afterSubmitIsSuccessful(organizationId: number): void {
-    if (!organizationId) {
+  protected afterSubmitIsSuccessful(success: boolean): void {
+    if (!success) {
       return;
     }
     const routePath = this.isClaimExistingOrg
-      ? ['../', 0, SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION]
-      : ['../', organizationId, SiteRoutes.ORGANIZATION_NAME];
-    this.routeUtils.routeRelativeTo(routePath);
+      ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
+      : SiteRoutes.ORGANIZATION_NAME;
+    this.routeUtils.routeRelativeTo(['../', 0, routePath]);
   }
 
   private toggleClaimFormValidators(isOrgClaim: boolean): void {

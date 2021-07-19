@@ -73,7 +73,7 @@ const routes: Routes = [
                 path: SiteRoutes.ORGANIZATION_CLAIM,
                 component: OrganizationClaimPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Create or Claim Organization' }
+                data: { title: 'Claim Organization' }
               },
               {
                 path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
