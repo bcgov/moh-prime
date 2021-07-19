@@ -138,9 +138,11 @@ export class OrganizationGuard extends BaseGuard {
         || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION))) {
       return true;
     }
-    const destPath = hasOrgClaim ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION :
-      party ? SiteRoutes.ORGANIZATION_CLAIM
-            : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
+    const destPath = hasOrgClaim
+      ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
+      : party
+        ? SiteRoutes.ORGANIZATION_CLAIM
+        : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
 
     // During initial registration the ID will be set to zero indicating the
     // organization does not exist
