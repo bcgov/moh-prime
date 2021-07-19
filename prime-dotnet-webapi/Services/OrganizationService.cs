@@ -63,17 +63,10 @@ namespace Prime.Services
                         o => o.Sites.Select(s => s.PEC))
                     .Containing(searchOptions.TextSearch)
                 )
+                .Include(o => o.Claims)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider, new { careSettingCode = searchOptions.CareSettingCode })
                 .DecompileAsync()
                 .ToListAsync();
-
-            results.ForEach(r =>
-            {
-                var task = _organizationClaimService.HasClaimAsync(r.Id);
-                // TODO: Better way to address "A second operation started on this context before a previous operation completed." error
-                r.HasClaim = task.Result;
-                //                r.IsUnderReview = await _organizationClaimService.IsOrganizationUnderReviewAsync(r.Id);
-            });
 
             return results
                 .Select(r => new OrganizationSearchViewModel
@@ -101,8 +94,6 @@ namespace Prime.Services
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
-            // TODO: Simplify using Linq?
-            organization.HasClaim = await _organizationClaimService.HasClaimAsync(organizationId);
             return organization;
         }
 
@@ -310,7 +301,8 @@ namespace Prime.Services
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
-                        .ThenInclude(pa => pa.Address);
+                        .ThenInclude(pa => pa.Address)
+                .Include(o => o.Claims);
         }
 
         public async Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)

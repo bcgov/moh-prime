@@ -11,6 +11,13 @@ namespace Prime.Models
     [Table("Organization")]
     public class Organization : BaseAuditable, IAgreeable
     {
+        public Organization()
+        {
+            // Initialize collections to prevent null exception on computed properties
+            // like `HasClaim`
+            this.Claims = new List<OrganizationClaim>();
+        }
+
         public const int DISPLAY_OFFSET = 1000;
 
         [Key]
@@ -36,6 +43,9 @@ namespace Prime.Models
         [JsonIgnore]
         public ICollection<Agreement> Agreements { get; set; }
 
+        [JsonIgnore]
+        public ICollection<OrganizationClaim> Claims { get; set; }
+
         [NotMapped]
         [Computed]
         public int DisplayId
@@ -55,9 +65,11 @@ namespace Prime.Models
             get => Sites?.Any(s => s.SubmittedDate.HasValue) ?? false;
         }
 
-        // TODO: Way to not duplicate in Organization and OrganizationListViewModel?
         [NotMapped]
-        public bool HasClaim { get; set; }
-
+        [Computed]
+        public bool HasClaim
+        {
+            get => Claims.Any();
+        }
     }
 }
