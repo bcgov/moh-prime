@@ -24,7 +24,6 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
 import { Organization } from '@registration/shared/models/organization.model';
-import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
 
 @UntilDestroy()
