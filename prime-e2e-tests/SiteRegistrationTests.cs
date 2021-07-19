@@ -46,10 +46,6 @@ namespace TestPrimeE2E.SiteRegistration
             }
             else
             {
-                Assert.AreEqual("Create or Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
-                // Choosing to create organization
-                ClickButton("Continue");
-
                 //Signing Authority Information
                 Assert.AreEqual("PharmaNet Site Registration", _driver.FindPatiently("//h1[@class='mb-4']").Text);
                 // Wait for page to fully load
@@ -62,6 +58,11 @@ namespace TestPrimeE2E.SiteRegistration
                 TypeIntoField("Fax (Optional)", "5555555555");
                 _driver.TakeScreenshot("Signing_Authority_Information");
                 ClickButton("Save and Continue");
+
+                _driver.FindTextPatiently("or claim an existing Organization");
+                Assert.AreEqual("Create or Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
+                // Choosing to create organization
+                ClickButton("Continue");
 
                 //Organization Information
                 TypeIntoField("Organization Name (Legal Entity Operating Site)", "ROGERS");

@@ -46,6 +46,17 @@ namespace TestPrimeE2E
         }
 
 
+        /// <summary>
+        /// This method is useful for waiting until a page fully loads before performing assertions,
+        /// filling fields, selecting items, etc.
+        /// </summary>
+        // TODO: Don't duplicate code shared with FindPatiently method
+        public static IWebElement FindTextPatiently(this IWebDriver driver, string someText)
+        {
+            return FindPatiently(driver, $"//*[contains(text(), '{someText}')]");
+        }
+
+
         public static IWebElement FindPossibleStaleById(this IWebDriver driver, string id)
         {
             // TODO: Eliminate need for Sleep
