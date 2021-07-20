@@ -25,8 +25,8 @@ export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
     private utilsService: UtilsService
   ) { }
 
-  public onSaveDocuments(documentGuids: string[]) {
-    const enrolleeId = this.route.snapshot.params.id;
+  public onSaveDocuments(documentGuids: string[]): void {
+    const enrolleeId = +this.route.snapshot.params.id;
     const documentGuids$ = documentGuids.map(guid =>
       this.enrolmentResource.createEnrolleeAdjudicationDocument(enrolleeId, guid));
 
@@ -37,25 +37,25 @@ export class EnrolleeAdjudicatorDocumentsComponent implements OnInit {
       });
   }
 
-  public onGetDocumentByGuid(documentId: number) {
-    this.enrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(this.route.snapshot.params.id, documentId)
+  public onGetDocumentByGuid(documentId: number): void {
+    this.enrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(+this.route.snapshot.params.id, documentId)
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }
 
-  public onDeleteDocumentById(documentId: number) {
-    const enrolleeId = this.route.snapshot.params.id;
+  public onDeleteDocumentById(documentId: number): void {
+    const enrolleeId = +this.route.snapshot.params.id;
     this.busy = this.enrolmentResource.deleteEnrolleeAdjudicationDocument(enrolleeId, documentId)
       .subscribe((document: EnrolleeAdjudicationDocument) => this.getDocuments(enrolleeId));
   }
 
   ngOnInit(): void {
-    this.getDocuments(this.route.snapshot.params.id);
-    this.route.params.subscribe(params => this.getDocuments(params.id));
+    this.getDocuments(+this.route.snapshot.params.id);
+    this.route.params.subscribe(params => this.getDocuments(+params.id));
   }
 
-  private getDocuments(enrolleeId: number) {
+  private getDocuments(enrolleeId: number): void {
     this.documents$ = this.enrolmentResource
       .getEnrolleeAdjudicationDocuments(enrolleeId);
   }

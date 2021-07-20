@@ -24,9 +24,9 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
     private utilsService: UtilsService
   ) { }
 
-  public onSaveDocuments(documentGuids: string[]) {
+  public onSaveDocuments(documentGuids: string[]): void {
     const documentGuids$ = documentGuids.map(guid =>
-      this.siteResource.createSiteAdjudicationDocument(this.route.snapshot.params.sid, guid));
+      this.siteResource.createSiteAdjudicationDocument(+this.route.snapshot.params.sid, guid));
 
     forkJoin(documentGuids$)
       .subscribe(val => {
@@ -35,15 +35,15 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
       });
   }
 
-  public onGetDocumentByGuid(documentId: number) {
-    this.siteResource.getSiteAdjudicationDocumentDownloadToken(this.route.snapshot.params.sid, documentId)
+  public onGetDocumentByGuid(documentId: number): void {
+    this.siteResource.getSiteAdjudicationDocumentDownloadToken(+this.route.snapshot.params.sid, documentId)
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }
 
-  public onDeleteDocumentById(documentId: number) {
-    this.busy = this.siteResource.deleteSiteAdjudicationDocument(this.route.snapshot.params.sid, documentId)
+  public onDeleteDocumentById(documentId: number): void {
+    this.busy = this.siteResource.deleteSiteAdjudicationDocument(+this.route.snapshot.params.sid, documentId)
       .subscribe((document: SiteAdjudicationDocument) => this.getDocuments());
   }
 
@@ -52,7 +52,7 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
     this.route.params.subscribe(() => this.getDocuments());
   }
 
-  private getDocuments() {
-    this.documents$ = this.siteResource.getSiteAdjudicationDocuments(this.route.snapshot.params.sid);
+  private getDocuments(): void {
+    this.documents$ = this.siteResource.getSiteAdjudicationDocuments(+this.route.snapshot.params.sid);
   }
 }
