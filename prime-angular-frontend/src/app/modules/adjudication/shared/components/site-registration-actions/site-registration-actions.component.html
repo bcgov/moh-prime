@@ -46,6 +46,13 @@
       <mat-icon>lock_open</mat-icon>
       <span>Request Changes</span>
     </button>
+    <button mat-menu-item
+            [disabled]="!(Role.VIEW_SITE | inRole)"
+            (click)="onToggleFlagSite()">
+      <mat-icon>flag</mat-icon>
+      <span *ngIf="siteRegistration?.flagged">Unflag Site</span>
+      <span *ngIf="!siteRegistration?.flagged">Flag Site</span>
+    </button>
 
     <mat-divider></mat-divider>
 

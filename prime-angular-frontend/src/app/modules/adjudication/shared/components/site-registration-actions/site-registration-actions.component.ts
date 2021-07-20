@@ -20,6 +20,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
   @Output() public enableEditing: EventEmitter<number>;
+  @Output() public toggleFlagSite: EventEmitter<{ siteId: number, flagged: boolean }>;
 
   public Role = Role;
   public SiteStatusType = SiteStatusType;
@@ -35,6 +36,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
+    this.toggleFlagSite = new EventEmitter<{ siteId: number, flagged: boolean }>();
   }
 
   public onApprove(): void {
@@ -69,6 +71,16 @@ export class SiteRegistrationActionsComponent implements OnInit {
         `PRIME Site Registration - ${this.siteRegistration.name}`,
         `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`
       );
+    }
+  }
+
+  public onToggleFlagSite() {
+    console.log("FLAG");
+    if (this.permissionService.hasRoles(Role.VIEW_SITE)) {
+      this.toggleFlagSite.emit({
+        siteId: this.siteRegistration.siteId,
+        flagged: !this.siteRegistration.flagged
+      })
     }
   }
 
