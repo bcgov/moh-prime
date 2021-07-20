@@ -80,7 +80,8 @@
       </ng-container>
     </section>
 
-    <section class="mb-4">
+    <section class="mb-4"
+             *ngIf="!deferredLicenceToggle?.checked">
 
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Business Licence Expiry Date</ng-container>

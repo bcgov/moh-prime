@@ -284,12 +284,24 @@ export class SiteResource {
       );
   }
 
-  public getBusinessLicence(siteId: number): Observable<BusinessLicence | BusinessLicence[]> {
+  public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
     return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licences?latest=true`)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getBusinessLicences(siteId: number): Observable<BusinessLicence[]> {
+    return this.apiResource.get<BusinessLicence[]>(`sites/${siteId}/business-licences`)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licences could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicences error has occurred: ', error);
           throw error;
         })

@@ -68,7 +68,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
+    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_REVIEW);
   }
 
   public downloadBusinessLicence(event: Event): void {

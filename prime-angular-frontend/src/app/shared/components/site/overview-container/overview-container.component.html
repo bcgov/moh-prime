@@ -93,18 +93,38 @@
       {{ site.businessLicence.deferredLicenceReason | default }}
     </app-enrollee-property>
 
-    <ng-container *ngIf="site.businessLicence?.businessLicenceDocument">
+    <ng-container *ngIf="site.businessLicence?.businessLicenceDocument && !admin; else businessLicenceListView">
+      <app-enrollee-property title="Expiry">
+        {{ site.businessLicence?.expiryDate | formatDate | default }}
+      </app-enrollee-property>
 
       <app-enrollee-property title="Filename">
         <button mat-stroked-button
                 color="primary"
-                (click)="getBusinessLicence()">
+                (click)="getBusinessLicence(site.businessLicence.id)">
           <mat-icon class="mr-1">attachment</mat-icon>
           {{ site.businessLicence?.businessLicenceDocument?.filename | default }}
         </button>
       </app-enrollee-property>
 
     </ng-container>
+
+    <ng-template #businessLicenceListView>
+      <ng-container *ngFor="let businessLicence of businessLicences">
+        <app-enrollee-property title="Expiry">
+          {{ businessLicence?.expiryDate | formatDate | default }}
+        </app-enrollee-property>
+
+        <app-enrollee-property title="Filename">
+          <button mat-stroked-button
+                  color="primary"
+                  (click)="getBusinessLicence(businessLicence.id)">
+            <mat-icon class="mr-1">attachment</mat-icon>
+            {{ businessLicence?.businessLicenceDocument?.filename | default }}
+          </button>
+        </app-enrollee-property>
+      </ng-container>
+    </ng-template>
   </app-overview-section>
 
   <app-overview-section title="Site Address"

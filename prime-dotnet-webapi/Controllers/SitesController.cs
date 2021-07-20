@@ -329,7 +329,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
             site = await _siteService.SubmitRegistrationAsync(siteId);
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
@@ -441,7 +441,10 @@ namespace Prime.Controllers
                 return BadRequest("Business Licence Document could not be created; network error or upload is already submitted");
             }
 
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
+            if (site.SubmittedDate != null)
+            {
+                await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId);
+            }
 
             // Send an notifying email to the adjudicator
             // if the site is calimed by a adjudicator, is a community pharmacy,

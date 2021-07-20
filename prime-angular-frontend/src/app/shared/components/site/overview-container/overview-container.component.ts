@@ -21,10 +21,10 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
   @Input() public admin: boolean;
+  @Input() public businessLicences: BusinessLicence[];
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
-  public businessLicences: BusinessLicence[];
 
   constructor(
     protected route: ActivatedRoute,
@@ -35,6 +35,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     super(route, router);
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
     this.admin = false;
+    this.businessLicences = [];
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -49,15 +50,11 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public getBusinessLicence() {
-    this.siteResource.getBusinessLicenceDocumentToken(this.site.id, this.site.businessLicence.id)
+  public getBusinessLicence(businessLicenceId: number) {
+    this.siteResource.getBusinessLicenceDocumentToken(this.site.id, businessLicenceId)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  public ngOnInit(): void {
-    if (this.admin) {
-      this.siteResource.getBusinessLicence(this.site.id)
-        .subscribe((businessLicences: BusinessLicence[]) => this.businessLicences = businessLicences);
-    }
-  }
+  public ngOnInit(): void { }
+
 }
