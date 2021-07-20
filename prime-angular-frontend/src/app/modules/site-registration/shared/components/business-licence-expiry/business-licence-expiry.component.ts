@@ -9,9 +9,5 @@ import { FormGroup } from '@angular/forms';
 export class BusinessLicenceExpiryComponent implements OnInit {
   @Input() public form: FormGroup;
 
-  ngOnInit(): void {
-
-  }
-
-
+  ngOnInit(): void { }
 }
