@@ -50,8 +50,7 @@
             [disabled]="!(Role.VIEW_SITE | inRole)"
             (click)="onToggleFlagSite()">
       <mat-icon>flag</mat-icon>
-      <span *ngIf="siteRegistration?.flagged">Unflag Site</span>
-      <span *ngIf="!siteRegistration?.flagged">Flag Site</span>
+      <span>{{siteRegistration?.flagged ? 'Unflag' : 'Flag'}} Site</span>
     </button>
 
     <mat-divider></mat-divider>
