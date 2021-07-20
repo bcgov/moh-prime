@@ -58,7 +58,7 @@
             scope="col"> Flagged </th>
         <td mat-cell
             *matCellDef="let row;">
-          <span *ngIf="row?.flagged">Editable <mat-icon>flag</mat-icon></span>
+          <span *ngIf="row?.flagged" class="flag">Editable <mat-icon>flag</mat-icon></span>
         </td>
       </ng-container>
 
