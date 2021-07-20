@@ -75,7 +75,6 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   public onToggleFlagSite() {
-    console.log("FLAG");
     if (this.permissionService.hasRoles(Role.VIEW_SITE)) {
       this.toggleFlagSite.emit({
         siteId: this.siteRegistration.siteId,
