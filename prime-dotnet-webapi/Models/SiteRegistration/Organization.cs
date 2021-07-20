@@ -15,7 +15,7 @@ namespace Prime.Models
         {
             // Initialize collections to prevent null exception on computed properties
             // like `HasClaim`
-            this.Claims = new List<OrganizationClaim>();
+            Claims = new List<OrganizationClaim>();
         }
 
         public const int DISPLAY_OFFSET = 1000;

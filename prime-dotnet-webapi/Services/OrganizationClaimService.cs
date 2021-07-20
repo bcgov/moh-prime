@@ -43,15 +43,15 @@ namespace Prime.Services
             return numAffected == 1;
         }
 
-        public Task<OrganizationClaim> GetOrganizationClaimAsync(int claimId)
+        public async Task<OrganizationClaim> GetOrganizationClaimAsync(int claimId)
         {
-            return _context.OrganizationClaims
+            return await _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.Id == claimId);
         }
 
-        public Task<OrganizationClaim> GetOrganizationClaimByOrgIdAsync(int organizationId)
+        public async Task<OrganizationClaim> GetOrganizationClaimByOrgIdAsync(int organizationId)
         {
-            return _context.OrganizationClaims
+            return await _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
 
