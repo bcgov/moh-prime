@@ -437,7 +437,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -451,7 +452,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 }

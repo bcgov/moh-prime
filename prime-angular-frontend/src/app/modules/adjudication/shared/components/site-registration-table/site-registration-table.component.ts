@@ -36,6 +36,7 @@ export class SiteRegistrationTableComponent implements OnInit {
       'organizationName',
       'signingAuthority',
       'siteDoingBusinessAs',
+      'flagged',
       'submissionDate',
       'assignedTo',
       'state',
