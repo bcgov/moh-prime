@@ -16,6 +16,7 @@ import { LocalStorageService } from '@core/services/local-storage.service';
 })
 export class SearchFormComponent implements OnInit {
   @Input() public hideStatus: boolean;
+  @Input() public localStoragePrefix: string;
   @Output() public search: EventEmitter<string>;
   @Output() public filter: EventEmitter<EnrolmentStatusEnum>;
   @Output() public refresh: EventEmitter<void>;
@@ -37,8 +38,8 @@ export class SearchFormComponent implements OnInit {
     this.filter = new EventEmitter<EnrolmentStatusEnum>();
     this.refresh = new EventEmitter<void>();
 
-    this.textSearchKey = 'search-form-textSearch';
-    this.statusCodeKey = 'search-form-statusCode';
+    this.textSearchKey = `${this.localStoragePrefix}-search-form-textSearch`;
+    this.statusCodeKey = `${this.localStoragePrefix}-search-form-statusCode`;
   }
 
   public get textSearch(): FormControl {
