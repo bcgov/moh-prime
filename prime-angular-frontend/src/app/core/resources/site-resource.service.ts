@@ -412,10 +412,8 @@ export class SiteResource {
   }
 
   public flagSite(siteId: number, flagged: boolean): Observable<Site> {
-    const url = `sites/${siteId}/flag`;
-    const request$ = (flagged)
-      ? this.apiResource.put<Site>(url, null)
-      : this.apiResource.delete<Site>(url);
+    const url = `sites/${siteId}/flag/${flagged}`;
+    const request$ = this.apiResource.put<Site>(url, null);
 
     return request$
       .pipe(
@@ -423,7 +421,7 @@ export class SiteResource {
         map((site: Site) => site),
         tap((site: Site) => this.logger.info('UPDATED SITE', site)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site could not be flagged');
+          this.toastService.openErrorToast('Site flag could not be updated');
           this.logger.error('[Site] SiteResource::flagSite error has occurred:'
             , error);
           throw error;

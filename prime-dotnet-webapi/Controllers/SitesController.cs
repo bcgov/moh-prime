@@ -1113,42 +1113,20 @@ namespace Prime.Controllers
         /// for an adjudicator to come back to this site
         /// </summary>
         /// <param name="siteId"></param>
-        [HttpPut("{siteId}/flag", Name = nameof(FlagSite))]
+        /// <param name="flagged"></param>
+        [HttpPut("{siteId}/flag/{flagged}", Name = nameof(FlagSite))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult> FlagSite(int siteId)
-        {
-            return await FlagSiteInternal(siteId, true);
-        }
-
-        // DELETE: api/sites/5/flag
-        /// <summary>
-        /// Removes a site's flag, indicating the adjudicator
-        /// is done working on it/has no need for the site flagged
-        /// </summary>
-        /// <param name="siteId"></param>
-        [HttpDelete("{siteId}/flag", Name = nameof(RemoveFlagSite))]
-        [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult> RemoveFlagSite(int siteId)
-        {
-            return await FlagSiteInternal(siteId, false);
-        }
-
-        private async Task<ActionResult> FlagSiteInternal(int siteId, bool flagged)
+        public async Task<ActionResult> FlagSite(int siteId, bool flagged)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            // run a service which talks to the db and pass in the flagged var?
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
         }
