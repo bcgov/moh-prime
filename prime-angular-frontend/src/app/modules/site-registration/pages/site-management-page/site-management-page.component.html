@@ -75,9 +75,13 @@
                         }
                       }">
         </ng-container>
-        <ng-container *ngIf="isApproved(site)"
+        <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
                       [ngTemplateOutlet]="success_notification"
                       [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">
+        </ng-container>
+        <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getRenewalRequiredSiteNotificationProperties(organization.id, site) }">
         </ng-container>
       </app-summary-card>
 

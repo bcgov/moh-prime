@@ -54,22 +54,26 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onSubmit(): void {
-    const payload = this.siteService.site;
-    const data: DialogOptions = {
-      title: 'Save Site',
-      message: 'When your site is saved, it will be submitted for review.',
-      actionText: 'Save Site'
-    };
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? this.siteResource.submitSite(payload)
-            : EMPTY
+    if (!this.site.approvedDate) {
+      const payload = this.siteService.site;
+      const data: DialogOptions = {
+        title: 'Save Site',
+        message: 'When your site is saved, it will be submitted for review.',
+        actionText: 'Save Site'
+      };
+      this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result: boolean) =>
+            (result)
+              ? this.siteResource.submitSite(payload)
+              : EMPTY
+          )
         )
-      )
-      .subscribe(() => this.nextRoute());
+        .subscribe(() => this.nextRoute());
+    } else {
+      this.nextRoute();
+    }
   }
 
   public onRoute(routePath: string): void {
@@ -83,7 +87,7 @@ export class OverviewPageComponent implements OnInit {
   public nextRoute(): void {
     this.busy = this.isOrgAgreementRequired$()
       .subscribe((wasRequired: boolean) =>
-        (wasRequired)
+        (wasRequired || this.site.approvedDate != null)
           ? this.routeUtils.routeRelativeTo(SiteRoutes.NEXT_STEPS)
           : this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT])
       );
@@ -96,8 +100,8 @@ export class OverviewPageComponent implements OnInit {
       this.showSubmissionAction = false;
     } else {
       this.site = this.siteService.site;
-      this.siteExpiryDate = Site.getExpiryDate(this.site);
-      this.showSubmissionAction = !this.site.submittedDate;
+      this.siteExpiryDate = this.site.approvedDate ? Site.getExpiryDate(this.site) : null;
+      this.showSubmissionAction = !this.site.submittedDate || this.site.approvedDate != null;
     }
   }
 

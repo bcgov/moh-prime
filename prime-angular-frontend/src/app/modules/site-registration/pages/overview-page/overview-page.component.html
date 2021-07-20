@@ -41,7 +41,7 @@
         <button mat-flat-button
                 color="primary"
                 [disabled]="!accept.checked"
-                (click)="onSubmit()">Save Site Information
+                (click)="onSubmit()"> {{ site.approvedDate ? 'Submit Site For Renewal' : 'Save Site Information' }}
         </button>
       </div>
     </div>

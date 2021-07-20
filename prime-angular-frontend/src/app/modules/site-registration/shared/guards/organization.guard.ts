@@ -197,6 +197,7 @@ export class OrganizationGuard extends BaseGuard {
       if (organization.hasAcceptedAgreement) {
         allowedRoutes.push(SiteRoutes.SITE_REVIEW);
         allowedRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
+        allowedRoutes.push(SiteRoutes.NEXT_STEPS);
       }
     }
 

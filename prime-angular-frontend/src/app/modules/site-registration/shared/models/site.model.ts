@@ -44,7 +44,7 @@ export class Site {
   status: SiteStatusType;
   pec: string;
 
-  public static getExpiryDate(site: Site): string | Moment | null {
+  public static getExpiryDate(site: Site | SiteListViewModel): string | Moment | null {
     // Expiry based on business licence expiry date, unless not present
     // or deferred, which defaults to using the submitted date of the site
     return (site.businessLicence?.expiryDate)

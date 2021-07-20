@@ -73,8 +73,8 @@
                         (route)="onRouteRelative($event)">
 
     <button *ngIf="site.submittedDate && site.approvedDate && !admin"
-            mat-stroked-button
-            color="danger"
+            mat-flat-button
+            color="primary"
             class="mb-4"
             (click)="routeRelativeTo(['./', SiteRoutes.BUSINESS_LICENCE_RENEWAL])">
       Update Business Licence

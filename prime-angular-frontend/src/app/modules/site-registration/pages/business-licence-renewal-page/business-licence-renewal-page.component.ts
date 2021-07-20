@@ -13,8 +13,7 @@ import { SiteFormStateService } from '@registration/shared/services/site-form-st
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { DocumentUploadComponent, BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { Observable, concat } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-page-form-state.class';
 
 @Component({
@@ -90,8 +89,6 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    // this.siteFormStateService.setForm(site, true);
-    // this.formState.form.markAsPristine();
   }
 
   protected initForm(): void {
