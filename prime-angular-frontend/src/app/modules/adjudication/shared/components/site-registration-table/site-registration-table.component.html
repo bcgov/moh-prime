@@ -52,6 +52,16 @@
             *matCellDef="let row;"> {{ row.siteDoingBusinessAs | default }} </td>
       </ng-container>
 
+      <ng-container matColumnDef="flagged">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col"> Flagged </th>
+        <td mat-cell
+            *matCellDef="let row;">
+          <span *ngIf="row?.flagged">Editable <mat-icon>flag</mat-icon></span>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="submissionDate">
         <th mat-header-cell
             *matHeaderCellDef
