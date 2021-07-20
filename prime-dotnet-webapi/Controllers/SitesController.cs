@@ -1150,7 +1150,7 @@ namespace Prime.Controllers
             }
             // run a service which talks to the db and pass in the flagged var?
             await _siteService.UpdateSiteFlag(siteId, flagged);
-            return NoContent();
+            return Ok(site);
         }
     }
 }
