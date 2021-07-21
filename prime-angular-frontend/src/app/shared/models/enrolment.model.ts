@@ -55,6 +55,8 @@ export interface HttpEnrollee extends Enrollee {
   adjudicator: Admin;
   base64QRCode: string;
   gpid: string;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }
 
 /**
@@ -104,6 +106,8 @@ export interface Enrolment {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }
 
 export interface EnrolleeListViewModel {
