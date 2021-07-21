@@ -78,7 +78,7 @@ export class SearchFormComponent implements OnInit {
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
       .subscribe((search: string) => {
-        this.localStorage.set(this.textSearchKey, search);
+        this.localStorage.set(this.textSearchKey, search || '');
         this.search.emit(search || null);
       });
 
