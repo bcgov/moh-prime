@@ -27,6 +27,7 @@ export class SearchFormComponent implements OnInit {
   private textSearchKey: string;
   private statusCodeKey: string;
 
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -37,9 +38,6 @@ export class SearchFormComponent implements OnInit {
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<EnrolmentStatusEnum>();
     this.refresh = new EventEmitter<void>();
-
-    this.textSearchKey = `${this.localStoragePrefix}-search-form-textSearch`;
-    this.statusCodeKey = `${this.localStoragePrefix}-search-form-statusCode`;
   }
 
   public get textSearch(): FormControl {
@@ -55,6 +53,9 @@ export class SearchFormComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.textSearchKey = `${this.localStoragePrefix}-search-form-textSearch`;
+    this.statusCodeKey = `${this.localStoragePrefix}-search-form-statusCode`;
+
     this.createFormInstance();
     this.initForm();
   }
@@ -71,8 +72,6 @@ export class SearchFormComponent implements OnInit {
 
     if (queryParams.textSearch || queryParams.statusCode) {
       this.form.patchValue(queryParams);
-    } else {
-      this.form.patchValue({ textSearch: this.localStorage.get(this.textSearchKey), statusCode: this.localStorage.getInteger(this.statusCodeKey) });
     }
 
     this.textSearch.valueChanges
@@ -87,8 +86,12 @@ export class SearchFormComponent implements OnInit {
       .pipe(debounceTime(500))
       // Passing `null` removes the query parameter from the URL
       .subscribe((enrolmentStatus: EnrolmentStatusEnum) => {
-        this.localStorage.set(this.statusCodeKey, enrolmentStatus.toString());
+        this.localStorage.set(this.statusCodeKey, enrolmentStatus?.toString());
         this.filter.emit(enrolmentStatus || null);
       });
+
+    if (!queryParams.textSearch && !queryParams.statusCode) {
+      this.form.patchValue({ textSearch: this.localStorage.get(this.textSearchKey), statusCode: this.localStorage.getInteger(this.statusCodeKey) || null });
+    }
   }
 }
