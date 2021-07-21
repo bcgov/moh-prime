@@ -412,8 +412,9 @@ export class SiteResource {
   }
 
   public flagSite(siteId: number, flagged: boolean): Observable<Site> {
-    const url = `sites/${siteId}/flag/${flagged}`;
-    const request$ = this.apiResource.put<Site>(url, null);
+    const url = `sites/${siteId}/flag`;
+    const body = { data: flagged };
+    const request$ = this.apiResource.put<Site>(url, body);
 
     return request$
       .pipe(

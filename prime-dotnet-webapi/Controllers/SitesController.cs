@@ -1114,13 +1114,13 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="flagged"></param>
-        [HttpPut("{siteId}/flag/{flagged}", Name = nameof(FlagSite))]
+        [HttpPut("{siteId}/flag", Name = nameof(FlagSite))]
         [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult> FlagSite(int siteId, bool flagged)
+        public async Task<ActionResult> FlagSite(int siteId, FromBodyData<bool> flagged)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
