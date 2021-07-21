@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 import { ConsoleLoggerService } from './console-logger.service';
-import { HttpLoggerService } from './http-logger.service';
+import { WebApiLoggerService } from './web-api-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class ErrorHandlerService implements ErrorHandler {
 
   public handleError(error: Error | HttpErrorResponse) {
     const logger = this.injector.get(ConsoleLoggerService);
-    const httpLogger = this.injector.get(HttpLoggerService);
+    const webApiLogger = this.injector.get(WebApiLoggerService);
     const router = this.injector.get(Router);
 
     const message = (error.message)
@@ -36,7 +36,7 @@ export class ErrorHandlerService implements ErrorHandler {
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
-      httpLogger.error(message, { url });
+      webApiLogger.error(message, { url });
     }
 
     logger.error(message, { url });

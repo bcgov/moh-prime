@@ -8,7 +8,7 @@ import { AbstractLoggerService } from './abstract-logger.service';
 @Injectable({
   providedIn: 'root'
 })
-export class HttpLoggerService extends AbstractLoggerService {
+export class WebApiLoggerService extends AbstractLoggerService {
   constructor(
     private loggerResource: LoggerResource,
   ) {

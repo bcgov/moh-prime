@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { HttpLoggerService } from './http-logger.service';
+import { WebApiLoggerService } from './web-api-logger.service';
 
 describe('HttpLoggerService', () => {
-  let service: HttpLoggerService;
+  let service: WebApiLoggerService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(HttpLoggerService);
+    service = TestBed.inject(WebApiLoggerService);
   });
 
   it('should be created', () => {
