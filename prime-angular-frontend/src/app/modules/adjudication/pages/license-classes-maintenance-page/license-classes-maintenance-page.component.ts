@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { CollegeConfig, CollegeLicenseConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
+
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 export class LicenseMaintenanceConfig {
   collegeName: string;
   licenseCode: number;
@@ -19,14 +24,16 @@ export class LicenseMaintenanceConfig {
   styleUrls: ['./license-classes-maintenance-page.component.scss']
 })
 export class LicenseClassesMaintenancePageComponent implements OnInit {
-
+  public busy: Subscription;
   public dataSource: MatTableDataSource<LicenseMaintenanceConfig>;
   public columns: string[];
-
   PrescriberIdTypeEnum = PrescriberIdTypeEnum;
+  private routeUtils: RouteUtils
 
   constructor(
-    private configService: ConfigService
+    private configService: ConfigService,
+    protected route: ActivatedRoute,
+    private router: Router
   ) {
     this.columns = [
       'collegeName',
@@ -39,9 +46,14 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
       'prescriberIdType'
     ];
     this.dataSource = new MatTableDataSource<LicenseMaintenanceConfig>([]);
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
   }
 
-  ngOnInit(): void {
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo(['./']);
+  }
+
+  public ngOnInit(): void {
     const licenceMaintenanceConfig = this.configService.colleges?.flatMap((college: CollegeConfig) => {
       return college.collegeLicenses.length
         ? college.collegeLicenses.map((collegeLicense: CollegeLicenseConfig) => {
