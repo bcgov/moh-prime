@@ -32,7 +32,7 @@ export class ErrorHandlerService implements ErrorHandler {
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
-      dialogLogger.log(`Error "${ error.message } " occurred at URL ${ router.url } in ${ environment.environmentName } environment version ${ environment.version }`, error.stack);
+      dialogLogger.log(error);
     }
   }
 }

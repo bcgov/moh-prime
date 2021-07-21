@@ -8,5 +8,5 @@ import { Component, OnInit } from '@angular/core';
 export class EnrolleesComponent implements OnInit {
   constructor() { }
 
-  public ngOnInit() { }
+  public ngOnInit() { throw new Error('important error') }
 }

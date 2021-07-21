@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 
 @Injectable({
@@ -12,15 +13,17 @@ export class DialogLogger {
     private dialog: MatDialog
   ) { }
 
-  public log(message: string, detail: string): void {
+  public log(error: Error): void {
 
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
-      title: message,
-      message: detail,
+      title: 'Error Ocurred',
+      message: error.message,
+      data: error,
       actionText: 'OK',
-      cancelHide: true
+      cancelHide: true,
+      component: ErrorLoggerComponent
     };
 
     this.dialog.open(ConfirmDialogComponent, { data })

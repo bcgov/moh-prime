@@ -1,0 +1,15 @@
+<mat-dialog-content>
+  <p>URL: {{ this.router.url }}</p>
+  <p>Environment: {{ this.config.environmentName }}</p>
+  <p>Version: {{ this.enviornment.version }}</p>
+  <mat-expansion-panel *ngIf="this.error.stack">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Details
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-template matExpansionPanelContent>
+      {{ this.error.stack }}
+    </ng-template>
+  </mat-expansion-panel>
+</mat-dialog-content>
