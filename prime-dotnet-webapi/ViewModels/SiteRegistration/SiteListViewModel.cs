@@ -31,5 +31,7 @@ namespace Prime.ViewModels
         public BusinessLicence BusinessLicence { get; set; }
 
         public bool HasNotification { get; set; }
+
+        public bool Flagged { get; set; }
     }
 }

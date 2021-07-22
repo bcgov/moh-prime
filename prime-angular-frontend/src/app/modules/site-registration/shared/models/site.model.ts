@@ -41,9 +41,11 @@ export interface Site {
   adjudicator: Admin;
   status: SiteStatusType;
   pec: string;
+  flagged: boolean;
 }
 
-export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence'> {
+export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence' | 'flagged'> {
   adjudicatorIdir: string;
   remoteUserCount: number;
+  flagged: boolean;
 }

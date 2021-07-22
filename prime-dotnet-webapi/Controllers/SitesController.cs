@@ -1106,5 +1106,29 @@ namespace Prime.Controllers
 
             return Ok();
         }
+
+        // PUT: api/sites/5/flag
+        /// <summary>
+        /// Sets a site's flag, which serves as a reminder
+        /// for an adjudicator to come back to this site
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="flagged"></param>
+        [HttpPut("{siteId}/flag", Name = nameof(FlagSite))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        public async Task<ActionResult> FlagSite(int siteId, FromBodyData<bool> flagged)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            await _siteService.UpdateSiteFlag(siteId, flagged);
+            return Ok(site);
+        }
     }
 }

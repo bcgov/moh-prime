@@ -201,8 +201,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-            this.siteResource.removeSiteAdjudicator(siteId),
-            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -452,7 +452,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -466,7 +467,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 

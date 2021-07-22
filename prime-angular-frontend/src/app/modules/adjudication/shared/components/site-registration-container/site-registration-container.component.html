@@ -17,7 +17,8 @@
                                (reassign)="onReassign($event)"
                                (notify)="onNotify($event)"
                                (route)="onRoute($event)"
-                               (reload)="onRefresh()"></app-site-registration-table>
+                               (reload)="onRefresh()"
+                               (flag)="onToggleFlagSite($event)"></app-site-registration-table>
 
   <ng-container *ngIf="content">
 
@@ -44,7 +45,8 @@
                                          (approve)="onApprove($event)"
                                          (decline)="onDecline($event)"
                                          (delete)="onDelete($event)"
-                                         (escalate)="onEscalate($event)">
+                                         (escalate)="onEscalate($event)"
+                                         (flag)="onToggleFlagSite($event)">
           </app-site-registration-actions>
 
         </ng-template>

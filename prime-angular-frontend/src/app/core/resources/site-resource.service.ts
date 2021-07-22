@@ -411,6 +411,25 @@ export class SiteResource {
       );
   }
 
+  public flagSite(siteId: number, flagged: boolean): Observable<Site> {
+    const url = `sites/${siteId}/flag`;
+    const body = { data: flagged };
+    const request$ = this.apiResource.put<Site>(url, body);
+
+    return request$
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site flag could not be updated');
+          this.logger.error('[Site] SiteResource::flagSite error has occurred:'
+            , error);
+          throw error;
+        })
+      );
+  }
+
   public createSiteRegistrationNote(siteId: number, note: string): Observable<SiteRegistrationNote> {
     const payload = { data: note };
     return this.apiResource.post(`sites/${siteId}/site-registration-notes`, payload)
