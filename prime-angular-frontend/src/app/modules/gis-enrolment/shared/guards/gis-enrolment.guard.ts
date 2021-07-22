@@ -6,7 +6,7 @@ import { map, exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 
@@ -21,7 +21,7 @@ import { GisEnrolment } from '../models/gis-enrolment.model';
 export class GisEnrolmentGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private gisEnrolmentService: GisEnrolmentService,
@@ -102,7 +102,7 @@ export class GisEnrolmentGuard extends BaseGuard {
    * when the current route path is not the destination path.
    */
   private navigate(routePath: string, destinationPath: string): boolean {
-    if (routePath === `/${ GisEnrolmentRoutes.MODULE_PATH }/${ destinationPath }`) {
+    if (routePath === `/${GisEnrolmentRoutes.MODULE_PATH}/${destinationPath}`) {
       return true;
     } else {
       this.router.navigate([GisEnrolmentRoutes.MODULE_PATH, destinationPath]);

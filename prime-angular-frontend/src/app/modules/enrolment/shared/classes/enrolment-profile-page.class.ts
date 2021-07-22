@@ -7,7 +7,7 @@ import { catchError, exhaustMap, map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -77,7 +77,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService

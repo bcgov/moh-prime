@@ -5,9 +5,9 @@ import { environment } from '@env/environment';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class AuthenticationGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private configService: ConfigService,
     private router: Router
@@ -48,7 +48,7 @@ export class AuthenticationGuard extends BaseGuard {
         // Capture the user's current location, and provide it to
         // Keycloak to redirect the user to where they originated
         // once authenticated
-        const redirectUri = `${ environment.loginRedirectUrl }${ routePath }`;
+        const redirectUri = `${environment.loginRedirectUrl}${routePath}`;
         const idpHint = (adminRoutes.includes(targetModule))
           ? IdentityProviderEnum.IDIR
           : (gisRoutes.includes(targetModule))
