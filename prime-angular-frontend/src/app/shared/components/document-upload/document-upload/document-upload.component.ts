@@ -9,7 +9,7 @@ import tus from 'tus-js-client';
 
 import { environment } from '@env/environment';
 
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {
@@ -42,7 +42,7 @@ export class DocumentUploadComponent implements OnInit {
 
   constructor(
     private accessTokenService: AccessTokenService,
-    private logger: LoggerService,
+    private logger: ConsoleLoggerService,
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
     this.filePondFiles = [];

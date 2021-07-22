@@ -8,7 +8,7 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
@@ -60,7 +60,7 @@ export class DashboardV1Component implements OnInit {
     private permissionService: PermissionService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public get isMobile(): boolean {

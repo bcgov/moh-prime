@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
@@ -28,7 +28,7 @@ export class PaperEnrolmentResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {

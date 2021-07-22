@@ -1,13 +1,30 @@
 import { Component, Input, ContentChildren, QueryList, TemplateRef } from '@angular/core';
 
+export type AlertType = 'info' | 'warn' | 'danger';
+
 @Component({
   selector: 'app-alert',
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss']
 })
 export class AlertComponent {
-  @Input() public type: 'info' | 'warn' | 'danger';
+  /**
+   * @description
+   * Alert type indicating the theme.
+   */
+  @Input() public type: AlertType;
+  /**
+   * @description
+   * Alert specific icon.
+   */
   @Input() public icon: string;
+  /**
+   * @description
+   * Additional CSS class(es).
+   *
+   * NOTE: Typically used to add a bottom margin, and
+   * not structural changes.
+   */
   @Input() public class: string;
 
   @ContentChildren('alertTitle', { descendants: true })
