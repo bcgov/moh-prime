@@ -133,7 +133,6 @@ namespace Prime.Models
             get => BusinessLicences
                     .OrderByDescending(l => l.UploadedDate.HasValue)
                     .ThenByDescending(l => l.UploadedDate)
-                    .ThenByDescending(l => l.Id)
                     .FirstOrDefault();
         }
     }
