@@ -75,13 +75,14 @@ export class SiteGuard extends BaseGuard {
 
     const allowlistRoutes = site.submittedDate
       ? [
-        ...SiteRoutes.editRegistrationRouteAccess(),
-        ...ArrayUtils.insertIf(
-          !site.businessLicence.completed,
-          SiteRoutes.BUSINESS_LICENCE
-        )
+        ...SiteRoutes.editRegistrationRouteAccess()
       ]
       : SiteRoutes.siteRegistrationRoutes();
+
+    if (site.approvedDate) {
+      allowlistRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
+      allowlistRoutes.push(SiteRoutes.NEXT_STEPS);
+    }
 
     // Redirect to an appropriate default route
     if (!allowlistRoutes.includes(childRoute)) {

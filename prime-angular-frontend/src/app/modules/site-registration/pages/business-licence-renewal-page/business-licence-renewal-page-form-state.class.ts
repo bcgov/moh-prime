@@ -4,9 +4,9 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
-interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
+interface BusinessLicenceRenewalPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
 
-export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
+export class BusinessLicenceRenewalPageFormState extends AbstractFormState<BusinessLicenceRenewalPageDataModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -23,14 +23,6 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return this.formInstance.get('businessLicenceExpiry') as FormControl;
   }
 
-  public get deferredLicenceReason(): FormControl {
-    return this.formInstance.get('deferredLicenceReason') as FormControl;
-  }
-
-  public get doingBusinessAs(): FormControl {
-    return this.formInstance.get('doingBusinessAs') as FormControl;
-  }
-
   /**
    * @description
    * Access to doingBusinessAs and pec, but prevents transmission
@@ -40,7 +32,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
    * updated using the site update endpoint, and are only used
    * within the business licence page.
    */
-  public get json(): BusinessLicencePageDataModel {
+  public get json(): BusinessLicenceRenewalPageDataModel {
     if (!this.formInstance) {
       return;
     }
@@ -48,38 +40,20 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: BusinessLicencePageDataModel & { businessLicence: BusinessLicence; }): void {
+  public patchValue(model: BusinessLicenceRenewalPageDataModel & { businessLicence: BusinessLicence; }): void {
     if (!this.formInstance) {
       return;
     }
 
-    const { doingBusinessAs, pec, businessLicence } = model;
+    const { businessLicence } = model;
 
-    this.formInstance.patchValue({ doingBusinessAs, pec, deferredLicenceReason: businessLicence?.deferredLicenceReason });
+    this.formInstance.patchValue({ deferredLicenceReason: businessLicence?.deferredLicenceReason });
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      businessLicenceGuid: [
-        '',
-        []
-      ],
-      businessLicenceExpiry: [
-        '',
-        [Validators.required]
-      ],
-      deferredLicenceReason: [
-        '',
-        []
-      ],
-      doingBusinessAs: [
-        '',
-        [Validators.required]
-      ],
-      pec: [
-        null,
-        [Validators.required]
-      ]
+      businessLicenceGuid: ['', [Validators.required]],
+      businessLicenceExpiry: ['', [Validators.required]]
     });
   }
 }

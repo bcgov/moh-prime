@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '@angular/common';
 
+import { Moment } from 'moment';
+
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
@@ -26,6 +28,7 @@ import { SiteListViewModel, Site } from '@registration/shared/models/site.model'
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
   selector: 'app-site-management-page',
@@ -36,6 +39,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
+  public organizationSitesExpiryDates: (string | Moment | null)[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
@@ -128,6 +132,15 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public getRenewalRequiredSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
+    return {
+      icon: 'notification_important',
+      text: 'This site requires renewal including this year\'s business licence.',
+      label: 'Renew Site',
+      route: () => this.viewSite(organizationId, site)
+    };
+  }
+
   public isInReview(site: SiteListViewModel): boolean {
     return site.submittedDate && site.status === SiteStatusType.IN_REVIEW;
   }
@@ -155,6 +168,10 @@ export class SiteManagementPageComponent implements OnInit {
     return (site.status === SiteStatusType.APPROVED);
   }
 
+  public requiresRenewal(site: SiteListViewModel): boolean {
+    return (DateUtils.withinDaysBeforeDate(Site.getExpiryDate(site), 90));
+  }
+
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
@@ -172,7 +189,14 @@ export class SiteManagementPageComponent implements OnInit {
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
         ),
-        map((organizations: Organization[]) => this.organizations = organizations),
+        map((organizations: Organization[]) => {
+          this.organizationSitesExpiryDates = organizations[0].sites
+            .map(s => {
+              if (s.status === SiteStatusType.APPROVED)
+                return Site.getExpiryDate(s)
+            });
+          return this.organizations = organizations;
+        }),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )

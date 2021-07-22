@@ -66,7 +66,7 @@ namespace Prime.Models
 
         public ICollection<SiteVendor> SiteVendors { get; set; }
 
-        public BusinessLicence BusinessLicence { get; set; }
+        public ICollection<BusinessLicence> BusinessLicences { get; set; }
 
         public ICollection<RemoteUser> RemoteUsers { get; set; }
 
@@ -115,12 +115,25 @@ namespace Prime.Models
         [Computed]
         public SiteStatusType Status
         {
-            get => (SiteStatuses.Count > 0 ?
-                SiteStatuses
-                .OrderByDescending(s => s.StatusDate)
-                .ThenByDescending(s => s.Id)
-                .FirstOrDefault().StatusType :
-                SiteStatusType.Active);
+            get => SiteStatuses.Count > 0
+                ? SiteStatuses
+                    .OrderByDescending(s => s.StatusDate)
+                    .ThenByDescending(s => s.Id)
+                    .FirstOrDefault().StatusType
+                : SiteStatusType.Active;
+        }
+
+        /// <summary>
+        /// Gets the most recently uploaded business licence
+        /// </summary>
+        [NotMapped]
+        [Computed]
+        public BusinessLicence BusinessLicence
+        {
+            get => BusinessLicences
+                    .OrderByDescending(l => l.UploadedDate.HasValue)
+                    .ThenByDescending(l => l.UploadedDate)
+                    .FirstOrDefault();
         }
     }
 }

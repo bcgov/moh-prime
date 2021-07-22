@@ -16,6 +16,7 @@ import { TechnicalSupportPageFormState } from '@registration/pages/technical-sup
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
 import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
+import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ import { BusinessLicencePageFormState } from '@registration/pages/business-licen
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
   public businessLicencePageFormState: BusinessLicencePageFormState;
+  public businessLicenceRenewalPageFormState: BusinessLicenceRenewalPageFormState;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
@@ -131,6 +133,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   protected buildForms() {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
     this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb);
+    this.businessLicenceRenewalPageFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
