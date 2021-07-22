@@ -15,7 +15,6 @@ namespace Prime.Models
 
         public string Prefix { get; set; }
 
-        [JsonIgnore]
         public bool Manual { get; set; }
 
         public bool Validate { get; set; }

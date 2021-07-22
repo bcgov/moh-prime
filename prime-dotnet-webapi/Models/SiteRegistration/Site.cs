@@ -56,6 +56,8 @@ namespace Prime.Models
 
         public bool Completed { get; set; }
 
+        public bool Flagged { get; set; }
+
         public DateTimeOffset? SubmittedDate { get; set; }
 
         public ICollection<SiteStatus> SiteStatuses { get; set; }

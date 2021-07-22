@@ -452,7 +452,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -466,7 +467,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 

@@ -43,6 +43,7 @@ export class Site {
   adjudicator: Admin;
   status: SiteStatusType;
   pec: string;
+  flagged: boolean;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | Moment | null {
     // Expiry based on business licence expiry date, unless not present
@@ -55,7 +56,8 @@ export class Site {
   }
 }
 
-export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence'> {
+export interface SiteListViewModel extends Pick<Site, 'id' | 'physicalAddress' | 'doingBusinessAs' | 'submittedDate' | 'careSettingCode' | 'siteVendors' | 'completed' | 'pec' | 'status' | 'businessLicence' | 'flagged'> {
   adjudicatorIdir: string;
   remoteUserCount: number;
+  flagged: boolean;
 }

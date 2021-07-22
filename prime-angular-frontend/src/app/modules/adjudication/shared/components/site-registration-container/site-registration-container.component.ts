@@ -273,6 +273,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
+  public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {
+    this.busy = this.siteResource.flagSite(siteId, flagged)
+      .subscribe((updatedSite: Site) => {
+        this.updateSite(updatedSite);
+        this.action.emit();
+      });
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -437,7 +445,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -451,7 +460,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 }

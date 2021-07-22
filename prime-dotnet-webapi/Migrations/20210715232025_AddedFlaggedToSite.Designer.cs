@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210715232025_AddedFlaggedToSite")]
+    partial class AddedFlaggedToSite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -8759,9 +8761,6 @@ namespace Prime.Migrations
                     b.Property<string>("DeferredLicenceReason")
                         .HasColumnType("text");
 
-                    b.Property<DateTimeOffset?>("ExpiryDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -8771,12 +8770,10 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTimeOffset?>("UploadedDate")
-                        .HasColumnType("timestamp with time zone");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SiteId");
+                    b.HasIndex("SiteId")
+                        .IsUnique();
 
                     b.ToTable("BusinessLicence");
                 });
@@ -15951,8 +15948,8 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
-                        .WithMany("BusinessLicences")
-                        .HasForeignKey("SiteId")
+                        .WithOne("BusinessLicence")
+                        .HasForeignKey("Prime.Models.BusinessLicence", "SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

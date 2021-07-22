@@ -714,6 +714,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateSiteFlag(int siteId, bool flagged)
+        {
+            var site = await _context.Sites
+                .SingleAsync(s => s.Id == siteId);
+
+            site.Flagged = flagged;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.SiteRegistrationNotes
