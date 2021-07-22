@@ -78,10 +78,13 @@
             [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
             [class.approved]="row.status === SiteStatusType.APPROVED"
             [class.declined]="row.status === SiteStatusType.LOCKED">
-          {{ displayStatus(row.status) | capitalize: true | default }}
-          <mat-icon *ngIf="row?.flagged">
-            flag
-          </mat-icon>
+          <div class="d-flex align-items-center">
+            <span class="mr-1">{{ displayStatus(row.status) | capitalize: true | default }}</span>
+            <mat-icon *ngIf="row?.flagged"
+                      matTooltip="Site Flagged"
+                      matTooltipPosition="after">flag
+            </mat-icon>
+          </div>
         </td>
       </ng-container>
 
