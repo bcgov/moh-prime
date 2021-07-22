@@ -15,6 +15,7 @@
 
         <input matInput
                placeholder="Expiry Date"
+               [min]="minExpiryDate"
                [matDatepicker]="expiryDatePicker"
                formControlName="businessLicenceExpiry"
                (click)="expiryDatePicker.open()"
