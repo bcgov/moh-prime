@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -24,8 +22,6 @@ export class AccessTermsComponent extends BaseEnrolmentPage implements OnInit {
     protected route: ActivatedRoute,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private logger: LoggerService,
-    private toastService: ToastService
   ) {
     super(route, router);
   }

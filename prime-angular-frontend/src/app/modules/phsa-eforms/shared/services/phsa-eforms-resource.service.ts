@@ -6,7 +6,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 
 import { PhsaEnrollee } from '@phsa/shared/models/phsa-enrollee.model';
@@ -20,7 +20,7 @@ export class PhsaEformsResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public createEnrollee(payload: PhsaEnrollee): Observable<PhsaEnrollee> {

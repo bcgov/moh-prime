@@ -3,7 +3,7 @@ import { FormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -39,7 +39,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);

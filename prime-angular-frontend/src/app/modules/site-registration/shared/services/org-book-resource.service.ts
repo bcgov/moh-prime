@@ -5,7 +5,7 @@ import { Observable, pipe } from 'rxjs';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
 
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService, SortWeight } from '@core/services/utils.service';
 
 import {
@@ -25,12 +25,12 @@ export class OrgBookResource {
     private http: HttpClient,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private utilsService: UtilsService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public autocomplete(orgName: string, inactive: boolean = false): Observable<OrgBookAutocompleteHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ q: orgName, inactive });
-    return this.http.get<OrgBookAutocompleteHttpResponse>(`${ this.ORGBOOK_API_URL }/search/autocomplete`, { params })
+    return this.http.get<OrgBookAutocompleteHttpResponse>(`${this.ORGBOOK_API_URL}/search/autocomplete`, { params })
       .pipe(
         map((response: OrgBookAutocompleteHttpResponse) => response),
         tap((response: OrgBookAutocompleteHttpResponse) => this.logger.info('ORGBOOK_AUTOCOMPLETE', response)),
@@ -51,7 +51,7 @@ export class OrgBookResource {
    */
   public getOrganizationFacet(orgName: string): Observable<OrgBookFacetHttpResponse> {
     const params = this.apiResourceUtilsService.makeHttpParams({ name: orgName });
-    return this.http.get<OrgBookFacetHttpResponse>(`${ this.ORGBOOK_API_URL }/search/credential/topic/facets`, { params })
+    return this.http.get<OrgBookFacetHttpResponse>(`${this.ORGBOOK_API_URL}/search/credential/topic/facets`, { params })
       .pipe(
         map((response: OrgBookFacetHttpResponse) => response),
         tap((response: OrgBookFacetHttpResponse) => this.logger.info('ORGBOOK_FACET', response)),
@@ -63,7 +63,7 @@ export class OrgBookResource {
   }
 
   public getOrganizationDetail(sourceId: string): Observable<OrgBookDetailHttpResponse> {
-    return this.http.get<OrgBookDetailHttpResponse>(`${ this.ORGBOOK_API_URL }/topic/ident/registration.registries.ca/${ sourceId }/formatted`)
+    return this.http.get<OrgBookDetailHttpResponse>(`${this.ORGBOOK_API_URL}/topic/ident/registration.registries.ca/${sourceId}/formatted`)
       .pipe(
         map((response: OrgBookDetailHttpResponse) => response),
         tap((response: OrgBookDetailHttpResponse) => this.logger.info('ORGBOOK_DETAIL', response)),
@@ -75,7 +75,7 @@ export class OrgBookResource {
   }
 
   public getOrganizationRelatedTo(topicId: number): Observable<OrgBookRelatedHttpResponse[]> {
-    return this.http.get<OrgBookRelatedHttpResponse[]>(`${ this.ORGBOOK_API_URL }/topic_relationship/${ topicId }/related_to_relations`)
+    return this.http.get<OrgBookRelatedHttpResponse[]>(`${this.ORGBOOK_API_URL}/topic_relationship/${topicId}/related_to_relations`)
       .pipe(
         map((response: OrgBookRelatedHttpResponse[]) => response),
         tap((response: OrgBookRelatedHttpResponse[]) => this.logger.info('ORGBOOK_RELATED_TO', response)),

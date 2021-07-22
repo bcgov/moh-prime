@@ -6,7 +6,7 @@ import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ConfigService } from '@config/config.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -54,7 +54,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected formUtilsService: FormUtilsService,
     private authService: AuthService,
     private configService: ConfigService

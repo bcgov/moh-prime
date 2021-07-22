@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Injectable({
@@ -12,7 +12,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 export class GisAuthorizationRedirectGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {
