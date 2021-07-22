@@ -60,7 +60,7 @@ namespace TestPrimeE2E.SiteRegistration
                 ClickButton("Save and Continue");
 
                 _driver.FindTextPatiently("or claim an existing Organization");
-                Assert.AreEqual("Create or Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
+                Assert.AreEqual("Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
                 // Choosing to create organization
                 ClickButton("Continue");
 
@@ -83,6 +83,8 @@ namespace TestPrimeE2E.SiteRegistration
             //site business licence
             _driver.FindPatiently("//input[@type='file']").SendKeys(TestParameters.BusinessLicencePath);
             _driver.FindPatiently("//*[contains(text(), 'Upload complete')]");
+            // Input business licence expiry date
+            PickDate("//input[@formcontrolname='businessLicenceExpiry']", "2023", "JUL", "22");
             TypeIntoField("Site Name (Doing Business As)", _company.CompanyName());
             var siteId = _driver.FindPatiently("//input[@formcontrolname='pec']");
             siteId.Clear();
