@@ -7,7 +7,7 @@ import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
@@ -38,7 +38,7 @@ export class PaperEnrolmentResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
@@ -140,8 +140,8 @@ export class PaperEnrolmentResource {
 
   /**
    * @description
-   * Mark the profile as completed indicating the user has traversed the entire enrolment
-   * as a wizard, and will now spoke between the views from overview.
+   * Mark the as completed indicating the workflow has been entirely traversed
+   * in wizard mode, and will now spoke between the views from overview.
    */
   public profileCompleted(enrolleeId: number): NoContent {
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/profile-completed`)

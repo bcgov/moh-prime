@@ -6,7 +6,7 @@ import { exhaustMap, map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -22,7 +22,7 @@ import { OrganizationService } from '@registration/shared/services/organization.
 export class OrganizationGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private organizationService: OrganizationService,
@@ -196,6 +196,8 @@ export class OrganizationGuard extends BaseGuard {
 
       if (organization.hasAcceptedAgreement) {
         allowedRoutes.push(SiteRoutes.SITE_REVIEW);
+        allowedRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
+        allowedRoutes.push(SiteRoutes.NEXT_STEPS);
       }
     }
 

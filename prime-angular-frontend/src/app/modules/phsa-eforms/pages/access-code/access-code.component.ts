@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 
@@ -25,7 +25,7 @@ export class AccessCodeComponent implements OnInit {
     protected router: Router,
     protected dialog: MatDialog,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected phsaEformsFormStateService: PhsaEformsFormStateService,

@@ -33,6 +33,7 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
@@ -58,6 +59,7 @@ namespace Prime
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
+            services.AddScoped<IClientLogService, ClientLogService>();
             services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IEmailService, EmailService>();
@@ -71,6 +73,7 @@ namespace Prime
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IGisService, GisService>();
             services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
@@ -78,6 +81,7 @@ namespace Prime
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();

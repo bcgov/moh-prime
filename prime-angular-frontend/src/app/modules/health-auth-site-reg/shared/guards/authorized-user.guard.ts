@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 
@@ -27,7 +27,7 @@ import { AuthorizedUserService } from '@health-auth/shared/services/authorized-u
 export class AuthorizedUserGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private authorizedUserService: AuthorizedUserService,

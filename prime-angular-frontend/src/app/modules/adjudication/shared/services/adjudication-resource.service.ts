@@ -8,7 +8,6 @@ import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
@@ -30,6 +29,7 @@ import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,7 @@ export class AdjudicationResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {

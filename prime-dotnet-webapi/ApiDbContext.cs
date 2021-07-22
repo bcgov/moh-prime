@@ -51,6 +51,8 @@ namespace Prime
             _context = context;
         }
 
+        public DbSet<ClientLog> ClientLogs { get; set; }
+
         // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
@@ -94,6 +96,7 @@ namespace Prime
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
+        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
 
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValue } from '@angular/common';
+
+import { Moment } from 'moment';
 
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -8,7 +11,7 @@ import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
@@ -25,6 +28,7 @@ import { SiteListViewModel, Site } from '@registration/shared/models/site.model'
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
+import { DateUtils } from '@lib/utils/date-utils.class';
 
 @Component({
   selector: 'app-site-management-page',
@@ -35,6 +39,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
+  public organizationSitesExpiryDates: (string | Moment | null)[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public VendorEnum = VendorEnum;
@@ -49,7 +54,7 @@ export class SiteManagementPageComponent implements OnInit {
     private siteResource: SiteResource,
     private utilsService: UtilsService,
     private authService: AuthService,
-    private logger: LoggerService,
+    private logger: ConsoleLoggerService,
     private fullnamePipe: FullnamePipe,
     private addressPipe: AddressPipe,
     private configCodePipe: ConfigCodePipe
@@ -98,7 +103,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
+  public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -106,11 +111,14 @@ export class SiteManagementPageComponent implements OnInit {
     ];
   }
 
-  public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
+  public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
+      {
+        key: 'Site Address',
+        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+      },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
@@ -120,6 +128,15 @@ export class SiteManagementPageComponent implements OnInit {
       icon: 'notification_important',
       text: 'Submission not completed',
       label: 'Continue Site Submission',
+      route: () => this.viewSite(organizationId, site)
+    };
+  }
+
+  public getRenewalRequiredSiteNotificationProperties(organizationId: number, site: SiteListViewModel) {
+    return {
+      icon: 'notification_important',
+      text: 'This site requires renewal including this year\'s business licence.',
+      label: 'Renew Site',
       route: () => this.viewSite(organizationId, site)
     };
   }
@@ -151,6 +168,10 @@ export class SiteManagementPageComponent implements OnInit {
     return (site.status === SiteStatusType.APPROVED);
   }
 
+  public requiresRenewal(site: SiteListViewModel): boolean {
+    return (DateUtils.withinDaysBeforeDate(Site.getExpiryDate(site), 90));
+  }
+
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
@@ -168,7 +189,14 @@ export class SiteManagementPageComponent implements OnInit {
         exhaustMap((user: BcscUser) =>
           this.organizationResource.getSigningAuthorityOrganizationsByUserId(user.userId)
         ),
-        map((organizations: Organization[]) => this.organizations = organizations),
+        map((organizations: Organization[]) => {
+          this.organizationSitesExpiryDates = organizations[0].sites
+            .map(s => {
+              if (s.status === SiteStatusType.APPROVED)
+                return Site.getExpiryDate(s)
+            });
+          return this.organizations = organizations;
+        }),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
         )

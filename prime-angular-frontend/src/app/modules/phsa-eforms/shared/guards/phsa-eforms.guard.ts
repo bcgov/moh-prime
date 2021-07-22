@@ -7,7 +7,7 @@ import { Observable, of } from 'rxjs';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
@@ -19,7 +19,7 @@ export class PhsaEformsGuard extends BaseGuard {
 
   public constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router
   ) {

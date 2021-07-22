@@ -9,6 +9,7 @@ import { AbstractComponent } from '@shared/classes/abstract-component';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-overview-container',
@@ -19,6 +20,8 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   @Input() public site: Site;
   @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
+  @Input() public admin: boolean;
+  @Input() public businessLicences: BusinessLicence[];
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
@@ -31,6 +34,8 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
   ) {
     super(route, router);
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+    this.admin = false;
+    this.businessLicences = [];
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -45,12 +50,11 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public getBusinessLicence() {
-    this.siteResource.getBusinessLicenceDocumentToken(this.site.id)
-      .subscribe((token: string) => {
-        this.utilsService.downloadToken(token);
-      });
+  public getBusinessLicence(businessLicenceId: number) {
+    this.siteResource.getBusinessLicenceDocumentToken(this.site.id, businessLicenceId)
+      .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
   public ngOnInit(): void { }
+
 }

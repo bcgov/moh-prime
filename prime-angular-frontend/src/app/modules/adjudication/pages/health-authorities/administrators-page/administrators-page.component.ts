@@ -46,6 +46,6 @@ export class AdministratorsPageComponent extends AbstractContactsPage implements
   }
 
   protected performSubmissionRequest(contact: Contact[]): NoContent {
-    return this.healthAuthResource.updatePharmanetAdministrators(this.route.snapshot.params.haid, contact);
+    return this.healthAuthResource.updateHealthAuthorityPharmanetAdministrators(this.route.snapshot.params.haid, contact);
   }
 }

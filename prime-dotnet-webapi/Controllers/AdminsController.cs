@@ -35,7 +35,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Admin>> CreateAdmin(Admin admin)
+        public async Task<ActionResult> CreateAdmin(Admin admin)
         {
             if (admin == null)
             {
@@ -69,7 +69,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Admin>>> GetAdmins()
+        public async Task<ActionResult> GetAdmins()
         {
             var admins = await _adminService.GetAdminsAsync();
             return Ok(admins);
@@ -86,7 +86,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Admin>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Admin>> GetAdminById(int adminId)
+        public async Task<ActionResult> GetAdminById(int adminId)
         {
             var admin = await _adminService.GetAdminAsync(adminId);
             if (admin == null)

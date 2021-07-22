@@ -8,13 +8,13 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AddressLine } from '@shared/models/address.model';
+import { Address, AddressLine } from '@shared/models/address.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { SiteAddressPageFormState } from './site-address-page-form-state.class';
+import { SiteAddressFormState } from './site-address-form-state.class';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { FormBuilder } from '@angular/forms';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 @Component({
   selector: 'app-site-address-page',
@@ -22,7 +22,7 @@ import { SiteAddressPageFormState } from './site-address-page-form-state.class';
   styleUrls: ['./site-address-page.component.scss']
 })
 export class SiteAddressPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: SiteAddressPageFormState;
+  public formState: SiteAddressFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public formControlNames: AddressLine[];
@@ -33,10 +33,9 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
-    private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
-    route: ActivatedRoute,
+    private fb: FormBuilder,
+    private healthAuthorityResource: HealthAuthorityResource,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
@@ -52,41 +51,38 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     ];
   }
 
-  // TODO remove this method add to allow routing between pages
-  public onSubmit() {
-    this.hasAttemptedSubmission = true;
+  public onBack(): void {
+    const backRoutePath = (this.isCompleted)
+      ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
+      : HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE;
 
-    if (this.checkValidity(this.formState.form)) {
-      this.onSubmitFormIsValid();
-      this.afterSubmitIsSuccessful();
-    } else {
-      this.onSubmitFormIsInvalid();
-    }
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
-  public onBack() {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.HEALTH_AUTH_CARE_TYPE);
-  }
-
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
   }
 
-  protected createFormInstance() {
-    this.formState = this.formStateService.siteAddressPageFormState;
+  protected createFormInstance(): void {
+    this.formState = new SiteAddressFormState(this.fb, this.formUtilsService);
   }
 
   protected patchForm(): void {
-    const site = this.siteService.site;
-    this.isCompleted = site?.completed;
-    // Force the site to be patched each time
-    this.formStateService.setForm(site, true);
-    this.formState.form.markAsPristine();
-  }
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
 
-  protected initForm() {
-    throw new Error('Not implemented');
+    this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .subscribe(({ physicalAddress, completed }: HealthAuthoritySite) => {
+        this.isCompleted = completed;
+        this.formState.patchValue({ physicalAddress });
+        if (Address.isNotEmpty(physicalAddress)) {
+          this.showAddressFields = true;
+        }
+      });
   }
 
   protected onSubmitFormIsInvalid(): void {
@@ -94,18 +90,17 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.formState.form.markAsPristine()));
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
+
+    return this.healthAuthorityResource.updateHealthAuthoritySitePhysicalAddress(haid, sid, payload);
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
-    const routePath = (this.isCompleted)
+    const nextRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.HOURS_OPERATION;
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 }
