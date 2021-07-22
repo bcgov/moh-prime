@@ -51,7 +51,7 @@ import { BusinessLicenceExpiryComponent } from './shared/components/business-lic
     SiteProgressIndicatorComponent,
     OverviewPageComponent,
     NextStepsPageComponent,
-    OrganizationClaimConfirmationPageComponent
+    OrganizationClaimConfirmationPageComponent,
     BusinessLicenceRenewalPageComponent,
     BusinessLicenceExpiryComponent
   ],
