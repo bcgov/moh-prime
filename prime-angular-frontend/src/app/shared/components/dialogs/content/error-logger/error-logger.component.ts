@@ -13,14 +13,14 @@ import { DialogOptions } from '../../dialog-options.model';
 })
 export class ErrorLoggerComponent implements OnInit {
   public error: any;
-  public enviornment = environment;
+  public environment = environment;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
+    @Inject(MAT_DIALOG_DATA) public options: DialogOptions,
     @Inject(APP_CONFIG) public config: AppConfig,
     public router: Router
   ) {
-    this.error = data.data;
+    this.error = options.data;
   }
 
   public ngOnInit(): void {
