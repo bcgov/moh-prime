@@ -571,24 +571,24 @@ export class MockConfig {
       ],
       "jobNames": [
         {
-          "code": 4,
-          "name": "Ward clerk"
-        },
-        {
-          "code": 3,
-          "name": "Registration clerk"
-        },
-        {
-          "code": 5,
-          "name": "Nursing unit assistant"
-        },
-        {
           "code": 1,
           "name": "Medical office assistant"
         },
         {
           "code": 2,
           "name": "Pharmacy assistant"
+        },
+        {
+          "code": 3,
+          "name": "Registration clerk"
+        },
+        {
+          "code": 4,
+          "name": "Ward clerk"
+        },
+        {
+          "code": 5,
+          "name": "Nursing unit assistant"
         }
       ],
       "licenses": [
@@ -596,6 +596,7 @@ export class MockConfig {
           "code": 1,
           "weight": 1,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -613,6 +614,7 @@ export class MockConfig {
           "code": 2,
           "weight": 2,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -630,6 +632,7 @@ export class MockConfig {
           "code": 3,
           "weight": 12,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -647,6 +650,7 @@ export class MockConfig {
           "code": 4,
           "weight": 11,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -664,6 +668,7 @@ export class MockConfig {
           "code": 5,
           "weight": 3,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -681,6 +686,7 @@ export class MockConfig {
           "code": 6,
           "weight": 4,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -698,6 +704,7 @@ export class MockConfig {
           "code": 7,
           "weight": 10,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -715,6 +722,7 @@ export class MockConfig {
           "code": 8,
           "weight": 6,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -732,6 +740,7 @@ export class MockConfig {
           "code": 9,
           "weight": 5,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -749,6 +758,7 @@ export class MockConfig {
           "code": 10,
           "weight": 7,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -766,6 +776,7 @@ export class MockConfig {
           "code": 11,
           "weight": 18,
           "prefix": "91",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -783,6 +794,7 @@ export class MockConfig {
           "code": 12,
           "weight": 14,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -800,6 +812,7 @@ export class MockConfig {
           "code": 13,
           "weight": 15,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -817,6 +830,7 @@ export class MockConfig {
           "code": 14,
           "weight": 16,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -834,6 +848,7 @@ export class MockConfig {
           "code": 15,
           "weight": 17,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -851,6 +866,7 @@ export class MockConfig {
           "code": 16,
           "weight": 9,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -868,6 +884,7 @@ export class MockConfig {
           "code": 17,
           "weight": 13,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -885,6 +902,7 @@ export class MockConfig {
           "code": 18,
           "weight": 22,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -902,6 +920,7 @@ export class MockConfig {
           "code": 19,
           "weight": 23,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -919,6 +938,7 @@ export class MockConfig {
           "code": 20,
           "weight": 20,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -936,6 +956,7 @@ export class MockConfig {
           "code": 21,
           "weight": 24,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -953,6 +974,7 @@ export class MockConfig {
           "code": 22,
           "weight": 8,
           "prefix": "91",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -970,6 +992,7 @@ export class MockConfig {
           "code": 23,
           "weight": 19,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -987,6 +1010,7 @@ export class MockConfig {
           "code": 24,
           "weight": 21,
           "prefix": "91",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1004,6 +1028,7 @@ export class MockConfig {
           "code": 25,
           "weight": 1,
           "prefix": "P1",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1021,6 +1046,7 @@ export class MockConfig {
           "code": 26,
           "weight": 2,
           "prefix": "P1",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1038,6 +1064,7 @@ export class MockConfig {
           "code": 27,
           "weight": 4,
           "prefix": "P1",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1055,6 +1082,7 @@ export class MockConfig {
           "code": 28,
           "weight": 3,
           "prefix": "P1",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1072,6 +1100,7 @@ export class MockConfig {
           "code": 29,
           "weight": 6,
           "prefix": "T9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1089,6 +1118,7 @@ export class MockConfig {
           "code": 30,
           "weight": 5,
           "prefix": "P1",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": false,
@@ -1106,6 +1136,7 @@ export class MockConfig {
           "code": 31,
           "weight": 7,
           "prefix": "T9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1123,6 +1154,7 @@ export class MockConfig {
           "code": 32,
           "weight": 6,
           "prefix": "R9",
+          "manual": false,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1140,6 +1172,7 @@ export class MockConfig {
           "code": 33,
           "weight": 7,
           "prefix": "R9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1157,6 +1190,7 @@ export class MockConfig {
           "code": 34,
           "weight": 10,
           "prefix": "R9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1174,6 +1208,7 @@ export class MockConfig {
           "code": 35,
           "weight": 12,
           "prefix": "R9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1191,6 +1226,7 @@ export class MockConfig {
           "code": 36,
           "weight": 13,
           "prefix": "R9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1208,6 +1244,7 @@ export class MockConfig {
           "code": 37,
           "weight": 14,
           "prefix": "R9",
+          "manual": false,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1225,6 +1262,7 @@ export class MockConfig {
           "code": 39,
           "weight": 9,
           "prefix": "R9",
+          "manual": false,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1242,6 +1280,7 @@ export class MockConfig {
           "code": 40,
           "weight": 11,
           "prefix": "R9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1259,6 +1298,7 @@ export class MockConfig {
           "code": 41,
           "weight": 15,
           "prefix": "Y9",
+          "manual": false,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1276,6 +1316,7 @@ export class MockConfig {
           "code": 42,
           "weight": 16,
           "prefix": "Y9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1293,6 +1334,7 @@ export class MockConfig {
           "code": 43,
           "weight": 19,
           "prefix": "Y9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1310,6 +1352,7 @@ export class MockConfig {
           "code": 45,
           "weight": 18,
           "prefix": "Y9",
+          "manual": false,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1327,6 +1370,7 @@ export class MockConfig {
           "code": 46,
           "weight": 20,
           "prefix": "Y9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1344,6 +1388,7 @@ export class MockConfig {
           "code": 47,
           "weight": 1,
           "prefix": "96",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1361,6 +1406,7 @@ export class MockConfig {
           "code": 48,
           "weight": 2,
           "prefix": "96",
+          "manual": true,
           "validate": false,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1378,6 +1424,7 @@ export class MockConfig {
           "code": 49,
           "weight": 5,
           "prefix": "96",
+          "manual": true,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": false,
@@ -1395,6 +1442,7 @@ export class MockConfig {
           "code": 51,
           "weight": 4,
           "prefix": "96",
+          "manual": false,
           "validate": true,
           "namedInImReg": true,
           "licensedToProvideCare": true,
@@ -1412,6 +1460,7 @@ export class MockConfig {
           "code": 52,
           "weight": 21,
           "prefix": "L9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1429,6 +1478,7 @@ export class MockConfig {
           "code": 53,
           "weight": 22,
           "prefix": "L9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1446,6 +1496,7 @@ export class MockConfig {
           "code": 54,
           "weight": 25,
           "prefix": "L9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1463,6 +1514,7 @@ export class MockConfig {
           "code": 55,
           "weight": 23,
           "prefix": "L9",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1480,6 +1532,7 @@ export class MockConfig {
           "code": 59,
           "weight": 25,
           "prefix": "93",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1497,6 +1550,7 @@ export class MockConfig {
           "code": 60,
           "weight": 28,
           "prefix": "98",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1514,6 +1568,7 @@ export class MockConfig {
           "code": 61,
           "weight": 29,
           "prefix": "98",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1531,6 +1586,7 @@ export class MockConfig {
           "code": 62,
           "weight": 30,
           "prefix": "98",
+          "manual": false,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1548,6 +1604,7 @@ export class MockConfig {
           "code": 63,
           "weight": 31,
           "prefix": "98",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1565,6 +1622,7 @@ export class MockConfig {
           "code": 64,
           "weight": 1,
           "prefix": "",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": false,
@@ -1652,6 +1710,7 @@ export class MockConfig {
           "code": 65,
           "weight": 26,
           "prefix": "93",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1669,6 +1728,7 @@ export class MockConfig {
           "code": 66,
           "weight": 27,
           "prefix": "93",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1686,6 +1746,7 @@ export class MockConfig {
           "code": 67,
           "weight": 28,
           "prefix": "93",
+          "manual": true,
           "validate": true,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1703,6 +1764,7 @@ export class MockConfig {
           "code": 68,
           "weight": 8,
           "prefix": "T9",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1720,6 +1782,7 @@ export class MockConfig {
           "code": 69,
           "weight": 32,
           "prefix": "98",
+          "manual": true,
           "validate": false,
           "namedInImReg": false,
           "licensedToProvideCare": true,
@@ -1740,12 +1803,12 @@ export class MockConfig {
           "name": "Health Authority"
         },
         {
-          "code": 2,
-          "name": "Private Community Health Practice"
-        },
-        {
           "code": 3,
           "name": "Community Pharmacy"
+        },
+        {
+          "code": 2,
+          "name": "Private Community Health Practice"
         },
         {
           "code": 4,
@@ -1796,10 +1859,6 @@ export class MockConfig {
       ],
       "statuses": [
         {
-          "code": 1,
-          "name": "Editable"
-        },
-        {
           "code": 2,
           "name": "Under Review"
         },
@@ -1812,25 +1871,59 @@ export class MockConfig {
           "name": "Locked"
         },
         {
+          "code": 1,
+          "name": "Editable"
+        },
+        {
           "code": 5,
           "name": "Declined"
         }
       ],
       "countries": [
         {
-          "code": "US",
-          "name": "United States"
-        },
-        {
           "code": "CA",
           "name": "Canada"
+        },
+        {
+          "code": "US",
+          "name": "United States"
         }
       ],
       "provinces": [
         {
-          "code": "WY",
+          "code": "AB",
+          "countryCode": "CA",
+          "name": "Alberta"
+        },
+        {
+          "code": "AK",
           "countryCode": "US",
-          "name": "Wyoming"
+          "name": "Alaska"
+        },
+        {
+          "code": "AL",
+          "countryCode": "US",
+          "name": "Alabama"
+        },
+        {
+          "code": "AR",
+          "countryCode": "US",
+          "name": "Arkansas"
+        },
+        {
+          "code": "AS",
+          "countryCode": "US",
+          "name": "American Samoa"
+        },
+        {
+          "code": "AZ",
+          "countryCode": "US",
+          "name": "Arizona"
+        },
+        {
+          "code": "BC",
+          "countryCode": "CA",
+          "name": "British Columbia"
         },
         {
           "code": "CA",
@@ -1848,14 +1941,14 @@ export class MockConfig {
           "name": "Connecticut"
         },
         {
-          "code": "DE",
-          "countryCode": "US",
-          "name": "Delaware"
-        },
-        {
           "code": "DC",
           "countryCode": "US",
           "name": "District of Columbia"
+        },
+        {
+          "code": "DE",
+          "countryCode": "US",
+          "name": "Delaware"
         },
         {
           "code": "FL",
@@ -1878,124 +1971,14 @@ export class MockConfig {
           "name": "Hawaii"
         },
         {
-          "code": "ID",
-          "countryCode": "US",
-          "name": "Idaho"
-        },
-        {
-          "code": "IN",
-          "countryCode": "US",
-          "name": "Indiana"
-        },
-        {
           "code": "IA",
           "countryCode": "US",
           "name": "Iowa"
         },
         {
-          "code": "KS",
+          "code": "ID",
           "countryCode": "US",
-          "name": "Kansas"
-        },
-        {
-          "code": "AR",
-          "countryCode": "US",
-          "name": "Arkansas"
-        },
-        {
-          "code": "KY",
-          "countryCode": "US",
-          "name": "Kentucky"
-        },
-        {
-          "code": "AZ",
-          "countryCode": "US",
-          "name": "Arizona"
-        },
-        {
-          "code": "AK",
-          "countryCode": "US",
-          "name": "Alaska"
-        },
-        {
-          "code": "AB",
-          "countryCode": "CA",
-          "name": "Alberta"
-        },
-        {
-          "code": "BC",
-          "countryCode": "CA",
-          "name": "British Columbia"
-        },
-        {
-          "code": "MB",
-          "countryCode": "CA",
-          "name": "Manitoba"
-        },
-        {
-          "code": "NB",
-          "countryCode": "CA",
-          "name": "New Brunswick"
-        },
-        {
-          "code": "NL",
-          "countryCode": "CA",
-          "name": "Newfoundland and Labrador"
-        },
-        {
-          "code": "NS",
-          "countryCode": "CA",
-          "name": "Nova Scotia"
-        },
-        {
-          "code": "AS",
-          "countryCode": "US",
-          "name": "American Samoa"
-        },
-        {
-          "code": "ON",
-          "countryCode": "CA",
-          "name": "Ontario"
-        },
-        {
-          "code": "QC",
-          "countryCode": "CA",
-          "name": "Quebec"
-        },
-        {
-          "code": "SK",
-          "countryCode": "CA",
-          "name": "Saskatchewan"
-        },
-        {
-          "code": "NT",
-          "countryCode": "CA",
-          "name": "Northwest Territories"
-        },
-        {
-          "code": "NU",
-          "countryCode": "CA",
-          "name": "Nunavut"
-        },
-        {
-          "code": "YT",
-          "countryCode": "CA",
-          "name": "Yukon"
-        },
-        {
-          "code": "AL",
-          "countryCode": "US",
-          "name": "Alabama"
-        },
-        {
-          "code": "PE",
-          "countryCode": "CA",
-          "name": "Prince Edward Island"
-        },
-        {
-          "code": "LA",
-          "countryCode": "US",
-          "name": "Louisiana"
+          "name": "Idaho"
         },
         {
           "code": "IL",
@@ -2003,99 +1986,24 @@ export class MockConfig {
           "name": "Illinois"
         },
         {
-          "code": "MD",
+          "code": "IN",
           "countryCode": "US",
-          "name": "Maryland"
+          "name": "Indiana"
         },
         {
-          "code": "PR",
+          "code": "KS",
           "countryCode": "US",
-          "name": "Puerto Rico"
+          "name": "Kansas"
         },
         {
-          "code": "RI",
+          "code": "KY",
           "countryCode": "US",
-          "name": "Rhode Island"
+          "name": "Kentucky"
         },
         {
-          "code": "SC",
+          "code": "LA",
           "countryCode": "US",
-          "name": "South Carolina"
-        },
-        {
-          "code": "ME",
-          "countryCode": "US",
-          "name": "Maine"
-        },
-        {
-          "code": "TN",
-          "countryCode": "US",
-          "name": "Tennessee"
-        },
-        {
-          "code": "TX",
-          "countryCode": "US",
-          "name": "Texas"
-        },
-        {
-          "code": "PA",
-          "countryCode": "US",
-          "name": "Pennsylvania"
-        },
-        {
-          "code": "UM",
-          "countryCode": "US",
-          "name": "United States Minor Outlying Islands"
-        },
-        {
-          "code": "VT",
-          "countryCode": "US",
-          "name": "Vermont"
-        },
-        {
-          "code": "VI",
-          "countryCode": "US",
-          "name": "Virgin Islands, U.S."
-        },
-        {
-          "code": "VA",
-          "countryCode": "US",
-          "name": "Virginia"
-        },
-        {
-          "code": "WA",
-          "countryCode": "US",
-          "name": "Washington"
-        },
-        {
-          "code": "WV",
-          "countryCode": "US",
-          "name": "West Virginia"
-        },
-        {
-          "code": "WI",
-          "countryCode": "US",
-          "name": "Wisconsin"
-        },
-        {
-          "code": "UT",
-          "countryCode": "US",
-          "name": "Utah"
-        },
-        {
-          "code": "OR",
-          "countryCode": "US",
-          "name": "Oregon"
-        },
-        {
-          "code": "SD",
-          "countryCode": "US",
-          "name": "South Dakota"
-        },
-        {
-          "code": "OH",
-          "countryCode": "US",
-          "name": "Ohio"
+          "name": "Louisiana"
         },
         {
           "code": "MA",
@@ -2103,34 +2011,19 @@ export class MockConfig {
           "name": "Massachusetts"
         },
         {
-          "code": "OK",
-          "countryCode": "US",
-          "name": "Oklahoma"
+          "code": "MB",
+          "countryCode": "CA",
+          "name": "Manitoba"
         },
         {
-          "code": "MN",
+          "code": "MD",
           "countryCode": "US",
-          "name": "Minnesota"
+          "name": "Maryland"
         },
         {
-          "code": "MS",
+          "code": "ME",
           "countryCode": "US",
-          "name": "Mississippi"
-        },
-        {
-          "code": "MO",
-          "countryCode": "US",
-          "name": "Missouri"
-        },
-        {
-          "code": "MT",
-          "countryCode": "US",
-          "name": "Montana"
-        },
-        {
-          "code": "NE",
-          "countryCode": "US",
-          "name": "Nebraska"
+          "name": "Maine"
         },
         {
           "code": "MI",
@@ -2138,24 +2031,34 @@ export class MockConfig {
           "name": "Michigan"
         },
         {
-          "code": "NH",
+          "code": "MN",
           "countryCode": "US",
-          "name": "New Hampshire"
+          "name": "Minnesota"
         },
         {
-          "code": "NJ",
+          "code": "MO",
           "countryCode": "US",
-          "name": "New Jersey"
+          "name": "Missouri"
         },
         {
-          "code": "NM",
+          "code": "MP",
           "countryCode": "US",
-          "name": "New Mexico"
+          "name": "Northern Mariana Islands"
         },
         {
-          "code": "NY",
+          "code": "MS",
           "countryCode": "US",
-          "name": "New York"
+          "name": "Mississippi"
+        },
+        {
+          "code": "MT",
+          "countryCode": "US",
+          "name": "Montana"
+        },
+        {
+          "code": "NB",
+          "countryCode": "CA",
+          "name": "New Brunswick"
         },
         {
           "code": "NC",
@@ -2168,84 +2071,228 @@ export class MockConfig {
           "name": "North Dakota"
         },
         {
-          "code": "MP",
+          "code": "NE",
           "countryCode": "US",
-          "name": "Northern Mariana Islands"
+          "name": "Nebraska"
+        },
+        {
+          "code": "NH",
+          "countryCode": "US",
+          "name": "New Hampshire"
+        },
+        {
+          "code": "NJ",
+          "countryCode": "US",
+          "name": "New Jersey"
+        },
+        {
+          "code": "NL",
+          "countryCode": "CA",
+          "name": "Newfoundland and Labrador"
+        },
+        {
+          "code": "NM",
+          "countryCode": "US",
+          "name": "New Mexico"
+        },
+        {
+          "code": "NS",
+          "countryCode": "CA",
+          "name": "Nova Scotia"
+        },
+        {
+          "code": "NT",
+          "countryCode": "CA",
+          "name": "Northwest Territories"
+        },
+        {
+          "code": "NU",
+          "countryCode": "CA",
+          "name": "Nunavut"
         },
         {
           "code": "NV",
           "countryCode": "US",
           "name": "Nevada"
+        },
+        {
+          "code": "NY",
+          "countryCode": "US",
+          "name": "New York"
+        },
+        {
+          "code": "OH",
+          "countryCode": "US",
+          "name": "Ohio"
+        },
+        {
+          "code": "OK",
+          "countryCode": "US",
+          "name": "Oklahoma"
+        },
+        {
+          "code": "ON",
+          "countryCode": "CA",
+          "name": "Ontario"
+        },
+        {
+          "code": "OR",
+          "countryCode": "US",
+          "name": "Oregon"
+        },
+        {
+          "code": "PA",
+          "countryCode": "US",
+          "name": "Pennsylvania"
+        },
+        {
+          "code": "PE",
+          "countryCode": "CA",
+          "name": "Prince Edward Island"
+        },
+        {
+          "code": "PR",
+          "countryCode": "US",
+          "name": "Puerto Rico"
+        },
+        {
+          "code": "QC",
+          "countryCode": "CA",
+          "name": "Quebec"
+        },
+        {
+          "code": "RI",
+          "countryCode": "US",
+          "name": "Rhode Island"
+        },
+        {
+          "code": "SC",
+          "countryCode": "US",
+          "name": "South Carolina"
+        },
+        {
+          "code": "SD",
+          "countryCode": "US",
+          "name": "South Dakota"
+        },
+        {
+          "code": "SK",
+          "countryCode": "CA",
+          "name": "Saskatchewan"
+        },
+        {
+          "code": "TN",
+          "countryCode": "US",
+          "name": "Tennessee"
+        },
+        {
+          "code": "TX",
+          "countryCode": "US",
+          "name": "Texas"
+        },
+        {
+          "code": "UM",
+          "countryCode": "US",
+          "name": "United States Minor Outlying Islands"
+        },
+        {
+          "code": "UT",
+          "countryCode": "US",
+          "name": "Utah"
+        },
+        {
+          "code": "VA",
+          "countryCode": "US",
+          "name": "Virginia"
+        },
+        {
+          "code": "VI",
+          "countryCode": "US",
+          "name": "Virgin Islands, U.S."
+        },
+        {
+          "code": "VT",
+          "countryCode": "US",
+          "name": "Vermont"
+        },
+        {
+          "code": "WA",
+          "countryCode": "US",
+          "name": "Washington"
+        },
+        {
+          "code": "WI",
+          "countryCode": "US",
+          "name": "Wisconsin"
+        },
+        {
+          "code": "WV",
+          "countryCode": "US",
+          "name": "West Virginia"
+        },
+        {
+          "code": "WY",
+          "countryCode": "US",
+          "name": "Wyoming"
+        },
+        {
+          "code": "YT",
+          "countryCode": "CA",
+          "name": "Yukon"
         }
       ],
       "statusReasons": [
         {
-          "code": 16,
-          "name": "Terms of Access to be determined by an Adjudicator"
-        },
-        {
-          "code": 15,
-          "name": "User has Requested Remote Access"
-        },
-        {
-          "code": 14,
-          "name": "User authenticated with a method other than BC Services Card"
-        },
-        {
-          "code": 13,
-          "name": "User does not have high enough identity assurance level"
-        },
-        {
-          "code": 12,
-          "name": "Admin has flagged the applicant for manual adjudication"
-        },
-        {
-          "code": 11,
-          "name": "Contact Address or Identity Address not in British Columbia"
+          "code": 8,
+          "name": "Insulin Pump Provider"
         },
         {
           "code": 10,
           "name": "Answered one or more Self Declaration questions \"Yes\""
         },
         {
-          "code": 9,
-          "name": "Licence Class requires manual adjudication"
-        },
-        {
-          "code": 5,
-          "name": "Name discrepancy in PharmaNet practitioner table"
-        },
-        {
-          "code": 7,
-          "name": "Listed as Non-Practicing in PharmaNet practitioner table"
-        },
-        {
-          "code": 6,
-          "name": "Birthdate discrepancy in PharmaNet practitioner table"
-        },
-        {
-          "code": 4,
-          "name": "College License or Practitioner ID not in PharmaNet table"
-        },
-        {
-          "code": 3,
-          "name": "PharmaNet Error, License could not be validated"
-        },
-        {
-          "code": 2,
-          "name": "Manually Adjudicated"
+          "code": 11,
+          "name": "Contact Address or Identity Address not in British Columbia"
         },
         {
           "code": 1,
           "name": "Automatically Adjudicated"
         },
         {
-          "code": 8,
-          "name": "Insulin Pump Provider"
+          "code": 2,
+          "name": "Manually Adjudicated"
         },
         {
-          "code": 17,
-          "name": "No address from BCSC. Enrollee entered address."
+          "code": 5,
+          "name": "Name discrepancy in PharmaNet practitioner table"
+        },
+        {
+          "code": 6,
+          "name": "Birthdate discrepancy in PharmaNet practitioner table"
+        },
+        {
+          "code": 7,
+          "name": "Listed as Non-Practicing in PharmaNet practitioner table"
+        },
+        {
+          "code": 9,
+          "name": "Licence Class requires manual adjudication"
+        },
+        {
+          "code": 12,
+          "name": "Admin has flagged the applicant for manual adjudication"
+        },
+        {
+          "code": 13,
+          "name": "User does not have high enough identity assurance level"
+        },
+        {
+          "code": 14,
+          "name": "User authenticated with a method other than BC Services Card"
+        },
+        {
+          "code": 15,
+          "name": "User has Requested Remote Access"
         },
         {
           "code": 16,
@@ -2269,6 +2316,11 @@ export class MockConfig {
         }
       ],
       "vendors": [
+        {
+          "code": 1,
+          "careSettingCode": 2,
+          "name": "CareConnect"
+        },
         {
           "code": 2,
           "careSettingCode": 2,
@@ -2295,9 +2347,9 @@ export class MockConfig {
           "name": "PharmaClik"
         },
         {
-          "code": 10,
+          "code": 7,
           "careSettingCode": 3,
-          "name": "WinRx"
+          "name": "Nexxsys"
         },
         {
           "code": 8,
@@ -2308,6 +2360,11 @@ export class MockConfig {
           "code": 9,
           "careSettingCode": 3,
           "name": "Assyst Rx-A"
+        },
+        {
+          "code": 10,
+          "careSettingCode": 3,
+          "name": "WinRx"
         },
         {
           "code": 11,
@@ -2323,22 +2380,20 @@ export class MockConfig {
           "code": 13,
           "careSettingCode": 3,
           "name": "BDM"
-        },
-        {
-          "code": 7,
-          "careSettingCode": 3,
-          "name": "Nexxsys"
-        },
-        {
-          "code": 1,
-          "careSettingCode": 2,
-          "name": "CareConnect"
         }
       ],
       "healthAuthorities": [
         {
-          "code": 6,
-          "name": "Provincial Health Services Authority"
+          "code": 1,
+          "name": "Northern Health"
+        },
+        {
+          "code": 2,
+          "name": "Interior Health"
+        },
+        {
+          "code": 3,
+          "name": "Vancouver Coastal Health"
         },
         {
           "code": 4,
@@ -2349,27 +2404,11 @@ export class MockConfig {
           "name": "Fraser Health"
         },
         {
-          "code": 2,
-          "name": "Interior Health"
-        },
-        {
-          "code": 1,
-          "name": "Northern Health"
-        },
-        {
-          "code": 3,
-          "name": "Vancouver Coastal Health"
+          "code": 6,
+          "name": "Provincial Health Services Authority"
         }
       ],
       "facilities": [
-        {
-          "code": 4,
-          "name": "Out-patient pharmacy"
-        },
-        {
-          "code": 1,
-          "name": "Acute/ambulatory care"
-        },
         {
           "code": 2,
           "name": "Long-term care"
@@ -2379,30 +2418,12 @@ export class MockConfig {
           "name": "In-patient pharmacy"
         },
         {
-          "code": 5,
-          "name": "Outpatient or community-based clinic"
-        }
-      ],
-      "careTypes": [
-        {
-          "code": 1,
-          "name": "Ambulatory Care"
+          "code": 4,
+          "name": "Out-patient pharmacy"
         },
         {
-          "code": 2,
-          "name": "Acute Care"
-        }
-      ],
-      "collegeLicenseGroupings": [
-        {
           "code": 1,
-          "name": "Licensed Practical Nurse",
-          "weight": 1
-        },
-        {
-          "code": 2,
-          "name": "Registered Nurse/Licensed Graduate Nurse",
-          "weight": 2
+          "name": "Acute/ambulatory care"
         },
         {
           "code": 5,

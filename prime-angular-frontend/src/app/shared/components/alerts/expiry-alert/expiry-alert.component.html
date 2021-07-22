@@ -1,0 +1,13 @@
+<app-alert *ngIf="expiryDates && withinDaysOfRenewal"
+           [type]="type"
+           [icon]="icon"
+           class="mb-4">
+  <ng-container #alertTitle
+                class="alert-title">
+    <ng-content select=".alert-title"></ng-content>
+  </ng-container>
+  <ng-container #alertContent
+                class="alert-content">
+    <ng-content select=".alert-content"></ng-content>
+  </ng-container>
+</app-alert>

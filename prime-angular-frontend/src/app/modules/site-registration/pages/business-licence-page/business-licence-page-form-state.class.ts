@@ -19,6 +19,10 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return this.formInstance.get('businessLicenceGuid') as FormControl;
   }
 
+  public get businessLicenceExpiry(): FormControl {
+    return this.formInstance.get('businessLicenceExpiry') as FormControl;
+  }
+
   public get deferredLicenceReason(): FormControl {
     return this.formInstance.get('deferredLicenceReason') as FormControl;
   }
@@ -59,6 +63,10 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       businessLicenceGuid: [
         '',
         []
+      ],
+      businessLicenceExpiry: [
+        '',
+        [Validators.required]
       ],
       deferredLicenceReason: [
         '',
