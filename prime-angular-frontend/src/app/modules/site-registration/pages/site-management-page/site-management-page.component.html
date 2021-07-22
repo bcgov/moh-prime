@@ -92,9 +92,11 @@
   <ng-template #notification
                let-props="props">
     <div class="d-flex align-items-center mt-2">
-      <mat-icon class="mr-2"
-                color="warn">{{ props.icon }}</mat-icon>
-      <span class="text-red">{{ props.text }}</span>
+      <div class="col d-flex align-items-center">
+        <mat-icon class="mr-2"
+                  color="warn">{{ props.icon }}</mat-icon>
+        <span class="text-red">{{ props.text }}</span>
+      </div>
       <button mat-flat-button
               color="primary"
               class="ml-auto"
