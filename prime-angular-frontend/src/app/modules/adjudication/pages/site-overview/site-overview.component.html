@@ -8,7 +8,9 @@
                                (assign)="onAssign($event)"
                                (reassign)="onReassign($event)"
                                (notify)="onNotify($event)"
-                               (route)="onRoute($event)"></app-site-registration-table>
+                               (route)="onRoute($event)"
+                               (flag)="onToggleFlagSite($event)">
+  </app-site-registration-table>
 
   <div class="row mt-4">
 
@@ -42,7 +44,8 @@
                                        (unreject)="onUnreject($event)"
                                        (delete)="onDelete($event)"
                                        (enableEditing)="onEnableEditing($event)"
-                                       (escalate)="onEscalate($event)">
+                                       (escalate)="onEscalate($event)"
+                                       (flag)="onToggleFlagSite($event)">
         </app-site-registration-actions>
       </div>
       <div class="row pl-4">
