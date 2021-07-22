@@ -34,5 +34,15 @@ export class ErrorHandlerService implements ErrorHandler {
       // Client error has occurred (Angular Error, ReferenceError...)
       dialogLogger.log(error);
     }
+
+    const message = (error.message)
+      ? error.message
+      : error.toString();
+    const url = router.url;
+
+    logger.error(message, { url });
+
+    // IMPORTANT: Rethrow the error, otherwise it gets swallowed
+    throw error;
   }
 }
