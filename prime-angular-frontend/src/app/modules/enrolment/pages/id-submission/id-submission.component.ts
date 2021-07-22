@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
@@ -33,7 +33,7 @@ export class IdSubmissionComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService

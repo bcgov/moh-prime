@@ -10,7 +10,7 @@ import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
@@ -35,7 +35,7 @@ export class HealthAuthorityResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService,
+    private logger: ConsoleLoggerService,
     private capitalizePipe: CapitalizePipe
   ) { }
 

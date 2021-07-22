@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Role } from '../enum/role.enum';
@@ -15,7 +15,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 export class AuthorizationRedirectGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router

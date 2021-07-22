@@ -1,5 +1,5 @@
 import { Party } from '@lib/models/party.model';
-import { SiteListViewModel } from './site.model';
+import { Site, SiteListViewModel } from './site.model';
 
 export interface Organization {
   id?: number;
@@ -16,5 +16,5 @@ export interface Organization {
   hasSubmittedSite: boolean;
   hasClaim: boolean;
   // Children -----
-  sites: SiteListViewModel[];
+  sites: Site[];
 }

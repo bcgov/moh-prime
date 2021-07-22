@@ -23,6 +23,7 @@ import { SiteRegistrationListViewModel } from '@registration/shared/models/site-
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { Party } from '@lib/models/party.model';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -41,6 +42,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public site: Site;
   public orgClaim: OrganizationClaim;
   public newSigningAuthority: Party;
+  public businessLicences: BusinessLicence[];
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
@@ -106,11 +108,13 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.busy = forkJoin([
       this.organizationResource.getOrganizationById(oid),
       this.siteResource.getSiteById(sid),
+      this.siteResource.getBusinessLicences(sid),
       this.organizationResource.getOrganizationClaimByOrgId(oid)
     ]).pipe(
-      exhaustMap(([organization, site, orgClaim]: [Organization, Site, OrganizationClaim]) => {
+      exhaustMap(([organization, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
         this.organization = organization;
         this.site = site;
+        this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.form.get('pec').setValue(site.pec);
         return of(null);

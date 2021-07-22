@@ -18,6 +18,7 @@ export class AdjudicationRoutes {
   public static MAINTENANCE = 'maintenance';
   public static NOTIFICATION_EMAILS = 'notification-emails';
   public static TOA = 'toa';
+  public static LICENSE_CLASSES = 'license-classes';
 
   // SITE_REGISTRATIONS is an alias for ORGANIZATIONS in the routing hierarchy
   public static SITE_REGISTRATIONS = 'site-registrations';

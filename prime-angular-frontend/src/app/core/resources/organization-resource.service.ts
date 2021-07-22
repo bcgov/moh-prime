@@ -6,9 +6,9 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Party } from '@lib/models/party.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
@@ -27,7 +27,7 @@ export class OrganizationResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {

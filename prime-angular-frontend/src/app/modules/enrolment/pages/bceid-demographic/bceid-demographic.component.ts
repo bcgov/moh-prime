@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import { MINIMUM_AGE } from '@lib/constants';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -52,7 +52,7 @@ export class BceidDemographicComponent extends BaseEnrolmentProfilePage implemen
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService

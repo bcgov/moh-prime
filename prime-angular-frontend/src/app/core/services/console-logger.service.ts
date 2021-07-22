@@ -1,51 +1,15 @@
 import { Injectable } from '@angular/core';
 
-import { environment } from '@env/environment';
+import { AbstractLoggerService } from '@core/services/abstract-logger.service';
+import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
 })
-export class LoggerService {
-  constructor() { }
+export class ConsoleLoggerService extends AbstractLoggerService {
 
-  /**
-   * @description
-   * General output of logging information.
-   */
-  public log(msg: string, ...data: any[]) {
-    this.print('log', { msg, data });
-  }
-
-  /**
-   * @description
-   * Informative output of logging information.
-   */
-  public info(msg: string, ...data: any[]) {
-    this.print('info', { msg, data });
-  }
-
-  /**
-   * @description
-   * Outputs a warning message.
-   */
-  public warn(msg: string, ...data: any[]) {
-    this.print('warn', { msg, data });
-  }
-
-  /**
-   * @description
-   * Outputs an error message.
-   */
-  public error(msg: string, ...data: any[]) {
-    this.print('error', { msg, data });
-  }
-
-  /**
-   * @description
-   * Outputs a stack trace.
-   */
-  public trace(msg: string, ...data: any[]) {
-    this.print('error', { msg, data });
+  constructor() {
+    super();
   }
 
   /**
@@ -53,14 +17,14 @@ export class LoggerService {
    * Pretty print JSON.
    */
   public pretty(msg: string, ...data: any[]) {
-    this.print('log', { msg, data: [JSON.stringify(data, null, '\t')] });
+    this.send('log', { msg, data: [JSON.stringify(data, null, '\t')] });
   }
 
   /**
    * @description
    * Prints the logging information, but ONLY if not in production.
    */
-  private print(type: string, params: { msg?: string, data?: any[] }) {
+  protected send(type: string, params: { msg?: string, data?: any[] }) {
     if (!environment.production || type === 'error' || type === 'warn') {
 
       const message = this.colorize(type, params.msg);
@@ -82,7 +46,7 @@ export class LoggerService {
    * Apply colour to the console message, otherwise the use
    * the default.
    */
-  private colorize(type: string, msg: string): string[] {
+  protected colorize(type: string, msg: string): string[] {
     let color = '';
 
     switch (type) {

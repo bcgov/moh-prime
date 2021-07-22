@@ -27,6 +27,8 @@ import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-pa
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
+import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
+import { BusinessLicenceExpiryComponent } from './shared/components/business-licence-expiry/business-licence-expiry.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +52,8 @@ import { OrganizationClaimConfirmationPageComponent } from './pages/organization
     OverviewPageComponent,
     NextStepsPageComponent,
     OrganizationClaimConfirmationPageComponent
+    BusinessLicenceRenewalPageComponent,
+    BusinessLicenceExpiryComponent
   ],
   imports: [
     SiteRegistrationRoutingModule,

@@ -31,6 +31,8 @@ export class SiteRoutes {
   public static SITE_REVIEW = 'site-review';
   public static NEXT_STEPS = 'next-steps';
 
+  public static BUSINESS_LICENCE_RENEWAL = 'business-licence-renewal';
+
   /**
    * @description
    * Useful for redirecting to module root-level routes.
@@ -88,6 +90,7 @@ export class SiteRoutes {
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
       this.CARE_SETTING,
+      this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
