@@ -19,7 +19,7 @@ namespace Prime.Engines
                 // Approve
                 (SiteRegistrationAction.Approve, SiteStatusType.InReview) => true,
                 // Unreject
-                (SiteRegistrationAction.Unreject, SiteStatusType.InReview) => true,
+                (SiteRegistrationAction.Unreject, SiteStatusType.Locked) => true,
 
                 _ => false
             };
