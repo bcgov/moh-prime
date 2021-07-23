@@ -2,9 +2,8 @@ namespace Prime.Models
 {
     public enum SiteStatusType
     {
-        Active = 1,
+        Editable = 1,
         InReview = 2,
-        Approved = 3,
-        Locked = 4
+        Locked = 3
     }
 }
