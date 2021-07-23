@@ -195,7 +195,6 @@ export class SiteManagementPageComponent implements OnInit {
               if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate)
                 return Site.getExpiryDate(s)
             });
-          console.log('organizations', organizations);
           return this.organizations = organizations;
         }),
         exhaustMap((organization: Organization[]) =>
