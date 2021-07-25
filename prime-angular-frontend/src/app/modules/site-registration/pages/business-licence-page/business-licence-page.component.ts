@@ -62,8 +62,9 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.businessLicence = new BusinessLicence(this.siteService.site.id);
   }
 
-  public isCommPharm(): boolean {
-    return this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+  public canDefer(): boolean {
+    const code = this.siteService.site.careSettingCode;
+    return code === CareSettingEnum.COMMUNITY_PHARMACIST || code === CareSettingEnum.DEVICE_PROVIDER;
   }
 
   public onUpload(document: BaseDocument): void {
@@ -192,11 +193,11 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
         if (businessLicense && !businessLicense.completed) {
           // Business licence may exist, but the deferred licence toggle may be
           // hidden based on care setting leaving the toggle undefined
-          if (this.isCommPharm()) {
+          if (this.canDefer()) {
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
 
-          this.updateBusLicAccess(this.isCommPharm());
+          this.updateBusLicAccess(this.canDefer());
         }
       });
   }
