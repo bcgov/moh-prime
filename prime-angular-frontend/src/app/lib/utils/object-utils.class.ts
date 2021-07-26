@@ -19,6 +19,22 @@ export class ObjectUtils {
 
   /**
    * @description
+   * Map an object's keys by value.
+   */
+  public static keyMappingImmutable<T, S>(object: T, mapping: { [key: string]: string }): S {
+    if (!object || !mapping) {
+      return;
+    }
+
+    return Object.keys({ ...object })
+      .reduce((mapped: S, key: string) => {
+        mapped[mapping[key] ?? key] = object[key];
+        return mapped;
+      }, {} as S);
+  }
+
+  /**
+   * @description
    * Merge a key/value pair into an object if the key
    * exists in the source object.
    */
