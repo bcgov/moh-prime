@@ -20,6 +20,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-site-overview',
@@ -36,6 +37,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public columns: string[];
   public organization: Organization;
   public site: Site;
+  public businessLicences: BusinessLicence[];
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
@@ -88,10 +90,12 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     this.busy = forkJoin({
       organization: this.organizationResource.getOrganizationById(oid),
-      site: this.siteResource.getSiteById(sid)
-    }).subscribe(({ organization, site }) => {
+      site: this.siteResource.getSiteById(sid),
+      businessLicences: this.siteResource.getBusinessLicences(sid)
+    }).subscribe(({ organization, site, businessLicences }) => {
       this.organization = organization;
       this.site = site;
+      this.businessLicences = businessLicences;
       this.form.get('pec').setValue(site.pec);
     });
   }

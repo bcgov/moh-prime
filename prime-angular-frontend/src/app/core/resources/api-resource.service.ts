@@ -6,16 +6,16 @@ import { Observable } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { AbstractResource } from '@core/resources/abstract-resource';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiResource extends AbstractResource {
   constructor(
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private http: HttpClient
   ) {

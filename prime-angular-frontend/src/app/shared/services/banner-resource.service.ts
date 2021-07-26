@@ -3,7 +3,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { Banner, BannerViewModel } from '@shared/models/banner.model';
@@ -18,7 +18,7 @@ export class BannerResourceService {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public createBanner(locationCode: BannerLocationCode, banner: Banner): Observable<Banner> {

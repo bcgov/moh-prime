@@ -8759,6 +8759,9 @@ namespace Prime.Migrations
                     b.Property<string>("DeferredLicenceReason")
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("ExpiryDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("SiteId")
                         .HasColumnType("integer");
 
@@ -8768,10 +8771,12 @@ namespace Prime.Migrations
                     b.Property<Guid>("UpdatedUserId")
                         .HasColumnType("uuid");
 
+                    b.Property<DateTimeOffset?>("UploadedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("SiteId")
-                        .IsUnique();
+                    b.HasIndex("SiteId");
 
                     b.ToTable("BusinessLicence");
                 });
@@ -8905,6 +8910,43 @@ namespace Prime.Migrations
                     b.HasIndex("PracticeCode");
 
                     b.ToTable("Certification");
+                });
+
+            modelBuilder.Entity("Prime.Models.ClientLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Data")
+                        .HasColumnType("text");
+
+                    b.Property<int>("LogType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ClientLog");
                 });
 
             modelBuilder.Entity("Prime.Models.College", b =>
@@ -15148,6 +15190,9 @@ namespace Prime.Migrations
                     b.Property<string>("DoingBusinessAs")
                         .HasColumnType("text");
 
+                    b.Property<bool>("Flagged")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
 
@@ -15943,8 +15988,8 @@ namespace Prime.Migrations
             modelBuilder.Entity("Prime.Models.BusinessLicence", b =>
                 {
                     b.HasOne("Prime.Models.Site", "Site")
-                        .WithOne("BusinessLicence")
-                        .HasForeignKey("Prime.Models.BusinessLicence", "SiteId")
+                        .WithMany("BusinessLicences")
+                        .HasForeignKey("SiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

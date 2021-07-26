@@ -7,7 +7,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 import { delay } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -45,7 +45,7 @@ export class RemoteAccessComponent extends BaseEnrolmentProfilePage implements O
     protected siteResource: SiteResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,

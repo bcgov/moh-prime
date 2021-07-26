@@ -6,11 +6,12 @@ import { map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 export class PaperEnrolmentGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private paperEnrolmentResource: PaperEnrolmentResource

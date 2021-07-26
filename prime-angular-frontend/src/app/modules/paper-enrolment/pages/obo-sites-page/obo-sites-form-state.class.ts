@@ -5,9 +5,9 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
-import { OboSitesFormModel } from './obo-sites-form.model';
+import { OboSitesForm } from './obo-sites-form.model';
 
-export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
+export class OboSiteFormState extends AbstractFormState<OboSitesForm> {
   public constructor(
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService
@@ -40,7 +40,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     return this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
   }
 
-  public get json(): OboSitesFormModel {
+  public get json(): OboSitesForm {
     if (!this.formInstance) {
       return;
     }
@@ -56,7 +56,7 @@ export class OboSiteFormState extends AbstractFormState<OboSitesFormModel> {
     return { oboSites };
   }
 
-  public patchValue({ oboSites }: OboSitesFormModel, enrollee: HttpEnrollee): void {
+  public patchValue({ oboSites }: OboSitesForm, enrollee: HttpEnrollee): void {
     if (!this.formInstance) {
       return;
     }

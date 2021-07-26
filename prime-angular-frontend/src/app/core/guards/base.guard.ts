@@ -4,10 +4,10 @@ import {
   ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Params
 } from '@angular/router';
 
-import { isObservable, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 
-import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
 
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService
+    protected logger: ConsoleLoggerService
   ) { }
 
   public get isAuthenticated(): boolean {
@@ -65,10 +65,10 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
         const result = await this.canAccess(this.authenticated, routePath, params);
         resolve(result);
       } catch (error) {
-        const destination = (routePath) ? ` to ${ routePath } ` : ' ';
-        const message = `Route access${ destination }has been denied`;
+        const destination = (routePath) ? ` to ${routePath} ` : ' ';
+        const message = `Route access${destination}has been denied`;
         this.logger.warn(message);
-        reject(`${ message }: ${ error }`);
+        reject(`${message}: ${error}`);
       }
     });
   }
@@ -90,7 +90,7 @@ export class BaseGuard implements CanLoad, CanActivate, CanActivateChild {
    */
   private getUrl(routeParam: UrlSegment[] | RouterStateSnapshot): string {
     return (Array.isArray(routeParam))
-      ? routeParam.reduce((path, segment) => `${ path }/${ segment.path }`, '')
+      ? routeParam.reduce((path, segment) => `${path}/${segment.path}`, '')
       : routeParam.url;
   }
 }
