@@ -7,19 +7,15 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { HttpEnrollee } from '@shared/models/enrolment.model';
-
-import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
-import { UtilsService } from '@core/services/utils.service';
-import { AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
-import { NursingLicenseCode } from '@shared/enums/nursing-license-code.enum';
-import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
-import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
   selector: 'app-overview-page',
@@ -30,10 +26,9 @@ export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public enrollee: HttpEnrollee;
   public routeUtils: RouteUtils;
+  public documents: EnrolleeAdjudicationDocument[];
   public CareSettingEnum = CareSettingEnum;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public savedDocuments: EnrolleeAdjudicationDocument[];
-  public AgreementTypeNameMap = AgreementTypeNameMap;
 
   constructor(
     protected dialog: MatDialog,
@@ -46,12 +41,7 @@ export class OverviewPageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public shouldShowPractices(collegeCode: number, licenseCode: number): boolean {
-    // Only display Advanced Practices for certain nursing licences
-    return CollegeCertification.hasPractice(collegeCode, licenseCode);
-  }
-
-  public getDocument(documentId: number): void {
+  public onDownload({ documentId }: { documentId: number }): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
       .subscribe((token: string) => this.utilsService.downloadToken(token));
@@ -76,12 +66,11 @@ export class OverviewPageComponent implements OnInit {
   }
 
   public onRoute(routePath: string | string[]) {
-    routePath = (Array.isArray(routePath)) ? routePath : [routePath];
     this.routeUtils.routeRelativeTo(routePath);
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.UPLOAD]);
+    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.UPLOAD);
   }
 
   public ngOnInit(): void {
@@ -89,7 +78,7 @@ export class OverviewPageComponent implements OnInit {
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.eid)
-      .subscribe(documents => this.savedDocuments = documents);
+      .subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
   }
 
   protected afterSubmitIsSuccessful(): void {
