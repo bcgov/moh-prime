@@ -2,7 +2,7 @@
   <p>URL: {{ this.router.url }}</p>
   <p>Environment: {{ this.config.environmentName }}</p>
   <p>Version: {{ this.environment.version }}</p>
-  <mat-expansion-panel *ngIf="error.stack"
+  <mat-expansion-panel *ngIf="error.stack && !environment.production"
                        class="mb-1">
     <mat-expansion-panel-header>
       <mat-panel-title>
