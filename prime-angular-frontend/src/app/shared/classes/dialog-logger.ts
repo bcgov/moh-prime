@@ -14,7 +14,6 @@ export class DialogLogger {
   ) { }
 
   public log(error: Error): void {
-
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
