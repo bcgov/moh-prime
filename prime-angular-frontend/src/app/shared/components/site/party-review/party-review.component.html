@@ -27,7 +27,7 @@
 
 <ng-container *ngFor="let addressType of ['physicalAddress', 'mailingAddress']">
 
-  <ng-container *ngIf="party[addressType] && !excludeList.includes(addressType)">
+  <ng-container *ngIf="party && party[addressType] && !excludeList.includes(addressType)">
 
     <div class="my-3">
       <strong>{{ (addressType === 'physicalAddress') ? 'Physical' : 'Mailing' }} Address</strong>

@@ -5,10 +5,10 @@ import { map, catchError, tap } from 'rxjs/operators';
 
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 import { CertSearch } from '@enrolment/shared/models/cert-search.model';
@@ -32,7 +32,7 @@ export class SiteResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getSites(organizationId: number): Observable<SiteListViewModel[]>;
@@ -236,7 +236,7 @@ export class SiteResource {
 
   public createBusinessLicence(siteId: number, businessLicence: BusinessLicence, documentGuid: string): Observable<BusinessLicence> {
     const params = documentGuid ? this.apiResourceUtilsService.makeHttpParams({ documentGuid }) : null;
-    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence, params)
+    return this.apiResource.post<BusinessLicence>(`sites/${siteId}/business-licences`, businessLicence, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -247,7 +247,7 @@ export class SiteResource {
   }
 
   public updateBusinessLicence(siteId: number, businessLicence: BusinessLicence): Observable<BusinessLicence> {
-    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licence`, businessLicence)
+    return this.apiResource.put<BusinessLicence>(`sites/${siteId}/business-licences/${businessLicence.id}`, businessLicence)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
@@ -257,9 +257,13 @@ export class SiteResource {
       );
   }
 
-  public createBusinessLicenceDocument(siteId: number, documentGuid: string): Observable<BusinessLicenceDocument> {
+  public createBusinessLicenceDocument(
+    siteId: number,
+    businessLicenceId: number,
+    documentGuid: string
+  ): Observable<BusinessLicenceDocument> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`, null, params)
+    return this.apiResource.post<BusinessLicenceDocument>(`sites/${siteId}/business-licences/${businessLicenceId}/document`, null, params)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicenceDocument>) => response.result),
         catchError((error: any) => {
@@ -269,8 +273,8 @@ export class SiteResource {
       );
   }
 
-  public removeBusinessLicenceDocument(siteId: number): NoContent {
-    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licence/document`)
+  public removeBusinessLicenceDocument(siteId: number, businessLicenceId: number): NoContent {
+    return this.apiResource.delete<BusinessLicenceDocument>(`sites/${siteId}/business-licences/${businessLicenceId}/document`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -281,19 +285,31 @@ export class SiteResource {
   }
 
   public getBusinessLicence(siteId: number): Observable<BusinessLicence> {
-    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licence`)
+    return this.apiResource.get<BusinessLicence>(`sites/${siteId}/business-licences?latest=true`)
       .pipe(
         map((response: ApiHttpResponse<BusinessLicence>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Business Licence could not be Retrieved');
+          this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicence error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getBusinessLicences(siteId: number): Observable<BusinessLicence[]> {
+    return this.apiResource.get<BusinessLicence[]>(`sites/${siteId}/business-licences`)
+      .pipe(
+        map((response: ApiHttpResponse<BusinessLicence[]>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Business Licences could not be Retrieved');
           this.logger.error('[SiteRegistration] SiteRegistrationResource::getBusinessLicences error has occurred: ', error);
           throw error;
         })
       );
   }
 
-  public getBusinessLicenceDocumentToken(siteId: number): Observable<string> {
-    return this.apiResource.get<string>(`sites/${siteId}/business-licence/document/token`)
+  public getBusinessLicenceDocumentToken(siteId: number, businessLicenceId: number): Observable<string> {
+    return this.apiResource.get<string>(`sites/${siteId}/business-licences/${businessLicenceId}/document/token`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
@@ -406,6 +422,25 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site registration could not be unrejected');
           this.logger.error('[SiteRegistration] SiteResource::unrejectSite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public flagSite(siteId: number, flagged: boolean): Observable<Site> {
+    const url = `sites/${siteId}/flag`;
+    const body = { data: flagged };
+    const request$ = this.apiResource.put<Site>(url, body);
+
+    return request$
+      .pipe(
+        map((response: ApiHttpResponse<Site>) => response.result),
+        map((site: Site) => site),
+        tap((site: Site) => this.logger.info('UPDATED SITE', site)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site flag could not be updated');
+          this.logger.error('[Site] SiteResource::flagSite error has occurred:'
+            , error);
           throw error;
         })
       );

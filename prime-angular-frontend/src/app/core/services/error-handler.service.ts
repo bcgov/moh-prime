@@ -2,9 +2,9 @@ import { Injectable, Injector, ErrorHandler } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { LoggerService } from '@core/services/logger.service';
 import { DialogLogger } from '@shared/classes/dialog-logger';
-import { environment } from '@env/environment.prod.template';
+import { ConsoleLoggerService } from './console-logger.service';
+import { WebApiLoggerService } from './web-api-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +17,15 @@ export class ErrorHandlerService implements ErrorHandler {
   ) { }
 
   public handleError(error: Error | HttpErrorResponse) {
-    const logger = this.injector.get(LoggerService);
+    const logger = this.injector.get(ConsoleLoggerService);
+    const webApiLogger = this.injector.get(WebApiLoggerService);
     const dialogLogger = this.injector.get(DialogLogger);
     const router = this.injector.get(Router);
+
+    const message = (error.message)
+      ? error.message
+      : error.toString();
+    const url = router.url;
 
     if (error instanceof HttpErrorResponse) {
       // Server or connection error occurred
@@ -28,17 +34,13 @@ export class ErrorHandlerService implements ErrorHandler {
         return logger.error('No Internet Connection');
       } else {
         // HTTP error has occurred (error.status = 403, 404, 500...)
-        return logger.error(`${ error.status } - ${ error.message }`);
+        return logger.error(`${error.status} - ${error.message}`);
       }
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
+      webApiLogger.error(message, { url });
       dialogLogger.log(error);
     }
-
-    const message = (error.message)
-      ? error.message
-      : error.toString();
-    const url = router.url;
 
     logger.error(message, { url });
 

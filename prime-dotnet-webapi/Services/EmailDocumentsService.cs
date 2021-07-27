@@ -49,10 +49,10 @@ namespace Prime.Services.EmailInternal
             };
         }
 
-        public async Task<string> GetBusinessLicenceDownloadLink(int siteId)
+        public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
         {
             var document = await _context.BusinessLicenceDocuments
-                .SingleOrDefaultAsync(doc => doc.BusinessLicence.SiteId == siteId);
+                .SingleOrDefaultAsync(doc => doc.BusinessLicence.Id == businessLicenceId);
 
             if (document == null)
             {

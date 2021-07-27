@@ -23,6 +23,13 @@ namespace Prime.Configuration
                     new Vendor { Code = 11, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Shoppers Drug Mart HealthWatch NG", Email = ""                       },
                     new Vendor { Code = 12, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "Commander Group",                   Email = ""                       },
                     new Vendor { Code = 13, CareSettingCode = (int)CareSettingType.CommunityPharmacy, Name = "BDM",                               Email = ""                       },
+                    new Vendor { Code = 14, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Assyst Rx-A",                       Email = ""                       },
+                    new Vendor { Code = 15, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Commander Group",                   Email = ""                       },
+                    new Vendor { Code = 16, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Kroll",                             Email = ""                       },
+                    new Vendor { Code = 17, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Nexxsys",                           Email = ""                       },
+                    new Vendor { Code = 18, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "PharmaClik",                        Email = ""                       },
+                    new Vendor { Code = 19, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "Shoppers Drug Mart HealthWatch NG", Email = ""                       },
+                    new Vendor { Code = 20, CareSettingCode = (int)CareSettingType.DeviceProvider,    Name = "WinRx",                             Email = ""                       },
                 };
             }
         }

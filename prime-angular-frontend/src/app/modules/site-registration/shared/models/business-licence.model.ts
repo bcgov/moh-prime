@@ -6,8 +6,10 @@ export class BusinessLicence {
   businessLicenceDocument: BusinessLicenceDocument;
   completed: boolean;
   deferredLicenceReason: string;
+  expiryDate: string;
 
-  constructor(siteId: number) {
+  constructor(siteId: number, expiryDate?: string) {
     this.siteId = siteId;
+    this.expiryDate = expiryDate;
   }
 }

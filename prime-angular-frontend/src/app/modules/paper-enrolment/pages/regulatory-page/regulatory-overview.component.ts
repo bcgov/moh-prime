@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { RouteUtils } from '@lib/utils/route-utils.class';
+import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { RegulatoryForm } from './regulatory-form.model';
@@ -13,8 +13,7 @@ import { RegulatoryForm } from './regulatory-form.model';
       <app-page-subheader>
         <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
 
-        <button *ngIf="true"
-                mat-icon-button
+        <button mat-icon-button
                 matTooltip="Edit College Licenses"
                 (click)="onRoute(PaperEnrolmentRoutes.REGULATORY)">
           <mat-icon>edit</mat-icon>
@@ -58,24 +57,16 @@ import { RegulatoryForm } from './regulatory-form.model';
     </app-page-section>
   `,
   styles: ['mat-icon { font-size: 1.2em; }'],
-  encapsulation: ViewEncapsulation.Emulated
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegulatoryOverviewComponent implements OnInit {
+export class RegulatoryOverviewComponent extends AbstractOverview {
   @Input() public regulatory: RegulatoryForm;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  private routeUtils: RouteUtils;
 
   constructor(
     route: ActivatedRoute,
     router: Router
   ) {
-    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
-  }
-
-  public ngOnInit(): void { }
-
-  public onRoute(routePath: string | string[]) {
-    routePath = (Array.isArray(routePath)) ? routePath : [routePath];
-    this.routeUtils.routeRelativeTo(routePath);
+    super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 }

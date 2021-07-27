@@ -51,7 +51,7 @@ import { PageFooterComponent } from '@shared/components/pages/page-footer/page-f
 import { NotificationInfoSummaryDirective } from '@shared/components/forms/contact-information-form/notification-info-summary.directive';
 import { DialogContentDirective } from '@shared/components/dialogs/dialog-content.directive';
 import { FormIconGroupComponent } from '@shared/components/form-icon-group/form-icon-group.component';
-import { AlertComponent } from '@shared/components/alert/alert.component';
+import { AlertComponent } from '@shared/components/alerts/alert/alert.component';
 import { EnrolleePropertyComponent } from '@shared/components/enrollee/enrollee-property/enrollee-property.component';
 import { EnrolleePropertyErrorComponent } from '@shared/components/enrollee/enrollee-property-error/enrollee-property-error.component';
 import { EnrolleeReviewComponent } from '@shared/components/enrollee/enrollee-review/enrollee-review.component';
@@ -104,8 +104,9 @@ import { PaginatorComponent } from '@shared/components/paginator/paginator.compo
 import { DoingBusinessAsFormFieldComponent } from '@shared/components/forms/fields/doing-business-as-form-field/doing-business-as-form-field.component';
 import { CardListComponent } from '@shared/components/card-list/card-list.component';
 import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
-import { OboSiteFormComponent } from './components/obo-site-form/obo-site-form.component';
-import { ErrorLoggerComponent } from './components/dialogs/content/error-logger/error-logger.component';
+import { OboSiteFormComponent } from '@shared/components/obo-site-form/obo-site-form.component';
+import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/expiry-alert.component';
+import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
 
 @NgModule({
   declarations: [
@@ -194,6 +195,7 @@ import { ErrorLoggerComponent } from './components/dialogs/content/error-logger/
     CardListComponent,
     OptionsFormComponent,
     OboSiteFormComponent,
+    ExpiryAlertComponent,
     ErrorLoggerComponent
   ],
   imports: [
@@ -288,7 +290,8 @@ import { ErrorLoggerComponent } from './components/dialogs/content/error-logger/
     DoingBusinessAsFormFieldComponent,
     CardListComponent,
     OptionsFormComponent,
-    OboSiteFormComponent
+    OboSiteFormComponent,
+    ExpiryAlertComponent
   ],
   providers: [
     FullnamePipe,
