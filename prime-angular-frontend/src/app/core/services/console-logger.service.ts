@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { environment } from '@env/environment';
 import { AbstractLoggerService } from '@core/services/abstract-logger.service';
-import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'

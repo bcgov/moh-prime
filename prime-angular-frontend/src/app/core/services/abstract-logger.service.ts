@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
@@ -32,5 +31,4 @@ export abstract class AbstractLoggerService {
   }
 
   protected abstract send(type: string, params: { msg?: string, data?: any[] });
-
 }
