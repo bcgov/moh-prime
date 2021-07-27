@@ -225,9 +225,9 @@ objects:
     config-map.json: |-
       {
         "environmentName": "dev",
-        "apiEndpoint": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
-        "loginRedirectUrl": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
-        "documentManagerUrl": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman",
+        "apiEndpoint": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
+        "loginRedirectUrl": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
+        "documentManagerUrl": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman",
         "keycloakConfig": {
           "config": {
             "url": "https://dev.oidc.gov.bc.ca/auth",
