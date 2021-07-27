@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
-using Prime.Models;
+using Prime.Models.VerifiableCredentials;
 
 namespace Prime.HttpClients
 {
@@ -429,4 +429,3 @@ namespace Prime.HttpClients
         public VerifiableCredentialApiException(string message, Exception inner) : base(message, inner) { }
     }
 }
-

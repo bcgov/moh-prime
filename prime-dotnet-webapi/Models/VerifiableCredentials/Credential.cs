@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
 
-namespace Prime.Models
+namespace Prime.Models.VerifiableCredentials
 {
     [Table("Credential")]
     public class Credential : BaseAuditable

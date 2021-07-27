@@ -9655,59 +9655,6 @@ namespace Prime.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Prime.Models.Credential", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTimeOffset?>("AcceptedCredentialDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Alias")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Base64QRCode")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ConnectionId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CredentialDefinitionId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CredentialExchangeId")
-                        .HasColumnType("text");
-
-                    b.Property<int>("EnrolleeId")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("SchemaId")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EnrolleeId");
-
-                    b.ToTable("Credential");
-                });
-
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
                 {
                     b.Property<int>("PrivilegeId")
@@ -15768,6 +15715,59 @@ namespace Prime.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Prime.Models.VerifiableCredentials.Credential", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset?>("AcceptedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Alias")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Base64QRCode")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ConnectionId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("CredentialDefinitionId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CredentialExchangeId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("RevokedCredentialDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("SchemaId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.ToTable("Credential");
+                });
+
             modelBuilder.Entity("Prime.Models.MailingAddress", b =>
                 {
                     b.HasBaseType("Prime.Models.Address");
@@ -16038,15 +16038,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
                         .HasForeignKey("PhysicalAddressId");
-                });
-
-            modelBuilder.Entity("Prime.Models.Credential", b =>
-                {
-                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
-                        .WithMany()
-                        .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Prime.Models.DefaultPrivilege", b =>
@@ -16667,6 +16658,15 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.CareSetting", "CareSetting")
                         .WithMany()
                         .HasForeignKey("CareSettingCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.VerifiableCredentials.Credential", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

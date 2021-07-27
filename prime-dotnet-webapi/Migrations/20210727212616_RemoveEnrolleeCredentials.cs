@@ -11,11 +11,33 @@ namespace Prime.Migrations
             migrationBuilder.DropTable(
                 name: "EnrolleeCredential");
 
-            migrationBuilder.AddColumn<int>(
-                name: "EnrolleeId",
-                table: "Credential",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.DropTable(
+                name: "Credential");
+
+            migrationBuilder.CreateTable(
+                name: "Credential",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    CreatedUserId = table.Column<Guid>(nullable: false),
+                    CreatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedUserId = table.Column<Guid>(nullable: false),
+                    UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
+                    EnrolleeId = table.Column<int>(nullable: false),
+                    ConnectionId = table.Column<string>(nullable: true),
+                    SchemaId = table.Column<string>(nullable: true),
+                    CredentialExchangeId = table.Column<string>(nullable: true),
+                    CredentialDefinitionId = table.Column<string>(nullable: true),
+                    Alias = table.Column<string>(nullable: true),
+                    Base64QRCode = table.Column<string>(nullable: true),
+                    AcceptedCredentialDate = table.Column<DateTimeOffset>(nullable: true),
+                    RevokedCredentialDate = table.Column<DateTimeOffset>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Credential", x => x.Id);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Credential_EnrolleeId",

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.Api;
+using Prime.Models.VerifiableCredentials;
 using Prime.ViewModels;
 
 namespace Prime.Services

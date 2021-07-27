@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
+using Prime.Models.VerifiableCredentials;
 
 namespace Prime
 {

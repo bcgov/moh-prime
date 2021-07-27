@@ -10,6 +10,7 @@ using QRCoder;
 using Prime.Models;
 using Prime.HttpClients;
 using Microsoft.EntityFrameworkCore;
+using Prime.Models.VerifiableCredentials;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -57,7 +58,7 @@ namespace Prime.Services
         }
 
         // Handle webhook events pushed by the issuing agent.
-        public async Task<bool> WebhookAsync(JObject data, string topic)
+        public async Task<bool> WebhookAsync(WebhookData data, string topic)
         {
             _logger.LogInformation("Webhook topic \"{topic}\"", topic);
 
@@ -149,26 +150,25 @@ namespace Prime.Services
         }
 
         // Handle webhook events for connection states.
-        private async Task<bool> HandleConnectionAsync(JObject data)
+        private async Task<bool> HandleConnectionAsync(WebhookData data)
         {
-            var state = data.Value<string>("state");
             string connectionId;
 
-            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
+            _logger.LogInformation("Connection state \"{state}\" for {@JObject}", data.State, JsonConvert.SerializeObject(data));
 
-            switch (state)
+            switch (data.State)
             {
                 case ConnectionState.Invitation:
                     // Enrollee Id stored as alias on invitation
-                    await UpdateCredentialConnectionId(data.Value<int>("alias"), data.Value<string>("connection_id"));
+                    await UpdateCredentialConnectionId(data.Alias, data.ConnectionId);
                     return true;
 
                 case ConnectionState.Request:
                     return true;
 
                 case ConnectionState.Response:
-                    var alias = data.Value<int>("alias");
-                    connectionId = data.Value<string>("connection_id");
+                    var alias = data.Alias;
+                    connectionId = data.ConnectionId;
 
                     _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", connectionId);
 
@@ -184,19 +184,17 @@ namespace Prime.Services
                     return true;
 
                 default:
-                    _logger.LogError("Connection state {state} is not supported", state);
+                    _logger.LogError("Connection state {state} is not supported", data.State);
                     return false;
             }
         }
 
         // Handle webhook events for issue credential topics.
-        private async Task<bool> HandleIssueCredentialAsync(JObject data)
+        private async Task<bool> HandleIssueCredentialAsync(WebhookData data)
         {
-            var state = data.Value<string>("state");
+            _logger.LogInformation("Issue credential state \"{state}\" for {@JObject}", data.State, JsonConvert.SerializeObject(data));
 
-            _logger.LogInformation("Issue credential state \"{state}\" for {@JObject}", state, JsonConvert.SerializeObject(data));
-
-            switch (state)
+            switch (data.State)
             {
                 case CredentialExchangeState.OfferSent:
                     return true;
@@ -206,16 +204,14 @@ namespace Prime.Services
                     await UpdateCredentialAfterIssued(data);
                     return true;
                 default:
-                    _logger.LogError("Credential exchange state {state} is not supported", state);
+                    _logger.LogError("Credential exchange state {state} is not supported", data.State);
                     return false;
             }
         }
 
-        private async Task<int> UpdateCredentialAfterIssued(JObject data)
+        private async Task<int> UpdateCredentialAfterIssued(WebhookData data)
         {
-            var connection_id = (string)data.SelectToken("connection_id");
-
-            var credential = GetCredentialByConnectionIdAsync(connection_id);
+            var credential = GetCredentialByConnectionIdAsync(data.ConnectionId);
 
             if (credential != null)
             {
