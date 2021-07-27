@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -18,10 +18,10 @@ import { VendorForm } from './vendor-form.model';
       </app-enrollee-property>
     </app-overview-section>
   `,
-  styles: [],
+  styles: ['mat-icon { font-size: 1.2em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VendorOverviewComponent extends AbstractOverview implements OnInit {
+export class VendorOverviewComponent extends AbstractOverview {
   @Input() public vendor: VendorForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
@@ -31,6 +31,4 @@ export class VendorOverviewComponent extends AbstractOverview implements OnInit 
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
-
-  public ngOnInit(): void { }
 }
