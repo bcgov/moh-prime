@@ -183,7 +183,7 @@ objects:
             - name: env-config
               readOnly: true
               mountPath: /opt/app-root/src/assets/config-map.json
-              subpath: config-map.json
+              subPath: config-map.json
         volumes:
         - name: vanity-tls-certs
           secret:
@@ -224,17 +224,17 @@ objects:
   data:
     config-map.json: |-
       {
-        environmentName: 'dev', // expected: 'prod' | 'test' | 'dev' | 'local';
-        apiEndpoint: '${SVC_NAME}.pharmanetenrolment.gov.bc.ca',
-        loginRedirectUrl: '${SVC_NAME}.pharmanetenrolment.gov.bc.ca',
-        documentManagerUrl: '${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman',
-        keycloakConfig: {
-          config: {
-            url: 'https://dev.oidc.gov.bc.ca/auth'
-            realm: 'v4mbqqas'
-            clientId: 'prime-application-dev'
+        "environmentName": "dev",
+        "apiEndpoint": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
+        "loginRedirectUrl": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
+        "documentManagerUrl": "${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman",
+        "keycloakConfig": {
+          "config": {
+            "url": "https://dev.oidc.gov.bc.ca/auth",
+            "realm": "v4mbqqas",
+            "clientId": "prime-application-dev"
           }
-        };
+        }
       }
 
 #   NGINX Configuration
