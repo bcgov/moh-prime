@@ -5,6 +5,7 @@ export interface SiteListViewModelPartial extends
   Omit<SiteListViewModel, 'id' | 'completed' | 'doingBusinessAs'> {
   siteId: number;
   siteDoingBusinessAs: string;
+  flagged: boolean;
 }
 
 export interface OrganizationListViewModelPartial extends

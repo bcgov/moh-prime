@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 export class HelpResource {
   constructor(
     private apiResource: ApiResource,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public enrolleeDisplayId(): Observable<number> {

@@ -6,7 +6,6 @@ import { forkJoin, Observable, of, Subscription } from 'rxjs';
 
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
-import { ToastService } from '@core/services/toast.service';
 import { SiteAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 @Component({
@@ -19,20 +18,15 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
   public busy: Subscription;
   @ViewChild('adjudicationDocuments') public adjudicatorDocumentsComponent: AdjudicatorDocumentsComponent;
 
-  private siteId: number;
-
   constructor(
     private siteResource: SiteResource,
     private route: ActivatedRoute,
-    private utilsService: UtilsService,
-    private toastService: ToastService
-  ) {
-    this.siteId = this.route.snapshot.params.sid;
-  }
+    private utilsService: UtilsService
+  ) { }
 
-  public onSaveDocuments(documentGuids: string[]) {
+  public onSaveDocuments(documentGuids: string[]): void {
     const documentGuids$ = documentGuids.map(guid =>
-      this.siteResource.createSiteAdjudicationDocument(this.siteId, guid));
+      this.siteResource.createSiteAdjudicationDocument(+this.route.snapshot.params.sid, guid));
 
     forkJoin(documentGuids$)
       .subscribe(val => {
@@ -41,23 +35,24 @@ export class SiteAdjudicatorDocumentsComponent implements OnInit {
       });
   }
 
-  public onGetDocumentByGuid(documentId: number) {
-    this.siteResource.getSiteAdjudicationDocumentDownloadToken(this.siteId, documentId)
+  public onGetDocumentByGuid(documentId: number): void {
+    this.siteResource.getSiteAdjudicationDocumentDownloadToken(+this.route.snapshot.params.sid, documentId)
       .subscribe((token: string) =>
         this.utilsService.downloadToken(token)
       );
   }
 
-  public onDeleteDocumentById(documentId: number) {
-    this.busy = this.siteResource.deleteSiteAdjudicationDocument(this.siteId, documentId)
+  public onDeleteDocumentById(documentId: number): void {
+    this.busy = this.siteResource.deleteSiteAdjudicationDocument(+this.route.snapshot.params.sid, documentId)
       .subscribe((document: SiteAdjudicationDocument) => this.getDocuments());
   }
 
   public ngOnInit(): void {
     this.getDocuments();
+    this.route.params.subscribe(() => this.getDocuments());
   }
 
-  private getDocuments() {
-    this.documents$ = this.siteResource.getSiteAdjudicationDocuments(this.siteId);
+  private getDocuments(): void {
+    this.documents$ = this.siteResource.getSiteAdjudicationDocuments(+this.route.snapshot.params.sid);
   }
 }

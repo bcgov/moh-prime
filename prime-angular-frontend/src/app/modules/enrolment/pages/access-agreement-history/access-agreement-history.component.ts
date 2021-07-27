@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
-import { LoggerService } from '@core/services/logger.service';
-import { ToastService } from '@core/services/toast.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -26,8 +24,6 @@ export class AccessAgreementHistoryComponent extends BaseEnrolmentPage implement
     protected route: ActivatedRoute,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private logger: LoggerService,
-    private toastService: ToastService,
   ) {
     super(route, router);
   }

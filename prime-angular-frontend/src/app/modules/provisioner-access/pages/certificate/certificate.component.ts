@@ -7,7 +7,7 @@ import { EnrolmentCertificate } from '../../shared/models/enrolment-certificate.
 import moment from 'moment';
 import { ProvisionerAccessResource } from '../../shared/services/provisioner-access-resource.service';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Component({
   selector: 'app-certificate',
@@ -23,7 +23,7 @@ export class CertificateComponent implements OnInit {
     private route: ActivatedRoute,
     private enrolmentCertificateResource: ProvisionerAccessResource,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public get hasPreferredName(): boolean {
