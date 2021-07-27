@@ -17,7 +17,7 @@ export class DialogLogger {
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
-      title: 'Error Ocurred',
+      title: 'Error Occurred',
       message: error.message,
       data: error,
       actionText: 'OK',
@@ -27,10 +27,6 @@ export class DialogLogger {
 
     this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
-      .subscribe((result: boolean) => {
-        if (result) {
-          // TODO: OK button clicked
-        }
-      });
+      .subscribe();
   }
 }
