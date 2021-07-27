@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Subscription, BehaviorSubject, pipe } from 'rxjs';
+import { Subscription, BehaviorSubject, pipe, Observable, UnaryFunction } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -54,14 +54,14 @@ export class AdjudicatorNotesComponent implements OnInit {
     return this.form.get('note') as FormControl;
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.form.valid) {
       switch (this.noteType) {
         case NoteType.EnrolleeAdjudicationNote:
-          this.createEnrolleeNote(this.route.snapshot.params.id, this.note.value);
+          this.createEnrolleeNote(+this.route.snapshot.params.id, this.note.value);
           break;
         case NoteType.SiteRegistrationNote:
-          this.createSiteRegistrationNote(this.route.snapshot.params.sid, this.note.value);
+          this.createSiteRegistrationNote(+this.route.snapshot.params.sid, this.note.value);
           break;
         default:
           break;
@@ -69,25 +69,27 @@ export class AdjudicatorNotesComponent implements OnInit {
     }
   }
 
-  public onRoute(routePath: string | (string | number)[]) {
+  public onRoute(routePath: string | (string | number)[]): void {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     switch (this.noteType) {
       case NoteType.EnrolleeAdjudicationNote:
-        this.getAdjudicatorNotes(this.route.snapshot.params.id);
+        this.getAdjudicatorNotes(+this.route.snapshot.params.id);
+        this.route.params.subscribe(params => this.getAdjudicatorNotes(+params.id));
         break;
       case NoteType.SiteRegistrationNote:
-        this.getSiteRegistrationNotes(this.route.snapshot.params.sid);
+        this.getSiteRegistrationNotes(+this.route.snapshot.params.sid);
+        this.route.params.subscribe(params => this.getSiteRegistrationNotes(+params.id));
         break;
       default:
         break;
     }
   }
 
-  protected createFormInstance() {
+  protected createFormInstance(): void {
     this.form = this.fb.group({
       note: [
         {
@@ -99,7 +101,7 @@ export class AdjudicatorNotesComponent implements OnInit {
     });
   }
 
-  private getAdjudicatorNotes(enrolleeId: number) {
+  private getAdjudicatorNotes(enrolleeId: number): void {
     this.busy = this.adjudicationResource.getAdjudicatorNotes(enrolleeId)
       .pipe(this.toDateContentPipe())
       .subscribe((datedContent: DateContent[]) =>
@@ -107,7 +109,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       );
   }
 
-  private createEnrolleeNote(enrolleeId: number, note: string) {
+  private createEnrolleeNote(enrolleeId: number, note: string): void {
     this.adjudicationResource
       .createAdjudicatorNote(enrolleeId, note)
       .pipe(this.toDateContentPipe())
@@ -118,7 +120,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       });
   }
 
-  private getSiteRegistrationNotes(siteId: number) {
+  private getSiteRegistrationNotes(siteId: number): void {
     this.busy = this.siteResource.getSiteRegistrationNotes(siteId)
       .pipe(this.toDateContentPipe())
       .subscribe((datedContent: DateContent[]) =>
@@ -126,7 +128,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       );
   }
 
-  private createSiteRegistrationNote(site: number, note: string) {
+  private createSiteRegistrationNote(site: number, note: string): void {
     this.siteResource
       .createSiteRegistrationNote(site, note)
       .pipe(this.toDateContentPipe())
@@ -137,7 +139,7 @@ export class AdjudicatorNotesComponent implements OnInit {
       });
   }
 
-  private toDateContentPipe() {
+  private toDateContentPipe(): UnaryFunction<Observable<BaseAdjudicatorNote | BaseAdjudicatorNote[]>, Observable<DateContent | unknown[]>> {
     return pipe(
       map((adjudicationNotes: BaseAdjudicatorNote | BaseAdjudicatorNote[]) =>
         (Array.isArray(adjudicationNotes))

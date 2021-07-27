@@ -7,7 +7,7 @@ import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.serv
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 
 import { LdapCredential } from '../models/ldap-credential.model';
@@ -21,11 +21,11 @@ export class GisEnrolmentResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
-    return this.apiResource.post<NoContent>(`parties/gis/${ enrolmentId }/ldap/login`, credentials)
+    return this.apiResource.post<NoContent>(`parties/gis/${enrolmentId}/ldap/login`, credentials)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
@@ -37,7 +37,7 @@ export class GisEnrolmentResource {
   }
 
   public getEnrolmentByUserId(userId: string): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`parties/gis/${ userId }`)
+    return this.apiResource.get<GisEnrolment>(`parties/gis/${userId}`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
@@ -54,7 +54,7 @@ export class GisEnrolmentResource {
   }
 
   public getEnrolmentById(enrolmentId: number): Observable<GisEnrolment> {
-    return this.apiResource.get<GisEnrolment>(`parties/gis/${ enrolmentId }`)
+    return this.apiResource.get<GisEnrolment>(`parties/gis/${enrolmentId}`)
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
@@ -82,7 +82,7 @@ export class GisEnrolmentResource {
   }
 
   public updateEnrolment(enrolment: GisEnrolment): NoContent {
-    return this.apiResource.put<NoContent>(`parties/gis/${ enrolment.id }`, enrolment)
+    return this.apiResource.put<NoContent>(`parties/gis/${enrolment.id}`, enrolment)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Enrolment has been updated')),
@@ -95,7 +95,7 @@ export class GisEnrolmentResource {
   }
 
   public submission(enrolmentId: number): NoContent {
-    return this.apiResource.post<NoContent>(`parties/gis/${ enrolmentId }/submission`)
+    return this.apiResource.post<NoContent>(`parties/gis/${enrolmentId}/submission`)
       .pipe(
         NoContentResponse,
         tap(() => this.toastService.openSuccessToast('Enrolment has been submitted')),

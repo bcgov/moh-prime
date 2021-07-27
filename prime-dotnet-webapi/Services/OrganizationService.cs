@@ -276,6 +276,7 @@ namespace Prime.Services
             {
                 CareSettingType.CommunityPractice => AgreementType.CommunityPracticeOrgAgreement,
                 CareSettingType.CommunityPharmacy => AgreementType.CommunityPharmacyOrgAgreement,
+                CareSettingType.DeviceProvider => AgreementType.DeviceProviderOrgAgreement,
                 _ => throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}"),
             };
         }

@@ -13,6 +13,7 @@
         <div class="pt-3">
           <app-search-form *ngIf="showSearchFilter"
                            [hideStatus]="true"
+                           localStoragePrefix="site-pchp"
                            (search)="onSearch($event)"
                            (filter)="onFilter($event)"
                            (refresh)="onRefresh()"></app-search-form>
@@ -34,6 +35,7 @@
         <div class="pt-3">
           <app-search-form *ngIf="showSearchFilter"
                            [hideStatus]="true"
+                           localStoragePrefix="site-cp"
                            (search)="onSearch($event)"
                            (filter)="onFilter($event)"
                            (refresh)="onRefresh()"></app-search-form>

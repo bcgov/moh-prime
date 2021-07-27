@@ -167,7 +167,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
 
-    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
+    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || site.careSettingCode === CareSettingEnum.DEVICE_PROVIDER) {
       routePath = SiteRoutes.ADMINISTRATOR;
     } else if (this.isCompleted) {
       routePath = SiteRoutes.SITE_REVIEW;

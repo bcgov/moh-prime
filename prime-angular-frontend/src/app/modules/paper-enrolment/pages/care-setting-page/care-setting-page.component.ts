@@ -16,7 +16,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 import { CareSettingFormState } from './care-setting-form-state.class';
 
