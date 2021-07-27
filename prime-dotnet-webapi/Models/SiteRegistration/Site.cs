@@ -120,7 +120,7 @@ namespace Prime.Models
                     .OrderByDescending(s => s.StatusDate)
                     .ThenByDescending(s => s.Id)
                     .FirstOrDefault().StatusType
-                : SiteStatusType.Active;
+                : SiteStatusType.Editable;
         }
 
         /// <summary>

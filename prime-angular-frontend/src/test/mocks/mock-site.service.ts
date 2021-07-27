@@ -75,7 +75,7 @@ export class MockSiteService {
       submittedDate: faker.date.past(2).toDateString(),
       adjudicatorId: null,
       adjudicator: null,
-      status: SiteStatusType.APPROVED,
+      status: SiteStatusType.EDITABLE,
       pec: null
     });
   }

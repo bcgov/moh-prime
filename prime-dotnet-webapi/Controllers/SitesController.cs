@@ -802,7 +802,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Decline, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Reject, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -829,18 +829,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            var action = SiteRegistrationAction.NA;
-            // Only allow enable editing for the following current site status: InReview & Approved
-            switch (site.Status)
-            {
-                case SiteStatusType.InReview:
-                    action = SiteRegistrationAction.RequestChange;
-                    break;
-                case SiteStatusType.Approved:
-                    action = SiteRegistrationAction.Unapprove;
-                    break;
-            }
-            if (!SiteStatusStateEngine.AllowableStatusChange(action, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.RequestChange, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }
@@ -867,7 +856,7 @@ namespace Prime.Controllers
             {
                 return NotFound($"Site not found with id {siteId}");
             }
-            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Undecline, site.Status))
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Unreject, site.Status))
             {
                 return BadRequest("Action could not be performed.");
             }

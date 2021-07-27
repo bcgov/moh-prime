@@ -89,6 +89,8 @@ namespace Prime.Services
                 (AgreementType.CommunityPharmacyOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPharmacyPdf,
                 (AgreementType.CommunityPracticeOrgAgreement, false) => RazorTemplates.OrgAgreements.CommunityPractice,
                 (AgreementType.CommunityPracticeOrgAgreement, true) => RazorTemplates.OrgAgreements.CommunityPracticePdf,
+                (AgreementType.DeviceProviderOrgAgreement, false) => RazorTemplates.OrgAgreements.DeviceProvider,
+                (AgreementType.DeviceProviderOrgAgreement, true) => RazorTemplates.OrgAgreements.DeviceProviderPdf,
                 _ => throw new ArgumentException($"Invalid AgreementType {type} in {nameof(RenderOrgAgreementHtmlAsync)}")
             };
 
