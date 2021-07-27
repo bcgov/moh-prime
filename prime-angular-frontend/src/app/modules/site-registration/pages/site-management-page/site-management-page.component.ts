@@ -165,7 +165,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public isApproved(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.APPROVED);
+    return (site.status === SiteStatusType.EDITABLE && !!site.approvedDate);
   }
 
   public requiresRenewal(site: SiteListViewModel): boolean {
@@ -192,7 +192,7 @@ export class SiteManagementPageComponent implements OnInit {
         map((organizations: Organization[]) => {
           this.organizationSitesExpiryDates = organizations[0].sites
             .map(s => {
-              if (s.status === SiteStatusType.APPROVED)
+              if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate)
                 return Site.getExpiryDate(s)
             });
           return this.organizations = organizations;
