@@ -71,7 +71,7 @@ namespace Prime.Services
                 ProvisionerId = organization.SigningAuthorityId,
                 OrganizationId = organization.Id,
             };
-            site.AddStatus(SiteStatusType.Active);
+            site.AddStatus(SiteStatusType.Editable);
 
             _context.Sites.Add(site);
 
@@ -327,12 +327,9 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site.Status != SiteStatusType.Approved)
-            {
-                site.AddStatus(SiteStatusType.Approved);
-                site.ApprovedDate = DateTimeOffset.Now;
-                await _context.SaveChangesAsync();
-            }
+            site.AddStatus(SiteStatusType.Editable);
+            site.ApprovedDate = DateTimeOffset.Now;
+            await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Approved");
 
@@ -365,9 +362,8 @@ namespace Prime.Services
         public async Task<Site> EnableEditingSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.SubmittedDate = null;
             site.ApprovedDate = null;
-            site.AddStatus(SiteStatusType.Active);
+            site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
