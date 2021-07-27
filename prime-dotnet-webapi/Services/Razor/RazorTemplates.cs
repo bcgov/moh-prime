@@ -35,6 +35,8 @@ namespace Prime.Services.Razor
             public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPharmacyPdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPharmacyOrganizationAgreementPdf.cshtml");
             public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPractice = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPracticeOrganizationAgreement.cshtml");
             public static readonly RazorTemplate<OrgAgreementRazorViewModel> CommunityPracticePdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/CommunityPracticeOrganizationAgreementPdf.cshtml");
+            public static readonly RazorTemplate<OrgAgreementRazorViewModel> DeviceProvider = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/DeviceProviderOrganizationAgreement.cshtml");
+            public static readonly RazorTemplate<OrgAgreementRazorViewModel> DeviceProviderPdf = new RazorTemplate<OrgAgreementRazorViewModel>("/Views/Agreements/DeviceProviderOrganizationAgreementPdf.cshtml");
         }
 
         public static class Emails
