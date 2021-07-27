@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export abstract class AbstractLoggerService {
-  constructor() { }
+  protected constructor() { }
 
   /**
    * @description
