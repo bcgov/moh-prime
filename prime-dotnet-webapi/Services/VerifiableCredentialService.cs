@@ -36,6 +36,7 @@ namespace Prime.Services
         public const string RequestReceived = "request_received";
         public const string CredentialIssued = "credential_issued";
     }
+
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
         private readonly IVerifiableCredentialClient _verifiableCredentialClient;
@@ -85,18 +86,16 @@ namespace Prime.Services
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            var enrolleeCredential = new EnrolleeCredential
+            var credential = new Credential
             {
                 EnrolleeId = enrollee.Id,
-                Credential = new Credential
-                {
-                    SchemaId = schemaId,
-                    CredentialDefinitionId = credentialDefinitionId,
-                    Alias = alias
-                }
+                SchemaId = schemaId,
+                CredentialDefinitionId = credentialDefinitionId,
+                Alias = alias
+
             };
 
-            _context.EnrolleeCredentials.Add(enrolleeCredential);
+            _context.Credentials.Add(credential);
 
             var created = await _context.SaveChangesAsync();
 
@@ -105,22 +104,20 @@ namespace Prime.Services
                 throw new InvalidOperationException("Could not store credential.");
             }
 
-            await CreateInvitation(enrolleeCredential.Credential);
+            await CreateInvitation(credential);
 
             return true;
         }
 
         public async Task<bool> RevokeCredentialsAsync(int enrolleeId)
         {
-            var enrolleeCredentials = await _context.EnrolleeCredentials
-                .Include(ec => ec.Credential)
+            var credentials = await _context.Credentials
                 .Where(ec => ec.EnrolleeId == enrolleeId)
-                .Where(ec => ec.Credential.CredentialExchangeId != null)
-                .Where(ec => ec.Credential.RevokedCredentialDate == null)
-                .Select(ec => ec.Credential)
+                .Where(ec => ec.CredentialExchangeId != null)
+                .Where(ec => ec.RevokedCredentialDate == null)
                 .ToListAsync();
 
-            foreach (var credential in enrolleeCredentials)
+            foreach (var credential in credentials)
             {
                 var success = credential.AcceptedCredentialDate == null
                     ? await _verifiableCredentialClient.DeleteCredentialAsync(credential)
@@ -231,11 +228,9 @@ namespace Prime.Services
         private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
         {
             // Add ConnectionId to Enrollee's newest credential
-            var credential = await _context.EnrolleeCredentials
-                .Include(ec => ec.Credential)
+            var credential = await _context.Credentials
                 .Where(ec => ec.EnrolleeId == enrolleeId)
                 .OrderByDescending(ec => ec.Id)
-                .Select(ec => ec.Credential)
                 .FirstOrDefaultAsync();
 
             if (credential != null)

@@ -557,9 +557,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements)
-                .Include(e => e.EnrolleeCredentials)
-                    .ThenInclude(ec => ec.Credential);
+                .Include(e => e.Agreements);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
@@ -921,6 +919,13 @@ namespace Prime.Services
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
+        }
+
+        public async Task<Credential> GetCredentialAsync(int enrolleeId)
+        {
+            return await _context.Credentials
+                .OrderByDescending(c => c.Id)
+                .FirstOrDefaultAsync(c => c.EnrolleeId == enrolleeId);
         }
 
         public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)

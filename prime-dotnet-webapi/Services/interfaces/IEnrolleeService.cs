@@ -51,5 +51,6 @@ namespace Prime.Services
         Task RemoveNotificationsAsync(int enrolleeId);
         Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
         Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType);
+        Task<Credential> GetCredentialAsync(int enrolleeId);
     }
 }
