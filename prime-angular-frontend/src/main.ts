@@ -11,7 +11,7 @@ import { APP_CONFIG, AppConfig, defaultAppConfig } from './app/app-config.module
 // without requiring a build by using the public assets folder, otherwise
 // config map should not exist in local development which relies on the
 // cascade of environment files.
-fetch('/assets/config-map-test.json')
+fetch('/assets/config-map.json')
   .then((response) => response.json())
   .then((configMap: ConfigMap) => {
     let appConfig = defaultAppConfig;
