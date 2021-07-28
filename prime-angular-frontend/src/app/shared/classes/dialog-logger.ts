@@ -13,11 +13,11 @@ export class DialogLogger {
     private dialog: MatDialog
   ) { }
 
-  public log(error: Error): void {
+  public log(logId: number, error: Error): void {
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
-      title: 'Error Occurred',
+      title: `Unknown Error, ID: ${logId}`,
       message: error.message,
       data: error,
       actionText: 'OK',
