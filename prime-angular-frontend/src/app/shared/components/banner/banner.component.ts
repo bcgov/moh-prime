@@ -38,10 +38,10 @@ export class BannerComponent implements OnInit {
     }
 
     this.bannerResource.getActiveBannersByLocationCode(this.locationCode)
-      .subscribe((banners: Banner[]) => this.banners = this.sortByUrgancy(banners));
+      .subscribe((banners: Banner[]) => this.banners = this.sortByUrgency(banners));
   }
 
-  private sortByUrgancy(banners: Banner[]): Banner[] {
+  private sortByUrgency(banners: Banner[]): Banner[] {
     return banners.sort((a: Banner, b: Banner) => b.bannerType - a.bannerType);
   }
 }

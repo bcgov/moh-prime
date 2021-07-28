@@ -99,12 +99,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
    */
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
-      case SiteStatusType.ACTIVE:
+      case SiteStatusType.EDITABLE:
         return (action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES || action === SiteAdjudicationAction.APPROVE || action === SiteAdjudicationAction.REJECT);
-      case SiteStatusType.APPROVED:
-        return (action === SiteAdjudicationAction.REQUEST_CHANGES);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
       default:

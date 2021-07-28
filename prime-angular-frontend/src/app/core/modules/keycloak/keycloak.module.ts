@@ -4,7 +4,7 @@ import { KeycloakAngularModule } from 'keycloak-angular';
 
 import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.service';
 
-function initializer(keycloakInitService: KeycloakInitService): () => Promise<void> {
+function keycloakFactory(keycloakInitService: KeycloakInitService): () => Promise<void> {
   return async () => await keycloakInitService.load();
 }
 
@@ -13,7 +13,7 @@ function initializer(keycloakInitService: KeycloakInitService): () => Promise<vo
   providers: [
     {
       provide: APP_INITIALIZER,
-      useFactory: initializer,
+      useFactory: keycloakFactory,
       multi: true,
       deps: [KeycloakInitService]
     }
