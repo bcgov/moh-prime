@@ -156,6 +156,10 @@ objects:
               readOnly: true
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
+            - name: env-config
+              readOnly: true
+              mountPath: /opt/app-root/src/assets/config-map.json
+              subPath: config-map.json
         volumes:
         - name: vanity-tls-certs
           secret:
@@ -169,6 +173,10 @@ objects:
           secret:
             secretName: plr-integration
             defaultMode: 420
+        - name: env-config
+          configMap:
+            name: ${SVC_NAME}-env-config
+            defaultMode: 420
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -180,6 +188,30 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
+
+#   Environment file
+- apiVersion: v1
+  kind: ConfigMap  
+  metadata:
+    name: ${SVC_NAME}-env-config
+    namespace: ${OC_NAMESPACE}-${OC_APP}
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  data:
+    config-map.json: |-
+      {
+        "environmentName": "dev",
+        "apiEndpoint": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/v1",
+        "loginRedirectUrl": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca",
+        "documentManagerUrl": "https://${SVC_NAME}.pharmanetenrolment.gov.bc.ca/api/docman",
+        "keycloakConfig": {
+          "config": {
+            "url": "https://dev.oidc.gov.bc.ca/auth",
+            "realm": "v4mbqqas",
+            "clientId": "prime-application-dev"
+          }
+        }
+      }
 
 #   NGINX Configuration
 - apiVersion: v1
