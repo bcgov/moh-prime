@@ -145,7 +145,7 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     // identity provider information is always populated from the claim
     return this.authService.getUser$()
       .pipe(
-        // TODO add idenity provider check to fork for BCeID
+        // TODO add identity provider check to fork for BCeID
         exhaustMap((bcscUser: BcscUser) => {
           // An enrolment won't exist until after the first submission, and
           // patching the form state should occur in that initial view

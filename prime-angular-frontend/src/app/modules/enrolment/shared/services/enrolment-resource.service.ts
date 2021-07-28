@@ -10,7 +10,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { LoggerService } from '@core/services/logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -83,7 +83,7 @@ export class EnrolmentResource {
 
   public submitApplication(enrolment: Enrolment): Observable<HttpEnrollee> {
     const { id } = enrolment;
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission`, this.enrolmentAdapterRequest(enrolment))
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submissions`, this.enrolmentAdapterRequest(enrolment))
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
@@ -95,15 +95,15 @@ export class EnrolmentResource {
       );
   }
 
-  public submissionAction(id: number, action: SubmissionAction, documentGuid: string = null): Observable<HttpEnrollee> {
+  public enrolleeStatusAction(id: number, action: EnrolleeStatusAction, documentGuid: string = null): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ documentGuid });
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/submission/${action}`, {}, params)
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${id}/status-actions/${action}`, {}, params)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Submission could not be completed.');
-          this.logger.error('[Enrolment] EnrolmentResource::submissionAction error has occurred: ', error);
+          this.toastService.openErrorToast('Action could not be completed.');
+          this.logger.error('[Enrolment] EnrolmentResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );
@@ -126,9 +126,12 @@ export class EnrolmentResource {
   // Provisioner Access
   // ---
 
-  public sendProvisionerAccessLink(emails: string = null, careSettingCode: number): Observable<EnrolmentCertificateAccessToken> {
+  public sendProvisionerAccessLink(
+    emails: string = null, enrolleeId: number, careSettingCode: number
+  ): Observable<EnrolmentCertificateAccessToken> {
     const payload = { data: emails };
-    return this.apiResource.post<EnrolmentCertificateAccessToken>(`provisioner-access/send-link/${careSettingCode}`, payload)
+    return this.apiResource
+      .post<EnrolmentCertificateAccessToken>(`enrollees/${enrolleeId}/provisioner-access/send-link/${careSettingCode}`, payload)
       .pipe(
         map((response: ApiHttpResponse<EnrolmentCertificateAccessToken>) => response.result),
         tap((token: EnrolmentCertificateAccessToken) => this.logger.info('ACCESS_TOKEN', token)),
@@ -201,36 +204,6 @@ export class EnrolmentResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment profile could not be found.');
           this.logger.error('[Enrolment] EnrolmentResource::getEnrolmentSubmissionForAccessTerm error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  // ---
-  // Agreement Versions
-  // ---
-
-  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
-    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
-      .pipe(
-        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
-        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement versions could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
-    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
-      .pipe(
-        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
-        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement version could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
           throw error;
         })
       );

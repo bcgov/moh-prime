@@ -55,13 +55,13 @@ export class Address {
    * been excluded by default as optional.
    */
   // TODO move to AddressUtils
-  public static isEmpty(address: Address, blacklist: (keyof Address)[] = optionalAddressLineItems): boolean {
+  public static isEmpty(address: Address, omitList: (keyof Address)[] = optionalAddressLineItems): boolean {
     if (!address) {
       return true;
     }
 
     return Object.keys(address)
-      .filter((key: keyof Address) => !blacklist.includes(key))
+      .filter((key: keyof Address) => !omitList.includes(key))
       .every(k => !address[k]);
   }
 
@@ -70,11 +70,11 @@ export class Address {
    * Checks for a partial address.
    */
   // TODO move to AddressUtils
-  public static isNotEmpty(address: Address, blacklist?: (keyof Address)[]): boolean {
+  public static isNotEmpty(address: Address, omitList?: (keyof Address)[]): boolean {
     if (!address) {
       return false;
     }
 
-    return !this.isEmpty(address, blacklist);
+    return !this.isEmpty(address, omitList);
   }
 }

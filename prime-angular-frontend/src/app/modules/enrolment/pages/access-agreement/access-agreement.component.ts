@@ -11,8 +11,8 @@ import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -46,7 +46,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public hasNoUploadError: boolean;
 
   // Allow the use of enum in the component template
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
   public EnrolleeClassification = EnrolleeClassification;
   public IdentityProviderEnum = IdentityProviderEnum;
 
@@ -103,9 +103,9 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .pipe(
           exhaustMap((result: boolean) =>
             (result)
-              ? this.enrolmentResource.submissionAction(
+              ? this.enrolmentResource.enrolleeStatusAction(
                 this.enrolment.id,
-                isAcceptingToa ? SubmissionAction.ACCEPT_TOA : SubmissionAction.DECLINE_TOA,
+                isAcceptingToa ? EnrolleeStatusAction.ACCEPT_TOA : EnrolleeStatusAction.DECLINE_TOA,
                 this.accessAgreementGuid.value
               )
               : EMPTY
@@ -113,9 +113,8 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         )
         .subscribe(() => {
           this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
-          this.routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY, {
-            state: { showProgressBar: this.isInitialEnrolment }
-          });
+          this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
+            { relativeTo: this.route.parent, queryParams: { isRenewal: !this.isInitialEnrolment } });
         });
     }
   }

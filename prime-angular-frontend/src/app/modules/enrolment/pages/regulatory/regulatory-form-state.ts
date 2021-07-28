@@ -2,18 +2,22 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { ConfigService } from '@config/config.service';
+import { CollegeLicenceClassEnum } from '@shared/enums/college-licence-class.enum';
 
 export interface RegulatoryFormModel {
   certifications: CollegeCertification[];
 }
 
+// TODO use RegulatoryFormModel instead of CollegeCertification[], which
+// makes the passing in and out of form state more like using specific
+// keys from the original model
 export class RegulatoryFormState extends AbstractFormState<CollegeCertification[]> {
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private configService: ConfigService
   ) {
     super();
-
     this.buildForm();
   }
 
@@ -37,7 +41,10 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
       return;
     }
 
-    return this.certifications.getRawValue();
+    return this.certifications.getRawValue().map(c => {
+      const { nurseCategory, ...collegeCertification } = c;
+      return collegeCertification;
+    });
   }
 
   public patchValue(certifications: CollegeCertification[]): void {
@@ -65,6 +72,7 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     return this.fb.group({
       // Force selection of "None" on new certifications
       collegeCode: ['', []],
+      nurseCategory: [null, []],
       licenseCode: [null, []],
       // Validators are applied at the component-level when
       // fields are made visible to allow empty submissions
@@ -79,7 +87,18 @@ export class RegulatoryFormState extends AbstractFormState<CollegeCertification[
     const certification = this.buildCollegeCertificationForm();
 
     if (collegeCertification) {
-      certification.patchValue(collegeCertification);
+      // Nursing category is a derived field for BCCNM, which is used to filter the
+      // results for the verbose number of available licence codes for nurses
+      const nurseCategory = (collegeCertification.collegeCode === CollegeLicenceClassEnum.BCCNM)
+        ? this.configService.colleges
+          .find(c => c.code === CollegeLicenceClassEnum.BCCNM)
+          .collegeLicenses
+          .filter(cl => cl.collegeCode === collegeCertification.collegeCode && cl.licenseCode === collegeCertification.licenseCode)
+          .shift()
+          .collegeLicenseGroupingCode
+        : null;
+
+      certification.patchValue({ ...collegeCertification, nurseCategory });
     }
 
     this.certifications.push(certification);

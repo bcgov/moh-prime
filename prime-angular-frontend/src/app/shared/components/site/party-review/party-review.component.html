@@ -1,9 +1,9 @@
-<app-enrollee-property *ngIf="showName"
-                       title="Name">
+<app-enrollee-property title="Name">
   {{ party | fullname | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="Job Title">
+<app-enrollee-property *ngIf="!excludeList.includes('jobRoleTitle')"
+                       title="Job Title">
   {{ party?.jobRoleTitle | default }}
 </app-enrollee-property>
 
@@ -11,11 +11,13 @@
   {{ party?.phone | phone | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="Fax">
+<app-enrollee-property *ngIf="!excludeList.includes('fax')"
+                       title="Fax">
   {{ party?.fax | phone | default }}
 </app-enrollee-property>
 
-<app-enrollee-property title="SMS Phone">
+<app-enrollee-property *ngIf="!excludeList.includes('smsPhone')"
+                       title="SMS Phone">
   {{ party?.smsPhone | phone | default }}
 </app-enrollee-property>
 
@@ -23,35 +25,39 @@
   {{ party?.email | default }}
 </app-enrollee-property>
 
-<ng-container *ngIf="party?.mailingAddress">
+<ng-container *ngFor="let addressType of ['physicalAddress', 'mailingAddress']">
 
-  <div class="my-3">
-    <strong>Mailing Address</strong>
-  </div>
+  <ng-container *ngIf="party && party[addressType] && !excludeList.includes(addressType)">
 
-  <app-enrollee-property title="Country">
-    {{ party?.mailingAddress?.countryCode | configCode: 'countries' | default }}
-  </app-enrollee-property>
+    <div class="my-3">
+      <strong>{{ (addressType === 'physicalAddress') ? 'Physical' : 'Mailing' }} Address</strong>
+    </div>
 
-  <app-enrollee-property title="Province">
-    {{ party?.mailingAddress?.provinceCode | configCode: 'provinces' | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Country">
+      {{ party[addressType]?.countryCode | configCode: 'countries' | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Street Address">
-    {{ party?.mailingAddress?.street | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Province">
+      {{ party[addressType]?.provinceCode | configCode: 'provinces' | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property *ngIf="party?.mailingAddress?.street2"
-                         title="Street Address 2">
-    {{ party?.mailingAddress?.street2 | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="Street Address">
+      {{ party[addressType]?.street | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="City">
-    {{ party?.mailingAddress?.city | default }}
-  </app-enrollee-property>
+    <app-enrollee-property *ngIf="party[addressType]?.street2"
+                           title="Street Address 2">
+      {{ party[addressType]?.street2 | default }}
+    </app-enrollee-property>
 
-  <app-enrollee-property title="Postal Code">
-    {{ party?.mailingAddress?.postal | postal | default }}
-  </app-enrollee-property>
+    <app-enrollee-property title="City">
+      {{ party[addressType]?.city | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Postal Code">
+      {{ party[addressType]?.postal | postal | default }}
+    </app-enrollee-property>
+
+  </ng-container>
 
 </ng-container>

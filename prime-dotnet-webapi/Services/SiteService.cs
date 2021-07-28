@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -11,7 +12,7 @@ using LinqKit;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.HttpClients;
-using System.Security.Claims;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
@@ -69,8 +70,8 @@ namespace Prime.Services
             {
                 ProvisionerId = organization.SigningAuthorityId,
                 OrganizationId = organization.Id,
-                Status = SiteStatusType.UnderReview
             };
+            site.AddStatus(SiteStatusType.Active);
 
             _context.Sites.Add(site);
 
@@ -328,7 +329,7 @@ namespace Prime.Services
 
             if (site.Status != SiteStatusType.Approved)
             {
-                site.Status = SiteStatusType.Approved;
+                site.AddStatus(SiteStatusType.Approved);
                 site.ApprovedDate = DateTimeOffset.Now;
                 await _context.SaveChangesAsync();
             }
@@ -341,7 +342,7 @@ namespace Prime.Services
         public async Task<Site> DeclineSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.Status = SiteStatusType.Declined;
+            site.AddStatus(SiteStatusType.Locked);
             site.ApprovedDate = null;
             await _context.SaveChangesAsync();
 
@@ -350,10 +351,23 @@ namespace Prime.Services
             return site;
         }
 
+        public async Task<Site> UnrejectSite(int siteId)
+        {
+            var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
+            site.AddStatus(SiteStatusType.InReview);
+            await _context.SaveChangesAsync();
+
+            await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Unrejected");
+
+            return site;
+        }
+
         public async Task<Site> EnableEditingSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.SubmittedDate = null;
+            site.ApprovedDate = null;
+            site.AddStatus(SiteStatusType.Active);
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
@@ -377,6 +391,7 @@ namespace Prime.Services
         {
             var site = await GetSiteAsync(siteId);
             site.SubmittedDate = DateTimeOffset.Now;
+            site.AddStatus(SiteStatusType.InReview);
             _context.Update(site);
 
             var updated = await _context.SaveChangesAsync();
@@ -448,7 +463,7 @@ namespace Prime.Services
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
             }
 
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.BusinessLicences);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -480,7 +495,7 @@ namespace Prime.Services
 
         private async Task<BusinessLicenceDocument> CreateBusinessLicenceDocument(Guid documentGuid)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "business_licences");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.BusinessLicences);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -585,7 +600,7 @@ namespace Prime.Services
 
         public async Task<SiteAdjudicationDocument> AddSiteAdjudicationDocumentAsync(int siteId, Guid documentGuid, int adminId)
         {
-            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, "site_adjudication_document");
+            var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SiteAdjudicationDocuments);
             if (string.IsNullOrWhiteSpace(filename))
             {
                 return null;
@@ -719,7 +734,8 @@ namespace Prime.Services
                     .ThenInclude(r => r.RemoteUserCertifications)
                 .Include(s => s.BusinessLicence)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
-                .Include(s => s.Adjudicator);
+                .Include(s => s.Adjudicator)
+                .Include(s => s.SiteStatuses);
         }
     }
 }

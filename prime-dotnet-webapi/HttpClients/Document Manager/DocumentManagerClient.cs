@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Flurl;
 
 using Prime.Extensions;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
@@ -15,6 +16,7 @@ namespace Prime.HttpClients
 
         public DocumentManagerClient(HttpClient httpClient)
         {
+            // Credentials and Base Url are set in Startup.cs
             _client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
         }
 
@@ -23,19 +25,12 @@ namespace Prime.HttpClients
             _client.DefaultRequestHeaders.Add("Tus-Resumable", "1.0.0");
             _client.DefaultRequestHeaders.Add("Upload-Length", fileSize);
 
-            var content = new FileMetadata(filename: filename).AsHttpContent();
-            return await _client.PostAsync("documents/uploads", content);
+            return await _client.PostAsync("documents/uploads", FileMetadataContent(filename: filename));
         }
 
-        /// <summary>
-        /// Moves a temporary file upload to its final destination and marks it as "submitted".
-        /// Returns the file's name if the operation was successful.
-        /// </summary>
         public async Task<string> FinalizeUploadAsync(Guid documentGuid, string destinationFolder)
         {
-            var content = new FileMetadata(destinationFolder: destinationFolder).AsHttpContent();
-            var response = await _client.PostAsync($"documents/uploads/{documentGuid}/submit", content);
-
+            var response = await _client.PostAsync($"documents/uploads/{documentGuid}/submit", FileMetadataContent(destinationFolder: destinationFolder));
             if (!response.IsSuccessStatusCode)
             {
                 return null;
@@ -47,7 +42,6 @@ namespace Prime.HttpClients
         public async Task<string> CreateDownloadTokenAsync(Guid documentGuid)
         {
             var response = await _client.PostAsync($"documents/{documentGuid}/download-token", null);
-
             if (!response.IsSuccessStatusCode)
             {
                 return null;
@@ -59,29 +53,39 @@ namespace Prime.HttpClients
 
         public async Task<Guid> SendFileAsync(Stream document, string filename, string destinationFolder)
         {
-            var url = new FileMetadata(filename, destinationFolder).AsQueryStringUrl("documents");
-            var content = new StreamContent(document);
+            var url = "documents".SetQueryParams(new
+            {
+                filename,
+                folder = destinationFolder
+            });
 
-            var response = await _client.PostAsync(url, content);
-            var documentResponse = await response.Content.ReadAsAsync<DocumentResponse>();
+            var response = await _client.PostAsync(url, new StreamContent(document));
+            var documentResponse = await response.Content.ReadAsAsync<DocumentGuidResponse>();
 
             return documentResponse?.Document_guid ?? Guid.Empty;
         }
 
-        public async Task<HttpResponseMessage> GetFileResponseAsync(Guid documentGuid)
+        public async Task<HttpContent> GetDocumentAsync(Guid documentGuid)
         {
-            return await _client.GetAsync($"documents/{documentGuid}");
-        }
-
-        public async Task<byte[]> GetFileAsync(Guid documentGuid)
-        {
-            var response = await GetFileResponseAsync(documentGuid);
+            var response = await _client.GetAsync($"documents/{documentGuid}");
             if (!response.IsSuccessStatusCode)
             {
                 return null;
             }
 
-            return await response.Content.ReadAsByteArrayAsync();
+            return response.Content;
+        }
+
+        private HttpContent FileMetadataContent(string filename = null, string destinationFolder = null)
+        {
+            var metadata = new Dictionary<string, string>
+            {
+                { "filename", filename },
+                { "folder", destinationFolder }
+            }
+            .RemoveNullValues();
+
+            return new FormUrlEncodedContent(metadata);
         }
     }
 }

@@ -16,7 +16,7 @@
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
+      "es2019",
       "dom"
     ],
     "paths": {
@@ -61,6 +61,9 @@
       ],
       "@health-auth/*": [
         "./app/modules/health-auth-site-reg/*"
+      ],
+      "@paper-enrolment/*": [
+        "./app/modules/paper-enrolment/*"
       ]
     }
   },

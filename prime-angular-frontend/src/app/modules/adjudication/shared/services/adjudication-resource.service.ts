@@ -12,7 +12,7 @@ import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { SubmissionAction } from '@shared/enums/submission-action.enum';
+import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { Address, AddressType, addressTypes } from '@shared/models/address.model';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
@@ -28,6 +28,8 @@ import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 @Injectable({
   providedIn: 'root'
@@ -82,8 +84,8 @@ export class AdjudicationResource {
       );
   }
 
-  public submissionAction(enrolleeId: number, action: SubmissionAction): Observable<HttpEnrollee> {
-    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/submission/${action}`)
+  public enrolleeStatusAction(enrolleeId: number, action: EnrolleeStatusAction): Observable<HttpEnrollee> {
+    return this.apiResource.post<HttpEnrollee>(`enrollees/${enrolleeId}/status-actions/${action}`)
       .pipe(
         map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
         tap((enrollee: HttpEnrollee) => {
@@ -92,7 +94,7 @@ export class AdjudicationResource {
         }),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment status could not be updated');
-          this.logger.error('[Adjudication] AdjudicationResource::submissionAction error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::enrolleeStatusAction error has occurred: ', error);
           throw error;
         })
       );
@@ -266,6 +268,33 @@ export class AdjudicationResource {
   // ---
   // Agreements
   // ---
+
+  public getLatestAgreementVersions(type?: AgreementTypeGroup): Observable<AgreementVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ type });
+    return this.apiResource.get<AgreementVersion[]>('agreements', params)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementVersionId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementVersionId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getAgreementVersion error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });

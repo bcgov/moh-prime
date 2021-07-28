@@ -1,0 +1,139 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Organization Information</app-page-header>
+
+  <div class="mb-4">
+    <app-health-authority-table (route)="onRoute($event)"></app-health-authority-table>
+  </div>
+
+  <div class="row">
+    <div class="col-6">
+
+      <div class="pb-3">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">business</mat-icon>
+            Organization Information
+          </ng-container>
+        </app-page-subheader>
+      </div>
+
+      <ng-container *ngIf="isInitial">
+
+        <!-- TODO for demo and should use a generic overview that filters sections based on input bindings -->
+        <app-overview-section title="Health Authority Care Types"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
+                              (route)="onRouteRelative($event)">
+          <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
+            <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
+                                   title="Care Type">
+              {{ careType }}
+            </app-enrollee-property>
+          </ng-container>
+
+          <ng-template #noCareTypes>
+            <app-enrollee-property>
+              None
+            </app-enrollee-property>
+          </ng-template>
+        </app-overview-section>
+
+        <app-overview-section title="Health Authority Vendors"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_VENDORS"
+                              (route)="onRouteRelative($event)">
+          <ng-container *ngIf="healthAuthority?.vendorCodes.length; else noVendors">
+            <app-enrollee-property *ngFor="let vendorCode of healthAuthority.vendorCodes"
+                                   title="Vendor">
+              {{ vendorCode | configCode: 'vendors' }}
+            </app-enrollee-property>
+          </ng-container>
+
+          <ng-template #noVendors>
+            <app-enrollee-property>
+              None
+            </app-enrollee-property>
+          </ng-template>
+        </app-overview-section>
+
+        <app-overview-section title="Privacy Office"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
+                              (route)="onRouteRelative($event)">
+          <app-enrollee-property title="Email">
+            {{ healthAuthority?.privacyOffice?.email | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Phone">
+            {{ healthAuthority?.privacyOffice?.phone | phone | default }}
+          </app-enrollee-property>
+        </app-overview-section>
+
+        <app-address-view title="Privacy Office Address"
+                          [address]="healthAuthority?.privacyOffice?.physicalAddress"
+                          [showRedirect]="true"
+                          [showIfEmpty]="true"
+                          (route)="onRoute(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE)"></app-address-view>
+
+        <app-overview-section title="Privacy Officer"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
+                              (route)="onRouteRelative($event)">
+          <app-party-review [party]="healthAuthority?.privacyOffice?.privacyOfficer"
+                            [excludeList]="['fax', 'smsPhone', 'jobRoleTitle', 'mailingAddress']"></app-party-review>
+        </app-overview-section>
+
+        <app-overview-section title="Technical Support Contacts"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS"
+                              (route)="onRouteRelative($event)">
+          <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
+            <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
+              <app-enrollee-property title="Technical Support">
+                <app-party-review [party]="technicalSupport"></app-party-review>
+              </app-enrollee-property>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noTechnicalSupports>
+            <app-enrollee-property>
+              None
+            </app-enrollee-property>
+          </ng-template>
+        </app-overview-section>
+
+        <app-overview-section title="PharmaNet Administrators"
+                              [showEditRedirect]="true"
+                              [editRoute]="AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS"
+                              (route)="onRouteRelative($event)">
+          <ng-container *ngIf="healthAuthority?.pharmanetAdministrators.length; else noPharmanetAdministrators">
+            <ng-container *ngFor="let pharmanetAdministrator of healthAuthority.pharmanetAdministrators">
+              <app-enrollee-property title="PharmaNet Administrator">
+                <app-party-review [party]="pharmanetAdministrator"></app-party-review>
+              </app-enrollee-property>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #noPharmanetAdministrators>
+            <app-enrollee-property>
+              None
+            </app-enrollee-property>
+          </ng-template>
+        </app-overview-section>
+
+      </ng-container>
+
+      <button *ngIf="!isInitial"
+              mat-button
+              type="button"
+              color="primary"
+              (click)="addOrgInfo()">
+        <mat-icon>add</mat-icon>
+        Add Organization Information
+      </button>
+
+    </div>
+  </div>
+</app-page>

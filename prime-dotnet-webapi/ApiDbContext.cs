@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 
 namespace Prime
 {
@@ -86,6 +87,15 @@ namespace Prime
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<Credential> Credentials { get; set; }
         public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
+
+        // Health Authorities
+        public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
+        public DbSet<HealthAuthorityCareType> HealthAuthorityCareTypes { get; set; }
+        public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
+        public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
+        public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
+        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
+
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
         public DbSet<IdentificationDocument> IdentificationDocuments { get; set; }

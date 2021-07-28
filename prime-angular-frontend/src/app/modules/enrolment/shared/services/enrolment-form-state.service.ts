@@ -10,7 +10,6 @@ import { LoggerService } from '@core/services/logger.service';
 import { RouteStateService } from '@core/services/route-state.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
 import { SelfDeclaration } from '@shared/models/self-declarations.model';
 import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
 import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enum';
@@ -22,16 +21,14 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { Site } from '@registration/shared/models/site.model';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
-import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 
-import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
-import { HealthAuthorityFormState } from '@enrolment/pages/health-authority/health-authority-form-state';
+import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
 
 @Injectable({
   providedIn: 'root'
@@ -43,12 +40,11 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public bcscDemographicFormState: BcscDemographicFormState;
   public regulatoryFormState: RegulatoryFormState;
   public deviceProviderForm: FormGroup;
-  public jobsForm: FormGroup;
+  public oboSitesForm: FormGroup;
   public remoteAccessForm: FormGroup;
   public remoteAccessLocationsForm: FormGroup;
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
-  public healthAuthoritiesFormState: HealthAuthorityFormState;
   public accessAgreementForm: FormGroup;
 
   private identityProvider: IdentityProviderEnum;
@@ -106,7 +102,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       : this.bcscDemographicFormState.json;
     const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
-    const { oboSites } = this.jobsForm.getRawValue();
+    const { oboSites } = this.oboSitesForm.getRawValue();
     const { enrolleeRemoteUsers } = this.remoteAccessForm.getRawValue();
     const remoteAccessLocations = this.remoteAccessLocationsForm.getRawValue();
     const careSettings = this.convertCareSettingFormToJson(id);
@@ -148,14 +144,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
         this.identityProvider === IdentityProviderEnum.BCSC,
         this.bcscDemographicFormState.form
       ),
+      this.careSettingsForm,
       this.regulatoryFormState.form,
       // TODO commented out until required to avoid it being validated
       // this.deviceProviderForm,
-      this.jobsForm,
+      this.oboSitesForm,
       this.remoteAccessLocationsForm,
-      this.selfDeclarationForm,
-      this.careSettingsForm,
-      this.healthAuthoritiesFormState.form
+      this.selfDeclarationForm
     ];
   }
 
@@ -164,15 +159,16 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
    * Check that all constituent forms are valid.
    */
   public get isValid(): boolean {
-    return super.isValid && this.hasCertificateOrJob();
+    return super.isValid && this.hasCertificateOrOboSite();
   }
 
   /**
    * @description
    * Check for the requirement of at least one certification, or one obo site/job.
    */
-  public hasCertificateOrJob(): boolean {
-    const oboSites = this.jobsForm.get('oboSites') as FormArray;
+  // TODO refactor this method as it can't be scanned and understood
+  public hasCertificateOrOboSite(): boolean {
+    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
     const certifications = this.regulatoryFormState.certifications;
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
     let hasOboSiteForEveryHA = true;
@@ -214,14 +210,13 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
     this.bceidDemographicFormState = new BceidDemographicFormState(this.fb, this.formUtilsService);
     this.bcscDemographicFormState = new BcscDemographicFormState(this.fb, this.formUtilsService);
-    this.regulatoryFormState = new RegulatoryFormState(this.fb);
+    this.regulatoryFormState = new RegulatoryFormState(this.fb, this.configService);
     this.deviceProviderForm = this.buildDeviceProviderForm();
-    this.jobsForm = this.buildJobsForm();
+    this.oboSitesForm = this.buildJobsForm();
     this.remoteAccessForm = this.buildRemoteAccessForm();
     this.remoteAccessLocationsForm = this.buildRemoteAccessLocationsForm();
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
-    this.healthAuthoritiesFormState = new HealthAuthorityFormState(this.fb, this.configService);
     this.accessAgreementForm = this.buildAccessAgreementForm();
   }
 
@@ -262,10 +257,10 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.careSettingsForm.get('careSettings').patchValue(enrolment.careSettings);
 
     if (enrolment.oboSites.length) {
-      const oboSites = this.jobsForm.get('oboSites') as FormArray;
-      const communityHealthSites = this.jobsForm.get('communityHealthSites') as FormArray;
-      const communityPharmacySites = this.jobsForm.get('communityPharmacySites') as FormArray;
-      const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
+      const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
+      const communityHealthSites = this.oboSitesForm.get('communityHealthSites') as FormArray;
+      const communityPharmacySites = this.oboSitesForm.get('communityPharmacySites') as FormArray;
+      const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
 
       oboSites.clear();
       communityHealthSites.clear();
@@ -333,7 +328,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       });
     }
     this.regulatoryFormState.patchValue(enrolment.certifications);
-    this.jobsForm.patchValue(enrolment);
+    this.oboSitesForm.patchValue(enrolment);
     this.remoteAccessForm.patchValue(enrolment);
     this.remoteAccessLocationsForm.patchValue(enrolment);
 
@@ -358,8 +353,6 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       }, {});
 
     this.selfDeclarationForm.patchValue(selfDeclarations);
-
-    this.healthAuthoritiesFormState.patchValue(enrolment.enrolleeHealthAuthorities);
 
     // After patching the form is dirty, and needs to be pristine
     // to allow for deactivation modals to work properly
@@ -617,8 +610,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
 
   public removeUnselectedHAOboSites() {
     // Obo Sites need to be removed from two different collections
-    const oboSites = this.jobsForm.get('oboSites') as FormArray;
-    const healthAuthoritySites = this.jobsForm.get('healthAuthoritySites') as FormGroup;
+    const oboSites = this.oboSitesForm.get('oboSites') as FormArray;
+    const healthAuthoritySites = this.oboSitesForm.get('healthAuthoritySites') as FormGroup;
     const enrolleeHealthAuthorities = this.careSettingsForm.get('enrolleeHealthAuthorities') as FormArray;
     // If the checkbox for the health authority is not selected, remove the corresponding Obo Sites
     this.configService.healthAuthorities.forEach((healthAuthority, index) => {

@@ -14,7 +14,7 @@ export class AdjudicationRoutes {
   public static EVENT_LOG = 'event-log';
   public static DOCUMENT_UPLOAD = 'documents';
   public static ENROLLEE_OVERVIEW = 'overview';
-  public static BANNER = 'banner';
+  public static BANNERS = 'banners';
   public static MAINTENANCE = 'maintenance';
   public static NOTIFICATION_EMAILS = 'notification-emails';
   public static TOA = 'toa';
@@ -24,13 +24,19 @@ export class AdjudicationRoutes {
   // SITE_REGISTRATION is an alias for SITES in the routing hierarchy
   public static SITE_REGISTRATION = 'site-registration';
 
-  public static HEALTH_AUTHORITIES = 'health-authorities';
-  public static AUTHORIZED_USERS = 'authorized-users';
-  public static CREATE_USER = 'create-user';
-
   public static ORGANIZATION_INFORMATION = 'organization-information';
   public static SITE_REMOTE_USERS = 'remote-users';
   public static SITE_INFORMATION = 'site-information';
+
+  public static HEALTH_AUTHORITIES = 'health-authorities';
+  public static HEALTH_AUTH_CARE_TYPES = 'health-auth-care-types';
+  public static HEALTH_AUTH_VENDORS = 'vendors';
+  public static HEALTH_AUTH_PRIVACY_OFFICE = 'privacy-office';
+  public static HEALTH_AUTH_TECHNICAL_SUPPORTS = 'technical-supports';
+  public static HEALTH_AUTH_ADMINISTRATORS = 'administrators';
+
+  public static HEALTH_AUTH_AUTHORIZED_USERS = 'authorized-users';
+  public static HEALTH_AUTH_AUTHORIZED_USER = 'authorized-user';
 
   public static METABASE_REPORTS = 'metabase-reports';
 

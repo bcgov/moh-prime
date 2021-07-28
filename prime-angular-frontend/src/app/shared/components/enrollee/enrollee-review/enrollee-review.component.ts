@@ -1,15 +1,15 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ValidationErrors } from '@angular/forms';
 
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
-import { HealthAuthority } from '@shared/models/health-authority.model';
+import { EnrolleeHealthAuthority } from '@shared/models/enrollee-health-authority.model';
 
 import { AuthService } from '@auth/shared/services/auth.service';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { Job } from '@enrolment/shared/models/job.model';
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
@@ -24,6 +24,7 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 export class EnrolleeReviewComponent {
   @Input() public showEditRedirect: boolean;
   @Input() public enrolment: Enrolment;
+  @Input() public enrolmentErrors: ValidationErrors;
   @Input() public admin: boolean;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
@@ -67,16 +68,14 @@ export class EnrolleeReviewComponent {
     );
   }
 
-  public get hasMailingAddress(): boolean {
-    return (this.enrollee && this.enrollee.mailingAddress && !!this.enrollee.mailingAddress.countryCode);
-  }
-
   public get hasCertification(): boolean {
     return (this.enrolment && !!this.enrolment.certifications.length);
   }
 
   public get certifications(): CollegeCertification[] {
-    return (this.hasCertification) ? this.enrolment.certifications : [];
+    return (this.hasCertification)
+      ? this.enrolment.certifications
+      : [];
   }
 
   public get hasDeviceProviderNumber(): boolean {
@@ -84,7 +83,9 @@ export class EnrolleeReviewComponent {
   }
 
   public get oboSites(): OboSite[] {
-    return this.enrolment.oboSites ? this.enrolment.oboSites : [];
+    return (this.enrolment.oboSites)
+      ? this.enrolment.oboSites
+      : [];
   }
 
   public get hasCareSetting(): boolean {
@@ -92,22 +93,21 @@ export class EnrolleeReviewComponent {
   }
 
   public get careSettings(): CareSetting[] {
-    return (this.hasCareSetting) ? this.enrolment.careSettings : [];
+    return (this.hasCareSetting)
+      ? this.enrolment.careSettings
+      : [];
   }
 
-  public get healthAuthorities(): { healthAuthorityCode: number, facilityCodes: number[] }[] {
+  public get healthAuthorities(): { healthAuthorityCode: number }[] {
     const healthAuthoritiesGrouped = this.enrolment?.enrolleeHealthAuthorities
-      ?.reduce((grouped: { [key: number]: number[] }, ha: HealthAuthority) => {
-        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? []), ha.facilityCode]);
+      ?.reduce((grouped: { [key: number]: number[] }, ha: EnrolleeHealthAuthority) => {
+        grouped[ha.healthAuthorityCode] = [].concat([...(grouped[ha.healthAuthorityCode] ?? [])]);
         return grouped;
       }, {});
 
     const healthAuthorities = healthAuthoritiesGrouped
       ? Object.keys(healthAuthoritiesGrouped)
-        .map(key => ({
-          healthAuthorityCode: +key,
-          facilityCodes: healthAuthoritiesGrouped[key]
-        }))
+        .map(key => ({ healthAuthorityCode: +key }))
       : null;
 
     return (healthAuthorities?.length) ? healthAuthorities : [];

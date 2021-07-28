@@ -1,24 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { FormBuilder } from '@angular/forms';
 
-import { Subject } from 'rxjs';
+import { BehaviorSubject, EMPTY } from 'rxjs';
+import { exhaustMap, tap } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { Address } from '@shared/models/address.model';
-import { VendorEnum } from '@shared/enums/vendor.enum';
-import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
+import { HealthAuthority } from '@shared/models/health-authority.model';
 
-import { HealthAuthSite } from '@health-auth/shared/models/health-auth-site.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
-import { HealthAuthSiteRegResource } from '@health-auth/shared/resources/health-auth-site-reg-resource.service';
-import { HealthAuthSiteRegFormStateService } from '@health-auth/shared/services/health-auth-site-reg-form-state.service';
-import { AdministratorPageFormState } from './administrator-page-form-state.class';
+import { AdministratorFormState } from './administrator-form-state.class';
 
 @Component({
   selector: 'app-administrator-page',
@@ -26,90 +24,81 @@ import { AdministratorPageFormState } from './administrator-page-form-state.clas
   styleUrls: ['./administrator-page.component.scss']
 })
 export class AdministratorPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: AdministratorPageFormState;
+  public formState: AdministratorFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public SiteRoutes = HealthAuthSiteRegRoutes;
-  public contacts: Contact[];
-  public formSubmittingEvent: Subject<void>;
-
-  private site: HealthAuthSite;
+  public pharmanetAdministrators: BehaviorSubject<{ id: number, fullName: string }[]>;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteResource: HealthAuthSiteRegResource,
-    private siteService: HealthAuthSiteRegService,
-    private formStateService: HealthAuthSiteRegFormStateService,
-    route: ActivatedRoute,
+    private fb: FormBuilder,
+    private healthAuthorityResource: HealthAuthorityResource,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(dialog, formUtilsService);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
-    this.formSubmittingEvent = new Subject<void>();
+    // TODO revisit passed subject value type
+    this.pharmanetAdministrators = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
-  // TODO remove this method add to allow routing between pages
-  public onSubmit() {
-    this.hasAttemptedSubmission = true;
-
-    if (this.checkValidity(this.formState.form)) {
-      this.onSubmitFormIsValid();
-      this.afterSubmitIsSuccessful();
-    } else {
-      this.onSubmitFormIsInvalid();
-    }
-  }
-
-  public onSelect(contact: Contact) {
-    if (!contact.physicalAddress) {
-      contact.physicalAddress = new Address();
-    }
-    this.formState.form.patchValue(contact);
-  }
-
-  public onBack() {
-    const routePath = (this.isCompleted)
+  public onBack(): void {
+    const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
       : HealthAuthSiteRegRoutes.REMOTE_USERS;
 
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
-
-    // TODO: pass in the administrator array of the site
-    // currently site model only supports single administrator
-    this.contacts = [];
+    this.initForm();
   }
 
-  protected createFormInstance() {
-    this.formState = this.formStateService.administratorPageFormState;
+  protected createFormInstance(): void {
+    this.formState = new AdministratorFormState(this.fb);
   }
 
   protected patchForm(): void {
-    this.site = this.siteService.site;
-    this.isCompleted = this.site?.completed;
-    this.formStateService.setForm(this.site, true);
-    this.formState.form.markAsPristine();
+    const healthAuthId = +this.route.snapshot.params.haid;
+    const healthAuthSiteId = +this.route.snapshot.params.sid;
+    if (!healthAuthId || !healthAuthSiteId) {
+      return;
+    }
+
+    this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
+      .pipe(
+        tap(({ pharmanetAdministrators }: HealthAuthority) => {
+          const administrators = pharmanetAdministrators
+            .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
+          this.pharmanetAdministrators.next(administrators);
+        }),
+        exhaustMap((_: HealthAuthority) =>
+          (healthAuthSiteId)
+            ? this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+            : EMPTY
+        )
+      )
+      .subscribe(({ healthAuthorityPharmanetAdministratorId, completed }: HealthAuthoritySite) => {
+        this.isCompleted = completed;
+        this.formState.patchValue({ healthAuthorityPharmanetAdministratorId });
+      });
   }
 
   protected performSubmission(): NoContent {
-    const payload = this.formStateService.json;
-    return this.siteResource.updateSite(payload);
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
+
+    return this.healthAuthorityResource.updateHealthAuthorityPharmanetAdministrator(haid, sid, payload)
+      .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
     this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
-  }
-
-  protected onSubmitFormIsInvalid(): void {
-    this.formSubmittingEvent.next();
   }
 }

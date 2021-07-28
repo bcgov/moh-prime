@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { KeyValue } from '@angular/common';
 
 import { Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
@@ -98,7 +99,7 @@ export class SiteManagementPageComponent implements OnInit {
     this.createSite(organizationId);
   }
 
-  public getOrganizationProperties(organization: Organization): { key: string, value: string; }[] {
+  public getOrganizationProperties(organization: Organization): KeyValue<string, string>[] {
     return [
       { key: 'Signing Authority', value: this.fullnamePipe.transform(organization.signingAuthority) },
       { key: 'Organization Name', value: organization.name },
@@ -106,11 +107,14 @@ export class SiteManagementPageComponent implements OnInit {
     ];
   }
 
-  public getSiteProperties(site: SiteListViewModel): { key: string, value: string; }[] {
+  public getSiteProperties(site: SiteListViewModel): KeyValue<string, string>[] {
     return [
       ...ArrayUtils.insertIf(site.doingBusinessAs, { key: 'Doing Business As', value: site.doingBusinessAs }),
       { key: 'Care Setting', value: this.configCodePipe.transform(site.careSettingCode, 'careSettings') },
-      { key: 'Site Address', value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode']) },
+      {
+        key: 'Site Address',
+        value: this.addressPipe.transform(site.physicalAddress, [...optionalAddressLineItems, 'provinceCode', 'countryCode'])
+      },
       { key: 'Vendor', value: this.configCodePipe.transform(site.siteVendors[0]?.vendorCode, 'vendors') }
     ];
   }
@@ -124,11 +128,11 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  public isUnderReview(site: SiteListViewModel): boolean {
-    return site.submittedDate && site.status === SiteStatusType.UNDER_REVIEW;
+  public isInReview(site: SiteListViewModel): boolean {
+    return site.submittedDate && site.status === SiteStatusType.IN_REVIEW;
   }
 
-  public getUnderReviewSiteNotificationProperties(site: SiteListViewModel) {
+  public getInReviewSiteNotificationProperties(site: SiteListViewModel) {
     const andSiteId = (!site.pec) ? ' and an assigned Site ID' : '';
     return {
       icon: 'notification_important',
@@ -136,11 +140,11 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
-  public isDeclined(site: SiteListViewModel): boolean {
-    return (site.status === SiteStatusType.DECLINED);
+  public isLocked(site: SiteListViewModel): boolean {
+    return (site.status === SiteStatusType.LOCKED);
   }
 
-  public getDeclinedSiteNotificationProperties() {
+  public getLockedSiteNotificationProperties() {
     return {
       icon: 'not_interested',
       text: 'Declined',
@@ -154,7 +158,7 @@ export class SiteManagementPageComponent implements OnInit {
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {
     return {
       icon: 'task_alt',
-      text: `Site Approved<br>Site ID: ${ site.pec }`
+      text: `Site Approved<br>Site ID: ${site.pec}`
     };
   }
 

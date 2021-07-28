@@ -8,8 +8,45 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    Preview
+    {{(editable) ? "Editing" : "Preview"}}
   </ng-container>
+
+  <button *ngIf="(Role.SUPER_ADMIN | inRole) && !editable"
+          mat-icon-button
+          matTooltip="Edit Email Template"
+          (click)="toggleEdit(true)">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button *ngIf="(Role.SUPER_ADMIN | inRole) && editable"
+          mat-icon-button
+          matTooltip="Cancel Editing"
+          (click)="toggleEdit(false)">
+    <mat-icon>close</mat-icon>
+  </button>
 </app-page-subheader>
 
-<div [innerHtml]="emailTemplate?.template"></div>
+<ng-container *ngIf="!editable">
+  <div [innerHtml]="emailTemplate?.template"></div>
+</ng-container>
+<ng-container *ngIf="editable">
+  <form [formGroup]="form"
+        (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill"
+                    class="w-100">
+      <mat-label>Template</mat-label>
+      <textarea formControlName="template"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="0"></textarea>
+    </mat-form-field>
+    <div class="d-flex justify-content-end">
+      <button mat-flat-button
+              color="primary">
+        Save
+      </button>
+    </div>
+  </form>
+</ng-container>

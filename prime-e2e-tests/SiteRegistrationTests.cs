@@ -79,7 +79,7 @@ namespace TestPrimeE2E.SiteRegistration
             TypeIntoField("Site Name (Doing Business As)", _company.CompanyName());
             var siteId = _driver.FindPatiently("//input[@formcontrolname='pec']");
             siteId.Clear();
-            siteId.SendKeys(_company.CompanyName());
+            siteId.SendKeys(GeneratePecLikeString());
             _driver.TakeScreenshot("Site_Business_Licence");
             ClickButton("Save and Continue");
 

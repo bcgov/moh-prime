@@ -1,0 +1,60 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Health Authority Information</app-page-header>
+  <app-progress-indicator [noContent]="true"></app-progress-indicator>
+
+  <form (ngSubmit)="onSubmit()"
+        [formGroup]="form"
+        novalidate>
+
+    <app-page-section>
+      <app-page-subheader>
+        <ng-container appPageSubheaderTitle>{{ title }}</ng-container>
+        <ng-container appPageSubheaderSummary>
+          Identify the Vendors associated with this Health Authority.
+        </ng-container>
+      </app-page-subheader>
+
+      <div class="row">
+        <div class="col col-sm-10 py-3">
+
+          <ng-container formArrayName="vendors">
+            <ng-container *ngFor="let vendor of vendors.controls; let index = index; let last = last;"
+                          [formGroupName]="index">
+
+              <div [class.mb-3]="!last">
+
+                <app-form-icon-group [show]="vendors.controls.length > 1"
+                                     (event)="removeVendor(index)">
+                  <app-options-form [form]="vendor"
+                                    fieldLabel="Vendor"
+                                    controlName="vendor"
+                                    optionLabel="name"
+                                    [availableOptions]="filteredVendors"></app-options-form>
+                </app-form-icon-group>
+
+              </div>
+
+            </ng-container>
+          </ng-container>
+
+          <button mat-button
+                  type="button"
+                  color="primary"
+                  [disabled]="!vendors.controls?.length"
+                  (click)="addVendor()">
+            <mat-icon>add</mat-icon>
+            Add Vendor
+          </button>
+
+        </div>
+      </div>
+    </app-page-section>
+
+  </form>
+
+  <app-page-footer [hasSecondaryAction]="true"
+                   primaryActionLabel="Save and Continue"
+                   (save)="onSubmit()"
+                   (back)="onBack()"></app-page-footer>
+
+</app-page>

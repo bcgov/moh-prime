@@ -122,7 +122,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
   protected onSubmitFormIsValid() {
     // Enrollees can not have certifications and jobs
     this.removeJobs();
-    // Remove remote access data when enrollee is no longer elegible, e.g. licence type changes
+    // Remove remote access data when enrollee is no longer eligible, e.g. licence type changes
     if (this.cannotRequestRemoteAccess) {
       this.removeRemoteAccessData();
     }
@@ -139,7 +139,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = (!this.certifications.length)
-        ? EnrolmentRoutes.JOB
+        ? EnrolmentRoutes.OBO_SITES
         : (this.enrolmentService.canRequestRemoteAccess(certifications, careSettings))
           ? EnrolmentRoutes.REMOTE_ACCESS
           : EnrolmentRoutes.SELF_DECLARATION;
@@ -162,7 +162,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
         }
       });
 
-    // Always have a single cerfication available, and it prevents
+    // Always have a single certification available, and it prevents
     // the page from jumping too much when routing
     if (!noEmptyCert && !this.certifications.controls.length) {
       this.addEmptyCollegeCertification();
@@ -178,7 +178,7 @@ export class RegulatoryComponent extends BaseEnrolmentProfilePage implements OnI
     this.removeIncompleteCertifications(true);
 
     if (this.certifications.length) {
-      const form = this.enrolmentFormStateService.jobsForm;
+      const form = this.enrolmentFormStateService.oboSitesForm;
       const oboSites = form.get('oboSites') as FormArray;
       oboSites.clear();
     }

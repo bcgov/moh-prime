@@ -29,6 +29,16 @@ parameters:
   description: For naming the web/reverse proxy pod
   required: true
   value: frontend
+- name: FRONTEND_REPLICAS
+  displayName: Number of frontend pods
+  description: For scaling frontend pods
+  required: true
+  value: '3'
+- name: BACKEND_REPLICAS
+  displayName: Number of backend pods
+  description: For scaling backend pods
+  required: true
+  value: '3'
 - name: VANITY_URL
   displayName: Vanity URL
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
@@ -116,7 +126,7 @@ objects:
       app.openshift.io/runtime: nginx
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 3
+    replicas: ${{FRONTEND_REPLICAS}}
     selector:
       name: ${SVC_NAME}-${FRONTEND_POD}
     strategy:
@@ -133,6 +143,19 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-${FRONTEND_POD}
       spec:
+        volumes:
+          - name: vanity-tls-certs
+            secret:
+              secretName: vanity-tls-certificate
+              defaultMode: 420
+          - name: nginx-config
+            configMap:
+              name: ${SVC_NAME}-nginx-config
+              defaultMode: 420
+          - name: plr-integration-volume
+            secret:
+              secretName: plr-integration
+              defaultMode: 420
         containers:
           - name: ${SVC_NAME}-${FRONTEND_POD}
             image: >-
@@ -148,6 +171,17 @@ objects:
                 protocol: TCP
               - containerPort: 8890
                 protocol: TCP
+            volumeMounts:
+            - name: vanity-tls-certs
+              readOnly: true
+              mountPath: /etc/nginx/certs
+            - name: plr-integration-volume
+              readOnly: true
+              mountPath: /etc/nginx/certs/plr
+            - name: nginx-config
+              readOnly: true
+              mountPath: /etc/nginx/conf.d/prime.conf
+              subPath: prime.conf
             resources: {}
             envFrom:
               - configMapRef:
@@ -155,6 +189,12 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${VANITY_URL}/api/docman
+            readinessProbe:
+              httpGet:
+                path: /
+                port: 8080
+              initialDelaySeconds: 5
+              periodSeconds: 5
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -256,6 +296,21 @@ objects:
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
 
+#   Frontend NGINX Logs Persistent Volume Claim
+# - apiVersion: v1
+#   kind: PersistentVolumeClaim
+#   metadata:
+#     name: ${SVC_NAME}-nginx-logs
+#     namespace: ${OC_NAMESPACE}-${OC_APP}
+#     labels:
+#       app.kubernetes.io/part-of: ${SVC_NAME}
+#   spec:
+#     accessModes:
+#       - ReadWriteMany
+#     resources:
+#       requests:
+#         storage: 1Gi
+
 ###########################################
 ###           Backend Web API           ###
 ###########################################
@@ -275,7 +330,7 @@ objects:
       app.openshift.io/runtime: dotnet
   spec:
     completionDeadlineSeconds: 1200
-    replicas: 3
+    replicas: ${{BACKEND_REPLICAS}}
     selector:
       name: ${SVC_NAME}-${API_POD}
     strategy:
@@ -314,26 +369,21 @@ objects:
                 value: https://${VANITY_URL}/api/v1/
               - name: FRONTEND_URL
                 value: https://${VANITY_URL}
-              - name: DB_PASS
+              - name: POSTGRESQL_PASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-password
-              - name: DB_NAME
-                valueFrom:
-                  secretKeyRef:
-                    name: ${SVC_NAME}-postgres
-                    key: database-name
-              - name: DB_USER
+              - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
                     key: database-user
-              - name: POSTGRESQL_ADMIN_PASSWORD
+              - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-postgres
-                    key: admin-password
+                    key: database-name
             ports:
               - containerPort: 1025
                 protocol: TCP
@@ -341,6 +391,18 @@ objects:
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
+            startupProbe:
+              httpGet:
+                path: /api/healthcheck
+                port: 8080
+              failureThreshold: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /api/healthcheck
+                port: 8080
+              initialDelaySeconds: 5
+              periodSeconds: 5
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
             envFrom:
@@ -532,6 +594,18 @@ objects:
                 protocol: TCP
               - containerPort: 9191
                 protocol: TCP
+            startupProbe:
+              httpGet:
+                path: /healthcheck
+                port: 6001
+              failureThreshold: 30
+              periodSeconds: 10
+            readinessProbe:
+              httpGet:
+                path: /healthcheck
+                port: 6001
+              initialDelaySeconds: 5
+              periodSeconds: 5
         volumes:
           - name: ${SVC_NAME}-${DOCMAN_POD}-pvc
             persistentVolumeClaim:

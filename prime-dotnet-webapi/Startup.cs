@@ -5,6 +5,7 @@ using System.Net.Mime;
 using System.Reflection;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,16 +13,18 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
-using AutoMapper;
-using IdentityModel.Client;
-using Newtonsoft.Json;
+using Flurl;
 using Serilog;
-using Wkhtmltopdf.NetCore;
 using SoapCore;
+using AutoMapper;
+using Newtonsoft.Json;
+using Wkhtmltopdf.NetCore;
+using IdentityModel.Client;
+using FluentValidation.AspNetCore;
 
 using Prime.Auth;
 using Prime.Services;
@@ -29,7 +32,8 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
-using System.Threading.Tasks;
+using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
@@ -50,41 +54,47 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<ILookupService, LookupService>();
-            services.AddScoped<IEnrolleeService, EnrolleeService>();
-            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
-            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<IAgreementService, AgreementService>();
+            services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
+            services.AddScoped<IBannerService, BannerService>();
+            services.AddScoped<IBusinessEventService, BusinessEventService>();
+            services.AddScoped<IDocumentService, DocumentService>();
+            services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmailDocumentsService, EmailDocumentsService>();
             services.AddScoped<IEmailRenderingService, EmailRenderingService>();
-            services.AddScoped<IPrivilegeService, PrivilegeService>();
-            services.AddScoped<IAgreementService, AgreementService>();
+            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+            services.AddScoped<IEnrolleeService, EnrolleeService>();
+            services.AddScoped<IEnrolleeAgreementService, EnrolleeAgreementService>();
+            services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
             services.AddScoped<IEnrolleeSubmissionService, EnrolleeSubmissionService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddScoped<IBusinessEventService, BusinessEventService>();
-            services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
+            services.AddScoped<IGisService, GisService>();
+            services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
+            services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
+            services.AddScoped<ILookupService, LookupService>();
+            services.AddScoped<IMetabaseService, MetabaseService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
+            services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
+            services.AddScoped<IPartyService, PartyService>();
+            services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IPlrProviderService, PlrProviderService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
-            services.AddScoped<IPartyService, PartyService>();
-            services.AddScoped<IDocumentService, DocumentService>();
-            services.AddScoped<IOrganizationService, OrganizationService>();
-            services.AddScoped<IPdfService, PdfService>();
-            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
-            services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
-            services.AddScoped<IMetabaseService, MetabaseService>();
             services.AddScoped<ISoapService, SoapService>();
-            services.AddScoped<IBannerService, BannerService>();
-            services.AddScoped<IGisService, GisService>();
-            services.AddScoped<IPlrProviderService, PlrProviderService>();
-            services.AddScoped<IHealthAuthorityService, HealthAuthorityService>();
-            services.AddScoped<IEmailTemplateService, EmailTemplateService>();
-            services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
+            services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
             ConfigureClients(services);
 
             services.AddControllers()
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
@@ -136,7 +146,7 @@ namespace Prime
             .AddTransient<BearerTokenHandler<ChesClientCredentials>>()
             .AddSingleton(new ChesClientCredentials
             {
-                Address = $"{PrimeEnvironment.ChesApi.TokenUrl}/token",
+                Address = Url.Combine(PrimeEnvironment.ChesApi.TokenUrl, "token"),
                 ClientId = PrimeEnvironment.ChesApi.ClientId,
                 ClientSecret = PrimeEnvironment.ChesApi.ClientSecret
             })

@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+
+import * as moment from 'moment';
 
 import { EMPTY, Subscription, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
@@ -33,11 +34,13 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
-  public currentStatus: EnrolmentStatus;
+  public enrolmentErrors: ValidationErrors;
+  public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
+  public within90DaysOfRenewal: boolean;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -50,8 +53,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
     private enrolmentResource: EnrolmentResource,
     private enrolmentFormStateService: EnrolmentFormStateService,
     private toastService: ToastService,
-    private formUtilsService: FormUtilsService,
-    private logger: LoggerService
+    private formUtilsService: FormUtilsService
   ) {
     super(route, router);
 
@@ -102,10 +104,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .canRequestRemoteAccess(certifications, careSettings);
   }
 
-  public hasRegOrJob(): boolean {
-    return this.enrolmentFormStateService.hasCertificateOrJob();
-  }
-
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
     this.allowRoutingWhenDirty = true;
     super.routeTo(routePath, navigationExtras);
@@ -128,6 +126,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // this view, and not made any changes to the state of their enrolment
           // so use the source of truth that is populated from the server
           let enrolment = this.enrolmentService.enrolment;
+
+          if (enrolment?.expiryDate) {
+            const expiryMinus90Days = moment(enrolment.expiryDate).subtract(90, 'days');
+            this.within90DaysOfRenewal = moment().isAfter(expiryMinus90Days);
+          }
 
           // Store current status as it will be truncated for initial enrolment
           this.currentStatus = enrolment.currentStatus.statusCode;
@@ -157,7 +160,23 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           // Attempt to patch the form if not already patched
           this.enrolmentFormStateService.setForm(enrolment);
+
+          this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
         })
       ).subscribe();
+  }
+
+  /**
+   * @description
+   * Get a set of enrolment errors.
+   *
+   * NOTE: Not possible to validate some form states due to validators
+   * being dynamically applied when the view is loaded. Use the passed
+   * enrolment for checking validation instead of form state.
+   */
+  private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
+    return {
+      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+    };
   }
 }

@@ -5,16 +5,16 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Services;
-using Prime.Models.Api;
 using Prime.ViewModels.Emails;
 using System.Collections.Generic;
+using Prime.Models.Api;
 
 namespace Prime.Controllers
 {
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public class EmailsController : ControllerBase
+    public class EmailsController : PrimeControllerBase
     {
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
@@ -39,7 +39,7 @@ namespace Prime.Controllers
         {
             var total = await _emailService.UpdateEmailLogStatuses(limit);
 
-            return Ok(ApiResponse.Result($"Updated {limit} of {total}."));
+            return Ok($"Updated {limit} of {total}.");
         }
 
         // POST: api/Emails/management/enrollees/renewal
@@ -72,7 +72,7 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplates()
         {
             var templates = await _emailTemplateService.GetEmailTemplatesAsync();
-            return Ok(ApiResponse.Result(templates));
+            return Ok(templates);
         }
 
         // GET: api/emails/management/templates/1
@@ -88,7 +88,30 @@ namespace Prime.Controllers
         public async Task<ActionResult> GetEmailTemplate(int emailTemplateId)
         {
             var template = await _emailTemplateService.GetEmailTemplateAsync(emailTemplateId);
-            return Ok(ApiResponse.Result(template));
+            return Ok(template);
+        }
+
+        // PUT: api/emails/management/templates/1
+        /// <summary>
+        /// Update email template
+        /// </summary>
+        /// <param name="emailTemplateId"></param>
+        /// <param name="template"></param>
+        [HttpPut("management/templates/{emailTemplateId}", Name = nameof(UpdateEmailTemplate))]
+        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EmailTemplateViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UpdateEmailTemplate(int emailTemplateId, FromBodyText template)
+        {
+            if (!await _emailTemplateService.EmailTemplateExistsAsync(emailTemplateId))
+            {
+                return NotFound($"Email Template not found with id {emailTemplateId}");
+            }
+
+            var emailTemplate = await _emailTemplateService.UpdateEmailTemplateAsync(emailTemplateId, template);
+            return Ok(emailTemplate);
         }
     }
 }

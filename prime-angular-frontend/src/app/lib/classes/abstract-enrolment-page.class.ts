@@ -7,6 +7,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AbstractFormState } from './abstract-form-state.class';
+import { tap } from 'rxjs/operators';
 
 export interface IEnrolmentPage {
   /**
@@ -14,11 +15,13 @@ export interface IEnrolmentPage {
    * Instance of the form state providing access to its API.
    */
   formState: AbstractFormState<unknown>;
+
   /**
    * @description
    * Handle submission of forms.
    */
   onSubmit(): void;
+
   /**
    * @description
    * Handle redirection from the view when the form is
@@ -58,9 +61,9 @@ export interface IEnrolmentPage {
  *   }
  * }
  */
-// TODO make AbstractFormState generic on AbstractEnrolmentPage
-// export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>> implements IEnrolmentPage {
-export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
+  // TODO remove default from T generic added to allow for slow refactoring
+  // tslint:disable-next-line:max-line-length
+export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> implements IEnrolmentPage {
   /**
    * @description
    * Busy subscription for use when blocking content from
@@ -79,9 +82,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Form state
    */
-  // TODO make AbstractFormState generic on AbstractEnrolmentPage
-  // public abstract formState: T;
-  public abstract formState: AbstractFormState<unknown>;
+  public abstract formState: T;
   /**
    * @description
    * Indicator applied after an initial submission of
@@ -96,7 +97,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
   protected allowRoutingWhenDirty: boolean;
   /**
    * @description
-   * Whitelisted set of control names that can be dirty, but
+   * Allowlisted set of control names that can be dirty, but
    * still allow routing. Allows for targeted route gating
    * on specific controls.
    *
@@ -107,7 +108,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * NOTE: allowRoutingWhenDirty must be falsey, as only one
    * of the routing checks can be used at a time.
    */
-  protected canDeactivateWhitelist: string[];
+  protected canDeactivateAllowlist: string[];
 
   protected constructor(
     protected dialog: MatDialog,
@@ -124,6 +125,7 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
     if (this.checkValidity(this.formState.form)) {
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
+        .pipe(tap((_) => this.formState.form.markAsPristine()))
         .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();
@@ -156,11 +158,14 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * method, but also useful if invoked from within the initForm method
    * when listeners need to be setup before and after patching the form.
    *
+   * @param model optional parameter to reduce the rigidity of invoking
+   * the method in case a member variable is not available.
+   *
    * @returns unknown to allow for flexibility when implemented, which
    * is can be useful as an observable when the sequence during patching
    * is asynchronous, but otherwise should be void
    */
-  protected abstract patchForm(): unknown;
+  protected abstract patchForm(model?: unknown): unknown;
 
   /**
    * @description
@@ -209,13 +214,14 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * @description
    * Submission hook for execution.
    */
-  protected abstract performSubmission(): Observable<unknown>;
+  // TODO add generic to return value that must match afterSubmitIsSuccessful parameter
+  protected abstract performSubmission(): Observable<S>;
 
   /**
    * @description
    * Post-submission hook for execution.
    */
-  protected afterSubmitIsSuccessful(response?: unknown): void {
+  protected afterSubmitIsSuccessful(response?: S): void {
     // Optional submission hook, otherwise NOOP
   }
 
@@ -225,9 +231,9 @@ export abstract class AbstractEnrolmentPage implements IEnrolmentPage {
    * or specifically gated on a set of allowed control names.
    */
   private checkDeactivationIsAllowed(): boolean {
-    if (!this.allowRoutingWhenDirty && this.canDeactivateWhitelist?.length) {
+    if (!this.allowRoutingWhenDirty && this.canDeactivateAllowlist?.length) {
       return Object.keys(this.formState.form.controls)
-        .filter(key => !this.canDeactivateWhitelist.includes(key))
+        .filter(key => !this.canDeactivateAllowlist.includes(key))
         .every(key => !this.formState.form.controls[key].dirty);
     }
 

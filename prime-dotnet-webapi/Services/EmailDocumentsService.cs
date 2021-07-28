@@ -14,7 +14,7 @@ namespace Prime.Services.EmailInternal
 {
     public class EmailDocumentsService : BaseService, IEmailDocumentsService
     {
-        private readonly IAgreementService _agreementService;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IOrganizationService _organizationService;
@@ -24,7 +24,7 @@ namespace Prime.Services.EmailInternal
         public EmailDocumentsService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
-            IAgreementService agreementService,
+            IOrganizationAgreementService organizationAgreementService,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
             IOrganizationService organizationService,
@@ -32,7 +32,7 @@ namespace Prime.Services.EmailInternal
             IRazorConverterService razorConverterService)
             : base(context, httpContext)
         {
-            _agreementService = agreementService;
+            _organizationAgreementService = organizationAgreementService;
             _documentAccessTokenService = documentAccessTokenService;
             _documentClient = documentClient;
             _organizationService = organizationService;
@@ -182,16 +182,18 @@ namespace Prime.Services.EmailInternal
             byte[] fileData = null;
             if (agreementDto.SignedAgreement == null)
             {
-                var html = await _agreementService.RenderOrgAgreementHtmlAsync(agreementType, agreementDto.OrganizationName, agreementDto.AcceptedDate, true);
+                var html = await _organizationAgreementService.RenderOrgAgreementHtmlAsync(agreementType, agreementDto.OrganizationName, agreementDto.AcceptedDate, true);
                 fileData = _pdfService.Generate(html);
             }
             else
             {
-                fileData = await _documentClient.GetFileAsync(agreementDto.SignedAgreement.DocumentGuid);
-                if (fileData == null)
+                var content = await _documentClient.GetDocumentAsync(agreementDto.SignedAgreement.DocumentGuid);
+                if (content == null)
                 {
                     return await ApologyDocument(agreementDto.SignedAgreement.Filename);
                 }
+
+                fileData = await content.ReadAsByteArrayAsync();
 
                 if (!agreementDto.SignedAgreement.HasFileExtension("pdf"))
                 {

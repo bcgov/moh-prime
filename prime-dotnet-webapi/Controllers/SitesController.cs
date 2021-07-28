@@ -11,6 +11,7 @@ using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
+using Prime.Engines;
 
 namespace Prime.Controllers
 {
@@ -18,7 +19,7 @@ namespace Prime.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewSite)]
-    public class SitesController : ControllerBase
+    public class SitesController : PrimeControllerBase
     {
         private readonly IMapper _mapper;
         private readonly ISiteService _siteService;
@@ -59,18 +60,18 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
 
             var sites = await _siteService.GetSitesAsync(organizationId);
 
             if (verbose)
             {
-                return Ok(ApiResponse.Result(sites));
+                return Ok(sites);
             }
             else
             {
-                return Ok(ApiResponse.Result(_mapper.Map<IEnumerable<SiteListViewModel>>(sites)));
+                return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
             }
         }
 
@@ -89,14 +90,14 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
 
-            return Ok(ApiResponse.Result(site));
+            return Ok(site);
         }
 
         // POST: api/Sites
@@ -114,9 +115,8 @@ namespace Prime.Controllers
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
             {
-                return NotFound(ApiResponse.Message($"Organization not found with id {organizationId}"));
+                return NotFound($"Organization not found with id {organizationId}");
             }
-
             var createdSiteId = await _siteService.CreateSiteAsync(organizationId);
 
             var createdSite = await _siteService.GetSiteAsync(createdSiteId);
@@ -124,7 +124,7 @@ namespace Prime.Controllers
             return CreatedAtAction(
                 nameof(GetSiteById),
                 new { siteId = createdSiteId },
-                ApiResponse.Result(createdSite)
+                createdSite
             );
         }
 
@@ -144,7 +144,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -172,7 +172,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -200,7 +200,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -231,7 +231,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+                return NotFound($"Site not found with id {siteId}.");
             }
 
             Admin admin = (adjudicatorId.HasValue)
@@ -240,14 +240,14 @@ namespace Prime.Controllers
 
             if (admin == null)
             {
-                return NotFound(ApiResponse.Message($"Admin not found with id {adjudicatorId.Value}."));
+                return NotFound($"Admin not found with id {adjudicatorId.Value}.");
             }
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id, admin.Id);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin claimed site");
 
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
         }
 
         // DELETE: api/Site/5/adjudicator
@@ -267,14 +267,14 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}."));
+                return NotFound($"Site not found with id {siteId}.");
             }
 
             var updatedSite = await _siteService.UpdateSiteAdjudicator(site.Id);
             // TODO implement business events for sites
             // await _businessEventService.CreateAdminActionEventAsync(siteId, "Admin disclaimed site");
 
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
         }
 
         // DELETE: api/Sites/5
@@ -292,7 +292,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -301,7 +301,7 @@ namespace Prime.Controllers
 
             await _siteService.DeleteSiteAsync(siteId);
 
-            return Ok(ApiResponse.Result(site));
+            return Ok(site);
         }
 
         // POST: api/sites/5/submission
@@ -318,18 +318,21 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
-
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Submit, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
-            return Ok(ApiResponse.Result(site));
+            return Ok(site);
         }
 
         // POST: api/sites/5/business-licence
@@ -340,7 +343,7 @@ namespace Prime.Controllers
         /// <param name="businessLicence"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence", Name = nameof(CreateBusinessLicence))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -351,7 +354,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -359,17 +362,16 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence != null)
             {
-                return Conflict(ApiResponse.Message($"Business Licence exists for site with id {siteId}"));
+                return Conflict($"Business Licence exists for site with id {siteId}");
             }
 
             var licence = await _siteService.AddBusinessLicenceAsync(siteId, businessLicence, documentGuid);
             if (licence == null)
             {
-                ModelState.AddModelError("documentGuid", "Business Licence could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Business Licence could not be created; network error or upload is already submitted");
             }
 
-            return Ok(ApiResponse.Result(licence));
+            return Ok(licence);
         }
 
         // PUT: api/sites/5/business-licence
@@ -379,7 +381,7 @@ namespace Prime.Controllers
         /// <param name="businessLicence"></param>
         /// <param name="siteId"></param>
         [HttpPut("{siteId}/business-licence", Name = nameof(UpdateBusinessLicence))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -390,7 +392,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -398,12 +400,12 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence.BusinessLicenceDocument != null)
             {
-                return Conflict(ApiResponse.Message($"Business licence already uploaded, update not allowed."));
+                return Conflict($"Business licence already uploaded, update not allowed.");
             }
 
             var licence = await _siteService.UpdateBusinessLicenceAsync(site.Id, businessLicence);
 
-            return Ok(ApiResponse.Result(licence));
+            return Ok(licence);
         }
 
         // POST: api/sites/5/business-licence/document
@@ -413,7 +415,7 @@ namespace Prime.Controllers
         /// <param name="documentGuid"></param>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/business-licence/document", Name = nameof(CreateBusinessLicenceDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -424,11 +426,11 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (site.BusinessLicence == null)
             {
-                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+                return NotFound($"Business Licence not found on site with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -436,14 +438,13 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence.BusinessLicenceDocument != null && site.SubmittedDate != null)
             {
-                return Conflict(ApiResponse.Message($"Business Licence Document exists for submitted site with id {siteId}"));
+                return Conflict($"Business Licence Document exists for submitted site with id {siteId}");
             }
 
             var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(site.BusinessLicence.Id, documentGuid);
             if (document == null)
             {
-                ModelState.AddModelError("documentGuid", "Business Licence Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Business Licence Document could not be created; network error or upload is already submitted");
             }
 
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId);
@@ -458,7 +459,7 @@ namespace Prime.Controllers
                 await _emailService.SendBusinessLicenceUploadedAsync(site);
             }
 
-            return Ok(ApiResponse.Result(document));
+            return Ok(document);
         }
 
         // DELETE: api/sites/5/business-licence/document
@@ -467,7 +468,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpDelete("{siteId}/business-licence/document", Name = nameof(RemoveBusinessLicenceDocument))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -477,11 +478,11 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (site.BusinessLicence == null)
             {
-                return NotFound(ApiResponse.Message($"Business Licence not found on site with id {siteId}"));
+                return NotFound($"Business Licence not found on site with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -489,7 +490,7 @@ namespace Prime.Controllers
             }
             if (site.SubmittedDate != null)
             {
-                return Conflict(ApiResponse.Message($"Unable to remove document once site has been submitted"));
+                return Conflict($"Unable to remove document once site has been submitted");
             }
 
             await _siteService.DeleteBusinessLicenceDocumentAsync(siteId);
@@ -511,7 +512,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -520,7 +521,7 @@ namespace Prime.Controllers
 
             var licence = await _siteService.GetBusinessLicenceAsync(site.Id);
 
-            return Ok(ApiResponse.Result(licence));
+            return Ok(licence);
         }
 
         // POST: api/sites/5/adjudication-documents
@@ -531,7 +532,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/adjudication-documents", Name = nameof(CreateSiteAdjudicationDocument))]
         [Authorize(Roles = Roles.EditSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -540,18 +541,17 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var document = await _siteService.AddSiteAdjudicationDocumentAsync(site.Id, documentGuid, admin.Id);
             if (document == null)
             {
-                ModelState.AddModelError("documentGuid", "Site Adjudication Document could not be created; network error or upload is already submitted");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("Site Adjudication Document could not be created; network error or upload is already submitted");
             }
 
-            return Ok(ApiResponse.Result(document));
+            return Ok(document);
         }
 
         // GET: api/sites/5/adjudication-documents
@@ -561,7 +561,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         [HttpGet("{siteId}/adjudication-documents", Name = nameof(GetSiteAdjudicationDocuments))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<SiteAdjudicationDocument>), StatusCodes.Status200OK)]
@@ -570,12 +570,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var documents = await _siteService.GetSiteAdjudicationDocumentsAsync(site.Id);
 
-            return Ok(ApiResponse.Result(documents));
+            return Ok(documents);
         }
 
         // GET: api/Sites/{siteId}/adjudication-documents/{documentId}
@@ -586,7 +586,7 @@ namespace Prime.Controllers
         /// <param name="documentId"></param>
         [HttpGet("{siteId}/adjudication-documents/{documentId}", Name = nameof(GetSiteAdjudicationDocument))]
         [Authorize(Roles = Roles.ViewSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
@@ -595,12 +595,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var token = await _documentService.GetDownloadTokenForSiteAdjudicationDocument(documentId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
 
         // PUT: api/Sites/5/pec
@@ -610,7 +610,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="pecCode"></param>
         [HttpPut("{siteId}/pec", Name = nameof(UpdatePecCode))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -619,14 +619,13 @@ namespace Prime.Controllers
         {
             if (string.IsNullOrWhiteSpace(pecCode))
             {
-                ModelState.AddModelError("Site.PEC", "PEC Code was not provided");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("PEC Code was not provided");
             }
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -636,7 +635,7 @@ namespace Prime.Controllers
 
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
         }
 
         // Get: api/site/5/latest-business-licence
@@ -654,7 +653,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
@@ -662,12 +661,12 @@ namespace Prime.Controllers
             }
             if (site.BusinessLicence?.BusinessLicenceDocument == null)
             {
-                return NotFound(ApiResponse.Message($"No business licence document found for site with id {siteId}"));
+                return NotFound($"No business licence document found for site with id {siteId}");
             }
 
             var token = await _documentService.GetDownloadTokenForBusinessLicenceDocument(siteId);
 
-            return Ok(ApiResponse.Result(token));
+            return Ok(token);
         }
 
         // POST: api/Sites/5/remote-users-email
@@ -676,7 +675,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/remote-users-email", Name = nameof(SendRemoteUsersEmail))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -686,7 +685,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             await _emailService.SendRemoteUsersUpdatedAsync(site);
@@ -699,7 +698,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="siteId"></param>
         [HttpPost("{siteId}/remote-users-email-admin", Name = nameof(SendRemoteUsersEmailAdmin))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -710,7 +709,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -730,7 +729,7 @@ namespace Prime.Controllers
         /// <param name="siteId"></param>
         /// <param name="remoteUsers"></param>
         [HttpPost("{siteId}/remote-users-email-user", Name = nameof(SendRemoteUsersEmailUser))]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -741,7 +740,7 @@ namespace Prime.Controllers
 
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
@@ -769,7 +768,11 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Approve, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
             }
 
             var updatedSite = await _siteService.ApproveSite(siteId);
@@ -777,7 +780,7 @@ namespace Prime.Controllers
             await _emailService.SendSiteApprovedSigningAuthorityAsync(site);
             await _emailService.SendSiteApprovedHIBCAsync(site);
 
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
         }
 
         // PUT: api/Sites/5/decline
@@ -796,11 +799,15 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Decline, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
             }
 
             var updatedSite = await _siteService.DeclineSite(siteId);
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
         }
 
         // PUT: api/Sites/5/enable-editing
@@ -819,11 +826,53 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
+            }
+            var action = SiteRegistrationAction.NA;
+            // Only allow enable editing for the following current site status: InReview & Approved
+            switch (site.Status)
+            {
+                case SiteStatusType.InReview:
+                    action = SiteRegistrationAction.RequestChange;
+                    break;
+                case SiteStatusType.Approved:
+                    action = SiteRegistrationAction.Unapprove;
+                    break;
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(action, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
             }
 
             var updatedSite = await _siteService.EnableEditingSite(siteId);
-            return Ok(ApiResponse.Result(updatedSite));
+            return Ok(updatedSite);
+        }
+
+        // PUT: api/Sites/5/unreject
+        /// <summary>
+        /// Unreject a site
+        /// </summary>
+        /// <param name="siteId"></param>
+        [HttpPut("{siteId}/unreject", Name = nameof(UnrejectSite))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> UnrejectSite(int siteId)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (!SiteStatusStateEngine.AllowableStatusChange(SiteRegistrationAction.Undecline, site.Status))
+            {
+                return BadRequest("Action could not be performed.");
+            }
+
+            var updatedSite = await _siteService.UnrejectSite(siteId);
+            return Ok(updatedSite);
         }
 
         // POST: api/Sites/5/site-registration-notes
@@ -834,7 +883,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         [HttpPost("{siteId}/site-registration-notes", Name = nameof(CreateSiteRegistrationNote))]
         [Authorize(Roles = Roles.EditSite)]
-        [ProducesResponseType(typeof(ApiBadRequestResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -844,19 +893,18 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             if (string.IsNullOrWhiteSpace(note))
             {
-                ModelState.AddModelError("note", "site registration notes can't be null or empty.");
-                return BadRequest(ApiResponse.BadRequest(ModelState));
+                return BadRequest("site registration notes can't be null or empty.");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var createdSiteRegistrationNote = await _siteService.CreateSiteRegistrationNoteAsync(siteId, note, admin.Id);
 
-            return Ok(ApiResponse.Result(createdSiteRegistrationNote));
+            return Ok(createdSiteRegistrationNote);
         }
 
         // GET: api/Sites/5/site-registration-notes
@@ -875,12 +923,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var siteRegistrationNotes = await _siteService.GetSiteRegistrationNotesAsync(site);
 
-            return Ok(ApiResponse.Result(siteRegistrationNotes));
+            return Ok(siteRegistrationNotes);
         }
 
         // POST: api/Sites/remote-users
@@ -895,7 +943,7 @@ namespace Prime.Controllers
         public async Task<ActionResult<IEnumerable<RemoteAccessSearchViewModel>>> GetSitesByRemoteUserInfo(IEnumerable<CertSearchViewModel> certifications)
         {
             var info = await _siteService.GetRemoteUserInfoAsync(certifications);
-            return Ok(ApiResponse.Result(info));
+            return Ok(info);
         }
 
         // GET: api/Sites/5/events?businessEventTypeCodes=1&businessEventTypeCodes=2
@@ -915,12 +963,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var events = await _siteService.GetSiteBusinessEventsAsync(siteId, businessEventTypeCodes);
 
-            return Ok(ApiResponse.Result(events));
+            return Ok(events);
         }
 
         // DELETE: api/Sites/{siteId}/adjudication-documents/{documentId}
@@ -939,12 +987,12 @@ namespace Prime.Controllers
             var document = await _siteService.GetSiteAdjudicationDocumentAsync(documentId);
             if (document == null)
             {
-                return NotFound(ApiResponse.Message($"Document not found with id {documentId}"));
+                return NotFound($"Document not found with id {documentId}");
             }
 
             await _siteService.DeleteSiteAdjudicationDocumentAsync(documentId);
 
-            return Ok(ApiResponse.Result(document));
+            return Ok(document);
         }
 
         // POST: api/sites/5/site-registration-notes/6/notification
@@ -965,18 +1013,18 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null)
             {
-                return NotFound(ApiResponse.Message($"Site Registration Note not found with id {siteRegistrationNoteId}"));
+                return NotFound($"Site Registration Note not found with id {siteRegistrationNoteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
             var notification = await _siteService.CreateSiteNotificationAsync(note.Id, admin.Id, assigneeId);
 
-            return Ok(ApiResponse.Result(notification));
+            return Ok(notification);
         }
 
         // DELETE: api/Enrollees/5/site-registration-notes/6/notification
@@ -996,12 +1044,12 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
             var note = await _siteService.GetSiteRegistrationNoteAsync(siteId, siteRegistrationNoteId);
             if (note == null || note.SiteNotification == null)
             {
-                return NotFound(ApiResponse.Message($"Site Registration Note with notification not found with id {siteRegistrationNoteId}"));
+                return NotFound($"Site Registration Note with notification not found with id {siteRegistrationNoteId}");
             }
 
             await _siteService.RemoveSiteNotificationAsync(note.SiteNotification.Id);
@@ -1025,14 +1073,14 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
 
             var notes = await _siteService.GetNotificationsAsync(siteId, admin.Id);
 
-            return Ok(ApiResponse.Result(notes));
+            return Ok(notes);
         }
 
         // Delete: api/sites/5/notifications
@@ -1051,7 +1099,7 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
             {
-                return NotFound(ApiResponse.Message($"Site not found with id {siteId}"));
+                return NotFound($"Site not found with id {siteId}");
             }
 
             await _siteService.RemoveNotificationsAsync(siteId);
