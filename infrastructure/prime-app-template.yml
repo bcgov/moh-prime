@@ -156,6 +156,10 @@ objects:
             secret:
               secretName: plr-integration
               defaultMode: 420
+          - name: env-config
+            configMap:
+              name: ${SVC_NAME}-env-config
+              defaultMode: 420
         containers:
           - name: ${SVC_NAME}-${FRONTEND_POD}
             image: >-
@@ -182,6 +186,10 @@ objects:
               readOnly: true
               mountPath: /opt/bitnami/nginx/conf/nginx.conf
               subPath: nginx.conf
+            - name: env-config
+              readOnly: true
+              mountPath: /opt/app-root/src/assets/config-map.json
+              subPath: config-map.json
             resources: {}
             envFrom:
               - configMapRef:

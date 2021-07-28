@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 
+import { environment } from '@env/environment';
 import { AbstractLoggerService } from '@core/services/abstract-logger.service';
-import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsoleLoggerService extends AbstractLoggerService {
-
   constructor() {
     super();
   }
@@ -46,7 +45,7 @@ export class ConsoleLoggerService extends AbstractLoggerService {
    * Apply colour to the console message, otherwise the use
    * the default.
    */
-  protected colorize(type: string, msg: string): string[] {
+  private colorize(type: string, msg: string): string[] {
     let color = '';
 
     switch (type) {
