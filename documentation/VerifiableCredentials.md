@@ -1,5 +1,7 @@
 ## Running the Aries Agent Locally for Verifiable Credential Testing and Development
 
+**Please Note** The following process is only necessary when working with Verifiable Credential Testing and Development, ie not required when initially setting up the project. 
+
 To run the project you will need to open two terminals:
 
 - one terminal in the [ngrok](../ngrok) folder: run the [start-ngrok.sh](../ngrok/start-ngrok.sh) script, this will initialize an ngrok tunnel that will be used to forward requests to your agent.
