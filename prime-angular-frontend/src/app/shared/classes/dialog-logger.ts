@@ -17,8 +17,7 @@ export class DialogLogger {
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
-      title: `Unknown Error, ID: ${logId}`,
-      message: error.message,
+      title: `Error Occurred (ID: ${logId})`,
       data: error,
       actionText: 'OK',
       cancelHide: true,

@@ -2,6 +2,8 @@ import { Injectable, Injector, ErrorHandler } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model';
+
 import { DialogLogger } from '@shared/classes/dialog-logger';
 import { ConsoleLoggerService } from './console-logger.service';
 import { WebApiLoggerService } from './web-api-logger.service';
@@ -27,7 +29,7 @@ export class ErrorHandlerService implements ErrorHandler {
       : error.toString();
     const url = router.url;
 
-    if (error instanceof HttpErrorResponse) {
+    if (error instanceof HttpErrorResponse || error instanceof ApiHttpErrorResponse) {
       // Server or connection error occurred
       if (!navigator.onLine) {
         // HTTP error intercept has occurred

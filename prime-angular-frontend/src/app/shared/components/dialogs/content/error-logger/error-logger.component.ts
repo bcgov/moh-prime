@@ -14,6 +14,7 @@ import { DialogOptions } from '../../dialog-options.model';
 export class ErrorLoggerComponent implements OnInit {
   public error: any;
   public environment = environment;
+  public currentDate: number;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public options: DialogOptions,
@@ -21,6 +22,7 @@ export class ErrorLoggerComponent implements OnInit {
     public router: Router
   ) {
     this.error = options.data;
+    this.currentDate = Date.now();
   }
 
   public ngOnInit(): void {

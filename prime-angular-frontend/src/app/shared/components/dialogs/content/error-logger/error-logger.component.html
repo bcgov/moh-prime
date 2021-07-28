@@ -1,4 +1,5 @@
 <mat-dialog-content>
+  <p>An unknown error has occurred at {{ currentDate | date:'medium' }}</p>
   <mat-expansion-panel *ngIf="error.stack && !environment.production"
                        class="mb-1">
     <mat-expansion-panel-header>
