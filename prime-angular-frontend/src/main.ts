@@ -1,13 +1,37 @@
-
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
+import { environment } from '@env/environment';
+import { ConfigMap } from '@env/config-map.model';
+
 import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import { APP_CONFIG, AppConfig, defaultAppConfig } from './app/app-config.module';
 
-if (environment.production) {
-  enableProdMode();
-}
+// The deployment pipeline provides the config map based on environment
+// without requiring a build by using the public assets folder, otherwise
+// config map should not exist in local development which relies on the
+// cascade of environment files.
+fetch('/assets/config-map.json')
+  .then((response) => response.json())
+  .then((configMap: ConfigMap) => {
+    let appConfig = defaultAppConfig;
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+    if (configMap) {
+      const { keycloakConfig: { config }, ...root } = configMap;
+      appConfig = { ...appConfig, ...root };
+      appConfig.keycloakConfig.config = config;
+    }
+
+    return appConfig;
+  })
+  .catch(() => defaultAppConfig)
+  .then((appConfig: AppConfig) => {
+    if (environment.production) {
+      enableProdMode();
+    }
+
+    platformBrowserDynamic([
+      { provide: APP_CONFIG, useValue: appConfig }
+    ]).bootstrapModule(AppModule)
+      .catch(err => console.error(err));
+  });

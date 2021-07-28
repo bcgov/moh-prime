@@ -15,8 +15,6 @@ import { UtilsService } from '@core/services/utils.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private window: Window;
-
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private activatedRoute: ActivatedRoute,
