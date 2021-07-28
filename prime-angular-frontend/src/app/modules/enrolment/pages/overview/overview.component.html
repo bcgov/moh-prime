@@ -5,7 +5,7 @@
   <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
-  <div class="mb-5">
+  <div class="mb-4">
     <app-alert *ngIf="!isInitialEnrolment && within90DaysOfRenewal"
                type="info"
                icon="error_outline"
@@ -48,9 +48,9 @@
     Request Remote Access
   </button>
 
-  <app-alert *ngIf="enrolment && !hasRegOrJob()"
+  <app-alert *ngIf="enrolmentErrors?.certificateOrOboSite"
              type="danger"
-             icon="warning">
+             icon="error">
     <ng-container #alertContent
                   class="alert-content">
       Your enrolment contains an error that will need to be updated before submission.
@@ -71,6 +71,7 @@
   <app-enrollee-review *ngIf="enrolment"
                        [showEditRedirect]="currentStatus === EnrolmentStatus.EDITABLE"
                        [enrolment]="enrolment"
+                       [enrolmentErrors]="enrolmentErrors"
                        (route)="routeTo($event)"></app-enrollee-review>
 
   <div class="footer mb-4">
@@ -102,7 +103,7 @@
 
       <button mat-flat-button
               color="primary"
-              [disabled]="!accept.checked || !hasRegOrJob()"
+              [disabled]="!accept.checked || enrolmentErrors?.certificateOrOboSite"
               (click)="onSubmit()">Submit Enrolment
       </button>
 

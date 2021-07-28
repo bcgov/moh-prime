@@ -211,7 +211,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   protected nextRouteAfterSubmit() {
-    const oboSites = this.enrolmentFormStateService.jobsForm.get('oboSites').value as OboSite[];
+    const oboSites = this.enrolmentFormStateService.oboSitesForm.get('oboSites').value as OboSite[];
     const certifications = this.enrolmentFormStateService.regulatoryFormState.certifications;
 
     let nextRoutePath: string;
@@ -251,7 +251,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
    * Remove obo sites by care setting if a care setting was removed from the enrolment
    */
   private removeOboSites(careSettingCode: number): void {
-    const form = this.enrolmentFormStateService.jobsForm;
+    const form = this.enrolmentFormStateService.oboSitesForm;
     const oboSites = form.get('oboSites') as FormArray;
 
     oboSites.value?.forEach((site: OboSite, index: number) => {
