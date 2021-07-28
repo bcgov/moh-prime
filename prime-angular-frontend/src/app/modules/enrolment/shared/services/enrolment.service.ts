@@ -67,11 +67,9 @@ export class EnrolmentService implements IEnrolmentService {
     const enrolleeLicenceCodes = certifications
       .map((certification: CollegeCertification) => certification.licenseCode);
 
-    const hasRemoteAccessLicence = this.configService.licenses
+    return this.configService.licenses
       .filter((licence: LicenseConfig) => enrolleeLicenceCodes.includes(licence.code))
       .some(this.hasAllowedRemoteAccessLicences);
-
-    return hasRemoteAccessLicence;
   }
 
   public hasAllowedRemoteAccessCareSetting(careSettings: CareSetting[]): boolean {
