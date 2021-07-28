@@ -11,6 +11,8 @@ using Prime.Models;
 using Prime.HttpClients;
 using Microsoft.EntityFrameworkCore;
 using Prime.Models.VerifiableCredentials;
+using System.Reflection;
+using Newtonsoft.Json.Serialization;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -138,14 +140,15 @@ namespace Prime.Services
         private async Task<int> CreateInvitation(Credential credential)
         {
             var invitation = await _verifiableCredentialClient.CreateInvitationAsync(credential.Alias);
-            var invitationUrl = invitation.Value<string>("invitation_url");
+            credential.ConnectionId = invitation.ConnectionId;
 
             QRCodeGenerator qrGenerator = new QRCodeGenerator();
-            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitationUrl, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(invitation.InvitationUrl.ToString(), QRCodeGenerator.ECCLevel.Q);
             Base64QRCode qrCode = new Base64QRCode(qrCodeData);
             string qrCodeImageAsBase64 = qrCode.GetGraphic(20, "#003366", "#ffffff");
 
             credential.Base64QRCode = qrCodeImageAsBase64;
+
             return await _context.SaveChangesAsync();
         }
 
@@ -159,8 +162,6 @@ namespace Prime.Services
             switch (data.State)
             {
                 case ConnectionState.Invitation:
-                    // Enrollee Id stored as alias on invitation
-                    await UpdateCredentialConnectionId(data.Alias, data.ConnectionId);
                     return true;
 
                 case ConnectionState.Request:
@@ -221,25 +222,6 @@ namespace Prime.Services
             return await _context.SaveChangesAsync();
         }
 
-        private async Task<int> UpdateCredentialConnectionId(int enrolleeId, string connection_id)
-        {
-            // Add ConnectionId to Enrollee's newest credential
-            var credential = await _context.Credentials
-                .Where(ec => ec.EnrolleeId == enrolleeId)
-                .OrderByDescending(ec => ec.Id)
-                .FirstOrDefaultAsync();
-
-            if (credential != null)
-            {
-                _logger.LogInformation("Updating this credential's (Id = {id}) connectionId to {connection_id}", credential.Id, connection_id);
-
-                credential.ConnectionId = connection_id;
-                _context.Credentials.Update(credential);
-            }
-
-            return await _context.SaveChangesAsync();
-        }
-
         private Credential GetCredentialByConnectionIdAsync(string connectionId)
         {
             return _context.Credentials
@@ -247,7 +229,7 @@ namespace Prime.Services
         }
 
         // Issue a credential to an active connection.
-        private async Task<JObject> IssueCredential(string connectionId, int enrolleeId)
+        private async Task IssueCredential(string connectionId, int enrolleeId)
         {
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.Id == enrolleeId);
@@ -257,7 +239,7 @@ namespace Prime.Services
             if (credential == null || credential.AcceptedCredentialDate != null)
             {
                 _logger.LogInformation("Cannot issue credential, credential with this connectionId:{connectionId} from database is null, or a credential has already been accepted.", connectionId);
-                return null;
+                return;
             }
 
             var credentialAttributes = await CreateCredentialAttributesAsync(enrolleeId);
@@ -265,41 +247,44 @@ namespace Prime.Services
             var issueCredentialResponse = await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
 
             // Set credentials CredentialExchangeId from issue credential response
-            credential.CredentialExchangeId = (string)issueCredentialResponse.SelectToken("credential_exchange_id");
+            credential.CredentialExchangeId = issueCredentialResponse.ExchangeId;
             _context.Credentials.Update(credential);
 
             await _context.SaveChangesAsync();
-
-            return issueCredentialResponse;
         }
 
         // Create the credential offer.
-        private async Task<JObject> CreateCredentialOfferAsync(string connectionId, JArray attributes)
+        private async Task<CredentialOfferRequest> CreateCredentialOfferAsync(string connectionId, CredentialPayload attributes)
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
-            JObject credentialOffer = new JObject
+            var credentialProposal = new CredentialProposal();
+            foreach (PropertyInfo property in attributes.GetType().GetProperties())
             {
-                { "connection_id", connectionId },
-                { "issuer_did", issuerDid },
-                { "schema_id", schemaId },
-                { "schema_issuer_did", issuerDid },
-                { "schema_name", PrimeEnvironment.VerifiableCredentialApi.SchemaName },
-                { "schema_version", PrimeEnvironment.VerifiableCredentialApi.SchemaVersion },
-                { "cred_def_id", credentialDefinitionId },
-                { "comment", "PharmaNet GPID" },
-                { "auto_remove", false },
-                { "trace", false },
+                if (property != null)
                 {
-                    "credential_proposal",
-                    new JObject
-                        {
-                            { "@type", "did:sov:BzCbsNYhMrjHiqZDTUASHg;spec/issue-credential/1.0/credential-preview" },
-                            { "attributes", attributes }
-                        }
+                    credentialProposal.Attributes.Add(new CredentialAttribute
+                    {
+
+                        Name = property.GetCustomAttribute<JsonPropertyAttribute>()?.PropertyName,
+                        Value = property.GetValue(attributes)?.ToString(),
+                    });
                 }
+            }
+
+            var credentialOffer = new CredentialOfferRequest
+            {
+                ConnectionId = connectionId,
+                IssuerDid = issuerDid,
+                SchemaId = schemaId,
+                SchemaIssuerDid = issuerDid,
+                SchemaName = PrimeEnvironment.VerifiableCredentialApi.SchemaName,
+                SchemaVersion = PrimeEnvironment.VerifiableCredentialApi.SchemaVersion,
+                CredentialDefinitionId = credentialDefinitionId,
+                Comment = "PharmaNet GPID",
+                CredentialProposal = credentialProposal
             };
 
             _logger.LogInformation("Credential offer for connection ID \"{connectionId}\" for {@JObject}", connectionId, JsonConvert.SerializeObject(credentialOffer));
@@ -308,7 +293,7 @@ namespace Prime.Services
         }
 
         // Create the credential proposal attributes.
-        private async Task<JArray> CreateCredentialAttributesAsync(int enrolleeId)
+        private async Task<CredentialPayload> CreateCredentialAttributesAsync(int enrolleeId)
         {
             // TODO Update schema to rename organization_type to care_setting
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
@@ -318,33 +303,13 @@ namespace Prime.Services
                 await _context.Entry(careSetting).Reference(o => o.CareSetting).LoadAsync();
             }
 
-            JArray attributes = new JArray
+            var attributes = new CredentialPayload
             {
-                new JObject
-                {
-                    { "name", "GPID" },
-                    { "value", enrollee.GPID }
-                },
-                new JObject
-                {
-                    { "name", "Renewal Date" },
-                    { "value", enrollee.ExpiryDate.Value.Date.ToShortDateString() }
-                },
-                new JObject
-                {
-                    { "name", "TOA Name" },
-                    { "value", enrollee.AssignedTOAType.Value.ToString() }
-                },
-                new JObject
-                {
-                    { "name", "Care Type Setting" },
-                    { "value", string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)) }
-                },
-                new JObject
-                {
-                    { "name", "Remote User" },
-                    { "value", enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"}
-                }
+                GPID = enrollee.GPID,
+                RenewalDate = enrollee.ExpiryDate.Value.Date.ToShortDateString(),
+                TOAName = enrollee.AssignedTOAType.Value.ToString(),
+                CareTypeSetting = string.Join(',', enrollee.EnrolleeCareSettings.Select(ecs => ecs.CareSetting.Name)),
+                RemoteUser = enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"
             };
 
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));

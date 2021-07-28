@@ -69,6 +69,11 @@ namespace Prime
             public static readonly string Url = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_URL") ?? "http://agent:8024/";
             public static readonly string Key = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_API_KEY") ?? "agent-api-key-dev";
             public static readonly string WebhookKey = GetEnvironmentVariable("VERIFIABLE_CREDENTIAL_WEBHOOK_KEY") ?? "0ce755d5-1fb1-483a-ba22-439061aa8f67";
+            // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
+            // and have verifier app updated by aries team in each environment (send them schema id, if claims change send them new attributes)
+            // Update the following through postman:
+            // 1. Add new schema, incrementing schema version -> schema_name = enrollee
+            // 2. Create a credential definition for schema -> support_revocation = true, tag = prime
             public static readonly string SchemaName = "enrollee";
             public static readonly string SchemaVersion = "2.2";
         }

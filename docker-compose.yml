@@ -111,7 +111,7 @@ services:
     ports:
       - 5434:5432
     volumes:
-      - wallet-data:/var/lib/postgresql/data
+      - wallet:/var/lib/postgresql/data
 
 ####################### API Backend Definition #######################
   dotnet-webapi:
@@ -288,6 +288,6 @@ volumes:
   local_postgres_data:
   local_mongodb_data:
   db_backup_data:
-  wallet-data:
+  wallet:
   prime-dotnet-webapi-bin:
   prime-dotnet-webapi-obj:
