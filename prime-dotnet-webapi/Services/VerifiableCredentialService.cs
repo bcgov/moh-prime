@@ -278,7 +278,6 @@ namespace Prime.Services
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
-            var schema = (await _verifiableCredentialClient.GetSchema(schemaId)).Value<JObject>("schema");
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
 
             JObject credentialOffer = new JObject
@@ -287,8 +286,8 @@ namespace Prime.Services
                 { "issuer_did", issuerDid },
                 { "schema_id", schemaId },
                 { "schema_issuer_did", issuerDid },
-                { "schema_name", schema.Value<string>("name") },
-                { "schema_version", schema.Value<string>("version") },
+                { "schema_name", PrimeEnvironment.VerifiableCredentialApi.SchemaName },
+                { "schema_version", PrimeEnvironment.VerifiableCredentialApi.SchemaVersion },
                 { "cred_def_id", credentialDefinitionId },
                 { "comment", "PharmaNet GPID" },
                 { "auto_remove", false },

@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text;
 using Prime.Models.VerifiableCredentials;
+using System.Linq;
 
 namespace Prime.HttpClients
 {
@@ -15,8 +16,6 @@ namespace Prime.HttpClients
         private readonly HttpClient _client;
         private readonly ILogger _logger;
 
-        private static readonly string SchemaName = "enrollee";
-        private static readonly string SchemaVersion = "2.2";
         // If schema changes, the following must be updated in all agents for each environment as the code changes are pushed so versions are the same
         // and have verifier app updated by aries team in each environment (send them schema id, if claims change send them new attributes)
         // Update the following through postman:
@@ -124,7 +123,7 @@ namespace Prime.HttpClients
             HttpResponseMessage response = null;
             try
             {
-                response = await _client.GetAsync($"schemas/created?schema_version={SchemaVersion}&schema_issuer_did={did}&schema_name={SchemaName}");
+                response = await _client.GetAsync($"schemas/created?schema_version={PrimeEnvironment.VerifiableCredentialApi.SchemaVersion}&schema_issuer_did={did}&schema_name={PrimeEnvironment.VerifiableCredentialApi.SchemaName}");
             }
             catch (Exception ex)
             {
@@ -138,13 +137,12 @@ namespace Prime.HttpClients
                 throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
             }
 
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-            var schemas = (JArray)body.SelectToken("schema_ids");
+            SchemaIdResponse schemaIdResponse = JsonConvert.DeserializeObject<SchemaIdResponse>(await response.Content.ReadAsStringAsync());
 
-            if (schemas != null && schemas.Count > 0)
+            if (schemaIdResponse.SchemaIds != null && schemaIdResponse.SchemaIds.Count > 0)
             {
-                _logger.LogInformation("SCHEMA_ID: {schemaid}", (string)body.SelectToken("schema_ids[0]"));
-                return (string)body.SelectToken("schema_ids[0]");
+                _logger.LogInformation("SCHEMA_ID: {schemaid}", (string)schemaIdResponse.SchemaIds.First());
+                return schemaIdResponse.SchemaIds.First();
             }
             else
             {
@@ -152,36 +150,10 @@ namespace Prime.HttpClients
             }
         }
 
-        public async Task<JObject> GetSchema(string schemaId)
-        {
-            HttpResponseMessage response = null;
-            try
-            {
-                response = await _client.GetAsync($"schemas/{schemaId}");
-            }
-            catch (Exception ex)
-            {
-                await LogError(response, ex);
-                throw new VerifiableCredentialApiException("Error occurred attempting to get the schema: ", ex);
-            }
-
-            if (!response.IsSuccessStatusCode)
-            {
-                await LogError(response);
-                throw new VerifiableCredentialApiException($"Error code {response.StatusCode} was provided when calling VerifiableCredentialClient::GetSchema");
-            }
-
-            JObject body = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-            _logger.LogInformation("GET Schema response {@JObject}", JsonConvert.SerializeObject(body));
-
-            return body;
-        }
-
         public async Task<string> CreateSchemaAsync()
         {
             // TODO create credential schema model with schema attriubtes(name, value) named
-            var attributes = new JArray
+            var attributes = new List<string>
             {
                 "GPID",
                 "Renewal Date",
@@ -190,14 +162,18 @@ namespace Prime.HttpClients
                 "Remote User"
             };
 
-            var schema = new JObject
+            var schemaRequest = new SchemaRequest
             {
-                { "attributes", attributes },
-                { "schema_name", SchemaName },
-                { "schema_version", SchemaVersion}
+                SchemaName = PrimeEnvironment.VerifiableCredentialApi.SchemaName,
+                SchemaVersion = PrimeEnvironment.VerifiableCredentialApi.SchemaVersion
             };
 
-            var httpContent = new StringContent(schema.ToString(), Encoding.UTF8, "application/json");
+            foreach (var attribute in attributes)
+            {
+                schemaRequest.Attributes.Add(attribute);
+            }
+
+            var httpContent = new StringContent(JsonConvert.SerializeObject(schemaRequest), Encoding.UTF8, "application/json");
 
             HttpResponseMessage response = null;
             try
