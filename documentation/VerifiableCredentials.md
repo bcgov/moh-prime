@@ -1,6 +1,6 @@
 ## Running the Aries Agent Locally for Verifiable Credential Testing and Development
 
-**NOTE:** The following process is only necessary when working with Verifiable Credential Testing and Development, and is not necessary for general development purposes. For example, when initially setting up the project.  
+**NOTE:** The following process is only necessary when working with Verifiable Credential Testing and Development, and is not necessary for general development purposes; for example, when initially setting up the project.  
 
 To run the project you will need to open two terminals:
 
