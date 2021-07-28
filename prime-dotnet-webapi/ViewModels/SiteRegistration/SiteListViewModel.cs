@@ -18,6 +18,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
+        public DateTimeOffset? ApprovedDate { get; set; }
+
         public bool Completed { get; set; }
 
         public int RemoteUserCount { get; set; }
@@ -31,5 +33,7 @@ namespace Prime.ViewModels
         public BusinessLicence BusinessLicence { get; set; }
 
         public bool HasNotification { get; set; }
+
+        public bool Flagged { get; set; }
     }
 }

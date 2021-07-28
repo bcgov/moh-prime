@@ -42,6 +42,7 @@ export class LicenseConfig extends Config<number> implements IWeightedConfig {
   namedInImReg: boolean;
   weight: number;
   validate: boolean;
+  manual: boolean;
   prescriberIdType: PrescriberIdTypeEnum;
 }
 

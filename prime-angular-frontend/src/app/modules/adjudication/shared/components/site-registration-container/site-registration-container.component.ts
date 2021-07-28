@@ -273,6 +273,14 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
+  public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {
+    this.busy = this.siteResource.flagSite(siteId, flagged)
+      .subscribe((updatedSite: Site) => {
+        this.updateSite(updatedSite);
+        this.action.emit();
+      });
+  }
+
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
@@ -389,7 +397,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     const siteRegistrations = results.reduce((registrations, result) => {
       const { matchOn, organization: ovm } = result;
       const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: SiteListViewModel, index: number) => {
+      const registration = sites.map((svm: Site, index: number) => {
         const { id: siteId, doingBusinessAs, ...site } = svm;
         return (!index)
           ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
@@ -431,13 +439,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
       physicalAddress,
       doingBusinessAs,
       submittedDate,
+      approvedDate,
       careSettingCode,
       siteVendors,
       remoteUsers,
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -445,13 +455,15 @@ export class SiteRegistrationContainerComponent implements OnInit {
       physicalAddress,
       siteDoingBusinessAs: doingBusinessAs,
       submittedDate,
+      approvedDate,
       careSettingCode,
       siteVendors,
       remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 }

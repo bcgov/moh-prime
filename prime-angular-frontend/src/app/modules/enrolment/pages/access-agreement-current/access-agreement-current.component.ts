@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs';
 
-import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
@@ -21,8 +19,6 @@ export class AccessAgreementCurrentComponent implements OnInit {
   constructor(
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private toastService: ToastService,
-    private logger: LoggerService
   ) { }
 
   public ngOnInit(): void {

@@ -13,7 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 

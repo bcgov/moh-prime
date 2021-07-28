@@ -9,7 +9,7 @@ import { tap } from 'rxjs/operators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -45,7 +45,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,

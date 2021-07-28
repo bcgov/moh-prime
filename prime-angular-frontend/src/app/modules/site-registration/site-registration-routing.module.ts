@@ -27,6 +27,7 @@ import { RemoteUsersPageComponent } from './pages/remote-users-page/remote-users
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
+import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
 
 const routes: Routes = [
   {
@@ -85,7 +86,7 @@ const routes: Routes = [
                 pathMatch: 'full'
               },
               {
-                path: `${ SiteRoutes.SITES }/:sid`,
+                path: `${SiteRoutes.SITES}/:sid`,
                 children: [
                   {
                     path: SiteRoutes.CARE_SETTING,
@@ -97,6 +98,13 @@ const routes: Routes = [
                   {
                     path: SiteRoutes.BUSINESS_LICENCE,
                     component: BusinessLicencePageComponent,
+                    canActivate: [SiteGuard],
+                    canDeactivate: [CanDeactivateFormGuard],
+                    data: { title: 'Site Business Licence' }
+                  },
+                  {
+                    path: SiteRoutes.BUSINESS_LICENCE_RENEWAL,
+                    component: BusinessLicenceRenewalPageComponent,
                     canActivate: [SiteGuard],
                     canDeactivate: [CanDeactivateFormGuard],
                     data: { title: 'Site Business Licence' }

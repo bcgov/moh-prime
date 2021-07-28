@@ -1,15 +1,17 @@
 import { Inject, Injectable } from '@angular/core';
 import { Params, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,7 @@ import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolmen
 export class PaperEnrolmentGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private paperEnrolmentResource: PaperEnrolmentResource
@@ -26,29 +28,36 @@ export class PaperEnrolmentGuard extends BaseGuard {
   }
 
   protected checkAccess(routePath: string = null, params: Params): Observable<boolean> | Promise<boolean> {
-    const enrolleeId = params.eid;
-    if (!enrolleeId) {
-      return this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
+    const enrolleeId = +params.eid;
+    return (enrolleeId)
+      ? this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
         .pipe(
-          map((enrollee: HttpEnrollee) => {
-            // Store the enrollee for access throughout creation and updating of a
-            // site, which will allows provide the most up-to-date site
-            // TODO replace each enrollee GET for the service
-            // this.paperEnrolmentService.enrollee = enrollee;
-
-            return this.routeDestination(routePath, enrollee);
-          })
-        );
-    } else {
-      return new Promise(async (resolve, reject) => resolve(true));
-    }
+          map((enrollee: HttpEnrollee) => this.routeDestination(routePath, enrollee, params))
+        )
+      : of(true);
   }
 
   /**
    * @description
    * Determine the route destination based on the enrolment.
    */
-  private routeDestination(routePath: string, enrolment: HttpEnrollee) {
-    return !!enrolment;
+  private routeDestination(routePath: string, enrollee: HttpEnrollee, params: Params): boolean {
+    return (enrollee?.approvedDate)
+      ? this.navigate(`/${this.config.routes.paperEnrolment}/${params.eid}/${PaperEnrolmentRoutes.NEXT_STEPS}`, routePath)
+      : true;
+  }
+
+  /**
+   * @description
+   * Prevent infinite route loops by navigating to a route only
+   * when the current route path is not the destination path.
+   */
+  private navigate(routePath: string, destinationPath: string): boolean {
+    if (routePath === destinationPath) {
+      return true;
+    } else {
+      this.router.navigate([routePath]);
+      return false;
+    }
   }
 }

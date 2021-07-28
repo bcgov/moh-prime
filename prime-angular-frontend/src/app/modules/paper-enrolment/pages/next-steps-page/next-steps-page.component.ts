@@ -16,7 +16,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 import { NextStepsFormState } from '@paper-enrolment/pages/next-steps-page/next-steps-form-state.class';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Component({
   selector: 'app-next-steps',

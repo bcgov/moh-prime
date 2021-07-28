@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
@@ -53,7 +53,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService
