@@ -1,7 +1,16 @@
 <div class="mb-2">
-  <div class="mb-2 property-key"
+  <div class="mb-2 property-key d-flex justify-content-between align-items-center"
        [ngClass]="(makeBold) ? 'font-weight-bolder' : 'font-weight-bold'">
-    {{ title }}
+    <span>{{ title }}</span>
+
+    <button *ngIf="hasError"
+            mat-icon-button
+            type="button"
+            [disabled]="true">
+      <mat-icon [matTooltip]="errorMessage"
+                matTooltipPosition="after"
+                color="warn">error</mat-icon>
+    </button>
   </div>
   <div class="ml-4 property-value">
     <ng-content></ng-content>
