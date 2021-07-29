@@ -45,8 +45,5 @@ export class ErrorHandlerService implements ErrorHandler {
     }
 
     logger.error(message, { url });
-
-    // IMPORTANT: Rethrow the error, otherwise it gets swallowed
-    throw error;
   }
 }
