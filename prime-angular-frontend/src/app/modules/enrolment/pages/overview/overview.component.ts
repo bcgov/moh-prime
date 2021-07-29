@@ -164,7 +164,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolmentWithin90DaysOfExpiry(): void {
     const enrolment = this.enrolmentService.enrolment;
     const expiryDate = enrolment.expiryDate;
-    this.withinDaysOfRenewal = DateUtils.withinDaysBeforeDate(expiryDate, 90) ? true : false;
+    this.withinDaysOfRenewal = DateUtils.withinDaysBeforeDate(expiryDate, 90);
   }
 
   /**
