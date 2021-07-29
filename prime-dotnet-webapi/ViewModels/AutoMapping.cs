@@ -9,6 +9,7 @@ using Prime.ViewModels.Emails;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.ViewModels.Plr;
 
 /**
  * Automapper Documentation
@@ -114,5 +115,7 @@ public class AutoMapping : Profile
         CreateMap<PlrProvider, PlrProvider>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
+
+        CreateMap<PlrProvider, PlrViewModel>();
     }
 }

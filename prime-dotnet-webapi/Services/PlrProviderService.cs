@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Prime.Models;
+using Prime.ViewModels.Plr;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -60,6 +64,15 @@ namespace Prime.Services
                 return -1;
             }
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
+        }
+
+        public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId)
+        {
+            return await _context.PlrProviders
+                .AsNoTracking()
+                .Where(p => collegeId.Contains(p.CollegeId))
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
