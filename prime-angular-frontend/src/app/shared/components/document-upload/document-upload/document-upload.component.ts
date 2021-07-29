@@ -7,9 +7,9 @@ import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-valida
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import tus from 'tus-js-client';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
-import { APP_CONFIG, AppConfig } from '../../../../app-config.module';
 
 export class BaseDocument {
   id: number;
