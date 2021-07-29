@@ -11,7 +11,6 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { ToastService } from '@core/services/toast.service';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -53,7 +52,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private authService: AuthService,
-    private toastService: ToastService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -77,10 +75,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   public onMailingAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
-  }
-
-  public onBack(): void {
-    this.routeUtils.routeTo([SiteRoutes.MODULE_PATH, SiteRoutes.SITE_MANAGEMENT]);
   }
 
   public ngOnInit(): void {

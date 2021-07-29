@@ -132,10 +132,11 @@ export class OrganizationGuard extends BaseGuard {
    * registration has not been completed.
    */
   private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
-    // allow navigation from the CLAIM page to either ORGANIZATION_NAME or CLAIM_CONFIRMATION page
+    // allow navigation from the CLAIM page to SIGNING_AUTHORITY, ORGANIZATION_NAME, or CLAIM_CONFIRMATION page
     if (this.router.url.includes(SiteRoutes.ORGANIZATION_CLAIM)
       && (routePath.includes(SiteRoutes.ORGANIZATION_NAME)
-        || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION))) {
+        || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION)
+        || routePath.includes(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY))) {
       return true;
     }
     const destPath = hasOrgClaim

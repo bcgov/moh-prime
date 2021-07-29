@@ -6,10 +6,10 @@ import { Validators } from '@angular/forms';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { ToastService } from '@core/services/toast.service';
+import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 
-import { Observable, of, Subscription } from 'rxjs';
-import { catchError, exhaustMap, map } from 'rxjs/operators';
+import { EMPTY, of } from 'rxjs';
+import { catchError, exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
@@ -19,9 +19,7 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
-import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationClaimPageFormState } from './organization-claim-page-form-state.class';
-import { OrgnizationType } from '@registration/shared/models/organization-type-model';
 
 @Component({
   selector: 'app-organization-claim-page',
@@ -35,14 +33,12 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   public isCompleted: boolean;
   public isClaimExistingOrg: boolean;
   public hasOrgClaimError: boolean;
-  public busy: Subscription;
 
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private organizationFormStateService: OrganizationFormStateService,
     private organizationResource: OrganizationResource,
-    private toastService: ToastService,
     private authService: AuthService,
     private route: ActivatedRoute,
     router: Router
@@ -58,6 +54,10 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
     this.toggleClaimFormValidators(event.checked);
   }
 
+  public onBack(): void {
+    this.routeUtils.routeRelativeTo([SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY]);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.isClaimExistingOrg = !!this.formState.json.pec && !!this.formState.json.claimDetail;
@@ -71,28 +71,25 @@ export class OrganizationClaimPageComponent extends AbstractEnrolmentPage implem
   protected patchForm(): void {
   }
 
-  protected performSubmission(): Observable<boolean> {
-    if (this.isClaimExistingOrg) {
-      return this.authService.getUser$()
+  protected performSubmission(): NoContent {
+    return (this.isClaimExistingOrg)
+      ? this.authService.getUser$()
         .pipe(
           exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
-          exhaustMap((party: Party) => this.organizationResource.claimOrganization(party.id, this.formState.json)
+          exhaustMap((party: Party) =>
+            this.organizationResource.claimOrganization(party.id, this.formState.json)
               .pipe(
-                map((organizationId: number) => !!organizationId),
-                catchError((error, caught) => {
+                catchError(_ => {
                   this.hasOrgClaimError = true;
-                  return of(false);
+                  return EMPTY;
                 })
-          ))
+            )),
+          NoContentResponse
         )
-    }
-    return of(true);
+      : of(NoContentResponse);
   }
 
-  protected afterSubmitIsSuccessful(success: boolean): void {
-    if (!success) {
-      return;
-    }
+  protected afterSubmitIsSuccessful(): void {
     const routePath = this.isClaimExistingOrg
       ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
       : SiteRoutes.ORGANIZATION_NAME;

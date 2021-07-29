@@ -198,7 +198,6 @@ export class OrganizationResource {
         map((response: ApiHttpResponse<number>) => response.result),
         tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Organization could not be claimed');
           this.logger.error('[Core] OrganizationResource::claimOrganization error has occurred: ', error);
           throw error;
         })
