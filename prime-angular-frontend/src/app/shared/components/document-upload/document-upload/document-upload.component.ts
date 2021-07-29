@@ -7,8 +7,6 @@ import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-valida
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import tus from 'tus-js-client';
 
-import { environment } from '@env/environment';
-
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { APP_CONFIG, AppConfig } from '../../../../app-config.module';
@@ -152,7 +150,7 @@ export class DocumentUploadComponent implements OnInit {
     };
 
     return {
-      url: `${environment.documentManagerUrl}/documents/uploads`,
+      url: `${this.config.documentManagerUrl}/documents/uploads`,
       process,
     };
   }
