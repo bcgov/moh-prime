@@ -1,7 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { environment } from '@env/environment';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
 import { BaseGuard } from '@core/guards/base.guard';
@@ -48,7 +47,7 @@ export class AuthenticationGuard extends BaseGuard {
         // Capture the user's current location, and provide it to
         // Keycloak to redirect the user to where they originated
         // once authenticated
-        const redirectUri = `${environment.loginRedirectUrl}${routePath}`;
+        const redirectUri = `${this.config.loginRedirectUrl}${routePath}`;
         const idpHint = (adminRoutes.includes(targetModule))
           ? IdentityProviderEnum.IDIR
           : (gisRoutes.includes(targetModule))

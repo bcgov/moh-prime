@@ -17,6 +17,7 @@ fetch('/assets/config-map.json')
     let appConfig = defaultAppConfig;
 
     if (configMap) {
+      // TODO mohKeyCloakConfig will eventually have configuration applied throughout the environments
       const { keycloakConfig: { config }, ...root } = configMap;
       appConfig = { ...appConfig, ...root };
       appConfig.keycloakConfig.config = config;
