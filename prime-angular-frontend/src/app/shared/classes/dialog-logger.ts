@@ -13,12 +13,12 @@ export class DialogLogger {
     private dialog: MatDialog
   ) { }
 
-  public log(logId: number, error: Error): void {
+  public log(logId: number): void {
     const data: DialogOptions = {
       icon: 'error',
       actionType: 'warn',
-      title: `Error Occurred (ID: ${logId})`,
-      data: error,
+      title: 'Error Occurred',
+      data: { errorId: logId },
       actionText: 'OK',
       cancelHide: true,
       component: ErrorLoggerComponent

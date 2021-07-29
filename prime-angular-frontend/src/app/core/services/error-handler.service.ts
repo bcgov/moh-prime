@@ -41,7 +41,7 @@ export class ErrorHandlerService implements ErrorHandler {
     } else {
       // Client error has occurred (Angular Error, ReferenceError...)
       webApiLogger.error(message, { url })
-        .subscribe(logId => dialogLogger.log(logId, error));
+        .subscribe(logId => dialogLogger.log(logId));
     }
 
     logger.error(message, { url });

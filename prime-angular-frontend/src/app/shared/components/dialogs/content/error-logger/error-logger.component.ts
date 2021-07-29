@@ -1,8 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 
-import { environment } from '@env/environment';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { DialogOptions } from '../../dialog-options.model';
 
@@ -12,17 +10,17 @@ import { DialogOptions } from '../../dialog-options.model';
   styleUrls: ['./error-logger.component.scss']
 })
 export class ErrorLoggerComponent implements OnInit {
-  public error: any;
-  public environment = environment;
-  public currentDate: number;
+  public currentDate: string;
+  public errorId: number;
+  public primePhone: string;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public options: DialogOptions,
-    @Inject(APP_CONFIG) public config: AppConfig,
-    public router: Router
+    @Inject(APP_CONFIG) public config: AppConfig
   ) {
-    this.error = options.data;
-    this.currentDate = Date.now();
+    this.errorId = options.data.errorId;
+    this.currentDate = new Date().toUTCString();
+    this.primePhone = config.prime.phone;
   }
 
   public ngOnInit(): void {

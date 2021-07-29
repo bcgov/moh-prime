@@ -1,14 +1,10 @@
 <mat-dialog-content>
-  <p>An unknown error has occurred at {{ currentDate | date:'medium' }}</p>
-  <mat-expansion-panel *ngIf="error.stack && !environment.production"
-                       class="mb-1">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        Details
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <ng-template matExpansionPanelContent>
-      {{ error.stack }}
-    </ng-template>
-  </mat-expansion-panel>
+  <p>
+    An unknown error #{{ errorId }} has occurred on {{ currentDate | formatDate : 'MMMM Do YYYY' }} at {{ currentDate |
+    formatDate : 'hh:mm a' }}.
+  </p>
+  <p>
+    The error has been logged to the server. If the issue persists contact {{ primePhone }} and
+    provide the error number.
+  </p>
 </mat-dialog-content>
