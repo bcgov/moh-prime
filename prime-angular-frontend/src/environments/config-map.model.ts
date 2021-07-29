@@ -8,4 +8,5 @@ export class ConfigMap {
   loginRedirectUrl: string;
   documentManagerUrl: string;
   keycloakConfig: KeycloakOptions;
+  mohKeycloakConfig: KeycloakOptions;
 }

@@ -1,15 +1,11 @@
-import { KeycloakOptions } from 'keycloak-angular';
 import { ConfigMap } from '@env/config-map.model';
 
 export type environmentName = 'prod' | 'test' | 'dev' | 'local';
 
 export class AppEnvironment extends ConfigMap {
+  // Only indicates that Angular has been built using --prod
   production: boolean;
   version: string;
-  environmentName: environmentName;
-  apiEndpoint: string;
-  loginRedirectUrl: string;
-  documentManagerUrl: string;
   prime: {
     displayPhone: string;
     phone: string;
@@ -19,6 +15,4 @@ export class AppEnvironment extends ConfigMap {
   phoneNumbers: {
     director: string;
   };
-  keycloakConfig: KeycloakOptions;
-  mohKeycloakConfig: KeycloakOptions;
 }

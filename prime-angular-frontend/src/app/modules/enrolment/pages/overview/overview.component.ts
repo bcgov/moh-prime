@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable } from 'rxjs';
@@ -31,6 +31,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public busy: Subscription;
   public enrolment: Enrolment;
+  public enrolmentErrors: ValidationErrors;
   public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
   public identityProvider: IdentityProviderEnum;
@@ -99,10 +100,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       .canRequestRemoteAccess(certifications, careSettings);
   }
 
-  public hasRegOrJob(): boolean {
-    return this.enrolmentFormStateService.hasCertificateOrJob();
-  }
-
   public routeTo(routePath: EnrolmentRoutes, navigationExtras: NavigationExtras = {}) {
     this.allowRoutingWhenDirty = true;
     super.routeTo(routePath, navigationExtras);
@@ -154,7 +151,23 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           // Attempt to patch the form if not already patched
           this.enrolmentFormStateService.setForm(enrolment);
+
+          this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
         })
       ).subscribe();
+  }
+
+  /**
+   * @description
+   * Get a set of enrolment errors.
+   *
+   * NOTE: Not possible to validate some form states due to validators
+   * being dynamically applied when the view is loaded. Use the passed
+   * enrolment for checking validation instead of form state.
+   */
+  private getEnrolmentErrors(enrolment: Enrolment): ValidationErrors {
+    return {
+      certificateOrOboSite: !enrolment.certifications?.length && !enrolment.oboSites?.length
+    };
   }
 }
