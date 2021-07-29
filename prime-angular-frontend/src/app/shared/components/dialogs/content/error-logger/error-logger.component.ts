@@ -15,14 +15,16 @@ export class ErrorLoggerComponent implements OnInit {
   public errorId: number;
   public currentDate: Moment;
   public primePhone: string;
+  public primeSupportEmail: string;
 
   constructor(
-    @Inject(APP_CONFIG) public config: AppConfig,
-    @Inject(MAT_DIALOG_DATA) public options: DialogOptions
+    @Inject(MAT_DIALOG_DATA) private options: DialogOptions,
+    @Inject(APP_CONFIG) public config: AppConfig
   ) {
     this.errorId = options.data.errorId;
     this.currentDate = moment();
     this.primePhone = config.prime.phone;
+    this.primeSupportEmail = config.prime.supportEmail;
   }
 
   public ngOnInit(): void {}
