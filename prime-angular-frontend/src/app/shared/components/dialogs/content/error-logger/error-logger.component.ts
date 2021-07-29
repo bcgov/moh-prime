@@ -1,6 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import moment, { Moment } from 'moment';
+
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { DialogOptions } from '../../dialog-options.model';
 
@@ -10,19 +12,18 @@ import { DialogOptions } from '../../dialog-options.model';
   styleUrls: ['./error-logger.component.scss']
 })
 export class ErrorLoggerComponent implements OnInit {
-  public currentDate: string;
   public errorId: number;
+  public currentDate: Moment;
   public primePhone: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public options: DialogOptions,
-    @Inject(APP_CONFIG) public config: AppConfig
+    @Inject(APP_CONFIG) public config: AppConfig,
+    @Inject(MAT_DIALOG_DATA) public options: DialogOptions
   ) {
     this.errorId = options.data.errorId;
-    this.currentDate = new Date().toUTCString();
+    this.currentDate = moment();
     this.primePhone = config.prime.phone;
   }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void {}
 }
