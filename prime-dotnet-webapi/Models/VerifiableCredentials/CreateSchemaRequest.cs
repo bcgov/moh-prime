@@ -15,10 +15,10 @@ namespace Prime.Models.VerifiableCredentials
 
 
         [JsonProperty("schema_name")]
-        public string SchemaName { get; set; } = string.Empty;
+        public string SchemaName { get; set; }
 
 
         [JsonProperty("schema_version")]
-        public string SchemaVersion { get; set; } = string.Empty;
+        public string SchemaVersion { get; set; }
     }
 }

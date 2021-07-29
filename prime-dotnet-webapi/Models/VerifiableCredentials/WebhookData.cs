@@ -17,9 +17,9 @@ namespace Prime.Models.VerifiableCredentials
         public string ConnectionId { get; set; }
 
         [JsonProperty("revoc_reg_id")]
-        public string RevocationRegistryId { get; set; } = string.Empty;
+        public string RevocationRegistryId { get; set; }
 
         [JsonProperty("revocation_id")]
-        public string RevocationId { get; set; } = string.Empty;
+        public string RevocationId { get; set; }
     }
 }

@@ -11,6 +11,6 @@ namespace Prime.Models.VerifiableCredentials
     public class IssuerDidResult
     {
         [JsonPropertyName("did")]
-        public string Did { get; set; } = string.Empty;
+        public string Did { get; set; }
     }
 }
