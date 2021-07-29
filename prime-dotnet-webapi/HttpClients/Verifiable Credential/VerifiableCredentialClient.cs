@@ -301,7 +301,7 @@ namespace Prime.HttpClients
             return true;
         }
 
-        public async Task<bool> SendMessageAsync(Guid connectionId, string content)
+        public async Task<bool> SendMessageAsync(string connectionId, string content)
         {
             _logger.LogInformation("Sending a message to connection_id={id}", connectionId);
 

@@ -12,13 +12,14 @@ namespace Prime.Models.VerifiableCredentials
 
         public int Alias { get; set; }
 
+
         [JsonProperty("connection_id")]
-        public Guid ConnectionId { get; set; }
+        public string ConnectionId { get; set; }
 
         [JsonProperty("revoc_reg_id")]
-        public string RevocationRegistryId { get; set; }
+        public string RevocationRegistryId { get; set; } = string.Empty;
 
         [JsonProperty("revocation_id")]
-        public string RevocationId { get; set; }
+        public string RevocationId { get; set; } = string.Empty;
     }
 }

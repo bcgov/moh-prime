@@ -8,7 +8,7 @@ namespace Prime.Models.VerifiableCredentials
         public string SchemaId { get; set; }
 
         [JsonProperty("support_revocation")]
-        public bool SupportRevocation { get; } = true;
+        public bool SupportRevocation { get; set; } = true;
 
         [JsonProperty("tag")]
         public string Tag { get; set; }

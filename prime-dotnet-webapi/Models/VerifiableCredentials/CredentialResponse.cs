@@ -6,6 +6,6 @@ namespace Prime.Models.VerifiableCredentials
     public class CredentialResponse
     {
         [JsonProperty("credential_exchange_id")]
-        public Guid CredentialExchangeId { get; set; }
+        public string ExchangeId { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Prime.Models.VerifiableCredentials;
 
 namespace Prime.HttpClients
@@ -15,6 +15,6 @@ namespace Prime.HttpClients
         Task<string> GetCredentialDefinitionIdAsync(string schemaId);
         Task<string> CreateCredentialDefinitionAsync(string schemaId);
         Task<bool> DeleteCredentialAsync(Credential credential);
-        Task<bool> SendMessageAsync(Guid connectionId, string content);
+        Task<bool> SendMessageAsync(string connectionId, string content);
     }
 }
