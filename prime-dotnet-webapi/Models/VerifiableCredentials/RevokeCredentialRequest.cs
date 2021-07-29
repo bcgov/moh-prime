@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Prime.Models.VerifiableCredentials
@@ -6,7 +7,7 @@ namespace Prime.Models.VerifiableCredentials
     {
 
         [JsonProperty("cred_ex_id")]
-        public string CredentialExchangeId { get; set; }
+        public Guid CredentialExchangeId { get; set; }
 
 
         [JsonProperty("publish")]

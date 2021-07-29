@@ -17,11 +17,11 @@ namespace Prime.Models.VerifiableCredentials
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
-        public string ConnectionId { get; set; }
+        public Guid ConnectionId { get; set; }
 
         public string SchemaId { get; set; }
 
-        public string CredentialExchangeId { get; set; }
+        public Guid CredentialExchangeId { get; set; }
 
         public string CredentialDefinitionId { get; set; }
 

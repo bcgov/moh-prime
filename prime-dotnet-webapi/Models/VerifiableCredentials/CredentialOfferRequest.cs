@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -12,7 +13,7 @@ namespace Prime.Models.VerifiableCredentials
         /// Gets or sets the connectionId.
         /// </summary>
         [JsonProperty("connection_id")]
-        public string ConnectionId { get; set; }
+        public Guid ConnectionId { get; set; }
 
         [JsonProperty("issuer_did")]
         public string IssuerDid { get; set; }

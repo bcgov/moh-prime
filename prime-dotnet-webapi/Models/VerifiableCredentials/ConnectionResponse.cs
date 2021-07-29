@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Prime.Models.VerifiableCredentials
@@ -5,9 +6,9 @@ namespace Prime.Models.VerifiableCredentials
     public class ConnectionResponse
     {
         [JsonProperty("connection_id")]
-        public string ConnectionId { get; set; }
+        public Guid ConnectionId { get; set; }
 
         [JsonProperty("invitation_url")]
-        public System.Uri InvitationUrl { get; set; }
+        public Uri InvitationUrl { get; set; }
     }
 }

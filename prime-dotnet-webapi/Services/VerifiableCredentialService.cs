@@ -155,8 +155,6 @@ namespace Prime.Services
         // Handle webhook events for connection states.
         private async Task<bool> HandleConnectionAsync(WebhookData data)
         {
-            string connectionId;
-
             _logger.LogInformation("Connection state \"{state}\" for {@JObject}", data.State, JsonConvert.SerializeObject(data));
 
             switch (data.State)
@@ -168,17 +166,11 @@ namespace Prime.Services
                     return true;
 
                 case ConnectionState.Response:
-                    var alias = data.Alias;
-                    connectionId = data.ConnectionId;
-
-                    _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", connectionId);
-
+                    _logger.LogInformation("Issuing a credential with this connection_id: {connectionId}", data.ConnectionId);
                     // Assumed that when a connection invitation has been sent and accepted
                     // the enrollee has been approved, and has a GPID for issuing a credential
-                    // TODO should be queued and managed outside of webhook callback
-                    await IssueCredential(connectionId, alias);
-                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId}", connectionId);
-
+                    await IssueCredential(data.ConnectionId, data.Alias);
+                    _logger.LogInformation("Credential has been issued for connection_id: {connectionId}", data.ConnectionId);
                     return true;
 
                 case ConnectionState.Active:
@@ -222,14 +214,14 @@ namespace Prime.Services
             return await _context.SaveChangesAsync();
         }
 
-        private Credential GetCredentialByConnectionIdAsync(string connectionId)
+        private Credential GetCredentialByConnectionIdAsync(Guid connectionId)
         {
             return _context.Credentials
                     .SingleOrDefault(c => c.ConnectionId == connectionId);
         }
 
         // Issue a credential to an active connection.
-        private async Task IssueCredential(string connectionId, int enrolleeId)
+        private async Task IssueCredential(Guid connectionId, int enrolleeId)
         {
             var enrollee = _context.Enrollees
                 .SingleOrDefault(e => e.Id == enrolleeId);
@@ -247,14 +239,14 @@ namespace Prime.Services
             var issueCredentialResponse = await _verifiableCredentialClient.IssueCredentialAsync(credentialOffer);
 
             // Set credentials CredentialExchangeId from issue credential response
-            credential.CredentialExchangeId = issueCredentialResponse.ExchangeId;
+            credential.CredentialExchangeId = issueCredentialResponse.CredentialExchangeId;
             _context.Credentials.Update(credential);
 
             await _context.SaveChangesAsync();
         }
 
         // Create the credential offer.
-        private async Task<CredentialOfferRequest> CreateCredentialOfferAsync(string connectionId, CredentialPayload attributes)
+        private async Task<CredentialOfferRequest> CreateCredentialOfferAsync(Guid connectionId, CredentialPayload attributes)
         {
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
