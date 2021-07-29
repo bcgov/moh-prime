@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Subscription, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -37,6 +38,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public withinDaysOfRenewal: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -153,8 +155,16 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentFormStateService.setForm(enrolment);
 
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
+          // Determine if Enrolment is within 90 days of expiration
+          this.enrolmentWithin90DaysOfExpiry();
         })
       ).subscribe();
+  }
+
+  public enrolmentWithin90DaysOfExpiry(): void {
+    const enrolment = this.enrolmentService.enrolment;
+    const expiryDate = enrolment.expiryDate;
+    this.withinDaysOfRenewal = DateUtils.withinDaysBeforeDate(expiryDate, 90) ? true : false;
   }
 
   /**

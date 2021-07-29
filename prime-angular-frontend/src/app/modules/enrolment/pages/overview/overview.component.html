@@ -18,9 +18,9 @@
     </app-expiry-alert>
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Renew Enrolment' }}
+      <ng-container appPageSubheaderTitle>{{ !withinDaysOfRenewal ? 'Enrolment Review' : 'Renew Enrolment' }}
       </ng-container>
-      <ng-container *ngIf="isInitialEnrolment; else renewalSummary"
+      <ng-container *ngIf="!withinDaysOfRenewal; else renewalSummary"
                     appPageSubheaderSummary>
         Review all the information to ensure it is accurate. You will not be approved if information is incorrect. If
         you need to edit your information, use the pencil icon to navigate to that section.
