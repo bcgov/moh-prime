@@ -1,0 +1,52 @@
+<h2>PLR Information (College ID {{ plrData?.collegeId }})</h2>
+<mat-card>
+  <mat-card-content>
+    <h3>User Type</h3>
+    <hr>
+    <app-enrollee-property title="Updated Time Stamp">
+      {{ plrData?.updatedTimeStamp | formatDate | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Identifier Type">
+      {{ plrData?.identifierType | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="College ID">
+      {{ plrData?.collegeId | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Provider Role Type">
+      {{ plrData?.providerRoleType | default }}
+    </app-enrollee-property>
+    <h3>User Name</h3>
+    <hr>
+    <app-enrollee-property title="Name Prefix">
+      {{ plrData?.namePrefix | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="First Name">
+      {{ plrData?.firstName | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Second Name">
+      {{ plrData?.secondName | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Third Name">
+      {{ plrData?.thirdName | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Last Name">
+      {{ plrData?.lastName | default }}
+    </app-enrollee-property>
+    <h3>Status</h3>
+    <hr>
+    <app-enrollee-property title="Status Code">
+      {{ plrData?.statusCode | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Status Reason Code">
+      {{ plrData?.statusReasonCode | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Status Start Date">
+      {{ plrData?.statusStartDate | formatDate | default }}
+    </app-enrollee-property>
+    <app-enrollee-property title="Expertise">
+      <span *ngFor="let exp of plrData?.expertise; let isLast=last">
+        {{ exp }}{{ isLast ? '' : ', '}}
+      </span>
+    </app-enrollee-property>
+  </mat-card-content>
+</mat-card>
