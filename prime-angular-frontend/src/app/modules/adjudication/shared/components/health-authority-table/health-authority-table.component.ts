@@ -10,6 +10,9 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
 import { Role } from '@auth/shared/enum/role.enum';
+import { exhaustMap, mergeMap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -25,6 +28,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
+  public healthAuthorityIdToSites: Map<number, HealthAuthoritySite[]>;
 
   constructor(
     private configService: ConfigService,
@@ -46,22 +50,39 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route = new EventEmitter<string | (string | number)[]>();
     this.dataSource = new MatTableDataSource<HealthAuthorityList>([]);
     this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
+    this.healthAuthorityIdToSites = new Map<number, HealthAuthoritySite[]>();
   }
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
   }
 
+  public showSites(healthAuthorityId: number) {
+    console.log(healthAuthorityId);
+  }
+
   public ngOnInit(): void {
     this.healthAuthorityResource.getHealthAuthorities()
-      .subscribe((healthAuthorities: HealthAuthorityList[]) => {
-        this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityList) =>
-          [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
-        );
+      .pipe(
+        exhaustMap((healthAuthorities: HealthAuthorityList[]) => {
+          this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityList) =>
+            [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
+          );
 
-        this.dataSource.data = (this.healthAuthorityCode)
-          ? healthAuthorities.filter(ha => ha.id === +this.healthAuthorityCode)
-          : healthAuthorities.sort((a, b) => a.id - b.id);
+          this.dataSource.data = (this.healthAuthorityCode)
+            ? healthAuthorities.filter(ha => ha.id === +this.healthAuthorityCode)
+            : healthAuthorities.sort((a, b) => a.id - b.id);
+          return from(healthAuthorities);
+        }),
+        // TODO: Rename type HealthAuthorityList to HealthAuthorityListItem?
+        // As each healthAuthority is emitted, get the sites registered with that healthAuthority
+        mergeMap((healthAuthority: HealthAuthorityList) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
+      )
+      .subscribe((sites: HealthAuthoritySite[]) => {
+        // For each list of sites in stream, store in map if non-empty list
+        if (sites && sites.length > 0) {
+          this.healthAuthorityIdToSites.set(sites[0].healthAuthorityOrganizationId, sites);
+        }
       });
   }
 }
