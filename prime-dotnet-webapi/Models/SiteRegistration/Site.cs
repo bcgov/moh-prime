@@ -15,7 +15,8 @@ namespace Prime.Models
         {
             // Initialize collections to prevent null exception on computed properties
             // like `Status`
-            this.SiteStatuses = new List<SiteStatus>();
+            SiteStatuses = new List<SiteStatus>();
+            BusinessLicences = new List<BusinessLicence>();
         }
 
 
