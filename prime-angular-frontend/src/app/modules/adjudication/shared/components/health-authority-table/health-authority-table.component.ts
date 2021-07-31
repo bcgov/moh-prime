@@ -22,13 +22,16 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
 export class HealthAuthorityTableComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
-  public columns: string[];
-  public dataSource: MatTableDataSource<HealthAuthorityList>;
+  public haColumns: string[];
+  public haDataSource: MatTableDataSource<HealthAuthorityList>;
   public healthAuthorityCode: HealthAuthorityEnum;
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
   public healthAuthorityIdToSites: Map<number, HealthAuthoritySite[]>;
+  public siteColumns: string[];
+  public sitesDataSource: MatTableDataSource<HealthAuthoritySite>;
+
 
   constructor(
     private configService: ConfigService,
@@ -36,21 +39,24 @@ export class HealthAuthorityTableComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private healthAuthorityResource: HealthAuthorityResource
   ) {
-    this.columns = [
+    this.haColumns = [
       'prefixes',
       'orgName',
-      'siteName',
-      'submissionDate',
       'assignedTo',
       'state',
-      'siteId',
       'remoteUsers',
       'actions'
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.dataSource = new MatTableDataSource<HealthAuthorityList>([]);
+    this.haDataSource = new MatTableDataSource<HealthAuthorityList>([]);
     this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
     this.healthAuthorityIdToSites = new Map<number, HealthAuthoritySite[]>();
+    this.sitesDataSource = new MatTableDataSource<HealthAuthoritySite>([]);
+    this.siteColumns = [
+      'siteName',
+      'submissionDate',
+      'siteId',
+    ];
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -58,7 +64,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public showSites(healthAuthorityId: number) {
-    console.log(healthAuthorityId);
+    this.sitesDataSource.data = this.healthAuthorityIdToSites.get(healthAuthorityId);
   }
 
   public ngOnInit(): void {
@@ -69,7 +75,7 @@ export class HealthAuthorityTableComponent implements OnInit {
             [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
           );
 
-          this.dataSource.data = (this.healthAuthorityCode)
+          this.haDataSource.data = (this.healthAuthorityCode)
             ? healthAuthorities.filter(ha => ha.id === +this.healthAuthorityCode)
             : healthAuthorities.sort((a, b) => a.id - b.id);
           return from(healthAuthorities);

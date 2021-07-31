@@ -3,7 +3,7 @@
 
     <mat-accordion multi="false">
       <table mat-table
-             [dataSource]="dataSource"
+             [dataSource]="haDataSource"
              class="w-100">
 
         <ng-container matColumnDef="prefixes">
@@ -29,35 +29,51 @@
               scope="col"> Health Authority Name
           </th>
           <td mat-cell
-              *matCellDef="let row;"> {{ row.name | default }}
+              *matCellDef="let row;"
+              colspan="7"> {{ row.name | default }}
             <mat-expansion-panel (opened)="showSites(row.id)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   {{ this.healthAuthorityIdToSites.get(row.id)?.length }}
                 </mat-panel-title>
               </mat-expansion-panel-header>
-              <p>This is the primary content of the panel.</p>
+              <table mat-table
+                     [dataSource]="sitesDataSource"
+                     class="w-100">
+                <ng-container matColumnDef="siteName">
+                  <th mat-header-cell
+                      *matHeaderCellDef
+                      scope="col"> Site Name
+                  </th>
+                  <td mat-cell
+                      *matCellDef="let row;"> {{ row.siteName | default }} </td>
+                </ng-container>
+                <ng-container matColumnDef="submissionDate">
+                  <th mat-header-cell
+                      *matHeaderCellDef
+                      scope="col"> Submission Date
+                  </th>
+                  <td mat-cell
+                      *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
+                </ng-container>
+                <ng-container matColumnDef="siteId">
+                  <th mat-header-cell
+                      *matHeaderCellDef
+                      scope="col"> Site ID
+                  </th>
+                  <td mat-cell
+                      *matCellDef="let row;"> {{ row.siteId | default }} </td>
+                </ng-container>
+                <tr mat-header-row
+                    *matHeaderRowDef="siteColumns; sticky: true"></tr>
+                <tr mat-row
+                    *matRowDef="let row; columns: siteColumns;"></tr>
+              </table>
             </mat-expansion-panel>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="siteName">
-          <th mat-header-cell
-              *matHeaderCellDef
-              scope="col"> Site Name
-          </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ null | default }} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="submissionDate">
-          <th mat-header-cell
-              *matHeaderCellDef
-              scope="col"> Submission Date
-          </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ null | default }} </td>
-        </ng-container>
 
         <ng-container matColumnDef="assignedTo">
           <th mat-header-cell
@@ -77,14 +93,6 @@
               *matCellDef="let row;"> {{ null | default }} </td>
         </ng-container>
 
-        <ng-container matColumnDef="siteId">
-          <th mat-header-cell
-              *matHeaderCellDef
-              scope="col"> Site ID
-          </th>
-          <td mat-cell
-              *matCellDef="let row;"> {{ null | default }} </td>
-        </ng-container>
 
         <ng-container matColumnDef="remoteUsers">
           <th mat-header-cell
@@ -112,13 +120,13 @@
         </ng-container>
 
         <tr mat-header-row
-            *matHeaderRowDef="columns; sticky: true"></tr>
+            *matHeaderRowDef="haColumns; sticky: true"></tr>
         <tr mat-row
-            *matRowDef="let row; columns: columns;"></tr>
+            *matRowDef="let row; columns: haColumns;"></tr>
       </table>
     </mat-accordion>
 
-    <p *ngIf="!dataSource?.data?.length"
+    <p *ngIf="!haDataSource?.data?.length"
        class="px-4 py-2 text-muted">
       No Health Authorities Found
     </p>
