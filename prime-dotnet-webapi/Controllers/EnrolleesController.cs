@@ -909,7 +909,7 @@ namespace Prime.Controllers
 
             var collegeId = enrollee.Certifications.Select(c => c.LicenseNumber);
 
-            var result = _plrProviderService.GetPlrDataByCollegeIdAsync(collegeId);
+            var result = await _plrProviderService.GetPlrDataByCollegeIdAsync(collegeId);
             return Ok(result);
         }
     }

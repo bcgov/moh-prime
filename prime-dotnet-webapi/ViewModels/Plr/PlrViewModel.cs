@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Prime.ViewModels.Plr
 {
@@ -27,10 +28,10 @@ namespace Prime.ViewModels.Plr
 
         public string StatusReasonCode { get; set; }
 
-        public ICollection<string> Expertise { get; set; }
+        public IEnumerable<string> Expertise { get; set; }
 
         public DateTimeOffset UpdatedTimeStamp { get; set; }
 
-        public DateTimeOffset StatusStartDate { get; set; }
+        public DateTime StatusStartDate { get; set; }
     }
 }

@@ -1,21 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-class PlrInfo {
-  id: number;
-  identifierType: string;
-  collegeId: string;
-  providerRoleType: string;
-  namePrefix: string;
-  firstName: string;
-  secondName: string;
-  thirdName: string;
-  lastName: string;
-  statusCode: string;
-  statusReasonCode: string;
-  expertise: string[];
-  updatedTimeStamp: string;
-  statusStartDate: string;
-}
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 @Component({
   selector: 'app-plr-info',

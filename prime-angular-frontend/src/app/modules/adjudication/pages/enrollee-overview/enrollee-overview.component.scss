@@ -7,3 +7,8 @@
   overflow: auto;
   height: calc(100vh - 500px);
 }
+
+:host ::ng-deep app-plr-info > mat-card {
+  overflow: auto;
+  height: calc(100vh - 500px);
+}

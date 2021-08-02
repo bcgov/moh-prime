@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Prime.Models;
 using Prime.ViewModels.Plr;
-using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
