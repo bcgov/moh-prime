@@ -8,6 +8,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class EnrolleePropertyComponent implements OnInit {
   @Input() public title: string;
   @Input() public makeBold: boolean;
+  @Input() public hasError: boolean;
+  @Input() public errorMessage: string;
 
   constructor() { }
 
