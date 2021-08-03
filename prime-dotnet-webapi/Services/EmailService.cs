@@ -208,6 +208,28 @@ namespace Prime.Services
             }
         }
 
+        public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
+        {
+            var orgName = await _context.Organizations
+                .Where(o => o.Id == organizationClaim.OrganizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+
+            var newSigningAuthorityEmail = await _context.Parties
+                .Where(p => p.Id == organizationClaim.NewSigningAuthorityId)
+                .Select(p => p.Email)
+                .SingleAsync();
+
+            var viewModel = new OrgClaimApprovalNotificationViewModel
+            {
+                OrganizationName = orgName,
+                ProvidedSiteId = organizationClaim.ProvidedSiteId
+            };
+
+            var email = await _emailRenderingService.RenderOrgClaimApprovalNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
+            await Send(email);
+        }
+
         public async Task<int> UpdateEmailLogStatuses(int limit)
         {
             Expression<Func<EmailLog, bool>> predicate = log =>

@@ -309,7 +309,7 @@ export class CollegeCertificationFormComponent implements OnInit {
   }
 
   private loadLicenses(collegeCode: number) {
-    if (collegeCode !== CollegeLicenceClassEnum.BCCNM) {
+    if (collegeCode !== CollegeLicenceClassEnum.BCCNM || this.condensed) {
       this.filteredLicenses = this.filterLicenses(collegeCode);
       this.licenseCode.patchValue(this.licenseCode.value || null, { emitEvent: false });
     }

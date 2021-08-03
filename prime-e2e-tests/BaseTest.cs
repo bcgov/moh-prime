@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Bogus;
 using Bogus.DataSets;
 using NUnit.Framework;
@@ -73,19 +72,30 @@ namespace TestPrimeE2E
         }
 
 
+        protected void ClickHamburgerMenuInTable(string uniqueTextOfRow)
+        {
+            _driver.FindPatiently($"//tr[td[contains(text(), '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]").Click();
+        }
+
+
+        protected void ClickHamburgerMenuItem(string menuItemLabel)
+        {
+            _driver.FindPatiently($"//button/span[contains(text(), '{menuItemLabel}')]").Click();
+        }
+
+
         protected void SelectDropdownItem(string formControlName, string itemLabel)
         {
-            _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}']//div[contains(@class,'mat-select-value')]").Click();
+            _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}' or @ng-reflect-name='{formControlName}']//div[contains(@class,'mat-select-value')]").Click();
             _driver.FindPatiently($"//span[@class='mat-option-text' and contains(text(), '{itemLabel}')]").Click();
         }
 
 
         /// <param name="month">Three character long, e.g. "MAR"</param>
-        protected void PickDate(string year, string month, string dayOfMonth)
+        protected void PickDate(string xPathToDatePicker, string year, string month, string dayOfMonth)
         {
-            // TODO: Support more than one visible calendar control
             month = month.ToUpper();
-            _driver.FindPatiently("//mat-datepicker-toggle//span[@class='mat-button-wrapper']").Click();
+            _driver.FindPatiently(xPathToDatePicker).Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{year}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{month}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{dayOfMonth}')]").Click();
@@ -97,9 +107,17 @@ namespace TestPrimeE2E
             _driver.FindPatiently($"//mat-radio-group[@formcontrolname='{formControlName}']//label[div[contains(text(), '{radioButtonLabel}')]]").Click();
         }
 
-        protected void FillFormField(string formControlName, string text)
+
+        /// <summary>
+        /// Specifying the <c>ancestorElement</c> can disambiguate the desired control (if necessary)
+        /// </summary>
+        protected void FillFormField(string formControlName, string text, string ancestorElement = "")
         {
-            var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
+            if (!"".Equals(ancestorElement))
+            {
+                ancestorElement = "//" + ancestorElement;
+            }
+            var control = _driver.FindPatiently($"{ancestorElement}//input[@formControlName='{formControlName}']");
             control.Clear();
             control.SendKeys(text);
         }
@@ -218,6 +236,20 @@ namespace TestPrimeE2E
             }
 
             return words;
+        }
+
+
+        /// <summary>
+        /// Works for some but not all screens
+        /// </summary>
+        protected void EnterAddress(Address address)
+        {
+            ClickButton("Add address manually");
+            SelectDropdownItem("countryCode", "Canada");
+            SelectDropdownItem("provinceCode", "British Columbia");
+            FillFormField("street", address.StreetAddress());
+            FillFormField("city", address.City());
+            FillFormField("postal", GetCanadianPostalCode(address));
         }
     }
 }
