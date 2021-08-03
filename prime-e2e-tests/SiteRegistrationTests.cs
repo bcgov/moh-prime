@@ -48,6 +48,8 @@ namespace TestPrimeE2E.SiteRegistration
             {
                 //Signing Authority Information
                 Assert.AreEqual("PharmaNet Site Registration", _driver.FindPatiently("//h1[@class='mb-4']").Text);
+                // Wait for page to fully load
+                _driver.FindPatiently("//input[@formControlName='phone']");
                 Assert.AreEqual("Signing Authority Information", _driver.FindPatiently("//h2[@class='title']").Text);
                 TypeIntoField("Job Title", _name.JobTitle());
                 TypeIntoField("Phone Number", "5555555555");
@@ -56,6 +58,11 @@ namespace TestPrimeE2E.SiteRegistration
                 TypeIntoField("Fax (Optional)", "5555555555");
                 _driver.TakeScreenshot("Signing_Authority_Information");
                 ClickButton("Save and Continue");
+
+                _driver.FindTextPatiently("or claim an existing Organization");
+                Assert.AreEqual("Claim Organization", _driver.FindPatiently("//h2[@class='title']").Text);
+                // Choosing to create organization
+                ClickButton("Continue");
 
                 //Organization Information
                 TypeIntoField("Organization Name (Legal Entity Operating Site)", "ROGERS");
@@ -76,6 +83,8 @@ namespace TestPrimeE2E.SiteRegistration
             //site business licence
             _driver.FindPatiently("//input[@type='file']").SendKeys(TestParameters.BusinessLicencePath);
             _driver.FindPatiently("//*[contains(text(), 'Upload complete')]");
+            // Input business licence expiry date
+            PickDate("//input[@formcontrolname='businessLicenceExpiry']", "2023", "JUL", "22");
             TypeIntoField("Site Name (Doing Business As)", _company.CompanyName());
             var siteId = _driver.FindPatiently("//input[@formcontrolname='pec']");
             siteId.Clear();

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -11,16 +10,20 @@ import { debounceTime, switchMap, tap, exhaustMap, take, map } from 'rxjs/operat
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Party } from '@lib/models/party.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
+import { AuthService } from '@auth/shared/services/auth.service';
+import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { OrgBookAutocompleteHttpResponse } from '@registration/shared/models/orgbook.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrgBookResource } from '@registration/shared/services/org-book-resource.service';
+import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationNamePageFormState } from './organization-name-page-form-state.class';
 
 @UntilDestroy()
@@ -48,6 +51,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     private organizationFormStateService: OrganizationFormStateService,
     private orgBookResource: OrgBookResource,
     private siteResource: SiteResource,
+    private authService: AuthService,
     private route: ActivatedRoute,
     router: Router
   ) {
@@ -97,6 +101,9 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   protected patchForm(): void {
     const organization = this.organizationService.organization;
+    if (!organization) {
+      return;
+    }
     this.isCompleted = organization?.completed;
     this.organizationFormStateService.setForm(organization, true);
     this.formState.form.markAsPristine();
@@ -126,18 +133,30 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   protected performSubmission(): Observable<number | null> {
     const organizationId = this.route.snapshot.params.oid;
-    const payload = this.organizationFormStateService.json;
-    return this.organizationResource
-      .updateOrganization(payload)
+    let payload = this.organizationFormStateService.json;
+    let request$ = (+organizationId !== 0)
+      ? this.organizationResource.updateOrganization(payload)
+      : this.authService.getUser$()
+        .pipe(
+          exhaustMap((bcscUser: BcscUser) => this.organizationResource.getSigningAuthorityByUserId(bcscUser.userId)),
+          exhaustMap((party: Party) => this.organizationResource.createOrganization(party.id)),
+          tap((organization: Organization) => {
+            this.organizationService.organization = organization;
+            Object.assign(payload, organization);
+            payload.name = this.organizationFormStateService.json.name;
+            payload.doingBusinessAs = this.organizationFormStateService.json.doingBusinessAs;
+          }),
+          exhaustMap(() => this.organizationResource.updateOrganization(payload))
+        );
+
+    return request$
       .pipe(
-        exhaustMap(() =>
-          this.organizationResource.updateCompleted(organizationId)
-        ),
+        exhaustMap(() => this.organizationResource.updateCompleted(this.organizationService.organization.id)),
         exhaustMap(
           // Check the organization wasn't completed before the update, and
           // if not then this is the initial registration wizard
           () => (!this.isCompleted)
-            ? this.siteResource.createSite(organizationId)
+            ? this.siteResource.createSite(this.organizationService.organization.id)
             : of(null)
         ),
         map((site: Site) => site?.id)

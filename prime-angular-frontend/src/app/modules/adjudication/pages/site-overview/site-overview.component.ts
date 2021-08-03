@@ -4,7 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
@@ -20,6 +21,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
+import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
@@ -37,6 +40,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public columns: string[];
   public organization: Organization;
   public site: Site;
+  public orgClaim: OrganizationClaim;
+  public newSigningAuthority: Party;
   public businessLicences: BusinessLicence[];
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
@@ -81,6 +86,18 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
+  public onApproveOrgClaim() {
+    this.busy = this.organizationResource
+      .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
+      .pipe(
+        exhaustMap(() => this.organizationResource.getOrganizationById(this.organization.id))
+      )
+      .subscribe((organization: Organization) => {
+        this.refresh.next(true);
+        this.organization = organization;
+      });
+  }
+
   public ngOnInit(): void {
     super.ngOnInit();
 
@@ -88,15 +105,23 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     const { oid, sid } = this.route.snapshot.params;
 
-    this.busy = forkJoin({
-      organization: this.organizationResource.getOrganizationById(oid),
-      site: this.siteResource.getSiteById(sid),
-      businessLicences: this.siteResource.getBusinessLicences(sid)
-    }).subscribe(({ organization, site, businessLicences }) => {
-      this.organization = organization;
-      this.site = site;
-      this.businessLicences = businessLicences;
-      this.form.get('pec').setValue(site.pec);
+    this.busy = forkJoin([
+      this.organizationResource.getOrganizationById(oid),
+      this.siteResource.getSiteById(sid),
+      this.siteResource.getBusinessLicences(sid),
+      this.organizationResource.getOrganizationClaimByOrgId(oid)
+    ]).pipe(
+      exhaustMap(([organization, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
+        this.organization = organization;
+        this.site = site;
+        this.businessLicences = businessLicences;
+        this.orgClaim = orgClaim;
+        this.form.get('pec').setValue(site.pec);
+        return of(null);
+      }),
+      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
+    ).subscribe((signingAuthority: Party | null) => {
+      this.newSigningAuthority = signingAuthority;
     });
   }
 
