@@ -13,6 +13,7 @@ import { Role } from '@auth/shared/enum/role.enum';
 import { exhaustMap, mergeMap } from 'rxjs/operators';
 import { from } from 'rxjs';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-health-authority-table',
@@ -31,6 +32,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   public healthAuthorityIdToSites: Map<number, HealthAuthoritySite[]>;
   public siteColumns: string[];
   public sitesDataSource: MatTableDataSource<HealthAuthoritySite>;
+  public SiteStatusType = SiteStatusType;
 
 
   constructor(
@@ -42,9 +44,6 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.haColumns = [
       'prefixes',
       'orgName',
-      'assignedTo',
-      'state',
-      'remoteUsers',
       'actions'
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
@@ -55,7 +54,11 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.siteColumns = [
       'siteName',
       'submissionDate',
+      'assignedTo',
+      'state',
       'siteId',
+      'remoteUsers',
+      'actions'
     ];
   }
 
@@ -65,6 +68,29 @@ export class HealthAuthorityTableComponent implements OnInit {
 
   public showSites(healthAuthorityId: number) {
     this.sitesDataSource.data = this.healthAuthorityIdToSites.get(healthAuthorityId);
+  }
+
+  // TODO: Eliminate duplication as this method copied from SiteRegistrationTableComponent
+  public displayStatus(status: SiteStatusType) {
+    switch (status) {
+      case SiteStatusType.EDITABLE:
+        return "Editable";
+      case SiteStatusType.IN_REVIEW:
+        return "In Review";
+      case SiteStatusType.LOCKED:
+        return "Locked";
+      default:
+        return "Editable";
+    }
+  }
+
+  // TODO: Eliminate duplication as this method very similar to that from SiteRegistrationTableComponent
+  public remoteUsers(siteRegistration: HealthAuthoritySite): number | 'Yes' | 'No' {
+    const count = siteRegistration.remoteUsers?.length;
+
+    return (!this.activatedRoute.snapshot.params.sid)
+      ? (count) ? 'Yes' : 'No'
+      : count;
   }
 
   public ngOnInit(): void {
