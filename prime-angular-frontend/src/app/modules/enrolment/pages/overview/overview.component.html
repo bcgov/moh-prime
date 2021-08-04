@@ -17,8 +17,59 @@
       </ng-container>
     </app-expiry-alert>
 
+    <ng-container *ngIf="!isInitialEnrolment && enrolment?.expiryDate">
+
+      <app-alert type="success"
+                 icon="check_circle_outline"
+                 class="mb-2 col-12">
+        <ng-container #alertTitle
+                      class="alert-title">
+          You have approval to access PharmaNet
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          <p>
+            Renew your enrolment by {{ enrolment?.expiryDate | formatDate }} to maintain your approval to access
+            PharmaNet
+          </p>
+        </ng-container>
+      </app-alert>
+
+      <app-page-subheader [divider]="false">
+        <ng-container appPageSubheaderTitle>GPID
+        </ng-container>
+        <ng-container appPageSubheaderSummary>
+          <section class="mb-2">
+            <h6 class="mb-0">
+              For your reference your GPID is:
+            </h6>
+
+            {{ GPID }}
+
+            <button mat-icon-button
+                    type="button"
+                    aria-label="Copy your GPID to clipboard"
+                    matTooltip="Copy your GPID to clipboard"
+                    [cdkCopyToClipboard]="GPID"
+                    (cdkCopyToClipboardCopied)="onCopy()">
+              <mat-icon>content_paste</mat-icon>
+            </button>
+          </section>
+
+          <button mat-flat-button
+                  type="button"
+                  color="primary"
+                  class="mb-3"
+                  (click)="routeTo(EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY)">
+            Share my GPID
+          </button>
+        </ng-container>
+      </app-page-subheader>
+
+    </ng-container>
+
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Renew Enrolment' }}
+      <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Enrolment Information' }}
       </ng-container>
       <ng-container *ngIf="isInitialEnrolment; else renewalSummary"
                     appPageSubheaderSummary>
@@ -29,9 +80,8 @@
       </ng-container>
       <ng-template #renewalSummary
                    appPageSubheaderSummary>
-        Review the information below to ensure it is current and accurate. Inaccurate information may result in a delay
-        in your renewal for PharmaNet access. If any information below requires updating, use the pencil icon to
-        navigate to the appropriate editing screen.
+        You currently hace approval to access PharmaNet. If any information below requires updating, use the pencil icon
+        to navigate to the appropriate section.
       </ng-template>
     </app-page-subheader>
   </div>

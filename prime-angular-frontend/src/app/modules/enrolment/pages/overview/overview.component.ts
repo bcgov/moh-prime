@@ -114,6 +114,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       : true;
   }
 
+  public get GPID(): string {
+    return this.enrolment?.enrollee?.gpid;
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
   public ngOnInit() {
     this.authService.getUser$()
       .pipe(
