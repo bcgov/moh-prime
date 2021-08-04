@@ -69,18 +69,33 @@
     </ng-container>
 
     <app-page-subheader>
-      <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Enrolment Information' }}
+      <ng-container appPageSubheaderTitle>
+        {{
+        isInitialEnrolment ? 'Enrolment Review'
+        : (withinDaysOfRenewal) ? 'Renew Enrolment'
+        : 'Enrolment Information'
+        }}
       </ng-container>
+
       <ng-container *ngIf="isInitialEnrolment; else renewalSummary"
                     appPageSubheaderSummary>
         Review all the information to ensure it is accurate. You will not be approved if information is incorrect. If
         you need to edit your information, use the pencil icon to navigate to that section.
-        <h3 *ngIf="enrolment?.expiryDate"
+        <h3 *ngIf="enrolment?.expiryDate && isInitialEnrolment"
             class="text-green mt-2">Renew Enrolment by {{ enrolment?.expiryDate | formatDate }}</h3>
       </ng-container>
-      <ng-template #renewalSummary
+
+      <ng-template #renewalSummary>
+        <ng-container *ngIf="withinDaysOfRenewal; else defaultSummary">
+          Review the information below to ensure it is current and accurate. Inaccurate information may result in a
+          delay in your renewal for PharmaNet access. If any information below requires updating, use the pencil icon to
+          navigate to the appropriate editing screen.
+        </ng-container>
+      </ng-template>
+
+      <ng-template #defaultSummary
                    appPageSubheaderSummary>
-        You currently hace approval to access PharmaNet. If any information below requires updating, use the pencil icon
+        You currently have approval to access PharmaNet. If any information below requires updating, use the pencil icon
         to navigate to the appropriate section.
       </ng-template>
     </app-page-subheader>
