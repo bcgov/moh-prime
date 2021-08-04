@@ -164,7 +164,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
-          this.withinDaysOfRenewal = DateUtils.withinDaysBeforeDate(this.enrolment?.expiryDate, 90);
+          this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         })
       ).subscribe();
   }
