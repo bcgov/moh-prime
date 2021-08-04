@@ -24,7 +24,7 @@
                     appPageSubheaderSummary>
         Review all the information to ensure it is accurate. You will not be approved if information is incorrect. If
         you need to edit your information, use the pencil icon to navigate to that section.
-        <h3 *ngIf="enrolment?.expiryDate"
+        <h3 *ngIf="enrolment?.expiryDate && isInitialEnrolment"
             class="text-green mt-2">Renew Enrolment by {{ enrolment?.expiryDate | formatDate }}</h3>
       </ng-container>
       <ng-template #renewalSummary
