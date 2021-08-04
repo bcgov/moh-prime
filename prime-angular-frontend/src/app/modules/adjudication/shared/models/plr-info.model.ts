@@ -10,7 +10,7 @@ export interface PlrInfo {
   lastName: string;
   statusCode: string;
   statusReasonCode: string;
-  expertise: string[];
+  expertise: string;
   updatedTimeStamp: string;
   statusStartDate: string;
 }

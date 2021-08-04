@@ -44,9 +44,7 @@
       {{ plrData?.statusStartDate | formatDate | default }}
     </app-enrollee-property>
     <app-enrollee-property title="Expertise">
-      <span *ngFor="let exp of plrData?.expertise; let isLast=last">
-        {{ exp }}{{ isLast ? '' : ', '}}
-      </span>
+      {{ plrData?.expertise | default }}
     </app-enrollee-property>
   </mat-card-content>
 </mat-card>

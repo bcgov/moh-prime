@@ -13,6 +13,7 @@ using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Plr;
 using Prime.Models.Plr;
+using Prime;
 
 /**
  * Automapper Documentation
@@ -119,15 +120,28 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
 
-        IQueryable<PlrRoleType> plrRoleTypes = null;
-        IQueryable<PlrStatusReason> plrStatusReasons = null;
-        IQueryable<PlrExpertise> plrExpertises = null;
+        // ProjectTo does not work for mapping expertise array, use workaround below and call mapper.Map
         CreateMap<PlrProvider, PlrViewModel>()
             .ForMember(dest => dest.ProviderRoleType,
-                opt => opt.MapFrom(src => plrRoleTypes.Where(r => r.Code == src.ProviderRoleType).SingleOrDefault().Name))
+                opt => opt.MapFrom((src, dest, destMember, context) =>
+                {
+                    var dbContext = context.Items["dbContext"] as ApiDbContext;
+                    return dbContext.Set<PlrRoleType>().Where(r => r.Code == src.ProviderRoleType).SingleOrDefault().Name;
+                })
+            )
             .ForMember(dest => dest.StatusReasonCode,
-                opt => opt.MapFrom(src => plrStatusReasons.Where(s => s.Code == src.StatusReasonCode).SingleOrDefault().Name))
+                opt => opt.MapFrom((src, dest, destMember, context) =>
+                {
+                    var dbContext = context.Items["dbContext"] as ApiDbContext;
+                    return dbContext.Set<PlrStatusReason>().Where(s => s.Code == src.StatusReasonCode).SingleOrDefault().Name;
+                })
+            )
             .ForMember(dest => dest.Expertise,
-                opt => opt.MapFrom(src => plrExpertises.Where(pe => src.Expertise.Contains(pe.Code)).Select(pe => pe.Name)));
+                opt => opt.MapFrom((src, dest, destMember, context) =>
+                {
+                    var dbContext = context.Items["dbContext"] as ApiDbContext;
+                    return string.Join(", ", dbContext.Set<PlrExpertise>().Where(e => src.Expertise.Contains(e.Code)).Select(e => e.Name));
+                })
+            );
     }
 }

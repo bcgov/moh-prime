@@ -28,7 +28,7 @@ namespace Prime.ViewModels.Plr
 
         public string StatusReasonCode { get; set; }
 
-        public IEnumerable<string> Expertise { get; set; }
+        public string Expertise { get; set; }
 
         public DateTimeOffset UpdatedTimeStamp { get; set; }
 

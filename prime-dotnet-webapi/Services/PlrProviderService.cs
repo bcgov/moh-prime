@@ -68,15 +68,12 @@ namespace Prime.Services
 
         public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId)
         {
-            var plrRoleTypes = _context.Set<PlrRoleType>().AsQueryable();
-            var plrStatusReasons = _context.Set<PlrStatusReason>().AsQueryable();
-            var plrExpertises = _context.Set<PlrExpertise>().AsQueryable();
-
-            return await _context.PlrProviders
+            var plr = await _context.PlrProviders
                 .AsNoTracking()
                 .Where(p => collegeId.Contains(p.CollegeId))
-                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons, plrExpertises })
                 .ToListAsync();
+
+            return _mapper.Map<IEnumerable<PlrProvider>, IEnumerable<PlrViewModel>>(plr, opt => opt.Items["dbContext"] = _context);
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
