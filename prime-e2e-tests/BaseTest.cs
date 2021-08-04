@@ -92,11 +92,10 @@ namespace TestPrimeE2E
 
 
         /// <param name="month">Three character long, e.g. "MAR"</param>
-        protected void PickDate(string year, string month, string dayOfMonth)
+        protected void PickDate(string xPathToDatePicker, string year, string month, string dayOfMonth)
         {
-            // TODO: Support more than one visible calendar control
             month = month.ToUpper();
-            _driver.FindPatiently("//mat-datepicker-toggle//span[@class='mat-button-wrapper']").Click();
+            _driver.FindPatiently(xPathToDatePicker).Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{year}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{month}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{dayOfMonth}')]").Click();
