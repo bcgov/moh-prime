@@ -14,7 +14,7 @@ namespace Prime.Services
             : base(context, httpContext)
         { }
 
-        public async Task CreateLogAsync(ClientLogViewModel log)
+        public async Task<int> CreateLogAsync(ClientLogViewModel log)
         {
             var newLog = new ClientLog
             {
@@ -27,6 +27,8 @@ namespace Prime.Services
             _context.ClientLogs.Add(newLog);
 
             await _context.SaveChangesAsync();
+
+            return newLog.Id;
         }
     }
 }

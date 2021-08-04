@@ -17,7 +17,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@shared/models/address.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
@@ -82,12 +82,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             smsPhone
           } = enrollee;
 
-          const middleName = givenNames.replace(firstName, '').trim();
-
           // Attempt to patch the form if not already patched
           this.formState.patchValue({
             firstName,
-            middleName,
+            givenNames,
             lastName,
             dateOfBirth,
             physicalAddress,

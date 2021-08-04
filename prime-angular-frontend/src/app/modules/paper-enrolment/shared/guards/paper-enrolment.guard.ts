@@ -9,8 +9,9 @@ import { BaseGuard } from '@core/guards/base.guard';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { AuthService } from '@auth/shared/services/auth.service';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 
 @Injectable({
   providedIn: 'root'

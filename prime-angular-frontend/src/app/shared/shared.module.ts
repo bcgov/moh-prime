@@ -106,6 +106,7 @@ import { CardListComponent } from '@shared/components/card-list/card-list.compon
 import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
 import { OboSiteFormComponent } from '@shared/components/obo-site-form/obo-site-form.component';
 import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/expiry-alert.component';
+import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
 
 @NgModule({
   declarations: [
@@ -194,7 +195,8 @@ import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/exp
     CardListComponent,
     OptionsFormComponent,
     OboSiteFormComponent,
-    ExpiryAlertComponent
+    ExpiryAlertComponent,
+    ErrorLoggerComponent
   ],
   imports: [
     CommonModule,

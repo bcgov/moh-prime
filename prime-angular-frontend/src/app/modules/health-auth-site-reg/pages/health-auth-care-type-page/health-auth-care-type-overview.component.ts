@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -18,10 +18,10 @@ import { HealthAuthCareTypeForm } from './health-auth-care-type-form.model';
       </app-enrollee-property>
     </app-overview-section>
   `,
-  styles: [],
+  styles: ['mat-icon { font-size: 1.2em; }'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HealthAuthCareTypeOverviewComponent extends AbstractOverview implements OnInit {
+export class HealthAuthCareTypeOverviewComponent extends AbstractOverview {
   @Input() public healthAuthCareType: HealthAuthCareTypeForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
@@ -31,6 +31,4 @@ export class HealthAuthCareTypeOverviewComponent extends AbstractOverview implem
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
-
-  public ngOnInit(): void { }
 }

@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { AbstractLoggerService } from '@core/services/abstract-logger.service';
-import { environment } from '@env/environment.prod.template';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConsoleLoggerService extends AbstractLoggerService {
-
-  constructor() {
+  constructor(
+    @Inject(APP_CONFIG) private config: AppConfig
+  ) {
     super();
   }
 
@@ -25,7 +26,7 @@ export class ConsoleLoggerService extends AbstractLoggerService {
    * Prints the logging information, but ONLY if not in production.
    */
   protected send(type: string, params: { msg?: string, data?: any[] }) {
-    if (!environment.production || type === 'error' || type === 'warn') {
+    if (this.config.environmentName !== 'prod' || type === 'error' || type === 'warn') {
 
       const message = this.colorize(type, params.msg);
 
@@ -46,7 +47,7 @@ export class ConsoleLoggerService extends AbstractLoggerService {
    * Apply colour to the console message, otherwise the use
    * the default.
    */
-  protected colorize(type: string, msg: string): string[] {
+  private colorize(type: string, msg: string): string[] {
     let color = '';
 
     switch (type) {

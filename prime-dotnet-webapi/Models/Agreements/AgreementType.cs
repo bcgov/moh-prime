@@ -22,6 +22,9 @@ namespace Prime.Models
 
         [AgreementGroups(AgreementGroup.Enrollee)]
         PharmacyOboTOA = 6,
+
+        [AgreementGroups(AgreementGroup.Organization)]
+        DeviceProviderOrgAgreement = 7,
     }
 
     public static class AgreementTypeExtensions

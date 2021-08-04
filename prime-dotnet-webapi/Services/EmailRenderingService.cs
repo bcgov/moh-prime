@@ -154,5 +154,16 @@ namespace Prime.Services.EmailInternal
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
         }
+
+        public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: newSigningAuthorityEmail,
+                subject: "Organization Claim was Approved",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.OrganizationClaimApprovalNotification, viewModel)
+            );
+        }
     }
 }
