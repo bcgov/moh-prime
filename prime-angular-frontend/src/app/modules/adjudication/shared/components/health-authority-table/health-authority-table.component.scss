@@ -11,3 +11,10 @@
 .org-menu-button {
   color: theme-palette(yellow);
 }
+
+.mat-expansion-panel-header {
+  /* For more info, see https://stackoverflow.com/questions/49747188/material-angular-accordion-header-title-height */
+  height: auto;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
