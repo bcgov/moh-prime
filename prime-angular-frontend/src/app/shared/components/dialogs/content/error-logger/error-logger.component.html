@@ -1,0 +1,13 @@
+<mat-dialog-content>
+  <p class="lead">
+    An unknown error <span *ngIf="errorId">#{{ errorId }}</span> has occurred on
+    {{ currentDate | formatDate : 'MMMM Do YYYY' }} at
+    {{ currentDate | formatDate : 'h:mma' }}.
+  </p>
+  <p>
+    The error has been logged to the server. If the issue persists contact
+    <strong><a [href]="'mailTo:' + primeSupportEmail">{{ primeSupportEmail }}</a></strong> or
+    <strong><a [href]="'tel:+' + this.primePhone">{{ primePhone }}</a></strong> and provide
+    the error number.
+  </p>
+</mat-dialog-content>

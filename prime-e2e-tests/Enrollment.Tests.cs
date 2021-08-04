@@ -99,7 +99,7 @@ namespace TestPrimeE2E.Enrollment
             VerifyEnrollmentPageTitle(expectedTitle);
             SelectDropdownItem("collegeCode", "College of Physicians and Surgeons of BC");
             SelectDropdownItem("licenseCode", "Full - Family");
-            PickDate("2023", "MAR", "5");
+            PickDate("//mat-datepicker-toggle//span[@class='mat-button-wrapper']", "2023", "MAR", "5");
             TypeIntoField("CPSID Number", "20101");
             // TODO: Why does 'Keep Changes and Continue' pop up without Sleep?
             System.Threading.Thread.Sleep(1000);
@@ -170,7 +170,7 @@ namespace TestPrimeE2E.Enrollment
         [TearDown]
         public void TestTearDown()
         {
-//            _driver.Quit();
+            //            _driver.Quit();
         }
     }
 }

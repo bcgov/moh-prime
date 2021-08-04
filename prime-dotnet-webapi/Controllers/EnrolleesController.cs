@@ -887,6 +887,20 @@ namespace Prime.Controllers
             return Ok(emails);
         }
 
+        // GET: api/Enrollees/1/qrcode
+        /// <summary>
+        /// Gets and Enrollee's Verifiable Credential qrcode invitation
+        /// </summary>
+        [HttpGet("{enrolleeId}/qrcode", Name = nameof(GetQrCode))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetQrCode(int enrolleeId)
+        {
+            var result = await _enrolleeService.GetCredentialAsync(enrolleeId);
+            return Ok(result?.Base64QRCode);
+        }
+
         // GET: api/Enrollees/5/plrs
         /// <summary>
         /// Gets all PLR data (matched by collegeId)

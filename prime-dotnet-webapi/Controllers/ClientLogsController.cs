@@ -28,18 +28,19 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("", Name = nameof(CreateLog))]
         [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
         public async Task<ActionResult> CreateLog(ClientLogViewModel log)
         {
+            var logId = 0;
             try
             {
-                await _logService.CreateLogAsync(log);
+                logId = await _logService.CreateLogAsync(log);
             }
             catch (Exception)
             {
                 // Do Nothing
             }
-            return NoContent();
+            return Ok(logId);
         }
     }
 }

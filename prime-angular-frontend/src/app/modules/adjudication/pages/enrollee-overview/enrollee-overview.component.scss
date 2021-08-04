@@ -1,3 +1,5 @@
+@import "palette";
+
 #enrolmentCard {
   overflow: auto;
   height: calc(100vh - 380px);
@@ -6,6 +8,10 @@
 #adjudicationCard {
   overflow: auto;
   height: calc(100vh - 500px);
+}
+
+.text-blue-light {
+  color: theme-palette(blue, light);
 }
 
 :host ::ng-deep app-plr-info > mat-card {
