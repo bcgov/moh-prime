@@ -20,5 +20,6 @@ namespace Prime.Services.EmailInternal
         Task<Email> RenderSiteApprovedPharmaNetAdministratorEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel);
         Task<Email> RenderSiteApprovedSigningAuthorityEmailAsync(string recipientEmail, SiteApprovalEmailViewModel viewModel);
         Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel);
+        Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel);
     }
 }

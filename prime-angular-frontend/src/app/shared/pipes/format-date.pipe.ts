@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import * as moment from 'moment';
+import moment, { Moment } from 'moment';
 
 import { APP_DATE_FORMAT } from '@lib/modules/ngx-material/ngx-material.module';
 
@@ -8,9 +8,9 @@ import { APP_DATE_FORMAT } from '@lib/modules/ngx-material/ngx-material.module';
   name: 'formatDate'
 })
 export class FormatDatePipe implements PipeTransform {
-  public transform(date: string, format: string = APP_DATE_FORMAT): string {
+  public transform(date: string | Moment, format: string = APP_DATE_FORMAT): string {
     return (date)
       ? moment(date).format(format)
-      : date;
+      : '';
   }
 }
