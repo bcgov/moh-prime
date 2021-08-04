@@ -1,5 +1,7 @@
 using System.Linq;
+using System.Collections.Gener­ic;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
@@ -10,6 +12,7 @@ using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.ViewModels.Plr;
+using Prime.Models.Plr;
 
 /**
  * Automapper Documentation
@@ -116,6 +119,15 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
 
-        CreateMap<PlrProvider, PlrViewModel>();
+        IQueryable<PlrRoleType> plrRoleTypes = null;
+        IQueryable<PlrStatusReason> plrStatusReasons = null;
+        IQueryable<PlrExpertise> plrExpertises = null;
+        CreateMap<PlrProvider, PlrViewModel>()
+            .ForMember(dest => dest.ProviderRoleType,
+                opt => opt.MapFrom(src => plrRoleTypes.Where(r => r.Code == src.ProviderRoleType).SingleOrDefault().Name))
+            .ForMember(dest => dest.StatusReasonCode,
+                opt => opt.MapFrom(src => plrStatusReasons.Where(s => s.Code == src.StatusReasonCode).SingleOrDefault().Name))
+            .ForMember(dest => dest.Expertise,
+                opt => opt.MapFrom(src => plrExpertises.Where(pe => src.Expertise.Contains(pe.Code)).Select(pe => pe.Name)));
     }
 }

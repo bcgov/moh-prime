@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Prime.Models;
 using Prime.ViewModels.Plr;
+using Prime.Models.Plr;
 using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
@@ -67,10 +68,14 @@ namespace Prime.Services
 
         public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId)
         {
+            var plrRoleTypes = _context.Set<PlrRoleType>().AsQueryable();
+            var plrStatusReasons = _context.Set<PlrStatusReason>().AsQueryable();
+            var plrExpertises = _context.Set<PlrExpertise>().AsQueryable();
+
             return await _context.PlrProviders
                 .AsNoTracking()
                 .Where(p => collegeId.Contains(p.CollegeId))
-                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons, plrExpertises })
                 .ToListAsync();
         }
 
