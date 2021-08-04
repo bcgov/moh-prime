@@ -6,7 +6,7 @@ import { MatRadioChange } from '@angular/material/radio';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 import { EMPTY, noop, of } from 'rxjs';
-import {exhaustMap, map, pairwise, startWith, tap} from 'rxjs/operators';
+import { exhaustMap, map, pairwise, startWith, tap } from 'rxjs/operators';
 
 import { Config, VendorConfig } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
@@ -72,6 +72,8 @@ export class CareSettingPageComponent extends AbstractEnrolmentPage implements O
         return true;
       case CareSettingEnum.COMMUNITY_PHARMACIST:
         return this.permissionService.hasRoles(Role.FEATURE_SITE_PHARMACIST);
+      case CareSettingEnum.DEVICE_PROVIDER:
+        return this.permissionService.hasRoles(Role.FEATURE_SITE_DEVICE_PROVIDER);
       default:
         return false;
     }

@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { environment } from '@env/environment';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ToastService } from '@core/services/toast.service';
 import { AuthRoutes } from '@auth/auth.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
@@ -14,6 +14,7 @@ import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 })
 export class KeycloakInitService {
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private location: Location,
     private keycloakService: KeycloakService,
@@ -39,8 +40,8 @@ export class KeycloakInitService {
 
   private getKeycloakOptions() {
     return (this.isMohKeycloak())
-      ? environment.mohKeycloakConfig
-      : environment.keycloakConfig;
+      ? this.config.mohKeycloakConfig
+      : this.config.keycloakConfig;
   }
 
   private isMohKeycloak() {

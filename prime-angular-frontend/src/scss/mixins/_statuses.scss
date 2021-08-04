@@ -9,7 +9,10 @@
       color: theme-palette(yellow);
     }
 
-    &.editable,
+    &.editable {
+      color: theme-palette(blue);
+    }
+
     &.approved {
       color: theme-palette(green);
     }

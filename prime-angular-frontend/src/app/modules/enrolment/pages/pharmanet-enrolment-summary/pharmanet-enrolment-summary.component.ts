@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -10,7 +9,6 @@ import { EMPTY } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
-import { WindowRefService } from '@core/services/window-ref.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -53,8 +51,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
-    private toastService: ToastService,
-    private windowRef: WindowRefService
+    private toastService: ToastService
   ) {
     super(route, router);
     this.showCommunityHealth = true;

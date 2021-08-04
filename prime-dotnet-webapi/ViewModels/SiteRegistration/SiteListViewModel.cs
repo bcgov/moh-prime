@@ -18,6 +18,8 @@ namespace Prime.ViewModels
 
         public DateTimeOffset? SubmittedDate { get; set; }
 
+        public DateTimeOffset? ApprovedDate { get; set; }
+
         public bool Completed { get; set; }
 
         public int RemoteUserCount { get; set; }

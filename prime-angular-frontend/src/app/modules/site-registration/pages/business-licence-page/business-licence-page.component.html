@@ -44,13 +44,13 @@
 
       </ng-container>
 
-      <ng-container *ngIf="isCommPharm()">
+      <ng-container *ngIf="canDefer()">
 
         <mat-slide-toggle #deferredLicence
                           class="my-2 mb-3"
                           color="primary"
                           (change)="onDeferredLicenceChange($event)">
-          This Community Pharmacy does not have a business licence
+          This Site does not have a business licence
         </mat-slide-toggle>
 
         <section *ngIf="deferredLicence?.checked"
