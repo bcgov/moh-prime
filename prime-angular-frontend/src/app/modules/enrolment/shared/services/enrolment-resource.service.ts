@@ -7,7 +7,7 @@ import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
@@ -18,13 +18,11 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolmentCertificateAccessToken } from '@shared/models/enrolment-certificate-access-token.model';
 import { EnrolmentSubmission, HttpEnrolleeSubmission } from '@shared/models/enrollee-submission.model';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
-import { AgreementVersion } from '@shared/models/agreement-version.model';
 
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
 
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-import { Job } from '@enrolment/shared/models/job.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +32,7 @@ export class EnrolmentResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public enrollee(): Observable<Enrolment> {
@@ -209,33 +207,10 @@ export class EnrolmentResource {
       );
   }
 
-  // ---
-  // Agreement Versions
-  // ---
-
-  public getLatestAgreementVersions(): Observable<AgreementVersion[]> {
-    return this.apiResource.get<AgreementVersion[]>('agreements/enrollee/latest')
+  public getQrCode(enrolleeId: number): Observable<string> {
+    return this.apiResource.get<string>(`enrollees/${enrolleeId}/qrCode`)
       .pipe(
-        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
-        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement versions could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getLatestAgreementVersions error has occurred: ', error);
-          throw error;
-        })
-      );
-  }
-
-  public getAgreementVersion(agreementId: number): Observable<AgreementVersion> {
-    return this.apiResource.get<AgreementVersion>(`agreements/${agreementId}`)
-      .pipe(
-        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
-        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Agreement version could not be found.');
-          this.logger.error('[Enrolment] EnrolmentResource::getAgreementVersion error has occurred: ', error);
-          throw error;
-        })
+        map((response: ApiHttpResponse<string>) => response.result)
       );
   }
 

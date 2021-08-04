@@ -20,7 +20,7 @@ namespace Prime.Controllers
     public class EnrolleeAgreementsController : PrimeControllerBase
     {
         private readonly IEnrolleeService _enrolleeService;
-        private readonly IAgreementService _agreementService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IRazorConverterService _razorConverterService;
         private readonly IBusinessEventService _businessEventService;
@@ -29,14 +29,14 @@ namespace Prime.Controllers
 
         public EnrolleeAgreementsController(
             IEnrolleeService enrolleeService,
-            IAgreementService agreementService,
+            IEnrolleeAgreementService enrolleeAgreementService,
             IEnrolleeSubmissionService enrolleeSubmissionService,
             IRazorConverterService razorConverterService,
             IBusinessEventService businessEventService,
             IPdfService pdfService)
         {
             _enrolleeService = enrolleeService;
-            _agreementService = agreementService;
+            _enrolleeAgreementService = enrolleeAgreementService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
             _razorConverterService = razorConverterService;
             _businessEventService = businessEventService;
@@ -54,7 +54,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Agreement>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<Agreement>>> GetEnrolleeAgreements(int enrolleeId, [FromQuery] AgreementFilters filters)
+        public async Task<ActionResult> GetEnrolleeAgreements(int enrolleeId, [FromQuery] AgreementFilters filters)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -66,7 +66,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
             if (User.IsAdministrant())
             {
@@ -87,7 +87,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentCardViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrolmentCardViewModel>>> GetEnrolleeEnrolmentCards(int enrolleeId, [FromQuery] AgreementFilters filters)
+        public async Task<ActionResult> GetEnrolleeEnrolmentCards(int enrolleeId, [FromQuery] AgreementFilters filters)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -101,7 +101,7 @@ namespace Prime.Controllers
 
             var enrolmentCards = new List<EnrolmentCardViewModel>();
 
-            var agreements = await _agreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
+            var agreements = await _enrolleeAgreementService.GetEnrolleeAgreementsAsync(enrolleeId, filters);
 
             foreach (var agreement in agreements)
             {
@@ -137,7 +137,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetAgreement(int enrolleeId, int agreementId)
+        public async Task<ActionResult> GetAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -149,7 +149,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            var agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
             if (agreement == null)
             {
                 return NotFound($"Agreement not found with id {agreementId} on enrollee with id {enrolleeId}");
@@ -175,7 +175,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Submission>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Submission>> GetSubmissionForAgreement(int enrolleeId, int agreementId)
+        public async Task<ActionResult> GetSubmissionForAgreement(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -187,7 +187,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
+            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId);
             if (agreement == null || agreement.AcceptedDate == null)
             {
                 return NotFound($"Accepted Agreement not found with id {agreementId} for enrollee with id {enrolleeId}");
@@ -219,7 +219,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<byte[]>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<byte[]>> GetAccessTermSignable(int enrolleeId, int agreementId)
+        public async Task<ActionResult> GetAccessTermSignable(int enrolleeId, int agreementId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
             if (record == null)
@@ -231,7 +231,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            Agreement agreement = await _agreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
+            Agreement agreement = await _enrolleeAgreementService.GetEnrolleeAgreementAsync(enrolleeId, agreementId, true);
 
             if (agreement == null)
             {

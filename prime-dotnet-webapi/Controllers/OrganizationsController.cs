@@ -22,23 +22,36 @@ namespace Prime.Controllers
     {
         private readonly IOrganizationService _organizationService;
 
-        private readonly IAgreementService _agreementService;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IPartyService _partyService;
         private readonly IDocumentService _documentService;
         private readonly ISiteService _siteService;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IBusinessEventService _businessEventService;
+        private readonly IAdminService _adminService;
+        private readonly IEmailService _emailService;
+
 
         public OrganizationsController(
             IOrganizationService organizationService,
-            IAgreementService agreementService,
+            IOrganizationAgreementService organizationAgreementService,
             IPartyService partyService,
             IDocumentService documentService,
-            ISiteService siteService)
+            ISiteService siteService,
+            IOrganizationClaimService organizationClaimService,
+            IBusinessEventService businessEventService,
+            IAdminService adminService,
+            IEmailService emailService)
         {
             _organizationService = organizationService;
-            _agreementService = agreementService;
+            _organizationAgreementService = organizationAgreementService;
             _partyService = partyService;
             _documentService = documentService;
             _siteService = siteService;
+            _organizationClaimService = organizationClaimService;
+            _businessEventService = businessEventService;
+            _adminService = adminService;
+            _emailService = emailService;
         }
 
         // GET: api/Organizations
@@ -50,7 +63,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<OrganizationSearchViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<OrganizationSearchViewModel>>> GetOrganizations([FromQuery] OrganizationSearchOptions search)
+        public async Task<ActionResult> GetOrganizations([FromQuery] OrganizationSearchOptions search)
         {
             var organizations = await _organizationService.GetOrganizationsAsync(search);
 
@@ -72,7 +85,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> GetOrganizationById(int organizationId)
+        public async Task<ActionResult> GetOrganizationById(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
 
@@ -93,7 +106,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status201Created)]
-        public async Task<ActionResult<Organization>> CreateOrganization(CreateOrganizationViewModel createOrganization)
+        public async Task<ActionResult> CreateOrganization(CreateOrganizationViewModel createOrganization)
         {
             if (!await _partyService.PartyExistsAsync(createOrganization.PartyId, PartyType.SigningAuthority))
             {
@@ -110,6 +123,112 @@ namespace Prime.Controllers
             );
         }
 
+        // POST: api/Organizations/claim
+        /// <summary>
+        /// Claim an existing Organization.
+        /// </summary>
+        [HttpPost("claims", Name = nameof(ClaimOrganization))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<int>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> ClaimOrganization(OrganizationClaimViewModel organizationClaim)
+        {
+            var party = await _partyService.GetPartyAsync(organizationClaim.PartyId, PartyType.SigningAuthority);
+            if (party == null)
+            {
+                return BadRequest("Could not claim an organization, the passed in SigningAuthority does not exist.");
+            }
+
+            if (party.UserId != User.GetPrimeUserId())
+            {
+                return BadRequest("Could not claim an organization, the passed in party does not match current user.");
+            }
+
+            var organization = await _organizationService.GetOrganizationByPecAsync(organizationClaim.PEC);
+            if (organization == null)
+            {
+                return BadRequest("Could not claim an organization, the passed in PEC did not locate an organization.");
+            }
+
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organization.Id);
+            if (orgClaim != null)
+            {
+                return BadRequest("Could not claim an organization which has already been claimed.");
+            }
+
+            var organizationId = await _organizationClaimService.CreateOrganizationClaimAsync(organizationClaim, organization);
+
+            return Ok(organizationId);
+        }
+
+        // GET: api/Organizations/claims
+        /// <summary>
+        /// Check if organization claim exists by a given search criteria.
+        /// </summary>
+        [HttpGet("claims", Name = nameof(OrganizationClaimExists))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> OrganizationClaimExists([FromQuery] OrganizationClaimSearchOptions search)
+        {
+            var result = await _organizationClaimService.OrganizationClaimExistsAsync(search);
+
+            return Ok(result);
+        }
+
+        // GET: api/Organizations/5/claims
+        /// <summary>
+        /// Find OrganizationClaim by Organization ID.
+        /// </summary>
+        [HttpGet("{organizationId}/claims", Name = nameof(GetOrganizationClaimByOrgId))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<OrganizationClaim>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetOrganizationClaimByOrgId(int organizationId)
+        {
+            var claim = await _organizationClaimService.GetOrganizationClaimByOrgIdAsync(organizationId);
+            if (claim == null)
+            {
+                return NotFound("No claim by a SigningAuthority exists for given Organization.");
+            }
+            return Ok(claim);
+        }
+
+        // POST: api/Organizations/5/claims/1/approve
+        /// <summary>
+        /// Approve claim for an existing Organization.
+        /// </summary>
+        [HttpPost("{organizationId}/claims/{claimId}/approve", Name = nameof(ApproveOrganizationClaim))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
+        {
+            var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimId);
+            if (orgClaim == null || (orgClaim.OrganizationId != organizationId))
+            {
+                return NotFound("Cannot locate Claim for given Organization.");
+            }
+
+            if (!await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId))
+            {
+                // TODO: Properly communicate error
+                return BadRequest("Could not assign Organization to new SigningAuthority.");
+            }
+
+            await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+
+            await _businessEventService.CreateOrganizationEventAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
+
+            await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
+
+            return NoContent();
+        }
+
         // PUT: api/Organizations/5
         /// <summary>
         /// Updates a specific Organization.
@@ -122,7 +241,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
+        public async Task<ActionResult> UpdateOrganization(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -148,7 +267,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> UpdateOrganizationCompleted(int organizationId)
+        public async Task<ActionResult> UpdateOrganizationCompleted(int organizationId)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
@@ -174,7 +293,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Organization>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Organization>> DeleteOrganization(int organizationId)
+        public async Task<ActionResult> DeleteOrganization(int organizationId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -201,9 +320,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<AgreementViewModel>>> GetOrganizationAgreements(int organizationId)
+        public async Task<ActionResult> GetOrganizationAgreements(int organizationId)
         {
-            var agreements = await _agreementService.GetOrgAgreementsAsync(organizationId);
+            var agreements = await _organizationAgreementService.GetOrgAgreementsAsync(organizationId);
 
             return Ok(agreements);
         }
@@ -267,14 +386,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<Agreement>> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
+        public async Task<ActionResult> GetOrganizationAgreement(int organizationId, int agreementId, [FromQuery] bool asPdf)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
                 return NotFound($"Organization not found with id {organizationId}");
             }
 
-            var agreement = await _agreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
+            var agreement = await _organizationAgreementService.GetOrgAgreementAsync(organizationId, agreementId, asPdf);
             if (agreement == null)
             {
                 return NotFound($"Agreement with ID {agreementId} not found on Organization {organizationId}");
@@ -296,19 +415,19 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
+        public async Task<ActionResult> GetSignableOrganizationAgreement(int organizationId, [FromQuery] AgreementType agreementType)
         {
             if (!await _organizationService.OrganizationExistsAsync(organizationId))
             {
                 return NotFound($"Organization not found with id {organizationId}");
             }
 
-            if (agreementType.IsEnrolleeAgreement())
+            if (!agreementType.IsOrganizationAgreement())
             {
                 return BadRequest($"Agreement with type {agreementType} not allowed");
             }
 
-            var pdf = await _agreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
+            var pdf = await _organizationAgreementService.GetSignableOrgAgreementAsync(organizationId, agreementType);
 
             return Ok(pdf);
         }
@@ -326,7 +445,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? organizationAgreementGuid)
+        public async Task<ActionResult> AcceptOrganizationAgreement(int organizationId, int agreementId, [FromQuery] Guid? organizationAgreementGuid)
         {
             var organization = await _organizationService.GetOrganizationNoTrackingAsync(organizationId);
             if (organization == null)
@@ -363,7 +482,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<string>> GetSignedAgreementToken(int organizationId, int agreementId)
+        public async Task<ActionResult> GetSignedAgreementToken(int organizationId, int agreementId)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)

@@ -3,7 +3,7 @@ import { Validators, FormControl, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { exhaustMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { selfDeclarationQuestions } from '@lib/data/self-declaration-questions';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -16,7 +16,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 
 @Component({
@@ -65,12 +65,12 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack(): void {
-    const certifications = this.enrollee?.certifications;
-    const backRoutePath = (certifications?.length)
-      ? PaperEnrolmentRoutes.REGULATORY
-      : PaperEnrolmentRoutes.OBO_SITES;
-
-    this.routeUtils.routeRelativeTo(['./', backRoutePath]);
+    const backRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : (this.enrollee?.certifications?.length)
+        ? PaperEnrolmentRoutes.REGULATORY
+        : PaperEnrolmentRoutes.OBO_SITES;
+    this.routeUtils.routeRelativeTo([backRoutePath]);
   }
 
   public ngOnInit(): void {
@@ -139,8 +139,11 @@ export class SelfDeclarationPageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.clearSelfDeclarationDocumentGuids();
-    this.routeUtils.routeRelativeTo([PaperEnrolmentRoutes.UPLOAD]);
+    const nextRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : PaperEnrolmentRoutes.UPLOAD;
+
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   private toggleSelfDeclarationValidators(value: boolean, control: FormControl) {

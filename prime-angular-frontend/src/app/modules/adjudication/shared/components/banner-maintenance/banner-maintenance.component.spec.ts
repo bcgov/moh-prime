@@ -22,6 +22,7 @@ import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { BannerMaintenanceComponent } from './banner-maintenance.component';
 import { SharedModule } from '@shared/shared.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('BannerMaintenanceComponent', () => {
   let component: BannerMaintenanceComponent;
@@ -38,6 +39,7 @@ describe('BannerMaintenanceComponent', () => {
         ReactiveFormsModule,
         MatSnackBarModule,
         SharedModule,
+        RouterTestingModule,
         AdjudicationModule
       ],
       providers: [

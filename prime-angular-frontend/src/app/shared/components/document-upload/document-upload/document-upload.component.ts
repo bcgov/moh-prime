@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, Inject } from '@angular/core';
 import { EventEmitter } from '@angular/core';
 
 import { FilePondErrorDescription, FilePondFile, FilePondOptions, ProcessServerConfigFunction } from 'filepond';
@@ -7,9 +7,8 @@ import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-valida
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import tus from 'tus-js-client';
 
-import { environment } from '@env/environment';
-
-import { LoggerService } from '@core/services/logger.service';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {
@@ -41,8 +40,9 @@ export class DocumentUploadComponent implements OnInit {
   private jwt: string;
 
   constructor(
+    @Inject(APP_CONFIG) private config: AppConfig,
     private accessTokenService: AccessTokenService,
-    private logger: LoggerService,
+    private logger: ConsoleLoggerService
   ) {
     this.labelMessage = 'Click to Browse or Drop files here';
     this.filePondFiles = [];
@@ -109,9 +109,9 @@ export class DocumentUploadComponent implements OnInit {
 
     const [initialFileType, ...fileTypes] = Object.values(allowedFileTypesMap);
     const allowedFileTypes = fileTypes.reduce((concat, fileType, index) =>
-      (index === fileTypes.length - 1)
-        ? `${concat}, or ${fileType}`
-        : `${concat}, ${fileType}`
+        (index === fileTypes.length - 1)
+          ? `${concat}, or ${fileType}`
+          : `${concat}, ${fileType}`
       , initialFileType);
 
     return `${this.labelMessage}. Files must be ${allowedFileTypes}`;
@@ -122,7 +122,7 @@ export class DocumentUploadComponent implements OnInit {
       const { name: filename, type: filetype } = file;
 
       const upload = new tus.Upload(file, {
-        endpoint: `${environment.apiEndpoint}/document`,
+        endpoint: `${this.config.apiEndpoint}/document`,
         metadata: { filename, filetype },
         chunkSize: 1048576, // 1 MB
         removeFingerprintOnSuccess: true,
@@ -150,7 +150,7 @@ export class DocumentUploadComponent implements OnInit {
     };
 
     return {
-      url: `${environment.documentManagerUrl}/documents/uploads`,
+      url: `${this.config.documentManagerUrl}/documents/uploads`,
       process,
     };
   }

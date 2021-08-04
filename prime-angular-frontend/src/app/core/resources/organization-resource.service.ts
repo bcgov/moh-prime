@@ -6,16 +6,18 @@ import { map, catchError, tap } from 'rxjs/operators';
 import { Party } from '@lib/models/party.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSearchListViewModel } from '@registration/shared/models/site-registration.model';
+import { OrganizationClaimFormModel } from '@registration/shared/models/organization-claim-form.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +27,7 @@ export class OrganizationResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getSigningAuthorityByUserId(userId: string): Observable<Party | null> {
@@ -143,6 +145,37 @@ export class OrganizationResource {
       );
   }
 
+  public getOrganizationClaim(queryParam: { pec?: string, userId?: string }): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams(queryParam);
+    return this.apiResource.get<boolean>(`organizations/claims`, params)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        tap((result: boolean) => this.logger.info('ORGANIZATIONCLAIM', result)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast(error.errors.message);
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaim error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getOrganizationClaimByOrgId(organizationId: number): Observable<OrganizationClaim> {
+    return this.apiResource.get<OrganizationClaim>(`organizations/${organizationId}/claims`)
+      .pipe(
+        map((response: ApiHttpResponse<OrganizationClaim>) => response.result),
+        tap((orgClaim: OrganizationClaim) => this.logger.info('OrganizationClaim', orgClaim)),
+        catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
+
+          this.toastService.openErrorToast('OrganizationClaim could not be retrieved');
+          this.logger.error('[Core] OrganizationResource::getOrganizationClaimByOrgId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public createOrganization(partyId: number): Observable<Organization> {
     return this.apiResource.post<Organization>('organizations', { partyId })
       .pipe(
@@ -154,6 +187,31 @@ export class OrganizationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Organization could not be created');
           this.logger.error('[Core] OrganizationResource::createOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public claimOrganization(partyId: number, orgClaim: OrganizationClaimFormModel): Observable<number> {
+    return this.apiResource.post<number>(`organizations/claims`, { partyId, ...orgClaim })
+      .pipe(
+        map((response: ApiHttpResponse<number>) => response.result),
+        tap(() => this.toastService.openSuccessToast('Organization claim has been submitted')),
+        catchError((error: any) => {
+          this.logger.error('[Core] OrganizationResource::claimOrganization error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveOrganizationClaim(organizationId: number, claimId: number): NoContent {
+    return this.apiResource.post<NoContent>(`organizations/${organizationId}/claims/${claimId}/approve`)
+      .pipe(
+        NoContentResponse,
+        tap(() => this.toastService.openSuccessToast('New Signing Authority Approved')),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Organization Claim could not be approved');
+          this.logger.error('[Core] OrganizationResource::approveOrganizationClaim error has occurred: ', error);
           throw error;
         })
       );

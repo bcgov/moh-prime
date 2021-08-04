@@ -17,7 +17,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address } from '@shared/models/address.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { DemographicFormState } from './demographic-form-state.class';
 
 @Component({
@@ -30,6 +30,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   public maxDateOfBirth: moment.Moment;
   public showAddressFields: boolean;
 
+  private enrollee: HttpEnrollee | null;
   private routeUtils: RouteUtils;
 
   constructor(
@@ -60,12 +61,15 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
+      // Don't throw an error as new enrolments are created in this view
       return;
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         if (enrollee) {
+          this.enrollee = enrollee;
+
           const {
             firstName,
             givenNames,
@@ -78,12 +82,10 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             smsPhone
           } = enrollee;
 
-          const middleName = givenNames.replace(firstName, '').trim();
-
           // Attempt to patch the form if not already patched
           this.formState.patchValue({
             firstName,
-            middleName,
+            givenNames,
             lastName,
             dateOfBirth,
             physicalAddress,
@@ -100,13 +102,13 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
       });
   }
 
-  protected performSubmission(): Observable<number> {
+  protected performSubmission(): Observable<HttpEnrollee> {
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
     const enrolleeId = +this.route.snapshot.params.eid;
     let request$ = this.paperEnrolmentResource.updateDemographic(enrolleeId, payload)
-      .pipe(map(() => enrolleeId));
+      .pipe(map(() => this.enrollee));
 
     if (!enrolleeId) {
       request$ = this.paperEnrolmentResource.createEnrollee(payload)
@@ -115,7 +117,7 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
             // Replace the URL with redirection, and prevent initial
             // ID of zero being pushed onto browser history
             this.location.replaceState([PaperEnrolmentRoutes.MODULE_PATH, enrollee.id, PaperEnrolmentRoutes.DEMOGRAPHIC].join('/'));
-            return enrollee.id;
+            return enrollee;
           })
         );
     }
@@ -123,8 +125,14 @@ export class DemographicPageComponent extends AbstractEnrolmentPage implements O
     return request$;
   }
 
-  protected afterSubmitIsSuccessful(enrolleeId: number): void {
-    this.routeUtils.routeRelativeTo(['../', enrolleeId, PaperEnrolmentRoutes.CARE_SETTING]);
+  protected afterSubmitIsSuccessful(enrollee: HttpEnrollee): void {
+    const nextRoutePath = (enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      // Must go up a route-level and down with newly minted enrollee ID
+      // to override the replaced route state during submission
+      : ['../', enrollee.id, PaperEnrolmentRoutes.CARE_SETTING];
+
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   protected onSubmitFormIsInvalid(): void {

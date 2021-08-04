@@ -20,6 +20,7 @@ namespace Prime.Services
     {
         private readonly IBusinessEventService _businessEventService;
         private readonly IPartyService _partyService;
+        private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
 
@@ -28,12 +29,14 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             IBusinessEventService businessEventService,
             IPartyService partyService,
+            IOrganizationClaimService organizationClaimService,
             IMapper mapper,
             IDocumentManagerClient documentClient)
             : base(context, httpContext)
         {
             _businessEventService = businessEventService;
             _partyService = partyService;
+            _organizationClaimService = organizationClaimService;
             _documentClient = documentClient;
             _mapper = mapper;
         }
@@ -86,10 +89,19 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            return await GetBaseOrganizationQuery()
+            var organization = await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
+            return organization;
+        }
+
+        public async Task<Organization> GetOrganizationByPecAsync(string pec)
+        {
+            return await GetBaseOrganizationQuery()
+                .Include(o => o.Sites)
+                .Where(o => o.Sites.Any(s => s.PEC == pec))
+                .SingleOrDefaultAsync();
         }
 
         public async Task<int> CreateOrganizationAsync(int partyId)
@@ -117,6 +129,7 @@ namespace Prime.Services
 
             return organization.Id;
         }
+
 
         public async Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization)
         {
@@ -276,6 +289,7 @@ namespace Prime.Services
             {
                 CareSettingType.CommunityPractice => AgreementType.CommunityPracticeOrgAgreement,
                 CareSettingType.CommunityPharmacy => AgreementType.CommunityPharmacyOrgAgreement,
+                CareSettingType.DeviceProvider => AgreementType.DeviceProviderOrgAgreement,
                 _ => throw new InvalidOperationException($"Did not recognize care setting code {careSettingCode} in {nameof(OrgAgreementTypeForSiteSetting)}"),
             };
         }
@@ -287,7 +301,15 @@ namespace Prime.Services
                     .ThenInclude(a => a.SignedAgreement)
                 .Include(o => o.SigningAuthority)
                     .ThenInclude(sa => sa.Addresses)
-                        .ThenInclude(pa => pa.Address);
+                        .ThenInclude(pa => pa.Address)
+                .Include(o => o.Claims);
+        }
+
+        public async Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
+        {
+            var organization = await _context.Organizations.SingleAsync(o => o.Id == organizationId);
+            organization.SigningAuthorityId = newSigningAuthorityId;
+            return await _context.SaveChangesAsync() == 1;
         }
     }
 }

@@ -2,7 +2,6 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { exhaustMap } from 'rxjs/operators';
 import { EMPTY } from 'rxjs';
@@ -10,8 +9,6 @@ import { EMPTY } from 'rxjs';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
-import { WindowRefService } from '@core/services/window-ref.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -19,7 +16,7 @@ import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -31,7 +28,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public enrolment: Enrolment;
 
   public CareSettingEnum = CareSettingEnum;
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
@@ -54,9 +51,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
     private dialog: MatDialog,
-    private toastService: ToastService,
-    private logger: LoggerService,
-    private windowRef: WindowRefService
+    private toastService: ToastService
   ) {
     super(route, router);
     this.showCommunityHealth = true;

@@ -8,12 +8,12 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-
+import { ConfigService } from '@config/config.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { RegulatoryFormState } from './regulatory-form-state.class';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
@@ -30,6 +30,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private configService: ConfigService,
     private fb: FormBuilder,
     private paperEnrolmentResource: PaperEnrolmentResource,
     private route: ActivatedRoute,
@@ -40,12 +41,11 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public routeBackTo(): void {
-    this.routeUtils.routeRelativeTo(PaperEnrolmentRoutes.CARE_SETTING);
-  }
-
-  public onSubmit(): void {
-    super.onSubmit();
+  public onBack(): void {
+    const backRoutePath = (this.enrollee.profileCompleted)
+      ? PaperEnrolmentRoutes.OVERVIEW
+      : PaperEnrolmentRoutes.CARE_SETTING;
+    this.routeUtils.routeRelativeTo(backRoutePath);
   }
 
   public ngOnInit(): void {
@@ -59,7 +59,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected createFormInstance(): void {
-    this.formState = new RegulatoryFormState(this.fb);
+    this.formState = new RegulatoryFormState(this.fb, this.configService);
   }
 
   protected initForm(): void {
@@ -73,19 +73,15 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   protected patchForm(): void {
     const enrolleeId = +this.route.snapshot.params.eid;
     if (!enrolleeId) {
-      return;
+      throw new Error('No enrollee ID was provided');
     }
 
     this.paperEnrolmentResource.getEnrolleeById(enrolleeId)
       .subscribe((enrollee: HttpEnrollee) => {
         if (enrollee) {
           this.enrollee = enrollee;
-          const {
-            certifications
-          } = enrollee;
-
           // Attempt to patch the form if not already patched
-          this.formState.patchValue(certifications);
+          this.formState.patchValue(enrollee.certifications);
         }
       });
   }
@@ -95,7 +91,7 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
     this.formState.form.markAsPristine();
 
     const payload = this.formState.json;
-    const oboSites = this.removeJobs(this.enrollee.oboSites);
+    const oboSites = this.removeOboSites(this.enrollee.oboSites);
 
     return this.paperEnrolmentResource.updateCertifications(this.enrollee.id, payload)
       .pipe(
@@ -108,22 +104,24 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.formState.removeIncompleteCertifications(true);
-    const certifications = this.formState.collegeCertifications;
-
-    const nextRoutePath = (!certifications.length)
+    // Force obo sites to always be checked regardless of the profile being
+    // completed so validations are applied prior to overview pushing the
+    // responsibility of validation to obo sites
+    const nextRoutePath = (!this.formState.collegeCertifications.length)
       ? PaperEnrolmentRoutes.OBO_SITES
-      : PaperEnrolmentRoutes.SELF_DECLARATION;
+      : (this.enrollee.profileCompleted)
+        ? PaperEnrolmentRoutes.OVERVIEW
+        : PaperEnrolmentRoutes.SELF_DECLARATION;
 
-    this.routeUtils.routeRelativeTo([nextRoutePath]);
+    this.routeUtils.routeRelativeTo(nextRoutePath);
   }
 
   /**
    * @description
-   * Remove obo sites/jobs from the enrolment as enrollees can not have
-   * certificate(s), as well as, job(s).
+   * Remove obo sites from the enrolment as enrollees can not have
+   * certificate(s), as well as, obo site(s).
    */
-  private removeJobs(oboSites: OboSite[]): OboSite[] {
+  private removeOboSites(oboSites: OboSite[]): OboSite[] {
     this.formState.removeIncompleteCertifications(true);
 
     if (this.formState.certifications.length) {
@@ -132,5 +130,4 @@ export class RegulatoryPageComponent extends AbstractEnrolmentPage implements On
 
     return oboSites;
   }
-
 }

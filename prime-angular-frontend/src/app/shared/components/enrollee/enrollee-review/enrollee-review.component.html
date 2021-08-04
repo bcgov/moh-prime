@@ -1,7 +1,6 @@
 <app-bcsc-profile [user]="enrollee"></app-bcsc-profile>
 
-<section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR"
-         class="mb-4">
+<app-page-section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR">
   <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
        so it is pointless to show the preferred names -->
 
@@ -34,7 +33,7 @@
     No preferred name entered.
   </ng-template>
 
-</section>
+</app-page-section>
 
 <app-address-view title="Verified Address"
                   [address]="enrollee.verifiedAddress"
@@ -54,7 +53,7 @@
                   [showIfEmpty]="true"
                   (route)="onRoute(demographicRoutePath)"></app-address-view>
 
-<section class="mb-4">
+<app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Contact Information</ng-container>
@@ -75,9 +74,9 @@
     {{ enrollee?.phoneExtension | default }}
   </app-enrollee-property>
 
-</section>
+</app-page-section>
 
-<section class="mb-4">
+<app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Notification Information</ng-container>
@@ -98,9 +97,9 @@
     {{ enrollee?.smsPhone | phone | default }}
   </app-enrollee-property>
 
-</section>
+</app-page-section>
 
-<section class="mb-4">
+<app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Care Setting</ng-container>
@@ -128,10 +127,9 @@
     None
   </app-enrollee-property>
 
-</section>
+</app-page-section>
 
-<section *ngIf="healthAuthorities?.length"
-         class="mb-4">
+<app-page-section *ngIf="healthAuthorities?.length">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Health Authority</ng-container>
@@ -151,9 +149,9 @@
     </app-enrollee-property>
   </ng-container>
 
-</section>
+</app-page-section>
 
-<section class="mb-4">
+<app-page-section>
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>College Licence Information</ng-container>
@@ -197,38 +195,15 @@
 
   <app-enrollee-property *ngIf="!hasCertification"
                          title="College Certification"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite"
+                         errorMessage="Must have a college certificate or job site information"
                          [makeBold]="true">
     None
   </app-enrollee-property>
 
-</section>
+</app-page-section>
 
-<section *ngIf="enrolment?.deviceProviderNumber"
-         class="mb-4">
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>Device Provider</ng-container>
-
-    <button *ngIf="showEditRedirect"
-            mat-icon-button
-            matTooltip="Edit Device Provider"
-            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </app-page-subheader>
-
-  <app-enrollee-property title="Device Provider Number">
-    {{ enrolment?.deviceProviderNumber | default }}
-  </app-enrollee-property>
-
-  <app-enrollee-property title="Are you an insulin pump provider?">
-    {{ enrolment.isInsulinPumpProvider | yesNo: true }}
-  </app-enrollee-property>
-
-</section>
-
-<section *ngIf="oboSites.length"
-         class="mb-4">
+<app-page-section *ngIf="oboSites.length || enrolmentErrors?.certificateOrOboSite">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
@@ -299,12 +274,43 @@
         </app-enrollee-property>
       </ng-container>
     </ng-container>
+
   </ng-container>
 
-</section>
+  <app-enrollee-property *ngIf="!oboSites.length"
+                         title="Job Sites"
+                         [hasError]="enrolmentErrors?.certificateOrOboSite"
+                         errorMessage="Must have a college certificate or job site information"
+                         [makeBold]="true">
+    None
+  </app-enrollee-property>
 
-<section *ngIf="isRequestingRemoteAccess"
-         class="mb-4">
+</app-page-section>
+
+<app-page-section *ngIf="enrolment?.deviceProviderNumber">
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Device Provider</ng-container>
+
+    <button *ngIf="showEditRedirect"
+            mat-icon-button
+            matTooltip="Edit Device Provider"
+            (click)="onRoute(EnrolmentRoutes.DEVICE_PROVIDER)">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </app-page-subheader>
+
+  <app-enrollee-property title="Device Provider Number">
+    {{ enrolment?.deviceProviderNumber | default }}
+  </app-enrollee-property>
+
+  <app-enrollee-property title="Are you an insulin pump provider?">
+    {{ enrolment.isInsulinPumpProvider | yesNo: true }}
+  </app-enrollee-property>
+
+</app-page-section>
+
+<app-page-section *ngIf="isRequestingRemoteAccess">
 
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Remote Access</ng-container>
@@ -342,14 +348,15 @@
 
       <ng-template #enrolleeView>
         {{ remoteAccessSite.site?.doingBusinessAs | default }}
-
       </ng-template>
+
       <address>
         {{ remoteAccessSite.site?.physicalAddress?.street | default }},
         {{ remoteAccessSite.site?.physicalAddress?.city | default }}
         {{ remoteAccessSite.site?.physicalAddress?.provinceCode | default }}
         {{ remoteAccessSite.site?.physicalAddress?.postal | default }}
       </address>
+
       Vendor: {{ getRemoteAccessSiteVendor(remoteAccessSite.id) | configCode:'vendors' | default }}
     </app-enrollee-property>
   </ng-container>
@@ -379,7 +386,7 @@
 
   </ng-container>
 
-</section>
+</app-page-section>
 
 <app-enrollee-self-declarations [enrolment]="enrolment">
   <button *ngIf="showEditRedirect"

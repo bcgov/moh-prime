@@ -71,7 +71,7 @@ namespace Prime.Services
                 ProvisionerId = organization.SigningAuthorityId,
                 OrganizationId = organization.Id,
             };
-            site.AddStatus(SiteStatusType.Active);
+            site.AddStatus(SiteStatusType.Editable);
 
             _context.Sites.Add(site);
 
@@ -327,12 +327,9 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if (site.Status != SiteStatusType.Approved)
-            {
-                site.AddStatus(SiteStatusType.Approved);
-                site.ApprovedDate = DateTimeOffset.Now;
-                await _context.SaveChangesAsync();
-            }
+            site.AddStatus(SiteStatusType.Editable);
+            site.ApprovedDate = DateTimeOffset.Now;
+            await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Approved");
 
@@ -365,9 +362,8 @@ namespace Prime.Services
         public async Task<Site> EnableEditingSite(int siteId)
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
-            site.SubmittedDate = null;
             site.ApprovedDate = null;
-            site.AddStatus(SiteStatusType.Active);
+            site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 
             await _businessEventService.CreateSiteEventAsync(site.Id, site.Organization.SigningAuthorityId, "Site Enabled Editing");
@@ -429,6 +425,7 @@ namespace Prime.Services
         public async Task<BusinessLicence> AddBusinessLicenceAsync(int siteId, BusinessLicence businessLicence, Guid documentGuid)
         {
             businessLicence.SiteId = siteId;
+            businessLicence.UploadedDate = DateTimeOffset.Now;
 
             if (documentGuid != Guid.Empty)
             {
@@ -441,11 +438,14 @@ namespace Prime.Services
             return businessLicence;
         }
 
-        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(int siteId, BusinessLicence updateBusinessLicence)
+        public async Task<BusinessLicence> UpdateBusinessLicenceAsync(int businessLicenceId, BusinessLicence updateBusinessLicence)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences
+                .Where(bl => bl.Id == businessLicenceId)
+                .SingleOrDefaultAsync();
 
             businessLicence.DeferredLicenceReason = updateBusinessLicence.DeferredLicenceReason;
+            businessLicence.ExpiryDate = updateBusinessLicence.ExpiryDate;
 
             _context.BusinessLicences.Update(businessLicence);
             await _context.SaveChangesAsync();
@@ -483,9 +483,9 @@ namespace Prime.Services
             return bld;
         }
 
-        public async Task DeleteBusinessLicenceDocumentAsync(int siteId)
+        public async Task DeleteBusinessLicenceDocumentAsync(int businessLicenceId)
         {
-            var businessLicence = await _context.BusinessLicences.Where(bl => bl.SiteId == siteId).SingleOrDefaultAsync();
+            var businessLicence = await _context.BusinessLicences.Where(bl => bl.Id == businessLicenceId).SingleOrDefaultAsync();
             if (businessLicence.BusinessLicenceDocument != null)
             {
                 _context.BusinessLicenceDocuments.Remove(businessLicence.BusinessLicenceDocument);
@@ -509,10 +509,18 @@ namespace Prime.Services
             };
         }
 
-        public async Task<BusinessLicence> GetBusinessLicenceAsync(int siteId)
+        public async Task<IEnumerable<BusinessLicence>> GetBusinessLicencesAsync(int siteId)
         {
             return await _context.BusinessLicences
                 .Where(bl => bl.SiteId == siteId)
+                .ToListAsync();
+        }
+
+        public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
+        {
+            return await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => s.BusinessLicence)
                 .SingleOrDefaultAsync();
         }
 
@@ -593,7 +601,7 @@ namespace Prime.Services
         {
             return await _context.BusinessEvents
                 .Include(e => e.Admin)
-                .Where(e => e.SiteId == siteId && businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode))
+                .Where(e => businessEventTypeCodes.Any(c => c == e.BusinessEventTypeCode) && (e.SiteId == siteId || e.Organization.Sites.Any(s => s.Id == siteId)))
                 .OrderByDescending(e => e.EventDate)
                 .ToListAsync();
         }
@@ -702,6 +710,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateSiteFlag(int siteId, bool flagged)
+        {
+            var site = await _context.Sites
+                .SingleAsync(s => s.Id == siteId);
+
+            site.Flagged = flagged;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user)
         {
             return await _context.SiteRegistrationNotes
@@ -732,7 +749,7 @@ namespace Prime.Services
                 .Include(s => s.BusinessHours)
                 .Include(s => s.RemoteUsers)
                     .ThenInclude(r => r.RemoteUserCertifications)
-                .Include(s => s.BusinessLicence)
+                .Include(s => s.BusinessLicences)
                     .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Include(s => s.Adjudicator)
                 .Include(s => s.SiteStatuses);

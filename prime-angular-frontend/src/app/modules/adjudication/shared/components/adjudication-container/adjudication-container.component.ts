@@ -10,7 +10,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolleeListViewModel, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
@@ -78,7 +78,7 @@ export class AdjudicationContainerComponent implements OnInit {
     this.routeUtils.updateQueryParams({ textSearch });
   }
 
-  public onFilter(status: EnrolmentStatus | null): void {
+  public onFilter(status: EnrolmentStatusEnum | null): void {
     this.routeUtils.updateQueryParams({ status });
   }
 
@@ -449,8 +449,7 @@ export class AdjudicationContainerComponent implements OnInit {
         this.enrolleeNavigation =
           [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
           AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
-          AdjudicationRoutes.EVENT_LOG,
-          AdjudicationRoutes.ADJUDICATOR_NOTES]
+          AdjudicationRoutes.EVENT_LOG]
             .includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
       });
   }
@@ -525,6 +524,8 @@ export class AdjudicationContainerComponent implements OnInit {
       alwaysManual,
       enrolleeRemoteUsers,
       enrolleeCareSettings,
+      requiresConfirmation,
+      confirmed
     } = enrollee;
 
     return {
@@ -546,8 +547,8 @@ export class AdjudicationContainerComponent implements OnInit {
       remoteAccess: !!(enrolleeRemoteUsers?.length),
       careSettingCodes: enrolleeCareSettings.map(ecs => ecs.careSettingCode),
       hasNotification: false,
-      requiresConfirmation: false,
-      confirmed: false
+      requiresConfirmation,
+      confirmed,
     };
   }
 }

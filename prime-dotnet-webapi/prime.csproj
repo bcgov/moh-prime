@@ -58,6 +58,7 @@
     <EmbeddedResource Include="Configuration\Resources\com-practice-org-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\com-pharmacy-org-v1.html" />
     <EmbeddedResource Include="Configuration\Resources\pharmacy-obo-toa-v1.html" />
+    <EmbeddedResource Include="Configuration\Resources\device-provider-org-v1.html" />
   </ItemGroup>
   <ItemGroup>
     <None Update="Resources\wkhtmltopdf\Linux\wkhtmltopdf">

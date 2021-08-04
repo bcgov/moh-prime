@@ -6,6 +6,7 @@
   <ng-content select="app-page-subheader"></ng-content>
 
   <app-search-form *ngIf="showSearchFilter"
+                   localStoragePrefix="enrollee"
                    (search)="onSearch($event)"
                    (filter)="onFilter($event)"
                    (refresh)="onRefresh()"></app-search-form>
@@ -44,6 +45,7 @@
                                  (assignToa)="onAssignToa($event)"
                                  (enableEnrollee)="onEnableEnrollee($event)"
                                  (enableEditing)="onEnableEditing($event)"
+                                 (cancelToa)="onCancelToa($event)"
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"
                                  (reload)="onRefresh()"></app-adjudicator-actions>

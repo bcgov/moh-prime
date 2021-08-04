@@ -18,9 +18,6 @@ import { OboSite } from '@enrolment/shared/models/obo-site.model';
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   displayId?: number;
-  firstName: string;
-  lastName: string;
-  givenNames: string;
   appliedDate: string;
   approvedDate: string;
   expiryDate?: string;
@@ -55,6 +52,8 @@ export interface HttpEnrollee extends Enrollee {
   adjudicator: Admin;
   base64QRCode: string;
   gpid: string;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }
 
 /**
@@ -104,6 +103,8 @@ export interface Enrolment {
   adjudicatorId: number;
   adjudicator: Admin;
   base64QRCode: string;
+  requiresConfirmation: boolean;
+  confirmed: boolean;
 }
 
 export interface EnrolleeListViewModel {

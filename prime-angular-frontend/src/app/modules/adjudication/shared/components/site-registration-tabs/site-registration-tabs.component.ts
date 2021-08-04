@@ -201,8 +201,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
           (action.action === AssignActionEnum.Disclaim)
             ? this.siteResource.removeSiteAdjudicator(siteId)
             : concat(
-            this.siteResource.removeSiteAdjudicator(siteId),
-            this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
+              this.siteResource.removeSiteAdjudicator(siteId),
+              this.siteResource.setSiteAdjudicator(siteId, action.adjudicatorId)
             )
         )
       )
@@ -404,7 +404,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
     const siteRegistrations = results.reduce((registrations, result) => {
       const { matchOn, organization: ovm } = result;
       const { id: organizationId, sites, ...organization } = ovm;
-      const registration = sites.map((svm: SiteListViewModel, index: number) => {
+      const registration = sites.map((svm: Site, index: number) => {
         const { id: siteId, doingBusinessAs, ...site } = svm;
         return (!index)
           ? { organizationId, ...organization, siteId, siteDoingBusinessAs: doingBusinessAs, ...site, matchOn }
@@ -425,7 +425,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
-        doingBusinessAs
+        doingBusinessAs,
+        hasClaim
       } = organization;
 
       return [{
@@ -435,6 +436,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
+        hasClaim,
         ...this.toSiteViewModelPartial(site)
       }];
     };
@@ -446,13 +448,15 @@ export class SiteRegistrationTabsComponent implements OnInit {
       physicalAddress,
       doingBusinessAs,
       submittedDate,
+      approvedDate,
       careSettingCode,
       siteVendors,
       remoteUsers,
       adjudicator,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     } = site;
 
     return {
@@ -460,13 +464,15 @@ export class SiteRegistrationTabsComponent implements OnInit {
       physicalAddress,
       siteDoingBusinessAs: doingBusinessAs,
       submittedDate,
+      approvedDate,
       careSettingCode,
       siteVendors,
       remoteUserCount: remoteUsers.length,
       adjudicatorIdir: adjudicator?.idir,
       pec,
       status,
-      businessLicence
+      businessLicence,
+      flagged
     };
   }
 

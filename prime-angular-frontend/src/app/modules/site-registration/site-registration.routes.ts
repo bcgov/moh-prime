@@ -11,7 +11,9 @@ export class SiteRoutes {
   // public static ORGANIZATIONS = 'organizations';
 
   public static ORGANIZATION_SIGNING_AUTHORITY = 'organization-signing-authority';
+  public static ORGANIZATION_CLAIM = 'claim';
   public static ORGANIZATION_NAME = 'organization-name';
+  public static ORGANIZATION_CLAIM_CONFIRMATION = 'organization-claim-confirmation'
   public static ORGANIZATION_REVIEW = 'organization-review';
   public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
@@ -29,12 +31,14 @@ export class SiteRoutes {
   public static SITE_REVIEW = 'site-review';
   public static NEXT_STEPS = 'next-steps';
 
+  public static BUSINESS_LICENCE_RENEWAL = 'business-licence-renewal';
+
   /**
    * @description
    * Useful for redirecting to module root-level routes.
    */
   public static routePath(route: string): string {
-    return `/${ SiteRoutes.MODULE_PATH }/${ route }`;
+    return `/${SiteRoutes.MODULE_PATH}/${route}`;
   }
 
   // Used to indicate the routes and order of registration for an initial
@@ -62,6 +66,7 @@ export class SiteRoutes {
     return [
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
+      this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_NAME
     ];
   }
@@ -85,6 +90,7 @@ export class SiteRoutes {
   public static editSiteRegistrationRouteOrder(): string[] {
     return [
       this.CARE_SETTING,
+      this.BUSINESS_LICENCE,
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,

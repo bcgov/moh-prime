@@ -8,7 +8,6 @@ import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
@@ -28,6 +27,9 @@ import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
+import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
+import { AgreementVersion } from '@shared/models/agreement-version.model';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +39,7 @@ export class AdjudicationResource {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getEnrollees(textSearch?: string, statusCode?: number): Observable<EnrolleeListViewModel[]> {
@@ -266,6 +268,33 @@ export class AdjudicationResource {
   // ---
   // Agreements
   // ---
+
+  public getLatestAgreementVersions(type?: AgreementTypeGroup): Observable<AgreementVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ type });
+    return this.apiResource.get<AgreementVersion[]>('agreements', params)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),
+        tap((agreementVersions: AgreementVersion[]) => this.logger.info('AGREEMENT_VERSIONS', agreementVersions)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement versions could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getLatestAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAgreementVersion(agreementVersionId: number): Observable<AgreementVersion> {
+    return this.apiResource.get<AgreementVersion>(`agreements/${agreementVersionId}`)
+      .pipe(
+        map((response: ApiHttpResponse<AgreementVersion>) => response.result),
+        tap((agreementVersion: AgreementVersion) => this.logger.info('AGREEMENT_VERSION', agreementVersion)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement version could not be found.');
+          this.logger.error('[Adjudication] AdjudicationResource::getAgreementVersion error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });

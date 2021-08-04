@@ -6,7 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { KeycloakLoginOptions } from 'keycloak-js';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Address } from '@shared/models/address.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 import { Admin } from '@auth/shared/models/admin.model';
@@ -38,7 +38,7 @@ export class AuthService implements IAuthService {
 
   constructor(
     private accessTokenService: AccessTokenService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public set hasJustLoggedIn(hasJustLoggedIn: boolean) {

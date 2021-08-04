@@ -3,7 +3,7 @@ import { FormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -11,6 +11,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationSigningAuthorityPageFormState } from '@registration/pages/organization-signing-authority-page/organization-signing-authority-page-form-state.class';
 import { OrganizationNamePageFormState } from '@registration/pages/organization-name-page/organization-name-page-form-state.class';
 import { OrganizationAgreementPageFormState } from '@registration/pages/organization-agreement-page/organization-agreement-page-form-state.class';
+import { OrganizationClaimPageFormState } from '@registration/pages/organization-claim-page/organization-claim-page-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -19,11 +20,12 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
   public organizationSigningAuthorityPageFormState: OrganizationSigningAuthorityPageFormState;
   public organizationNamePageFormState: OrganizationNamePageFormState;
   public organizationAgreementPageFormState: OrganizationAgreementPageFormState;
+  public organizationClaimPageFormState: OrganizationClaimPageFormState;
 
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     private formUtilsService: FormUtilsService
   ) {
     super(fb, routeStateService, logger);
@@ -71,6 +73,7 @@ export class OrganizationFormStateService extends AbstractFormStateService<Organ
     this.organizationSigningAuthorityPageFormState = new OrganizationSigningAuthorityPageFormState(this.fb, this.formUtilsService);
     this.organizationNamePageFormState = new OrganizationNamePageFormState(this.fb);
     this.organizationAgreementPageFormState = new OrganizationAgreementPageFormState(this.fb);
+    this.organizationClaimPageFormState = new OrganizationClaimPageFormState(this.fb);
   }
 
   /**

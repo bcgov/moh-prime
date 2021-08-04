@@ -12,6 +12,12 @@
         <td mat-cell
             *matCellDef="let row;">
           <div class="flex-container flex-wrap d-flex">
+            <button *ngIf="row.hasClaim"
+                    mat-icon-button
+                    color="warn"
+                    (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
+              <mat-icon>front_hand</mat-icon>
+            </button>
             <app-contextual-site-notification *ngIf="row.hasNotification"
                                               class="align-self-start"
                                               [siteId]="row.siteId"
@@ -75,10 +81,17 @@
         <td mat-cell
             *matCellDef="let row;"
             class="status"
+            [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
             [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
-            [class.approved]="row.status === SiteStatusType.APPROVED"
+            [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
             [class.declined]="row.status === SiteStatusType.LOCKED">
-          {{ displayStatus(row.status) | capitalize: true | default }}
+          <div class="d-flex align-items-center">
+            <span class="mr-1">{{ displayStatus(row.status) | capitalize: true | default }}</span>
+            <mat-icon *ngIf="row?.flagged"
+                      matTooltip="Site Flagged"
+                      matTooltipPosition="after">flag
+            </mat-icon>
+          </div>
         </td>
       </ng-container>
 
@@ -150,9 +163,9 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.BANNER])">
+                (click)="onRoute([AdjudicationRoutes.BANNERS])">
           <mat-icon>bookmark</mat-icon>
-          <span>Create Banner</span>
+          <span>Site Banners</span>
         </button>
         <button mat-menu-item
                 (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">

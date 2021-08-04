@@ -10,7 +10,7 @@ import { ApiHttpErrorResponse } from '@core/models/api-http-error-response.model
 import { CrudHttpResponse } from '@core/models/crud-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 export abstract class AbstractCrudResource<T> {
   /**
@@ -23,7 +23,7 @@ export abstract class AbstractCrudResource<T> {
     @Inject(APP_CONFIG) protected config: AppConfig,
     protected apiResource: ApiResource,
     protected apiResourceUtilsService: ApiResourceUtilsService,
-    protected logger: LoggerService
+    protected logger: ConsoleLoggerService
   ) { }
 
   /**

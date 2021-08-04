@@ -1,0 +1,34 @@
+name: Cleanup Closed PRs
+
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-20.04
+    environment: Development
+    steps:
+      - name: Install OC
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.6"
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1.1
+        with:
+          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
+          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+
+      - name: "Delete Artifacts for closed PR"
+        run: |
+          oc delete all,pvc,secrets,route,ingress,configmaps -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -l app.kubernetes.io/part-of=pr-${{ github.event.number }}
+      
+      - name: "Cleanup old pods"
+        run: |
+          for pod in $(oc get pods | grep "Error\|Failed\|Completed\|ImagePullBackOff" | awk '{print $1}'); do oc delete pod -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} --grace-period=1 ${pod}; done
+
+      - name: "Cleanup old rcs"
+        run: |
+           oc adm prune deployments -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} --keep-complete=1

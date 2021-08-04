@@ -7,7 +7,7 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
 import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
@@ -39,7 +39,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     protected enrolmentResource: EnrolmentResource,
     protected enrolmentFormStateService: EnrolmentFormStateService,
     protected toastService: ToastService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     protected authService: AuthService,
@@ -164,10 +164,9 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected createFormInstance() {
-    this.form = this.enrolmentFormStateService.jobsForm;
+    this.form = this.enrolmentFormStateService.oboSitesForm;
   }
 
-  // TODO refactor and make this invoke initForm
   protected initForm() {
     // Initialize listeners before patching
     this.patchForm().subscribe(() => {

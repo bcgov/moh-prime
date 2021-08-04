@@ -75,16 +75,14 @@ export class SiteRegistrationTableComponent implements OnInit {
   // TODO status lookup for sites would remove the need for this method and only require pipes
   public displayStatus(status: SiteStatusType) {
     switch (status) {
-      case SiteStatusType.ACTIVE:
-        return "Active";
+      case SiteStatusType.EDITABLE:
+        return "Editable";
       case SiteStatusType.IN_REVIEW:
         return "In Review";
-      case SiteStatusType.APPROVED:
-        return "Approved";
       case SiteStatusType.LOCKED:
         return "Locked";
       default:
-        return "Active";
+        return "Editable";
     }
   }
 

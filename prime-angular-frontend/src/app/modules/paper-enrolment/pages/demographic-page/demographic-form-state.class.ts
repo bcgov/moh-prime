@@ -41,7 +41,12 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const { middleName, ...model } = this.formInstance.getRawValue();
+    const givenNames = (middleName)
+      ? `${model.firstName} ${middleName}`
+      : model.firstName;
+
+    return { ...model, givenNames };
   }
 
   public patchValue(model: DemographicForm): void {
@@ -49,7 +54,11 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       return;
     }
 
-    this.formInstance.patchValue(model);
+    const middleName = (model.givenNames)
+      ? model.givenNames.replace(model.firstName, '').trim()
+      : '';
+
+    this.formInstance.patchValue({ ...model, middleName });
   }
 
   public buildForm(): void {
@@ -59,8 +68,7 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
       lastName: [null, [Validators.required]],
       dateOfBirth: [null, [Validators.required]],
       physicalAddress: this.formUtilsService.buildAddressForm({
-        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal'],
-        useDefaults: ['countryCode']
+        areRequired: ['street', 'city', 'provinceCode', 'countryCode', 'postal']
       }),
       email: [null, [
         Validators.required,

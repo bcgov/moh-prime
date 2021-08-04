@@ -10,13 +10,21 @@
                       (assign)="onAssign($event)"
                       (reassign)="onReassign($event)"
                       (route)="onRoute($event)"
+                      (refresh)="onRefresh()"
                       (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
+    <div *ngIf="enrolment?.enrollee.gpid"
+         class="col-12 pb-3 text-blue-light">
 
+      <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
+
+    </div>
     <div class="col-6">
+
       <h2>Enrolment</h2>
+
       <mat-card id="enrolmentCard">
         <mat-card-content>
           <p class="text-success font-italic">
@@ -31,8 +39,10 @@
           </app-enrollee-review>
         </mat-card-content>
       </mat-card>
+
     </div>
     <div class="col-6">
+
       <ng-container *ngIf="showAdjudication">
         <h2>Adjudication</h2>
         <mat-card id="adjudicationCard">
@@ -58,7 +68,8 @@
                                (enableEditing)="onEnableEditing($event)"
                                (cancelToa)="onCancelToa($event)"
                                (rerunRules)="onRerunRules($event)"
-                               (toggleManualAdj)="onToggleManualAdj($event)">
+                               (toggleManualAdj)="onToggleManualAdj($event)"
+                               (reload)="onRefresh()">
       </app-adjudicator-actions>
 
     </div>

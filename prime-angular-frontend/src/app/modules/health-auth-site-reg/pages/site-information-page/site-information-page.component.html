@@ -18,7 +18,7 @@
       <div class="row">
         <div class="col">
           <app-doing-business-as-form-field label="Site Name (e.g. facility name, clinic name, or pharmacy name)"
-                                            [doingBusinessAs]="formState.doingBusinessAs"></app-doing-business-as-form-field>
+                                            [doingBusinessAs]="formState.siteName"></app-doing-business-as-form-field>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
           <mat-form-field class="w-100">
             <mat-label>Site ID</mat-label>
             <input matInput
-                   [formControl]="formState.pec">
+                   [formControl]="formState.siteId">
             <mat-error>Required</mat-error>
           </mat-form-field>
         </div>
@@ -51,6 +51,7 @@
                    [hasSecondaryAction]="true"
                    primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
-                   (back)="onBack()"></app-page-footer>
+                   (back)="onBack()"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-page>

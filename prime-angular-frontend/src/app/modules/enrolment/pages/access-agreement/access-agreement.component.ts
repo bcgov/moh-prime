@@ -7,12 +7,11 @@ import { exhaustMap } from 'rxjs/operators';
 import { EMPTY, Observable } from 'rxjs';
 
 import { ToastService } from '@core/services/toast.service';
-import { LoggerService } from '@core/services/logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { ViewportService } from '@core/services/viewport.service';
 import { EnrolleeAgreement } from '@shared/models/agreement.model';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { EnrolleeClassification } from '@shared/enums/enrollee-classification.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
@@ -46,7 +45,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
   public hasNoUploadError: boolean;
 
   // Allow the use of enum in the component template
-  public EnrolmentStatus = EnrolmentStatus;
+  public EnrolmentStatus = EnrolmentStatusEnum;
   public EnrolleeClassification = EnrolleeClassification;
   public IdentityProviderEnum = IdentityProviderEnum;
 
@@ -64,7 +63,6 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
     private toastService: ToastService,
     private utilsService: UtilsService,
     private viewportService: ViewportService,
-    private logger: LoggerService,
     private authService: AuthService
   ) {
     super(route, router);

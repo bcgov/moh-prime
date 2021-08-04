@@ -44,17 +44,17 @@
 
       </ng-container>
 
-      <ng-container *ngIf="isCommPharm()">
+      <ng-container *ngIf="canDefer()">
 
         <mat-slide-toggle #deferredLicence
                           class="my-2 mb-3"
                           color="primary"
                           (change)="onDeferredLicenceChange($event)">
-          This Community Pharmacy does not have a business licence
+          This Site does not have a business licence
         </mat-slide-toggle>
 
-        <section class="mb-3"
-                 *ngIf="deferredLicence?.checked">
+        <section *ngIf="deferredLicence?.checked"
+                 class="mb-3">
           <app-page-subheader2>
             <ng-container appPageSubheader2Title>Missing Business Licence</ng-container>
             <ng-container appPageSubheader2Summary>
@@ -68,16 +68,23 @@
           <div class="row">
             <div class="col">
               <mat-form-field class="w-100">
-              <textarea matInput
-                        rows="5"
-                        placeholder="Write here"
-                        formControlName="deferredLicenceReason"></textarea>
+                <textarea matInput
+                          rows="5"
+                          placeholder="Write here"
+                          formControlName="deferredLicenceReason"></textarea>
                 <mat-error>Required</mat-error>
               </mat-form-field>
             </div>
           </div>
         </section>
       </ng-container>
+    </section>
+
+    <section class="mb-4"
+             *ngIf="!deferredLicenceToggle?.checked">
+
+      <app-business-licence-expiry [form]="formState.form"></app-business-licence-expiry>
+
     </section>
 
     <app-site-information-form [form]="formState.form"

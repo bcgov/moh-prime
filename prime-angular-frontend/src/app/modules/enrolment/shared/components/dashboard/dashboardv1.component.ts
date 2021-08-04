@@ -8,9 +8,9 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ViewportService } from '@core/services/viewport.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { DeviceResolution } from '@shared/enums/device-resolution.enum';
-import { EnrolmentStatus } from '@shared/enums/enrolment-status.enum';
+import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -60,7 +60,7 @@ export class DashboardV1Component implements OnInit {
     private permissionService: PermissionService,
     private viewportService: ViewportService,
     private enrolmentService: EnrolmentService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public get isMobile(): boolean {
@@ -92,7 +92,7 @@ export class DashboardV1Component implements OnInit {
     let routePath = EnrolmentRoutes.BCSC_LOGIN;
 
     if (this.permissionService.hasRoles(Role.ADMIN)) {
-      routePath = `${ routePath }/${ AdjudicationRoutes.LOGIN_PAGE }`;
+      routePath = `${routePath}/${AdjudicationRoutes.LOGIN_PAGE}`;
     }
 
     this.authService.logout(routePath);
@@ -132,7 +132,7 @@ export class DashboardV1Component implements OnInit {
 
     const user = await this.authService.getUser();
     // Identity providers don't all provide last name
-    this.username = `${ user?.firstName } ${ user.lastName ?? '' }`;
+    this.username = `${user?.firstName} ${user.lastName ?? ''}`;
   }
 
   private getSideNavSections(): DashboardNavSectionV1[] {
@@ -143,7 +143,7 @@ export class DashboardV1Component implements OnInit {
     const enrolment = this.enrolmentService.enrolment;
     const enrolmentStatus = (enrolment)
       ? enrolment.currentStatus.statusCode
-      : EnrolmentStatus.EDITABLE;
+      : EnrolmentStatusEnum.EDITABLE;
     // Check if the enrollee is within their initial enrolment
     const hasAcceptedAtLeastOneToa = (enrolment)
       ? !!enrolment.expiryDate
@@ -151,9 +151,9 @@ export class DashboardV1Component implements OnInit {
     const statusIcons = this.getEnrolmentStatusIcons(enrolmentStatus, hasAcceptedAtLeastOneToa);
     const currentRoute = this.router.url.slice(1).split('/')[1];
 
-    const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatus.UNDER_REVIEW)
+    const termsOfAccessRoute = (enrolmentStatus === EnrolmentStatusEnum.UNDER_REVIEW)
       ? EnrolmentRoutes.SUBMISSION_CONFIRMATION
-      : (enrolmentStatus === EnrolmentStatus.REQUIRES_TOA)
+      : (enrolmentStatus === EnrolmentStatusEnum.REQUIRES_TOA)
         ? EnrolmentRoutes.PENDING_ACCESS_TERM
         : EnrolmentRoutes.CURRENT_ACCESS_TERM;
 
@@ -168,8 +168,8 @@ export class DashboardV1Component implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED,
-                EnrolmentStatus.DECLINED
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             ),
             forceActive: EnrolmentRoutes.enrolmentProfileRoutes().includes(currentRoute)
@@ -182,8 +182,8 @@ export class DashboardV1Component implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED,
-                EnrolmentStatus.DECLINED
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             ),
             forceActive: [
@@ -199,8 +199,8 @@ export class DashboardV1Component implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED,
-                EnrolmentStatus.DECLINED
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             )
           }
@@ -213,8 +213,8 @@ export class DashboardV1Component implements OnInit {
             icon: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED,
-                EnrolmentStatus.DECLINED
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             )
               ? 'lock'
@@ -224,8 +224,8 @@ export class DashboardV1Component implements OnInit {
             disabled: (
               !hasAcceptedAtLeastOneToa ||
               [
-                EnrolmentStatus.LOCKED,
-                EnrolmentStatus.DECLINED
+                EnrolmentStatusEnum.LOCKED,
+                EnrolmentStatusEnum.DECLINED
               ].includes(enrolmentStatus)
             ),
             deemphasize: this.enrolmentService.isInitialEnrolment
@@ -235,7 +235,7 @@ export class DashboardV1Component implements OnInit {
     ];
   }
 
-  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatus, hasAcceptedAtLeastOneToa: boolean) {
+  private getEnrolmentStatusIcons(enrolmentStatus: EnrolmentStatusEnum, hasAcceptedAtLeastOneToa: boolean) {
     let enrollee = 'assignment_ind';
     let accessAgreement = 'assignment';
     let certificate = 'mail';
@@ -246,16 +246,16 @@ export class DashboardV1Component implements OnInit {
       certificate = 'lock';
 
       switch (enrolmentStatus) {
-        case EnrolmentStatus.EDITABLE:
+        case EnrolmentStatusEnum.EDITABLE:
           break;
-        case EnrolmentStatus.UNDER_REVIEW:
-        case EnrolmentStatus.REQUIRES_TOA:
+        case EnrolmentStatusEnum.UNDER_REVIEW:
+        case EnrolmentStatusEnum.REQUIRES_TOA:
           accessAgreement = 'schedule';
           break;
-        case EnrolmentStatus.LOCKED:
+        case EnrolmentStatusEnum.LOCKED:
           enrollee = 'lock';
           break;
-        case EnrolmentStatus.DECLINED:
+        case EnrolmentStatusEnum.DECLINED:
           enrollee = 'lock';
           accessAgreement = 'lock';
           certificate = 'lock';
@@ -263,14 +263,14 @@ export class DashboardV1Component implements OnInit {
       }
     } else {
       switch (enrolmentStatus) {
-        case EnrolmentStatus.EDITABLE:
+        case EnrolmentStatusEnum.EDITABLE:
           break;
-        case EnrolmentStatus.UNDER_REVIEW:
-        case EnrolmentStatus.REQUIRES_TOA:
+        case EnrolmentStatusEnum.UNDER_REVIEW:
+        case EnrolmentStatusEnum.REQUIRES_TOA:
           accessAgreement = 'schedule';
           break;
-        case EnrolmentStatus.LOCKED:
-        case EnrolmentStatus.DECLINED:
+        case EnrolmentStatusEnum.LOCKED:
+        case EnrolmentStatusEnum.DECLINED:
           enrollee = 'lock';
           accessAgreement = 'lock';
           certificate = 'lock';

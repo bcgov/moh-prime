@@ -77,9 +77,9 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId)
+        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(siteId);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
             var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl));
             email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
@@ -134,7 +134,7 @@ namespace Prime.Services
 
         public async Task SendBusinessLicenceUploadedAsync(Site site)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);
+            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.BusinessLicence.Id);
 
             var email = await _emailRenderingService.RenderBusinessLicenceUploadedEmailAsync(site.Adjudicator.Email, new LinkedEmailViewModel(downloadUrl));
             await Send(email);
@@ -206,6 +206,28 @@ namespace Prime.Services
                     await Send(email);
                 }
             }
+        }
+
+        public async Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim)
+        {
+            var orgName = await _context.Organizations
+                .Where(o => o.Id == organizationClaim.OrganizationId)
+                .Select(o => o.Name)
+                .SingleAsync();
+
+            var newSigningAuthorityEmail = await _context.Parties
+                .Where(p => p.Id == organizationClaim.NewSigningAuthorityId)
+                .Select(p => p.Email)
+                .SingleAsync();
+
+            var viewModel = new OrgClaimApprovalNotificationViewModel
+            {
+                OrganizationName = orgName,
+                ProvidedSiteId = organizationClaim.ProvidedSiteId
+            };
+
+            var email = await _emailRenderingService.RenderOrgClaimApprovalNotificationEmailAsync(newSigningAuthorityEmail, viewModel);
+            await Send(email);
         }
 
         public async Task<int> UpdateEmailLogStatuses(int limit)

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
+using Prime.Models.VerifiableCredentials;
 
 namespace Prime
 {
@@ -51,6 +52,8 @@ namespace Prime
             _context = context;
         }
 
+        public DbSet<ClientLog> ClientLogs { get; set; }
+
         // Enrollee Jobs have been migrated onto OboSites, but we are not dropping the old table for the time being
         public DbSet<Job> Jobs { get; set; }
         public DbSet<Enrollee> Enrollees { get; set; }
@@ -86,7 +89,7 @@ namespace Prime
         public DbSet<BusinessLicence> BusinessLicences { get; set; }
         public DbSet<SignedAgreementDocument> SignedAgreementDocuments { get; set; }
         public DbSet<Credential> Credentials { get; set; }
-        public DbSet<EnrolleeCredential> EnrolleeCredentials { get; set; }
+        public DbSet<OrganizationClaim> OrganizationClaims { get; set; }
 
         // Health Authorities
         public DbSet<HealthAuthorityOrganization> HealthAuthorities { get; set; }
@@ -94,6 +97,7 @@ namespace Prime
         public DbSet<HealthAuthorityContact> HealthAuthorityContacts { get; set; }
         public DbSet<HealthAuthorityVendor> HealthAuthorityVendors { get; set; }
         public DbSet<PrivacyOffice> PrivacyOffices { get; set; }
+        public DbSet<HealthAuthoritySite> HealthAuthoritySites { get; set; }
 
 
         public DbSet<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
