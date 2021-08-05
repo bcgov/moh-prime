@@ -736,7 +736,7 @@ objects:
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
           env:
             - name: CACHE_REDIS_HOST
-              value: redis
+              value: ${SVC_NAME}-redis
             - name: CACHE_REDIS_PASS
               valueFrom:
                 secretKeyRef:
@@ -747,27 +747,21 @@ objects:
             - name: DB_HOST
               value: ${SVC_NAME}-postgres
             - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: ${SVC_NAME}-postgres
-                  key: database-name
+              value: prime-${SVC_NAME}
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
             - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql
-                  key: postgresql_database_port
+              value: "5432"
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-user
             - name: DOCUMENT_MANAGER_URL
-              value: "https://${VANITY_URL}/api/docman/"
+              value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
             - name: FLASK_ENV
               valueFrom:
                 configMapKeyRef:
@@ -801,7 +795,7 @@ objects:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: ${SVC_NAME}-postgres
+                  name: pr-database-secrets
                   key: database-password
           command:
             # Script force waits migration pod execution until PostgreSQL is verified to 
