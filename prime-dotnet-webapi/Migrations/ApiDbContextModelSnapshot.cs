@@ -14747,7 +14747,7 @@ namespace Prime.Migrations
                         new
                         {
                             Code = "A110",
-                            Name = "dministrative Medicine"
+                            Name = "Administrative Medicine"
                         },
                         new
                         {

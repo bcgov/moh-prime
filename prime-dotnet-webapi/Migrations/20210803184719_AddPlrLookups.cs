@@ -338,7 +338,7 @@ namespace Prime.Migrations
                     { "A135", "Behavioral Therapy" },
                     { "A130", "Aviation Medicine" },
                     { "A120", "Allergy" },
-                    { "A110", "dministrative Medicine" },
+                    { "A110", "Administrative Medicine" },
                     { "490", "Vascular Surgery" },
                     { "325", "Medical Scientist(Surgery)" },
                     { "480", "Thoracic Surgery(Gen.Sur.)" },

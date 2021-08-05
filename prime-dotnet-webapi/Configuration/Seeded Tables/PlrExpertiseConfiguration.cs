@@ -156,7 +156,7 @@ namespace Prime.Configuration
                     new PlrExpertise { Code = "905",      Name = "Pediatric Nephrology" },
                     new PlrExpertise { Code = "910",      Name = "Pediatric Neurology" },
                     new PlrExpertise { Code = "915",      Name = "Pediatric Cardiovascular Surgery" },
-                    new PlrExpertise { Code = "A110",     Name = "dministrative Medicine" },
+                    new PlrExpertise { Code = "A110",     Name = "Administrative Medicine" },
                     new PlrExpertise { Code = "A115",     Name = "Adolescent Medicine" },
                     new PlrExpertise { Code = "A120",     Name = "Allergy" },
                     new PlrExpertise { Code = "A130",     Name = "Aviation Medicine" },
