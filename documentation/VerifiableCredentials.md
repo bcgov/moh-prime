@@ -1,6 +1,6 @@
 ## Running the Aries Agent Locally for Verifiable Credential Testing and Development
 
-**NOTE:** The following process is only necessary when working with Verifiable Credential Testing and Development, and is not necessary for general development purposes; for example, when initially setting up the project.  
+**NOTE:** The following process is only necessary when working with Verifiable Credential Testing and Development, and is not necessary for general development purposes; for example, when initially setting up the project.
 
 To run the project you will need to open two terminals:
 
@@ -23,4 +23,19 @@ You can always run `./manage -h` to get more information about the usage of the 
 Common Issues
 - When stopping and removing an agent and wallet and then restarting it, you may get an error saying `New seed provided which doesn't match the registered public did`, if this happens, delete the volumes for the wallet, running `./manage rm` again and then try ``./manage start` again.
 
-- If the wallet keeps giving the message `An error has occured`, when you scan the qr code, try restarting ngrok. It goes stale after a few hours and prevents your phone from talking to the agent.
+- If the wallet keeps giving the message `An error has occured`, when you scan the qr code, try restarting ngrok, and then restarting the agent. It goes stale after a few hours and prevents your phone from talking to the agent.
+
+
+## Updating the schema
+To update the schema:
+- Add or update the fields in the [CredentialPayload.cs](../Models/VerifiableCredentials/CredentialPayload.cs). Ensure the JsonProperty looks how you want the name to appear on the Credential.
+- Increment the SchemaVersion under VerifiableCredentialApi in [PrimeEnvironment.cs](../PrimeEnvironment.cs).
+- In local development, this change will take place in the agent automatically when the agent and webapi are restarted.   On startup the schema is created, and then the credential definition is created.
+- In dev, test, and prod, the schema and credential definition will have to be updated manually through postman or through the swagger UI as the code is pushed to each environment. You will also have to send the DTS team the updated schema information so that they can update the verifiers.
+- dev swagger: https://prime-agent-admin-dev.apps.silver.devops.gov.bc.ca/api/doc
+- test swagger: https://prime-agent-admin-test.apps.silver.devops.gov.bc.ca/api/doc
+- prod swagger: https://prime-agent-admin.apps.silver.devops.gov.bc.ca/api/doc
+
+Send the updated schema: https://prime-agent-admin-dev.apps.silver.devops.gov.bc.ca/api/doc#/schema/post_schemas
+Using the schema id created in the previous step, then create the credential definition (support_revocation = true, tag = prime)
+https://prime-agent-admin-dev.apps.silver.devops.gov.bc.ca/api/doc#/credential-definition/post_credential_definitions
