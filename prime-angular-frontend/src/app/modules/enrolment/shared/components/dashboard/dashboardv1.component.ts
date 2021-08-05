@@ -192,7 +192,7 @@ export class DashboardV1Component implements OnInit {
             ].includes(currentRoute)
           },
           {
-            name: 'Next Steps to Get PharmaNet',
+            name: 'Share GPID/Approval',
             icon: statusIcons.certificate,
             route: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
             showItem: true,

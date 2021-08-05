@@ -106,6 +106,7 @@ import { CardListComponent } from '@shared/components/card-list/card-list.compon
 import { OptionsFormComponent } from '@shared/components/forms/options-form/options-form.component';
 import { OboSiteFormComponent } from '@shared/components/obo-site-form/obo-site-form.component';
 import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/expiry-alert.component';
+import { InfographicComponent } from './components/infographic/infographic.component';
 import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
 
 @NgModule({
@@ -196,7 +197,8 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     OptionsFormComponent,
     OboSiteFormComponent,
     ExpiryAlertComponent,
-    ErrorLoggerComponent
+    ErrorLoggerComponent,
+    InfographicComponent
   ],
   imports: [
     CommonModule,
@@ -291,6 +293,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     CardListComponent,
     OptionsFormComponent,
     OboSiteFormComponent,
+    InfographicComponent,
     ExpiryAlertComponent
   ],
   providers: [
@@ -300,4 +303,4 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     CapitalizePipe
   ]
 })
-export class SharedModule {}
+export class SharedModule { }

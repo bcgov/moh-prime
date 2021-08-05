@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ExcelDataReader;
+using Microsoft.EntityFrameworkCore;
 using Prime;
 using Prime.Models;
 using Serilog;
@@ -22,7 +23,7 @@ namespace PlrIntakeUtility
             // See https://github.com/ExcelDataReader/ExcelDataReader#important-note-on-net-core
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            Log.Information($"Started loading at {DateTime.Now}");
+            Log.Information($"Started loading {args[0]} at {DateTime.Now}");
             try
             {
                 ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(args);
@@ -47,7 +48,17 @@ namespace PlrIntakeUtility
                                     PlrProvider provider = intaker.ReadRow(reader);
                                     intaker.CheckData(provider, rowNum);
                                     dbContext.PlrProviders.Add(provider);
-                                    numProviders++;
+                                    try
+                                    {
+                                        dbContext.SaveChanges();
+                                        numProviders++;
+                                    }
+                                    catch (DbUpdateException e)
+                                    {
+                                        // e.g. May get `duplicate key value violates unique constraint "IX_PlrProvider_Ipc"` error
+                                        Log.Error(e, $"Error saving {nameof(PlrProvider)} at row number {rowNum} to the database.");
+                                        dbContext.PlrProviders.Remove(provider);
+                                    }
                                 }
                                 catch (Exception e)
                                 {
@@ -56,7 +67,6 @@ namespace PlrIntakeUtility
                             }
                         } while (reader.NextResult());
 
-                        dbContext.SaveChanges();
                         Log.Information($"Number of providers loaded: {numProviders}, Final row number: {rowNum}.");
                     }
                 }
