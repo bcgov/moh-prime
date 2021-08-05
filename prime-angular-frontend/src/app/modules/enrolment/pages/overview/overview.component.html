@@ -21,7 +21,8 @@
 
       <app-alert type="success"
                  icon="check_circle_outline"
-                 class="mb-2 col-12">
+                 class="mb-2 col-12"
+                 *ngIf="!withinDaysOfRenewal">
         <ng-container #alertTitle
                       class="alert-title">
           You have approval to access PharmaNet
