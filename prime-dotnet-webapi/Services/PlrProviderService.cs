@@ -68,12 +68,21 @@ namespace Prime.Services
 
         public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId)
         {
+            IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
+            IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
+
             var plr = await _context.PlrProviders
                 .AsNoTracking()
                 .Where(p => collegeId.Contains(p.CollegeId))
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<PlrProvider>, IEnumerable<PlrViewModel>>(plr, opt => opt.Items["dbContext"] = _context);
+            // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manuully before return
+            return plr.Select(p =>
+                {
+                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e => p.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+                    return p;
+                });
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)

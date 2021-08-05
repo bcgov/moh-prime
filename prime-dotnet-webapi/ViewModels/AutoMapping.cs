@@ -120,28 +120,12 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.Ipc, opt => opt.Ignore());
 
-        // ProjectTo does not work for mapping expertise array, use workaround below and call mapper.Map
+        IQueryable<PlrRoleType> plrRoleTypes = null;
+        IQueryable<PlrStatusReason> plrStatusReasons = null;
         CreateMap<PlrProvider, PlrViewModel>()
-            .ForMember(dest => dest.ProviderRoleType,
-                opt => opt.MapFrom((src, dest, destMember, context) =>
-                {
-                    var dbContext = context.Items["dbContext"] as ApiDbContext;
-                    return dbContext.Set<PlrRoleType>().Where(r => r.Code == src.ProviderRoleType).SingleOrDefault().Name;
-                })
-            )
-            .ForMember(dest => dest.StatusReasonCode,
-                opt => opt.MapFrom((src, dest, destMember, context) =>
-                {
-                    var dbContext = context.Items["dbContext"] as ApiDbContext;
-                    return dbContext.Set<PlrStatusReason>().Where(s => s.Code == src.StatusReasonCode).SingleOrDefault().Name;
-                })
-            )
-            .ForMember(dest => dest.Expertise,
-                opt => opt.MapFrom((src, dest, destMember, context) =>
-                {
-                    var dbContext = context.Items["dbContext"] as ApiDbContext;
-                    return string.Join(", ", dbContext.Set<PlrExpertise>().Where(e => src.Expertise.Contains(e.Code)).Select(e => e.Name));
-                })
-            );
+            .ForMember(dest => dest.ProviderRoleType, opt => opt.MapFrom(src => plrRoleTypes.Where(r => src.ProviderRoleType == r.Code).FirstOrDefault().Name))
+            .ForMember(dest => dest.StatusReasonCode, opt => opt.MapFrom(src => plrStatusReasons.Where(s => src.StatusReasonCode == s.Code).FirstOrDefault().Name))
+            .ForMember(dest => dest.ExpertiseCode, opt => opt.MapFrom(src => src.Expertise))
+            .ForMember(dest => dest.Expertise, opt => opt.Ignore());
     }
 }

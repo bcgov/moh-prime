@@ -30,6 +30,9 @@ namespace Prime.ViewModels.Plr
 
         public string Expertise { get; set; }
 
+        [JsonIgnore]
+        public IEnumerable<string> ExpertiseCode { get; set; }
+
         public DateTimeOffset UpdatedTimeStamp { get; set; }
 
         public DateTime StatusStartDate { get; set; }
