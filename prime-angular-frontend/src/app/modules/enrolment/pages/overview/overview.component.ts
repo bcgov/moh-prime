@@ -116,6 +116,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       : true;
   }
 
+  public get GPID(): string {
+    return this.enrolment?.enrollee?.gpid;
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
   public ngOnInit() {
     this.authService.getUser$()
       .pipe(
@@ -155,16 +163,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentFormStateService.setForm(enrolment);
 
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
-          // Determine if Enrolment is within 90 days of expiration
-          this.enrolmentWithin90DaysOfExpiry();
+
+          this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         })
       ).subscribe();
-  }
-
-  private enrolmentWithin90DaysOfExpiry(): void {
-    const enrolment = this.enrolmentService.enrolment;
-    const expiryDate = enrolment.expiryDate;
-    this.withinDaysOfRenewal = DateUtils.withinDaysBeforeDate(expiryDate, 90);
   }
 
   /**

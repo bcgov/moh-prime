@@ -17,6 +17,6 @@
   </ItemGroup>
   <ItemGroup>
     <!-- Make file available within PlrIntakeUtility.Tests\bin\Debug\netcoreapp3.1 at runtime -->
-    <None Update="PRIME_Test_Data_PLR_IAT20210318-expertise-credential-format-example.xls" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="PRIME_Test_Data_PLR_IAT20210617_v2.0.xls" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
