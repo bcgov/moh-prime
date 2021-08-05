@@ -100,8 +100,6 @@ namespace Prime
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
-                    // required to fix the error "Self referencing loop detected" caused by PlrViewModel Expertise property
-                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
             services.AddCors(options =>
