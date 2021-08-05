@@ -180,7 +180,7 @@ const routes: Routes = [
       {
         path: EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY,
         component: PharmanetEnrolmentSummaryComponent,
-        data: { title: 'Next Steps to Get PharmaNet' }
+        data: { title: 'Share GPID/Approval' }
       },
       {
         path: EnrolmentRoutes.ACCESS_TERMS,
@@ -220,4 +220,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class EnrolmentRoutingModule {}
+export class EnrolmentRoutingModule { }
