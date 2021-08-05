@@ -21,7 +21,7 @@ You can always run `./manage -h` to get more information about the usage of the 
 
 
 Common Issues
-- When stopping and removing an agent and wallet and then restarting it, you may get an error saying `New seed provided which doesn't match the registered public did`, if this happens, delete the volumes for the wallet, running `./manage rm` again and then try ``./manage start` again.
+- When stopping and removing an agent and wallet and then restarting it, you may get an error saying `New seed provided which doesn't match the registered public did`, if this happens, delete the volumes for the wallet, run `./manage rm` again and then try `./manage start` again.
 
 - If the wallet keeps giving the message `An error has occured`, when you scan the qr code, try restarting ngrok, and then restarting the agent. It goes stale after a few hours and prevents your phone from talking to the agent.
 
@@ -37,5 +37,6 @@ To update the schema:
 - prod swagger: https://prime-agent-admin.apps.silver.devops.gov.bc.ca/api/doc
 
 Send the updated schema: https://prime-agent-admin-dev.apps.silver.devops.gov.bc.ca/api/doc#/schema/post_schemas
+
 Using the schema id created in the previous step, then create the credential definition (support_revocation = true, tag = prime)
 https://prime-agent-admin-dev.apps.silver.devops.gov.bc.ca/api/doc#/credential-definition/post_credential_definitions
