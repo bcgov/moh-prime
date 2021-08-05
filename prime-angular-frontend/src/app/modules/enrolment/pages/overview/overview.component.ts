@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, Subscription, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
@@ -37,6 +38,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public withinDaysOfRenewal: boolean;
 
   protected allowRoutingWhenDirty: boolean;
 
@@ -114,6 +116,14 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
       : true;
   }
 
+  public get GPID(): string {
+    return this.enrolment?.enrollee?.gpid;
+  }
+
+  public onCopy() {
+    this.toastService.openSuccessToast('Your GPID has been copied to clipboard');
+  }
+
   public ngOnInit() {
     this.authService.getUser$()
       .pipe(
@@ -153,6 +163,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentFormStateService.setForm(enrolment);
 
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
+
+          this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
         })
       ).subscribe();
   }
