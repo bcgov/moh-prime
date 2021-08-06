@@ -36,6 +36,14 @@ namespace Prime.Configuration
 
             builder.HasIndex(p => p.Ipc)
                 .IsUnique();
+
+            builder.HasOne(p => p.ProviderRole)
+                .WithMany()
+                .HasForeignKey(p => p.ProviderRoleType);
+
+            builder.HasOne(p => p.StatusReason)
+                .WithMany()
+                .HasForeignKey(p => p.StatusReasonCode);
         }
     }
 }
