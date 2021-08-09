@@ -24,8 +24,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('AuthorizedUserPageComponent', () => {
-  let component: AuthorizedUserPageComponent;
-  let fixture: ComponentFixture<AuthorizedUserPageComponent>;
+  const component: AuthorizedUserPageComponent;
+  const fixture: ComponentFixture<AuthorizedUserPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({

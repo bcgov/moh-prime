@@ -12,8 +12,6 @@ import moment from 'moment';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { FormGroupValidators } from '@lib/validators/form-group.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
@@ -24,7 +22,6 @@ import { BannerResourceService } from '@shared/services/banner-resource.service'
 import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
-import { BannerMaintenanceForm } from './banner-maintenance-form.model';
 import { BannerMaintenanceFormState } from './banner-maintenance-form-state.class';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
@@ -112,7 +109,7 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
       .subscribe((result: boolean) => {
         if (result) {
           this.bannerResource.deleteBanner(bannerId)
-            .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.BANNERS]))
+            .subscribe(() => this.routeUtils.routeRelativeTo(['../', AdjudicationRoutes.BANNERS]));
         }
       });
   }
@@ -130,8 +127,10 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
   protected createFormInstance(): void {
     this.formState = new BannerMaintenanceFormState(this.fb, this.formUtilsService, this.locationCode);
 
-    this.formState.title.valueChanges.subscribe(() => this.internalBanner = this.formState.json);
-    this.formState.bannerType.valueChanges.subscribe(() => this.internalBanner = this.formState.json);
+    this.formState.title.valueChanges
+      .subscribe(() => this.internalBanner = this.formState.json);
+    this.formState.bannerType.valueChanges
+      .subscribe(() => this.internalBanner = this.formState.json);
     this.formState.bannerLocationCode.setValue(this.locationCode);
   }
 
@@ -145,7 +144,7 @@ export class BannerMaintenanceComponent extends AbstractEnrolmentPage implements
       .subscribe((banner: Banner) => {
         this.formState.patchValue(banner);
         this.internalBanner = this.formState.json;
-      })
+      });
   }
 
   protected performSubmission(): Observable<number> {
