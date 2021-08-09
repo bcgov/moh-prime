@@ -6,6 +6,6 @@ namespace Prime.Services
 {
     public interface IClientLogService
     {
-        Task CreateLogAsync(ClientLogViewModel log);
+        Task<int> CreateLogAsync(ClientLogViewModel log);
     }
 }

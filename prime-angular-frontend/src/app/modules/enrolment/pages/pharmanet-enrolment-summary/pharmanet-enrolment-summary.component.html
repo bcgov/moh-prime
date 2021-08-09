@@ -2,155 +2,289 @@
 
   <app-enrollee-page [busy]="busy">
 
-    <app-page-header>Next Steps to Get PharmaNet</app-page-header>
+    <app-page-header>
+      {{getTitle()}}
+    </app-page-header>
 
-    <ng-container *ngIf="!isRenewal; else renewalConfirmation">
-      <app-next-steps-infographic [enrolment]="enrolment">
 
-        <ng-container *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
+    <div class="row">
 
-          <p class="mb-4">
-            To get your access to PharmaNet set up, use the email option below to notify your PharmaNet administrator of
-            your completed enrolment.
-          </p>
+      <ng-container *ngIf="initialEnrolment; else renewalConfirmation">
+        <app-infographic *ngIf="!complete"
+                         imageName="notification"
+                         class="col-12">
+          <ng-container appInfographicHeader>
+            Share your approval with your PharmaNet administrator.
+          </ng-container>
+          <ng-container appInfographicDescription>
+            PRIME with send your enrolment information to your PharmaNet administrator(s) so they can set up your
+            access.
+          </ng-container>
+          <ng-container appInfographicContent
+                        *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
 
-          <form [formGroup]="form">
+            <p class="mb-4 font-weight-bold">
+              Note: You cannot access PharmaNet without completing this step. If necessary, you can leave this blank and
+              return to PRIME later to enter the email(s).
+            </p>
 
-            <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
-
-              <ng-container [ngTemplateOutlet]="settingEmail"
-                            [ngTemplateOutletContext]="careSettingConfig">
-              </ng-container>
-
+            <ng-container [ngTemplateOutlet]="emailGroup"
+                          [ngTemplateOutletContext]="careSettingConfigs">
             </ng-container>
-          </form>
 
-          <section>
-            <h6 class="mb-0">
-              For your reference your GPID is:
-            </h6>
+            <section>
+              <h6 class="mb-0">
+                For your reference your GPID is:
+              </h6>
 
-            {{ GPID }}
+              {{ GPID }}
 
-            <button mat-icon-button
-                    type="button"
-                    aria-label="Copy your GPID to clipboard"
-                    matTooltip="Copy your GPID to clipboard"
-                    [cdkCopyToClipboard]="GPID"
-                    (cdkCopyToClipboardCopied)="onCopy()">
-              <mat-icon>content_paste</mat-icon>
-            </button>
-          </section>
-
-          <ng-template #settingEmail
-                       let-setting="setting"
-                       let-settingPlural="settingPlural"
-                       let-settingCode="settingCode"
-                       let-formControl="formControl"
-                       let-subheaderContent="subheaderContent">
-            <app-page-subheader headerType="h6">
-              <ng-container appPageSubheaderTitle>
-                {{ setting }}
-              </ng-container>
-              <ng-container appPageSubheaderSummary>
-                {{ subheaderContent }} If you work in more than one clinic you can include the email addresses for all
-                the
-                PharmaNet administrators separated by a comma.
-              </ng-container>
-            </app-page-subheader>
-
-            <form [formGroup]="form">
-
-              <div class="row"
-                   [hidden]="!isEmailVisible(settingCode)">
-                <div class="col-sm-8 col-xl-7">
-
-                  <mat-form-field class="w-100 mb-3">
-                    <input matInput
-                           placeholder="Email"
-                           [formControl]="formControl">
-                    <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
-                    <mat-error *ngIf="formControl.hasError('emails') && !formControl.hasError('trim')">Must be a valid
-                      email address(es)</mat-error>
-                    <mat-error *ngIf="formControl.hasError('emails') && formControl.hasError('trim')">Contains invalid
-                      space character(s)</mat-error>
-                  </mat-form-field>
-
-                </div>
-                <div class="col-sm-4 col-xl-3">
-
-                  <button mat-flat-button
-                          type="button"
-                          color="primary"
-                          class="w-100 mb-4"
-                          (click)="sendProvisionerAccessLinkTo(settingCode)">
-                    Send
-                  </button>
-
-                </div>
-              </div>
-
-            </form>
-
-            <ng-container *ngIf="!isEmailVisible(settingCode)">
-              <p class="mb-4 text-green">
-                Email sent to: {{ formControl.value }}
-                <br>
-              If you work in multiple {{ settingPlural }} you will need to notify them all.
-              </p>
-              <button mat-button
+              <button mat-icon-button
                       type="button"
-                      color="primary"
-                      class="mb-3"
-                      (click)="setShowEmail(settingCode, true, formControl)">
-                <mat-icon>add</mat-icon>
-                Add {{ setting }}
+                      aria-label="Copy your GPID to clipboard"
+                      matTooltip="Copy your GPID to clipboard"
+                      [cdkCopyToClipboard]="GPID"
+                      (cdkCopyToClipboardCopied)="onCopy()">
+                <mat-icon>content_paste</mat-icon>
               </button>
+            </section>
+          </ng-container>
+        </app-infographic>
+
+        <ng-container *ngIf="complete">
+
+          <app-alert type="success"
+                     icon="check_circle_outline"
+                     class="mb-5 col-12">
+            <ng-container #alertTitle
+                          class="alert-title">
+              Your enrolment in PRIME is complete
             </ng-container>
-          </ng-template>
+            <ng-container #alertContent
+                          class="alert-content">
+              <p>
+                You will need to renew your enrolment once a year, you will get an email reminding of your renewal date.
+              </p>
+              <p class="font-weight-bold">
+                Your renewal date is: {{ enrolment.expiryDate | formatDate }}
+              </p>
+            </ng-container>
 
-          <ng-template #concise
-                       let-provisioner="provisioner">
-            <p class="mb-4">
-              Your PharmaNet approval notification will be sent to {{ provisioner }}.
-            </p>
-          </ng-template>
+          </app-alert>
+          <app-infographic imageName="global"
+                           class="col-12">
+            <ng-container appInfographicHeader>
+              Global PharmaNet ID
+            </ng-container>
+            <ng-container appInfographicDescription>
+              PRIME has assigned you a global PharmaNet ID (GPID). This will be attached to all of your transactions in
+              PharmaNet. It protects your information and patient information. If you ever need your GPID, you can sign
+              in to PRIME to access it.
+            </ng-container>
+            <ng-container appInfographicContent>
+              <section>
+                <h6 class="mb-0">
+                  For your reference your GPID is:
+                </h6>
 
-          <ng-template #verbose
-                       let-provisioner="provisioner">
-            <p class="mb-4">
-              Provide the email address of the person in your organization who is responsible for contacting
-              {{ provisioner }} to set up accounts (e.g. your Office Manager or MOA). Use a comma to separate multiple
-              emails addresses. Do not enter your own email as you will be copied on the communication.
-            </p>
-          </ng-template>
+                {{ GPID }}
 
+                <button mat-icon-button
+                        type="button"
+                        aria-label="Copy your GPID to clipboard"
+                        matTooltip="Copy your GPID to clipboard"
+                        [cdkCopyToClipboard]="GPID"
+                        (cdkCopyToClipboardCopied)="onCopy()">
+                  <mat-icon>content_paste</mat-icon>
+                </button>
+              </section>
+            </ng-container>
+
+          </app-infographic>
         </ng-container>
 
-      </app-next-steps-infographic>
-    </ng-container>
+      </ng-container>
 
-    <ng-template #renewalConfirmation>
-      <app-alert type="success"
-                 icon="check_circle_outline"
-                 class="mb-5">
-        <ng-container #alertTitle
-                      class="alert-title">
-          You have signed the Terms of Access and renewed your enrolment.
+      <ng-template #renewalConfirmation>
+        <app-infographic imageName="notification"
+                         class="col-12">
+          <ng-container appInfographicHeader>
+            Resend your approval with your PharmaNet administrator.
+          </ng-container>
+          <ng-container appInfographicDescription>
+            When PRIME approved you to access PharmaNet, you were assigned a global PharmaNet ID (GPID).
+            <br>
+            Examples of when you would need to share your GPID:
+            <ul>
+              <li>If I change work sites.</li>
+              <li>If I change jobs.</li>
+              <li>If my worksite has new PharmaNet software.</li>
+            </ul>
+          </ng-container>
+          <ng-container appInfographicContent
+                        *ngIf="enrolment.currentStatus.statusCode === EnrolmentStatus.EDITABLE">
+
+            <p>
+              To share your GPID, enter the email address of your PharmaNet administrator(s) below. A PharmaNet
+              administrator is the person in your workplace who set up PharmaNet access.
+            </p>
+
+            <p>
+              PRIME will send your enrolment information to your PharmaNet administrator(s) so they can set up your
+              access.
+            </p>
+
+            <p class="mb-4 font-weight-bold">
+              Note: You cannot access PharmaNet without completing this step.
+            </p>
+
+            <ng-container [ngTemplateOutlet]="emailGroup"
+                          [ngTemplateOutletContext]="careSettingConfigs">
+            </ng-container>
+
+            <section>
+              <h6 class="mb-0">
+                For your reference your GPID is:
+              </h6>
+
+              {{ GPID }}
+
+              <button mat-icon-button
+                      type="button"
+                      aria-label="Copy your GPID to clipboard"
+                      matTooltip="Copy your GPID to clipboard"
+                      [cdkCopyToClipboard]="GPID"
+                      (cdkCopyToClipboardCopied)="onCopy()">
+                <mat-icon>content_paste</mat-icon>
+              </button>
+            </section>
+          </ng-container>
+        </app-infographic>
+      </ng-template>
+
+      <app-infographic *ngIf="!initialEnrolment || !complete"
+                       imageName="moa"
+                       class="col-12">
+        <ng-container appInfographicHeader>
+          Your PharmaNet administrator(s) will contact you once your PharmaNet access has been set up.
         </ng-container>
-      </app-alert>
-      <app-page-section>
-        <app-page-subheader2 [showUnderline]="false">
-          <ng-container appPageSubheader2Title>
-            Next Steps
+      </app-infographic>
+
+      <app-infographic *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
+                       imageName="approval"
+                       class="col-12">
+        <ng-container appInfographicHeader>
+          Access your verified credential (optional)
+        </ng-container>
+        <ng-container appInfographicDescription>
+          <button mat-flat-button
+                  type="button"
+                  color="primary"
+                  *ngIf="Role.FEATURE_VC_ISSUANCE | inRole"
+                  (click)="openQR($event)">
+            Verified Credential
+          </button>
+        </ng-container>
+      </app-infographic>
+    </div>
+
+    <ng-template #emailGroup>
+      <form [formGroup]="form">
+
+        <ng-container *ngFor="let careSettingConfig of careSettingConfigs">
+
+          <ng-container [ngTemplateOutlet]="settingEmail"
+                        [ngTemplateOutletContext]="careSettingConfig">
           </ng-container>
-          <ng-container appPageSubheader2Summary>
-            You do not have to take further actions unless you have changed where you work, if you have you need to send
-            your PharmaNet approval to your newPharmaNet Administrator by selecting "Next Steps to get PharmaNet".
-          </ng-container>
-        </app-page-subheader2>
-      </app-page-section>
+
+        </ng-container>
+      </form>
     </ng-template>
+
+    <ng-template #settingEmail
+                 let-setting="setting"
+                 let-settingPlural="settingPlural"
+                 let-settingCode="settingCode"
+                 let-formControl="formControl"
+                 let-subheaderContent="subheaderContent">
+      <app-page-subheader headerType="h6"
+                          [divider]="false">
+        <ng-container appPageSubheaderTitle>
+          {{ setting }}
+        </ng-container>
+        <ng-container appPageSubheaderSummary>
+          {{ subheaderContent }} If you work in more than one clinic you can include the email addresses for all
+          the
+          PharmaNet administrators separated by a comma.
+        </ng-container>
+      </app-page-subheader>
+
+      <form [formGroup]="form">
+
+        <div class="row"
+             [hidden]="!isEmailVisible(settingCode)">
+          <div class="col-sm-8 col-xl-7">
+
+            <mat-form-field class="w-100 mb-3">
+              <input matInput
+                     placeholder="Email"
+                     [formControl]="formControl">
+              <mat-error *ngIf="formControl.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="formControl.hasError('emails') && !formControl.hasError('trim')">Must be a valid
+                email address(es)</mat-error>
+              <mat-error *ngIf="formControl.hasError('emails') && formControl.hasError('trim')">Contains invalid
+                space character(s)</mat-error>
+            </mat-form-field>
+
+          </div>
+          <div class="col-sm-4 col-xl-3">
+
+            <button mat-flat-button
+                    type="button"
+                    color="primary"
+                    class="w-100 mb-4"
+                    (click)="sendProvisionerAccessLinkTo(settingCode)">
+              Send
+            </button>
+
+          </div>
+        </div>
+
+      </form>
+
+      <ng-container *ngIf="!isEmailVisible(settingCode)">
+        <p class="mb-4 text-green">
+          Email sent to: {{ formControl.value }}
+          <br>
+              If you work in multiple {{ settingPlural }} you will need to notify them all.
+        </p>
+        <button mat-button
+                type="button"
+                color="primary"
+                class="mb-3"
+                (click)="setShowEmail(settingCode, true, formControl)">
+          <mat-icon>add</mat-icon>
+          Add {{ setting }}
+        </button>
+      </ng-container>
+    </ng-template>
+
+    <ng-template #concise
+                 let-provisioner="provisioner">
+      <p class="mb-4">
+        Your PharmaNet approval notification will be sent to {{ provisioner }}.
+      </p>
+    </ng-template>
+
+    <ng-template #verbose
+                 let-provisioner="provisioner">
+      <p class="mb-4">
+        Provide the email address of the person in your organization who is responsible for contacting
+        {{ provisioner }} to set up accounts (e.g. your Office Manager or MOA). Use a comma to separate multiple
+        emails addresses. Do not enter your own email as you will be copied on the communication.
+      </p>
+    </ng-template>
+
 
   </app-enrollee-page>
 

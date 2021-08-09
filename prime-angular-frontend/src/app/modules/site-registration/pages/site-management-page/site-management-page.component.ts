@@ -169,7 +169,7 @@ export class SiteManagementPageComponent implements OnInit {
   }
 
   public requiresRenewal(site: SiteListViewModel): boolean {
-    return (DateUtils.withinDaysBeforeDate(Site.getExpiryDate(site), 90));
+    return DateUtils.withinRenewalPeriod(Site.getExpiryDate(site));
   }
 
   public getApprovedSiteNotificationProperties(site: SiteListViewModel) {

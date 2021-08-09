@@ -30,7 +30,7 @@
         "pipeArgs": [
           "exec",
           "-i",
-          "primeapi"
+          "prime-webapi-backend"
         ],
         "debuggerPath": "/vsdbg/vsdbg",
         "pipeCwd": "${workspaceRoot}",
@@ -48,7 +48,7 @@
       "netCore": {
         "appProject": "${workspaceFolder}/prime.csproj"
       },
-      "containerName": "primeapi"
+      "containerName": "prime-webapi-backend"
     }
   ]
 }
