@@ -3,6 +3,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SameAsComponent } from './same-as.component';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SiteRegistrationModule } from '@registration/site-registration.module';
+import { APP_CONFIG, APP_DI_CONFIG } from '../../../../app-config.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('SameAsComponent', () => {
   let component: SameAsComponent;
@@ -15,8 +17,16 @@ describe('SameAsComponent', () => {
         RouterTestingModule,
         SiteRegistrationModule
       ],
-      declarations: [SameAsComponent]
-
+      declarations: [
+        SameAsComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

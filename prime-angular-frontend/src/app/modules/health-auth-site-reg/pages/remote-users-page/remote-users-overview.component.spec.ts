@@ -8,9 +8,10 @@ describe('RemoteUsersOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RemoteUsersOverviewComponent ]
+      imports: [],
+      declarations: [RemoteUsersOverviewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

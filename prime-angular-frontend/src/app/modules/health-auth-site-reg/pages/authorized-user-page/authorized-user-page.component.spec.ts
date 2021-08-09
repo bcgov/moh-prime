@@ -24,8 +24,8 @@ import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
 
 describe('AuthorizedUserPageComponent', () => {
-  const component: AuthorizedUserPageComponent;
-  const fixture: ComponentFixture<AuthorizedUserPageComponent>;
+  let component: AuthorizedUserPageComponent;
+  let fixture: ComponentFixture<AuthorizedUserPageComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -71,10 +71,10 @@ describe('AuthorizedUserPageComponent', () => {
   beforeEach(inject(
     [OrganizationService, OrganizationFormStateService],
     (organizationService: OrganizationService, organizationFormStateService: OrganizationFormStateService) => {
-      // fixture = TestBed.createComponent(AuthorizedUserPageComponent);
-      // component = fixture.componentInstance;
-      // organizationFormStateService.setForm(organizationService.organization);
-      // fixture.detectChanges();
+      fixture = TestBed.createComponent(AuthorizedUserPageComponent);
+      component = fixture.componentInstance;
+      organizationFormStateService.setForm(organizationService.organization);
+      fixture.detectChanges();
     })
   );
 

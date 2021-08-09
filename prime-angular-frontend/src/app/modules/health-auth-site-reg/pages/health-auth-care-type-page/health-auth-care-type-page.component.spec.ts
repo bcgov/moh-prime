@@ -35,6 +35,7 @@ describe('HealthAuthCareTypePageComponent', () => {
         NgxMaterialModule
       ],
       providers: [
+        KeycloakService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
@@ -50,12 +51,10 @@ describe('HealthAuthCareTypePageComponent', () => {
         {
           provide: PermissionService,
           useClass: MockPermissionService
-        },
-        KeycloakService
+        }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

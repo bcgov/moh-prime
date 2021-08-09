@@ -1,5 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HealthAuthCareTypesPageComponent } from './health-auth-care-types-page.component';
 
 describe('HealthAuthCareTypesPageComponent', () => {
@@ -8,7 +13,21 @@ describe('HealthAuthCareTypesPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HealthAuthCareTypesPageComponent ]
+      imports: [
+        HttpClientTestingModule,
+        ReactiveFormsModule,
+        MatSnackBarModule
+      ],
+      declarations: [
+        HealthAuthCareTypesPageComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });
