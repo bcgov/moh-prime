@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { NgxBusyModule } from '@lib/modules/ngx-busy/ngx-busy.module';
@@ -29,35 +30,36 @@ describe('EnrolleeToaMaintenanceListPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        NgxBusyModule,
-        NgxContextualHelpModule,
-        NgxMaterialModule,
-        ReactiveFormsModule,
+        // BrowserAnimationsModule,
         RouterTestingModule,
-        AdjudicationModule
+        // HttpClientTestingModule,
+        // NgxBusyModule,
+        // NgxContextualHelpModule,
+        // NgxMaterialModule,
+        // ReactiveFormsModule,
+        // RouterTestingModule,
+        // AdjudicationModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        {
-          provide: ConfigService,
-          useValue: MockConfigService
-        },
-        {
-          provide: AuthService,
-          useClass: MockAuthService
-        },
-        {
-          provide: PermissionService,
-          useClass: MockPermissionService
-        }
-      ]
-    })
-      .compileComponents();
+        // {
+        //   provide: ConfigService,
+        //   useValue: MockConfigService
+        // },
+        // {
+        //   provide: AuthService,
+        //   useClass: MockAuthService
+        // },
+        // {
+        //   provide: PermissionService,
+        //   useClass: MockPermissionService
+        // }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
