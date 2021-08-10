@@ -5,7 +5,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { MockConfigService } from 'test/mocks/mock-config.service';
+
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ConfigService } from '@config/config.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthCareTypesPageComponent } from './health-auth-care-types-page.component';
 
@@ -28,6 +31,10 @@ describe('HealthAuthCareTypesPageComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
         },
         CapitalizePipe
       ],

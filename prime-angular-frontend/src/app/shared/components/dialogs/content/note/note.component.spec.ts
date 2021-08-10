@@ -1,11 +1,11 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { NoteComponent } from './note.component';
-import { SharedModule } from '@shared/shared.module';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NoteComponent } from './note.component';
 
 describe('NoteComponent', () => {
   let component: NoteComponent;
@@ -14,9 +14,10 @@ describe('NoteComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        BrowserAnimationsModule,
-        NgxMaterialModule,
-        SharedModule
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        MatDialogModule,
+        BrowserAnimationsModule
       ],
       providers: [
         {
