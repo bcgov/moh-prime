@@ -4,6 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteProgressIndicatorComponent } from './site-progress-indicator.component';
@@ -12,7 +13,7 @@ describe('SiteProgressIndicatorComponent', () => {
   let component: SiteProgressIndicatorComponent;
   let fixture: ComponentFixture<SiteProgressIndicatorComponent>;
 
-  beforeEach( async () => {
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
         SharedModule,
@@ -22,6 +23,10 @@ describe('SiteProgressIndicatorComponent', () => {
         SiteProgressIndicatorComponent
       ],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
         {
           provide: OrganizationService,
           useClass: MockOrganizationService

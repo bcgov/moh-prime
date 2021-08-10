@@ -18,7 +18,9 @@ describe('EnrolmentProgressIndicatorComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule
       ],
-      declarations: [EnrolmentProgressIndicatorComponent],
+      declarations: [
+        EnrolmentProgressIndicatorComponent
+      ],
       providers: [
         {
           provide: APP_CONFIG,
