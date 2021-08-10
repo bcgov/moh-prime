@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 import { SendBulkEmailComponent } from './send-bulk-email.component';
-import {MAT_DIALOG_DATA, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {NgxMaterialModule} from '@lib/modules/ngx-material/ngx-material.module';
-import {SendEmailComponent} from '@shared/components/dialogs/content/send-email/send-email.component';
-import {APP_CONFIG, APP_DI_CONFIG} from '../../../../../app-config.module';
 
 describe('SendBulkEmailComponent', () => {
   let component: SendBulkEmailComponent;
@@ -14,11 +15,12 @@ describe('SendBulkEmailComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        MatDialogModule,
         HttpClientTestingModule,
         NgxMaterialModule
       ],
-      declarations: [SendEmailComponent],
+      declarations: [
+        SendEmailComponent
+      ],
       providers: [
         {
           provide: APP_CONFIG,
@@ -33,10 +35,10 @@ describe('SendBulkEmailComponent', () => {
           useValue: {
             title: 'Send Bulk Email'
           }
-        },
-      ]
-    })
-    .compileComponents();
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {

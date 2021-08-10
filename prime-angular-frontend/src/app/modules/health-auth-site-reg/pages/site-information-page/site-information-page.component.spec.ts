@@ -18,6 +18,7 @@ import { ConfigService } from '@config/config.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteInformationPageComponent } from './site-information-page.component';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 
 describe('SiteInformationPageComponent', () => {
   let component: SiteInformationPageComponent;
@@ -50,11 +51,11 @@ describe('SiteInformationPageComponent', () => {
           provide: PermissionService,
           useClass: MockPermissionService
         },
-        KeycloakService
+        KeycloakService,
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

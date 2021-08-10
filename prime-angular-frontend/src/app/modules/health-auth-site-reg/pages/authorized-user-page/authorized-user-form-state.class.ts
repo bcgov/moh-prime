@@ -90,7 +90,7 @@ export class AuthorizedUserFormState extends AbstractFormState<AuthorizedUserFor
       smsPhone: [null, [FormControlValidators.phone]],
       jobRoleTitle: [null, [Validators.required]],
       employmentIdentifier: [null, []],
-      healthAuthorityCode: [null, [Validators.required]],
+      healthAuthorityCode: [null, [Validators.required]]
     });
   }
 

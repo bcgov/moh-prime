@@ -59,9 +59,6 @@ describe('RemoteUserPageComponent', () => {
       fixture = TestBed.createComponent(RemoteUserPageComponent);
       component = fixture.componentInstance;
       siteFormStateService.setForm(siteService.site);
-      console.log('TEST ----------------', siteFormStateService.json.remoteUsers[0].remoteUserCertifications);
-      console.log('VALUE ----------------', siteFormStateService.remoteUsersPageFormState.json);
-      console.log('STATE ----------------', siteFormStateService.remoteUsersPageFormState.remoteUserCertifications);
       fixture.detectChanges();
     })
   );
