@@ -26,32 +26,34 @@ describe('HealthAuthCareTypePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HealthAuthCareTypePageComponent],
       imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        NgxMaterialModule
+        // BrowserAnimationsModule,
+        // HttpClientTestingModule,
+        // RouterTestingModule,
+        // ReactiveFormsModule,
+        // NgxMaterialModule
+      ],
+      declarations: [
+        HealthAuthCareTypePageComponent
       ],
       providers: [
-        KeycloakService,
-        {
-          provide: APP_CONFIG,
-          useValue: APP_DI_CONFIG
-        },
-        {
-          provide: ConfigService,
-          useClass: MockConfigService
-        },
-        {
-          provide: AuthService,
-          useClass: MockAuthService
-        },
-        {
-          provide: PermissionService,
-          useClass: MockPermissionService
-        }
+        // KeycloakService,
+        // {
+        //   provide: APP_CONFIG,
+        //   useValue: APP_DI_CONFIG
+        // },
+        // {
+        //   provide: ConfigService,
+        //   useClass: MockConfigService
+        // },
+        // {
+        //   provide: AuthService,
+        //   useClass: MockAuthService
+        // },
+        // {
+        //   provide: PermissionService,
+        //   useClass: MockPermissionService
+        // }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

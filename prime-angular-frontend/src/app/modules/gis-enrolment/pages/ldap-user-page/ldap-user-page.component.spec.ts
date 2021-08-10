@@ -1,12 +1,15 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { LdapUserPageComponent } from './ldap-user-page.component';
+
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 
 describe('LdapUserPageComponent', () => {
@@ -18,12 +21,19 @@ describe('LdapUserPageComponent', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        BrowserAnimationsModule,
-        NgxMaterialModule
+        // BrowserAnimationsModule,
+        // NgxMaterialModule
+        MatDialogModule
       ],
       declarations: [
         LdapUserPageComponent,
-        YesNoPipe
+        // YesNoPipe
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

@@ -9,6 +9,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 
 import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAuthorizedUserService } from 'test/mocks/mock-authorized-user.service';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -18,6 +19,7 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { SiteManagementPageComponent } from './site-management-page.component';
+import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 
 describe('SiteManagementPageComponent', () => {
   let component: SiteManagementPageComponent;
@@ -26,14 +28,13 @@ describe('SiteManagementPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
         imports: [
-          // BrowserAnimationsModule,
           HttpClientTestingModule,
           RouterTestingModule,
           MatSnackBarModule
-          // ReactiveFormsModule,
-          // NgxMaterialModule
         ],
-        declarations: [SiteManagementPageComponent],
+        declarations: [
+          SiteManagementPageComponent
+        ],
         providers: [
           {
             provide: APP_CONFIG,
@@ -43,10 +44,10 @@ describe('SiteManagementPageComponent', () => {
             provide: ConfigService,
             useClass: MockConfigService
           },
-          // KeycloakService,
-          // ConfigCodePipe,
-          // FullnamePipe,
-          // AddressPipe,
+          {
+            provide: AuthorizedUserService,
+            useClass: MockAuthorizedUserService
+          },
           CapitalizePipe
         ],
         schemas: [NO_ERRORS_SCHEMA]
