@@ -269,8 +269,8 @@ export class AdjudicationResource {
   // Agreements
   // ---
 
-  public getLatestAgreementVersions(type?: AgreementTypeGroup): Observable<AgreementVersion[]> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ type });
+  public getAgreementVersions(latest: boolean, type?: AgreementTypeGroup): Observable<AgreementVersion[]> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ latest, type });
     return this.apiResource.get<AgreementVersion[]>('agreements', params)
       .pipe(
         map((response: ApiHttpResponse<AgreementVersion[]>) => response.result),

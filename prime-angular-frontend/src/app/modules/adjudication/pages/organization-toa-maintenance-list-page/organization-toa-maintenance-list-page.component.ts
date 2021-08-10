@@ -52,7 +52,7 @@ export class OrganizationToaMaintenanceListPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.adjudicationResource.getLatestAgreementVersions(AgreementTypeGroup.ORGANIZATION)
+    this.busy = this.adjudicationResource.getAgreementVersions(true, AgreementTypeGroup.ORGANIZATION)
       .subscribe((result) => this.orgAgreementVersions = result);
   }
 }

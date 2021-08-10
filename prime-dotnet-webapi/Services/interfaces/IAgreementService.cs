@@ -8,7 +8,7 @@ namespace Prime.Services
 {
     public interface IAgreementService
     {
-        Task<IEnumerable<AgreementVersionListViewModel>> GetLatestAgreementVersionsAsync(AgreementGroup? group);
+        Task<IEnumerable<AgreementVersionListViewModel>> GetAgreementVersionsAsync(bool latest, AgreementGroup? group);
         Task<AgreementVersionViewModel> GetAgreementVersionAsync(int agreementVersionId);
         Task<int> GetLatestAgreementVersionIdOfTypeAsync(AgreementType type);
         Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid);

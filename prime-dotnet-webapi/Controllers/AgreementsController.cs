@@ -24,16 +24,16 @@ namespace Prime.Controllers
         }
 
         /// <summary>
-        /// Get a list of the latest Agreement Versions
+        /// Get a list of the Agreement Versions, with filters
         /// </summary>
         [HttpGet(Name = nameof(GetLatestAgreementVersions))]
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetLatestAgreementVersions([FromQuery] AgreementGroup? type)
+        public async Task<ActionResult> GetLatestAgreementVersions([FromQuery] bool latest, [FromQuery] AgreementGroup? type)
         {
-            var agreements = await _agreementService.GetLatestAgreementVersionsAsync(type);
+            var agreements = await _agreementService.GetAgreementVersionsAsync(latest, type);
             return Ok(agreements);
         }
 

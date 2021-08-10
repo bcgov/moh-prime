@@ -50,7 +50,7 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.busy = this.adjudicationResource.getLatestAgreementVersions(AgreementTypeGroup.ENROLLEE)
+    this.busy = this.adjudicationResource.getAgreementVersions(true, AgreementTypeGroup.ENROLLEE)
       .subscribe((result) => this.enrolleeAgreementVersions = result);
   }
 }

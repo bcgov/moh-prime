@@ -31,8 +31,10 @@ namespace Prime.Services
         }
 
 
-        public async Task<IEnumerable<AgreementVersionListViewModel>> GetLatestAgreementVersionsAsync(AgreementGroup? group)
+        public async Task<IEnumerable<AgreementVersionListViewModel>> GetAgreementVersionsAsync(bool latest, AgreementGroup? group)
         {
+            if (latest)
+            {
             // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
             return await _context.AgreementVersions
                 .AsNoTracking()
@@ -43,6 +45,13 @@ namespace Prime.Services
                     .Where(av => av.AgreementType == at)
                     .OrderByDescending(av => av.EffectiveDate)
                     .First())
+                .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+            }
+
+            return await _context.AgreementVersions
+                .AsNoTracking()
+                .If(group.HasValue, q => q.Where(av => group.Value.AgreementTypes().Contains(av.AgreementType)))
                 .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
