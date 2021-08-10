@@ -89,7 +89,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]
     name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -191,7 +191,7 @@ objects:
 
 #   Environment file
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-env-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -215,7 +215,7 @@ objects:
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -408,6 +408,7 @@ objects:
           server_tokens off;
           # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate   certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -552,7 +553,7 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: pr-database-secrets                    
+                name: pr-database-secrets
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
@@ -589,7 +590,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -681,7 +682,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -834,7 +835,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -856,8 +857,8 @@ objects:
 ###     Document Manager (Migration)    ###
 ###########################################
 ### Document Manager (Migration) Deployment Config
-### Used for Alembic to run database migrations against the PostgreSQL database 
-### for all Document Manager related tables. This pod will run once PostgreSQL 
+### Used for Alembic to run database migrations against the PostgreSQL database
+### for all Document Manager related tables. This pod will run once PostgreSQL
 ### is verified to be open to query connections.
 - apiVersion: batch/v1
   kind: Job
@@ -885,10 +886,10 @@ objects:
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
           command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
+            # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
             - /opt/app-root/src/app.sh
-          args: 
+          args:
             - migrate
           env:
             - name: CACHE_REDIS_HOST
@@ -965,7 +966,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 
 ###########################################
 ###         PostgreSQL Database         ###
@@ -1003,7 +1004,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -1079,7 +1080,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-    annotations: 
+    annotations:
       template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
