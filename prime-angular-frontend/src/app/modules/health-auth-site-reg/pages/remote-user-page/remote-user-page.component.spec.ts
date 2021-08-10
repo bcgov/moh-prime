@@ -15,6 +15,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUserPageComponent } from './remote-user-page.component';
 
+
 xdescribe('RemoteUserPageComponent', () => {
   let component: RemoteUserPageComponent;
   let fixture: ComponentFixture<RemoteUserPageComponent>;
