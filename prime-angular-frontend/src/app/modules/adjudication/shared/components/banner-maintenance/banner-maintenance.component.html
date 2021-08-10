@@ -78,7 +78,7 @@
             <mat-datepicker #endDatePicker></mat-datepicker>
             <mat-error *ngIf="formState.endDate.hasError('required')">Required</mat-error>
             <mat-error
-                       *ngIf="!formState.endDate.hasError('required') && formState.dateRange.hasError('isSameOrBefore')">
+              *ngIf="!formState.endDate.hasError('required') && formState.dateRange.hasError('isSameOrBefore')">
               End Date must be equal or greater than Start Date.
             </mat-error>
           </mat-form-field>
@@ -120,7 +120,8 @@
     </button>
     <button mat-flat-button
             [disabled]="!(Role.SUPER_ADMIN | inRole)"
-            color="primary">Publish Banner</button>
+            color="primary">Publish Banner
+    </button>
   </div>
 
 </form>
