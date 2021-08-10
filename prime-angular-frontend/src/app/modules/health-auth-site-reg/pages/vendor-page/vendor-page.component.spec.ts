@@ -1,8 +1,9 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogModule } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -27,12 +28,13 @@ describe('VendorPageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        // BrowserAnimationsModule,
-        // HttpClientTestingModule,
-        // RouterTestingModule,
-        // ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule
         // NgxMaterialModule
-        MatDialogModule
+        // BrowserAnimationsModule,
       ],
       declarations: [
         VendorPageComponent
@@ -43,10 +45,10 @@ describe('VendorPageComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        // {
-        //   provide: ConfigService,
-        //   useClass: MockConfigService
-        // },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
+        },
         // {
         //   provide: AuthService,
         //   useClass: MockAuthService
@@ -58,8 +60,7 @@ describe('VendorPageComponent', () => {
         CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

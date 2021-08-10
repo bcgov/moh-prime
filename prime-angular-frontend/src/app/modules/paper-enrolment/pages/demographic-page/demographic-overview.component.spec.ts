@@ -1,7 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { DemographicOverviewComponent } from './demographic-overview.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { DemographicOverviewComponent } from './demographic-overview.component';
 
 describe('DemographicOverviewComponent', () => {
   let component: DemographicOverviewComponent;
@@ -14,7 +16,11 @@ describe('DemographicOverviewComponent', () => {
       ],
       declarations: [
         DemographicOverviewComponent
-      ]
+      ],
+      providers: [
+        DefaultPipe
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   });

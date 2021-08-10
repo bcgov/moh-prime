@@ -22,6 +22,9 @@ import { OrganizationService } from '@registration/shared/services/organization.
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { KeycloakService } from 'keycloak-angular';
 
 describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
@@ -29,31 +32,28 @@ describe('AuthorizedUserPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AuthorizedUserPageComponent,
-        DefaultPipe,
-        FullnamePipe,
-        FormatDatePipe,
-        ConfigCodePipe,
-        PostalPipe,
-        CapitalizePipe
-      ],
       imports: [
-        // BrowserAnimationsModule,
-        // HttpClientTestingModule,
-        // RouterTestingModule,
-        // ReactiveFormsModule,
-        // NgxMaterialModule
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatSnackBarModule
+        // NgxMaterialModule,
+        // BrowserAnimationsModule
+      ],
+      declarations: [
+        AuthorizedUserPageComponent
       ],
       providers: [
-        // {
-        //   provide: APP_CONFIG,
-        //   useValue: APP_DI_CONFIG
-        // },
-        // {
-        //   provide: ConfigService,
-        //   useClass: MockConfigService
-        // },
+        KeycloakService,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: ConfigService,
+          useClass: MockConfigService
+        },
         // {
         //   provide: OrganizationService,
         //   useClass: MockOrganizationService
@@ -63,6 +63,7 @@ describe('AuthorizedUserPageComponent', () => {
         //   useClass: MockAuthService
         // },
         // OrganizationFormStateService,
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
