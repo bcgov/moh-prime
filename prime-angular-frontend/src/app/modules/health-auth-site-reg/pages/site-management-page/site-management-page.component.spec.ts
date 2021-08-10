@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthorizedUserService } from 'test/mocks/mock-authorized-user.service';
 
@@ -12,6 +13,7 @@ import { ConfigService } from '@config/config.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUserService } from '@health-auth/shared/services/authorized-user.service';
 import { SiteManagementPageComponent } from './site-management-page.component';
+import { AuthService } from '@auth/shared/services/auth.service';
 
 describe('SiteManagementPageComponent', () => {
   let component: SiteManagementPageComponent;
@@ -35,6 +37,10 @@ describe('SiteManagementPageComponent', () => {
           {
             provide: ConfigService,
             useClass: MockConfigService
+          },
+          {
+            provide: AuthService,
+            useClass: MockAuthService
           },
           {
             provide: AuthorizedUserService,
