@@ -33,6 +33,7 @@ namespace LuceneIndexer
         public static IndexWriter GetIndexWriter(string pathName)
         {
             var analyzer = new StandardAnalyzer(Lucene.Net.Util.LuceneVersion.LUCENE_48);
+            // index folder will be suffixed with 'index'
             var indexPath = Path.Combine(pathName, "index");
             var directory = FSDirectory.Open(indexPath);
             var config = new IndexWriterConfig(Lucene.Net.Util.LuceneVersion.LUCENE_48, analyzer);

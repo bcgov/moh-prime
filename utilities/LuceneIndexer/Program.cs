@@ -15,7 +15,7 @@ namespace LuceneIndexer
                 .Build();
 
             var connectionString = config.GetConnectionString("PrimeDatabase");
-            // default to current folder
+            // default to current folder, otherwise use the args
             var indexPathName = System.AppDomain.CurrentDomain.BaseDirectory;
             if (args.Length > 0 && !string.IsNullOrEmpty(args[0])) {
                 indexPathName = args[0];
