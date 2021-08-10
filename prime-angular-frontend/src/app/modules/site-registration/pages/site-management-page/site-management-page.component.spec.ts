@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -15,6 +16,7 @@ import { ConfigService } from '@config/config.service';
 import { ConfigCodePipe } from '@config/config-code.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 import { AddressPipe } from '@shared/pipes/address.pipe';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { SiteManagementPageComponent } from './site-management-page.component';
 
 describe('SiteManagementPageComponent', () => {
@@ -40,6 +42,10 @@ describe('SiteManagementPageComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         },
         {
           provide: ConfigService,

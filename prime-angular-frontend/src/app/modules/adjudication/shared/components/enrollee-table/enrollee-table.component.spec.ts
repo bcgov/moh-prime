@@ -6,8 +6,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
+import { MockAuthService } from 'test/mocks/mock-auth.service';
+
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { AuthService } from '@auth/shared/services/auth.service';
 import { EnrolleeTableComponent } from './enrollee-table.component';
 
 describe('EnrolleeTableComponent', () => {
@@ -30,6 +33,10 @@ describe('EnrolleeTableComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
+        },
+        {
+          provide: AuthService,
+          useClass: MockAuthService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
