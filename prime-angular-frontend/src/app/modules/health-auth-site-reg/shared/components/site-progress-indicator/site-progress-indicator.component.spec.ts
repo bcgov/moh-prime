@@ -1,4 +1,5 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
@@ -11,11 +12,14 @@ describe('SiteProgressIndicatorComponent', () => {
   let component: SiteProgressIndicatorComponent;
   let fixture: ComponentFixture<SiteProgressIndicatorComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         SharedModule,
         RouterTestingModule
+      ],
+      declarations: [
+        SiteProgressIndicatorComponent
       ],
       providers: [
         {
@@ -23,10 +27,9 @@ describe('SiteProgressIndicatorComponent', () => {
           useClass: MockOrganizationService
         }
       ],
-      declarations: [SiteProgressIndicatorComponent]
-    })
-      .compileComponents();
-  }));
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteProgressIndicatorComponent);

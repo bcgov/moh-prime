@@ -130,7 +130,7 @@
 <div *ngIf="internalBanner"
      class="row">
   <div class="col-sm-12 col-md-9 col-xl-7">
-    <app-alert [type]="BannerType[this.internalBanner.bannerType]?.toLowerCase()">
+    <app-alert [type]="BannerType[internalBanner.bannerType]?.toLowerCase()">
       <ng-container #alertTitle
                     class="alert-title">
         {{ internalBanner.title }}

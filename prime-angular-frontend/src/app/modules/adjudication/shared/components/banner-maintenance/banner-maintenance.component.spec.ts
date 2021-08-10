@@ -30,8 +30,7 @@ describe('BannerMaintenanceComponent', () => {
         ReactiveFormsModule,
         RouterTestingModule,
         NgxMaterialModule,
-        BrowserAnimationsModule,
-        SharedModule
+        BrowserAnimationsModule
       ],
       providers: [
         KeycloakService,
