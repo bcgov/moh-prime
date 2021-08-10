@@ -3,8 +3,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { AdjudicatorActionsComponent } from './adjudicator-actions.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AdjudicationModule } from '@adjudication/adjudication.module';
+import { AdjudicatorActionsComponent } from './adjudicator-actions.component';
 
 describe('AdjudicatorActionsComponent', () => {
   let component: AdjudicatorActionsComponent;
@@ -16,7 +17,11 @@ describe('AdjudicatorActionsComponent', () => {
         AdjudicationModule
       ],
       providers: [
-        KeycloakService
+        KeycloakService,
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

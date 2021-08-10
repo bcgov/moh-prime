@@ -22,17 +22,17 @@ describe('RemoteUsersPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        ReactiveFormsModule,
+        NgxMaterialModule,
+        BrowserAnimationsModule
+      ],
       declarations: [
         RemoteUsersPageComponent,
         AddressPipe,
         FullnamePipe
-      ],
-      imports: [
-        BrowserAnimationsModule,
-        HttpClientTestingModule,
-        RouterTestingModule,
-        ReactiveFormsModule,
-        NgxMaterialModule
       ],
       providers: [
         {

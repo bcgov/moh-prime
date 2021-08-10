@@ -1,10 +1,9 @@
-import { waitForAsync, ComponentFixture, TestBed, inject } from '@angular/core/testing';
+import { ComponentFixture, TestBed, inject } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KeycloakService } from 'keycloak-angular';
 
@@ -14,13 +13,14 @@ import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { ConfigService } from '@config/config.service';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { AuthorizedUserPageComponent } from './authorized-user-page.component';
 
-fdescribe('AuthorizedUserPageComponent', () => {
+describe('AuthorizedUserPageComponent', () => {
   let component: AuthorizedUserPageComponent;
   let fixture: ComponentFixture<AuthorizedUserPageComponent>;
 
@@ -30,8 +30,8 @@ fdescribe('AuthorizedUserPageComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        MatDialogModule,
-        MatSnackBarModule
+        NgxMaterialModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         AuthorizedUserPageComponent

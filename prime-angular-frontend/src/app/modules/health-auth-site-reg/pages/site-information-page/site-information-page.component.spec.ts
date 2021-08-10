@@ -55,8 +55,7 @@ describe('SiteInformationPageComponent', () => {
         CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

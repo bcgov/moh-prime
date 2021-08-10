@@ -3,6 +3,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { PaginatorComponent } from './paginator.component';
 
 describe('PaginatorComponent', () => {
@@ -12,9 +13,12 @@ describe('PaginatorComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        NgxMaterialModule
       ],
-      declarations: [PaginatorComponent],
+      declarations: [
+        PaginatorComponent
+      ],
       providers: [
         {
           provide: APP_CONFIG,
