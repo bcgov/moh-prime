@@ -15,7 +15,7 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUserPageComponent } from './remote-user-page.component';
 
-describe('RemoteUserPageComponent', () => {
+fdescribe('RemoteUserPageComponent', () => {
   let component: RemoteUserPageComponent;
   let fixture: ComponentFixture<RemoteUserPageComponent>;
 
@@ -58,7 +58,7 @@ describe('RemoteUserPageComponent', () => {
     (siteService: SiteService, siteFormStateService: SiteFormStateService) => {
       fixture = TestBed.createComponent(RemoteUserPageComponent);
       component = fixture.componentInstance;
-      // siteFormStateService.setForm(siteService.site);
+      siteFormStateService.setForm(siteService.site);
       fixture.detectChanges();
     })
   );
