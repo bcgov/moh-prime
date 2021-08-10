@@ -23,7 +23,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { HealthAuthCareTypePageComponent } from './health-auth-care-type-page.component';
 
-describe('HealthAuthCareTypePageComponent', () => {
+fdescribe('HealthAuthCareTypePageComponent', () => {
   let component: HealthAuthCareTypePageComponent;
   let fixture: ComponentFixture<HealthAuthCareTypePageComponent>;
 
