@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormArray } from '@angular/forms';
+import { FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { noop, of } from 'rxjs';
@@ -23,6 +23,13 @@ import { RemoteUserCertification } from '@registration/shared/models/remote-user
 import { HealthAuthSiteRegService } from '@health-auth/shared/services/health-auth-site-reg.service';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-form-state.class';
 
+// TODO refactor into list/form composite component used in health authority organization information
+// TODO copy of the remote users and remote user have been pulled from site registration
+//      and do not fit the current workflow for health authorities. Remote users should
+//      be set up similar to adjudication/pages/health-authorities/vendor-page where
+//      the list and form exist in one page and allow for a single form state to be
+//      shared since form state service is not used
+// TODO test bed has been skipped until the above update occurs
 @Component({
   selector: 'app-remote-user-page',
   templateUrl: './remote-user-page.component.html',
@@ -58,6 +65,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
+    private fb: FormBuilder,
     private configService: ConfigService,
     private healthAuthoritySiteService: HealthAuthSiteRegService,
     // TODO do we need this in health authority?
@@ -166,7 +174,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected createFormInstance(): void {
     // Be aware that this is the parent form state and should only
     // be used for it's API and on submission
-    this.formState = null;
+    this.formState = new RemoteUsersPageFormState(this.fb);
   }
 
   protected patchForm(): void {

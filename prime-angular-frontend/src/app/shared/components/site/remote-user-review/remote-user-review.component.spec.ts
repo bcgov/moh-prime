@@ -7,7 +7,7 @@ describe('RemoteUserReviewComponent', () => {
   let component: RemoteUserReviewComponent;
   let fixture: ComponentFixture<RemoteUserReviewComponent>;
 
-  beforeEach(async() => {
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [
         RemoteUserReviewComponent
