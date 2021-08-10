@@ -8,8 +8,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MockSiteService } from 'test/mocks/mock-site.service';
 import { MockConfigService } from 'test/mocks/mock-config.service';
 
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { ConfigService } from '@config/config.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
