@@ -30,6 +30,7 @@ namespace PrimeTests.UnitTests
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
                 agreementService ?? A.Fake<IAgreementService>(),
+                A.Fake<IEnrolleeAgreementService>(),
                 submissionRulesService ?? A.Fake<ISubmissionRulesService>(),
                 businessEventService ?? A.Fake<IBusinessEventService>(),
                 emailService ?? A.Fake<IEmailService>(),
