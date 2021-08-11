@@ -9,6 +9,9 @@ on: [push, pull_request]
 
 jobs:
   build:
+    defaults:
+      run:
+        working-directory: ./prime-angular-frontend
     runs-on: ubuntu-latest
     strategy:
       matrix:
