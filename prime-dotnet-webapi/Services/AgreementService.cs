@@ -8,6 +8,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
@@ -31,27 +32,29 @@ namespace Prime.Services
         }
 
 
-        public async Task<IEnumerable<AgreementVersionListViewModel>> GetAgreementVersionsAsync(bool latest, AgreementGroup? group)
+        public async Task<IEnumerable<AgreementVersionListViewModel>> GetAgreementVersionsAsync(AgreementVersionFilters filters)
         {
-            if (latest)
+            filters ??= new AgreementVersionFilters();
+
+            if (filters.Latest)
             {
-            // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
-            return await _context.AgreementVersions
-                .AsNoTracking()
-                .Select(av => av.AgreementType)
-                .Distinct()
-                .If(group.HasValue, q => q.Where(at => group.Value.AgreementTypes().Contains(at)))
-                .Select(at => _context.AgreementVersions
-                    .Where(av => av.AgreementType == at)
-                    .OrderByDescending(av => av.EffectiveDate)
-                    .First())
-                .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
+                // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
+                return await _context.AgreementVersions
+                    .AsNoTracking()
+                    .Select(av => av.AgreementType)
+                    .Distinct()
+                    .If(filters.HasTypeFilter, q => q.Where(at => filters.FilteredTypes().Contains(at)))
+                    .Select(at => _context.AgreementVersions
+                        .Where(av => av.AgreementType == at)
+                        .OrderByDescending(av => av.EffectiveDate)
+                        .First())
+                    .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
                     .ToListAsync();
             }
 
             return await _context.AgreementVersions
                 .AsNoTracking()
-                .If(group.HasValue, q => q.Where(av => group.Value.AgreementTypes().Contains(av.AgreementType)))
+                .If(filters.HasTypeFilter, q => q.Where(av => filters.FilteredTypes().Contains(av.AgreementType)))
                 .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }

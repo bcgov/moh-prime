@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
 
@@ -26,14 +27,14 @@ namespace Prime.Controllers
         /// <summary>
         /// Get a list of the Agreement Versions, with filters
         /// </summary>
-        [HttpGet(Name = nameof(GetLatestAgreementVersions))]
+        [HttpGet(Name = nameof(GetAgreementVersions))]
         [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<AgreementVersionListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetLatestAgreementVersions([FromQuery] bool latest, [FromQuery] AgreementGroup? type)
+        public async Task<ActionResult> GetAgreementVersions([FromQuery] AgreementVersionFilters filters)
         {
-            var agreements = await _agreementService.GetAgreementVersionsAsync(latest, type);
+            var agreements = await _agreementService.GetAgreementVersionsAsync(filters);
             return Ok(agreements);
         }
 
