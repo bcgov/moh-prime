@@ -7,7 +7,7 @@ import { ConfigCodePipe } from './config-code.pipe';
 function configFactory(configService: ConfigService): () => Promise<Configuration> {
   // Ensure configuration is populated before the application
   // is fully initialized to prevent race conditions
-  return async () => await configService.load().toPromise();
+  return () => configService.load().toPromise();
 }
 
 @NgModule({
