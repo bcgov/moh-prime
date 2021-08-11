@@ -19,8 +19,8 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v1
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ~/prime-angular-frontend/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
@@ -40,7 +40,7 @@ jobs:
         run: |
           npm ci
           npm run build:ci
-      
+
       - run: cc-test-reporter after-build -t lcov
 
       # - name: Setup Code Climate
