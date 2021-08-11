@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels;
@@ -15,6 +14,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AgreementsController : PrimeControllerBase
     {
         private readonly IAgreementService _agreementService;
@@ -56,8 +56,7 @@ namespace Prime.Controllers
 
         // api/agreements/compare/11..13
         [HttpGet("compare/{compareString}", Name = nameof(CompareAgreements))]
-        // [Authorize(Roles = Roles.ViewEnrollee)]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
