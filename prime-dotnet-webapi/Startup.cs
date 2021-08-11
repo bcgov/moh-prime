@@ -34,6 +34,7 @@ using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using Prime.LuceneIndexer;
 
 namespace Prime
 {
@@ -136,6 +137,8 @@ namespace Prime
             ConfigureDatabase(services);
 
             AuthenticationSetup.Initialize(services);
+
+            services.AddHostedService<LuceneIndexService>();
         }
 
         protected void ConfigureClients(IServiceCollection services)

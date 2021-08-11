@@ -18,6 +18,7 @@ using System.Security.Claims;
 using System.Linq.Expressions;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.Models.VerifiableCredentials;
+using Prime.LuceneIndexer;
 
 namespace Prime.Services
 {
@@ -118,18 +119,8 @@ namespace Prime.Services
 
             return await _context.Enrollees
                 .AsNoTracking()
-                .If(!string.IsNullOrWhiteSpace(searchOptions.TextSearch), q => q
-                    .Search(e => e.FirstName,
-                        e => e.LastName,
-                        e => e.FullName,
-                        e => e.Email,
-                        e => e.Phone,
-                        e => e.DisplayId.ToString())
-                    .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
-                    .Containing(searchOptions.TextSearch)
-                )
-                .If(searchOptions.StatusCode.HasValue, q => q
-                    .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                .If(!string.IsNullOrEmpty(searchOptions.TextSearch),
+                    q => q.Where(e => IndexWorker.SearchEnrollee(searchOptions.TextSearch).Contains(e.Id))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
