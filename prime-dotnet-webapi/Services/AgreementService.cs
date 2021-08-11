@@ -85,7 +85,10 @@ namespace Prime.Services
                           || av.Id == compareViewModel.FinalId)
                 .ToDictionaryAsync(x => x.Id, x => x.Text);
 
-            var diff = new HtmlDiff.HtmlDiff(text[compareViewModel.InitialId], text[compareViewModel.FinalId]);
+            var diff = new HtmlDiff.HtmlDiff(text[compareViewModel.InitialId], text[compareViewModel.FinalId])
+            {
+                IgnoreWhitespaceDifferences = true
+            };
             return diff.Build();
         }
 

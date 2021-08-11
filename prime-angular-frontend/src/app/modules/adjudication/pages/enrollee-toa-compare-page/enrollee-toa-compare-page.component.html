@@ -1,1 +1,43 @@
-<p>enrollee-toa-compare-page works!</p>
+<app-page [busy]="busy"
+          showToolbar="true"
+          (back)="onBack()">
+  <app-page-header>Compare Enrollee TOAs</app-page-header>
+
+  <app-page-subheader *ngIf="agreementType"
+                      class="mb-4"
+                      [divider]="false">
+    <ng-container appPageSubheaderTitle>
+      {{ AgreementType[agreementType] | replace: '_':' ' | capitalize: true }}
+    </ng-container>
+  </app-page-subheader>
+
+  <div class="row">
+    <div class="col-6">
+      Compare From
+      <mat-select [(value)]="initialVersionId"
+                  (selectionChange)="getDiffHtml()">
+        <mat-option *ngFor="let version of agreementVersions; let index = index"
+                    [value]="version.id">
+          Version {{ index + 1}} - {{ version.effectiveDate | formatDate }}
+        </mat-option>
+      </mat-select>
+      To
+      <mat-select [(value)]="finalVersionId"
+                  (selectionChange)="getDiffHtml()">
+        <mat-option *ngFor="let version of agreementVersions; let index = index"
+                    [value]="version.id">
+          Version {{ index + 1 }} - {{ version.effectiveDate | formatDate }}
+        </mat-option>
+      </mat-select>
+    </div>
+  </div>
+
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>
+      Difference View
+    </ng-container>
+  </app-page-subheader>
+
+  <div [innerHtml]="diffHtml"></div>
+</app-page>

@@ -296,6 +296,18 @@ export class AdjudicationResource {
       );
   }
 
+  public compareAgreementVersions(initialVersionId: number, finalVersionId: number): Observable<string> {
+    return this.apiResource.get<string>(`agreements/compare/${initialVersionId}..${finalVersionId}`)
+      .pipe(
+        map((response: ApiHttpResponse<string>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Agreement comparison could not be made.');
+          this.logger.error('[Adjudication] AdjudicationResource::compareAgreementVersions error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public getAcceptedAccessTermsByYear(enrolleeId: number, yearAccepted: number): Observable<EnrolleeAgreement[]> {
     const params = this.apiResourceUtilsService.makeHttpParams({ yearAccepted });
     return this.apiResource.get<EnrolleeAgreement[]>(`enrollees/${enrolleeId}/agreements`, params)
