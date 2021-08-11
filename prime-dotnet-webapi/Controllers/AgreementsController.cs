@@ -38,7 +38,7 @@ namespace Prime.Controllers
             return Ok(agreements);
         }
 
-        /// /api/agreements/2
+        // api/agreements/2
         /// <summary>
         /// Get an Agreement Version by id
         /// </summary>
@@ -52,6 +52,26 @@ namespace Prime.Controllers
         {
             var agreement = await _agreementService.GetAgreementVersionAsync(agreementVersionId);
             return Ok(agreement);
+        }
+
+        // api/agreements/compare/11..13
+        [HttpGet("compare/{compareString}", Name = nameof(CompareAgreements))]
+        // [Authorize(Roles = Roles.ViewEnrollee)]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> CompareAgreements(string compareString)
+        {
+            var vm = AgreementCompareViewModel.ParseCompareString(compareString);
+            if (vm == null)
+            {
+                return BadRequest("Could not determine Agreement Versions to compare.");
+            }
+
+            var diff = await _agreementService.CompareAgreementsAsync(vm);
+            return Ok(diff);
         }
     }
 }

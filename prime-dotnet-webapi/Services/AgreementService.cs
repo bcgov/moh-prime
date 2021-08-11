@@ -78,6 +78,18 @@ namespace Prime.Services
                 .FirstAsync();
         }
 
+        public async Task<string> CompareAgreementsAsync(AgreementCompareViewModel compareViewModel)
+        {
+            var text = await _context.AgreementVersions
+                .AsNoTracking()
+                .Where(av => av.Id == compareViewModel.InitialId
+                          || av.Id == compareViewModel.FinalId)
+                .ToDictionaryAsync(x => x.Id, x => x.Text);
+
+            var diff = new HtmlDiff.HtmlDiff(text[compareViewModel.InitialId], text[compareViewModel.FinalId]);
+            return diff.Build();
+        }
+
         public async Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid)
         {
             var filename = await _documentClient.FinalizeUploadAsync(documentGuid, DestinationFolders.SignedAgreements);

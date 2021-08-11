@@ -13,6 +13,11 @@ namespace Prime.Services
         Task<IEnumerable<AgreementVersionListViewModel>> GetAgreementVersionsAsync(AgreementVersionFilters? filters);
         Task<AgreementVersionViewModel> GetAgreementVersionAsync(int agreementVersionId);
         Task<int> GetLatestAgreementVersionIdOfTypeAsync(AgreementType type);
+        /// <summary>
+        /// Returns an HTML diff of the text of the two specified Agreement Versions.
+        /// </summary>
+        /// <param name="compareViewModel"></param>
+        Task<string> CompareAgreementsAsync(AgreementCompareViewModel compareViewModel);
         Task<SignedAgreementDocument> AddSignedAgreementDocumentAsync(int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetSignedAgreementDocumentAsync(int agreementId);
     }

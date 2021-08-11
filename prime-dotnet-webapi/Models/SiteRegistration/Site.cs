@@ -84,6 +84,7 @@ namespace Prime.Models
         public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
+
         /// <summary>
         /// Days in which the business has any business hours.
         /// Only the time portion of the input parameter is considered.
