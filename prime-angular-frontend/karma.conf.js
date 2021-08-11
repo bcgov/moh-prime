@@ -17,10 +17,19 @@ module.exports = function (config) {
       clearContext: false,
     },
     coverageIstanbulReporter: {
-      dir: require('path').join(__dirname, './coverage/angular-frontend'),
-      reports: ['html', 'lcovonly', 'text-summary'],
+      dir: require('path').join(__dirname, './coverage/'),
+      reports: ['html', 'lcovonly', 'xml', 'text-summary'],
       fixWebpackSourcePaths: true
     },
+    // coverageReporter: {
+    //   dir: require('path').join(__dirname, './coverage/'),
+    //   subdir: '.',
+    //   reporters: [
+    //     { type: 'html' },
+    //     { type: 'text-summary' },
+    //     { type: 'lcov' }
+    //   ]
+    // },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
@@ -64,15 +73,6 @@ module.exports = function (config) {
     browserNoActivityTimeout: 60000,
     singleRun: false,
     restartOnFileChange: true,
-    coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/'),
-      subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' },
-        { type: 'lcov' }
-      ]
-    },
     customLaunchers: {
       ChromeHeadlessCustom: {
         base: 'ChromeHeadless',
