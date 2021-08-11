@@ -36,25 +36,24 @@ namespace Prime.Services
         {
             filters ??= new AgreementVersionFilters();
 
-            if (filters.Latest)
+            var query = filters.Latest switch
             {
-                // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
-                return await _context.AgreementVersions
-                    .AsNoTracking()
-                    .Select(av => av.AgreementType)
+                true => _context.AgreementVersions
+                    .Select(av => av.AgreementType) // In EF 5 we should be able to do a GroupBy on AgreementVersion instead of the double select.
                     .Distinct()
                     .If(filters.HasTypeFilter, q => q.Where(at => filters.FilteredTypes().Contains(at)))
                     .Select(at => _context.AgreementVersions
                         .Where(av => av.AgreementType == at)
                         .OrderByDescending(av => av.EffectiveDate)
-                        .First())
-                    .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
-                    .ToListAsync();
-            }
+                        .First()),
 
-            return await _context.AgreementVersions
+                false => _context.AgreementVersions
+                    .If(filters.HasTypeFilter, q => q.Where(av => filters.FilteredTypes().Contains(av.AgreementType)))
+            };
+
+            return await query
                 .AsNoTracking()
-                .If(filters.HasTypeFilter, q => q.Where(av => filters.FilteredTypes().Contains(av.AgreementType)))
+                .OrderBy(av => av.EffectiveDate)
                 .ProjectTo<AgreementVersionListViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
