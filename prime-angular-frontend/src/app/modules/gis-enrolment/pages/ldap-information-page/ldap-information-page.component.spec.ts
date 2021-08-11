@@ -10,7 +10,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { LdapInformationPageComponent } from './ldap-information-page.component';
 
-describe('LdapInformationPageComponent', () => {
+xdescribe('LdapInformationPageComponent', () => {
   let component: LdapInformationPageComponent;
   let fixture: ComponentFixture<LdapInformationPageComponent>;
 

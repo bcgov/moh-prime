@@ -7,7 +7,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SharedModule } from '@shared/shared.module';
 import { GisEnrolmentProgressIndicatorComponent } from './gis-enrolment-progress-indicator.component';
 
-describe('GisEnrolmentProgressIndicatorComponent', () => {
+xdescribe('GisEnrolmentProgressIndicatorComponent', () => {
   let component: GisEnrolmentProgressIndicatorComponent;
   let fixture: ComponentFixture<GisEnrolmentProgressIndicatorComponent>;
 

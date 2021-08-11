@@ -10,7 +10,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EnrolleeInformationPageComponent } from './enrollee-information-page.component';
 
-describe('EnrolleeInformationPageComponent', () => {
+xdescribe('EnrolleeInformationPageComponent', () => {
   let component: EnrolleeInformationPageComponent;
   let fixture: ComponentFixture<EnrolleeInformationPageComponent>;
 

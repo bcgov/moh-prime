@@ -6,7 +6,7 @@ import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { GisEnrolmentResource } from './gis-enrolment-resource.service';
 
-describe('GisEnrolmentResource', () => {
+xdescribe('GisEnrolmentResource', () => {
   let service: GisEnrolmentResource;
 
   beforeEach(() => {

@@ -11,7 +11,7 @@ import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
 import { LdapUserPageComponent } from './ldap-user-page.component';
 
 
-describe('LdapUserPageComponent', () => {
+xdescribe('LdapUserPageComponent', () => {
   let component: LdapUserPageComponent;
   let fixture: ComponentFixture<LdapUserPageComponent>;
 
