@@ -1,0 +1,92 @@
+name: Build
+on: [push, pull_request]
+  # push:
+  #   branches:
+  #     - master
+  # pull_request:
+  #   branches:
+  #     - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+          cc_test_reporter_version: latest  # optional
+
+      - run: cc-test-reporter before-build
+
+      - name: npm ci and npm run build
+        run: |
+          npm ci
+          npm run build:ci
+      
+      - run: cc-test-reporter after-build -t lcov
+
+      # - name: Setup Code Climate
+      #   # You may pin to the exact commit or the version.
+      #   # uses: amancevice/setup-code-climate@58f8e3450a12c469be1c8e049694ee25c3302528
+      #   uses: amancevice/setup-code-climate@v0
+
+
+
+# name: Build
+# on:
+#   push:
+#     branches:
+#       - master
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     strategy:
+#       matrix:
+#         node-version: [12.x]
+
+#     steps:
+#       - uses: actions/checkout@v1
+
+#       - name: Cache node modules
+#         uses: actions/cache@v1
+#         with:
+#           path: ~/.npm
+#           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: |
+#             ${{ runner.os }}-node-
+
+#       - name: Node ${{ matrix.node-version }}
+#         uses: actions/setup-node@v1
+#         with:
+#           node-version: ${{ matrix.node-version }}
+
+#       - name: npm ci and npm run build
+#         run: |
+#           npm ci
+#           npm run build:ci
+#       - name: Setup Code Climate
+#         # You may pin to the exact commit or the version.
+#         # uses: amancevice/setup-code-climate@58f8e3450a12c469be1c8e049694ee25c3302528
+#         uses: amancevice/setup-code-climate@v0
+#         with:
+#           # Code Climate test reporter ID
+#           cc_test_reporter_id: '419d40ac0bf4fd66897e7f0e165139dfa14b648e04de243fef2847492a007dfe'
