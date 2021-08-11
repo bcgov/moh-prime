@@ -44,7 +44,7 @@ jobs:
           npm ci
           npm run build:ci
 
-      - run: cc-test-reporter after-build -t lcov
+      - run: cc-test-reporter after-build -t lcov -p "/home/runner/work/moh-prime/moh-prime/prime-angular-frontend/coverage"
 
       # - name: Setup Code Climate
       #   # You may pin to the exact commit or the version.
