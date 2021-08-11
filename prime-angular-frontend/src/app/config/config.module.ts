@@ -1,14 +1,13 @@
-import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
+import { Configuration } from './config.model';
 import { ConfigService } from './config.service';
 import { ConfigCodePipe } from './config-code.pipe';
 
-function configFactory(injector: Injector): () => Promise<void> {
-  return async (): Promise<void> => {
-    // Ensure configuration is populated before the application
-    // is fully initialized to prevent race conditions
-    await injector.get(ConfigService).load().toPromise();
-  };
+function configFactory(configService: ConfigService): () => Promise<Configuration> {
+  // Ensure configuration is populated before the application
+  // is fully initialized to prevent race conditions
+  return async () => await configService.load().toPromise();
 }
 
 @NgModule({
@@ -20,7 +19,7 @@ function configFactory(injector: Injector): () => Promise<void> {
       provide: APP_INITIALIZER,
       useFactory: configFactory,
       multi: true,
-      deps: [Injector]
+      deps: [ConfigService]
     },
     ConfigCodePipe
   ],
