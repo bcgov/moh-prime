@@ -22,7 +22,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v1
         with:
-          path: ~/prime-angular-frontend/.npm
+          path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
