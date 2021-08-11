@@ -12,7 +12,7 @@
   </app-page-subheader>
 
   <div class="row">
-    <div class="col-6">
+    <div class="col-3">
       Compare From
       <mat-select [(value)]="initialVersionId"
                   (selectionChange)="getDiffHtml()">
@@ -32,12 +32,7 @@
     </div>
   </div>
 
-
-  <app-page-subheader>
-    <ng-container appPageSubheaderTitle>
-      Difference View
-    </ng-container>
-  </app-page-subheader>
+  <hr>
 
   <div [innerHtml]="diffHtml"></div>
 </app-page>

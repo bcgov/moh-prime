@@ -89,6 +89,7 @@ namespace Prime.Services
             {
                 IgnoreWhitespaceDifferences = true
             };
+
             return diff.Build();
         }
 
