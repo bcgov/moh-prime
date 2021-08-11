@@ -7,15 +7,14 @@
     "start:ie": "ng serve --configuration es5",
     "build": "ng build --subresource-integrity",
     "audit": "npm install && npm audit fix && ng build --prod",
-    "test": "ng test",
+    "test": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ngcc",
-    "coverage": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessNoSandbox",
-    "sonar": "npm run coverage && sonar-scanner",
     "reporter": "ng build --prod --stats-json --sourceMap",
     "bundle-report": "npm reporter && webpack-bundle-analyzer dist/angular-frontend/stats-es2015.json",
-    "source-report": "npm reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js"
+    "source-report": "npm reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js",
+    "build:ci": "npm run test"
   },
   "private": true,
   "dependencies": {
