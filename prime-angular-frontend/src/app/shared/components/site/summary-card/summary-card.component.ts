@@ -14,17 +14,25 @@ export class SummaryCardComponent implements OnInit {
   @Input() public properties: KeyValue<string, string>[];
   @Input() public actionButtonTitle: string;
   @Input() public actionDisabled: boolean;
+  @Input() public alternateButtonTitle: string;
+  @Input() public alternateDisabled: boolean;
 
   @Output() public action: EventEmitter<void>;
+  @Output() public alternateAction: EventEmitter<void>;
   @Output() public remove: EventEmitter<void>;
 
   constructor() {
     this.action = new EventEmitter<void>();
+    this.alternateAction = new EventEmitter<void>();
     this.remove = new EventEmitter<void>();
   }
 
   public onAction() {
     this.action.emit();
+  }
+
+  public onAlternateAction() {
+    this.alternateAction.emit();
   }
 
   public onRemove() {

@@ -12,19 +12,28 @@
 
   <div class="container-fluid">
     <div class="row">
-      <ng-container *ngFor="let version of enrolleeAgreementVersions">
+      <ng-container *ngFor="let version of latestEnrolleeAgreementVersions">
         <div class="col-md-6 col-sm-12">
           <app-summary-card class=""
                             icon="gavel"
                             [title]="AgreementType[version.agreementType] | replace: '_':' ' | capitalize: true"
                             [properties]="getToaCardProperties(version)"
                             actionButtonTitle="View"
+                            alternateButtonTitle="Compare Versions"
                             [actionDisabled]="false"
-                            (action)="onView(version.id)">
+                            (action)="onView(version.id)"
+                            (alternateAction)="onCompare(version.agreementType)">
           </app-summary-card>
         </div>
       </ng-container>
     </div>
   </div>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderTitle>Compare TOA Versions</ng-container>
+    <ng-container appPageSubheaderSummary>
+      See changes between versions of a TOA
+    </ng-container>
+  </app-page-subheader>
 
 </app-page>

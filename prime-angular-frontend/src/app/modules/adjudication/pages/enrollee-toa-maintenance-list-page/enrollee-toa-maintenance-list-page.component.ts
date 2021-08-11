@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   public busy: Subscription;
-  public enrolleeAgreementVersions: AgreementVersion[];
+  public latestEnrolleeAgreementVersions: AgreementVersion[];
 
   public AgreementType = AgreementType;
 
@@ -40,6 +40,10 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
     this.routeUtils.routeRelativeTo([id]);
   }
 
+  public onCompare(type: AgreementType): void {
+    this.routeUtils.routeRelativeTo(['compare', type]);
+  }
+
   public getToaCardProperties(agreementVersion: AgreementVersion) {
     return [
       {
@@ -51,6 +55,6 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.busy = this.adjudicationResource.getAgreementVersions(true, AgreementTypeGroup.ENROLLEE)
-      .subscribe((result) => this.enrolleeAgreementVersions = result);
+      .subscribe((result) => this.latestEnrolleeAgreementVersions = result);
   }
 }

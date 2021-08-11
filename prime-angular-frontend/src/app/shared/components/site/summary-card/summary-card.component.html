@@ -25,6 +25,15 @@
       {{ actionButtonTitle }}
     </button>
   </mat-card-actions>
+  <mat-card-actions *ngIf="alternateButtonTitle">
+    <button mat-stroked-button
+            type="button"
+            color="primary"
+            [disabled]="alternateDisabled"
+            (click)="onAlternateAction()">
+      {{ alternateButtonTitle }}
+    </button>
+  </mat-card-actions>
 </mat-card>
 
 <ng-template #property
