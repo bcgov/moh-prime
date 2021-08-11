@@ -9,6 +9,7 @@ using Prime.Models;
 using Prime.Engines;
 using Prime.Models.Api;
 using Prime.ViewModels;
+using Prime.LuceneIndexer;
 
 namespace Prime.Services
 {
@@ -100,6 +101,7 @@ namespace Prime.Services
 
             await ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
+            await IndexWorker.IndexAll(_context);
         }
 
         /// <summary>

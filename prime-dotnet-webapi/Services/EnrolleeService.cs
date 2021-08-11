@@ -239,7 +239,9 @@ namespace Prime.Services
 
             try
             {
-                return await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync();
+                await IndexWorker.IndexAll(_context);
+                return result;
             }
             catch (DbUpdateConcurrencyException)
             {

@@ -8,6 +8,7 @@ using Lucene.Net.Store;
 using Prime.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Prime.LuceneIndexer
 {
@@ -16,7 +17,7 @@ namespace Prime.LuceneIndexer
         private static RAMDirectory _directory;
         private static StandardAnalyzer _analyzer;
 
-        public static void IndexAll(ApiDbContext dbContext)
+        public static async Task IndexAll(ApiDbContext dbContext)
         {
             _analyzer = new StandardAnalyzer(Lucene.Net.Util.LuceneVersion.LUCENE_48);
             // index folder will be suffixed with 'index'
@@ -24,21 +25,22 @@ namespace Prime.LuceneIndexer
             var config = new IndexWriterConfig(Lucene.Net.Util.LuceneVersion.LUCENE_48, _analyzer);
 
             using var writer = new IndexWriter(_directory, config);
-            foreach (var enrollee in dbContext.Enrollees.Include(e => e.Addresses)
-                                                            .ThenInclude(a => a.Address)
-                                                        .Include(e => e.Certifications))
+            await foreach (var enrollee in dbContext.Enrollees.Include(e => e.Addresses)
+                                                                .ThenInclude(a => a.Address)
+                                                              .Include(e => e.Certifications)
+                                                              .AsAsyncEnumerable())
             {
                 var doc = enrollee.ToLuceneDocument();
 
                 foreach (var cert in enrollee.Certifications)
                 {
-                    doc.Add(new Field("LicenseNumber", cert.LicenseNumber, TextField.TYPE_NOT_STORED));
+                    doc.Add(new Field("LicenseNumber", cert.LicenseNumber ?? "", TextField.TYPE_NOT_STORED));
                 }
                 foreach (var address in enrollee.Addresses)
                 {
-                    doc.Add(new Field("Address.City", address.Address.City, TextField.TYPE_STORED));
-                    doc.Add(new Field("Address.Street", address.Address.Street, TextField.TYPE_STORED));
-                    doc.Add(new Field("Address.Postal", address.Address.Postal, TextField.TYPE_STORED));
+                    doc.Add(new Field("Address.City", address.Address.City ?? "", TextField.TYPE_STORED));
+                    doc.Add(new Field("Address.Street", address.Address.Street ?? "", TextField.TYPE_STORED));
+                    doc.Add(new Field("Address.Postal", address.Address.Postal ?? "", TextField.TYPE_STORED));
                 }
                 writer.AddDocument(doc);
             }

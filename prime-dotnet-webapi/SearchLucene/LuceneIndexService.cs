@@ -15,7 +15,7 @@ namespace Prime.LuceneIndexer
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            return Task.Run(() => IndexWorker.IndexAll(_context));
+            return IndexWorker.IndexAll(_context);
         }
     }
 }
