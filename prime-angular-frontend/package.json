@@ -6,7 +6,6 @@
     "start": "ng serve",
     "start:ie": "ng serve --configuration es5",
     "build": "ng build --subresource-integrity",
-    "build:prod": "ng build --prod",
     "audit": "npm install && npm audit fix && ng build --prod",
     "test": "ng test --watch=false --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
@@ -17,7 +16,7 @@
     "reporter": "ng build --prod --stats-json --sourceMap",
     "bundle-report": "npm reporter && webpack-bundle-analyzer dist/angular-frontend/stats-es2015.json",
     "source-report": "npm reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js",
-    "build:ci": "npm run clean && npm run test && npm run build:prod"
+    "build:ci": "npm run clean && npm run test"
   },
   "private": true,
   "dependencies": {
