@@ -64,6 +64,15 @@ module.exports = function (config) {
     browserNoActivityTimeout: 60000,
     singleRun: false,
     restartOnFileChange: true,
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage/'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' },
+        { type: 'lcov' }
+      ]
+    },
     customLaunchers: {
       ChromeHeadlessCustom: {
         base: 'ChromeHeadless',
