@@ -16,7 +16,7 @@
     "reporter": "ng build --prod --stats-json --sourceMap",
     "bundle-report": "npm reporter && webpack-bundle-analyzer dist/angular-frontend/stats-es2015.json",
     "source-report": "npm reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js",
-    "build:ci": "npm run clean && npm run test && npm run build:prod"
+    "build:ci": "npm run clean && npm run test"
   },
   "private": true,
   "dependencies": {
