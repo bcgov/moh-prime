@@ -79,13 +79,21 @@ namespace Prime.Services
 
         public async Task<string> CompareAgreementsAsync(AgreementCompareViewModel compareViewModel)
         {
-            var text = await _context.AgreementVersions
+            var results = await _context.AgreementVersions
                 .AsNoTracking()
-                .Where(av => av.Id == compareViewModel.InitialId
-                          || av.Id == compareViewModel.FinalId)
-                .ToDictionaryAsync(x => x.Id, x => x.Text);
+                .Where(av => av.Id == compareViewModel.InitialId)
+                .Select(initial => new
+                {
+                    InitialText = initial.Text,
+                    FinalText = _context.AgreementVersions
+                        .AsNoTracking()
+                        .Where(av => av.Id == compareViewModel.FinalId)
+                        .Select(av => av.Text)
+                        .Single()
+                })
+                .SingleAsync();
 
-            var diff = new HtmlDiff.HtmlDiff(text[compareViewModel.InitialId], text[compareViewModel.FinalId])
+            var diff = new HtmlDiff.HtmlDiff(results.InitialText, results.FinalText)
             {
                 IgnoreWhitespaceDifferences = true
             };

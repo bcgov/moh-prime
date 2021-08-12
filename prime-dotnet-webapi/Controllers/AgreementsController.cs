@@ -14,7 +14,6 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class AgreementsController : PrimeControllerBase
     {
         private readonly IAgreementService _agreementService;
