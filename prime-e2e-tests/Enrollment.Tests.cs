@@ -104,7 +104,8 @@ namespace TestPrimeE2E.Enrollment
             // TODO: Why does 'Keep Changes and Continue' pop up without Sleep?
             System.Threading.Thread.Sleep(1000);
             CheckLogThenScreenshot(expectedTitle);
-            ClickButton("Save and Continue");
+            // Need to Tab over to click ''Save and Continue' button
+            _driver.TabAndInteract("//input[@data-placeholder='CPSID Number']", 3, Keys.Enter);
         }
 
 
