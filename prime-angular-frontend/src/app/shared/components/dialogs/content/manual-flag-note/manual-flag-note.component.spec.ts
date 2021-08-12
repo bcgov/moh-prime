@@ -1,11 +1,11 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ManualFlagNoteComponent } from './manual-flag-note.component';
-import { SharedModule } from '@shared/shared.module';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { ManualFlagNoteComponent } from './manual-flag-note.component';
 
 describe('ManualFlagNoteComponent', () => {
   let component: ManualFlagNoteComponent;
@@ -14,9 +14,8 @@ describe('ManualFlagNoteComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule,
-        NgxMaterialModule,
-        BrowserAnimationsModule,
+        ReactiveFormsModule,
+        BrowserAnimationsModule
       ],
       declarations: [],
       providers: [
@@ -34,9 +33,9 @@ describe('ManualFlagNoteComponent', () => {
           provide: MAT_DIALOG_DATA,
           useValue: {}
         },
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

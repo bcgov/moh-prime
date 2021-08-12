@@ -24,7 +24,7 @@ export class EnrolleeToaMaintenanceListPageComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    protected route: ActivatedRoute,
+    private route: ActivatedRoute,
     private router: Router,
     private adjudicationResource: AdjudicationResource,
     private formatDatePipe: FormatDatePipe

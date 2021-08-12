@@ -192,8 +192,9 @@ export class SiteManagementPageComponent implements OnInit {
         map((organizations: Organization[]) => {
           this.organizationSitesExpiryDates = organizations[0].sites
             .map(s => {
-              if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate)
-                return Site.getExpiryDate(s)
+              if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate) {
+                return Site.getExpiryDate(s);
+              }
             });
           return this.organizations = organizations;
         }),
@@ -208,6 +209,8 @@ export class SiteManagementPageComponent implements OnInit {
 
   private createSite(organizationId: number): void {
     this.busy = this.siteResource.createSite(organizationId)
-      .subscribe((site: Site) => this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING]));
+      .subscribe((site: Site) =>
+        this.routeUtils.routeRelativeTo([organizationId, SiteRoutes.SITES, site.id, SiteRoutes.CARE_SETTING])
+      );
   }
 }
