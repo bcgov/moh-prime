@@ -13,7 +13,7 @@ import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority
   providedIn: 'root'
 })
 export class HealthAuthSiteRegService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _site: BehaviorSubject<HealthAuthoritySite>;
 
   constructor() {
