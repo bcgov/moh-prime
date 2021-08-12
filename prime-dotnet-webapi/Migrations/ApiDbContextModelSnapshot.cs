@@ -14016,25 +14016,10 @@ namespace Prime.Migrations
                     b.Property<string>("Address1Line3")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Address1StartDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Address2Line1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2Line2")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Address2Line3")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Address2StartDate")
+                    b.Property<DateTime?>("Address1StartDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("City1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("City2")
                         .HasColumnType("text");
 
                     b.Property<string>("CollegeId")
@@ -14043,10 +14028,19 @@ namespace Prime.Migrations
                     b.Property<string>("ConditionCode")
                         .HasColumnType("text");
 
+                    b.Property<DateTime?>("ConditionEndDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime?>("ConditionStartDate")
+                        .HasColumnType("timestamp without time zone");
+
                     b.Property<string>("Country1")
                         .HasColumnType("text");
 
-                    b.Property<string>("Country2")
+                    b.Property<string>("Cpn")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Cpn")
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
@@ -14058,7 +14052,7 @@ namespace Prime.Migrations
                     b.Property<string>("Credentials")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
@@ -14085,9 +14079,6 @@ namespace Prime.Migrations
                     b.Property<string>("Ipc")
                         .HasColumnType("text");
 
-                    b.Property<string>("Languages")
-                        .HasColumnType("text");
-
                     b.Property<string>("LastName")
                         .HasColumnType("text");
 
@@ -14100,16 +14091,10 @@ namespace Prime.Migrations
                     b.Property<string>("PostalCode1")
                         .HasColumnType("text");
 
-                    b.Property<string>("PostalCode2")
-                        .HasColumnType("text");
-
                     b.Property<string>("ProviderRoleType")
                         .HasColumnType("text");
 
                     b.Property<string>("Province1")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Province2")
                         .HasColumnType("text");
 
                     b.Property<string>("SecondName")
@@ -14118,13 +14103,13 @@ namespace Prime.Migrations
                     b.Property<string>("StatusCode")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StatusExpiryDate")
+                    b.Property<DateTime?>("StatusExpiryDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("StatusReasonCode")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("StatusStartDate")
+                    b.Property<DateTime?>("StatusStartDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Suffix")

@@ -1,9 +1,11 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockConfigService } from 'test/mocks/mock-config.service';
 import { MockAuthService } from 'test/mocks/mock-auth.service';
+import { MockConfigService } from 'test/mocks/mock-config.service';
+import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 import { DashboardComponent } from './dashboard.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
@@ -14,7 +16,6 @@ import { MockPermissionService } from 'test/mocks/mock-permission.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
-import { MockAccessTokenService } from 'test/mocks/mock-access-token.service';
 
 describe('DashboardComponent', () => {
   let component: DashboardComponent;
@@ -28,6 +29,7 @@ describe('DashboardComponent', () => {
         RouterTestingModule
       ],
       providers: [
+        KeycloakService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
@@ -47,11 +49,10 @@ describe('DashboardComponent', () => {
         {
           provide: AccessTokenService,
           useClass: MockAccessTokenService
-        },
-        KeycloakService
-      ]
-    })
-      .compileComponents();
+        }
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

@@ -8,6 +8,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { MockPermissionService } from 'test/mocks/mock-permission.service';
+import { Role } from '@auth/shared/enum/role.enum';
 
 describe('EnrolleeGuard', () => {
   beforeEach(() => {
@@ -36,6 +37,8 @@ describe('EnrolleeGuard', () => {
   });
 
   it('should create', inject([EnrolleeGuard], (guard: EnrolleeGuard) => {
+    // authService.loggedIn = true;
+    // authService.role = Role.ADMIN;
     expect(guard).toBeTruthy();
   }));
 });

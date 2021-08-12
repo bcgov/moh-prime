@@ -64,8 +64,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   public getOrgBookLink(orgId: string, display: boolean = false) {
     const url = 'https://www.orgbook.gov.bc.ca/en/organization';
     return (display)
-      ? `${ url }/${ orgId }`
-      : `${ url }/registration.registries.ca/${ orgId }`;
+      ? `${url}/${orgId}`
+      : `${url}/registration.registries.ca/${orgId}`;
   }
 
   public onSelect({ option }: MatAutocompleteSelectedEvent) {
@@ -133,8 +133,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
   protected performSubmission(): Observable<number | null> {
     const organizationId = this.route.snapshot.params.oid;
-    let payload = this.organizationFormStateService.json;
-    let request$ = (+organizationId !== 0)
+    const payload = this.organizationFormStateService.json;
+    const request$ = (+organizationId !== 0)
       ? this.organizationResource.updateOrganization(payload)
       : this.authService.getUser$()
         .pipe(
@@ -173,7 +173,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
       routePath = [redirectPath, SiteRoutes.SITE_REVIEW];
     } else {
       routePath = (!this.isCompleted)
-        ? [SiteRoutes.SITES, `${ siteId }`, SiteRoutes.CARE_SETTING]
+        ? [SiteRoutes.SITES, `${siteId}`, SiteRoutes.CARE_SETTING]
         : SiteRoutes.ORGANIZATION_REVIEW;
     }
 

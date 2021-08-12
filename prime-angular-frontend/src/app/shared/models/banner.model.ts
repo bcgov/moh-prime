@@ -43,9 +43,9 @@ export class BannerViewModel {
       title: bannerVm.title,
       content: bannerVm.content,
       startDate: start.format(),
-      startTime: start.format("HHmm"),
+      startTime: start.format('HHmm'),
       endDate: end.format(),
-      endTime: end.format("HHmm")
+      endTime: end.format('HHmm')
     };
   }
 

@@ -76,13 +76,13 @@ export class SiteRegistrationTableComponent implements OnInit {
   public displayStatus(status: SiteStatusType) {
     switch (status) {
       case SiteStatusType.EDITABLE:
-        return "Editable";
+        return 'Editable';
       case SiteStatusType.IN_REVIEW:
-        return "In Review";
+        return 'In Review';
       case SiteStatusType.LOCKED:
-        return "Locked";
+        return 'Locked';
       default:
-        return "Editable";
+        return 'Editable';
     }
   }
 
