@@ -77,17 +77,17 @@ namespace Prime.Services
                 .FirstAsync();
         }
 
-        public async Task<string> CompareAgreementsAsync(AgreementCompareViewModel compareViewModel)
+        public async Task<string> CompareAgreementsAsync(AgreementCompareViewModel compare)
         {
             var results = await _context.AgreementVersions
                 .AsNoTracking()
-                .Where(av => av.Id == compareViewModel.InitialId)
+                .Where(av => av.Id == compare.InitialId)
                 .Select(initial => new
                 {
                     InitialText = initial.Text,
                     FinalText = _context.AgreementVersions
                         .AsNoTracking()
-                        .Where(av => av.Id == compareViewModel.FinalId)
+                        .Where(av => av.Id == compare.FinalId)
                         .Select(av => av.Text)
                         .Single()
                 })
