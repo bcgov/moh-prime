@@ -34,7 +34,7 @@ COPY package.json package-lock.json ./
 COPY . .
 
 # Install Angular CLI
-RUN npm install -g @angular/cli
+RUN npm install --unsafe-perm=true -g @angular/cli
 # Install dependencies
 RUN npm ci
 # Add application
