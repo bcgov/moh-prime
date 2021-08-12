@@ -19,6 +19,7 @@ using System.Linq.Expressions;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.Models.VerifiableCredentials;
 using Prime.LuceneIndexer;
+using SolrNet;
 
 namespace Prime.Services
 {
@@ -27,18 +28,21 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly ISolrOperations<Enrollee> _solr;
 
         public EnrolleeService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
             IBusinessEventService businessEventService,
-            IDocumentManagerClient documentClient)
+            IDocumentManagerClient documentClient,
+            ISolrOperations<Enrollee> solr)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _solr = solr;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)
@@ -182,6 +186,9 @@ namespace Prime.Services
 
             await _businessEventService.CreateEnrolleeEventAsync(enrollee.Id, "Enrollee Created");
 
+            await _solr.AddAsync(enrollee);
+            await _solr.CommitAsync();
+
             return enrollee.Id;
         }
 
@@ -241,6 +248,8 @@ namespace Prime.Services
             {
                 var result = await _context.SaveChangesAsync();
                 await IndexWorker.IndexAll(_context);
+                await _solr.AddAsync(enrollee);
+                await _solr.CommitAsync();
                 return result;
             }
             catch (DbUpdateConcurrencyException)
@@ -484,6 +493,9 @@ namespace Prime.Services
 
             _context.Enrollees.Remove(enrollee);
             await _context.SaveChangesAsync();
+
+            await _solr.DeleteAsync(enrollee);
+            await _solr.CommitAsync();
         }
 
         public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)

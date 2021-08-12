@@ -35,6 +35,10 @@ using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
 using Prime.LuceneIndexer;
+using SolrNet.Microsoft.DependencyInjection;
+using SolrNet;
+using Prime.Models;
+using SolrNet.Mapping;
 
 namespace Prime
 {
@@ -139,6 +143,13 @@ namespace Prime
             AuthenticationSetup.Initialize(services);
 
             services.AddHostedService<LuceneIndexService>();
+
+            //var mapper = IndexWorker.MapEnrollee();
+            var mapper = new AllPropertiesMappingManager();
+            mapper.SetUniqueKey(typeof(Enrollee).GetProperty("Id"));
+
+            services.AddSolrNet<Enrollee>("http://localhost:8983/solr/enrollees");
+            services.AddSingleton<IReadOnlyMappingManager>(mapper);
         }
 
         protected void ConfigureClients(IServiceCollection services)

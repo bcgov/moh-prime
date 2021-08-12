@@ -10,6 +10,7 @@ using Prime.Engines;
 using Prime.Models.Api;
 using Prime.ViewModels;
 using Prime.LuceneIndexer;
+using SolrNet;
 
 namespace Prime.Services
 {
@@ -25,6 +26,8 @@ namespace Prime.Services
         private readonly IVerifiableCredentialService _verifiableCredentialService;
         private readonly IPrivilegeService _privilegeService;
         private readonly ILogger _logger;
+        private readonly ISolrOperations<Enrollee> _solr;
+
 
         public SubmissionService(
             ApiDbContext context,
@@ -38,7 +41,8 @@ namespace Prime.Services
             IEnrolleeSubmissionService enrolleeSubmissionService,
             IVerifiableCredentialService verifiableCredentialService,
             IPrivilegeService privilegeService,
-            ILogger<SubmissionService> logger)
+            ILogger<SubmissionService> logger,
+            ISolrOperations<Enrollee> solr)
             : base(context, httpContext)
         {
             _agreementService = agreementService;
@@ -51,6 +55,7 @@ namespace Prime.Services
             _verifiableCredentialService = verifiableCredentialService;
             _privilegeService = privilegeService;
             _logger = logger;
+            _solr = solr;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)
@@ -102,6 +107,8 @@ namespace Prime.Services
             await ProcessEnrolleeApplicationRules(enrolleeId);
             await _context.SaveChangesAsync();
             await IndexWorker.IndexAll(_context);
+            await _solr.AddAsync(enrollee);
+            await _solr.CommitAsync();
         }
 
         /// <summary>

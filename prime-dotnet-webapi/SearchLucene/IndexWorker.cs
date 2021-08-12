@@ -9,6 +9,7 @@ using Prime.Models;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using SolrNet.Mapping;
 
 namespace Prime.LuceneIndexer
 {
@@ -85,6 +86,32 @@ namespace Prime.LuceneIndexer
                 var hitDoc = searcher.Doc(hit.Doc);
                 return int.Parse(hitDoc.Get("Id"));
             });
+        }
+
+        public static MappingManager MapEnrollee()
+        {
+            var mgr = new MappingManager();
+            var property = typeof(Enrollee).GetProperty("Id");
+            mgr.Add(property, "id");
+            mgr.SetUniqueKey(property);
+            mgr.Add(typeof(Enrollee).GetProperty("GPID"), "gpid");
+            mgr.Add(typeof(Enrollee).GetProperty("HPDID"), "hpdid");
+            mgr.Add(typeof(Enrollee).GetProperty("FirstName"), "first_name");
+            mgr.Add(typeof(Enrollee).GetProperty("LastName"), "last_name");
+            mgr.Add(typeof(Enrollee).GetProperty("GivenNames"), "given_name");
+            mgr.Add(typeof(Enrollee).GetProperty("PreferredFirstName"), "preferred_first_name");
+            mgr.Add(typeof(Enrollee).GetProperty("PreferredMiddleName"), "preferred_middle_name");
+            mgr.Add(typeof(Enrollee).GetProperty("PreferredLastName"), "preferred_last_name");
+            mgr.Add(typeof(Enrollee).GetProperty("DateOfBirth"), "date_of_birth");
+            mgr.Add(typeof(Enrollee).GetProperty("Email"), "email");
+            mgr.Add(typeof(Enrollee).GetProperty("SmsPhone"), "sms_phone");
+            mgr.Add(typeof(Enrollee).GetProperty("Phone"), "phone");
+            mgr.Add(typeof(Certification).GetProperty("LicenseNumber"), "license_number");
+            mgr.Add(typeof(Address).GetProperty("City"), "city");
+            mgr.Add(typeof(Address).GetProperty("Street"), "street");
+            mgr.Add(typeof(Address).GetProperty("Postal"), "postal");
+
+            return mgr;
         }
     }
 }

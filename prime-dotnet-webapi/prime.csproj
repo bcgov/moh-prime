@@ -31,6 +31,8 @@
     <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
     <PackageReference Include="SimpleBase" Version="3.0.0" />
     <PackageReference Include="SoapCore" Version="1.1.0.2" />
+    <PackageReference Include="SolrNet" Version="1.0.19" />
+    <PackageReference Include="SolrNet.Microsoft.DependencyInjection" Version="1.0.19" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="5.0.0" />
     <PackageReference Include="CompareNETObjects" Version="4.73.0" />
