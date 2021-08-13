@@ -47,9 +47,9 @@ jobs:
       - run: cc-test-reporter after-build -t lcov
   
   build-be-coverage:
-    # defaults:
-    #   run:
-    #     working-directory: ./prime-dot-net-webapi-tests
+    defaults:
+      run:
+        working-directory: ./prime-dot-net-webapi-tests
 
     runs-on: ubuntu-latest
 
@@ -69,7 +69,7 @@ jobs:
 
       - name: Install dependencies
         run: dotnet restore
-        
+
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
@@ -78,10 +78,7 @@ jobs:
       - run: cc-test-reporter before-build
 
       - name: Generate coverage report
-        run: |
-          cd ./prime-dotnet-webapi-tests/
-
-          dotnet test < /dev/null
+        run: dotnet test < /dev/null
 
       - run: cc-test-reporter after-build -t lcov
 
