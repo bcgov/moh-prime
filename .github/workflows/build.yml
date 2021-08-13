@@ -79,7 +79,7 @@ jobs:
       - name: Generate coverage report
         run: |
           cd ./prime-dotnet-webapi-tests/
-          dotnet test < /dev/null
+          dotnet test --filter FullyQualifiedName\!~Integration < /dev/null
 
       - run: cc-test-reporter after-build -t lcov
 
