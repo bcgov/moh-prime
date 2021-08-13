@@ -14,8 +14,6 @@ jobs:
         working-directory: ./prime-dot-net-webapi-tests
     
     runs-on: ubuntu-latest
-  
-  jobs: dotnet-stuff:
 
     steps:
       - uses: actions/checkout@v2
@@ -29,7 +27,7 @@ jobs:
         run: dotnet build
       - name: Test with the dotnet CLI
         run: dotnet test
-        
+
   # build-fe-coverage:
   #   defaults:
   #     run:
