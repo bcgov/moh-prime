@@ -8,104 +8,75 @@ on:
   #     - develop
 
 jobs:
+  build-fe-coverage:
+    defaults:
+      run:
+        working-directory: ./prime-angular-frontend
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+          cc_test_reporter_version: latest  # optional
+
+      - run: cc-test-reporter before-build
+
+      - name: npm ci and npm run build
+        run: |
+          npm ci
+          npm run build:ci
+
+      - run: cc-test-reporter after-build -t lcov
+  
   build-be-coverage:
     defaults:
       run:
         working-directory: ./prime-dot-net-webapi-tests
-    
-    runs-on: ${{ matrix.operating-system }}
+
+    runs-on: ubuntu-latest
+
     strategy:
-      fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest, windows-latest, macOS-latest]
-        dotnet-version: ['2.1', '2.2', '3.0', '3.1', '5.0']
+        dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Clear toolcache
-        shell: pwsh
-        run: __tests__/clear-toolcache.ps1 ${{ runner.os }}
-      - name: Setup dotnet ${{ matrix.dotnet-version }}
-        uses: ./
+      - uses: actions/checkout@v2
+      - name: Setup .NET 3.x
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Check installed version
-        shell: pwsh
-        run: |
-          $version = & dotnet --version
-          Write-Host "Installed version: $version"
-          if (-not $version.StartsWith("${{ matrix.dotnet-version }}")) { throw "Unexpected version" }
+          # Semantic version range syntax or exact version of a dotnet version
+          dotnet-version: '3.x'
+      - name: Display dotnet version
+        run: dotnet --version
 
+      - uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+          cc_test_reporter_version: latest  # optional
 
-  # build-fe-coverage:
-  #   defaults:
-  #     run:
-  #       working-directory: ./prime-angular-frontend
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [12.x]
+      - run: cc-test-reporter before-build
 
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - name: Cache node modules
-  #       uses: actions/cache@v1
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
 
-  #     - name: Node ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-
-  #     - uses: amancevice/setup-code-climate@v0
-  #       with:
-  #         cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
-  #         cc_test_reporter_version: latest  # optional
-
-  #     - run: cc-test-reporter before-build
-
-  #     - name: npm ci and npm run build
-  #       run: |
-  #         npm ci
-  #         npm run build:ci
-
-  #     - run: cc-test-reporter after-build -t lcov
-  
-  # build-be-coverage:
-  #   defaults:
-  #     run:
-  #       working-directory: ./prime-dot-net-webapi-tests
-
-  #   runs-on: ubuntu-latest
-
-  #   strategy:
-  #     matrix:
-  #       dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
-
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Setup .NET 3.x
-  #       uses: actions/setup-dotnet@v1
-  #       with:dot
-  #         # Semantic version range syntax or exact version of a dotnet version
-  #         dotnet-version: '3.x'
-  #     - name: Display dotnet version
-  #       run: dotnet --version
-
-  #     - uses: amancevice/setup-code-climate@v0
-  #       with:
-  #         cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
-  #         cc_test_reporter_version: latest  # optional
-
-  #     - run: cc-test-reporter before-build
-
-  #     - name: Test
-  #       run: dotnet test --no-restore --verbosity normal
-
-  #     - run: cc-test-reporter after-build -t lcov
+      - run: cc-test-reporter after-build -t lcov
 
 
