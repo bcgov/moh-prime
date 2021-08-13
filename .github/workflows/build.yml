@@ -81,6 +81,8 @@ jobs:
           cd ./prime-dotnet-webapi-tests/
           dotnet test --filter FullyQualifiedName\!~Integration < /dev/null
 
-      - run: cc-test-reporter after-build -t lcov
+      - run: |
+        cd ./prime-dotnet-webapi-tests/
+        cc-test-reporter after-build -t lcov
 
 
