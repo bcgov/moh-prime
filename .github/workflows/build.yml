@@ -85,7 +85,7 @@ jobs:
         run: |
           cd ./prime-dotnet-webapi-tests/coverage
           dir
-          Ren "coverage.info" "lcov.info"
+          mv "coverage.info" "lcov.info"
           cd ../
       - name: After test reporter
         run: |
