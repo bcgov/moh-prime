@@ -78,7 +78,7 @@ jobs:
         run: |
           cd ./prime-dotnet-webapi-tests/
 
-          dotnet test --logger:"console;noprogress=true"
+          dotnet test < /dev/null
 
           # dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
