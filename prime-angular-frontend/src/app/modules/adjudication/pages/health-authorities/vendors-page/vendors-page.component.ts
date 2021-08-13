@@ -13,6 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 @Component({
   selector: 'app-vendors-page',
@@ -25,6 +26,7 @@ export class VendorsPageComponent implements OnInit {
   public form: FormGroup;
   public isInitialEntry: boolean;
   public filteredVendors: BehaviorSubject<VendorConfig[]>;
+  public healthAuthorityVendors: VendorConfig[];
 
   private routeUtils: RouteUtils;
 
@@ -44,7 +46,11 @@ export class VendorsPageComponent implements OnInit {
       AdjudicationRoutes.HEALTH_AUTHORITIES,
       this.route.snapshot.params.haid
     ]);
-    this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.configService.vendors);
+
+    this.healthAuthorityVendors = this.configService.vendors
+      .filter((vendorConfig: VendorConfig) => vendorConfig.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY);
+
+    this.filteredVendors = new BehaviorSubject<VendorConfig[]>(this.healthAuthorityVendors);
   }
 
   public get vendors(): FormArray {
@@ -89,7 +95,7 @@ export class VendorsPageComponent implements OnInit {
       .subscribe(({ vendors }: { vendors: { vendor: VendorConfig }[] }) => {
         const selectedVendorCodes = vendors.map(ct => ct.vendor?.code);
         // Filter out the selected vendors to avoid visual duplicates
-        const filteredVendors = this.configService.vendors.filter(v => !selectedVendorCodes.includes(v.code));
+        const filteredVendors = this.healthAuthorityVendors.filter(v => !selectedVendorCodes.includes(v.code));
         this.filteredVendors.next(filteredVendors);
       });
 
