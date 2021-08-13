@@ -68,10 +68,13 @@ namespace Prime.Services
 
         public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId)
         {
+            IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
+            IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
+
             var plr = await _context.PlrProviders
                 .AsNoTracking()
                 .Where(p => collegeId.Contains(p.CollegeId))
-                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider)
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
                 .ToListAsync();
 
             // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manuully before return

@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Newtonsoft.Json;
-using Prime.Models.Plr;
 
 namespace Prime.Models
 {
@@ -27,9 +25,6 @@ namespace Prime.Models
 
         public string ProviderRoleType { get; set; }
 
-        [JsonIgnore]
-        public PlrRoleType ProviderRole { get; set; }
-
         /// <summary>HIBC's Ministry Practitioner ID.</summary>
         public string MspId { get; set; }
 
@@ -52,9 +47,6 @@ namespace Prime.Models
         public string StatusCode { get; set; }
 
         public string StatusReasonCode { get; set; }
-
-        [JsonIgnore]
-        public PlrStatusReason StatusReason { get; set; }
 
         public DateTime? StatusStartDate { get; set; }
 

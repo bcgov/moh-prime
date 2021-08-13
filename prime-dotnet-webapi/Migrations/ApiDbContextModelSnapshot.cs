@@ -16103,6 +16103,9 @@ namespace Prime.Migrations
                     b.Property<string>("Cpn")
                         .HasColumnType("text");
 
+                    b.Property<string>("Cpn")
+                        .HasColumnType("text");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -16194,10 +16197,6 @@ namespace Prime.Migrations
 
                     b.HasIndex("Ipc")
                         .IsUnique();
-
-                    b.HasIndex("ProviderRoleType");
-
-                    b.HasIndex("StatusReasonCode");
 
                     b.ToTable("PlrProvider");
                 });
@@ -18597,7 +18596,7 @@ namespace Prime.Migrations
                         .IsRequired();
 
                     b.HasOne("Prime.Models.Organization", "Organization")
-                        .WithMany("Claims")
+                        .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -18625,17 +18624,6 @@ namespace Prime.Migrations
                         .HasForeignKey("PartyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Prime.Models.PlrProvider", b =>
-                {
-                    b.HasOne("Prime.Models.Plr.PlrRoleType", "ProviderRole")
-                        .WithMany()
-                        .HasForeignKey("ProviderRoleType");
-
-                    b.HasOne("Prime.Models.Plr.PlrStatusReason", "StatusReason")
-                        .WithMany()
-                        .HasForeignKey("StatusReasonCode");
                 });
 
             modelBuilder.Entity("Prime.Models.Privilege", b =>
