@@ -31,7 +31,7 @@ export class AppConfig extends AppEnvironment {
 
 // Default application configuration is for local development
 // outside and inside a container based on environment.
-export const defaultAppConfig: AppConfig = {
+export const APP_DI_CONFIG: AppConfig = {
   ...environment,
   routes: {
     denied: AppRoutes.DENIED,
