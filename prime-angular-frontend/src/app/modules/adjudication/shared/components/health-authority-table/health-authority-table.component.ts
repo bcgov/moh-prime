@@ -23,15 +23,12 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 export class HealthAuthorityTableComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
-  public haColumns: string[];
-  public haDataSource: MatTableDataSource<HealthAuthorityList>;
+  public siteColumns: string[];
+  public dataSource: MatTableDataSource<HealthAuthorityList | HealthAuthoritySite>;
   public healthAuthorityCode: HealthAuthorityEnum;
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
-  public healthAuthorityIdToSites: Map<number, HealthAuthoritySite[]>;
-  public siteColumns: string[];
-  public sitesDataSource: MatTableDataSource<HealthAuthoritySite>;
   public SiteStatusType = SiteStatusType;
 
 
@@ -41,34 +38,31 @@ export class HealthAuthorityTableComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private healthAuthorityResource: HealthAuthorityResource
   ) {
-    this.haColumns = [
+    this.siteColumns = [
       'prefixes',
       'orgName',
-      'actions'
-    ];
-    this.route = new EventEmitter<string | (string | number)[]>();
-    this.haDataSource = new MatTableDataSource<HealthAuthorityList>([]);
-    this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
-    this.healthAuthorityIdToSites = new Map<number, HealthAuthoritySite[]>();
-    this.sitesDataSource = new MatTableDataSource<HealthAuthoritySite>([]);
-    this.siteColumns = [
       'siteName',
       'submissionDate',
       'assignedTo',
       'state',
       'siteId',
       'remoteUsers',
-      'actions'
+      'siteActions'
     ];
+    this.route = new EventEmitter<string | (string | number)[]>();
+    this.dataSource = new MatTableDataSource<HealthAuthorityList | HealthAuthoritySite>([]);
+    this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
   }
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
   }
 
-  public showSites(healthAuthorityId: number) {
-    this.sitesDataSource.data = this.healthAuthorityIdToSites.get(healthAuthorityId);
-  }
+
+  // public showSites(healthAuthorityId: number) {
+  //   this.sitesDataSource.data = this.healthAuthorityIdToSites.get(healthAuthorityId);
+  // }
+
 
   // TODO: Eliminate duplication as this method copied from SiteRegistrationTableComponent
   public displayStatus(status: SiteStatusType) {
@@ -93,6 +87,56 @@ export class HealthAuthorityTableComponent implements OnInit {
       : count;
   }
 
+
+  idOfExpandedHA = -1;
+
+
+  static isHA(obj): boolean {
+    return obj.hasUnderReviewUsers !== undefined;
+  }
+
+  isHealthAuthorityObject(obj): boolean {
+    return obj.hasUnderReviewUsers !== undefined;
+  }
+
+
+  isGroup(index, item): boolean {
+    // TODO: always work?
+    //    return !item.siteId;
+    return HealthAuthorityTableComponent.isHA(item);
+  }
+
+  expand(item: HealthAuthorityList) {
+    this.idOfExpandedHA =
+      this.idOfExpandedHA !== item.id ? item.id : -1;
+  }
+
+
+  sortData(a: HealthAuthorityList | HealthAuthoritySite, b: HealthAuthorityList | HealthAuthoritySite): number {
+    if (HealthAuthorityTableComponent.isHA(a) && HealthAuthorityTableComponent.isHA(b)) {
+      return a.id - b.id;
+    }
+    else if (HealthAuthorityTableComponent.isHA(a)) {
+      if ((a as HealthAuthorityList).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
+        return -1;
+      } else {
+        return (a as HealthAuthorityList).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+      }
+    }
+    else if (HealthAuthorityTableComponent.isHA(b)) {
+      if ((b as HealthAuthorityList).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
+        return 1;
+      } else {
+        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityList).id;
+      }
+    }
+    else {
+      return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+    }
+  }
+
+
+
   public ngOnInit(): void {
     this.healthAuthorityResource.getHealthAuthorities()
       .pipe(
@@ -101,9 +145,10 @@ export class HealthAuthorityTableComponent implements OnInit {
             [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
           );
 
-          this.haDataSource.data = (this.healthAuthorityCode)
+          this.dataSource.data = (this.healthAuthorityCode)
             ? healthAuthorities.filter(ha => ha.id === +this.healthAuthorityCode)
-            : healthAuthorities.sort((a, b) => a.id - b.id);
+            //            : healthAuthorities.sort((a, b) => a.id - b.id);
+            : healthAuthorities.sort(this.sortData);
           return from(healthAuthorities);
         }),
         // TODO: Rename type HealthAuthorityList to HealthAuthorityListItem?
@@ -112,8 +157,9 @@ export class HealthAuthorityTableComponent implements OnInit {
       )
       .subscribe((sites: HealthAuthoritySite[]) => {
         // For each list of sites in stream, store in map if non-empty list
+        // TODO: Problem with simultaneous set to `data` field?
         if (sites && sites.length > 0) {
-          this.healthAuthorityIdToSites.set(sites[0].healthAuthorityOrganizationId, sites);
+          this.dataSource.data = [...sites, ...this.dataSource.data].sort(this.sortData);
         }
       });
   }
