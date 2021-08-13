@@ -83,7 +83,7 @@ jobs:
 
       - name: Check Files
         run: |
-          cd ./prime-dotnet-webapi-tests
+          cd ./prime-dotnet-webapi-tests/TestResults
           dir
           cd ../
       - name: After test reporter
