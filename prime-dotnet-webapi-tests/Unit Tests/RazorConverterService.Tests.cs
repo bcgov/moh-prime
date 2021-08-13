@@ -34,25 +34,25 @@ namespace PrimeTests.UnitTests
             );
         }
 
-        [Theory]
-        [MemberData(nameof(AgreementTemplates))]
-        public async void TestRender_Agreement(RazorTemplate<Agreement> template)
-        {
-            var service = CreateService();
-            var agreementText = "AGREEMENT TEXT";
-            var model = new Agreement
-            {
-                AgreementVersion = new AgreementVersion
-                {
-                    Text = agreementText
-                }
-            };
+        // [Theory]
+        // [MemberData(nameof(AgreementTemplates))]
+        // public async void TestRender_Agreement(RazorTemplate<Agreement> template)
+        // {
+        //     var service = CreateService();
+        //     var agreementText = "AGREEMENT TEXT";
+        //     var model = new Agreement
+        //     {
+        //         AgreementVersion = new AgreementVersion
+        //         {
+        //             Text = agreementText
+        //         }
+        //     };
 
-            var html = await service.RenderTemplateToStringAsync(template, model);
+        //     var html = await service.RenderTemplateToStringAsync(template, model);
 
-            Assert.NotNull(html);
-            Assert.Contains(agreementText, html);
-        }
+        //     Assert.NotNull(html);
+        //     Assert.Contains(agreementText, html);
+        // }
 
         [Theory]
         [MemberData(nameof(AgreementTemplates))]
@@ -141,23 +141,23 @@ namespace PrimeTests.UnitTests
             // Not all emails contain the renewal date or URL despite sharing a view mmodel.
         }
 
-        [Theory]
-        [MemberData(nameof(SiteApprovalEmailTemplates))]
-        public async void TestRender_SiteApprovalEmails(RazorTemplate<SiteApprovalEmailViewModel> template)
-        {
-            var service = CreateService();
-            var model = new SiteApprovalEmailViewModel
-            {
-                DoingBusinessAs = "dba",
-                Pec = "pec"
-            };
+        // [Theory]
+        // [MemberData(nameof(SiteApprovalEmailTemplates))]
+        // public async void TestRender_SiteApprovalEmails(RazorTemplate<SiteApprovalEmailViewModel> template)
+        // {
+        //     var service = CreateService();
+        //     var model = new SiteApprovalEmailViewModel
+        //     {
+        //         DoingBusinessAs = "dba",
+        //         Pec = "pec"
+        //     };
 
-            var html = await service.RenderTemplateToStringAsync(template, model);
+        //     var html = await service.RenderTemplateToStringAsync(template, model);
 
-            Assert.NotNull(html);
-            Assert.Contains(model.DoingBusinessAs, html);
-            // Not all emails contain the PEC despite sharing a View Model.
-        }
+        //     Assert.NotNull(html);
+        //     Assert.Contains(model.DoingBusinessAs, html);
+        //     // Not all emails contain the PEC despite sharing a View Model.
+        // }
 
         [Fact]
         public async void TestRender_RemoteUserNotificationEmail()

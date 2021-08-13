@@ -8,7 +8,7 @@ on:
   #     - develop
 
 jobs:
-  build-fe-coverage:
+  build-frontend-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -46,7 +46,7 @@ jobs:
 
       - run: cc-test-reporter after-build -t lcov
   
-  build-be-coverage:
+  build-backend-coverage:
     # defaults:
     #   run:
     #     working-directory: ./prime-dot-net-webapi-tests

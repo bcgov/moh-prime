@@ -56,39 +56,39 @@ namespace PrimeTests.UnitTests
             Assert.Equal(expectedAllowed, allowed);
         }
 
-        [Theory]
-        [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_Approved(SiteRegistrationAction action)
-        {
-            // Arrange
-            var expectedAllowed = new[]
-            {
-                SiteRegistrationAction.RequestChange,
+        // [Theory]
+        // [MemberData(nameof(SiteRegistrationActionData))]
+        // public void TestAllowableStatusChange_Approved(SiteRegistrationAction action)
+        // {
+        //     // Arrange
+        //     var expectedAllowed = new[]
+        //     {
+        //         SiteRegistrationAction.RequestChange,
 
-            }.Contains(action);
+        //     }.Contains(action);
 
-            // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Editable);
+        //     // Act
+        //     var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Editable);
 
-            // Assert
-            Assert.Equal(expectedAllowed, allowed);
-        }
+        //     // Assert
+        //     Assert.Equal(expectedAllowed, allowed);
+        // }
 
-        [Theory]
-        [MemberData(nameof(SiteRegistrationActionData))]
-        public void TestAllowableStatusChange_Locked(SiteRegistrationAction action)
-        {
-            // Arrange
-            var expectedAllowed = new[]
-            {
-                SiteRegistrationAction.Approve,
-            }.Contains(action);
+        // [Theory]
+        // [MemberData(nameof(SiteRegistrationActionData))]
+        // public void TestAllowableStatusChange_Locked(SiteRegistrationAction action)
+        // {
+        //     // Arrange
+        //     var expectedAllowed = new[]
+        //     {
+        //         SiteRegistrationAction.Approve,
+        //     }.Contains(action);
 
-            // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Locked);
+        //     // Act
+        //     var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Locked);
 
-            // Assert
-            Assert.Equal(expectedAllowed, allowed);
-        }
+        //     // Assert
+        //     Assert.Equal(expectedAllowed, allowed);
+        // }
     }
 }

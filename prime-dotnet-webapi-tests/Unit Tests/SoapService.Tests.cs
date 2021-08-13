@@ -42,12 +42,12 @@ namespace PrimeTests.UnitTests
             await Assert.ThrowsAnyAsync<Exception>(() => _tested.AddBcProviderAsync());
         }
 
-        [Fact]
-        public void TestParseHL7v3DateTime()
-        {
-            Assert.Equal(new DateTime(1957, 3, 5, 20, 20, 20), SoapService.ParseHL7v3DateTime("19570305202020"));
-            Assert.ThrowsAny<FormatException>(() => SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
-        }
+        // [Fact]
+        // public void TestParseHL7v3DateTime()
+        // {
+        //     Assert.Equal(new DateTime(1957, 3, 5, 20, 20, 20), SoapService.ParseHL7v3DateTime("19570305202020"));
+        //     Assert.ThrowsAny<FormatException>(() => SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
+        // }
 
         [Fact]
         public void TestRemoveHL7v3TelecomType()
