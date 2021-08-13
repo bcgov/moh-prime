@@ -78,7 +78,9 @@ jobs:
         run: |
           cd ./prime-dotnet-webapi-tests/
 
-          dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+          dotnet test --logger:"console;noprogress=true"
+
+          # dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
       - run: cc-test-reporter after-build -t lcov
 
