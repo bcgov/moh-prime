@@ -1,7 +1,14 @@
 name: Build
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - innovate/code-climate
+  # pull_request:
+  #   branches:
+  #     - develop
+
 jobs:
-  build:
+  build-fe-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -38,3 +45,37 @@ jobs:
           npm run build:ci
 
       - run: cc-test-reporter after-build -t lcov
+  
+  build-be-coverage:
+    defaults:
+      run:
+        working-directory: ./prime-dot-net-webapi-test
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v1.7.2
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+          cc_test_reporter_version: latest  # optional
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
+
+      - run: cc-test-reporter after-build -t lcov
+
+

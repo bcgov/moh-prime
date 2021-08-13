@@ -27,11 +27,11 @@ namespace PrimeTests.UnitTests
             var expectedAllowed = new[]
             {
                 SiteRegistrationAction.Submit,
-                SiteRegistrationAction.Decline
+                SiteRegistrationAction.Reject
             }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Active);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Editable);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -45,7 +45,7 @@ namespace PrimeTests.UnitTests
             var expectedAllowed = new[]
             {
                 SiteRegistrationAction.Approve,
-                SiteRegistrationAction.Decline,
+                SiteRegistrationAction.Reject,
                 SiteRegistrationAction.RequestChange
             }.Contains(action);
 
@@ -63,12 +63,12 @@ namespace PrimeTests.UnitTests
             // Arrange
             var expectedAllowed = new[]
             {
-                SiteRegistrationAction.Unapprove,
+                SiteRegistrationAction.RequestChange,
 
             }.Contains(action);
 
             // Act
-            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Approved);
+            var allowed = SiteStatusStateEngine.AllowableStatusChange(action, SiteStatusType.Editable);
 
             // Assert
             Assert.Equal(expectedAllowed, allowed);
@@ -81,7 +81,7 @@ namespace PrimeTests.UnitTests
             // Arrange
             var expectedAllowed = new[]
             {
-                SiteRegistrationAction.Undecline,
+                SiteRegistrationAction.Approve,
             }.Contains(action);
 
             // Act
