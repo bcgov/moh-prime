@@ -55,15 +55,15 @@ jobs:
 
     strategy:
       matrix:
-        dotnet-version: [5.0.x' ]
+        dotnet-version: ['3.1.411','5.0.x' ]
 
     steps:
       - uses: actions/checkout@v2
-      - name: Setup .NET Core 5.0.302
+      - name: Setup .NET Core 3.1.411
         uses: actions/setup-dotnet@v1
         with:
           # Semantic version range syntax or exact version of a dotnet version
-          dotnet-version: '5.0.302'
+          dotnet-version: '3.1.411'
       - name: Display dotnet version
         run: dotnet --version
 
@@ -77,7 +77,9 @@ jobs:
       - name: Generate coverage report
         run: |
           cd ./prime-dotnet-webapi-tests/
-          dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
+          dotnet test
+
+          # dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
       - run: cc-test-reporter after-build -t lcov
 
