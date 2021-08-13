@@ -51,22 +51,68 @@ jobs:
       run:
         working-directory: ./prime-dot-net-webapi-test
 
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
-
+    runs-on: ubuntu-20.04
+    environment: Tools
+    env:
+      SERVICE_NAME: dotnet-webapi
+      CONTAINER_NAME: prime-webapi-backend
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
-        uses: actions/setup-dotnet@v1.7.2
+      - name: "Checkout the repo"
+        uses: actions/checkout@v2
+
+      - name: "Login to OpenShift repository"
+        uses: docker/login-action@v1
         with:
-          dotnet-version: ${{ matrix.dotnet-version }}
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
+          registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
+          username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
+          password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
+
+      - name: "Login to RedHat container repository"
+        uses: docker/login-action@v1
+        with: 
+          registry: ${{secrets.REDHAT_REGISTRY_URL}}
+          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
+          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
+
+      - name: "Build, tag and push .NET web API image"
+        id: build-image
+        env:
+          PRIME_DB_PASSWORD: ${{secrets.PRIME_DB_PASSWORD}}
+          PRIME_DB_USER: ${{secrets.PRIME_DB_USER}}
+          COMPOSE_DOCKER_CLI_BUILD: 1
+          DOCKER_BUILDKIT: 1
+
+        run: |
+          docker-compose -f oc4-compose.yml build --force-rm --no-cache \
+            --build-arg ASPNETCORE_HTTPS_PORT=5001 \
+            --build-arg ASPNETCORE_ENVIRONMENT="Development" \
+            --build-arg ASPNETCORE_URLS="http://+:8080" \
+            --build-arg DB_CONNECTION_STRING="host=tools-postgres-db;port=5432;database=postgres;username=$PRIME_DB_USER;password=$PRIME_DB_PASSWORD" \
+            --build-arg DB_HOST=tools-postgres-db \
+            --build-arg DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME" \
+            --build-arg PGPASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD \
+            --build-arg POSTGRESQL_USERNAME=$PRIME_DB_USER \
+            --build-arg POSTGRESQL_DATABASE=postgres \
+            --build-arg SVC_NAME="tools" \
+            $SERVICE_NAME
+          docker tag moh-prime_$SERVICE_NAME ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:tools
+          docker image push ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/$CONTAINER_NAME:tools
+
+    # strategy:
+    #   matrix:
+    #     dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
+
+    # steps:
+    #   - uses: actions/checkout@v2
+    #   - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+    #     uses: actions/setup-dotnet@v1.7.2
+    #     with:
+    #       dotnet-version: ${{ matrix.dotnet-version }}
+    #   - name: Install dependencies
+    #     run: dotnet restore
+    #   - name: Build
+    #     run: dotnet build --configuration Release --no-restore
 
       - uses: amancevice/setup-code-climate@v0
         with:
