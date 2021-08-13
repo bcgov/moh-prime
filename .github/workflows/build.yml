@@ -13,20 +13,29 @@ jobs:
       run:
         working-directory: ./prime-dot-net-webapi-tests
     
-    runs-on: ubuntu-latest
-
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macOS-latest]
+        dotnet-version: ['2.1', '2.2', '3.0', '3.1', '5.0']
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup dotnet
-        uses: actions/setup-dotnet@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Clear toolcache
+        shell: pwsh
+        run: __tests__/clear-toolcache.ps1 ${{ runner.os }}
+      - name: Setup dotnet ${{ matrix.dotnet-version }}
+        uses: ./
         with:
-          dotnet-version: '3.1.x'
-      - name: Install dependencies
-        run: dotnet restore
-      - name: Build
-        run: dotnet build
-      - name: Test with the dotnet CLI
-        run: dotnet test
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Check installed version
+        shell: pwsh
+        run: |
+          $version = & dotnet --version
+          Write-Host "Installed version: $version"
+          if (-not $version.StartsWith("${{ matrix.dotnet-version }}")) { throw "Unexpected version" }
+
 
   # build-fe-coverage:
   #   defaults:
