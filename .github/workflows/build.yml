@@ -82,7 +82,7 @@ jobs:
           dotnet test --filter FullyQualifiedName\!~Integration < /dev/null
 
       - name: Check Files
-        run:
+        run: |
           cd ./prime-dotnet-webapi-tests/coverage
           dir
           cd ../
