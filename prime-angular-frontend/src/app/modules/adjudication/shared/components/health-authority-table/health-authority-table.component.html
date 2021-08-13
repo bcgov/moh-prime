@@ -123,16 +123,6 @@
       </ng-container>
 
 
-
-      <tr mat-header-row
-          *matHeaderRowDef="siteColumns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: siteColumns;"
-          [hidden]="row.healthAuthorityOrganizationId !== idOfExpandedHA"></tr>
-
-
-
-
       <!-- Health Authority header -->
       <ng-container matColumnDef="haHeader">
         <td colspan="7"
@@ -141,7 +131,7 @@
           <strong>{{groupBy.name}}</strong>
           <button mat-icon-button
                   title="Expand"
-                  (click)="expand(groupBy)">
+                  (click)="expandHeader(groupBy)">
             <mat-icon>{{ (groupBy.id === idOfExpandedHA) ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
         </td>
@@ -151,6 +141,11 @@
           *matRowDef="let row; columns: ['prefixes', 'haHeader', 'haActions']; when: isGroup"> </tr>
 
 
+      <tr mat-header-row
+          *matHeaderRowDef="siteColumns; sticky: true"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: siteColumns;"
+          [hidden]="row.healthAuthorityOrganizationId !== idOfExpandedHA"></tr>
 
     </table>
 
@@ -162,7 +157,8 @@
     <ng-template #haMenu
                  let-row="row">
       <button mat-icon-button
-              [matMenuTriggerFor]="menu">
+              [matMenuTriggerFor]="menu"
+              class="org-menu-button">
         <mat-icon>more_vert</mat-icon>
       </button>
 
@@ -218,5 +214,6 @@
         </button>
       </mat-menu>
     </ng-template>
+
   </div>
 </div>
