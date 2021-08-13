@@ -38,7 +38,7 @@ RUN npm set unsafe-perm true
 RUN npm install -g @angular/cli
 # Install dependencies
 RUN npm ci
-# Add applicationz
+# Add application
 RUN ng build --prod
 
 ########################################
