@@ -80,8 +80,6 @@ jobs:
 
           dotnet test < /dev/null
 
-          # dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
-
       - run: cc-test-reporter after-build -t lcov
 
 

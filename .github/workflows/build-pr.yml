@@ -152,6 +152,7 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
+          # dotnet test /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
