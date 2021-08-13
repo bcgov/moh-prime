@@ -81,6 +81,11 @@ jobs:
           cd ./prime-dotnet-webapi-tests/
           dotnet test --filter FullyQualifiedName\!~Integration < /dev/null
 
+      - name: Check Files
+        run:
+          cd ./prime-dotnet-webapi-tests/coverage
+          dir
+          cd ../
       - name: After test reporter
         run: |
           cd ./prime-dotnet-webapi-tests/
