@@ -86,6 +86,7 @@ jobs:
       - name: After test reporter
         run: |
           cd ./prime-dotnet-webapi-tests/
-          cc-test-reporter after-build -t lcov COVERAGE_FILE coverage/coverage.info
+          cc-test-reporter format-coverage -t lcov COVERAGE_FILE coverage/coverage.info
+          cc-test-reporter upload-coverage
 
 
