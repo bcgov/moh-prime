@@ -5,7 +5,7 @@ on:
       - innovate/code-climate
   # pull_request:
   #   branches:
-  #     - develop
+  #     - develops
 
 jobs:
   # build-frontend-coverage:
