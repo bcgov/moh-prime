@@ -43,8 +43,16 @@
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
+                          class="alert-content"
+                          *ngIf="remainingAttempts === 1">The next failed attempt to login will lock your account.
+            </ng-container>
+            <ng-container #alertContent
+                          class="alert-content"
+                          *ngIf="remainingAttempts !== 1">You have {{remainingAttempts}} remaining attempts to login.
+            </ng-container>
+            <ng-container #alertContent
                           class="alert-content">
-              You have {{remainingAttempts}} attempts the next failed attempt will lock your account. Please wait
+              Please wait
               {{lockoutTimeInHours}} hour(s) before trying again. If you think this is a mistake please contact Reg
               Admin at 999 999 9999
             </ng-container>
