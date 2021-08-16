@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: frontend
-          path: coverage/lcov.info
+          path: ./prime-angular-frontend/coverage/lcov.info
 
 
   
@@ -135,7 +135,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: backend
-          path: coverage/lcov.info
+          path: ./prime-angular-frontend/coverage/lcov.info
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
