@@ -1,5 +1,5 @@
 name: CodeClimate-Checks
-on: [ pull_request ]
+on: [ push, pull_request ]
   # push:
   #   branches:
   #     - innovate/code-climate
@@ -8,7 +8,7 @@ on: [ pull_request ]
   #     - develops
 
 jobs:
-  build-frontend-coverage:
+  collect-frontend-coverage:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
@@ -41,13 +41,13 @@ jobs:
 
       - name: npm ci and npm run build
         run: |
-          npm ci
+          # npm ci
           npm run build:ci
 
       - run: cc-test-reporter after-build -t lcov
   
-  build-backend-coverage:
-    needs: build-frontend-coverage
+  collect-backend-coverage:
+    needs: collect-frontend-coverage
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
