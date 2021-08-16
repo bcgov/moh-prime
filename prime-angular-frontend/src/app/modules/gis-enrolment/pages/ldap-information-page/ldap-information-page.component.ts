@@ -25,6 +25,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   public formState: LdapInformationPageFormState;
   public remainingAttempts: number;
   public lockoutTimeInHours: number;
+  public apiErrorCode: number;
 
   private routeUtils: RouteUtils;
 
@@ -69,6 +70,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
         exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json)),
         catchError((error: any) => {
           if (error.status === 401 && this.remainingAttempts !== 0) {
+            this.apiErrorCode = error.status;
             this.remainingAttempts -= 1;
           }
           throw error;

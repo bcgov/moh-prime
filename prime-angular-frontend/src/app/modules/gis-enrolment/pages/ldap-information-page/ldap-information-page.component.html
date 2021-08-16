@@ -39,7 +39,7 @@
           </mat-form-field>
 
         </div>
-        <ng-container *ngIf="remainingAttempts > 0">
+        <ng-container *ngIf="remainingAttempts > 0 && apiErrorCode">
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
@@ -58,7 +58,7 @@
             </ng-container>
           </app-alert>
         </ng-container>
-        <ng-container *ngIf="remainingAttempts === 0">
+        <ng-container *ngIf="remainingAttempts === 0 && apiErrorCode">
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
