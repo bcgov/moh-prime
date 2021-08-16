@@ -118,8 +118,12 @@ jobs:
           echo "Going in coverage folder"
           cd ./coverage
           dir
-
-
+          echo "Going in FE coverage folder"
+          cd ../../
+          cd ./prime-angular-frontend
+          echo "In FE coverage folder"
+          dir
+          cd ./coverage
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
