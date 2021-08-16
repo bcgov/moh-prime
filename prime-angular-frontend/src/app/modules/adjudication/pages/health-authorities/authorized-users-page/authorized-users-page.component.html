@@ -1,11 +1,8 @@
 <app-page [busy]="busy"
           mode="full">
 
-  <app-page-header>Health Authority</app-page-header>
+  <app-page-header>{{ haName }} Authorized Users</app-page-header>
 
-  <div class="mb-4">
-    <app-health-authority-table (route)="onRoute($event)"></app-health-authority-table>
-  </div>
   <div>
     <app-health-auth-authorized-users-view></app-health-auth-authorized-users-view>
   </div>
