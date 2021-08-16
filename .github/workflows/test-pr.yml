@@ -108,5 +108,18 @@ jobs:
         run: |
           # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
-          cc-test-reporter sum-coverage -p 2
-          cc-test-reporter upload-coverage
+
+
+  sum-coverage:
+    needs: [ collect-frontend-coverage, collect-backend-coverage ]
+
+    - uses: amancevice/setup-code-climate@v0
+      with:
+        cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+        cc_test_reporter_version: latest  # optional
+
+    - name: Sum frontend and backend coverages
+      run: |
+        cc-test-reporter sum-coverage -p 2 FILE ["prime-angular-frontend/coverage/lcov.info", "prime-dotnet-webapi-tests/coverage/lcov.info"]
+        cc-test-reporter upload-coverage
+
