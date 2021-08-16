@@ -25,15 +25,7 @@ exclude_patterns:
 - "**/*.spec.*"
 - "**/*.Designer.cs"
 - "prime-dotnet-webapi/Migrations/ApiDbContextModelSnapshot.cs"
-# examples of auto-generated exclusions
-- db/*
-- spec/*
-- tests/*
-- vendor/*
 
-# examples of third party libraries that should be excluded
-- */jquery/*
-- */bootstrap/*
 
 # examples of minified files that should be excluded
 - **.min.js
