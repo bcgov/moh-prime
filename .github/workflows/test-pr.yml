@@ -41,7 +41,7 @@ jobs:
 
       - name: npm ci and npm run build
         run: |
-          # npm ci
+          npm ci
           npm run build:ci
 
       - run: cc-test-reporter after-build -t lcov
