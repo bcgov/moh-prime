@@ -28,5 +28,5 @@ exclude_patterns:
 
 
 # examples of minified files that should be excluded
-- **.min.js
-- **.min.css
+# - **.min.js
+# - **.min.css
