@@ -49,6 +49,7 @@ jobs:
         run: |
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
           dir
+          echo "Going in coverage folder"
           cd ./coverage
           dir
 
@@ -114,6 +115,10 @@ jobs:
           # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
           dir
+          echo "Going in coverage folder"
+          cd ./coverage
+          dir
+
 
 
   codeclimate-sum-coverage:
@@ -125,6 +130,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      defaults:
+        run:
+          working-directory: ./prime-dotnet-webapi-tests
+          
       - uses: amancevice/setup-code-climate@v0
         with:
           cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
