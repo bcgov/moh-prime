@@ -21,7 +21,7 @@ export class AuthorizedUsersPageComponent implements OnInit {
     private router: Router,
     private configService: ConfigService,
   ) {
-    this.haName = this.configService.healthAuthorities.find(ha => ha.code === this.route.snapshot.params.haid)?.name;
+    this.haName = this.configService.healthAuthorities.find(ha => ha.code === +this.route.snapshot.params.haid)?.name;
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
