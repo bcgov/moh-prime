@@ -127,10 +127,6 @@ jobs:
         run:
           working-directory: ./prime-dotnet-webapi-tests
 
-    defaults:
-      run:
-        working-directory: ./
-
     runs-on: ubuntu-latest
 
     steps:
