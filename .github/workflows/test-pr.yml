@@ -104,13 +104,13 @@ jobs:
           dir
           # cd ../
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov -verbosity:Error
-      - name: After test reporter
+      - name: Collect Backend Report
         run: |
           # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
 
 
-  sum-coverage:
+  codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
     - uses: amancevice/setup-code-climate@v0
