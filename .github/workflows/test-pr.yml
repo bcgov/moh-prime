@@ -123,6 +123,6 @@ jobs:
 
       - name: Sum frontend and backend coverages
         run: |
-          cc-test-reporter sum-coverage -p 2 FILE ["prime-angular-frontend/coverage/lcov.info", "prime-dotnet-webapi-tests/coverage/lcov.info"]
+          cc-test-reporter sum-coverage prime-angular-frontend/coverage/lcov.info prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
           cc-test-reporter upload-coverage
 
