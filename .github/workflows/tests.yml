@@ -47,6 +47,7 @@ jobs:
       - run: cc-test-reporter after-build -t lcov
   
   build-backend-coverage:
+    needs: build-frontend-coverage
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
