@@ -12,6 +12,7 @@ jobs:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
+
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -52,12 +53,6 @@ jobs:
           echo "Going in coverage folder"
           cd ./coverage
           dir
-      
-      - name: Persist coverage file
-        uses: actions/upload-artifact@v2
-        with:
-          name: frontend
-          path: coverage/lcov.info
 
 
   
@@ -131,12 +126,6 @@ jobs:
           dir
           cd ./coverage
 
-      - name: Persist backend coverage file
-        uses: actions/upload-artifact@v2
-        with:
-          name: backend
-          path: coverage/lcov.info
-
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
@@ -150,7 +139,8 @@ jobs:
 
       - name: Sum frontend and backend coverages
         run: |
+          cd ./prime-dotnet-webapi-tests/
           dir
-          # cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
-          # cc-test-reporter upload-coverage
+          cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
+          cc-test-reporter upload-coverage
 
