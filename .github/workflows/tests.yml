@@ -1,4 +1,4 @@
-name: Test
+name: CodeClimate-Checks
 on:
   push:
     branches:
@@ -8,43 +8,43 @@ on:
   #     - develops
 
 jobs:
-  # build-frontend-coverage:
-  #   defaults:
-  #     run:
-  #       working-directory: ./prime-angular-frontend
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [12.x]
+  build-frontend-coverage:
+    defaults:
+      run:
+        working-directory: ./prime-angular-frontend
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
 
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - name: Cache node modules
-  #       uses: actions/cache@v1
-  #       with:
-  #         path: ~/.npm
-  #         key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-node-
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-  #     - name: Node ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
 
-  #     - uses: amancevice/setup-code-climate@v0
-  #       with:
-  #         cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
-  #         cc_test_reporter_version: latest  # optional
+      - uses: amancevice/setup-code-climate@v0
+        with:
+          cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
+          cc_test_reporter_version: latest  # optional
 
-  #     - run: cc-test-reporter before-build
+      - run: cc-test-reporter before-build
 
-  #     - name: npm ci and npm run build
-  #       run: |
-  #         npm ci
-  #         npm run build:ci
+      - name: npm ci and npm run build
+        run: |
+          npm ci
+          npm run build:ci
 
-  #     - run: cc-test-reporter after-build -t lcov
+      - run: cc-test-reporter after-build -t lcov
   
   build-backend-coverage:
     defaults:
