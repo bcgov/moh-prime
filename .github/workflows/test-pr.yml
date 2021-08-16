@@ -1,5 +1,5 @@
 name: CodeClimate-Checks
-on: [ push, pull_request ]
+on: [ pull_request ]
   # push:
   #   branches:
   #     - innovate/code-climate
@@ -42,7 +42,7 @@ jobs:
       - name: npm ci and npm run build
         run: |
           npm ci
-          npm run build:ci
+          npm run test
 
       - run: cc-test-reporter after-build -t lcov
   
