@@ -68,7 +68,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
       .pipe(
         exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json)),
         catchError((error: any) => {
-          if (error.status === 401) {
+          if (error.status === 401 && this.remainingAttempts !== 0) {
             this.remainingAttempts -= 1;
           }
           throw error;

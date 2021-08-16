@@ -50,6 +50,17 @@
             </ng-container>
           </app-alert>
         </ng-container>
+        <ng-container *ngIf="remainingAttempts === 0">
+          <app-alert type="danger"
+                     icon="error_outline">
+            <ng-container #alertContent
+                          class="alert-content">
+              Your account is now locked due to too many failed login attempts. Please wait
+              {{lockoutTimeInHours}} hour(s) before trying again. If you think this is a mistake please contact Reg
+              Admin at 999 999 9999
+            </ng-container>
+          </app-alert>
+        </ng-container>
         <div class="col-12 text-right">
           <button mat-button
                   type="button"
