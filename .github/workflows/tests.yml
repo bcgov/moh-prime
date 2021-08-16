@@ -1,8 +1,8 @@
 name: CodeClimate-Checks
-on:
-  push:
-    branches:
-      - innovate/code-climate
+on: [ pull_request ]
+  # push:
+  #   branches:
+  #     - innovate/code-climate
   # pull_request:
   #   branches:
   #     - develops
@@ -106,5 +106,3 @@ jobs:
           # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
           cc-test-reporter upload-coverage
-
-
