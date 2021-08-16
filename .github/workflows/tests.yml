@@ -73,6 +73,11 @@ jobs:
         run: |
           cd ../
           dotnet restore
+
+      - name: Install ReportGenerator
+        run: |
+          cd ../
+          dotnet tool install -g dotnet-reportgenerator-globaltool
         
       - uses: amancevice/setup-code-climate@v0
         with:
@@ -84,19 +89,21 @@ jobs:
       - name: Generate coverage report
         run: |
           # cd ./prime-dotnet-webapi-tests/
-          dotnet test /p:CollectCoverage=true /p:CoverletOutput=coverage/ /p:CoverletOutputFormat=lcov --filter FullyQualifiedName\!~Integration < /dev/null
+          # dotnet test /p:CollectCoverage=true /p:CoverletOutput=coverage/ /p:CoverletOutputFormat=lcov --filter FullyQualifiedName\!~Integration < /dev/null
+          dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura --filter FullyQualifiedName\!~Integration < /dev/null
 
       - name: Check Files
         run: |
           # cd ./prime-dotnet-webapi-tests/coverage
-          cd ./coverage
-          mv "coverage.info" "lcov.info"
-          dir
-          cd ../
+          # cd ./coverage
+          # mv "coverage.info" "lcov.info"
+          # dir
+          # cd ../
+          reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov -verbosity:Error
       - name: After test reporter
         run: |
           # cd ./prime-dotnet-webapi-tests/
-          cc-test-reporter format-coverage COVERAGE_FILE coverage/coverage.info -t lcov
+          cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
           cc-test-reporter upload-coverage
 
 
