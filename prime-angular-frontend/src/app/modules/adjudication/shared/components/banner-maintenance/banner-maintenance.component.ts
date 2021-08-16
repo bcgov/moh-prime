@@ -19,7 +19,6 @@ import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialo
 import { BannerResourceService } from '@shared/services/banner-resource.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-
 import { BannerMaintenanceFormState } from './banner-maintenance-form-state.class';
 
 export class IsSameOrBeforeErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
