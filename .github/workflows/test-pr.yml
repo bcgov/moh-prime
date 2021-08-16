@@ -112,6 +112,9 @@ jobs:
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
+    defaults:
+      run:
+        working-directory: ./
 
     runs-on: ubuntu-latest
 
@@ -123,6 +126,7 @@ jobs:
 
       - name: Sum frontend and backend coverages
         run: |
+          dir
           cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
           cc-test-reporter upload-coverage
 
