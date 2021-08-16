@@ -46,7 +46,12 @@ jobs:
 
       # - run: cc-test-reporter after-build -t lcov
       - name: Collect Frontend Report
-        run: cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
+        run: |
+          cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
+          dir
+          cd ./coverage
+          dir
+
 
   
   collect-backend-coverage:
@@ -108,6 +113,7 @@ jobs:
         run: |
           # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
+          dir
 
 
   codeclimate-sum-coverage:
