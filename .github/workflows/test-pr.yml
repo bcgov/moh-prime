@@ -39,7 +39,7 @@ jobs:
 
       - run: cc-test-reporter before-build
 
-      - name: npm ci and npm run build
+      - name: npm ci and npm run test
         run: |
           npm ci
           npm run test
@@ -98,7 +98,7 @@ jobs:
           # cd ./prime-dotnet-webapi-tests/coverage
           # cd ./coverage
           # mv "coverage.info" "lcov.info"
-          # dir
+          dir
           # cd ../
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov -verbosity:Error
       - name: After test reporter
