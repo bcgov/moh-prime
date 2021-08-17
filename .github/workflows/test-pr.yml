@@ -157,7 +157,7 @@ jobs:
       - name: Sum files
         run: |
           dir 
-          cd ./backend
+          
           cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
           cc-test-reporter upload-coverage
             
