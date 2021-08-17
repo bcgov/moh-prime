@@ -107,7 +107,9 @@ jobs:
         run: |
           # cd ./prime-dotnet-webapi-tests/
           # dotnet test /p:CollectCoverage=true /p:CoverletOutput=coverage/ /p:CoverletOutputFormat=lcov --filter FullyQualifiedName\!~Integration < /dev/null
-          dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration < /dev/null
+          # dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration < /dev/null
+                    dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* < /dev/null
+
 
       - name: Run report generator
         run: |
