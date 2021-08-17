@@ -5,7 +5,7 @@ SETLOCAL
 @REM SET BCSC_PASSWORD=
 @REM dotnet test --filter TestPrimeE2E.Enrollment.EnrollmentTests.FullFamilyPhysician_HappyPath
 
-@REM SET ADMIN_UR=http://localhost:4200/admin
+@REM SET ADMIN_URL=http://localhost:4200/admin
 @REM SET IDIR_ID=
 @REM SET IDIR_PASSWORD=
 @REM SET BCSC_ID=
