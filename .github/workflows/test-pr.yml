@@ -156,9 +156,7 @@ jobs:
 
       - name: Sum files
         run: |
-          # $frontend = lcov.info
-          # $backend = backend.info
-          cc-test-reporter sum-coverage frontend/lcov.info backend/lcov.info -p 2 -o codeclimate.total.json
+          cc-test-reporter sum-coverage -output o -p 2 frontend/lcov.info | backend/lcov.info 
           cc-test-reporter upload-coverage
             
       # - name: Sum frontend and backend coverages
