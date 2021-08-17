@@ -151,3 +151,9 @@ jobs:
           # cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
           cc-test-reporter sum-coverage -p 2 frontend.json backend.json
           cc-test-reporter upload-coverage
+      
+      - name: Create summed report
+        uses: actions/upload-artifact@v2
+        with:
+          name: summed
+          path: ./coverage/codeclimate.json
