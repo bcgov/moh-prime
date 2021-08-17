@@ -1,3 +1,10 @@
+const COMMUNITY_PHARMACIST_TOA = 'Pharmacy Regulated User';
+const REGULATED_USER_TOA = 'Regulated User';
+const OBO_TOA = 'On Behalf Of User';
+const COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT = 'Community Practice Organization';
+const COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT = 'Community Pharmacy Organization';
+const PHARMACY_OBO_TOA = 'Pharmacy On Behalf Of User';
+
 export enum AgreementType {
   COMMUNITY_PHARMACIST_TOA = 1,
   REGULATED_USER_TOA,
