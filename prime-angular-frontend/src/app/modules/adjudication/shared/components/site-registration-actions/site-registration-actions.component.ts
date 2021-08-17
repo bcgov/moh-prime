@@ -79,7 +79,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
       this.flag.emit({
         siteId: this.siteRegistration.siteId,
         flagged: !this.siteRegistration.flagged
-      })
+      });
     }
   }
 
@@ -94,15 +94,18 @@ export class SiteRegistrationActionsComponent implements OnInit {
   }
 
   /**
-   * @param action
-   * @returns Whether the given action is valid according to the status of the site registration
+   * @description
+   * Check whether the given action is valid according to the status of the
+   * site registration.
    */
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
       case SiteStatusType.EDITABLE:
         return (action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.IN_REVIEW:
-        return (action === SiteAdjudicationAction.REQUEST_CHANGES || action === SiteAdjudicationAction.APPROVE || action === SiteAdjudicationAction.REJECT);
+        return (action === SiteAdjudicationAction.REQUEST_CHANGES
+          || action === SiteAdjudicationAction.APPROVE
+          || action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
       default:

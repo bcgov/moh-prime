@@ -91,7 +91,10 @@ export class SearchFormComponent implements OnInit {
       });
 
     if (!queryParams.textSearch && !queryParams.statusCode) {
-      this.form.patchValue({ textSearch: this.localStorage.get(this.textSearchKey), statusCode: this.localStorage.getInteger(this.statusCodeKey) || null });
+      this.form.patchValue({
+        textSearch: this.localStorage.get(this.textSearchKey),
+        statusCode: this.localStorage.getInteger(this.statusCodeKey) || null
+      });
     }
   }
 }

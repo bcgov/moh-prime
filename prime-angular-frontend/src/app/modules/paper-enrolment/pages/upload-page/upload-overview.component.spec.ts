@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { UploadOverviewComponent } from './upload-overview.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('UploadOverviewComponent', () => {
   let component: UploadOverviewComponent;
@@ -8,7 +9,12 @@ describe('UploadOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UploadOverviewComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        UploadOverviewComponent
+      ]
     })
     .compileComponents();
   });

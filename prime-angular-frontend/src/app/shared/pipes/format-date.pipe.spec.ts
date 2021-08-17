@@ -22,6 +22,6 @@ describe('FormatDatePipe', () => {
   it('should not fail when passed a null', () => {
     const value = null;
     const result = pipe.transform(value);
-    expect(result).toBeNull();
+    expect(result).toBe('');
   });
 });

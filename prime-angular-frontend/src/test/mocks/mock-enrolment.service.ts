@@ -126,7 +126,9 @@ export class MockEnrolmentService implements IEnrolmentService {
       alwaysManual: false,
       adjudicatorId: null,
       adjudicator: null,
-      base64QRCode: null
+      base64QRCode: null,
+      confirmed: false,
+      requiresConfirmation: false
     });
   }
 
