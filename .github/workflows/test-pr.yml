@@ -12,13 +12,16 @@ jobs:
     defaults:
       run:
         working-directory: ./prime-angular-frontend
+  
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version: [12.x]
 
     steps:
       - uses: actions/checkout@v1
+
       - name: Cache node modules
         uses: actions/cache@v1
         with:
@@ -44,16 +47,11 @@ jobs:
           npm ci
           npm run test
 
-      # - run: cc-test-reporter after-build -t lcov
       - name: Collect Frontend Report
         run: |
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
-          dir
-          echo "Going in coverage folder"
-          cd ./coverage
-          dir
       
-      - name: Persist coverage file
+      - name: Create frontend coverage file artifact
         uses: actions/upload-artifact@v2
         with:
           name: frontend
@@ -63,6 +61,7 @@ jobs:
   
   collect-backend-coverage:
     needs: collect-frontend-coverage
+
     defaults:
       run:
         working-directory: ./prime-dotnet-webapi-tests
@@ -75,11 +74,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup .NET Core 3.1.411
         uses: actions/setup-dotnet@v1
         with:
           # Semantic version range syntax or exact version of a dotnet version
           dotnet-version: '3.1.411'
+
       - name: Display dotnet version
         run: |
           cd ../
@@ -108,24 +109,15 @@ jobs:
           # dotnet test /p:CollectCoverage=true /p:CoverletOutput=coverage/ /p:CoverletOutputFormat=lcov --filter FullyQualifiedName\!~Integration < /dev/null
           dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:Exclude=[xunit.*]* --filter FullyQualifiedName\!~Integration < /dev/null
 
-      - name: Check Files
+      - name: Run report generator
         run: |
-          # cd ./prime-dotnet-webapi-tests/coverage
-          # cd ./coverage
-          # mv "coverage.info" "lcov.info"
-          dir
-          # cd ../
           reportgenerator "-reports:coverage.cobertura.xml" "-targetdir:coverage" -reporttype:lcov -verbosity:Error
+
       - name: Collect Backend Report
         run: |
-          # cd ./prime-dotnet-webapi-tests/
           cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info
-          dir
-          echo "Going in coverage folder"
-          cd ./coverage
-          dir
 
-      - name: Persist backend coverage file
+      - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
         with:
           name: backend
@@ -146,24 +138,16 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend
-          path: frontend/
+          # path: frontend/
 
       - name: Download backend artifact
         uses: actions/download-artifact@v2
         with:
           name: backend
-          path: backend/
+          # path: backend/
 
       - name: Sum files
-        run: |
-          dir 
-          
-          cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
+        run: |          
+          # cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
+          cc-test-reporter sum-coverage -p 2 frontend.json backend.json
           cc-test-reporter upload-coverage
-            
-      # - name: Sum frontend and backend coverages
-      #   run: |
-      #     dir
-      #     # cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
-      #     # cc-test-reporter upload-coverage
-
