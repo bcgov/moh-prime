@@ -124,12 +124,6 @@ jobs:
           echo "Going in coverage folder"
           cd ./coverage
           dir
-          echo "Going in FE coverage folder"
-          cd ../../
-          cd ./prime-angular-frontend
-          echo "In FE coverage folder"
-          dir
-          cd ./coverage
 
       - name: Persist backend coverage file
         uses: actions/upload-artifact@v2
