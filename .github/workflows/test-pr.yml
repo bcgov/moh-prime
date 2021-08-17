@@ -123,13 +123,14 @@ jobs:
           dir
           echo "Going in coverage folder"
           cd ./coverage
+          mv "lcov.info" "backend.info"
           dir
 
       - name: Persist backend coverage file
         uses: actions/upload-artifact@v2
         with:
           name: backend
-          path: ./prime-dotnet-webapi-tests/coverage/lcov.info
+          path: ./prime-dotnet-webapi-tests/coverage/backend.info
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
@@ -142,9 +143,28 @@ jobs:
           cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
           cc_test_reporter_version: latest  # optional
 
-      - name: Sum frontend and backend coverages
-        run: |
-          dir
-          # cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
-          # cc-test-reporter upload-coverage
+      steps:
+
+        - name: Download fronend artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: frontend
+
+        - name: Download backend artifact
+          uses: actions/download-artifact@v2
+          with:
+            name: backend
+
+        - name: Sum files
+          run: |
+            $frontend = lcov.info
+            $backend = backend.info
+            cc-test-reporter sum-coverage $frontend $backend -p 2 -o codeclimate.total.json
+            cc-test-reporter upload-coverage
+            
+      # - name: Sum frontend and backend coverages
+      #   run: |
+      #     dir
+      #     # cc-test-reporter sum-coverage ./prime-angular-frontend/coverage/lcov.info ./prime-dotnet-webapi-tests/coverage/lcov.info -p 2 -o codeclimate.total.json
+      #     # cc-test-reporter upload-coverage
 
