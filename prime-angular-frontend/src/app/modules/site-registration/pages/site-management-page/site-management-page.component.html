@@ -1,4 +1,16 @@
 <app-page [busy]="busy">
+  <app-expiry-alert [expiryDates]="organizationSitesExpiryDates">
+    <!-- Work around for ngProjectAs not passing class reference to alert when applied to ng-content -->
+    <ng-container #alertTitle
+                  class="alert-title">
+      One or more sites requires renewal.
+    </ng-container>
+    <ng-container #alertContent
+                  class="alert-content">
+      Review information and upload a valid business licence for site(s) indicated below.
+    </ng-container>
+  </app-expiry-alert>
+
   <app-page-header>Site Management</app-page-header>
 
   <section class="mb-3">
@@ -7,8 +19,8 @@
       <ng-container appPageSubheader2Summary>
         Use this management page to update your information or to add multiple sites.
         <em class="emphasize">
-          A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at one
-          location, you have multiple sites.
+          A site is a physical address in combination with a PharmaNet software vendor. If you use multiple vendors at
+          one location, you have multiple sites.
         </em>
       </ng-container>
     </app-page-subheader2>
@@ -63,9 +75,13 @@
                         }
                       }">
         </ng-container>
-        <ng-container *ngIf="isApproved(site)"
+        <ng-container *ngIf="isApproved(site) && !requiresRenewal(site)"
                       [ngTemplateOutlet]="success_notification"
                       [ngTemplateOutletContext]="{ props: getApprovedSiteNotificationProperties(site) }">
+        </ng-container>
+        <ng-container *ngIf="isApproved(site) && requiresRenewal(site)"
+                      [ngTemplateOutlet]="notification"
+                      [ngTemplateOutletContext]="{ props: getRenewalRequiredSiteNotificationProperties(organization.id, site) }">
         </ng-container>
       </app-summary-card>
 
@@ -76,9 +92,11 @@
   <ng-template #notification
                let-props="props">
     <div class="d-flex align-items-center mt-2">
-      <mat-icon class="mr-2"
-                color="warn">{{ props.icon }}</mat-icon>
-      <span class="text-red">{{ props.text }}</span>
+      <div class="col d-flex align-items-center">
+        <mat-icon class="mr-2"
+                  color="warn">{{ props.icon }}</mat-icon>
+        <span class="text-red">{{ props.text }}</span>
+      </div>
       <button mat-flat-button
               color="primary"
               class="ml-auto"

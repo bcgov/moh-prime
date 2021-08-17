@@ -6,10 +6,7 @@
                                     [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
 
   <div class="mb-4">
-    <app-alert *ngIf="!isInitialEnrolment && within90DaysOfRenewal"
-               type="info"
-               icon="error_outline"
-               class="mb-4">
+    <app-expiry-alert [expiryDates]="enrolment?.expiryDate">
       <ng-container #alertTitle
                     class="alert-title">
         Your enrolment requires renewal.
@@ -18,7 +15,7 @@
                     class="alert-content">
         Renew your enrolment by {{ enrolment?.expiryDate | formatDate | default }} to maintain your access to PharmaNet.
       </ng-container>
-    </app-alert>
+    </app-expiry-alert>
 
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>{{ isInitialEnrolment ? 'Enrolment Review' : 'Renew Enrolment' }}

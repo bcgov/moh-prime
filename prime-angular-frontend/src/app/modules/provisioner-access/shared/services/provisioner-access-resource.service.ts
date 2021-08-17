@@ -5,7 +5,7 @@ import { map, tap } from 'rxjs/operators';
 
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 import { EnrolmentCertificate } from '../models/enrolment-certificate.model';
 
@@ -16,7 +16,7 @@ export class ProvisionerAccessResource {
 
   constructor(
     private apiResource: ApiResource,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public getCertificate(accessTokenId: string): Observable<EnrolmentCertificate> {

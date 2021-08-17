@@ -3,8 +3,6 @@ import { Router, ActivatedRoute, NavigationExtras } from '@angular/router';
 import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import * as moment from 'moment';
-
 import { EMPTY, Subscription, Observable } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
@@ -15,7 +13,6 @@ import { Enrolment } from '@shared/models/enrolment.model';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { Address } from '@shared/models/address.model';
-
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -37,7 +34,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public enrolmentErrors: ValidationErrors;
   public currentStatus: EnrolmentStatusEnum;
   public demographicRoutePath: string;
-  public within90DaysOfRenewal: boolean;
   public identityProvider: IdentityProviderEnum;
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
@@ -126,11 +122,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           // this view, and not made any changes to the state of their enrolment
           // so use the source of truth that is populated from the server
           let enrolment = this.enrolmentService.enrolment;
-
-          if (enrolment?.expiryDate) {
-            const expiryMinus90Days = moment(enrolment.expiryDate).subtract(90, 'days');
-            this.within90DaysOfRenewal = moment().isAfter(expiryMinus90Days);
-          }
 
           // Store current status as it will be truncated for initial enrolment
           this.currentStatus = enrolment.currentStatus.statusCode;

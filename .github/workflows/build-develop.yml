@@ -1,12 +1,5 @@
-# This workflow will build all of the necessary components for the PRIME
-# application, with the respective images pushed and stored in the project's
-# tools namespace.
-#
-# Images are then deployed to the respective OpenShift namespace via the
-# prime-app-template.yml in the infrastructure folder.
-
-name: Build PRIME from Develop Branch and Deploy to OpenShift Image Registry
-
+name: Build Develop
+# Build all of the necessary components for the PRIME application from `develop` branch. Images are then deployed to Dev environment via the prime-app-template.yml in the infrastructure folder
 
 # ##### Uncomment on merge to dev
 on:
@@ -173,10 +166,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install OC
-        uses: redhat-actions/oc-installer@v1
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4.6"
 
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
+        uses: redhat-actions/oc-login@v1.1
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
@@ -204,39 +199,3 @@ jobs:
             -p FRONTEND_REPLICAS=1 \
             -p BACKEND_REPLICAS=1 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-
-#          oc process -f infrastructure/mailhog-template.yml \
-#            -p MAILHOG_SERVICE_NAME=mailhog-server \
-#            -p MAILHOG_IMAGE=registry.hub.docker.com/mailhog/mailhog:latest \
-#            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-
-#          oc process -f infrastructure/metabase-template.yml \
-#            -p OC_APP=${{secrets.OC_APP}} \
-#            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
-
-  garbage-cleanup:
-    runs-on: ubuntu-20.04
-    environment: Development
-    needs: [apply-oc-template]
-    steps:
-      - name: "Use the OpenShift template"
-        uses: actions/checkout@v2
-
-      - name: Install OC
-        uses: redhat-actions/oc-installer@v1
-
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
-
-      - name: "Cleanup"
-        id: cleanup
-        env:
-          PROJECT_OWNER: bcgov
-          PROJECT_NAME: moh-prime
-          PROJECT_PREFIX: ${{secrets.OPENSHIFT_LICENSE_PLATE}}
-        run: |
-          ./devops/OC4/player.sh occleanup

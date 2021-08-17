@@ -3,7 +3,7 @@ import { ApiHttpResponse } from '@core/models/api-http-response.model';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiResource } from '@core/resources/api-resource.service';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { ToastService } from '@core/services/toast.service';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { Banner, BannerViewModel } from '@shared/models/banner.model';
@@ -18,7 +18,7 @@ export class BannerResourceService {
     private apiResource: ApiResource,
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
-    private logger: LoggerService
+    private logger: ConsoleLoggerService
   ) { }
 
   public createBanner(locationCode: BannerLocationCode, banner: Banner): Observable<Banner> {
@@ -67,7 +67,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel>) => BannerViewModel.toBanner(response.result)),
         tap((banners: Banner) => this.logger.info('BANNER', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Banner could not be retrieved');
           this.logger.error('[Banner] BannerResource::getBanner error has occurred: ', error);
           throw error;
         })
@@ -80,7 +79,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('ENROLMENT_LANDING_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment Landing Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getEnrolmentLandingBanners error has occurred: ', error);
           throw error;
         })
@@ -93,7 +91,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('SITE_LANDING_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Site Landing Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getSiteLandingBanners error has occurred: ', error);
           throw error;
         })
@@ -107,7 +104,6 @@ export class BannerResourceService {
         map((response: ApiHttpResponse<BannerViewModel[]>) => response.result.map(b => BannerViewModel.toBanner(b))),
         tap((banners: Banner[]) => this.logger.info('ACTIVE_BANNERS', banners)),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Banners could not be retrieved');
           this.logger.error('[Banner] BannerResource::getActiveBannersByLocationCode error has occurred: ', error);
           throw error;
         })

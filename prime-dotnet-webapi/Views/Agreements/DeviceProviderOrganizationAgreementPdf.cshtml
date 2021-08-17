@@ -1,0 +1,14 @@
+@using Prime.ViewModels.Agreements
+@model OrgAgreementRazorViewModel
+
+@{
+  Layout = "~/Views/Partials/_BaseLayout.cshtml";
+}
+
+@section Title { Organization Agreement }
+
+@section Theme {
+@await Html.PartialAsync("~/Views/Partials/_AgreementTheme.cshtml")
+}
+
+@await Html.PartialAsync("DeviceProviderOrganizationAgreement.cshtml")

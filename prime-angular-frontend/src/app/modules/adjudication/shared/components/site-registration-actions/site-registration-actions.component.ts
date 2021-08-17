@@ -20,6 +20,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   @Output() public escalate: EventEmitter<number>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
   @Output() public enableEditing: EventEmitter<number>;
+  @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
 
   public Role = Role;
   public SiteStatusType = SiteStatusType;
@@ -35,6 +36,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
     this.enableEditing = new EventEmitter<number>();
+    this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
   }
 
   public onApprove(): void {
@@ -72,6 +74,15 @@ export class SiteRegistrationActionsComponent implements OnInit {
     }
   }
 
+  public onToggleFlagSite() {
+    if (this.permissionService.hasRoles(Role.VIEW_SITE)) {
+      this.flag.emit({
+        siteId: this.siteRegistration.siteId,
+        flagged: !this.siteRegistration.flagged
+      })
+    }
+  }
+
   public onDelete(record: { [key: string]: number }) {
     this.delete.emit(record);
   }
@@ -88,12 +99,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
    */
   public isActionAllowed(action: SiteAdjudicationAction): boolean {
     switch (this.siteRegistration.status) {
-      case SiteStatusType.ACTIVE:
+      case SiteStatusType.EDITABLE:
         return (action === SiteAdjudicationAction.REJECT);
       case SiteStatusType.IN_REVIEW:
         return (action === SiteAdjudicationAction.REQUEST_CHANGES || action === SiteAdjudicationAction.APPROVE || action === SiteAdjudicationAction.REJECT);
-      case SiteStatusType.APPROVED:
-        return (action === SiteAdjudicationAction.REQUEST_CHANGES);
       case SiteStatusType.LOCKED:
         return (action === SiteAdjudicationAction.UNREJECT);
       default:

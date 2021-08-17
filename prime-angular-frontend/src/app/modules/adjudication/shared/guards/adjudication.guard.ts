@@ -6,12 +6,12 @@ import { exhaustMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { Admin } from '@auth/shared/models/admin.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 export class AdjudicationGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     private permissionService: PermissionService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,

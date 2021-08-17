@@ -22,6 +22,7 @@ import { SelfDeclarationOverviewComponent } from './pages/self-declaration-page/
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { UploadPageComponent } from './pages/upload-page/upload-page.component';
+import { UploadOverviewComponent } from './pages/upload-page/upload-overview.component';
 
 @NgModule({
   declarations: [
@@ -37,8 +38,9 @@ import { UploadPageComponent } from './pages/upload-page/upload-page.component';
     OboSitesOverviewComponent,
     SelfDeclarationPageComponent,
     SelfDeclarationOverviewComponent,
-    OverviewPageComponent,
     UploadPageComponent,
+    UploadOverviewComponent,
+    OverviewPageComponent,
     NextStepsPageComponent
   ],
   imports: [

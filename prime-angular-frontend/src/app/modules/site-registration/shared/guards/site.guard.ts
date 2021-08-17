@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { AppConfig, APP_CONFIG } from 'app/app-config.module';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { AuthService } from '@auth/shared/services/auth.service';
@@ -22,7 +22,7 @@ import { ArrayUtils } from '@lib/utils/array-utils.class';
 export class SiteGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private router: Router,
     private siteResource: SiteResource,
@@ -75,13 +75,14 @@ export class SiteGuard extends BaseGuard {
 
     const allowlistRoutes = site.submittedDate
       ? [
-        ...SiteRoutes.editRegistrationRouteAccess(),
-        ...ArrayUtils.insertIf(
-          !site.businessLicence.completed,
-          SiteRoutes.BUSINESS_LICENCE
-        )
+        ...SiteRoutes.editRegistrationRouteAccess()
       ]
       : SiteRoutes.siteRegistrationRoutes();
+
+    if (site.approvedDate) {
+      allowlistRoutes.push(SiteRoutes.BUSINESS_LICENCE_RENEWAL);
+      allowlistRoutes.push(SiteRoutes.NEXT_STEPS);
+    }
 
     // Redirect to an appropriate default route
     if (!allowlistRoutes.includes(childRoute)) {

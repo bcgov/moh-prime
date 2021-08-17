@@ -7,7 +7,7 @@ import { exhaustMap, map, tap } from 'rxjs/operators';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BaseGuard } from '@core/guards/base.guard';
-import { LoggerService } from '@core/services/logger.service';
+import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { Enrolment } from '@shared/models/enrolment.model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 
@@ -24,7 +24,7 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
 export class EnrolmentGuard extends BaseGuard {
   constructor(
     protected authService: AuthService,
-    protected logger: LoggerService,
+    protected logger: ConsoleLoggerService,
     @Inject(APP_CONFIG) private config: AppConfig,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -20,7 +20,7 @@ import { SiteAddressForm } from './site-address-form.model';
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SiteAddressOverviewComponent extends AbstractOverview implements OnInit {
+export class SiteAddressOverviewComponent extends AbstractOverview {
   @Input() public siteAddress: SiteAddressForm;
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
@@ -30,6 +30,4 @@ export class SiteAddressOverviewComponent extends AbstractOverview implements On
   ) {
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
-
-  public ngOnInit(): void { }
 }

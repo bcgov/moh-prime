@@ -6,9 +6,7 @@ public class PaperEnrolleesMappingProfile : Profile
 {
     public PaperEnrolleesMappingProfile()
     {
-        CreateMap<PaperEnrolleeDemographicViewModel, Enrollee>()
-            .ForMember(dest => dest.GivenNames, opt => opt.MapFrom(src => src.MiddleName == null ? src.FirstName : $"{src.FirstName} {src.MiddleName}"));
-
+        CreateMap<PaperEnrolleeDemographicViewModel, Enrollee>();
         CreateMap<PaperEnrolleeCertificationViewModel, Certification>();
         CreateMap<PaperEnrolleeSelfDeclarationViewModel, SelfDeclaration>();
         CreateMap<PaperEnrolleeOboSiteViewModel, OboSite>();

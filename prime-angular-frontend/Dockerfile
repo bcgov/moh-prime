@@ -28,8 +28,7 @@ RUN apt-get update && \
 COPY nginx.conf /etc/nginx/
 COPY nginxdev.conf /etc/nginx/nginx.template.conf
 COPY entrypoint.sh /
-RUN echo "Populating environment..." && \
-    (eval "echo \"$(cat /usr/src/app/src/environments/environment.prod.template.ts )\"" ) > /usr/src/app/src/environments/environment.prod.ts
+
 RUN cat /usr/src/app/src/environments/environment.prod.ts
 RUN npm install @angular/cli -g && \
     npm install && \

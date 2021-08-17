@@ -16,7 +16,7 @@ import { SelfDeclarationTypeEnum } from '@shared/enums/self-declaration-type.enu
 import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentResource } from '@paper-enrolment/services/paper-enrolment-resource.service';
+import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
 import { SelfDeclarationFormState } from './self-declaration-form-state.class';
 
 @Component({

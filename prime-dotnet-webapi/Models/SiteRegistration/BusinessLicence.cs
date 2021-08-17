@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using DelegateDecompiler;
@@ -14,6 +15,10 @@ namespace Prime.Models
         [JsonIgnore]
         public Site Site { get; set; }
         public string DeferredLicenceReason { get; set; }
+
+        public DateTimeOffset? UploadedDate { get; set; }
+
+        public DateTimeOffset? ExpiryDate { get; set; }
         public BusinessLicenceDocument BusinessLicenceDocument { get; set; }
 
         [NotMapped]
