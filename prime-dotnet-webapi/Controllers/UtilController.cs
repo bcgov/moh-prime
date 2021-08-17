@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -16,9 +17,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult GCCollect()
+        public async Task<ActionResult> GCCollect()
         {
-            System.GC.Collect();
+            await Task.Run(() => System.GC.Collect());
 
             return NoContent();
         }
