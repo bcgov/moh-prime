@@ -7,11 +7,28 @@ export enum AgreementType {
   PHARMACY_OBO_TOA
 }
 
+
 export const AgreementTypeNameMap: Record<AgreementType, string> = {
-  [AgreementType.COMMUNITY_PHARMACIST_TOA]: 'Pharma Regulated Users',
-  [AgreementType.REGULATED_USER_TOA]: 'Regulated Users',
-  [AgreementType.OBO_TOA]: 'On Behalf Of',
+  [AgreementType.COMMUNITY_PHARMACIST_TOA]: 'Pharmacy Regulated User',
+  [AgreementType.REGULATED_USER_TOA]: 'Regulated User',
   [AgreementType.COMMUNITY_PRACTICE_ORGANIZATION_AGREEMENT]: 'Community Practice Organization',
   [AgreementType.COMMUNITY_PHARMACY_ORGANIZATION_AGREEMENT]: 'Community Pharmacy Organization',
-  [AgreementType.PHARMACY_OBO_TOA]: 'Pharma On Behalf Of'
+  [AgreementType.OBO_TOA]: 'On Behalf Of User',
+  [AgreementType.PHARMACY_OBO_TOA]: 'Pharmacy On Behalf Of User'
 };
+
+// Paper Enrolment
+export enum AgreementTypePaperEnrolment {
+  COMMUNITY_PHARMACIST_TOA = 1,
+  REGULATED_USER_TOA,
+  OBO_TOA,
+  PHARMACY_OBO_TOA
+}
+
+export const AgreementTypeNameMapPaperEnrolment: Record<AgreementTypePaperEnrolment, string> = {
+  [AgreementTypePaperEnrolment.REGULATED_USER_TOA]: 'Regulated User',
+  [AgreementTypePaperEnrolment.COMMUNITY_PHARMACIST_TOA]: 'Pharmacy Regulated User',
+  [AgreementTypePaperEnrolment.OBO_TOA]: 'On-behalf-of User',
+  [AgreementTypePaperEnrolment.PHARMACY_OBO_TOA]: 'Pharmacy On-behalf-of User'
+};
+
