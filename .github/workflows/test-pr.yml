@@ -156,7 +156,7 @@ jobs:
 
       - name: Sum files
         run: |
-          cc-test-reporter sum-coverage -output o -p 2 frontend/lcov.info | backend/lcov.info 
+          cc-test-reporter sum-coverage -output - -p 2 frontend/lcov.info | backend/lcov.info 
           cc-test-reporter upload-coverage
             
       # - name: Sum frontend and backend coverages
