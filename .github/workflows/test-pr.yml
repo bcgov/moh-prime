@@ -143,24 +143,22 @@ jobs:
           cc_test_reporter_id: 7b2162da9980320cb4c73c88d894c3743f11138a474509c015a1b2db1e04bde3
           cc_test_reporter_version: latest  # optional
 
-      steps:
+      - name: Download frontend artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend
 
-        - name: Download fronend artifact
-          uses: actions/download-artifact@v2
-          with:
-            name: frontend
+      - name: Download backend artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: backend
 
-        - name: Download backend artifact
-          uses: actions/download-artifact@v2
-          with:
-            name: backend
-
-        - name: Sum files
-          run: |
-            $frontend = lcov.info
-            $backend = backend.info
-            cc-test-reporter sum-coverage $frontend $backend -p 2 -o codeclimate.total.json
-            cc-test-reporter upload-coverage
+      - name: Sum files
+        run: |
+          $frontend = lcov.info
+          $backend = backend.info
+          cc-test-reporter sum-coverage $frontend $backend -p 2 -o codeclimate.total.json
+          cc-test-reporter upload-coverage
             
       # - name: Sum frontend and backend coverages
       #   run: |
