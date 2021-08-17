@@ -921,9 +921,9 @@ namespace Prime.Controllers
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var collegeId = enrollee.Certifications.Select(c => c.LicenseNumber);
+            var collegeIds = enrollee.Certifications.Select(c => c.LicenseNumber);
 
-            var result = await _plrProviderService.GetPlrDataByCollegeIdAsync(collegeId);
+            var result = await _plrProviderService.GetPlrDataByCollegeIdsAsync(collegeIds);
             return Ok(result);
         }
     }

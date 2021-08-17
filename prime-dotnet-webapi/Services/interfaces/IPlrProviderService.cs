@@ -8,6 +8,6 @@ namespace Prime.Services
     public interface IPlrProviderService
     {
         public Task<int> CreateOrUpdatePlrProviderAsync(PlrProvider dataObject, bool expectExists = false);
-        Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdAsync(IEnumerable<string> collegeId);
+        Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds);
     }
 }
