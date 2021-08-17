@@ -47,7 +47,7 @@ jobs:
       # - run: cc-test-reporter after-build -t lcov
       - name: Collect Frontend Report
         run: |
-          cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
+          cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
           dir
           echo "Going in coverage folder"
           cd ./coverage
@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: frontend
-          path: ./prime-angular-frontend/coverage/lcov.info
+          path: ./prime-angular-frontend/coverage/frontend.json
 
 
   
@@ -119,7 +119,7 @@ jobs:
       - name: Collect Backend Report
         run: |
           # cd ./prime-dotnet-webapi-tests/
-          cc-test-reporter format-coverage COVERAGE_FILE coverage/lcov.info -t lcov
+          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info
           dir
           echo "Going in coverage folder"
           cd ./coverage
@@ -129,7 +129,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: backend
-          path: ./prime-dotnet-webapi-tests/coverage/lcov.info
+          path: ./prime-dotnet-webapi-tests/coverage/backend.json
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
@@ -146,17 +146,19 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend
-          path: frontend
+          path: frontend/
 
       - name: Download backend artifact
         uses: actions/download-artifact@v2
         with:
           name: backend
-          path: backend
+          path: backend/
 
       - name: Sum files
         run: |
-          cc-test-reporter sum-coverage -p 2 frontend/lcov.info backend/lcov.info 
+          dir 
+          cd ./backend
+          cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
           cc-test-reporter upload-coverage
             
       # - name: Sum frontend and backend coverages
