@@ -144,12 +144,16 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel)
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
         {
+            var recipientEmails = careSettingCode == CareSettingType.CommunityPharmacy
+                ? new[] { PrimeSupportEmail }
+                : new[] { MohEmail, PrimeSupportEmail };
+
             return new Email
             (
                 from: PrimeEmail,
-                to: new[] { MohEmail, PrimeSupportEmail },
+                to: recipientEmails,
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
             );
