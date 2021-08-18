@@ -132,6 +132,13 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
+            resources:
+              limits:
+                cpu: 50m
+                memory: 50MiB
+              requests:
+                cpu: 15m
+                memory: 10MiB
             readinessProbe:
               httpGet:
                 path: /
@@ -607,6 +614,13 @@ objects:
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
+            resources:
+              limits:
+                cpu: 50m
+                memory: 1GiB
+              requests:
+                cpu: 15m
+                memory: 500MiB
             startupProbe:
               httpGet:
                 path: /api/healthcheck
@@ -870,6 +884,13 @@ objects:
                   secretKeyRef:
                     name: pr-database-secrets
                     key: database-password
+            resources:
+              limits:
+                cpu: 25m
+                memory: 128MiB
+              requests:
+                cpu: 10m
+                memory: 28MiB
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -997,7 +1018,11 @@ objects:
                 name: postgresql
             resources:
               limits:
+                cpu: 50m
                 memory: ${POSTGRES_MEMORY_LIMIT}
+              requests:
+                cpu: 10m
+                memory: 100MiB            
             securityContext:
               capabilities: {}
               privileged: false
