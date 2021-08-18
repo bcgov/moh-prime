@@ -103,5 +103,18 @@ namespace Prime
         {
             public static readonly string Url = GetEnvironmentVariable("LDAP_API_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/ldap";
         }
+
+        /// <summary>
+        /// This API allows PRIME to retrieve Pharmanet Transaction Logs for reports and analysis
+        /// </summary>
+        public static class PrimeOdrApi
+        {
+            public static readonly string Url = GetEnvironmentVariable("PRIME_ODR_API_URL");
+            public static readonly string Username = GetEnvironmentVariable("PRIME_ODR_API_USERNAME");
+            public static readonly string Password = GetEnvironmentVariable("PRIME_ODR_API_PASSWORD");
+            // Client certificate expected by PRIME-ODR API
+            public static readonly string SslCertFilename = GetEnvironmentVariable("PRIME_ODR_API_SSL_CERT_FILENAME");
+            public static readonly string SslCertPassword = GetEnvironmentVariable("PRIME_ODR_API_SSL_CERT_PASSWORD");
+        }
     }
 }

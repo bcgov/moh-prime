@@ -218,6 +218,18 @@ namespace Prime
             {
                 client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
             });
+
+            services.AddTransient<PrimeOdrClientHandler>()
+            .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
+            {
+                client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
+            })
+            .ConfigurePrimaryHttpMessageHandler<PrimeOdrClientHandler>();
+            // services
+            // .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
+            // {
+            //     client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
