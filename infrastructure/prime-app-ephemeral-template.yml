@@ -135,10 +135,10 @@ objects:
             resources:
               limits:
                 cpu: 50m
-                memory: 50MiB
+                memory: 50Mi
               requests:
                 cpu: 15m
-                memory: 10MiB
+                memory: 10Mi
             readinessProbe:
               httpGet:
                 path: /
@@ -620,7 +620,7 @@ objects:
                 memory: 1GiB
               requests:
                 cpu: 15m
-                memory: 500MiB
+                memory: 500Mi
             startupProbe:
               httpGet:
                 path: /api/healthcheck
@@ -887,10 +887,10 @@ objects:
             resources:
               limits:
                 cpu: 25m
-                memory: 128MiB
+                memory: 128Mi
               requests:
                 cpu: 10m
-                memory: 28MiB
+                memory: 28Mi
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -1022,7 +1022,7 @@ objects:
                 memory: ${POSTGRES_MEMORY_LIMIT}
               requests:
                 cpu: 10m
-                memory: 100MiB            
+                memory: 100Mi            
             securityContext:
               capabilities: {}
               privileged: false
