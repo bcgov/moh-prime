@@ -14,7 +14,6 @@ export enum AgreementType {
   PHARMACY_OBO_TOA
 }
 
-
 export const AgreementTypeNameMap: Record<AgreementType, string> = {
   [AgreementType.COMMUNITY_PHARMACIST_TOA]: COMMUNITY_PHARMACIST_TOA,
   [AgreementType.REGULATED_USER_TOA]: REGULATED_USER_TOA,
@@ -25,17 +24,17 @@ export const AgreementTypeNameMap: Record<AgreementType, string> = {
 };
 
 // Paper Enrolment
-export enum AgreementTypePaperEnrolment {
+export enum PaperEnrolmentAgreementType {
   COMMUNITY_PHARMACIST_TOA = 1,
   REGULATED_USER_TOA,
   OBO_TOA,
   PHARMACY_OBO_TOA
 }
 
-export const AgreementTypeNameMapPaperEnrolment: Record<AgreementTypePaperEnrolment, string> = {
-  [AgreementTypePaperEnrolment.REGULATED_USER_TOA]: REGULATED_USER_TOA,
-  [AgreementTypePaperEnrolment.COMMUNITY_PHARMACIST_TOA]: COMMUNITY_PHARMACIST_TOA,
-  [AgreementTypePaperEnrolment.OBO_TOA]: OBO_TOA,
-  [AgreementTypePaperEnrolment.PHARMACY_OBO_TOA]: PHARMACY_OBO_TOA
+export const PaperEnrolmentAgreementTypeNameMap: Record<PaperEnrolmentAgreementType, string> = {
+  [PaperEnrolmentAgreementType.REGULATED_USER_TOA]: REGULATED_USER_TOA,
+  [PaperEnrolmentAgreementType.COMMUNITY_PHARMACIST_TOA]: COMMUNITY_PHARMACIST_TOA,
+  [PaperEnrolmentAgreementType.OBO_TOA]: OBO_TOA,
+  [PaperEnrolmentAgreementType.PHARMACY_OBO_TOA]: PHARMACY_OBO_TOA
 };
 
