@@ -10,6 +10,7 @@ using Prime.Models.HealthAuthorities;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels;
+using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime.Controllers
 {
@@ -19,10 +20,12 @@ namespace Prime.Controllers
     public class HealthAuthoritiesController : PrimeControllerBase
     {
         private readonly IHealthAuthorityService _healthAuthorityService;
+        private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
 
-        public HealthAuthoritiesController(IHealthAuthorityService healthAuthorityService)
+        public HealthAuthoritiesController(IHealthAuthorityService healthAuthorityService, IHealthAuthoritySiteService healthAuthoritySiteService)
         {
             _healthAuthorityService = healthAuthorityService;
+            _healthAuthoritySiteService = healthAuthoritySiteService;
         }
 
         // GET: api/health-authorities
@@ -44,7 +47,7 @@ namespace Prime.Controllers
         /// Gets a specific Health Authority Organization.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
-        [HttpGet("{healthAuthorityId}", Name = nameof(GetHealthAuthorityById))]
+        [HttpGet("{healthAuthorityId:int}", Name = nameof(GetHealthAuthorityById))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -80,6 +83,19 @@ namespace Prime.Controllers
 
             var users = await _healthAuthorityService.GetAuthorizedUsersAsync(healthAuthorityId);
             return Ok(users);
+        }
+
+        // GET: api/health-authorities/sites
+        /// <summary>
+        /// Gets all sites for any health authority.
+        /// </summary>
+        [HttpGet("sites", Name = nameof(GetAllHealthAuthoritySites))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAllHealthAuthoritySites()
+        {
+            return Ok(await _healthAuthoritySiteService.GetAllSitesAsync());
         }
 
         // PUT: api/health-authorities/5/care-types

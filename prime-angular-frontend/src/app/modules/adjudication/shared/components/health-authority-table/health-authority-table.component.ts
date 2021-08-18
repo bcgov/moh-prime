@@ -10,7 +10,7 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { HealthAuthorityListItem } from '@shared/models/health-authority-list.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { exhaustMap, mergeMap } from 'rxjs/operators';
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
@@ -24,7 +24,6 @@ export class HealthAuthorityTableComponent implements OnInit {
 
   public siteColumns: string[];
   public dataSource: MatTableDataSource<HealthAuthorityListItem | HealthAuthoritySite>;
-  public healthAuthorityCode: HealthAuthorityEnum;
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -49,7 +48,6 @@ export class HealthAuthorityTableComponent implements OnInit {
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
     this.dataSource = new MatTableDataSource<HealthAuthorityListItem | HealthAuthoritySite>([]);
-    this.healthAuthorityCode = this.activatedRoute.snapshot.params.haid;
     // No HA headers should be expanded initially
     this.idOfExpandedHA = -1;
   }
@@ -89,7 +87,7 @@ export class HealthAuthorityTableComponent implements OnInit {
     return HealthAuthorityTableComponent.isHA(rowData);
   }
 
-  public expandHeader(item: HealthAuthorityListItem) {
+  public expandHeader(item: HealthAuthorityListItem): void {
     this.idOfExpandedHA =
       this.idOfExpandedHA !== item.id ? item.id : -1;
   }
@@ -102,19 +100,14 @@ export class HealthAuthorityTableComponent implements OnInit {
             [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
           );
 
-          this.dataSource.data = (this.healthAuthorityCode)
-            ? healthAuthorities.filter(ha => ha.id === +this.healthAuthorityCode)
-            : healthAuthorities.sort(this.sortData);
-          return from(healthAuthorities);
+          this.dataSource.data = healthAuthorities;
+          return of(null);
         }),
-        // As each healthAuthority is emitted, get the sites registered with that healthAuthority
-        mergeMap((healthAuthority: HealthAuthorityListItem) => this.healthAuthorityResource.getHealthAuthoritySites(healthAuthority.id))
+        mergeMap(() => this.healthAuthorityResource.getAllHealthAuthoritySites())
       )
       .subscribe((sites: HealthAuthoritySite[]) => {
-        // For each list of sites in stream, store in map if non-empty list
-        if (sites && sites.length > 0) {
-          this.dataSource.data = [...this.dataSource.data, ...sites].sort(this.sortData);
-        }
+        // Sort HAs together with HA Site Registrations
+        this.dataSource.data = [...this.dataSource.data, ...sites].sort(this.sortData);
       });
   }
 
