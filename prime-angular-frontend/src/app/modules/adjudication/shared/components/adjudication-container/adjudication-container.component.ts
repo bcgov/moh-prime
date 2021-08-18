@@ -420,7 +420,11 @@ export class AdjudicationContainerComponent implements OnInit {
       .subscribe((queryParams: { [key: string]: any }) => this.getDataset(this.route.snapshot.params.id, queryParams));
     // url params could change due to jump action, subscribe to changes
     this.route.params
-      .subscribe((params) => this.getDataset(params.id, {}));
+      .subscribe((params) => {
+        if (params.id) {
+          this.getDataset(params.id, {});
+        }
+      });
   }
 
   protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
