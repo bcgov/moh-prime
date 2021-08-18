@@ -1,4 +1,5 @@
 ---
+# Obsolete, not used anymore
 apiVersion: v1
 kind: Template
 metadata:
@@ -90,7 +91,7 @@ objects:
                 value: "https://${VANITY_URL}/api/v1/"
               - name: DB_HOST
                 value: "postgresql${SUFFIX}"
-              
+
               # Canada Post AddressComplete API related environment variables
               - name: ADDRESS_AUTOCOMPLETE_API_KEY
                 valueFrom:
@@ -137,7 +138,7 @@ objects:
                     key: document_manager_client_secret
                     name: "document-manager-secrets"
               - name: DOCUMENT_MANAGER_URL
-                value: "https://${VANITY_URL}/api/docman/"          
+                value: "https://${VANITY_URL}/api/docman/"
 
               # Keycloak related environment variables
               - name: JWT_WELL_KNOWN_CONFIG
@@ -240,7 +241,7 @@ objects:
                   configMapKeyRef:
                     key: postgresql_database_name
                     name: "postgresql"
-              
+
               # Verifiable Credential related environment variables
               - name: VERIFIABLE_CREDENTIAL_API_KEY
                 valueFrom:

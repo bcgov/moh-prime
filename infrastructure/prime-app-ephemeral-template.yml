@@ -89,7 +89,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]
     name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -191,7 +191,7 @@ objects:
 
 #   Environment file
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-env-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -215,7 +215,7 @@ objects:
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -552,7 +552,7 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: pr-database-secrets                    
+                name: pr-database-secrets
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
@@ -580,6 +580,8 @@ objects:
                 value: http://${SVC_NAME}-document-manager:6001
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
+              - name: PRIME_ODR_API_SSL_CERT_FILENAME
+                value: /opt/app-root/etc/certs/prime-odr-api-cert.pfx
               - name: DB_HOST
                 value: ${SVC_NAME}-postgres
               - name: BACKEND_URL
@@ -589,7 +591,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -659,6 +661,8 @@ objects:
               - secretRef:
                   name: pharmanet-api-secrets
               - secretRef:
+                  name: prime-odr-api-secrets
+              - secretRef:
                   name: verifiable-credential-secrets
               - secretRef:
                   name: plr-integration-thumbprint
@@ -670,6 +674,8 @@ objects:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
+            secret:
+              secretName: prime-odr-api-ssl-certs
     triggers:
       - type: ConfigChange
       - type: ImageChange
@@ -681,7 +687,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -798,10 +804,10 @@ objects:
                   name: pr-database-secrets
                   key: database-password
           command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
+            # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
             - /opt/app-root/src/app.sh
-          args: 
+          args:
             - migrate
         containers:
           - name: ${SVC_NAME}-document-manager
@@ -907,7 +913,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -961,7 +967,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -1037,7 +1043,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-    annotations: 
+    annotations:
       template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
