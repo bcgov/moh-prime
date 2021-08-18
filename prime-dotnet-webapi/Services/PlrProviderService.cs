@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Prime.Models;
+using Prime.ViewModels.Plr;
+using Prime.Models.Plr;
+using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -60,6 +64,25 @@ namespace Prime.Services
                 return -1;
             }
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
+        }
+
+        public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds)
+        {
+            IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
+            IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
+
+            var plr = await _context.PlrProviders
+                .AsNoTracking()
+                .Where(p => collegeIds.Contains(p.CollegeId))
+                .ProjectTo<PlrViewModel>(_mapper.ConfigurationProvider, new { plrRoleTypes, plrStatusReasons })
+                .ToListAsync();
+
+            // PlrProvider's Expertise array does not play well with automapper ProjectTo, map manually before return
+            return plr.Select(p =>
+                {
+                    p.Expertise = string.Join(", ", _context.Set<PlrExpertise>().Where(e => p.ExpertiseCode.Contains(e.Code)).Select(e => e.Name));
+                    return p;
+                });
         }
 
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)

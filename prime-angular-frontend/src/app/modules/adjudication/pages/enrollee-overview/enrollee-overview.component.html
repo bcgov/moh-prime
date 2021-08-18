@@ -53,25 +53,29 @@
           </mat-card-content>
         </mat-card>
       </ng-container>
-
-      <app-adjudicator-actions *ngIf="enrollees?.length"
-                               class="float-right"
-                               [enrollee]="enrollees[0]"
-                               (approve)="onApprove($event)"
-                               (decline)="onDecline($event)"
-                               (lock)="onLock($event)"
-                               (unlock)="onUnlock($event)"
-                               (delete)="onDelete($event)"
-                               (route)="onRoute($event)"
-                               (assignToa)="onAssignToa($event)"
-                               (enableEnrollee)="onEnableEnrollee($event)"
-                               (enableEditing)="onEnableEditing($event)"
-                               (cancelToa)="onCancelToa($event)"
-                               (rerunRules)="onRerunRules($event)"
-                               (toggleManualAdj)="onToggleManualAdj($event)"
-                               (reload)="onRefresh()">
-      </app-adjudicator-actions>
-
+      <div class="row justify-content-end">
+        <app-adjudicator-actions *ngIf="enrollees?.length"
+                                 [enrollee]="enrollees[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"
+                                 (assignToa)="onAssignToa($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"
+                                 (enableEditing)="onEnableEditing($event)"
+                                 (cancelToa)="onCancelToa($event)"
+                                 (rerunRules)="onRerunRules($event)"
+                                 (toggleManualAdj)="onToggleManualAdj($event)"
+                                 (reload)="onRefresh()">
+        </app-adjudicator-actions>
+      </div>
+      <div *ngIf="plrInfo?.length">
+        <ng-container *ngFor="let plr of plrInfo">
+          <app-plr-info [plrData]="plr"></app-plr-info>
+        </ng-container>
+      </div>
     </div>
   </div>
 </app-page>
