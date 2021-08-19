@@ -669,9 +669,11 @@ objects:
             volumeMounts:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
+                subPath: pharmanet-api-cert.pfx
                 readOnly: true
               - name: odr-certs
                 mountPath: /opt/app-root/etc/certs
+                subPath: prime-odr-api-cert.pfx
                 readOnly: true
         volumes:
           - name: cert-volume
