@@ -648,6 +648,8 @@ objects:
                   name: pharmanet-api
               - configMapRef:
                   name: verifiable-credential
+              - configMapRef:
+                  name: prime-odr-api
               - secretRef:
                   name: canada-post-addresscomplete-secrets
               - secretRef:
