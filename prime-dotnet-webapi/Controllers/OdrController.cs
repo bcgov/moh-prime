@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Prime.HttpClients;
 
 namespace Prime.Controllers
@@ -11,9 +12,15 @@ namespace Prime.Controllers
     {
         private readonly IPrimeOdrClient _primeOdrClient;
 
-        public OdrController(IPrimeOdrClient primeOdrClient)
+        private readonly ILogger _logger;
+
+
+        public OdrController(
+            IPrimeOdrClient primeOdrClient,
+            ILogger<OdrController> logger)
         {
             _primeOdrClient = primeOdrClient;
+            _logger = logger;
         }
 
 
@@ -24,9 +31,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RetrievePharmanetTxLogs()
         {
-            var lastTxId = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync();
-
-            return Ok(lastTxId);
+            var result = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync();
+            _logger.LogDebug(@"{result.Logs.Count} log items retrieved");
+            _logger.LogDebug(@"Do more logs exist?  {result.ExistsMoreLogs}");
+            return Ok(result);
         }
     }
 }

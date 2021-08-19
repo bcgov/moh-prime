@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
@@ -18,8 +20,7 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-
-        public async Task<long> RetrieveLatestPharmanetTxLogsAsync()
+        public async Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync()
         {
             _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.Url);
             _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.Username);
@@ -28,8 +29,7 @@ namespace Prime.HttpClients
             // Auth header and cert are configured to be injected in Startup.cs
             await _client.GetAsync(PrimeEnvironment.PrimeOdrApi.Url);
 
-            // TODO:
-            return -123L;
+            return (null, false);
         }
     }
 

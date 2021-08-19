@@ -1,13 +1,15 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Prime.Models;
 
 namespace Prime.HttpClients
 {
     public interface IPrimeOdrClient
     {
         /// <summary>
-        /// Calls external PRIME-ODR web service, retrieves latest logs and saves to PRIME database,
-        /// then returns id of last transaction retrieved and saved to PRIME database.
+        /// Calls external PRIME-ODR web service and retrieves latest logs as <c>Result</c>
+        /// and <c>ExistsMoreLogs</c> (using C# 7.0 tuple syntax) indicates whether the PRIME-ODR web service indicated there are more logs that can be retrieved
         /// </summary>
-        Task<long> RetrieveLatestPharmanetTxLogsAsync();
+        Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync();
     }
 }
