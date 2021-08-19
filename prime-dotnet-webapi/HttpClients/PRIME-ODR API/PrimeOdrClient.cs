@@ -34,6 +34,7 @@ namespace Prime.HttpClients
                     requestUUID = System.Guid.NewGuid().ToString(),
                     clientName = "PRIME-dev",
                     lastTxnId = 0,
+                    fetchSize = 1000
                 }));
             _logger.LogInformation(await response.Content.ReadAsStringAsync());
 
