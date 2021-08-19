@@ -668,11 +668,11 @@ objects:
                   name: plr-integration-thumbprint
             volumeMounts:
               - name: cert-volume
-                mountPath: /opt/app-root/etc/certs
+                mountPath: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
                 subPath: pharmanet-api-cert.pfx
                 readOnly: true
               - name: odr-certs
-                mountPath: /opt/app-root/etc/certs
+                mountPath: /opt/app-root/etc/certs/prime-odr-api-cert.pfx
                 subPath: prime-odr-api-cert.pfx
                 readOnly: true
         volumes:
