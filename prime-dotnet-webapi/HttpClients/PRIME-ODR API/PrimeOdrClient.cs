@@ -36,8 +36,11 @@ namespace Prime.HttpClients
 
     public class PrimeOdrClientHandler : HttpClientHandler
     {
-        public PrimeOdrClientHandler()
+        public PrimeOdrClientHandler(ILogger<PrimeOdrClient> logger)
         {
+            logger.LogDebug(PrimeEnvironment.PrimeOdrApi.SslCertFilename);
+            logger.LogDebug(PrimeEnvironment.PrimeOdrApi.SslCertPassword);
+
             ClientCertificates.Add(new X509Certificate2(PrimeEnvironment.PrimeOdrApi.SslCertFilename, PrimeEnvironment.PrimeOdrApi.SslCertPassword));
             ClientCertificateOptions = ClientCertificateOption.Manual;
         }
