@@ -219,19 +219,19 @@ namespace Prime
                 client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
             });
 
-            if (PrimeEnvironment.IsLocal)
+            // if (PrimeEnvironment.IsLocal)
+            // {
+            //     services.AddSingleton<IPrimeOdrClient, MockPrimeOdrClient>();
+            // }
+            // else
+            // {
+            services.AddTransient<PrimeOdrClientHandler>()
+            .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
             {
-                services.AddSingleton<IPrimeOdrClient, MockPrimeOdrClient>();
-            }
-            else
-            {
-                services.AddTransient<PrimeOdrClientHandler>()
-                .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
-                {
-                    client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
-                })
-                .ConfigurePrimaryHttpMessageHandler<PrimeOdrClientHandler>();
-            }
+                client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
+            })
+            .ConfigurePrimaryHttpMessageHandler<PrimeOdrClientHandler>();
+            // }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

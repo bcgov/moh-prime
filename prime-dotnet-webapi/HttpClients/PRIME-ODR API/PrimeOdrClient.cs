@@ -27,7 +27,8 @@ namespace Prime.HttpClients
             _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.SslCertFilename);
 
             // Auth header and cert are configured to be injected in Startup.cs
-            await _client.GetAsync(PrimeEnvironment.PrimeOdrApi.Url);
+            var response = await _client.GetAsync(PrimeEnvironment.PrimeOdrApi.Url);
+            _logger.LogCritical(response.Content.ToString());
 
             return (null, false);
         }
