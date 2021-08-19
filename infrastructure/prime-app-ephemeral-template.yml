@@ -670,10 +670,14 @@ objects:
               - name: cert-volume
                 mountPath: /opt/app-root/etc/certs
                 readOnly: true
+              - name: odr-certs
+                mountPath: /opt/app-root/etc/certs
+                readOnly: true
         volumes:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
+          - name: odr-certs
             secret:
               secretName: prime-odr-api-ssl-certs
     triggers:
