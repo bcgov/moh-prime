@@ -36,9 +36,21 @@ namespace Prime.Services
             }
         }
 
-        public Task<long> SaveLogs(ICollection<PharmanetTransactionLog> logs)
+        public async Task<long> SaveLogsAsync(ICollection<PharmanetTransactionLog> logs)
         {
-            throw new System.NotImplementedException();
+            if (logs == null || logs.Count == 0)
+            {
+                return -1;
+            }
+
+            _logger.LogInformation("Adding to Context ...");
+            foreach (PharmanetTransactionLog log in logs)
+            {
+                _context.PharmanetTransactionLogs.Add(log);
+            }
+            await _context.SaveChangesAsync();
+            _logger.LogInformation("... Save Changes completed.");
+            return logs.Last().TransactionId;
         }
     }
 }

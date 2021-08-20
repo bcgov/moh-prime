@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Prime.HttpClients;
+using Prime.Models;
 using Prime.Services;
 
 namespace Prime.Controllers
@@ -36,10 +38,21 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RetrievePharmanetTxLogs()
         {
-            var result = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync(_pnetTransactionLogService.GetMostRecentTransactionId());
-            _logger.LogInformation($"{result.Logs.Count} log items retrieved");
-            _logger.LogInformation($"Do more logs exist?  {result.ExistsMoreLogs}");
-            return Ok(result);
+            long lastKnownTxId = _pnetTransactionLogService.GetMostRecentTransactionId();
+            List<PharmanetTransactionLog> logs;
+            bool existsMore;
+            do
+            {
+                (logs, existsMore) = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync(lastKnownTxId);
+                _logger.LogInformation($"{logs.Count} log items retrieved");
+                _logger.LogInformation($"Do more logs exist?  {existsMore}");
+                if (logs.Count > 0)
+                {
+                    lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
+                }
+            } while (existsMore);
+
+            return Ok(lastKnownTxId);
         }
     }
 }

@@ -12,6 +12,6 @@ namespace Prime.Services
         /// Returns transaction ID of last log saved
         /// </summary>
         /// <param name="logs"></param>
-        public Task<long> SaveLogs(ICollection<PharmanetTransactionLog> logs);
+        public Task<long> SaveLogsAsync(ICollection<PharmanetTransactionLog> logs);
     }
 }

@@ -31,8 +31,9 @@ namespace Prime.HttpClients
                 };
             var noResults = new List<PharmanetTransactionLog>();
 
-            // Randomly determine whether to return results or not, and what is value of ExistsMoreLogs
-            return Task.FromResult((randomizer.Next(2) == 1 ? results : noResults, randomizer.Next(2) == 1));
+            // Randomly determine what is value of ExistsMoreLogs
+            bool hasResults = randomizer.Next(10) != 1;
+            return Task.FromResult((hasResults ? results : noResults, hasResults));
         }
     }
 }
