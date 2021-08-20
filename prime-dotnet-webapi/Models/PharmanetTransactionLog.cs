@@ -25,8 +25,12 @@ namespace Prime.Models
 
         public string UserId { get; set; }
 
-        [JsonProperty("ipAddr")]
-        public string IpAddress { get; set; }
+        // IP address of the location or pharmacy that is sending the transaction.
+        public string LocationIpAddress { get; set; }
+
+        // The Location and Source IP address information should be the same, but when pharmacy connects to PharmaNet using an intermediary like HNSecure,
+        // then the Source IP address will be that of the intermediary.
+        public string SourceIpAddress { get; set; }
 
         [JsonProperty("pharmacyId")]
         public string PharmacyId { get; set; }

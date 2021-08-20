@@ -49,8 +49,8 @@ namespace Prime.HttpClients
             }
 
             var apiResponse = JsonConvert.DeserializeObject<PrimeOdrApiResponse>(content);
-            _logger.LogInformation(@"Sent request Id: {primeRequestId}, response request Id: {apiResponse.RequestUUID}");
-            _logger.LogInformation(@"Requested fetch size: {PrimeEnvironment.PrimeOdrApi.FetchSize}, response numberOfTransactions: {apiResponse.NumberOfTransactions}, actual count of transactions: {apiResponse.PNetTransactions.Count}");
+            _logger.LogInformation($"Sent request Id: {primeRequestId}, response request Id: {apiResponse.RequestUUID}");
+            _logger.LogInformation($"Requested fetch size: {PrimeEnvironment.PrimeOdrApi.FetchSize}, response numberOfTransactions: {apiResponse.NumberOfTransactions}, actual count of transactions: {apiResponse.PNetTransactions.Count}");
 
             return (apiResponse.PNetTransactions, apiResponse.IsThereMoreData == "Y");
         }

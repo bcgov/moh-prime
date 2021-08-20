@@ -114,13 +114,15 @@ namespace Prime
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
         public DbSet<Banner> Banners { get; set; }
 
-
         // PLR Integration
         public DbSet<PlrProvider> PlrProviders { get; set; }
 
-
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
+
+        // ODR Integration
+        public DbSet<PharmanetTransactionLog> PharmanetTransactionLogs { get; set; }
+
 
         public override int SaveChanges()
         {
