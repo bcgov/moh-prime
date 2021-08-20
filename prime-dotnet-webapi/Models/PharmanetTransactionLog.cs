@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Newtonsoft.Json;
+using Prime.Helpers;
 
 namespace Prime.Models
 {
@@ -19,6 +20,7 @@ namespace Prime.Models
         public long TransactionId { get; set; }
 
         [JsonProperty("txnDateTime")]
+        [JsonConverter(typeof(CustomDateTimeConverter), "yyyyMMddTHHmmss.ff")]
         public DateTime TxDateTime { get; set; }
 
         public string UserId { get; set; }

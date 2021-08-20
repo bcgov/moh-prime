@@ -49,7 +49,7 @@ namespace Prime.HttpClients
 
     public class PrimeOdrClientHandler : HttpClientHandler
     {
-        public PrimeOdrClientHandler(ILogger<PrimeOdrClient> logger)
+        public PrimeOdrClientHandler(ILogger<PrimeOdrClientHandler> logger)
         {
             logger.LogInformation(PrimeEnvironment.PrimeOdrApi.SslCertFilename);
             logger.LogInformation(PrimeEnvironment.PrimeOdrApi.SslCertPassword);
