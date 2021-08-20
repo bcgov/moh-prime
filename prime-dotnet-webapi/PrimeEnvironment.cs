@@ -115,6 +115,10 @@ namespace Prime
             // Client certificate expected by PRIME-ODR API
             public static readonly string SslCertFilename = GetEnvironmentVariable("PRIME_ODR_API_SSL_CERT_FILENAME");
             public static readonly string SslCertPassword = GetEnvironmentVariable("PRIME_ODR_API_SSL_CERT_PASSWORD");
+            // "a name representing the client app making the request, used as information in request/response logs, should remain static"
+            public static readonly string ClientName = GetEnvironmentVariable("PRIME_ODR_API_CLIENT_NAME");
+            // Should be numeric value, "to return only nnn transaction log records"
+            public static readonly string FetchSize = GetEnvironmentVariable("PRIME_ODR_API_FETCH_SIZE");
         }
     }
 }

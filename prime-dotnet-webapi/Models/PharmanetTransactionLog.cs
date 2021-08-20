@@ -18,7 +18,7 @@ namespace Prime.Models
         [JsonProperty("txnId")]
         public long TransactionId { get; set; }
 
-        [JsonProperty("txnDate")]
+        [JsonProperty("txnDateTime")]
         public DateTime TxDateTime { get; set; }
 
         public string UserId { get; set; }
@@ -26,7 +26,7 @@ namespace Prime.Models
         [JsonProperty("ipAddr")]
         public string IpAddress { get; set; }
 
-        [JsonProperty("pharmId")]
+        [JsonProperty("pharmacyId")]
         public string PharmacyId { get; set; }
 
         [JsonProperty("txnType")]
@@ -35,18 +35,19 @@ namespace Prime.Models
         [JsonProperty("txnSubtype")]
         public string TransactionSubType { get; set; }
 
-        [JsonProperty("practId")]
+        [JsonProperty("practitionerId")]
         public string PractitionerId { get; set; }
 
+        [JsonProperty("collegeRef")]
         public string CollegePrefix { get; set; }
 
-        [JsonProperty("txnStatus")]
+        [JsonProperty("pnetTxnOutcome")]
         public string TransactionOutcome { get; set; }
 
-        [JsonProperty("prvdrSwId")]
+        [JsonProperty("providerSoftwareId")]
         public string ProviderSoftwareId { get; set; }
 
-        [JsonProperty("prvdrSwVrsn")]
+        [JsonProperty("providerSoftwareVer")]
         public string ProviderSoftwareVersion { get; set; }
     }
 }

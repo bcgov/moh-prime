@@ -7,24 +7,22 @@ namespace Prime.HttpClients
 {
     public class MockPrimeOdrClient : IPrimeOdrClient
     {
-        private static int txIdCounter = 1;
-
-        private Random randomizer = new Random();
+        private readonly Random randomizer = new Random();
 
 
-        public Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync()
+        public Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync(long lastKnownTxId)
         {
             var results = new List<PharmanetTransactionLog>
                 {
                     new PharmanetTransactionLog {
-                        TransactionId = txIdCounter++,
+                        TransactionId = ++lastKnownTxId,
                         PractitionerId = "12345",
                         CollegePrefix = "91",
                         UserId = "SDFERY#$%DFGBDF@#%$SSS@@!@$",
                         TxDateTime = DateTime.Now,
                         PharmacyId = "ABC" },
                     new PharmanetTransactionLog {
-                        TransactionId = txIdCounter++,
+                        TransactionId = ++lastKnownTxId,
                         PractitionerId = "678901",
                         CollegePrefix = "P1",
                         UserId = "HJK%^*^&*IGFHRTYRTYETREGSDF",

@@ -10,6 +10,7 @@ namespace Prime.HttpClients
         /// Calls external PRIME-ODR web service and retrieves latest logs as <c>Result</c>
         /// and <c>ExistsMoreLogs</c> (using C# 7.0 tuple syntax) indicates whether the PRIME-ODR web service indicated there are more logs that can be retrieved
         /// </summary>
-        Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync();
+        /// <param name="lastKnownTxId">Last known Pharmanet Transaction ID (note, not PRIME internal ID)</param>
+        Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync(long lastKnownTxId);
     }
 }

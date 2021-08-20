@@ -31,9 +31,9 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RetrievePharmanetTxLogs()
         {
-            var result = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync();
-            _logger.LogDebug(@"{result.Logs.Count} log items retrieved");
-            _logger.LogDebug(@"Do more logs exist?  {result.ExistsMoreLogs}");
+            var result = await _primeOdrClient.RetrieveLatestPharmanetTxLogsAsync(0);
+            _logger.LogInformation(@"{result.Logs.Count} log items retrieved");
+            _logger.LogInformation(@"Do more logs exist?  {result.ExistsMoreLogs}");
             return Ok(result);
         }
     }
