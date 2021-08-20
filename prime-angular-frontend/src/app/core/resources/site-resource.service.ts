@@ -159,6 +159,19 @@ export class SiteResource {
       );
   }
 
+  public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
+    const payload = { data: note };
+    return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email-user`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site reviewed notification email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendSiteReviewedEmailUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
     return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)

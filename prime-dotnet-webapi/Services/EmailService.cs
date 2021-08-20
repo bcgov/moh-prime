@@ -89,6 +89,18 @@ namespace Prime.Services
             await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
         }
 
+        public async Task SendSiteReviewedNotificationAsync(Site site, string note)
+        {
+            var viewModel = new SiteNotificationEmailViewModel
+            {
+                Note = note,
+                Pec = site.PEC
+            };
+
+            var email = await _emailRenderingService.RenderSiteReviewedNotificationEmailAsync(site.AdministratorPharmaNet.Email, viewModel);
+            await Send(email);
+        }
+
         public async Task SendRemoteUsersUpdatedAsync(Site site)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(site.Id);

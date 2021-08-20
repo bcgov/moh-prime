@@ -753,6 +753,32 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // POST: api/Sites/5/site-reviewed-email-user
+        /// <summary>
+        /// Send site reviewed notification email to provider enrolment team
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        [HttpPost("{siteId}/site-reviewed-email-user", Name = nameof(SendSiteReviewedNotificationEmail))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendSiteReviewedNotificationEmail(int siteId, FromBodyText note)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _emailService.SendSiteReviewedNotificationAsync(site, note);
+            return NoContent();
+        }
+
         // PUT: api/Sites/5/approve
         /// <summary>
         /// Approve a site.

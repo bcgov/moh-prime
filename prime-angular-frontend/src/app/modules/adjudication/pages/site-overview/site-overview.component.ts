@@ -4,11 +4,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, forkJoin, of, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, noop, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -46,6 +50,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
+  public showSendNotification: boolean;
+  public isNotificationSent: boolean;
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -98,6 +104,26 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       });
   }
 
+  public onSendNotification(): void {
+    const data: DialogOptions = {
+      title: 'PharmaCare Provider Enrolment',
+      message: 'Send notification to provider enrolment team',
+      actionText: 'Send Notification',
+      component: NoteComponent
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return this.siteResource.sendSiteReviewedEmailUser(this.route.snapshot.params.sid, result.output);
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe(() => this.isNotificationSent = true);
+  }
+
   public ngOnInit(): void {
     super.ngOnInit();
 
@@ -117,6 +143,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.form.get('pec').setValue(site.pec);
+        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
         return of(null);
       }),
       exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))

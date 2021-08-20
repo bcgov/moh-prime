@@ -159,6 +159,18 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(string recipientEmail, SiteNotificationEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Site Registration review complete",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteReviewedNotification, viewModel)
+            );
+        }
+
+
         public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
         {
             return new Email
