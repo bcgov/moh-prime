@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Prime.Models;
 using Flurl;
+using Newtonsoft.Json;
 
 namespace Prime.HttpClients
 {
@@ -38,7 +39,16 @@ namespace Prime.HttpClients
                     fetchSize = PrimeEnvironment.PrimeOdrApi.FetchSize
                 }));
 
-            var apiResponse = await httpResponse.Content.ReadAsAsync<PrimeOdrApiResponse>();
+            //            var apiResponse = await httpResponse.Content.ReadAsAsync<PrimeOdrApiResponse>();
+            string content = await httpResponse.Content.ReadAsStringAsync();
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                // TODO: handle properly
+                _logger.LogError(content);
+                return (null, false);
+            }
+
+            var apiResponse = JsonConvert.DeserializeObject<PrimeOdrApiResponse>(content);
             _logger.LogInformation(@"Sent request Id: {primeRequestId}, response request Id: {apiResponse.RequestUUID}");
             _logger.LogInformation(@"Requested fetch size: {PrimeEnvironment.PrimeOdrApi.FetchSize}, response numberOfTransactions: {apiResponse.NumberOfTransactions}, actual count of transactions: {apiResponse.PNetTransactions.Count}");
 
