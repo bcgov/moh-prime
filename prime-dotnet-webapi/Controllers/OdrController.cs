@@ -38,6 +38,8 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RetrievePharmanetTxLogs()
         {
+            // TODO: Add exception handling
+
             long lastKnownTxId = _pnetTransactionLogService.GetMostRecentTransactionId();
             List<PharmanetTransactionLog> logs;
             bool existsMore;

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Npgsql.Bulk;
 using Prime.Models;
 
 namespace Prime.Services
@@ -44,11 +45,15 @@ namespace Prime.Services
             }
 
             _logger.LogInformation("Adding to Context ...");
-            foreach (PharmanetTransactionLog log in logs)
-            {
-                _context.PharmanetTransactionLogs.Add(log);
-            }
-            await _context.SaveChangesAsync();
+            // foreach (PharmanetTransactionLog log in logs)
+            // {
+            //     _context.PharmanetTransactionLogs.Add(log);
+            // }
+            // await _context.SaveChangesAsync();
+
+            var uploader = new NpgsqlBulkUploader(_context);
+            await uploader.InsertAsync(logs);
+
             _logger.LogInformation("... Save Changes completed.");
             return logs.Last().TransactionId;
         }
