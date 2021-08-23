@@ -18,7 +18,6 @@ namespace TestPrimeE2E
 
         public static readonly string IdirPassword = GetEnvironmentVariable("IDIR_PASSWORD");
 
-
         // Path to the business licence file to be uploaded
         public static readonly string BusinessLicencePath = GetEnvironmentVariable("BUSINESSLICENCE_PATH");
 
@@ -27,5 +26,8 @@ namespace TestPrimeE2E
 
         // Path to where screenshots will be archived.  If not specified, the working directory should be the location used
         public static readonly string ScreenshotsArchivePath = GetEnvironmentVariable("SCREENSHOTS_ARCHIVE_PATH");
+
+        // Name of Health Authority of interest
+        public static readonly string HealthAuthority = GetEnvironmentVariable("HEALTH_AUTHORITY");
     }
 }

@@ -418,7 +418,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
-        doingBusinessAs
+        doingBusinessAs,
+        hasClaim
       } = organization;
 
       return [{
@@ -428,6 +429,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
+        hasClaim,
         ...this.toSiteViewModelPartial(site)
       }];
     };

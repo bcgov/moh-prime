@@ -17,6 +17,8 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
+import { ImageComponent } from '@shared/components/dialogs/content/image/image.component';
+import { Role } from '@auth/shared/enum/role.enum';
 
 @Component({
   selector: 'app-pharmanet-enrolment-summary',
@@ -29,11 +31,13 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
   public CareSettingEnum = CareSettingEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
+  public Role = Role;
 
   public showCommunityHealth: boolean;
   public showPharmacist: boolean;
   public showHealthAuthority: boolean;
-  public isRenewal: boolean;
+  public initialEnrolment: boolean;
+  public complete: boolean;
 
   public careSettingConfigs: {
     setting: string,
@@ -160,7 +164,7 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
 
     if (!formControl) { return; }
 
-    const emails = formControl.value.split(',').map((email: string) => email.trim()).join(',') || null;
+    const emails = formControl.value?.split(',').map((email: string) => email.trim()).join(',') || null;
 
     (formControl.valid)
       ? this.sendProvisionerAccessLink(emails, formControl, careSettingCode)
@@ -176,11 +180,14 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          result
-            ? this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode)
-            : EMPTY
-        )
+        exhaustMap((result: boolean) => {
+          if (result) {
+            this.complete = true;
+            return this.enrolmentResource.sendProvisionerAccessLink(emails, this.enrolment.id, careSettingCode);
+          } else {
+            return EMPTY;
+          }
+        })
       )
       .subscribe(() => {
         this.toastService.openSuccessToast('Email was successfully sent');
@@ -188,10 +195,36 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
       });
   }
 
-  public ngOnInit() {
+  public openQR(event: Event): void {
+    event.preventDefault();
+
+    const data: DialogOptions = {
+      title: 'Verified Credential',
+      message: 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.',
+      actionHide: true,
+      cancelText: 'Close',
+      data: { base64Image: this.enrolment.base64QRCode },
+      component: ImageComponent
+    };
+
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe();
+  }
+
+  public getTitle() {
+    if (!this.initialEnrolment) {
+      return 'Share my Global PharmaNet ID (GPID)';
+    } else if (this.complete) {
+      return 'PRIME Enrolment Complete';
+    }
+    return 'Next Steps to Get PharmaNet';
+  }
+
+  public ngOnInit(): void {
     this.enrolment = this.enrolmentService.enrolment;
     this.isInitialEnrolment = this.enrolmentService.isInitialEnrolment;
-    this.isRenewal = this.route.snapshot.queryParams?.isRenewal === 'true';
+    this.initialEnrolment = this.route.snapshot.queryParams?.initialEnrolment === 'true';
 
     this.careSettingConfigs = this.careSettings.map(careSetting => {
       switch (careSetting.careSettingCode) {

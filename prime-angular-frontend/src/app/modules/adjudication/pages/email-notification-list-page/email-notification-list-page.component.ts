@@ -43,6 +43,9 @@ export class EmailNotificationListPageComponent implements OnInit {
     this.busy = this.emailTemplateResource.getEmailTemplates()
       .subscribe(templates =>
         this.templates = templates
-          .sort((a: EmailTemplate, b: EmailTemplate) => EmailTemplateTypeEnum[a.emailType].localeCompare(EmailTemplateTypeEnum[b.emailType])));
+          .sort((a: EmailTemplate, b: EmailTemplate) =>
+            EmailTemplateTypeEnum[a.emailType].localeCompare(EmailTemplateTypeEnum[b.emailType])
+          )
+      );
   }
 }

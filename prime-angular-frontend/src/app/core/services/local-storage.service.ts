@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class LocalStorageService {
-
   constructor() { }
 
   public get length(): number {
@@ -20,7 +19,9 @@ export class LocalStorageService {
   }
 
   public getInteger(key: string): number {
-    return (localStorage.getItem(key)) ? parseInt(localStorage.getItem(key)) : null;
+    return (localStorage.getItem(key))
+      ? parseInt(localStorage.getItem(key), 10)
+      : null;
   }
 
   public clear(): void {

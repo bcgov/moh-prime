@@ -1,10 +1,11 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { SiteRemoteUsersComponent } from './site-remote-users.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { SiteRemoteUsersComponent } from './site-remote-users.component';
 
 describe('SiteRemoteUsersComponent', () => {
   let component: SiteRemoteUsersComponent;
@@ -20,12 +21,13 @@ describe('SiteRemoteUsersComponent', () => {
     }
   };
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [
         HttpClientTestingModule,
         NgxMaterialModule,
       ],
+      declarations: [SiteRemoteUsersComponent],
       providers: [
         {
           provide: APP_CONFIG,
@@ -36,10 +38,9 @@ describe('SiteRemoteUsersComponent', () => {
           useValue: mockActivatedRoute
         }
       ],
-      declarations: [SiteRemoteUsersComponent]
-    })
-      .compileComponents();
-  }));
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SiteRemoteUsersComponent);

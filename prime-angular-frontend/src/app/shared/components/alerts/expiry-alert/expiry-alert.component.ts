@@ -38,7 +38,6 @@ export class ExpiryAlertComponent implements OnInit, OnChanges {
   constructor() {
     this.type = 'info';
     this.icon = 'error_outline';
-    this.daysToExpiry = 90;
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -55,7 +54,10 @@ export class ExpiryAlertComponent implements OnInit, OnChanges {
       ? updatedExpiryDates
       : [updatedExpiryDates];
     this.withinDaysOfRenewal = expiryDates
-      .map((expiryDate: (string | Moment)) => DateUtils.withinDaysBeforeDate(expiryDate, this.daysToExpiry))
+      .map((expiryDate: (string | Moment)) =>
+        (this.daysToExpiry) ? DateUtils.withinDaysBeforeDate(expiryDate, this.daysToExpiry)
+          : DateUtils.withinRenewalPeriod(expiryDate)
+      )
       .some((withinDaysOfRenewal: boolean) => withinDaysOfRenewal);
   }
 }

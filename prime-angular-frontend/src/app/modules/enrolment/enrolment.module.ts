@@ -32,7 +32,6 @@ import {
   AccessAgreementHistoryEnrolmentComponent
 } from './pages/access-agreement-history-enrolment/access-agreement-history-enrolment.component';
 import { EnrolleePageComponent } from './shared/components/enrollee-page/enrollee-page.component';
-import { NextStepsInfographicComponent } from './shared/components/next-steps-infographic/next-steps-infographic.component';
 import { EnrolmentCollectionNoticeComponent } from './shared/components/enrolment-collection-notice/enrolment-collection-notice.component';
 import { DashboardV1Component } from './shared/components/dashboard/dashboardv1.component';
 import { HeaderComponent } from './shared/components/header/header.component';
@@ -65,7 +64,6 @@ import { EnrolmentProgressIndicatorComponent } from './shared/components/enrolme
     AccessAgreementCurrentComponent,
     AccessAgreementHistoryEnrolmentComponent,
     EnrolleePageComponent,
-    NextStepsInfographicComponent,
     EnrolmentCollectionNoticeComponent,
     EnrolmentProgressIndicatorComponent,
     RemoteAccessAddressesComponent
