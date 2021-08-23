@@ -9,7 +9,7 @@ namespace Prime.Services.EmailInternal
         Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId);
         Task<IEnumerable<Pdf>> GenerateSiteRegistrationSubmissionAttachmentsAsync(int siteId);
 
-        Task<IEnumerable<Pdf>> GeneratePaperRenewalAttachmentAsync(string gpid);
+        Task<IEnumerable<Pdf>> GeneratePaperEnrolleeRenewalAttachmentAsync(string gpid);
         Task SaveSiteRegistrationReview(int siteId, Pdf pdf);
     }
 }

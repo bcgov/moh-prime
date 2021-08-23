@@ -28,7 +28,6 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
-
         private readonly IRazorConverterService _razorConverterService;
 
 
@@ -959,16 +958,16 @@ namespace Prime.Services
 
         /********************************************************************************************************
         ********************************************************************************************************/
-        public async Task<string> RenderPaperEnrolleeAgreementHtmlAsync(String gpid, DateTimeOffset? acceptedDate)
-        {
-            // TODOD change to proper form when we get it
-            var template = RazorTemplates.Emails.RenewalRequired;
+        // public async Task<string> RenderPaperEnrolleeAgreementHtmlAsync(String gpid, DateTimeOffset? acceptedDate)
+        // {
+        //     // TODOD change to proper form when we get it
+        //     var template = RazorTemplates.Emails.RenewalRequired;
 
-            var displayDate = acceptedDate ?? DateTimeOffset.Now;
-            // Converting to BC time here since we aren't localizing this time in the web client
-            displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
+        //     var displayDate = acceptedDate ?? DateTimeOffset.Now;
+        //     // Converting to BC time here since we aren't localizing this time in the web client
+        //     displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
 
-            return await _razorConverterService.RenderTemplateToStringAsync(template, new EnrolleeRenewalEmailViewModel(orgName, displayDate, withSignature));
-        }
+        //     return await _razorConverterService.RenderTemplateToStringAsync(template, new EnrolleeRenewalEmailViewModel(orgName, displayDate, withSignature));
+        // }
     }
 }

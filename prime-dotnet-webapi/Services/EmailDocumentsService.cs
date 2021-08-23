@@ -49,11 +49,8 @@ namespace Prime.Services.EmailInternal
             };
         }
 
-        public async Task<IEnumerable<Pdf>> GeneratePaperEnrolleeRenewalAttachmentAsync() {
-            return new[]
-            {
-                await GeneratePaperRenewalAttachment("TODO:GPID")
-            };
+        public async Task<IEnumerable<Pdf>> GeneratePaperEnrolleeRenewalAttachmentAsync(string gpId) {
+            return await GeneratePaperEnrolleeRenewalAttachmentAsync(gpId);
         }
 
         public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
@@ -225,13 +222,14 @@ namespace Prime.Services.EmailInternal
                 return null;
             }
 
-           // get document pdf/html
+            System.Guid placeholder = new System.Guid(gpId);
+            // get document pdf/html
             byte[] fileData = null;
-            var content = await _documentClient.GetDocumentAsync("TODO: Form GUID");
+            var content = await _documentClient.GetDocumentAsync(placeholder);
 
             fileData = await content.ReadAsByteArrayAsync();
 
-            var html = await _razorConverterService.RenderTemplateToStringAsync("TODO: FORM NAME", new File("filename", fileData));
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File("filename", fileData));
 
             fileData = _pdfService.Generate(html);
 
