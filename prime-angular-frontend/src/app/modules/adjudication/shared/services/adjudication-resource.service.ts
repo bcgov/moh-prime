@@ -22,6 +22,7 @@ import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
 import { EnrolleeNotification } from '../models/enrollee-notification.model';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
@@ -66,6 +67,19 @@ export class AdjudicationResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrolment could not be retrieved');
           this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getPlrInfoByEnrolleeId(enrolleeId: number): Observable<PlrInfo[]> {
+    return this.apiResource.get<PlrInfo[]>(`enrollees/${enrolleeId}/plrs`)
+      .pipe(
+        map((response: ApiHttpResponse<PlrInfo[]>) => response.result),
+        tap((plrs: PlrInfo[]) => this.logger.info('PLRS', plrs)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('PLR data could not be retrieved');
+          this.logger.error('[Adjudication] AdjudicationResource::getPlrInfoByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );

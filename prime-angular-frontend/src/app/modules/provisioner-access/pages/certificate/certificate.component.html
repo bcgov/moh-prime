@@ -38,7 +38,7 @@
 
     </ng-container>
 
-    <app-enrollee-property *ngIf="certificate.careSettings.length == 0"
+    <app-enrollee-property *ngIf="!certificate.careSettings.length"
                            title="Organization Type"
                            [makeBold]="true">
       None

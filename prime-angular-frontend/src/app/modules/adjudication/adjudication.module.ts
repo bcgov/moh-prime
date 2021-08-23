@@ -76,6 +76,7 @@ import { OrganizationToaMaintenanceListPageComponent } from './pages/organizatio
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { EnrolleeToaComparePageComponent } from './pages/enrollee-toa-compare-page/enrollee-toa-compare-page.component';
+import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { EnrolleeToaComparePageComponent } from './pages/enrollee-toa-compare-pa
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent,
     LicenseClassesMaintenancePageComponent,
-    EnrolleeToaComparePageComponent
+    EnrolleeToaComparePageComponent,
+    PlrInfoComponent
   ],
   imports: [
     AdjudicationRoutingModule,

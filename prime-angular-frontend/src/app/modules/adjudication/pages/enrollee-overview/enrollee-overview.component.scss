@@ -13,3 +13,9 @@
 .text-blue-light {
   color: theme-palette(blue, light);
 }
+
+:host ::ng-deep app-plr-info > mat-card {
+  overflow: auto;
+  height: calc(100vh - 500px);
+  margin-bottom: 3rem;
+}
