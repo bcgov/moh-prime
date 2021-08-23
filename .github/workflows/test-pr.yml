@@ -124,7 +124,7 @@ jobs:
           path: ./prime-dotnet-webapi-tests/coverage/backend.json
 
   codeclimate-sum-coverage:
-    # needs: [ collect-frontend-coverage, collect-backend-coverage ]
+    needs: [ collect-frontend-coverage, collect-backend-coverage ]
 
     runs-on: ubuntu-latest
 
