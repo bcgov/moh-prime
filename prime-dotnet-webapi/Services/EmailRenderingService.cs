@@ -100,6 +100,20 @@ namespace Prime.Services.EmailInternal
             );
         }
 
+        // New Paper
+        /***************************************************************************************************************************************/
+        public async Task<Email> PaperEnrolleeRenderRenewalPassedEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "Your PRIME Renewal Date Has Passed",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleePaperRenewalPassed, viewModel)
+                // attachments: TypeUnloadedException PLACEHOLDER ATTACHMENT
+            );
+        }
+
         public async Task<Email> RenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
         {
             return new Email
@@ -108,6 +122,20 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmail,
                 subject: "PRIME Renewal Required",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleeRenewalRequired, viewModel)
+            );
+        }
+
+        // New paper
+        /***************************************************************************************************************************************/
+        public async Task<Email> PaperEnrolleeRenderRenewalRequiredEmailAsync(string recipientEmail, EnrolleeRenewalEmailViewModel viewModel)
+        {
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmail,
+                subject: "PRIME Renewal Required",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleePaperRenewalRequired, viewModel)
+                // attachments: TypeUnloadedException PLACEHOLDER ATTACHMENT
             );
         }
 

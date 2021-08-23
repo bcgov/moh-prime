@@ -179,6 +179,7 @@ namespace Prime.Services
         public async Task SendEnrolleeRenewalEmails()
         {
             var reminderEmailsIntervals = new List<double> { 14, 7, 3, 2, 1, 0 };
+            var PaperEnrolleeGpidFilter = "NOBCSC";
 
             var enrollees = await _context.Enrollees
                 .Select(e => new
@@ -186,7 +187,8 @@ namespace Prime.Services
                     e.FirstName,
                     e.LastName,
                     e.Email,
-                    e.ExpiryDate
+                    e.ExpiryDate,
+                    e.GPID
                 })
                 .Where(e => e.ExpiryDate != null)
                 .DecompileAsync()
@@ -195,12 +197,22 @@ namespace Prime.Services
             foreach (var enrollee in enrollees)
             {
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
-                if (reminderEmailsIntervals.Contains(expiryDays))
+                if (reminderEmailsIntervals.Contains(expiryDays) && enrollee.GPID.StartsWith(PaperEnrolleeGpidFilter))
+                {
+                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    await Send(email);
+                } 
+                else if (reminderEmailsIntervals.Contains(expiryDays))
                 {
                     var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     await Send(email);
                 }
-                if (expiryDays == -1)
+                if (expiryDays == -1 && enrollee.GPID.StartsWith(PaperEnrolleeGpidFilter))
+                {
+                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    await Send(email);
+                } 
+                else if (expiryDays == -1)
                 {
                     var email = await _emailRenderingService.RenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
                     await Send(email);

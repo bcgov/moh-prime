@@ -19,6 +19,8 @@ using System.Linq.Expressions;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.Models.VerifiableCredentials;
 
+using Prime.Services.Razor;
+
 namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
@@ -26,6 +28,9 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+
+        private readonly IRazorConverterService _razorConverterService;
+
 
         public EnrolleeService(
             ApiDbContext context,
@@ -950,6 +955,20 @@ namespace Prime.Services
                 .Select(e => e.Email)
                 .DecompileAsync()
                 .ToListAsync();
+        }
+
+        /********************************************************************************************************
+        ********************************************************************************************************/
+        public async Task<string> RenderPaperEnrolleeAgreementHtmlAsync(String gpid, DateTimeOffset? acceptedDate)
+        {
+            // TODOD change to proper form when we get it
+            var template = RazorTemplates.Emails.RenewalRequired;
+
+            var displayDate = acceptedDate ?? DateTimeOffset.Now;
+            // Converting to BC time here since we aren't localizing this time in the web client
+            displayDate = displayDate.ToOffset(new TimeSpan(-7, 0, 0));
+
+            return await _razorConverterService.RenderTemplateToStringAsync(template, new EnrolleeRenewalEmailViewModel(orgName, displayDate, withSignature));
         }
     }
 }

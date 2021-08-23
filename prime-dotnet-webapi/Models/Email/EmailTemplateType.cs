@@ -15,7 +15,9 @@ namespace Prime.Models
         SiteApprovedPharmaNetAdministrator = 11,
         SiteApprovedSigningAuthority = 12,
         SiteRegistrationSubmission = 13,
-        OrganizationClaimApprovalNotification = 14
+        OrganizationClaimApprovalNotification = 14,
+        EnrolleePaperRenewalRequired = 15,
+        EnrolleePaperRenewalPassed = 16
 
     }
 }
