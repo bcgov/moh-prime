@@ -62,7 +62,7 @@ export interface IEnrolmentPage {
  * }
  */
   // TODO remove default from T generic added to allow for slow refactoring
-  // tslint:disable-next-line:max-line-length
+  // eslint-disable-next-line max-len
 export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown> = AbstractFormState<unknown>, S = unknown> implements IEnrolmentPage {
   /**
    * @description

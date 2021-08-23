@@ -7,9 +7,9 @@ import { IAccessTokenService } from '@auth/shared/services/access-token.service'
 
 export class MockAccessTokenService implements IAccessTokenService {
   public hasJustLoggedIn: boolean;
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   private _role: Role;
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _loggedIn: boolean;
 
   constructor() {
