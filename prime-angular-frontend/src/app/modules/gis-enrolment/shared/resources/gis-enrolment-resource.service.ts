@@ -12,6 +12,7 @@ import { ToastService } from '@core/services/toast.service';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
+import { LdapThrottlingParameters } from '../models/ldap-credential.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,10 +25,10 @@ export class GisEnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<NoContent> {
-    return this.apiResource.post<NoContent>(`parties/gis/${enrolmentId}/ldap/login`, credentials)
+  public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<LdapThrottlingParameters> {
+    return this.apiResource.post<LdapThrottlingParameters>(`parties/gis/${enrolmentId}/ldap/login`, credentials)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<LdapThrottlingParameters>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('You could not be authenticated.');
           this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
