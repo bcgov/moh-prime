@@ -9,7 +9,7 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { AccessStatusEnum } from '@health-auth/shared/enums/access-status.enum';
 
 export class MockAuthorizedUserService implements IAuthorizedUserService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _authorizedUser: BehaviorSubject<AuthorizedUser>;
 
   constructor() {
