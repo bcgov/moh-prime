@@ -56,7 +56,7 @@ namespace Prime.Controllers
                     }
                     catch (Npgsql.NpgsqlException e)
                     {
-                        _logger.LogError("Error saving logs.", e);
+                        _logger.LogError(e.Message, e);
                         // TODO: Make configurable
                         // Wait for database to recover and then try again
                         await Task.Delay(5000);

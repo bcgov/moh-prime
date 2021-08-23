@@ -24,9 +24,9 @@ namespace Prime.HttpClients
 
         public async Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync(long lastKnownTxId)
         {
-            _logger.LogInformation(PrimeEnvironment.PrimeOdrApi.Url);
-            _logger.LogInformation(PrimeEnvironment.PrimeOdrApi.ClientName);
-            _logger.LogInformation(PrimeEnvironment.PrimeOdrApi.FetchSize);
+            _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.Url);
+            _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.ClientName);
+            _logger.LogDebug(PrimeEnvironment.PrimeOdrApi.FetchSize);
 
             // Auth header and cert are configured to be injected in Startup.cs
             string primeRequestId = System.Guid.NewGuid().ToString();
@@ -61,8 +61,8 @@ namespace Prime.HttpClients
     {
         public PrimeOdrClientHandler(ILogger<PrimeOdrClientHandler> logger)
         {
-            logger.LogInformation(PrimeEnvironment.PrimeOdrApi.SslCertFilename);
-            logger.LogInformation(PrimeEnvironment.PrimeOdrApi.SslCertPassword);
+            logger.LogDebug(PrimeEnvironment.PrimeOdrApi.SslCertFilename);
+            logger.LogDebug(PrimeEnvironment.PrimeOdrApi.SslCertPassword);
 
             ClientCertificates.Add(new X509Certificate2(PrimeEnvironment.PrimeOdrApi.SslCertFilename, PrimeEnvironment.PrimeOdrApi.SslCertPassword));
             ClientCertificateOptions = ClientCertificateOption.Manual;
