@@ -128,8 +128,13 @@ namespace Prime.Services
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
                 )
-                .If(searchOptions.StatusCode.HasValue, q => q
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode != 42, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                )
+                // MacGyver paper enrollee Filter into status Filter. arbitrarily chose 42.
+                // search-form.component.ts constructor() has other reference to this value.
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode == 42, q => q
+                    .Where(e => e.GPID.StartsWith("NOBCSC"))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
