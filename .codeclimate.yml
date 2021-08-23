@@ -20,6 +20,7 @@ exclude_patterns:
 - poc/*
 - schemasoy/*
 - utilities/*
+- prime-e2e-tests/*
 
 # Exclude File Patterns
 - "**/*.spec.*"

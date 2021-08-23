@@ -1,5 +1,5 @@
 name: CodeClimate-Checks
-on: [ push, pull_request ]
+on: [ push ]
   # push:
   #   branches:
   #     - innovate/code-climate
