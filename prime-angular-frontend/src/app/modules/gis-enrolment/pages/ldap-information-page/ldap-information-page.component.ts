@@ -14,6 +14,7 @@ import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resour
 import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
+import { LdapThrottlingParameters } from '@gis/shared/models/ldap-credential.model';
 
 @Component({
   selector: 'app-ldap-information-page',
@@ -76,6 +77,15 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
           throw error;
         })
       )
+  }
+
+  protected setThrottling(): void {
+    this.gisEnrolmentResource.ldapLogin(this.gisEnrolmentService.enrolment.id, this.formState.credentials)
+      .subscribe((ldapThrottlingParameters: LdapThrottlingParameters) => {
+        this.remainingAttempts = ldapThrottlingParameters.remainingAttempts;
+        this.lockoutTimeInHours = ldapThrottlingParameters.lockoutTimeInHours;
+      })
+
   }
 
   protected afterSubmitIsSuccessful(): void {
