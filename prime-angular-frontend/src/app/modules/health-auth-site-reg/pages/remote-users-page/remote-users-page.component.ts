@@ -21,6 +21,11 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 
 // TODO refactor into list/form composite component used in health authority organization information
+// TODO copy of the remote users and remote user have been pulled from site registration
+//      and do not fit the current workflow for health authorities. Remote users should
+//      be set up similar to adjudication/pages/health-authorities/vendor-page where
+//      the list and form exist in one page and allow for a single form state to be
+//      shared since form state service is not used
 @UntilDestroy()
 @Component({
   selector: 'app-remote-users-page',

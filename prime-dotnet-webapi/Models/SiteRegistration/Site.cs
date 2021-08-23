@@ -84,17 +84,6 @@ namespace Prime.Models
         public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
-        /// <summary>
-        /// Days in which the business has any business hours.
-        /// Only the time portion of the input parameter is considered.
-        /// </summary>
-        public IEnumerable<DayOfWeek> DaysOpen(DateTimeOffset? atTime = null)
-        {
-            return BusinessHours
-                .Where(h => atTime == null || h.IsOpen(atTime.Value))
-                .Select(b => b.Day)
-                .Distinct();
-        }
 
         public SiteStatus AddStatus(SiteStatusType siteStatusType)
         {

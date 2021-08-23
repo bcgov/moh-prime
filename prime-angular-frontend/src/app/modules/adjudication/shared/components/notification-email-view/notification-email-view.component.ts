@@ -45,7 +45,7 @@ export class NotificationEmailViewComponent implements OnInit {
     if (this.form.valid) {
       const data: DialogOptions = {
         title: 'Save Email Template',
-        message: `Are you sure you want to overrite the email template?`,
+        message: `Are you sure you want to overwrite the email template?`,
         actionText: 'Save Template'
       };
 

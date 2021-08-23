@@ -6,8 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 
-import { LdapUserPageComponent } from './ldap-user-page.component';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { YesNoPipe } from '@shared/pipes/yes-no.pipe';
+import { LdapUserPageComponent } from './ldap-user-page.component';
+
 
 describe('LdapUserPageComponent', () => {
   let component: LdapUserPageComponent;
@@ -18,12 +20,18 @@ describe('LdapUserPageComponent', () => {
       imports: [
         ReactiveFormsModule,
         RouterTestingModule,
-        BrowserAnimationsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         LdapUserPageComponent,
         YesNoPipe
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

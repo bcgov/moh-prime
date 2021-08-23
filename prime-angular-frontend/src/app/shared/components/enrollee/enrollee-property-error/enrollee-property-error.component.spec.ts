@@ -1,7 +1,9 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { EnrolleePropertyErrorComponent } from './enrollee-property-error.component';
-import { SharedModule } from '@shared/shared.module';
 
 describe('EnrolleePropertyErrorComponent', () => {
   let component: EnrolleePropertyErrorComponent;
@@ -10,9 +12,12 @@ describe('EnrolleePropertyErrorComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        SharedModule
+        NgxMaterialModule,
+        BrowserAnimationsModule
       ],
-      declarations: []
+      declarations: [],
+      providers: [],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

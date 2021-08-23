@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EmailTemplateResourceService } from './email-template-resource.service';
 
 describe('EmailTemplateResourceService', () => {
@@ -8,11 +10,15 @@ describe('EmailTemplateResourceService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule,
+        MatSnackBarModule
+      ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
+        }
       ]
     });
     service = TestBed.inject(EmailTemplateResourceService);

@@ -1,5 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { ErrorLoggerComponent } from './error-logger.component';
 
 describe('ErrorLoggerComponent', () => {
@@ -8,9 +12,30 @@ describe('ErrorLoggerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ErrorLoggerComponent ]
-    })
-    .compileComponents();
+      imports: [
+        MatDialogModule
+      ],
+      declarations: [
+        ErrorLoggerComponent,
+        FormatDatePipe
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {
+            data: {
+              errorId: 1000
+            }
+          }
+        },
+        FormatDatePipe
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {
