@@ -7,7 +7,7 @@ interface LdapInformationPageDataModel {
   ldapUsername: string;
 }
 
-// tslint:disable-next-line:no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface LdapInformationPageFormModel extends LdapCredential {}
 
 export class LdapInformationPageFormState extends AbstractFormState<LdapInformationPageDataModel> {
