@@ -1,27 +1,27 @@
 //
+@use '~@angular/material' as mat;
 // MATERIAL THEME
 //
 
 @import './material-palette';
-@import '~@angular/material/theming';
 
 // Define the palettes for your theme using the Material Design palettes available in the material
 // palette.scss (imported above). For each palette, you can optionally specify a default (500),
 // lighter (100), and darker (700) hue.
-$prime-app-primary: mat-palette($prime-blue, 500);
-$prime-app-accent: mat-palette($prime-yellow, 500);
+$prime-app-primary: mat.define-palette($prime-blue, 500);
+$prime-app-accent: mat.define-palette($prime-yellow, 500);
 
 // The warn palette is optional (defaults to red).
-$prime-app-warn: mat-palette($mat-red);
+$prime-app-warn: mat.define-palette(mat.$red-palette);
 
 // Create the default theme object (a Sass map containing all of the palettes).
-$prime-app-theme: mat-light-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
+$prime-app-theme: mat.define-light-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 
-@include angular-material-theme($prime-app-theme);
+@include mat.all-component-themes($prime-app-theme);
 
 // Create the dark theme object (a Sass map containing all of the palettes).
-$prime-dark-app-theme: mat-dark-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);
+$prime-dark-app-theme: mat.define-dark-theme($prime-app-primary, $prime-app-accent, $prime-app-warn);

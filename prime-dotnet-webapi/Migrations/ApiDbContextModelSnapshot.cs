@@ -14000,6 +14000,2069 @@ namespace Prime.Migrations
                     b.ToTable("PharmanetTransactionLog");
                 });
 
+            modelBuilder.Entity("Prime.Models.Plr.PlrExpertise", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("PlrExpertiseLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "MS",
+                            Name = "Management Studies"
+                        },
+                        new
+                        {
+                            Code = "NON-SPEC",
+                            Name = "Non-Specialist"
+                        },
+                        new
+                        {
+                            Code = "NUCRX",
+                            Name = "Nuclear Pharmacy"
+                        },
+                        new
+                        {
+                            Code = "NUTRX",
+                            Name = "Nutrition Pharmacy"
+                        },
+                        new
+                        {
+                            Code = "ONCRX",
+                            Name = "Oncology Pharmacy"
+                        },
+                        new
+                        {
+                            Code = "OP",
+                            Name = "Oral Medicine and Oral Pathology"
+                        },
+                        new
+                        {
+                            Code = "ORD",
+                            Name = "Oral and Maxillofacial Radiology"
+                        },
+                        new
+                        {
+                            Code = "ORTH",
+                            Name = "Orthodontics"
+                        },
+                        new
+                        {
+                            Code = "OS",
+                            Name = "Oral Maxillofacial Surgery"
+                        },
+                        new
+                        {
+                            Code = "PED",
+                            Name = "Pediatric Dentistry"
+                        },
+                        new
+                        {
+                            Code = "PER",
+                            Name = "Periodontics"
+                        },
+                        new
+                        {
+                            Code = "PHPHARM",
+                            Name = "Pharmacotherapy"
+                        },
+                        new
+                        {
+                            Code = "PRO",
+                            Name = "Prosthodontics"
+                        },
+                        new
+                        {
+                            Code = "PSYRX",
+                            Name = "Psychiatric Pharmacy"
+                        },
+                        new
+                        {
+                            Code = "SMD1",
+                            Name = "Addiction Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD10",
+                            Name = "Certified Independent Medical Examiner"
+                        },
+                        new
+                        {
+                            Code = "SMD100",
+                            Name = "Medical Disorders of Pregnancy"
+                        },
+                        new
+                        {
+                            Code = "LPNOR",
+                            Name = "Operating Room"
+                        },
+                        new
+                        {
+                            Code = "SMD101",
+                            Name = "Cardiovascular Disease"
+                        },
+                        new
+                        {
+                            Code = "SMD104",
+                            Name = "Chemical, Biological, Radiological and Nuclear Warfare Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD11",
+                            Name = "Chemical Dependency"
+                        },
+                        new
+                        {
+                            Code = "SMD12",
+                            Name = "Child and Adolescent Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "SMD13",
+                            Name = "Chronic Pain Management"
+                        },
+                        new
+                        {
+                            Code = "SMD14",
+                            Name = "Clinical Hypnosis"
+                        },
+                        new
+                        {
+                            Code = "SMD15",
+                            Name = "Colon & Rectal Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD16",
+                            Name = "Corneal & Extraocular Disease"
+                        },
+                        new
+                        {
+                            Code = "SMD17",
+                            Name = "Counseling"
+                        },
+                        new
+                        {
+                            Code = "SMD18",
+                            Name = "Critical Care Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD19",
+                            Name = "Dermatology"
+                        },
+                        new
+                        {
+                            Code = "SMD2",
+                            Name = "Adolescent Medicine"
+                        },
+                        new
+                        {
+                            Code = "CCFPEM",
+                            Name = "Certificant; CFPC(E.M.)"
+                        },
+                        new
+                        {
+                            Code = "CMCE",
+                            Name = "Community Medicine Certification"
+                        },
+                        new
+                        {
+                            Code = "CTI",
+                            Name = "Computed Tomography Imaging"
+                        },
+                        new
+                        {
+                            Code = "DPH",
+                            Name = "Dental Public Health"
+                        },
+                        new
+                        {
+                            Code = "DS",
+                            Name = "Dental Sciences"
+                        },
+                        new
+                        {
+                            Code = "END",
+                            Name = "Endodontics"
+                        },
+                        new
+                        {
+                            Code = "ERN1",
+                            Name = "General Medicine"
+                        },
+                        new
+                        {
+                            Code = "ERN10",
+                            Name = "Critical/ Intensive Care"
+                        },
+                        new
+                        {
+                            Code = "ERN11",
+                            Name = "Occupational Health"
+                        },
+                        new
+                        {
+                            Code = "ERN12",
+                            Name = "Home Care"
+                        },
+                        new
+                        {
+                            Code = "ERN13",
+                            Name = "Geriatric / Long Term Care"
+                        },
+                        new
+                        {
+                            Code = "ERN14",
+                            Name = "Community Health"
+                        },
+                        new
+                        {
+                            Code = "ERN15",
+                            Name = "Ambulatory Care"
+                        },
+                        new
+                        {
+                            Code = "ERN16",
+                            Name = "Nursing Administration"
+                        },
+                        new
+                        {
+                            Code = "ERN17",
+                            Name = "Teaching"
+                        },
+                        new
+                        {
+                            Code = "ERN18",
+                            Name = "Research"
+                        },
+                        new
+                        {
+                            Code = "ERN19",
+                            Name = "Telehealth"
+                        },
+                        new
+                        {
+                            Code = "ERN2",
+                            Name = "General Surgery"
+                        },
+                        new
+                        {
+                            Code = "CCFP",
+                            Name = "Certificant; CFPC"
+                        },
+                        new
+                        {
+                            Code = "ERN3",
+                            Name = "Pediatrics"
+                        },
+                        new
+                        {
+                            Code = "ERN4",
+                            Name = "Maternal / Newborn"
+                        },
+                        new
+                        {
+                            Code = "ERN5",
+                            Name = "Psychiatric/ Mental Health"
+                        },
+                        new
+                        {
+                            Code = "ERN6",
+                            Name = "Oncology"
+                        },
+                        new
+                        {
+                            Code = "ERN7",
+                            Name = "Rehabilitation"
+                        },
+                        new
+                        {
+                            Code = "ERN8",
+                            Name = "Operating / Recovery Room"
+                        },
+                        new
+                        {
+                            Code = "ERN9",
+                            Name = "Emergency Care/ Prehospital"
+                        },
+                        new
+                        {
+                            Code = "GPDEN",
+                            Name = "General Practice"
+                        },
+                        new
+                        {
+                            Code = "GPMD",
+                            Name = "General Practice"
+                        },
+                        new
+                        {
+                            Code = "GPPHARM",
+                            Name = "General Practice"
+                        },
+                        new
+                        {
+                            Code = "LPNDIAL",
+                            Name = "Dialysis"
+                        },
+                        new
+                        {
+                            Code = "LPNIMMUN",
+                            Name = "Immunization"
+                        },
+                        new
+                        {
+                            Code = "AMD35",
+                            Name = "Nuclear Medicine - Full"
+                        },
+                        new
+                        {
+                            Code = "AMD36",
+                            Name = "Sleep Interpreter - Respiratory Dis."
+                        },
+                        new
+                        {
+                            Code = "AMD37",
+                            Name = "Magnetic Resonance - Limited"
+                        },
+                        new
+                        {
+                            Code = "AMD38",
+                            Name = "Pulm Director - Level II"
+                        },
+                        new
+                        {
+                            Code = "AMD39",
+                            Name = "Pulm Director - Level III"
+                        },
+                        new
+                        {
+                            Code = "AMD4",
+                            Name = "Craniosacral Therapy(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD40",
+                            Name = "Pulm Director - Level IV"
+                        },
+                        new
+                        {
+                            Code = "AMD41",
+                            Name = "Sleep Director -Full"
+                        },
+                        new
+                        {
+                            Code = "AMD42",
+                            Name = "Sleep Director - Pediatric Disorders"
+                        },
+                        new
+                        {
+                            Code = "AMD43",
+                            Name = "Sleep Director - Respiratory Disorders"
+                        },
+                        new
+                        {
+                            Code = "AMD44",
+                            Name = "Homeopathy (Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD45",
+                            Name = "Ultrasound - Obstetrical / Gynecology"
+                        },
+                        new
+                        {
+                            Code = "AMD46",
+                            Name = "Echocardiography -Restricted"
+                        },
+                        new
+                        {
+                            Code = "AMD47",
+                            Name = "Ultasound - Non-Specialist"
+                        },
+                        new
+                        {
+                            Code = "AMD48",
+                            Name = "Nuclear Medicine - Restricted"
+                        },
+                        new
+                        {
+                            Code = "AMD49",
+                            Name = "Addiction Medicine"
+                        },
+                        new
+                        {
+                            Code = "AMD5",
+                            Name = "Doctor of Osteopathy"
+                        },
+                        new
+                        {
+                            Code = "AMD50",
+                            Name = "Customized Nutritional Therapy(Comp.)"
+                        },
+                        new
+                        {
+                            Code = "AMD51",
+                            Name = "Ultrasound -Abortion Transvaginal"
+                        },
+                        new
+                        {
+                            Code = "AMD52",
+                            Name = "Ultrasound - Abortion Trans - abdominal"
+                        },
+                        new
+                        {
+                            Code = "AMD53",
+                            Name = "Anti-Aging Medicine(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD54",
+                            Name = "Primordial Sound Meditation(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD55",
+                            Name = "Ayurveda(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD56",
+                            Name = "Fluoroscopically-guided needle placements"
+                        },
+                        new
+                        {
+                            Code = "AMD57",
+                            Name = "Magnetic Resonance - Cardiac"
+                        },
+                        new
+                        {
+                            Code = "AMD58",
+                            Name = "PET -Positron Emission Tomography"
+                        },
+                        new
+                        {
+                            Code = "AMD6",
+                            Name = "Electrocardiogram"
+                        },
+                        new
+                        {
+                            Code = "AMD7",
+                            Name = "Electroencephalography"
+                        },
+                        new
+                        {
+                            Code = "AMD8",
+                            Name = "Electromyography"
+                        },
+                        new
+                        {
+                            Code = "AMD9",
+                            Name = "Evoked Potential Auditory"
+                        },
+                        new
+                        {
+                            Code = "BI",
+                            Name = "Breast Imaging"
+                        },
+                        new
+                        {
+                            Code = "A225",
+                            Name = "Max / Fax Surgery"
+                        },
+                        new
+                        {
+                            Code = " A240",
+                            Name = "Medical Imaging"
+                        },
+                        new
+                        {
+                            Code = "A385",
+                            Name = "Pulmonary Diseases"
+                        },
+                        new
+                        {
+                            Code = "AMD1",
+                            Name = "Acupuncture"
+                        },
+                        new
+                        {
+                            Code = "AMD10",
+                            Name = "Evoked Potential Somatosensory"
+                        },
+                        new
+                        {
+                            Code = "AMD11",
+                            Name = "Evoked Potential Visual"
+                        },
+                        new
+                        {
+                            Code = "AMD12",
+                            Name = "Evoked Potential(EP)"
+                        },
+                        new
+                        {
+                            Code = "AMD13",
+                            Name = "Functional Medicine(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD14",
+                            Name = "Herbal Therapy(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD15",
+                            Name = "Kinesiology(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD16",
+                            Name = "Magnetic Resonance - Full"
+                        },
+                        new
+                        {
+                            Code = "AMD17",
+                            Name = "Cardiac Nuclear Imaging"
+                        },
+                        new
+                        {
+                            Code = "AMD18",
+                            Name = "Nuclear Medicine - Limited"
+                        },
+                        new
+                        {
+                            Code = "AMD19",
+                            Name = "Ultrasound - Opthalmology"
+                        },
+                        new
+                        {
+                            Code = "AMD2",
+                            Name = "Echocardiography -Full Adult"
+                        },
+                        new
+                        {
+                            Code = "AMD20",
+                            Name = "Echocardiography - Full Pediatric"
+                        },
+                        new
+                        {
+                            Code = "AMD21",
+                            Name = "Pulm Interpretation-Level II"
+                        },
+                        new
+                        {
+                            Code = "AMD22",
+                            Name = "Pulm Interpretation-Level III"
+                        },
+                        new
+                        {
+                            Code = "AMD23",
+                            Name = "Pulm Interpretation-Level IV"
+                        },
+                        new
+                        {
+                            Code = "AMD24",
+                            Name = "Reiki Therapy(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD25",
+                            Name = "Thought Field Therapy(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "AMD26",
+                            Name = "Transcendental Meditation(Comp.)"
+                        },
+                        new
+                        {
+                            Code = "AMD27",
+                            Name = "Echocardiography -Transesophageal"
+                        },
+                        new
+                        {
+                            Code = "AMD28",
+                            Name = "Trigger Point Therapy"
+                        },
+                        new
+                        {
+                            Code = "AMD29",
+                            Name = "Ultrasound -Full"
+                        },
+                        new
+                        {
+                            Code = "AMD3",
+                            Name = "Cardiac Stress Testing"
+                        },
+                        new
+                        {
+                            Code = "AMD30",
+                            Name = "Ultrasound -Urology"
+                        },
+                        new
+                        {
+                            Code = "AMD31",
+                            Name = "Ultrasound -Vascular"
+                        },
+                        new
+                        {
+                            Code = "AMD32",
+                            Name = "Vestibular Testing - Director"
+                        },
+                        new
+                        {
+                            Code = "AMD33",
+                            Name = "Vestibular Testing - Interpretor"
+                        },
+                        new
+                        {
+                            Code = "AMD34",
+                            Name = "Chelation Therapy(Complementary)"
+                        },
+                        new
+                        {
+                            Code = "480",
+                            Name = "Thoracic Surgery(Gen.Sur.)"
+                        },
+                        new
+                        {
+                            Code = "481",
+                            Name = "Thoracic Surgery(General / Cardiac)"
+                        },
+                        new
+                        {
+                            Code = "490",
+                            Name = "Vascular Surgery"
+                        },
+                        new
+                        {
+                            Code = "510",
+                            Name = "Clinical Pharmacology"
+                        },
+                        new
+                        {
+                            Code = "512",
+                            Name = "Colorectal Surgery"
+                        },
+                        new
+                        {
+                            Code = "515",
+                            Name = "Critical Care medicine"
+                        },
+                        new
+                        {
+                            Code = "520",
+                            Name = "General Surgical Oncology"
+                        },
+                        new
+                        {
+                            Code = "530",
+                            Name = "Gynecology Oncology"
+                        },
+                        new
+                        {
+                            Code = "535",
+                            Name = "Gynecology Reprod. Endocrin. & Infert."
+                        },
+                        new
+                        {
+                            Code = "540",
+                            Name = "Transfusion Medicine"
+                        },
+                        new
+                        {
+                            Code = "545",
+                            Name = "Maternal - Fetal Medicine"
+                        },
+                        new
+                        {
+                            Code = "550",
+                            Name = "Clinician Investigator Program"
+                        },
+                        new
+                        {
+                            Code = "555",
+                            Name = "Neonatal - Perinatal Medicine"
+                        },
+                        new
+                        {
+                            Code = "560",
+                            Name = "Neuroradiology"
+                        },
+                        new
+                        {
+                            Code = "570",
+                            Name = "Palliative Medicine"
+                        },
+                        new
+                        {
+                            Code = "580",
+                            Name = "Pediatric Radiology"
+                        },
+                        new
+                        {
+                            Code = "582",
+                            Name = "Pediatric Emergency Medicine"
+                        },
+                        new
+                        {
+                            Code = "584",
+                            Name = "Developmental Pediatrics"
+                        },
+                        new
+                        {
+                            Code = "474",
+                            Name = "Rheumatology(Int.Med or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "900",
+                            Name = "Pediatric Gastroenterology"
+                        },
+                        new
+                        {
+                            Code = "905",
+                            Name = "Pediatric Nephrology"
+                        },
+                        new
+                        {
+                            Code = "910",
+                            Name = "Pediatric Neurology"
+                        },
+                        new
+                        {
+                            Code = "915",
+                            Name = "Pediatric Cardiovascular Surgery"
+                        },
+                        new
+                        {
+                            Code = "A110",
+                            Name = "Administrative Medicine"
+                        },
+                        new
+                        {
+                            Code = "A115",
+                            Name = "Adolescent Medicine"
+                        },
+                        new
+                        {
+                            Code = "A120",
+                            Name = "Allergy"
+                        },
+                        new
+                        {
+                            Code = "A130",
+                            Name = "Aviation Medicine"
+                        },
+                        new
+                        {
+                            Code = "A135",
+                            Name = "Behavioral Therapy"
+                        },
+                        new
+                        {
+                            Code = "A140",
+                            Name = "Child Health"
+                        },
+                        new
+                        {
+                            Code = "A145",
+                            Name = "Cytopathology"
+                        },
+                        new
+                        {
+                            Code = "A155",
+                            Name = "Epidemiology"
+                        },
+                        new
+                        {
+                            Code = "A160",
+                            Name = "Family Medicine"
+                        },
+                        new
+                        {
+                            Code = "315",
+                            Name = "General Surgery"
+                        },
+                        new
+                        {
+                            Code = "319",
+                            Name = "Gynecology"
+                        },
+                        new
+                        {
+                            Code = "320",
+                            Name = "Obstetrics"
+                        },
+                        new
+                        {
+                            Code = "325",
+                            Name = "Medical Scientist(Surgery)"
+                        },
+                        new
+                        {
+                            Code = "329",
+                            Name = "Neurosurgery"
+                        },
+                        new
+                        {
+                            Code = "331",
+                            Name = "No Specialty(Surgery)"
+                        },
+                        new
+                        {
+                            Code = "336",
+                            Name = "Obstetrics and Gynecology"
+                        },
+                        new
+                        {
+                            Code = "338",
+                            Name = "Ophthalmology"
+                        },
+                        new
+                        {
+                            Code = "340",
+                            Name = "Orthopedic Surgery"
+                        },
+                        new
+                        {
+                            Code = "342",
+                            Name = "Otolaryngology"
+                        },
+                        new
+                        {
+                            Code = "345",
+                            Name = "Plastic Surgery"
+                        },
+                        new
+                        {
+                            Code = "348",
+                            Name = "Principles of Surgery"
+                        },
+                        new
+                        {
+                            Code = "354",
+                            Name = "Thoracic Surgery"
+                        },
+                        new
+                        {
+                            Code = "355",
+                            Name = "Thoracic Surgery"
+                        },
+                        new
+                        {
+                            Code = "356",
+                            Name = "Cardiac Surgery"
+                        },
+                        new
+                        {
+                            Code = "360",
+                            Name = "Urology"
+                        },
+                        new
+                        {
+                            Code = "405",
+                            Name = "Cardiology(Int.Med.or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "409",
+                            Name = "Clinical Imm. Allergy(Int.Med.or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "305",
+                            Name = "Cardiovascular and Thoracic Surgery"
+                        },
+                        new
+                        {
+                            Code = "411",
+                            Name = "Critical Care Medicine"
+                        },
+                        new
+                        {
+                            Code = "415",
+                            Name = "Endocrin.Metabolism(Int.Med.or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "417",
+                            Name = "Forensic Pathology(Anatomical/ General)"
+                        },
+                        new
+                        {
+                            Code = "420",
+                            Name = "Gastroenterology(Int.Med.or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "425",
+                            Name = "Geriatric Medicine(Int.Med.)"
+                        },
+                        new
+                        {
+                            Code = "430",
+                            Name = "Hematology(Int.Med or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "431",
+                            Name = "Pediatric Hemat./ Onc. (Pediatrics)"
+                        },
+                        new
+                        {
+                            Code = "432",
+                            Name = "Neuropathology"
+                        },
+                        new
+                        {
+                            Code = "435",
+                            Name = "Infectious Diseases(Int.Med or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "452",
+                            Name = "Medical Oncology(Int.Med.)"
+                        },
+                        new
+                        {
+                            Code = "460",
+                            Name = "Nephrology(Int.Med or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "465",
+                            Name = "Pediatric General Surgery"
+                        },
+                        new
+                        {
+                            Code = "472",
+                            Name = "Respirology(Int.Med.or Ped.)"
+                        },
+                        new
+                        {
+                            Code = "118",
+                            Name = "Diagnostic and Therapeutic Radiology"
+                        },
+                        new
+                        {
+                            Code = "122",
+                            Name = "Emergency Medicine"
+                        },
+                        new
+                        {
+                            Code = "126",
+                            Name = "Gastroenterology"
+                        },
+                        new
+                        {
+                            Code = "130",
+                            Name = "Hematology"
+                        },
+                        new
+                        {
+                            Code = "136",
+                            Name = "Internal Medicine"
+                        },
+                        new
+                        {
+                            Code = "140",
+                            Name = "Medical Scientist(Medicine)"
+                        },
+                        new
+                        {
+                            Code = "145",
+                            Name = "Neurology"
+                        },
+                        new
+                        {
+                            Code = "146",
+                            Name = "Neurology and/ or Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "149",
+                            Name = "No Specialty(Medicine)"
+                        },
+                        new
+                        {
+                            Code = "150",
+                            Name = "Medical Genetics"
+                        },
+                        new
+                        {
+                            Code = "151",
+                            Name = "Nuclear Medicine"
+                        },
+                        new
+                        {
+                            Code = "152",
+                            Name = "Urological Oncology"
+                        },
+                        new
+                        {
+                            Code = "153",
+                            Name = "Paediatric Oncology"
+                        },
+                        new
+                        {
+                            Code = "154",
+                            Name = "Community Oncology"
+                        },
+                        new
+                        {
+                            Code = "155",
+                            Name = "Occupational Medicine"
+                        },
+                        new
+                        {
+                            Code = "159",
+                            Name = "Pediatric Cardiology"
+                        },
+                        new
+                        {
+                            Code = "160",
+                            Name = "Pediatrics"
+                        },
+                        new
+                        {
+                            Code = "162",
+                            Name = "Physical Medicine Rehabilitation"
+                        },
+                        new
+                        {
+                            Code = "165",
+                            Name = "Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "168",
+                            Name = "Public Health"
+                        },
+                        new
+                        {
+                            Code = "172",
+                            Name = "Radiation Oncology"
+                        },
+                        new
+                        {
+                            Code = "176",
+                            Name = "Respirology"
+                        },
+                        new
+                        {
+                            Code = "180",
+                            Name = "Rheumatology"
+                        },
+                        new
+                        {
+                            Code = "190",
+                            Name = "Therapeutic Radiology"
+                        },
+                        new
+                        {
+                            Code = "202",
+                            Name = "Anatomical Pathology"
+                        },
+                        new
+                        {
+                            Code = "210",
+                            Name = "General Pathology"
+                        },
+                        new
+                        {
+                            Code = "215",
+                            Name = "Hematological Pathology"
+                        },
+                        new
+                        {
+                            Code = "225",
+                            Name = "Medical Biochemistry"
+                        },
+                        new
+                        {
+                            Code = "227",
+                            Name = "Medical Microbiology"
+                        },
+                        new
+                        {
+                            Code = "232",
+                            Name = "Neuropathology"
+                        },
+                        new
+                        {
+                            Code = "240",
+                            Name = "Pathology and Bacteriology"
+                        },
+                        new
+                        {
+                            Code = "302",
+                            Name = "Cardiothoracic Surgery"
+                        },
+                        new
+                        {
+                            Code = "15 ",
+                            Name = "Malignant Disease Specialist"
+                        },
+                        new
+                        {
+                            Code = "101",
+                            Name = "Anaesthesia"
+                        },
+                        new
+                        {
+                            Code = "105",
+                            Name = "Cardiology"
+                        },
+                        new
+                        {
+                            Code = "107",
+                            Name = "Clinical Immunology"
+                        },
+                        new
+                        {
+                            Code = "108",
+                            Name = "Clinical Immunology and Allergy"
+                        },
+                        new
+                        {
+                            Code = "110",
+                            Name = "Community Medicine"
+                        },
+                        new
+                        {
+                            Code = "115",
+                            Name = "Dermatology"
+                        },
+                        new
+                        {
+                            Code = "117",
+                            Name = "Diagnostic Radiology"
+                        },
+                        new
+                        {
+                            Code = "SMD77",
+                            Name = "Pediatric Rheumatology"
+                        },
+                        new
+                        {
+                            Code = "SMD78",
+                            Name = "Perinatology"
+                        },
+                        new
+                        {
+                            Code = "SMD79",
+                            Name = "Phlebology"
+                        },
+                        new
+                        {
+                            Code = "SMD8",
+                            Name = "Breastfeeding"
+                        },
+                        new
+                        {
+                            Code = "SMD80",
+                            Name = "Phlebology / Sclerotherapy"
+                        },
+                        new
+                        {
+                            Code = "SMD81",
+                            Name = "Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "SMD82",
+                            Name = "Psychological Disorders"
+                        },
+                        new
+                        {
+                            Code = "SMD83",
+                            Name = "Psychotherapy"
+                        },
+                        new
+                        {
+                            Code = "SMD84",
+                            Name = "Psychotherapy / Hypnotherapy"
+                        },
+                        new
+                        {
+                            Code = "SMD85",
+                            Name = "Psychotherapy: Indiv.Fam. & Marital"
+                        },
+                        new
+                        {
+                            Code = "SMD86",
+                            Name = "Reproductive Endocrinology"
+                        },
+                        new
+                        {
+                            Code = "SMD87",
+                            Name = "Sclerotherapy of Varicose Veins"
+                        },
+                        new
+                        {
+                            Code = "SMD88",
+                            Name = "Shoulder Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD89",
+                            Name = "Sleep Disorders Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD9",
+                            Name = "Cardiac Rhythm Disturbances Pacemaker"
+                        },
+                        new
+                        {
+                            Code = "SMD90",
+                            Name = "Sport Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD91",
+                            Name = "Travel Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD92",
+                            Name = "Treatment of Stress Disorders"
+                        },
+                        new
+                        {
+                            Code = "SMD93",
+                            Name = "Uro - oncology"
+                        },
+                        new
+                        {
+                            Code = "SMD94",
+                            Name = "Urogynecology"
+                        },
+                        new
+                        {
+                            Code = "SMD95",
+                            Name = "Non-Spine Musculoskeletal Conditions"
+                        },
+                        new
+                        {
+                            Code = "SMD96",
+                            Name = "Burn Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD97",
+                            Name = "Speech and Hearing Disorders"
+                        },
+                        new
+                        {
+                            Code = "SMD98",
+                            Name = "Oncological Surgery Liver and Pancreas"
+                        },
+                        new
+                        {
+                            Code = "SMD99",
+                            Name = "Child and Maternal Health"
+                        },
+                        new
+                        {
+                            Code = "SMD5",
+                            Name = "Arthro.And Reconstruct. Joint Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD50",
+                            Name = "Knee Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD51",
+                            Name = "Laparoscopic General Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD52",
+                            Name = "Laser Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD53",
+                            Name = "Mammography"
+                        },
+                        new
+                        {
+                            Code = "SMD54",
+                            Name = "Maternity Care & Diseases of Females"
+                        },
+                        new
+                        {
+                            Code = "SMD55",
+                            Name = "Medical Genetics"
+                        },
+                        new
+                        {
+                            Code = "SMD56",
+                            Name = "Neonatology"
+                        },
+                        new
+                        {
+                            Code = "SMD57",
+                            Name = "Neuro - ophthalmology"
+                        },
+                        new
+                        {
+                            Code = "SMD58",
+                            Name = "Neuro-otology"
+                        },
+                        new
+                        {
+                            Code = "SMD59",
+                            Name = "Neuroanesthesia"
+                        },
+                        new
+                        {
+                            Code = "SMD6",
+                            Name = "Arthro. And Recon. Surg. (Knee / Shoulder)"
+                        },
+                        new
+                        {
+                            Code = "SMD60",
+                            Name = "Nutrition"
+                        },
+                        new
+                        {
+                            Code = "SMD61",
+                            Name = "Obstetrics &Gynecology"
+                        },
+                        new
+                        {
+                            Code = "SMD62",
+                            Name = "Occupation Related Medical Disorders"
+                        },
+                        new
+                        {
+                            Code = "SMD63",
+                            Name = "Occupational & Aviation Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD64",
+                            Name = "Occupational Health"
+                        },
+                        new
+                        {
+                            Code = "SMD65",
+                            Name = "Occupational Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD49",
+                            Name = "Knee & Leg Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD66",
+                            Name = "Occupational Ortho. Clinical Impairment"
+                        },
+                        new
+                        {
+                            Code = "SMD67",
+                            Name = "Oculo-Plastics"
+                        },
+                        new
+                        {
+                            Code = "SMD68",
+                            Name = "Ophthalmology"
+                        },
+                        new
+                        {
+                            Code = "SMD69",
+                            Name = "OrthopedicSports Medicine in Children"
+                        },
+                        new
+                        {
+                            Code = "SMD7",
+                            Name = "Aviation Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD70",
+                            Name = "Orthopedic Traumatology"
+                        },
+                        new
+                        {
+                            Code = "SMD71",
+                            Name = "Pain Management"
+                        },
+                        new
+                        {
+                            Code = "SMD72",
+                            Name = "Pediatric &Adolescent Gynecology"
+                        },
+                        new
+                        {
+                            Code = "SMD73",
+                            Name = "Pediatric Ophthamology Adult Strabismus"
+                        },
+                        new
+                        {
+                            Code = "SMD74",
+                            Name = "Pediatric Orthopedic Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD75",
+                            Name = "Pediatric Orthopedics"
+                        },
+                        new
+                        {
+                            Code = "SMD76",
+                            Name = "Pediatric Otolaryngology"
+                        },
+                        new
+                        {
+                            Code = "SMD21",
+                            Name = "Diabetes"
+                        },
+                        new
+                        {
+                            Code = "SMD22",
+                            Name = "Diseases of Children"
+                        },
+                        new
+                        {
+                            Code = "SMD23",
+                            Name = "Diseases of the Colon and Rectum"
+                        },
+                        new
+                        {
+                            Code = "SMD24",
+                            Name = "Diseases of the Eye"
+                        },
+                        new
+                        {
+                            Code = "SMD25",
+                            Name = "Diseases of the Joints"
+                        },
+                        new
+                        {
+                            Code = "SMD26",
+                            Name = "Diseases of the Kidney"
+                        },
+                        new
+                        {
+                            Code = "SMD27",
+                            Name = "Resp. Tract Diseases -Children"
+                        },
+                        new
+                        {
+                            Code = "SMD28",
+                            Name = "Echocardiography"
+                        },
+                        new
+                        {
+                            Code = "SMD29",
+                            Name = "Emergency Care"
+                        },
+                        new
+                        {
+                            Code = "SMD3",
+                            Name = "Allergies"
+                        },
+                        new
+                        {
+                            Code = "SMD30",
+                            Name = "Endocrinology"
+                        },
+                        new
+                        {
+                            Code = "SMD31",
+                            Name = "Endoscopic General Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD32",
+                            Name = "Exercise Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD33",
+                            Name = "Family Therapy"
+                        },
+                        new
+                        {
+                            Code = "SMD34",
+                            Name = "Female Incontinence & Urodynamics"
+                        },
+                        new
+                        {
+                            Code = "SMD35",
+                            Name = "Forensic Pathology"
+                        },
+                        new
+                        {
+                            Code = "SMD36",
+                            Name = "Forensic Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "SMD37",
+                            Name = "Forensic Psychiatry Medico-legal Med."
+                        },
+                        new
+                        {
+                            Code = "SMD38",
+                            Name = "Gastrointestinal Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD20",
+                            Name = "Dermatopathology"
+                        },
+                        new
+                        {
+                            Code = "SMD39",
+                            Name = "Geriatric Medicine"
+                        },
+                        new
+                        {
+                            Code = "SMD4",
+                            Name = "Allergies -Upper Respiratory Tract"
+                        },
+                        new
+                        {
+                            Code = "SMD40",
+                            Name = "Geriatric Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "SMD41",
+                            Name = "Geriatrics"
+                        },
+                        new
+                        {
+                            Code = "SMD42",
+                            Name = "Geriatrics & Psychotherapy"
+                        },
+                        new
+                        {
+                            Code = "SMD43",
+                            Name = "Glaucoma"
+                        },
+                        new
+                        {
+                            Code = "SMD44",
+                            Name = "Hair Restoration Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD45",
+                            Name = "Hand &Wrist Surgery"
+                        },
+                        new
+                        {
+                            Code = "SMD46",
+                            Name = "Head and Neck Oncology"
+                        },
+                        new
+                        {
+                            Code = "SMD47",
+                            Name = "Hypnotherapy"
+                        },
+                        new
+                        {
+                            Code = "SMD48",
+                            Name = "Joint Replacement & Reconstruction"
+                        },
+                        new
+                        {
+                            Code = "LPNORTHO",
+                            Name = "Orthopaedic"
+                        },
+                        new
+                        {
+                            Code = "402",
+                            Name = "Adolescent Medicine"
+                        },
+                        new
+                        {
+                            Code = "410",
+                            Name = "Clinical Pharmacology"
+                        },
+                        new
+                        {
+                            Code = "412",
+                            Name = "Colorectal Surgery"
+                        },
+                        new
+                        {
+                            Code = "414",
+                            Name = "Developmental Pediatrics"
+                        },
+                        new
+                        {
+                            Code = "423",
+                            Name = "General Surgical Oncology"
+                        },
+                        new
+                        {
+                            Code = "427",
+                            Name = "Gynecologic Oncology"
+                        },
+                        new
+                        {
+                            Code = "428",
+                            Name = "Gynecologic Reproductive Endocrinology and Infertility"
+                        },
+                        new
+                        {
+                            Code = "434",
+                            Name = "Neuroradiology"
+                        },
+                        new
+                        {
+                            Code = "445",
+                            Name = "Maternal - Fetal Medicine"
+                        },
+                        new
+                        {
+                            Code = "455",
+                            Name = "Neonatal - Perinatal Medicine"
+                        },
+                        new
+                        {
+                            Code = "461",
+                            Name = "Occupational Medicine"
+                        },
+                        new
+                        {
+                            Code = "462",
+                            Name = "Pediatric Emergency Medicine"
+                        },
+                        new
+                        {
+                            Code = "468",
+                            Name = "Pediatric Radiology"
+                        },
+                        new
+                        {
+                            Code = "485",
+                            Name = "Transfusion Medicine"
+                        },
+                        new
+                        {
+                            Code = "406",
+                            Name = "Child and Adolescent Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "418",
+                            Name = "Forensic Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "426",
+                            Name = "Geriatric Psychiatry"
+                        },
+                        new
+                        {
+                            Code = "470",
+                            Name = "Pain Medicine"
+                        },
+                        new
+                        {
+                            Code = "421",
+                            Name = "General Internal Medicine"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.Plr.PlrRoleType", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("PlrRoleTypeLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "RTNM",
+                            Name = "Nuclear Medicine Technologist"
+                        },
+                        new
+                        {
+                            Code = "RTR",
+                            Name = "Radiation Technologist in Radiology"
+                        },
+                        new
+                        {
+                            Code = "RTT",
+                            Name = "Radiation Technologist in Therapy"
+                        },
+                        new
+                        {
+                            Code = "RN",
+                            Name = "Registered Nurse"
+                        },
+                        new
+                        {
+                            Code = "RNP",
+                            Name = "Registered Nurse Practitioner"
+                        },
+                        new
+                        {
+                            Code = "RPN",
+                            Name = "Registered Psychiatric Nurse"
+                        },
+                        new
+                        {
+                            Code = "RTEMG",
+                            Name = "Registered Electromyography Technologist"
+                        },
+                        new
+                        {
+                            Code = "RTMR",
+                            Name = "Radiation Technologist in Magnetic Resonance"
+                        },
+                        new
+                        {
+                            Code = "PHARM",
+                            Name = "Pharmacist"
+                        },
+                        new
+                        {
+                            Code = "PO",
+                            Name = "Podiatrist"
+                        },
+                        new
+                        {
+                            Code = "RAC",
+                            Name = "Registered Acupuncturist"
+                        },
+                        new
+                        {
+                            Code = "REPT",
+                            Name = "Registered Evoked Potential Technologist"
+                        },
+                        new
+                        {
+                            Code = "RET",
+                            Name = "Registered Electroencephalography Technologist"
+                        },
+                        new
+                        {
+                            Code = "RM",
+                            Name = "Registered Midwife"
+                        },
+                        new
+                        {
+                            Code = "LPN",
+                            Name = "Licensed Practical Nurse"
+                        },
+                        new
+                        {
+                            Code = "MD",
+                            Name = "Medical Doctor"
+                        },
+                        new
+                        {
+                            Code = "MOA",
+                            Name = "Medical Office Assistant"
+                        },
+                        new
+                        {
+                            Code = "OPT",
+                            Name = "Optometrist"
+                        },
+                        new
+                        {
+                            Code = "PCP",
+                            Name = "Primary Care Paramedic"
+                        },
+                        new
+                        {
+                            Code = "PCY",
+                            Name = "Pharmacy"
+                        },
+                        new
+                        {
+                            Code = "ACP",
+                            Name = "Advanced Care Paramedic"
+                        },
+                        new
+                        {
+                            Code = "CCP",
+                            Name = "Critical Care Paramedic"
+                        },
+                        new
+                        {
+                            Code = "DEN",
+                            Name = "Dentist"
+                        },
+                        new
+                        {
+                            Code = "EMR",
+                            Name = "Emergency Medical Responder"
+                        },
+                        new
+                        {
+                            Code = "CC",
+                            Name = "Clinical Counsellor"
+                        },
+                        new
+                        {
+                            Code = "OT",
+                            Name = "Occupational Therapist"
+                        },
+                        new
+                        {
+                            Code = "PSYCH",
+                            Name = "Psychologist"
+                        },
+                        new
+                        {
+                            Code = "SW",
+                            Name = "Social Worker"
+                        },
+                        new
+                        {
+                            Code = "RCSW",
+                            Name = "Registered Clinical Social Worker"
+                        },
+                        new
+                        {
+                            Code = "CHIRO",
+                            Name = "Chiropractor"
+                        },
+                        new
+                        {
+                            Code = "PHYSIO",
+                            Name = "Physiotherapist"
+                        },
+                        new
+                        {
+                            Code = "RMT",
+                            Name = "Registered Massage Therapist"
+                        },
+                        new
+                        {
+                            Code = "KN",
+                            Name = "Kinesiologist"
+                        },
+                        new
+                        {
+                            Code = "PTECH",
+                            Name = "Pharmacy Technician"
+                        },
+                        new
+                        {
+                            Code = "COUN",
+                            Name = "Counsellor"
+                        },
+                        new
+                        {
+                            Code = "MFT",
+                            Name = "Marriage and Family Therapist"
+                        },
+                        new
+                        {
+                            Code = "RD",
+                            Name = "Registered Dietitian"
+                        },
+                        new
+                        {
+                            Code = "PHARMTECH",
+                            Name = "PHARMTECH"
+                        });
+                });
+
+            modelBuilder.Entity("Prime.Models.Plr.PlrStatusReason", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("PlrStatusReasonLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "OOP",
+                            Name = "Out of Province"
+                        },
+                        new
+                        {
+                            Code = "ORG",
+                            Name = "Organization Provider"
+                        },
+                        new
+                        {
+                            Code = "DEF",
+                            Name = "Deferred"
+                        },
+                        new
+                        {
+                            Code = "DEN",
+                            Name = "Licensed Denied"
+                        },
+                        new
+                        {
+                            Code = "ERSRES",
+                            Name = "Erased by Resolution"
+                        },
+                        new
+                        {
+                            Code = "GS",
+                            Name = "Good Standing"
+                        },
+                        new
+                        {
+                            Code = "HON",
+                            Name = "Honorary"
+                        },
+                        new
+                        {
+                            Code = "INNONPRAC",
+                            Name = "Initial Non Practicing"
+                        },
+                        new
+                        {
+                            Code = "MIS",
+                            Name = "Missionary"
+                        },
+                        new
+                        {
+                            Code = "NR",
+                            Name = "Non-resident"
+                        },
+                        new
+                        {
+                            Code = "OPEN",
+                            Name = "Open"
+                        },
+                        new
+                        {
+                            Code = "PRAC",
+                            Name = "Practising"
+                        },
+                        new
+                        {
+                            Code = "REM",
+                            Name = "Removed"
+                        },
+                        new
+                        {
+                            Code = "RESDISC",
+                            Name = "Resigned - disciplinary action"
+                        },
+                        new
+                        {
+                            Code = "SPE",
+                            Name = "Special Registry"
+                        },
+                        new
+                        {
+                            Code = "SUS",
+                            Name = "Suspended"
+                        },
+                        new
+                        {
+                            Code = "TEMPPER",
+                            Name = "Temporary Permit"
+                        },
+                        new
+                        {
+                            Code = "TI",
+                            Name = "Temporary Inactive"
+                        },
+                        new
+                        {
+                            Code = "TSF",
+                            Name = "Transfer"
+                        },
+                        new
+                        {
+                            Code = "UNK",
+                            Name = "Unknown"
+                        },
+                        new
+                        {
+                            Code = "VW",
+                            Name = "Voluntary Withdrawal"
+                        },
+                        new
+                        {
+                            Code = "ASSOC",
+                            Name = "Associate"
+                        },
+                        new
+                        {
+                            Code = "AU",
+                            Name = "Address Unknown"
+                        },
+                        new
+                        {
+                            Code = "CLOSED",
+                            Name = "Closed"
+                        },
+                        new
+                        {
+                            Code = "NONPRAC",
+                            Name = "Non Practicing"
+                        },
+                        new
+                        {
+                            Code = "LAP",
+                            Name = "License Lapsed on Request"
+                        },
+                        new
+                        {
+                            Code = "LTP",
+                            Name = "Left the Province"
+                        },
+                        new
+                        {
+                            Code = "NONPAY",
+                            Name = "Non Payment of Fee"
+                        },
+                        new
+                        {
+                            Code = "RET",
+                            Name = "Retired"
+                        },
+                        new
+                        {
+                            Code = "DEC",
+                            Name = "Deceased"
+                        },
+                        new
+                        {
+                            Code = "MEDSTUD",
+                            Name = "Medical Student"
+                        });
+                });
+
             modelBuilder.Entity("Prime.Models.PlrProvider", b =>
                 {
                     b.Property<int>("Id")
