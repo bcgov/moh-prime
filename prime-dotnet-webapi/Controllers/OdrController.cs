@@ -50,7 +50,17 @@ namespace Prime.Controllers
                 _logger.LogInformation($"Do more logs exist?  {existsMore}");
                 if (logs.Count > 0)
                 {
-                    lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
+                    try
+                    {
+                        lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
+                    }
+                    catch (Npgsql.NpgsqlException e)
+                    {
+                        _logger.LogError("Error saving logs.", e);
+                        // TODO: Make configurable
+                        // Wait for database to recover and then try again
+                        await Task.Delay(5000);
+                    }
                 }
             } while (existsMore);
 
