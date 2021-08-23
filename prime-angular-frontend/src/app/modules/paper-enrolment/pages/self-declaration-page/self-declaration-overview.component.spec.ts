@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { SelfDeclarationOverviewComponent } from './self-declaration-overview.component';
 
@@ -8,7 +9,12 @@ describe('SelfDeclarationOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SelfDeclarationOverviewComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        SelfDeclarationOverviewComponent
+      ]
     })
     .compileComponents();
   });

@@ -9,7 +9,7 @@ import { RouteUtils } from '@lib/utils/route-utils.class';
  * overview components.
  */
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class AbstractOverview {
   @Input() public showEditRedirect: boolean;
   public routeUtils: RouteUtils;

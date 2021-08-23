@@ -4,14 +4,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { MockSiteService } from 'test/mocks/mock-site.service';
 
-import { AdministratorPageComponent } from './administrator-page.component';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
-import { SiteService } from '@registration/shared/services/site.service';
 import { KeycloakService } from 'keycloak-angular';
+
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { SiteService } from '@registration/shared/services/site.service';
+import { AdministratorPageComponent } from './administrator-page.component';
 
 describe('AdministratorComponent', () => {
   let component: AdministratorPageComponent;
@@ -19,17 +22,19 @@ describe('AdministratorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AdministratorPageComponent
-      ],
       imports: [
         BrowserAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        MatDialogModule,
+        MatSnackBarModule
+      ],
+      declarations: [
+        AdministratorPageComponent
       ],
       providers: [
+        KeycloakService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
@@ -38,7 +43,7 @@ describe('AdministratorComponent', () => {
           provide: SiteService,
           useClass: MockSiteService
         },
-        KeycloakService
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

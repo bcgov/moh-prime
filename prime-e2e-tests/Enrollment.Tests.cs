@@ -56,6 +56,16 @@ namespace TestPrimeE2E.Enrollment
             CompleteSelfDeclarationPage();
 
             CompleteEnrolmentReviewPage();
+
+            // Next Steps
+            ClickButton("Continue");
+
+            // Terms of Access
+            // Need to Tab over to check "I have read the PharmaNet User Terms of Access."
+            _driver.TabAndInteract("//a[@href='mailto:PRIMESupport@gov.bc.ca']", 1, Keys.Space);
+            // Need to Tab over to press "Accept Terms of Access" button
+            _driver.TabAndInteract("//a[@href='mailto:PRIMESupport@gov.bc.ca']", 2, Keys.Enter);
+            _driver.FindPatiently("//app-confirm-dialog/mat-dialog-actions/button[span[contains(text(), 'Accept Terms of Access')]]").Click();
         }
 
 
@@ -104,7 +114,8 @@ namespace TestPrimeE2E.Enrollment
             // TODO: Why does 'Keep Changes and Continue' pop up without Sleep?
             System.Threading.Thread.Sleep(1000);
             CheckLogThenScreenshot(expectedTitle);
-            ClickButton("Save and Continue");
+            // Need to Tab over to click ''Save and Continue' button
+            _driver.TabAndInteract(GetInputFieldXPath("CPSID Number"), 3, Keys.Enter);
         }
 
 
@@ -133,7 +144,7 @@ namespace TestPrimeE2E.Enrollment
             FillFormField("postal", GetCanadianPostalCode(siteAddress));
             CheckLogThenScreenshot(expectedTitle);
             // Need to Tab over to click ''Save and Continue' button
-            _driver.TabAndInteract("//input[@formControlName='pec']", 3, Keys.Enter);
+            _driver.TabAndInteract(GetFormFieldXPath("pec"), 3, Keys.Enter);
         }
 
 
@@ -143,13 +154,14 @@ namespace TestPrimeE2E.Enrollment
             _driver.FindPatiently("//mat-radio-group[@formcontrolname='hasRegistrationSuspended']");
             VerifyEnrollmentPageTitle(expectedTitle);
             ClickRadioButton("hasRegistrationSuspended", "No");
-            ClickRadioButton("hasConviction", "No");
-            // Need to Tab over to click 'No' radio button
-            _driver.TabAndInteract("//mat-radio-group[@formcontrolname='hasConviction']//label[div[contains(text(), 'No')]]", 1, Keys.Space);
+            // Need to Tab over to click 'No' radio button for Has Conviction?
+            _driver.TabAndInteract(GetRadioButtonXPath("hasRegistrationSuspended", "No"), 1, Keys.Space);
+            // Need to Tab over to click 'No' radio button for "hasPharmaNetSuspended"
+            _driver.TabAndInteract(GetRadioButtonXPath("hasRegistrationSuspended", "No"), 2, Keys.Space);
             ClickRadioButton("hasDisciplinaryAction", "No");
             CheckLogThenScreenshot(expectedTitle);
             // Need to Tab over to click 'Save and Continue' button
-            _driver.TabAndInteract("//mat-radio-group[@formcontrolname='hasDisciplinaryAction']//label[div[contains(text(), 'No')]]", 2, Keys.Enter);
+            _driver.TabAndInteract(GetRadioButtonXPath("hasDisciplinaryAction", "No"), 2, Keys.Enter);
         }
 
 

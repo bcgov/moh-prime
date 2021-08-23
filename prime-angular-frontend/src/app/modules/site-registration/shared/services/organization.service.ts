@@ -10,15 +10,15 @@ import { Organization } from '@registration/shared/models/organization.model';
  * directly from a HTTP response.
  */
 export interface IOrganizationService {
-  organization$: BehaviorSubject<Organization | null>;
+  organization$: Observable<Organization | null>;
   organization: Organization | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrganizationService {
-  // tslint:disable-next-line: variable-name
+export class OrganizationService implements IOrganizationService {
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _organization: BehaviorSubject<Organization>;
 
   constructor() {

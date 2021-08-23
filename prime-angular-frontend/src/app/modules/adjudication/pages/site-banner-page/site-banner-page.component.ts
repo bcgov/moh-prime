@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { RouteUtils } from '@lib/utils/route-utils.class';
-import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-site-banner-page',

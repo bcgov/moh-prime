@@ -11,6 +11,7 @@ import { SiteAddressPageComponent } from './site-address-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
 import { ConfigService } from '@config/config.service';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 
 describe('SiteAddressPageComponent', () => {
   let component: SiteAddressPageComponent;
@@ -36,7 +37,8 @@ describe('SiteAddressPageComponent', () => {
         {
           provide: ConfigService,
           useClass: MockConfigService
-        }
+        },
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
