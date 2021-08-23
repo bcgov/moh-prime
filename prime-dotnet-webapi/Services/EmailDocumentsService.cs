@@ -49,6 +49,10 @@ namespace Prime.Services.EmailInternal
             };
         }
 
+        public async Task<IEnumerable<Pdf>> GeneratePaperEnrolleeRenewalAttachmentAsync(string gpId) {
+            return await GeneratePaperEnrolleeRenewalAttachmentAsync(gpId);
+        }
+
         public async Task<string> GetBusinessLicenceDownloadLink(int businessLicenceId)
         {
             var document = await _context.BusinessLicenceDocuments
@@ -203,6 +207,36 @@ namespace Prime.Services.EmailInternal
             }
 
             return new Pdf("OrganizationAgreement.pdf", fileData);
+        }
+
+        /********************************************************************************************************************************
+        ********************************************************************************************************************************/
+        private async Task<Pdf> GeneratePaperRenewalAttachmentAsync(string gpId)
+        {
+            var enrollee = await _context.Enrollees
+                .Where(e => e.GPID == gpId)
+                .SingleOrDefaultAsync();
+
+            if (enrollee == null)
+            {
+                return null;
+            }
+
+            System.Guid placeholder = new System.Guid(gpId);
+            // get document pdf/html
+            byte[] fileData = null;
+            var content = await _documentClient.GetDocumentAsync(placeholder);
+
+            fileData = await content.ReadAsByteArrayAsync();
+
+            var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File("filename", fileData));
+
+            fileData = _pdfService.Generate(html);
+
+           // embed gpid
+
+           // return document       
+            return new Pdf("Renewal.pdf", fileData);
         }
 
         private async Task<Pdf> ApologyDocument(string filename)

@@ -47,7 +47,8 @@ namespace Prime.Controllers
         /// Send enrollee renewal reminder emails
         /// </summary>
         [HttpPost("management/enrollees/renewal", Name = nameof(SendEnrolleeRenewalEmails))]
-        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        // [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
