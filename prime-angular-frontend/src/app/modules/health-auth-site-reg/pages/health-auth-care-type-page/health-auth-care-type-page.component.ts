@@ -15,8 +15,8 @@ import { HealthAuthorityResource } from '@core/resources/health-authority-resour
 import { HealthAuthority } from '@shared/models/health-authority.model';
 
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { HealthAuthCareTypeFormState } from './health-auth-care-type-form-state.class';
 
 @Component({
   selector: 'app-health-auth-care-type-page',

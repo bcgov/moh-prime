@@ -12,7 +12,7 @@ import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.clas
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
-import { AgreementType, AgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { PaperEnrolmentAgreementType, PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -30,7 +30,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   public formState: UploadFormState;
   public agreementTypes: number[];
   public savedDocuments: EnrolleeAdjudicationDocument[];
-  public AgreementTypeNameMap = AgreementTypeNameMap;
+  public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public hasNoUploadError: boolean;
 
   private routeUtils: RouteUtils;
@@ -48,7 +48,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     super(dialog, formUtilsService);
 
     this.documentGuids = [];
-    this.agreementTypes = EnumUtils.values(AgreementType);
+    this.agreementTypes = EnumUtils.values(PaperEnrolmentAgreementType);
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 

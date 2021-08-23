@@ -19,7 +19,7 @@ describe('BannerResourceService', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
+        }
       ]
     });
     service = TestBed.inject(BannerResourceService);

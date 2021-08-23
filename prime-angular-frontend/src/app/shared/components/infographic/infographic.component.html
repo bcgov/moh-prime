@@ -1,0 +1,12 @@
+<div [class]="imageName"
+     [class.info]="true">
+  <h5>
+    <ng-content select="[appInfographicHeader]"></ng-content>
+  </h5>
+  <p>
+    <ng-content select="[appInfographicDescription]"></ng-content>
+  </p>
+  <div>
+    <ng-content select="[appInfographicContent]"></ng-content>
+  </div>
+</div>

@@ -15,9 +15,16 @@
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
+    <div *ngIf="enrolment?.enrollee.gpid"
+         class="col-12 pb-3 text-blue-light">
 
+      <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
+
+    </div>
     <div class="col-6">
+
       <h2>Enrolment</h2>
+
       <mat-card id="enrolmentCard">
         <mat-card-content>
           <p class="text-success font-italic">
@@ -32,8 +39,10 @@
           </app-enrollee-review>
         </mat-card-content>
       </mat-card>
+
     </div>
     <div class="col-6">
+
       <ng-container *ngIf="showAdjudication">
         <h2>Adjudication</h2>
         <mat-card id="adjudicationCard">
@@ -44,25 +53,29 @@
           </mat-card-content>
         </mat-card>
       </ng-container>
-
-      <app-adjudicator-actions *ngIf="enrollees?.length"
-                               class="float-right"
-                               [enrollee]="enrollees[0]"
-                               (approve)="onApprove($event)"
-                               (decline)="onDecline($event)"
-                               (lock)="onLock($event)"
-                               (unlock)="onUnlock($event)"
-                               (delete)="onDelete($event)"
-                               (route)="onRoute($event)"
-                               (assignToa)="onAssignToa($event)"
-                               (enableEnrollee)="onEnableEnrollee($event)"
-                               (enableEditing)="onEnableEditing($event)"
-                               (cancelToa)="onCancelToa($event)"
-                               (rerunRules)="onRerunRules($event)"
-                               (toggleManualAdj)="onToggleManualAdj($event)"
-                               (reload)="onRefresh()">
-      </app-adjudicator-actions>
-
+      <div class="row justify-content-end">
+        <app-adjudicator-actions *ngIf="enrollees?.length"
+                                 [enrollee]="enrollees[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"
+                                 (assignToa)="onAssignToa($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"
+                                 (enableEditing)="onEnableEditing($event)"
+                                 (cancelToa)="onCancelToa($event)"
+                                 (rerunRules)="onRerunRules($event)"
+                                 (toggleManualAdj)="onToggleManualAdj($event)"
+                                 (reload)="onRefresh()">
+        </app-adjudicator-actions>
+      </div>
+      <div *ngIf="plrInfo?.length">
+        <ng-container *ngFor="let plr of plrInfo">
+          <app-plr-info [plrData]="plr"></app-plr-info>
+        </ng-container>
+      </div>
     </div>
   </div>
 </app-page>

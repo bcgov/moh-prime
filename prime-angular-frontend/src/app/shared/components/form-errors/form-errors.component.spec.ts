@@ -1,7 +1,8 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { FormErrorsComponent } from './form-errors.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 
 describe('FormErrorsComponent', () => {
   let component: FormErrorsComponent;
@@ -14,6 +15,12 @@ describe('FormErrorsComponent', () => {
       ],
       declarations: [
         FormErrorsComponent
+      ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        }
       ]
     })
       .compileComponents();

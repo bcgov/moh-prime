@@ -15,11 +15,10 @@ import { UtilsService } from '@core/services/utils.service';
 })
 export class MockConfigService extends ConfigService implements IConfigService {
   constructor(
-    @Inject(APP_CONFIG) protected config: AppConfig,
     protected apiResource: ApiResource,
     protected utilsService: UtilsService
   ) {
-    super(config, apiResource, utilsService);
+    super(apiResource, utilsService);
 
     // Load the runtime configuration
     this.load().subscribe();

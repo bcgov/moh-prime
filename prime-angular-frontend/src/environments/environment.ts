@@ -9,6 +9,10 @@ import { environment as defaultEnvironment } from '@env/environment.prod';
  * @description
  * Development environment populated with the default and
  * production environment with appropriate overrides.
+ *
+ * WARNING: Do not access environment directly. Config map properties
+ * are injected by the pipeline and override the environment defaults
+ * used for local development.
  */
 export const environment: AppEnvironment = {
   ...defaultEnvironment,
@@ -23,4 +27,4 @@ export const environment: AppEnvironment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

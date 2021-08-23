@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { EmailNotificationListPageComponent } from './email-notification-list-page.component';
 
 describe('EmailNotificationListPageComponent', () => {
@@ -9,15 +13,22 @@ describe('EmailNotificationListPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [EmailNotificationListPageComponent],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule,
+        MatSnackBarModule
+      ],
+      declarations: [
+        EmailNotificationListPageComponent
+      ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         }
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   });
 
   beforeEach(() => {

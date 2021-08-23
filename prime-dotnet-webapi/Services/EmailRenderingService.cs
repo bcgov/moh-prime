@@ -144,14 +144,29 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel)
+        public async Task<Email> RenderSiteRegistrationSubmissionEmailAsync(LinkedEmailViewModel viewModel, CareSettingType careSettingCode)
+        {
+            var recipientEmails = careSettingCode == CareSettingType.CommunityPharmacy
+                ? new[] { PrimeSupportEmail }
+                : new[] { MohEmail, PrimeSupportEmail };
+
+            return new Email
+            (
+                from: PrimeEmail,
+                to: recipientEmails,
+                subject: "PRIME Site Registration Submission",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+            );
+        }
+
+        public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
-                to: new[] { MohEmail, PrimeSupportEmail },
-                subject: "PRIME Site Registration Submission",
-                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteRegistrationSubmission, viewModel)
+                to: newSigningAuthorityEmail,
+                subject: "Organization Claim was Approved",
+                body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.OrganizationClaimApprovalNotification, viewModel)
             );
         }
     }

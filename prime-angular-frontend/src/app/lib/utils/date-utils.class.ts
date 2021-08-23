@@ -20,6 +20,14 @@ export class DateUtils {
 
   /**
    * @description
+   * Check that a date is within the 90 day renewal period.
+   */
+  public static withinRenewalPeriod(date: string | Moment | null): boolean {
+    return DateUtils.withinDaysBeforeDate(date, 90);
+  }
+
+  /**
+   * @description
    * Check that a date falls within a date range, which forces the
    * start and end dates .
    */
