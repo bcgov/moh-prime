@@ -2,7 +2,7 @@ import { Configuration } from '@config/config.model';
 
 export class MockConfig {
   public static get(): Configuration {
-    // tslint:disable
+    /* eslint-disable */
     // Export of /lookups response:
     return {
       "colleges": [
@@ -2468,6 +2468,6 @@ export class MockConfig {
         }
       ]
     }
-    // tslint:enable
+    /* eslint-enable */
   }
 }

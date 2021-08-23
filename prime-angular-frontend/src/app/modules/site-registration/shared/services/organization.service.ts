@@ -18,7 +18,7 @@ export interface IOrganizationService {
   providedIn: 'root'
 })
 export class OrganizationService implements IOrganizationService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _organization: BehaviorSubject<Organization>;
 
   constructor() {
