@@ -1,11 +1,11 @@
 name: CodeClimate-Checks
-on: [ pull_request ]
+on: [ push, pull_request ]
   # push:
   #   branches:
   #     - innovate/code-climate
   # pull_request:
   #   branches:
-  #     - develops
+  #     - developsssssss
 
 jobs:
   collect-frontend-coverage:
