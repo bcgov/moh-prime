@@ -152,6 +152,9 @@ jobs:
           dir
           cc-test-reporter sum-coverage -p 2 frontend.json backend.json
           dir
+          cd ./coverage
+          dir
+          cd ../
           cc-test-reporter upload-coverage -i ./coverage/codeclimate.json
       
       - name: Create summed report
