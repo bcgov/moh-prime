@@ -28,8 +28,7 @@ namespace Prime.Services
         private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
-        private readonly IRazorConverterService _razorConverterService;
-
+        // private readonly IRazorConverterService _razorConverterService;
 
         public EnrolleeService(
             ApiDbContext context,
