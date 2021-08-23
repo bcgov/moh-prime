@@ -198,18 +198,28 @@ export class PharmanetEnrolmentSummaryComponent extends BaseEnrolmentPage implem
   public openQR(event: Event): void {
     event.preventDefault();
 
-    const data: DialogOptions = {
-      title: 'Verified Credential',
-      message: 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.',
-      actionHide: true,
-      cancelText: 'Close',
-      data: { base64Image: this.enrolment.base64QRCode },
-      component: ImageComponent
-    };
+    this.enrolmentResource.getQrCode(this.enrolment.id)
+      .subscribe((qrCode: string) => {
+        var data = qrCode
+          ? { base64Image: qrCode }
+          : null;
+        var message = qrCode
+          ? 'Scan this QR code to receive an invitation to your verifiable credential that can be stored in your digital wallet.'
+          : 'No credential invitation found.';
 
-    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-      .afterClosed()
-      .subscribe();
+        const options: DialogOptions = {
+          title: 'Verified Credential',
+          message,
+          actionHide: true,
+          cancelText: 'Close',
+          data,
+          component: ImageComponent
+        };
+
+        this.busy = this.dialog.open(ConfirmDialogComponent, { data: options })
+          .afterClosed()
+          .subscribe();
+      });
   }
 
   public getTitle() {
