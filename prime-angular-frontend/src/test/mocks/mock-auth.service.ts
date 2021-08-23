@@ -9,9 +9,9 @@ import { Observable, from } from 'rxjs';
 import { IdentityProviderEnum } from '@auth/shared/enum/identity-provider.enum';
 
 export class MockAuthService implements IAuthService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention,no-underscore-dangle,id-blacklist,id-match
   private _role: Role;
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _loggedIn: boolean;
 
   public hasJustLoggedIn: boolean;
