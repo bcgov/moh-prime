@@ -150,6 +150,7 @@ jobs:
         run: |          
           # cc-test-reporter sum-coverage -p 2 frontend/frontend.json backend/backend.json
           dir
+          pwd
           cc-test-reporter sum-coverage -p 2 frontend.json backend.json
           dir
           cd ./coverage
