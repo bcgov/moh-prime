@@ -35,6 +35,12 @@ export class SearchFormComponent implements OnInit {
     private localStorage: LocalStorageService
   ) {
     this.statuses = this.configService.statuses;
+
+    // MacGyver paper enrollee Filter into status Filter. arbitrarily chose 42.
+    // EnrolleeService GetEnrolleesAsync() has other reference to this value.
+    const manualEnrolleeStatus = new Config<number>(42, 'Manual (Paper) Enrollees');
+    this.statuses.push(manualEnrolleeStatus);
+
     this.search = new EventEmitter<string>();
     this.filter = new EventEmitter<EnrolmentStatusEnum>();
     this.refresh = new EventEmitter<void>();
@@ -91,7 +97,10 @@ export class SearchFormComponent implements OnInit {
       });
 
     if (!queryParams.textSearch && !queryParams.statusCode) {
-      this.form.patchValue({ textSearch: this.localStorage.get(this.textSearchKey), statusCode: this.localStorage.getInteger(this.statusCodeKey) || null });
+      this.form.patchValue({
+        textSearch: this.localStorage.get(this.textSearchKey),
+        statusCode: this.localStorage.getInteger(this.statusCodeKey) || null
+      });
     }
   }
 }

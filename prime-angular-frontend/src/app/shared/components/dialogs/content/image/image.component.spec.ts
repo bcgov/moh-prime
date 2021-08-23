@@ -1,8 +1,10 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
+import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
+import { SafePipe } from '@shared/pipes/safe.pipe';
 import { ImageComponent } from './image.component';
-import { SharedModule } from '@shared/shared.module';
 
 describe('ImageComponent', () => {
   let component: ImageComponent;
@@ -10,18 +12,23 @@ describe('ImageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ImageComponent],
-      imports: [
-        SharedModule
+      imports: [],
+      declarations: [
+        ImageComponent,
+        SafePipe
       ],
       providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: APP_DI_CONFIG
+        },
         {
           provide: MAT_DIALOG_DATA,
           useValue: {}
         }
-      ]
-    })
-      .compileComponents();
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

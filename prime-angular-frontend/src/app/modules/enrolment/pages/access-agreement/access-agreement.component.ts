@@ -112,7 +112,7 @@ export class AccessAgreementComponent extends BaseEnrolmentPage implements OnIni
         .subscribe(() => {
           this.toastService.openSuccessToast(`Terms of Access has been ${status.adjective}`);
           this.router.navigate([EnrolmentRoutes.PHARMANET_ENROLMENT_SUMMARY],
-            { relativeTo: this.route.parent, queryParams: { isRenewal: !this.isInitialEnrolment } });
+            { relativeTo: this.route.parent, queryParams: { initialEnrolment: this.isInitialEnrolment } });
         });
     }
   }

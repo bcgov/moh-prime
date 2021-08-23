@@ -29,5 +29,4 @@ export class EmailNotificationViewPageComponent implements OnInit {
   }
 
   public ngOnInit(): void { }
-
 }

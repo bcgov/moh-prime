@@ -1,13 +1,14 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { HoursOperationPageComponent } from './hours-operation-page.component';
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { HoursOperationPageComponent } from './hours-operation-page.component';
 
 describe('HoursOperationPageComponent', () => {
   let component: HoursOperationPageComponent;
@@ -19,17 +20,18 @@ describe('HoursOperationPageComponent', () => {
         HoursOperationPageComponent
       ],
       imports: [
-        BrowserAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        MatDialogModule,
+        MatSnackBarModule
       ],
       providers: [
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        }
+        },
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();

@@ -8,6 +8,7 @@ import { ConfigService } from '@config/config.service';
 import { PrescriberIdTypeEnum } from '@shared/enums/prescriber-id-type.enum';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+
 export class LicenseMaintenanceConfig {
   collegeName: string;
   licenseCode: number;
@@ -17,7 +18,8 @@ export class LicenseMaintenanceConfig {
   manual?: boolean;
   validate?: boolean;
   prescriberIdType?: PrescriberIdTypeEnum;
-};
+}
+
 @Component({
   selector: 'app-license-classes-maintenance-page',
   templateUrl: './license-classes-maintenance-page.component.html',
@@ -28,7 +30,7 @@ export class LicenseClassesMaintenancePageComponent implements OnInit {
   public dataSource: MatTableDataSource<LicenseMaintenanceConfig>;
   public columns: string[];
   PrescriberIdTypeEnum = PrescriberIdTypeEnum;
-  private routeUtils: RouteUtils
+  private routeUtils: RouteUtils;
 
   constructor(
     private configService: ConfigService,

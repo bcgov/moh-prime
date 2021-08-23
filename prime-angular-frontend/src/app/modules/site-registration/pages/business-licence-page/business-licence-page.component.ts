@@ -207,10 +207,16 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
     if (toggleAccess) {
       enableOrDisable = 'disable';
-      this.updateBusLicValidations([this.formState.deferredLicenceReason], [this.formState.doingBusinessAs, this.formState.businessLicenceExpiry]);
+      this.updateBusLicValidations(
+        [this.formState.deferredLicenceReason],
+        [this.formState.doingBusinessAs, this.formState.businessLicenceExpiry]
+      );
     } else {
       enableOrDisable = 'enable';
-      this.updateBusLicValidations([this.formState.doingBusinessAs, this.formState.businessLicenceExpiry], [this.formState.deferredLicenceReason]);
+      this.updateBusLicValidations(
+        [this.formState.doingBusinessAs, this.formState.businessLicenceExpiry],
+        [this.formState.deferredLicenceReason]
+      );
     }
 
     this.formState.doingBusinessAs[enableOrDisable]();
