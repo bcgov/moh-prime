@@ -60,9 +60,14 @@ namespace TestPrimeE2E
         /// </summary>
         protected void TypeIntoField(string fieldId, string text)
         {
-            var field = _driver.FindPatiently($"//input[@data-placeholder='{fieldId}']");
+            var field = _driver.FindPatiently(GetInputFieldXPath(fieldId));
             field.Clear();
             field.SendKeys(text);
+        }
+
+        protected string GetInputFieldXPath(string fieldId)
+        {
+            return $"//input[@data-placeholder='{fieldId}']";
         }
 
 
@@ -86,7 +91,16 @@ namespace TestPrimeE2E
 
         protected void SelectDropdownItem(string formControlName, string itemLabel)
         {
-            _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}' or @ng-reflect-name='{formControlName}']//div[contains(@class,'mat-select-value')]").Click();
+            // Drop-down lists seem like they can be rendered in a number of ways
+            var selectControl = _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}' or @ng-reflect-name='{formControlName}']//div[contains(@class,'mat-select-value')]");
+            if (selectControl != null)
+            {
+                selectControl.Click();
+            }
+            else
+            {
+                _driver.FindPatiently($"//app-options-form[@controlname='{formControlName}']").Click();
+            }
             _driver.FindPatiently($"//span[@class='mat-option-text' and contains(text(), '{itemLabel}')]").Click();
         }
 
@@ -104,22 +118,31 @@ namespace TestPrimeE2E
 
         protected void ClickRadioButton(string formControlName, string radioButtonLabel)
         {
-            _driver.FindPatiently($"//mat-radio-group[@formcontrolname='{formControlName}']//label[div[contains(text(), '{radioButtonLabel}')]]").Click();
+            _driver.FindPatiently(GetRadioButtonXPath(formControlName, radioButtonLabel)).Click();
         }
 
+        protected string GetRadioButtonXPath(string formControlName, string radioButtonLabel)
+        {
+            return $"//mat-radio-group[@formcontrolname='{formControlName}']//label[span[contains(text(), '{radioButtonLabel}')] or div[contains(text(), '{radioButtonLabel}')]]";
+        }
 
         /// <summary>
         /// Specifying the <c>ancestorElement</c> can disambiguate the desired control (if necessary)
         /// </summary>
         protected void FillFormField(string formControlName, string text, string ancestorElement = "")
         {
+            var control = _driver.FindPatiently(GetFormFieldXPath(formControlName, ancestorElement));
+            control.Clear();
+            control.SendKeys(text);
+        }
+
+        protected string GetFormFieldXPath(string formControlName, string ancestorElement = "")
+        {
             if (!"".Equals(ancestorElement))
             {
                 ancestorElement = "//" + ancestorElement;
             }
-            var control = _driver.FindPatiently($"{ancestorElement}//input[@formControlName='{formControlName}']");
-            control.Clear();
-            control.SendKeys(text);
+            return $"{ancestorElement}//input[@formControlName='{formControlName}']";
         }
 
 

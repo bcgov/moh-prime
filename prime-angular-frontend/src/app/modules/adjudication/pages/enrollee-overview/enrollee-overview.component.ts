@@ -16,6 +16,7 @@ import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeNavigation } from '@shared/models/enrollee-navigation-model';
 import { EnrolmentStatusEnum } from '@shared/enums/enrolment-status.enum';
 import { AdjudicationContainerComponent } from '@adjudication/shared/components/adjudication-container/adjudication-container.component';
+import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 
 @Component({
   selector: 'app-enrollee-overview',
@@ -26,6 +27,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public enrollee: HttpEnrollee;
   public enrolment: Enrolment;
   public enrolleeNavigation: EnrolleeNavigation;
+  public plrInfo: PlrInfo[];
   public showAdjudication: boolean;
 
   constructor(
@@ -72,13 +74,15 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
               enrolment: this.enrolmentAdapter(enrollee)
             }))
           ),
-        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId)
+        enrolleeNavigation: this.adjudicationResource.getAdjacentEnrolleeId(enrolleeId),
+        plrInfo: this.adjudicationResource.getPlrInfoByEnrolleeId(enrolleeId)
       })
-        .subscribe(({ enrollee, enrolleeNavigation }) => {
+      .subscribe(({ enrollee, enrolleeNavigation, plrInfo }) => {
           this.enrollee = enrollee.enrollee;
           this.enrollees = [enrollee.enrolleeView];
           this.enrolment = enrollee.enrolment;
           this.enrolleeNavigation = enrolleeNavigation;
+          this.plrInfo = plrInfo;
           // hide the adjudication card if enrolment is editable and no 'reason for adjudication'
           this.showAdjudication = !(enrollee.enrollee.currentStatus.statusCode === EnrolmentStatusEnum.EDITABLE
             && !enrollee.enrollee.currentStatus.enrolmentStatusReasons?.length);
