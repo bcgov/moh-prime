@@ -639,8 +639,8 @@ objects:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
-              failureThreshold: 1
-              periodSeconds: 5
+              failureThreshold: 3
+              periodSeconds: 10
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
             envFrom:
@@ -1036,7 +1036,7 @@ objects:
                 memory: ${POSTGRES_MEMORY_LIMIT}
               requests:
                 cpu: 10m
-                memory: 100Mi            
+                memory: 100Mi
             securityContext:
               capabilities: {}
               privileged: false
@@ -1131,7 +1131,7 @@ objects:
                 memory: 100Mi
               requests:
                 cpu: 5m
-                memory: 50Mi 
+                memory: 50Mi
             readinessProbe:
               exec:
                 command:
