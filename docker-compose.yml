@@ -22,98 +22,104 @@ services:
 ###############################################################################
 ###                           MongoDB Definition                            ###
 ###############################################################################
-  # mongo:
-  #   restart: always
-  #   container_name: prime-mongodb
-  #   image: mongo:3
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: root
-  #     MONGO_INITDB_ROOT_PASSWORD: prime
-  #   ports:
-  #     - 8081:8081
-  #   volumes:
-  #     - local_mongodb_data:/var/lib/mongodb/data
-  #   networks:
-  #     - prime-net
+  mongo:
+    restart: always
+    container_name: prime-mongodb
+    image: mongo:3
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: prime
+    ports:
+      - 8081:8081
+    volumes:
+      - local_mongodb_data:/var/lib/mongodb/data
+    networks:
+      - prime-net
 
 ###############################################################################
 ###                            Redis Definition                             ###
 ###############################################################################
-  # redis:
-  #   image: redis:3.2-alpine
-  #   container_name: prime-redis
-  #   restart: always
-  #   command: redis-server --requirepass redis-password
-  #   ports:
-  #     - "6379:6379"
+  redis:
+    image: redis:3.2-alpine
+    container_name: prime-redis
+    restart: always
+    command: redis-server --requirepass redis-password
+    ports:
+      - "6379:6379"
+    networks:
+      - prime-net
+      
+#######################################################################################
+##                      Verifiable Credential Agent Definition                       ##
+#######################################################################################
+  # agent:
+  #   image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
+  #   environment:
+  #     ACAPY_LABEL: ${AGENT_NAME}
+  #     ACAPY_ENDPOINT: ${AGENT_ENDPOINT}
+  #     ACAPY_GENESIS_URL: ${LEDGER_URL}/genesis
+  #     ACAPY_WALLET_NAME: ${AGENT_WALLET_NAME}
+  #     ACAPY_WALLET_TYPE: "indy"
+  #     ACAPY_WALLET_KEY: ${AGENT_WALLET_ENCRYPTION_KEY}
+  #     ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
+  #     ACAPY_WALLET_STORAGE_TYPE: ${AGENT_WALLET_STORAGE_TYPE}
+  #     ACAPY_AUTO_PROVISION: "true"
+  #     ACAPY_WEBHOOK_URL: ${AGENT_WEBHOOK_URL}
+  #     ACAPY_LOG_LEVEL: ${AGENT_LOG_LEVEL}
+  #     ACAPY_AUTO_ACCEPT_INVITES: "true"
+  #     ACAPY_AUTO_ACCEPT_REQUESTS: "true"
+  #     ACAPY_AUTO_PING_CONNECTION: "true"
+  #     ACAPY_AUTO_RESPOND_MESSAGES: "true"
+  #     ACAPY_TAILS_SERVER_BASE_URL: ${TAILS_SERVER_URL}
+  #     AGENT_HTTP_IN_PORT: ${AGENT_HTTP_IN_PORT}
+  #     AGENT_WS_IN_PORT: ${AGENT_WS_IN_PORT}
+  #     AGENT_ADMIN_PORT: ${AGENT_ADMIN_PORT}
+  #     WALLET_HOST: ${WALLET_HOST}
+  #     WALLET_PORT: ${WALLET_PORT}
+  #     WALLET_USER: ${WALLET_USER}
+  #     WALLET_PASSWORD: ${WALLET_PASSWORD}
   #   networks:
   #     - prime-net
+  #   ports:
+  #     - ${AGENT_HTTP_IN_PORT}:${AGENT_HTTP_IN_PORT}
+  #     - ${AGENT_WS_IN_PORT}:${AGENT_WS_IN_PORT}
+  #     - ${AGENT_ADMIN_PORT}:${AGENT_ADMIN_PORT}
+  #   depends_on:
+  #     - wallet
+  #   entrypoint: /bin/bash
+  #   command: [
+  #       "-c",
+  #       "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"ENDORSER\", \"alias\":\"${AGENT_WALLET_NAME}\"}' -X POST ${LEDGER_URL}/register; \
+  #       sleep 5; \
+  #       aca-py start \
+  #       --inbound-transport http '0.0.0.0' ${AGENT_HTTP_IN_PORT} \
+  #       --inbound-transport ws '0.0.0.0' ${AGENT_WS_IN_PORT} \
+  #       --outbound-transport ws \
+  #       --outbound-transport http \
+  #       --wallet-storage-config '{\"url\":\"${WALLET_HOST}:${WALLET_PORT}\",\"max_connections\":5}' \
+  #       --wallet-storage-creds '{\"account\":\"${WALLET_USER}\",\"password\":\"${WALLET_PASSWORD}\",\"admin_account\":\"${WALLET_USER}\",\"admin_password\":\"${WALLET_PASSWORD}\"}' \
+  #       --admin '0.0.0.0' ${AGENT_ADMIN_PORT} \
+  #       --${AGENT_ADMIN_MODE}",
+  #     ]
+  
+#######################################################################################
+##                      Verifiable Credential Wallet Definition                      ##
+#######################################################################################
+  # wallet:
+  #   image: postgres:12-alpine
+  #   environment:
+  #     POSTGRES_USER: DB_USER
+  #     POSTGRES_PASSWORD: DB_PASSWORD
+  #   networks:
+  #     - prime-net
+  #   ports:
+  #     - 5434:5432
+  #   volumes:
+  #     - wallet:/var/lib/postgresql/data
 
-####################### Verifiable Credential Agent Definition #######################
-  agent:
-    image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
-    environment:
-      ACAPY_LABEL: ${AGENT_NAME}
-      ACAPY_ENDPOINT: ${AGENT_ENDPOINT}
-      ACAPY_GENESIS_URL: ${LEDGER_URL}/genesis
-      ACAPY_WALLET_NAME: ${AGENT_WALLET_NAME}
-      ACAPY_WALLET_TYPE: "indy"
-      ACAPY_WALLET_KEY: ${AGENT_WALLET_ENCRYPTION_KEY}
-      ACAPY_WALLET_SEED: ${AGENT_WALLET_SEED}
-      ACAPY_WALLET_STORAGE_TYPE: ${AGENT_WALLET_STORAGE_TYPE}
-      ACAPY_AUTO_PROVISION: "true"
-      ACAPY_WEBHOOK_URL: ${AGENT_WEBHOOK_URL}
-      ACAPY_LOG_LEVEL: ${AGENT_LOG_LEVEL}
-      ACAPY_AUTO_ACCEPT_INVITES: "true"
-      ACAPY_AUTO_ACCEPT_REQUESTS: "true"
-      ACAPY_AUTO_PING_CONNECTION: "true"
-      ACAPY_AUTO_RESPOND_MESSAGES: "true"
-      ACAPY_TAILS_SERVER_BASE_URL: ${TAILS_SERVER_URL}
-      AGENT_HTTP_IN_PORT: ${AGENT_HTTP_IN_PORT}
-      AGENT_WS_IN_PORT: ${AGENT_WS_IN_PORT}
-      AGENT_ADMIN_PORT: ${AGENT_ADMIN_PORT}
-      WALLET_HOST: ${WALLET_HOST}
-      WALLET_PORT: ${WALLET_PORT}
-      WALLET_USER: ${WALLET_USER}
-      WALLET_PASSWORD: ${WALLET_PASSWORD}
-    networks:
-      - prime-net
-    ports:
-      - ${AGENT_HTTP_IN_PORT}:${AGENT_HTTP_IN_PORT}
-      - ${AGENT_WS_IN_PORT}:${AGENT_WS_IN_PORT}
-      - ${AGENT_ADMIN_PORT}:${AGENT_ADMIN_PORT}
-    depends_on:
-      - wallet
-    entrypoint: /bin/bash
-    command: [
-        "-c",
-        "curl -d '{\"seed\":\"${AGENT_WALLET_SEED}\", \"role\":\"ENDORSER\", \"alias\":\"${AGENT_WALLET_NAME}\"}' -X POST ${LEDGER_URL}/register; \
-        sleep 5; \
-        aca-py start \
-        --inbound-transport http '0.0.0.0' ${AGENT_HTTP_IN_PORT} \
-        --inbound-transport ws '0.0.0.0' ${AGENT_WS_IN_PORT} \
-        --outbound-transport ws \
-        --outbound-transport http \
-        --wallet-storage-config '{\"url\":\"${WALLET_HOST}:${WALLET_PORT}\",\"max_connections\":5}' \
-        --wallet-storage-creds '{\"account\":\"${WALLET_USER}\",\"password\":\"${WALLET_PASSWORD}\",\"admin_account\":\"${WALLET_USER}\",\"admin_password\":\"${WALLET_PASSWORD}\"}' \
-        --admin '0.0.0.0' ${AGENT_ADMIN_PORT} \
-        --${AGENT_ADMIN_MODE}",
-      ]
-
-  ####################### Verifiable Credential Wallet Definition #######################
-  wallet:
-    image: postgres:12-alpine
-    environment:
-      POSTGRES_USER: DB_USER
-      POSTGRES_PASSWORD: DB_PASSWORD
-    networks:
-      - prime-net
-    ports:
-      - 5434:5432
-    volumes:
-      - wallet:/var/lib/postgresql/data
-
-####################### API Backend Definition #######################
+###############################################################################
+##                        API Backend Definition                             ##
+###############################################################################
   dotnet-webapi:
     container_name: prime-webapi-backend
     restart: always
@@ -166,113 +172,113 @@ services:
 ###############################################################################
 ###                         Web Frontend Definition                         ###
 ###############################################################################
-  # nginx-angular:
-  #   container_name: prime-frontend
-  #   build:
-  #     context: ./prime-angular-frontend/
-  #     dockerfile: openshift.dockerfile
-  #     args:
-  #       KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
-  #       KEYCLOAK_REALM: ${KEYCLOAK_REALM}
-  #       KEYCLOAK_URL: ${KEYCLOAK_URL}
-  #       REDIRECT_URL: ${REDIRECT_URL}
-  #       JWT_WELL_KNOWN_CONFIG: ${JWT_WELL_KNOWN_CONFIG}
-  #   # command: "nginx -g 'daemon off;'"
-  #   restart: always
-  #   ports:
-  #      - "8080:8080"
-  #      - "4200:8080"
-  #   expose:
-  #      - "8080"
-  #      - "4200"
-  #   networks:
-  #     - prime-net
-  #   depends_on:
-  #     - dotnet-webapi
+  nginx-angular:
+    container_name: prime-frontend
+    build:
+      context: ./prime-angular-frontend/
+      dockerfile: openshift.dockerfile
+      args:
+        KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID}
+        KEYCLOAK_REALM: ${KEYCLOAK_REALM}
+        KEYCLOAK_URL: ${KEYCLOAK_URL}
+        REDIRECT_URL: ${REDIRECT_URL}
+        JWT_WELL_KNOWN_CONFIG: ${JWT_WELL_KNOWN_CONFIG}
+    # command: "nginx -g 'daemon off;'"
+    restart: always
+    ports:
+       - "8080:8080"
+       - "4200:8080"
+    expose:
+       - "8080"
+       - "4200"
+    networks:
+      - prime-net
+    depends_on:
+      - dotnet-webapi
 
 ###############################################################################
 ###                      Local SMTP Server Definition                       ###
 ###############################################################################
-  # mailhog:
-  #   container_name: mailhog
-  #   restart: always
-  #   image: mailhog/mailhog:latest
-  #   ports:
-  #     - 25:1025
-  #     - 1025:1025
-  #     - 8025:8025 # Visit localhost:8025 to see the list of captured emails
-  #   networks:
-  #     - prime-net
+  mailhog:
+    container_name: mailhog
+    restart: always
+    image: mailhog/mailhog:latest
+    ports:
+      - 25:1025
+      - 1025:1025
+      - 8025:8025 # Visit localhost:8025 to see the list of captured emails
+    networks:
+      - prime-net
 
 ###############################################################################
 ###                     Database Inspection Definition                      ###
 ###############################################################################
-  # schema-spy:
-  #   container_name: schema-spy
-  #   build:
-  #     context: schemaspy/
-  #   image: openjdk:jre-alpine
-  #   ports:
-  #     - "8069:8069"
-  #     - "80:8069"
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - prime-net
+  schema-spy:
+    container_name: schema-spy
+    build:
+      context: schemaspy/
+    image: openjdk:jre-alpine
+    ports:
+      - "8069:8069"
+      - "80:8069"
+    depends_on:
+      - postgres
+    networks:
+      - prime-net
 
 ###############################################################################
 ###                            Backup Definition                            ###
 ###############################################################################
-  # backup:
-  #   container_name: backup
-  #   build:
-  #     context: prime-database-backup
-  #   ports:
-  #     - 6432:5432
-  #     - 9081:8081
-  #   depends_on:
-  #     - postgres
-  #     - mongo
-  #   volumes:
-  #     - db_backup_data:/opt/backup
-  #     - local_postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - prime-net
+  backup:
+    container_name: backup
+    build:
+      context: prime-database-backup
+    ports:
+      - 6432:5432
+      - 9081:8081
+    depends_on:
+      - postgres
+      - mongo
+    volumes:
+      - db_backup_data:/opt/backup
+      - local_postgres_data:/var/lib/postgresql/data
+    networks:
+      - prime-net
 
 ###############################################################################
 ###                       Document Manager Definition                       ###
 ###############################################################################
-  # document_manager_backend:
-  #   restart: always
-  #   container_name: document-manager-backend
-  #   build:
-  #     context: document-manager/backend
-  #   ports:
-  #     - 6001:6001
-  #   volumes:
-  #     - ./document-manager/backend/:/app/
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #     - document_manager_migrate
-  #   env_file: ./document-manager/backend/.env-local
-  #   networks:
-  #     - prime-net
+  document_manager_backend:
+    restart: always
+    container_name: document-manager-backend
+    build:
+      context: document-manager/backend
+    ports:
+      - 6001:6001
+    volumes:
+      - ./document-manager/backend/:/app/
+    depends_on:
+      - postgres
+      - redis
+      - document_manager_migrate
+    env_file: ./document-manager/backend/.env-local
+    networks:
+      - prime-net
 
-  # document_manager_migrate:
-  #   restart: on-failure
-  #   container_name: document-manager-migrate
-  #   build:
-  #     context: document-manager/backend
-  #     dockerfile: Dockerfile.migrate
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #   volumes:
-  #     - ./document-manager/backend/:/app/
-  #   env_file: ./document-manager/backend/.env-local
-  #   networks:
-  #     - prime-net
+  document_manager_migrate:
+    restart: on-failure
+    container_name: document-manager-migrate
+    build:
+      context: document-manager/backend
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./document-manager/backend/:/app/
+    env_file: ./document-manager/backend/.env-local
+    networks:
+      - prime-net
 
 ###############################################################################
 ###                           Networks Definition                           ###

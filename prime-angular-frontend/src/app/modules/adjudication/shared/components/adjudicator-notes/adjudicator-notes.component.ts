@@ -82,7 +82,7 @@ export class AdjudicatorNotesComponent implements OnInit {
         break;
       case NoteType.SiteRegistrationNote:
         this.getSiteRegistrationNotes(+this.route.snapshot.params.sid);
-        this.route.params.subscribe(params => this.getSiteRegistrationNotes(+params.id));
+        this.route.params.subscribe(params => this.getSiteRegistrationNotes(+params.sid));
         break;
       default:
         break;
