@@ -1,58 +1,57 @@
+version: "2"         # required to adjust maintainability checks
 plugins:
   brakeman:
-    enabled: true
+    enabled: false
   rubocop:
-    enabled: true
+    enabled: false
   eslint:
-    enabled: true
+    enabled: false
 
 # Exclude Folder Pattern
 # Exclude File Pattern
-exclude_paths:
-- ".github/"
-- ".docker/"
-- ".vscode/"
-- "devops/"
-- "document-manager/"
-- "documentation/"
-- "infrastructure/"
-- "mailhog/"
-- "ngork/"
-- "poc/"
-- "prime-database-backup/"
-- "prime-angular-frontend/node_modules/"
-- "Migrations/"
-- "Controllers/"
-- "Views/"
-- "ViewModels/"
-- "Resrouces/"
-- "Configuration/"
-- "logs/"
-- "./prime-dotnet-webapi-tests/"
-- "./prime-e2e-tests/"
-- "./schemasoy/"
-- "./utilities/"
-- "./config/"
-- "db/"
-- "dist/"
-- "features/"
-- "**/node_modules/"
-- "script/"
-- "**/spec/"
-- "**/test/"
-- "**/tests/"
-- "Tests/"
-
 exclude_patterns:
-- "**/vendor/"
-- "**/*_test.go"
-- "**/*.d.ts"
-- "**/*.spec.*"
-- "**/*.json"
-- "**/*.html"
-- "**/*.cshtml"
-- "**/*ViewModel.cs"
-- "Migrations/ApiDbContextModelSnapshot.cs"
+  - ".github/"
+  - ".docker/"
+  - ".vscode/"
+  - "devops/"
+  - "document-manager/"
+  - "documentation/"
+  - "infrastructure/"
+  - "mailhog/"
+  - "ngork/"
+  - "poc/"
+  - "prime-database-backup/"
+  - "prime-angular-frontend/node_modules/"
+  - "Migrations/"
+  - "Controllers/"
+  - "Views/"
+  - "ViewModels/"
+  - "Resrouces/"
+  - "Configuration/"
+  - "logs/"
+  - "./prime-dotnet-webapi-tests/"
+  - "./prime-e2e-tests/"
+  - "./schemasoy/"
+  - "./utilities/"
+  - "./config/"
+  - "db/"
+  - "dist/"
+  - "features/"
+  - "**/node_modules/"
+  - "script/"
+  - "**/spec/"
+  - "**/test/"
+  - "**/tests/"
+  - "Tests/"
+  - "**/vendor/"
+  - "**/*_test.go"
+  - "**/*.d.ts"
+  - "**/*.spec.*"
+  - "**/*.json"
+  - "**/*.html"
+  - "**/*.cshtml"
+  - "**/*ViewModel.cs"
+  - "Migrations/ApiDbContextModelSnapshot.cs"
 
 
 # examples of minified files that should be excluded
