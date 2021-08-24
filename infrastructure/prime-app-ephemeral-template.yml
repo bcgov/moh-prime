@@ -1078,7 +1078,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 key: app-db-name
-                name: prime-${SVC_NAME}
+                name: ${SVC_NAME}-patroni
           - name: PATRONI_KUBERNETES_BYPASS_API_SERVICE
             value: 'true'
           - name: PATRONI_KUBERNETES_LABELS
