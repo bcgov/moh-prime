@@ -60,7 +60,7 @@ jobs:
 
   
   collect-backend-coverage:
-    needs: collect-frontend-coverage
+    # needs: collect-frontend-coverage
 
     defaults:
       run:
