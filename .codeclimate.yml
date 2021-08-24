@@ -8,7 +8,7 @@ plugins:
 
 # Exclude Folder Pattern
 # Exclude File Pattern
-exclude_patterns:
+exclude_paths:
 - ".github/"
 - ".docker/"
 - ".vscode/"
@@ -42,6 +42,8 @@ exclude_patterns:
 - "**/test/"
 - "**/tests/"
 - "Tests/"
+
+exclude_patterns:
 - "**/vendor/"
 - "**/*_test.go"
 - "**/*.d.ts"
