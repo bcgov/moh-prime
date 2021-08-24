@@ -52,6 +52,8 @@ namespace Prime.Controllers
                 {
                     try
                     {
+                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.SaveDelay));
+
                         lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
                     }
                     catch (Npgsql.NpgsqlException e)
