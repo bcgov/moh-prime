@@ -199,7 +199,9 @@ namespace Prime.Services
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays) && enrollee.GPID.StartsWith(PaperEnrolleeGpidFilter))
                 {
-                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    // var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    var email = await _emailRenderingService.RenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+
                     await Send(email);
                 } 
                 else if (reminderEmailsIntervals.Contains(expiryDays))
