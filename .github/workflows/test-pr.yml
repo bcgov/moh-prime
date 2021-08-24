@@ -115,7 +115,7 @@ jobs:
 
       - name: Collect Backend Report
         run: |
-          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info -p "/home/runner/work/"
+          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info
 
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
@@ -125,6 +125,9 @@ jobs:
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
+    defaults:
+      run:
+        working-directory: ./
 
     runs-on: ubuntu-latest
 
