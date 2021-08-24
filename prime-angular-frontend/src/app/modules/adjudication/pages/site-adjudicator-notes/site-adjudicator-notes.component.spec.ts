@@ -36,7 +36,7 @@ describe('SiteAdjudicatorNotesComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         {
           provide: AuthService,

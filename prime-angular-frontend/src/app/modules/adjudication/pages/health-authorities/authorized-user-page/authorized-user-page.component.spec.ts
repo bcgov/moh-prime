@@ -39,7 +39,7 @@ describe('AuthorizedUserPageComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         {
           provide: AuthService,

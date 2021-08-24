@@ -29,7 +29,7 @@ describe('LicenseClassesMaintenancePageComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
