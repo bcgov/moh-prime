@@ -61,7 +61,7 @@ namespace Prime.Controllers
                         _logger.LogError(e.Message, e);
                         // TODO: Make configurable
                         // Wait for database to recover and then try again
-                        await Task.Delay(5000);
+                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.RetryDelay));
                     }
                 }
             } while (existsMore);
