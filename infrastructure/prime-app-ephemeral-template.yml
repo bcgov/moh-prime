@@ -1035,16 +1035,16 @@ objects:
       application: ${SVC_NAME}
       cluster-name: ${SVC_NAME}-patroni
       app.kubernetes.io/part-of: ${SVC_NAME}
-    name: ${SVC_NAME}
+    name: ${SVC_NAME}-patroni
   spec:
     podManagementPolicy: OrderedReady
-    replicas: 3
+    replicas: 1
     revisionHistoryLimit: 10
     selector:
       matchLabels:
         application: ${SVC_NAME}
         cluster-name: ${SVC_NAME}-patroni
-    serviceName: ${SVC_NAME}
+    serviceName: ${SVC_NAME}-patroni
     template:
       metadata:
         creationTimestamp: null
@@ -1117,7 +1117,7 @@ objects:
             value: 0.0.0.0:8008
           image: image-registry.openshift-image-registry.svc:5000/bcgov/patroni-postgres:12.4-latest
           imagePullPolicy: IfNotPresent
-          name: ${SVC_NAME}
+          name: ${SVC_NAME}-patroni
           readinessProbe:
             httpGet:
               scheme: HTTP
@@ -1145,8 +1145,8 @@ objects:
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
-        serviceAccount: ${SVC_NAME}-patroniocp
-        serviceAccountName: ${SVC_NAME}-patroniocp
+        # serviceAccount: ${SVC_NAME}-patroniocp
+        # serviceAccountName: ${SVC_NAME}-patroniocp
         terminationGracePeriodSeconds: 0
         volumes:
         - name: pgdata
@@ -1162,63 +1162,63 @@ objects:
 #       cluster-name: ${SVC_NAME}-patroni
 #       app.kubernetes.io/part-of: ${SVC_NAME}
 #   subsets: []
-- apiVersion: v1
-  kind: ServiceAccount
-  metadata:
-    name: ${SVC_NAME}-patroniocp
-- apiVersion: rbac.authorization.k8s.io/v1
-  kind: Role
-  metadata:
-    name: ${SVC_NAME}-patroniocp
-  rules:
-  - apiGroups:
-    - ""
-    resources:
-    - configmaps
-    verbs:
-    - create
-    - get
-    - list
-    - patch
-    - update
-    - watch
-    # delete is required only for 'patronictl remove'
-    - delete
-  - apiGroups:
-    - ""
-    resources:
-    - endpoints
-    verbs:
-    - get
-    - patch
-    - update
-    # the following three privileges are necessary only when using endpoints
-    - create
-    - list
-    - watch
-    # delete is required only for for 'patronictl remove'
-    - delete
-  - apiGroups:
-    - ""
-    resources:
-    - pods
-    verbs:
-    - get
-    - list
-    - patch
-    - update
-    - watch
-- apiVersion: rbac.authorization.k8s.io/v1
-  kind: RoleBinding
-  metadata:
-    name: ${SVC_NAME}-patroniocp
-  roleRef:
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
-    name: ${SVC_NAME}-patroniocp
-  subjects:
-  - kind: ServiceAccount
-    name: ${SVC_NAME}-patroniocp
+# - apiVersion: v1
+#   kind: ServiceAccount
+#   metadata:
+#     name: ${SVC_NAME}-patroniocp
+# - apiVersion: rbac.authorization.k8s.io/v1
+#   kind: Role
+#   metadata:
+#     name: ${SVC_NAME}-patroniocp
+#   rules:
+#   - apiGroups:
+#     - ""
+#     resources:
+#     - configmaps
+#     verbs:
+#     - create
+#     - get
+#     - list
+#     - patch
+#     - update
+#     - watch
+#     # delete is required only for 'patronictl remove'
+#     - delete
+#   - apiGroups:
+#     - ""
+#     resources:
+#     - endpoints
+#     verbs:
+#     - get
+#     - patch
+#     - update
+#     # the following three privileges are necessary only when using endpoints
+#     - create
+#     - list
+#     - watch
+#     # delete is required only for for 'patronictl remove'
+#     - delete
+#   - apiGroups:
+#     - ""
+#     resources:
+#     - pods
+#     verbs:
+#     - get
+#     - list
+#     - patch
+#     - update
+#     - watch
+# - apiVersion: rbac.authorization.k8s.io/v1
+#   kind: RoleBinding
+#   metadata:
+#     name: ${SVC_NAME}-patroniocp
+#   roleRef:
+#     apiGroup: rbac.authorization.k8s.io
+#     kind: Role
+#     name: ${SVC_NAME}-patroniocp
+#   subjects:
+#   - kind: ServiceAccount
+#     name: ${SVC_NAME}-patroniocp
 
 ############## XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 # - apiVersion: apps.openshift.io/v1
