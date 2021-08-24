@@ -52,8 +52,13 @@ namespace Prime.Services
             // }
             // await _context.SaveChangesAsync();
 
-            var uploader = new NpgsqlBulkUploader(_context);
+            // Don't use injected DB Context
+            ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(new string[] { });
+
+            var uploader = new NpgsqlBulkUploader(dbContext);
             await uploader.InsertAsync(logs);
+
+            await dbContext.DisposeAsync();
 
             _logger.LogInformation("... Save Changes completed.");
             return logs.Last().TransactionId;
