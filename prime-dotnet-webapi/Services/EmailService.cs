@@ -97,7 +97,7 @@ namespace Prime.Services
                 Pec = site.PEC
             };
 
-            var email = await _emailRenderingService.RenderSiteReviewedNotificationEmailAsync(site.AdministratorPharmaNet.Email, viewModel);
+            var email = await _emailRenderingService.RenderSiteReviewedNotificationEmailAsync(viewModel);
             await Send(email);
         }
 

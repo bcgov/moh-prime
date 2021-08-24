@@ -761,7 +761,7 @@ namespace Prime.Controllers
         /// <param name="note"></param>
         /// <returns></returns>
         [HttpPost("{siteId}/site-reviewed-email-user", Name = nameof(SendSiteReviewedNotificationEmail))]
-        [Authorize(Roles = Roles.EditSite)]
+        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]

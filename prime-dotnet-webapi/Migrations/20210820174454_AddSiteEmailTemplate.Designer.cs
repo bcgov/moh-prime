@@ -11669,7 +11669,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EmailType = 15,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# \"@Model.Pec\". The following notes were added: \"@Model.Note\"",
+                            Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# @Model.Pec. @(!string.IsNullOrWhiteSpace(Model.Note) ? $\"The following notes were added: {Model.Note}\" : \"\")",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });

@@ -12,6 +12,8 @@ namespace Prime.Services.EmailInternal
         private const string PrimeEmail = "no-reply-prime@gov.bc.ca";
         private const string PrimeSupportEmail = "primesupport@gov.bc.ca";
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
+        private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
+
 
         private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailTemplateService _emailTemplateService;
@@ -159,12 +161,12 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(string recipientEmail, SiteNotificationEmailViewModel viewModel)
+        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteNotificationEmailViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
-                to: recipientEmail,
+                to: ProviderEnrolmentTeamEmail,
                 subject: "PRIME Site Registration review complete",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteReviewedNotification, viewModel)
             );

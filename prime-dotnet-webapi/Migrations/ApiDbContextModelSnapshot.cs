@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
-using Prime.Models;
 
 namespace Prime.Migrations
 {
@@ -11667,7 +11666,7 @@ namespace Prime.Migrations
                             CreatedUserId = new Guid("00000000-0000-0000-0000-000000000000"),
                             EmailType = 15,
                             ModifiedDate = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
-                            Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# \"@Model.Pec\". The following notes were added: \"@Model.Note\"",
+                            Template = "A PRIME Admin has reviewed the site registration for PEC/SiteID# @Model.Pec. @(!string.IsNullOrWhiteSpace(Model.Note) ? $\"The following notes were added: {Model.Note}\" : \"\")",
                             UpdatedTimeStamp = new DateTimeOffset(new DateTime(2019, 9, 16, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, -7, 0, 0, 0)),
                             UpdatedUserId = new Guid("00000000-0000-0000-0000-000000000000")
                         });
@@ -17950,111 +17949,6 @@ namespace Prime.Migrations
                             CareSettingCode = 4,
                             Email = "",
                             Name = "WinRx"
-                        },
-                        new
-                        {
-                            Code = 21,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "CareConnect"
-                        },
-                        new
-                        {
-                            Code = 22,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Excelleris"
-                        },
-                        new
-                        {
-                            Code = 23,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "iClinic"
-                        },
-                        new
-                        {
-                            Code = 24,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Medinet"
-                        },
-                        new
-                        {
-                            Code = 25,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Plexia"
-                        },
-                        new
-                        {
-                            Code = 26,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "PharmaClik"
-                        },
-                        new
-                        {
-                            Code = 27,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Nexxsys"
-                        },
-                        new
-                        {
-                            Code = 28,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Kroll"
-                        },
-                        new
-                        {
-                            Code = 29,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Assyst Rx-A"
-                        },
-                        new
-                        {
-                            Code = 30,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "WinRx"
-                        },
-                        new
-                        {
-                            Code = 31,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Shoppers Drug Mart HealthWatch NG"
-                        },
-                        new
-                        {
-                            Code = 32,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Commander Group"
-                        },
-                        new
-                        {
-                            Code = 33,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "BDM"
-                        },
-                        new
-                        {
-                            Code = 34,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Meditech"
-                        },
-                        new
-                        {
-                            Code = 35,
-                            CareSettingCode = 1,
-                            Email = "",
-                            Name = "Cerner"
                         });
                 });
 
@@ -18116,8 +18010,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(2);
                 });
 
             modelBuilder.Entity("Prime.Models.PhysicalAddress", b =>
@@ -18125,8 +18017,6 @@ namespace Prime.Migrations
                     b.HasBaseType("Prime.Models.Address");
 
                     b.ToTable("Address");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("Prime.Models.VerifiedAddress", b =>
