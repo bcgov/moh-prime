@@ -75,10 +75,10 @@ namespace TestPrimeE2E.SiteRegistration
             // choose private community health practice
             SelectDropdownItem("careSettingCode", "Community Pharmacy");
             // pick vendor
-            _driver.FindPatiently("//mat-radio-group[@formcontrolname='vendorCode']//label[div[contains(text(), 'BDM')]]").Click();
+            ClickRadioButton("vendorCode", "BDM");
             _driver.TakeScreenshot("Care_Setting");
             // Need to tab over and click "Save and Continue" button
-            _driver.TabAndInteract("//mat-radio-button[label/div[contains(text(), 'WinRx')]]", 2, Keys.Enter);
+            _driver.TabAndInteract(GetRadioButtonXPath("vendorCode", "WinRx"), 2, Keys.Enter);
 
             //site business licence
             _driver.FindPatiently("//input[@type='file']").SendKeys(TestParameters.BusinessLicencePath);
