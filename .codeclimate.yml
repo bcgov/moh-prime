@@ -31,6 +31,20 @@ exclude_patterns:
 - "schemasoy/*"
 - "utilities/*"
 
+# Auto
+- "config/"
+- "db/"
+- "dist/"
+- "features/"
+- "**/node_modules/"
+- "script/"
+- "**/spec/"
+- "**/test/"
+- "**/tests/"
+- "Tests/"
+- "**/vendor/"
+- "**/*_test.go"
+- "**/*.d.ts"
 
 # Exclude File Patterns
 - "**/*.spec.*"
