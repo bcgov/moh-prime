@@ -115,7 +115,7 @@ jobs:
 
       - name: Collect Backend Report
         run: |
-          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info -p "/home/runner/work/moh-prime/moh-prime"
+          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info -p "/home/runner/work/moh-prime/"
 
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
