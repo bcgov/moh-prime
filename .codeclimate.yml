@@ -21,13 +21,13 @@ exclude_patterns:
 - "poc/"
 - "prime-database-backup/"
 - "prime-angular-frontend/node_modules/"
-- "./prime-dotnet-webapi/Migrations/"
-- "./prime-dotnet-webapi/Controllers/"
-- "./prime-dotnet-webapi/Views/"
-- "./prime-dotnet-webapi/ViewModels/"
-- "./prime-dotnet-webapi/Resrouces/"
-- "./prime-dotnet-webapi/Configuration/"
-- "./prime-dotnet-webapi/logs/"
+- "Migrations/"
+- "Controllers/"
+- "Views/"
+- "ViewModels/"
+- "Resrouces/"
+- "Configuration/"
+- "logs/"
 - "./prime-dotnet-webapi-tests/"
 - "./prime-e2e-tests/"
 - "./schemasoy/"
@@ -57,3 +57,11 @@ exclude_patterns:
 # examples of minified files that should be excluded
 # - **.min.js
 # - **.min.css
+
+# - "./prime-dotnet-webapi/Migrations/"
+# - "./prime-dotnet-webapi/Controllers/"
+# - "./prime-dotnet-webapi/Views/"
+# - "./prime-dotnet-webapi/ViewModels/"
+# - "./prime-dotnet-webapi/Resrouces/"
+# - "./prime-dotnet-webapi/Configuration/"
+# - "./prime-dotnet-webapi/logs/"
