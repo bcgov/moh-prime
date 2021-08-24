@@ -640,7 +640,7 @@ objects:
                 path: /api/healthcheck
                 port: 8080
               failureThreshold: 3
-              periodSeconds: 10
+              periodSeconds: 20
             imagePullPolicy: IfNotPresent
             terminationMessagePolicy: File
             envFrom:
