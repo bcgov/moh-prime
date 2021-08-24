@@ -115,7 +115,9 @@ jobs:
 
       - name: Collect Backend Report
         run: |
-          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi/
+          cd ../
+          cd ./prime-dotnet-webapi
+          cc-test-reporter format-coverage -t lcov -o coverage/backend.json coverage/lcov.info -p /home/runner/work/moh-prime/moh-prime/prime-dotnet-webapi
 
       - name: Create backend coverage file artifact
         uses: actions/upload-artifact@v2
@@ -125,9 +127,6 @@ jobs:
 
   codeclimate-sum-coverage:
     needs: [ collect-frontend-coverage, collect-backend-coverage ]
-    defaults:
-      run:
-        working-directory: ./
 
     runs-on: ubuntu-latest
 
