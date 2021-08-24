@@ -1,10 +1,10 @@
 plugins:
   brakeman:
-    enabled: false
+    enabled: true
   rubocop:
-    enabled: false
+    enabled: true
   eslint:
-    enabled: false
+    enabled: true
 
 # Exclude Folder Pattern
 # Exclude File Pattern
@@ -50,8 +50,7 @@ exclude_patterns:
 - "**/*.html"
 - "**/*.cshtml"
 - "**/*ViewModel.cs"
-- "**/*.Designer.cs"
-- "prime-dotnet-webapi/Migrations/ApiDbContextModelSnapshot.cs"
+- "Migrations/ApiDbContextModelSnapshot.cs"
 
 
 # examples of minified files that should be excluded
