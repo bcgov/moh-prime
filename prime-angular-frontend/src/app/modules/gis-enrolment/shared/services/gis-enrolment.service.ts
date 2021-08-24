@@ -18,7 +18,7 @@ export interface IEnrolmentService<T> {
   providedIn: 'root'
 })
 export class GisEnrolmentService implements IEnrolmentService<GisEnrolment> {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<GisEnrolment>;
 
   constructor() {

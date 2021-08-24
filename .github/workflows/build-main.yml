@@ -186,6 +186,6 @@ jobs:
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -p HPR_URL=prod-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
+            -p HPR_URL=healthpractitionerregistration.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=prod-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
