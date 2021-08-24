@@ -118,7 +118,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-${API_POD}"}]
     name: ${SVC_NAME}-${FRONTEND_POD}
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -132,11 +132,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -224,7 +224,7 @@ objects:
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -415,8 +415,8 @@ objects:
           ssl_certificate certs/chained.crt;
           ssl_certificate_key certs/private.key;
           server_tokens off;
-          # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -483,12 +483,12 @@ objects:
       termination: edge
       insecureEdgeTerminationPolicy: Redirect
     wildcardPolicy: None
-  
+
 #   Frontend Route (Health Practitioner Registration)
 - apiVersion: route.openshift.io/v1
   kind: Route
   namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata: 
+  metadata:
     name: ${SVC_NAME}-${FRONTEND_POD}-hpr
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -567,11 +567,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -588,7 +588,7 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: ${SVC_NAME}-postgres                    
+                name: ${SVC_NAME}-postgres
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
@@ -726,7 +726,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -768,11 +768,11 @@ objects:
     strategy:
       type: Recreate
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -853,10 +853,10 @@ objects:
                   name: ${SVC_NAME}-postgres
                   key: database-password
           command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
+            # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
             - /opt/app-root/src/app.sh
-          args: 
+          args:
             - migrate
         containers:
           - name: ${SVC_NAME}-${DOCMAN_POD}
@@ -967,7 +967,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -1022,11 +1022,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
     template:
       metadata:
         labels:
@@ -1047,7 +1047,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: ${SVC_NAME}-postgres                    
+                    name: ${SVC_NAME}-postgres
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -1105,7 +1105,7 @@ objects:
           - name: ${SVC_NAME}-postgres-data
             persistentVolumeClaim:
               claimName: ${SVC_NAME}-postgres-data
-  
+
 #   PostgreSQL Service
 - apiVersion: v1
   kind: Service
@@ -1126,7 +1126,7 @@ objects:
       name: ${SVC_NAME}-postgres
     sessionAffinity: None
     type: ClusterIP
-  
+
 #   Database Persistent Volume Claim
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -1163,11 +1163,11 @@ objects:
     strategy:
       type: Rolling
       rollingParams:
-        updatePeriodSeconds: 1 
-        intervalSeconds: 1 
-        timeoutSeconds: 120 
-        maxSurge: "20%" 
-        maxUnavailable: "10%" 
+        updatePeriodSeconds: 1
+        intervalSeconds: 1
+        timeoutSeconds: 120
+        maxSurge: "20%"
+        maxUnavailable: "10%"
       activeDeadlineSeconds: 21600
     template:
       metadata:
