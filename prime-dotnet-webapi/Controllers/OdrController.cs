@@ -52,7 +52,7 @@ namespace Prime.Controllers
                 {
                     try
                     {
-                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.SaveDelay));
+                        //                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.SaveDelay));
 
                         lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
                     }
@@ -61,7 +61,7 @@ namespace Prime.Controllers
                         _logger.LogError(e.Message, e);
                         // TODO: Make configurable
                         // Wait for database to recover and then try again
-                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.RetryDelay));
+                        //                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.RetryDelay));
                     }
                 }
             } while (existsMore);

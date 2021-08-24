@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 using Npgsql.Bulk;
+using NpgsqlTypes;
 using Prime.Models;
 
 namespace Prime.Services
@@ -53,12 +55,44 @@ namespace Prime.Services
             // await _context.SaveChangesAsync();
 
             // Don't use injected DB Context
-            ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(new string[] { });
+            // ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(new string[] { });
 
-            var uploader = new NpgsqlBulkUploader(dbContext);
-            await uploader.InsertAsync(logs);
 
-            await dbContext.DisposeAsync();
+            // var uploader = new NpgsqlBulkUploader(dbContext);
+            // await uploader.InsertAsync(logs);
+
+
+            // await dbContext.DisposeAsync();
+
+
+            var connString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+
+            await using var conn = new NpgsqlConnection(connString);
+            await conn.OpenAsync();
+
+            using (var writer = conn.BeginBinaryImport(
+                @"COPY ""PharmanetTransactionLog""(""TransactionId"", ""TxDateTime"", ""UserId"", ""SourceIpAddress"", ""LocationIpAddress"", ""PharmacyId"", ""TransactionType"", ""TransactionSubType"", ""PractitionerId"", ""CollegePrefix"", ""TransactionOutcome"", ""ProviderSoftwareId"", ""ProviderSoftwareVersion"")
+                FROM STDIN (FORMAT BINARY)"))
+            {
+                foreach (PharmanetTransactionLog log in logs)
+                {
+                    writer.StartRow();
+                    writer.Write(log.TransactionId, NpgsqlDbType.Bigint);
+                    writer.Write(log.TxDateTime, NpgsqlDbType.Timestamp);
+                    writer.Write(log.UserId, NpgsqlDbType.Text);
+                    writer.Write(log.SourceIpAddress, NpgsqlDbType.Text);
+                    writer.Write(log.LocationIpAddress, NpgsqlDbType.Text);
+                    writer.Write(log.PharmacyId, NpgsqlDbType.Text);
+                    writer.Write(log.TransactionType, NpgsqlDbType.Text);
+                    writer.Write(log.TransactionSubType, NpgsqlDbType.Text);
+                    writer.Write(log.PractitionerId, NpgsqlDbType.Text);
+                    writer.Write(log.CollegePrefix, NpgsqlDbType.Text);
+                    writer.Write(log.TransactionOutcome, NpgsqlDbType.Text);
+                    writer.Write(log.ProviderSoftwareId, NpgsqlDbType.Text);
+                    writer.Write(log.ProviderSoftwareVersion, NpgsqlDbType.Text);
+                }
+                writer.Complete();
+            }
 
             _logger.LogInformation("... Save Changes completed.");
             return logs.Last().TransactionId;
