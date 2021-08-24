@@ -27,7 +27,7 @@ namespace Prime.Controllers
         [HttpGet(Name = nameof(GetDiagnostics))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiResultResponse<object>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult GetDiagnostics()
         {
             var now = DateTime.UtcNow;
