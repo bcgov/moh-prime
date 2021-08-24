@@ -32,6 +32,8 @@ exclude_patterns:
 
 # Exclude File Patterns
 - "**/*.spec.*"
+- "**/*.json"
+- "**/*.html"
 - "**/*.Designer.cs"
 - "prime-dotnet-webapi/Migrations/ApiDbContextModelSnapshot.cs"
 
