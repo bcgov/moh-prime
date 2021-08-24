@@ -14,7 +14,7 @@ import { GisEnrolmentResource } from '@gis/shared/resources/gis-enrolment-resour
 import { GisEnrolmentService } from '@gis/shared/services/gis-enrolment.service';
 import { GisEnrolmentFormStateService } from '@gis/shared/services/gis-enrolment-form-state.service';
 import { LdapInformationPageFormState } from './ldap-information-page-form-state.class';
-import { LdapThrottlingParameters } from '@gis/shared/models/ldap-credential.model';
+import { LdapThrottlingParameters } from '@gis/shared/models/ldap-error.model';
 
 @Component({
   selector: 'app-ldap-information-page',

@@ -12,7 +12,7 @@ import { ToastService } from '@core/services/toast.service';
 
 import { LdapCredential } from '../models/ldap-credential.model';
 import { GisEnrolment } from '../models/gis-enrolment.model';
-import { LdapThrottlingParameters } from '../models/ldap-credential.model';
+import { LdapThrottlingParameters } from '../models/ldap-error.model';
 
 @Injectable({
   providedIn: 'root'

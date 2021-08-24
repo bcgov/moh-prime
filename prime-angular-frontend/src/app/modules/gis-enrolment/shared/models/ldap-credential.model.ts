@@ -3,7 +3,3 @@ export interface LdapCredential {
   ldapPassword: string;
 }
 
-export interface LdapThrottlingParameters {
-  remainingAttempts: number;
-  lockoutTimeInHours: number;
-}
