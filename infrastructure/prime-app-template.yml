@@ -655,6 +655,7 @@ objects:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
+              timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
@@ -765,7 +766,7 @@ objects:
     selector:
       name: ${SVC_NAME}-${DOCMAN_POD}
     strategy:
-      type: Rolling
+      type: Recreate
       rollingParams:
         updatePeriodSeconds: 1
         intervalSeconds: 1
