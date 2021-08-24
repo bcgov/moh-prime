@@ -413,8 +413,8 @@ objects:
           ssl_certificate certs/chained.crt;
           ssl_certificate_key certs/private.key;
           server_tokens off;
-          # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -627,6 +627,7 @@ objects:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
+              timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
