@@ -49,9 +49,11 @@ services:
     networks:
       - prime-net
 
-####################### Verifiable Credential Agent Definition #######################
+###############################################################################
+##                      Verifiable Credential Agent Definition               ##
+###############################################################################
   # agent:
-  #   image: bcgovimages/aries-cloudagent:py36-1.15-1_0.6.0
+  #   image: bcgovimages/aries-cloudagent:py36-1.16-1_0.7.0
   #   environment:
   #     ACAPY_LABEL: ${AGENT_NAME}
   #     ACAPY_ENDPOINT: ${AGENT_ENDPOINT}
@@ -100,7 +102,9 @@ services:
   #       --${AGENT_ADMIN_MODE}",
   #     ]
 
-  ####################### Verifiable Credential Wallet Definition #######################
+#######################################################################################
+##                      Verifiable Credential Wallet Definition                      ##
+#######################################################################################
   # wallet:
   #   image: postgres:12-alpine
   #   environment:
@@ -113,7 +117,9 @@ services:
   #   volumes:
   #     - wallet:/var/lib/postgresql/data
 
-####################### API Backend Definition #######################
+###############################################################################
+##                        API Backend Definition                             ##
+###############################################################################
   dotnet-webapi:
     container_name: prime-webapi-backend
     restart: always
