@@ -38,7 +38,7 @@
     "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",
     "keycloak-angular": "^8.3.0",
-    "keycloak-js": "^10.0.2",
+    "keycloak-js": "^14.0.0",
     "moment": "^2.29.1",
     "ng-busy": "^11.0.0",
     "ngx-filepond": "^6.0.0",
