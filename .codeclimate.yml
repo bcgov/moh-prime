@@ -48,6 +48,8 @@ exclude_patterns:
 - "**/*.spec.*"
 - "**/*.json"
 - "**/*.html"
+- "**/*.cshtml"
+- "**/*ViewModel.cs"
 - "**/*.Designer.cs"
 - "prime-dotnet-webapi/Migrations/ApiDbContextModelSnapshot.cs"
 
