@@ -89,7 +89,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]
     name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -198,7 +198,7 @@ objects:
 
 #   Environment file
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-env-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -222,7 +222,7 @@ objects:
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -413,8 +413,8 @@ objects:
           ssl_certificate certs/chained.crt;
           ssl_certificate_key certs/private.key;
           server_tokens off;
-          # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -559,7 +559,7 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: pr-database-secrets                    
+                name: pr-database-secrets
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
@@ -596,7 +596,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -625,6 +625,7 @@ objects:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
+              timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
@@ -695,7 +696,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -812,10 +813,10 @@ objects:
                   name: pr-database-secrets
                   key: database-password
           command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
+            # Script force waits migration pod execution until PostgreSQL is verified to
             # be open to query connections.
             - /opt/app-root/src/app.sh
-          args: 
+          args:
             - migrate
         containers:
           - name: ${SVC_NAME}-document-manager
@@ -928,7 +929,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -982,7 +983,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -1062,7 +1063,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-    annotations: 
+    annotations:
       template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
