@@ -7,7 +7,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 export class MockSiteService {
-  // tslint:disable-next-line: variable-name
+  // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private readonly _site: BehaviorSubject<Site>;
 
   constructor() {

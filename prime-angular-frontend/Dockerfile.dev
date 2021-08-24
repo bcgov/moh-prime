@@ -1,5 +1,5 @@
 # base image
-FROM node:10.5
+FROM node:14.16
 
 ENV NODE_ROOT /usr/src/app
 RUN mkdir -p /usr/src/app

@@ -32,7 +32,7 @@ export class CareSettingFormState extends AbstractFormState<CareSettingForm> {
     }
 
     // Variable names must match keys for FormArrays in the FormGroup to get values
-    // tslint:disable-next-line:prefer-const
+    // eslint-disable-next-line prefer-const
     let { enrolleeCareSettings, enrolleeHealthAuthorities } = this.formInstance.getRawValue();
 
     // Any checked HA is converted into an enrollee health authority object literal,

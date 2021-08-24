@@ -3,7 +3,7 @@ import { Component, OnInit, EventEmitter, Output, Input, Directive } from '@angu
 import { AuthService } from '@auth/shared/services/auth.service';
 
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
+// eslint-disable-next-line @angular-eslint/directive-class-suffix
 export abstract class AbstractCollectionNoticeAlert {
   @Input() public isFull: boolean;
   @Output() public accepted: EventEmitter<void>;
