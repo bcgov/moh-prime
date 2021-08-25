@@ -199,7 +199,7 @@ namespace Prime.Services
                 var expiryDays = (enrollee.ExpiryDate.Value.Date - DateTime.Now.Date).TotalDays;
                 if (reminderEmailsIntervals.Contains(expiryDays) && enrollee.GPID.StartsWith(paperEnrolleeGpidFilter))
                 {
-                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value, gpId: enrollee.GPID));
                     email.Attachments = await _emailDocumentService.GeneratePaperEnrolleeRenewalAttachmentAsync(enrollee.GPID);
                     await Send(email);
                 } 
@@ -210,7 +210,7 @@ namespace Prime.Services
                 }
                 if (expiryDays == -1 && enrollee.GPID.StartsWith(paperEnrolleeGpidFilter))
                 {
-                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    var email = await _emailRenderingService.PaperEnrolleeRenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value, gpId: enrollee.GPID));
                     email.Attachments = await _emailDocumentService.GeneratePaperEnrolleeRenewalAttachmentAsync(enrollee.GPID);
                     await Send(email);
                 } 

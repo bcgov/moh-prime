@@ -54,6 +54,7 @@ namespace Prime.Services.Razor
             public static readonly RazorTemplate<SiteApprovalEmailViewModel> SiteApprovedSigningAuthorityEmailTemplate = new RazorTemplate<SiteApprovalEmailViewModel>("Views/Emails/SiteApprovedSigningAuthorityEmailTemplate.cshtml");
             public static readonly RazorTemplate<SiteApprovalEmailViewModel> SiteApprovedHibcEmailTemplate = new RazorTemplate<SiteApprovalEmailViewModel>("Views/Emails/SiteApprovedHIBCEmailTemplate.cshtml");
             public static readonly RazorTemplate<LinkedEmailViewModel> SiteRegistrationSubmission = new RazorTemplate<LinkedEmailViewModel>("/Views/Emails/SiteRegistrationSubmissionEmail.cshtml");
+            public static readonly RazorTemplate<EnrolleeRenewalEmailViewModel> PaperEnrolleeRenewalForm = new RazorTemplate<EnrolleeRenewalEmailViewModel>("/Views/Emails/PaperEnrolleeRenewalForm.cshtml");
         }
     }
 }
