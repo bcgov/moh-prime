@@ -3,10 +3,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Prime.Migrations
 {
-    public partial class PharmanetTransactionLogDefaults : Migration
+    public partial class PharmanetTransactionLogChangesAndDefaults : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "IpAddress",
+                table: "PharmanetTransactionLog");
+
             migrationBuilder.AlterColumn<Guid>(
                 name: "UpdatedUserId",
                 table: "PharmanetTransactionLog",
@@ -38,10 +42,28 @@ namespace Prime.Migrations
                 defaultValueSql: "current_timestamp",
                 oldClrType: typeof(DateTimeOffset),
                 oldType: "timestamp with time zone");
+
+            migrationBuilder.AddColumn<string>(
+                name: "LocationIpAddress",
+                table: "PharmanetTransactionLog",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "SourceIpAddress",
+                table: "PharmanetTransactionLog",
+                nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropColumn(
+                name: "LocationIpAddress",
+                table: "PharmanetTransactionLog");
+
+            migrationBuilder.DropColumn(
+                name: "SourceIpAddress",
+                table: "PharmanetTransactionLog");
+
             migrationBuilder.AlterColumn<Guid>(
                 name: "UpdatedUserId",
                 table: "PharmanetTransactionLog",
@@ -73,6 +95,12 @@ namespace Prime.Migrations
                 nullable: false,
                 oldClrType: typeof(DateTimeOffset),
                 oldDefaultValueSql: "current_timestamp");
+
+            migrationBuilder.AddColumn<string>(
+                name: "IpAddress",
+                table: "PharmanetTransactionLog",
+                type: "text",
+                nullable: true);
         }
     }
 }

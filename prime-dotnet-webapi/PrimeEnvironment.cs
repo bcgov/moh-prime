@@ -119,12 +119,6 @@ namespace Prime
             public static readonly string ClientName = GetEnvironmentVariable("PRIME_ODR_API_CLIENT_NAME");
             // Should be numeric value, "to return only nnn transaction log records"
             public static readonly string FetchSize = GetEnvironmentVariable("PRIME_ODR_API_FETCH_SIZE");
-
-
-            public static readonly string RetryDelay = GetEnvironmentVariable("PRIME_ODR_API_RETRY_DELAY");
-
-            public static readonly string SaveDelay = GetEnvironmentVariable("PRIME_ODR_API_SAVE_DELAY");
-
         }
     }
 }

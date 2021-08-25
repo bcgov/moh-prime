@@ -35,11 +35,10 @@ namespace Prime.Controllers
         /// Expose method invokable via OpenShift Cron
         /// </summary>
         [HttpPost("retrieve-logs", Name = nameof(RetrievePharmanetTxLogs))]
+        //        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RetrievePharmanetTxLogs()
         {
-            // TODO: Add exception handling
-
             long lastKnownTxId = _pnetTransactionLogService.GetMostRecentTransactionId();
             List<PharmanetTransactionLog> logs;
             bool existsMore;
@@ -52,16 +51,12 @@ namespace Prime.Controllers
                 {
                     try
                     {
-                        //                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.SaveDelay));
-
                         lastKnownTxId = await _pnetTransactionLogService.SaveLogsAsync(logs);
                     }
                     catch (Npgsql.NpgsqlException e)
                     {
+                        // Log error and then keep trying
                         _logger.LogError(e.Message, e);
-                        // TODO: Make configurable
-                        // Wait for database to recover and then try again
-                        //                        await Task.Delay(int.Parse(PrimeEnvironment.PrimeOdrApi.RetryDelay));
                     }
                 }
             } while (existsMore);

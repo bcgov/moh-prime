@@ -688,7 +688,7 @@ objects:
                 mountPath: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
                 subPath: pharmanet-api-cert.pfx
                 readOnly: true
-              - name: odr-certs
+              - name: odr-cert
                 mountPath: /opt/app-root/etc/certs/prime-odr-api-cert.pfx
                 subPath: prime-odr-api-cert.pfx
                 readOnly: true
@@ -696,7 +696,7 @@ objects:
           - name: cert-volume
             secret:
               secretName: pharmanet-api-ssl-certs
-          - name: odr-certs
+          - name: odr-cert
             secret:
               secretName: prime-odr-api-ssl-certs
     triggers:

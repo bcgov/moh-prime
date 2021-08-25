@@ -220,6 +220,7 @@ namespace Prime
                 client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
             });
 
+            // TODO: Why can't we use https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments?view=aspnetcore-5.0 rather than OC_APP?
             // if (PrimeEnvironment.IsLocal)
             // {
             //     services.AddSingleton<IPrimeOdrClient, MockPrimeOdrClient>();
@@ -227,11 +228,11 @@ namespace Prime
             // else
             // {
             services.AddTransient<PrimeOdrClientHandler>()
-            .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
-            {
-                client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
-            })
-            .ConfigurePrimaryHttpMessageHandler<PrimeOdrClientHandler>();
+                .AddHttpClient<IPrimeOdrClient, PrimeOdrClient>(client =>
+                {
+                    client.SetBasicAuthentication(PrimeEnvironment.PrimeOdrApi.Username, PrimeEnvironment.PrimeOdrApi.Password);
+                })
+                .ConfigurePrimaryHttpMessageHandler<PrimeOdrClientHandler>();
             // }
         }
 

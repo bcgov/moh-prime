@@ -46,30 +46,13 @@ namespace Prime.Services
                 return -1;
             }
 
-            _logger.LogInformation("Adding to Context ...");
-
-            // foreach (PharmanetTransactionLog log in logs)
-            // {
-            //     _context.PharmanetTransactionLogs.Add(log);
-            // }
-            // await _context.SaveChangesAsync();
-
-            // Don't use injected DB Context
-            // ApiDbContext dbContext = new ApiDbContextFactory().CreateDbContext(new string[] { });
-
-
-            // var uploader = new NpgsqlBulkUploader(dbContext);
-            // await uploader.InsertAsync(logs);
-
-
-            // await dbContext.DisposeAsync();
-
+            _logger.LogInformation("Preparing to save ...");
 
             var connString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-
             await using var conn = new NpgsqlConnection(connString);
             await conn.OpenAsync();
 
+            // See https://www.npgsql.org/doc/copy.html#binary-copy
             using (var writer = conn.BeginBinaryImport(
                 @"COPY ""PharmanetTransactionLog""(""TransactionId"", ""TxDateTime"", ""UserId"", ""SourceIpAddress"", ""LocationIpAddress"", ""PharmacyId"", ""TransactionType"", ""TransactionSubType"", ""PractitionerId"", ""CollegePrefix"", ""TransactionOutcome"", ""ProviderSoftwareId"", ""ProviderSoftwareVersion"")
                 FROM STDIN (FORMAT BINARY)"))
@@ -94,7 +77,7 @@ namespace Prime.Services
                 writer.Complete();
             }
 
-            _logger.LogInformation("... Save Changes completed.");
+            _logger.LogInformation("... save completed.");
             return logs.Last().TransactionId;
         }
     }

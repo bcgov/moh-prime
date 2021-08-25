@@ -5,9 +5,14 @@ using Prime.Models;
 
 namespace Prime.HttpClients
 {
+    /// <summary>
+    /// <c>IPrimeOdrClient</c> for local testing, as PRIME-ODR API is generally restricted to OpenShift IP addresses.
+    /// </summary>
     public class MockPrimeOdrClient : IPrimeOdrClient
     {
         private readonly Random randomizer = new Random();
+
+        private readonly List<PharmanetTransactionLog> noResults = new List<PharmanetTransactionLog>();
 
 
         public Task<(List<PharmanetTransactionLog> Logs, bool ExistsMoreLogs)> RetrieveLatestPharmanetTxLogsAsync(long lastKnownTxId)
@@ -29,7 +34,6 @@ namespace Prime.HttpClients
                         TxDateTime = DateTime.Now,
                         PharmacyId = "DEF" }
                 };
-            var noResults = new List<PharmanetTransactionLog>();
 
             // Randomly determine what is value of ExistsMoreLogs
             bool hasResults = randomizer.Next(10) != 1;
