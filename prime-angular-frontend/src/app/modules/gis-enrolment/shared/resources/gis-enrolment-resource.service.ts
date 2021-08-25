@@ -25,16 +25,33 @@ export class GisEnrolmentResource {
     private logger: ConsoleLoggerService
   ) { }
 
-  public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<object> {
-    return this.apiResource.post<object>(`parties/gis/${enrolmentId}/ldap/login`, credentials)
+  public ldapLogin(enrolmentId: number, credentials: LdapCredential): Observable<any> {
+    return this.apiResource.post<NoContent | LdapThrottlingParameters>(`parties/gis/${enrolmentId}/ldap/login`, credentials)
       .pipe(
-        map((response: ApiHttpResponse<object>) => response.result),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('You could not be authenticated.');
-          this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
-          throw error;
-        })
-      );
+        // NoContentResponse,
+        // catchError((error: any) => {
+        //   this.toastService.openErrorToast('You could not be authenticated.');
+        //   this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
+        //   console.log('Response Headers: ', error.headers.has('RemainingAttempts'));
+        //   // NOTE check status
+        //   // What do you need to do to get the headers?
+        //   if (error.status === 401) {
+        //     console.log('Response Headers: ', error.headers.get('RemainingAttempts'));
+        //     // return of({ remainingAttempts: error.headers.get('RemainingAttempts'), lockoutTimeInHours: error.headers.get('lockoutTimeInHours') });
+        // const ldapError = {
+        //   remainingAttempts: error.headers.get('RemainingAttempts'),
+        //   lockoutTimeInHours: error.headers.get('LockoutTimeInHours')
+        // };
+        //     return of(ldapError);
+        //   }
+        //   // return error;
+        //   throw error;
+        // })
+        catchError((error) => of({
+          remainingAttempts: 1,
+          lockoutTimeInHours: 4
+        }))
+      )
   }
 
   public getEnrolmentByUserId(userId: string): Observable<GisEnrolment> {
@@ -42,7 +59,7 @@ export class GisEnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<GisEnrolment>) => response.result),
         catchError((error: any) => {
-          // Allow for creation off of a new enrolment
+          // Allow for creation of a new enrolment
           if (error.status === 404) {
             return of(null);
           }

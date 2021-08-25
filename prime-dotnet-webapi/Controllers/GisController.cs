@@ -155,6 +155,8 @@ namespace Prime.Controllers
         [HttpPost("{gisId}/ldap/login", Name = nameof(LdapLogin))]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        // [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> LdapLogin(int gisId, LdapLoginPayload payload)
         {
@@ -170,10 +172,20 @@ namespace Prime.Controllers
 
             var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
+            var throttlingParameters = new
+            {
+                remainingAttempts = 4,
+                lockoutTimeInHours = 1
+            };
+
             if (result)
             {
                 return Ok();
             }
+
+            Response.Headers.Add("RemainingAttempts", throttlingParameters.remainingAttempts.ToString());
+            Response.Headers.Add("LockoutTimeInHours", throttlingParameters.lockoutTimeInHours.ToString());
+
 
             return Unauthorized();
         }
