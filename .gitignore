@@ -19,6 +19,6 @@ BuildReports/
 .env
 
 # ignore test coverage files and directories
-**/coverage
+**/**/coverage
 **/lcov.info
 **/coverage.cobertura.xml 
