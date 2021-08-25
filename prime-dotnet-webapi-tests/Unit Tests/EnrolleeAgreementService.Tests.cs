@@ -53,58 +53,58 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        // [Fact]
-        // public async void TestCreateAgreement_ThrowsWhenNull()
-        // {
-        //     // Arrange
-        //     var service = CreateService();
-        //     var enrollee = new EnrolleeFactory().Generate();
-        //     enrollee.Submissions = new[]
-        //     {
-        //         new Submission
-        //         {
-        //             AgreementType = null,
-        //             CreatedDate = DateTimeOffset.Now,
-        //         }
-        //     };
-        //     enrollee.AccessAgreementNote = null;
-        //     TestDb.Has(enrollee);
+        [Fact]
+        public async void TestCreateAgreement_ThrowsWhenNull()
+        {
+            // Arrange
+            var service = CreateService();
+            var enrollee = new EnrolleeFactory().Generate();
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    AgreementType = null,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
 
-        //     // Act
-        //     // Assert
-        //     await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateEnrolleeAgreementAsync(enrollee.Id));
-        // }
+            // Act
+            // Assert
+            await Assert.ThrowsAsync<InvalidOperationException>(() => service.CreateEnrolleeAgreementAsync(enrollee.Id));
+        }
 
-        // [Theory]
-        // [MemberData(nameof(AgreementTypeData))]
-        // public async void TestCreateAgreement(AgreementType determinedType)
-        // {
-        //     // Arrange
-        //     var service = CreateService();
-        //     var enrollee = new EnrolleeFactory().Generate();
-        //     enrollee.Submissions = new[]
-        //     {
-        //         new Submission
-        //         {
-        //             AgreementType = determinedType,
-        //             CreatedDate = DateTimeOffset.Now,
-        //         }
-        //     };
-        //     enrollee.AccessAgreementNote = null;
-        //     TestDb.Has(enrollee);
+        [Theory]
+        [MemberData(nameof(AgreementTypeData))]
+        public async void TestCreateAgreement(AgreementType determinedType)
+        {
+            // Arrange
+            var service = CreateService();
+            var enrollee = new EnrolleeFactory().Generate();
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    AgreementType = determinedType,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
+            enrollee.AccessAgreementNote = null;
+            TestDb.Has(enrollee);
 
-        //     var expectedAgreementId = TestDb.AgreementVersions
-        //         .Where(a => a.AgreementType == determinedType)
-        //         .OrderByDescending(a => a.EffectiveDate)
-        //         .Select(a => a.Id)
-        //         .First();
+            var expectedAgreementId = TestDb.AgreementVersions
+                .Where(a => a.AgreementType == determinedType)
+                .OrderByDescending(a => a.EffectiveDate)
+                .Select(a => a.Id)
+                .First();
 
-        //     // Act
-        //     await service.CreateEnrolleeAgreementAsync(enrollee.Id);
+            // Act
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
-        //     // Assert
-        //     AssertAgreementGeneration(enrollee, expectedAgreementId);
-        // }
+            // Assert
+            AssertAgreementGeneration(enrollee, expectedAgreementId);
+        }
 
         public static IEnumerable<object[]> AgreementTypeData()
         {
@@ -114,29 +114,29 @@ namespace PrimeTests.UnitTests
             }
         }
 
-        // [Fact]
-        // public async void TestCreateAgreement_WithLimitsClause()
-        // {
-        //     // Arrange
-        //     var service = CreateService();
-        //     var enrollee = new EnrolleeFactory().Generate();
-        //     enrollee.Submissions = new[]
-        //     {
-        //         new Submission
-        //         {
-        //             AgreementType = AgreementType.OboTOA,
-        //             CreatedDate = DateTimeOffset.Now,
-        //         }
-        //     };
-        //     var noteText = "oh dear";
-        //     enrollee.AccessAgreementNote = new AccessAgreementNote { Note = noteText };
-        //     TestDb.Has(enrollee);
+        [Fact]
+        public async void TestCreateAgreement_WithLimitsClause()
+        {
+            // Arrange
+            var service = CreateService();
+            var enrollee = new EnrolleeFactory().Generate();
+            enrollee.Submissions = new[]
+            {
+                new Submission
+                {
+                    AgreementType = AgreementType.OboTOA,
+                    CreatedDate = DateTimeOffset.Now,
+                }
+            };
+            var noteText = "oh dear";
+            enrollee.AccessAgreementNote = new AccessAgreementNote { Note = noteText };
+            TestDb.Has(enrollee);
 
-        //     // Act
-        //     await service.CreateEnrolleeAgreementAsync(enrollee.Id);
+            // Act
+            await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
-        //     // Assert
-        //     AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);
-        // }
+            // Assert
+            AssertAgreementGeneration(enrollee, expectedLimitsClauseText: noteText);
+        }
     }
 }
