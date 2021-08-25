@@ -70,7 +70,7 @@ namespace Prime.Services
             var enrolleeSubmission = new Submission
             {
                 EnrolleeId = enrollee.Id,
-                ProfileSnapshot = JObject.FromObject(enrollee, _camelCaseSerializer),
+                ProfileSnapshot = GetEnrolleeProfileSnapshot(enrollee),
                 RequestedRemoteAccess = enrollee.EnrolleeRemoteUsers.Any(),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -84,6 +84,11 @@ namespace Prime.Services
             _context.Submissions.Add(enrolleeSubmission);
 
             await _context.SaveChangesAsync();
+        }
+
+        public JObject GetEnrolleeProfileSnapshot(Enrollee enrollee)
+        {
+            return JObject.FromObject(enrollee, _camelCaseSerializer);
         }
     }
 }

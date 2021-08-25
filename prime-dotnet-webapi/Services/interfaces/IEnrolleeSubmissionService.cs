@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using Newtonsoft.Json.Linq;
 using Prime.Models;
 
 namespace Prime.Services
@@ -15,5 +15,7 @@ namespace Prime.Services
         Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime);
 
         Task CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true);
+
+        public JObject GetEnrolleeProfileSnapshot(Enrollee enrollee);
     }
 }

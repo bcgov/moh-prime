@@ -23,6 +23,7 @@ namespace Prime.Services
 
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
         private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
@@ -32,6 +33,7 @@ namespace Prime.Services
             IHttpContextAccessor httpContext,
             ILogger<EnrolleePaperSubmissionService> logger,
             IMapper mapper,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
             IEnrolleeAgreementService enrolleeAgreementService,
             IDocumentManagerClient documentClient,
             IBusinessEventService businessEventService)
@@ -39,6 +41,7 @@ namespace Prime.Services
         {
             _logger = logger;
             _mapper = mapper;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
             _enrolleeAgreementService = enrolleeAgreementService;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
@@ -241,6 +244,11 @@ namespace Prime.Services
             enrollee.AddEnrolmentStatus(StatusType.RequiresToa)
                 .AddStatusReason(StatusReasonType.Automatic);
             enrollee.AddEnrolmentStatus(StatusType.Editable);
+
+            var submission = await _context.Submissions
+                .SingleOrDefaultAsync(s => s.EnrolleeId == enrollee.Id);
+
+            submission.ProfileSnapshot = _enrolleeSubmissionService.GetEnrolleeProfileSnapshot(enrollee);
 
             await _context.SaveChangesAsync();
         }

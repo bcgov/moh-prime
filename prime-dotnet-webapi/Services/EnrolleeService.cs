@@ -81,7 +81,7 @@ namespace Prime.Services
                 query = query.Include(e => e.Adjudicator)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
-                            .ThenInclude(esan => esan.AdjudicatorNote)
+                            .ThenInclude(esr => esr.AdjudicatorNote)
                     .Include(e => e.EnrolmentStatuses)
                         .ThenInclude(es => es.EnrolmentStatusReference)
                             .ThenInclude(esr => esr.Adjudicator);
