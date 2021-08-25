@@ -7,6 +7,7 @@ using FakeItEasy;
 using AutoMapper;
 
 using Prime.Models;
+using Prime.Extensions;
 using Prime.Services;
 using Prime.HttpClients;
 using PrimeTests.Utils;
@@ -40,7 +41,7 @@ namespace PrimeTests.UnitTests
 
             if (expectedAgreementVersionId.HasValue)
             {
-                Assert.Equal(agreement.AgreementVersionId, expectedAgreementVersionId.Value);
+                Assert.Equal(expectedAgreementVersionId.Value, agreement.AgreementVersionId);
             }
 
             if (expectedLimitsClauseText == null)
@@ -49,7 +50,7 @@ namespace PrimeTests.UnitTests
             }
             else
             {
-                Assert.Equal(agreement.LimitsConditionsClause.Text, expectedLimitsClauseText);
+                Assert.Equal(expectedLimitsClauseText, agreement.LimitsConditionsClause.Text);
             }
         }
 
@@ -80,7 +81,11 @@ namespace PrimeTests.UnitTests
         public async void TestCreateAgreement(AgreementType determinedType)
         {
             // Arrange
-            var service = CreateService();
+            var expectedAgreementId = 66; // arbitrary number
+            var agreementService = A.Fake<IAgreementService>();
+            A.CallTo(() => agreementService.GetLatestAgreementVersionIdOfTypeAsync(A<AgreementType>.That.IsEqualTo(determinedType))).Returns(expectedAgreementId);
+            var service = CreateService(agreementService: agreementService);
+
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
             {
@@ -93,12 +98,6 @@ namespace PrimeTests.UnitTests
             enrollee.AccessAgreementNote = null;
             TestDb.Has(enrollee);
 
-            var expectedAgreementId = TestDb.AgreementVersions
-                .Where(a => a.AgreementType == determinedType)
-                .OrderByDescending(a => a.EffectiveDate)
-                .Select(a => a.Id)
-                .First();
-
             // Act
             await service.CreateEnrolleeAgreementAsync(enrollee.Id);
 
@@ -108,7 +107,7 @@ namespace PrimeTests.UnitTests
 
         public static IEnumerable<object[]> AgreementTypeData()
         {
-            foreach (var agreementType in Enum.GetValues(typeof(AgreementType)))
+            foreach (var agreementType in AgreementGroup.Enrollee.AgreementTypes())
             {
                 yield return new object[] { agreementType };
             }
