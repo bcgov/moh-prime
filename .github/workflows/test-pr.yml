@@ -1,11 +1,16 @@
 name: CodeClimate-Checks
-on: [ push ]
-  # push:
-  #   branches:
-  #     - innovate/code-climate
-  # pull_request:
-  #   branches:
-  #     - developsssssss
+on:
+  push:
+    branches-ignore: 
+      - 'develop'
+      - 'test'
+      - 'master'
+  workflow_dispatch:
+  pull_request:
+    branches-ignore:
+      - 'develop'
+      - 'test'
+      - 'master'
 
 jobs:
   collect-frontend-coverage:
