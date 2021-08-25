@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Npgsql.Bulk;
 using NpgsqlTypes;
 using Prime.Models;
 
