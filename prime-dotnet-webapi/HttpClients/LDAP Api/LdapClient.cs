@@ -65,58 +65,6 @@ namespace Prime.HttpClients
             public string Username { get; set; }
         }
 
-        // public async Task<string> GetThrottlingParamaters(string username, string password)
-        // {
-        //     var messageObject = new
-        //     {
-        //         userName = username,
-        //         password
-        //     };
-
-        //     var responseObject = new
-        //     {
-        //         remainingAttempts,
-        //         lockoutTimeInHours
-        //     }
-
-        //     var httpContent = CreateStringContent(messageObject);
-
-        //     HttpResponseMessage response = null;
-        //     try
-        //     {
-        //         response = await _client.PostAsync("users", httpContent);
-
-        //         var responseJsonString = await response.Content.ReadAsStringAsync();
-        //         _logger.LogInformation("CONTENT RESPONSE: {body}", responseJsonString);
-
-        //         if (response.IsSuccessStatusCode)
-        //         {
-        //             var successResponse = JsonConvert.DeserializeObject<LdapThrottlingParameters>(responseJsonString);
-        //             return {
-        //                 RemainingAttempts = successResponse.remainingAttempts,
-        //                 LockoutTimeInHours = successResponse.lockoutTimeInHours
-        //             };
-        //         }
-        //         else
-        //         {
-        //             await LogError(response);
-        //             return null;
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         await LogError(response, ex);
-        //         return null;
-        //     }
-        // }
-
-        public class LdapThrottlingParameters
-        {
-            public int RemainingAttempts { get; set; }
-
-            public int LockoutTimeInHours { get; set; }
-        }
-
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
         {
             await LogError(null, response, exception);
