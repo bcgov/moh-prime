@@ -36,6 +36,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - uses: amancevice/setup-code-climate@v0
+
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
           cc_test_reporter_version: latest  # optional
