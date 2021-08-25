@@ -110,7 +110,6 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmail,
                 subject: "Your PRIME Renewal Date Has Passed",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleePaperRenewalPassed, viewModel)
-                // attachments: PLACEHOLDER FOR ATTACHMENT
             );
         }
 
@@ -135,7 +134,6 @@ namespace Prime.Services.EmailInternal
                 to: recipientEmail,
                 subject: "PRIME Renewal Required",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.EnrolleePaperRenewalRequired, viewModel)
-                // attachments: PLACEHOLDER FOR ATTACHMENT
             );
         }
 

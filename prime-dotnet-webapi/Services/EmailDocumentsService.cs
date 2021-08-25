@@ -227,6 +227,11 @@ namespace Prime.Services.EmailInternal
             byte[] fileData = null;
             var content = await _documentClient.GetDocumentAsync(placeholder);
 
+            if (content == null) 
+            {
+                return null;
+            }
+
             fileData = await content.ReadAsByteArrayAsync();
 
             var html = await _razorConverterService.RenderTemplateToStringAsync(RazorTemplates.Document, new File("filename", fileData));

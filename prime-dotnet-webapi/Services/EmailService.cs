@@ -200,6 +200,7 @@ namespace Prime.Services
                 if (reminderEmailsIntervals.Contains(expiryDays) && enrollee.GPID.StartsWith(paperEnrolleeGpidFilter))
                 {
                     var email = await _emailRenderingService.PaperEnrolleeRenderRenewalRequiredEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    email.Attachments = await _emailDocumentService.GeneratePaperEnrolleeRenewalAttachmentAsync(enrollee.GPID);
                     await Send(email);
                 } 
                 else if (reminderEmailsIntervals.Contains(expiryDays))
@@ -210,6 +211,7 @@ namespace Prime.Services
                 if (expiryDays == -1 && enrollee.GPID.StartsWith(paperEnrolleeGpidFilter))
                 {
                     var email = await _emailRenderingService.PaperEnrolleeRenderRenewalPassedEmailAsync(enrollee.Email, new EnrolleeRenewalEmailViewModel(enrollee.FirstName, enrollee.LastName, enrollee.ExpiryDate.Value));
+                    email.Attachments = await _emailDocumentService.GeneratePaperEnrolleeRenewalAttachmentAsync(enrollee.GPID);
                     await Send(email);
                 } 
                 else if (expiryDays == -1)
