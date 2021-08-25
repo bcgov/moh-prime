@@ -6,7 +6,6 @@ namespace PrimeTests
     {
         public static IConfigurationRoot GetIConfigurationRoot(string outputPath)
         {            
-            System.Console.WriteLine(outputPath);
             return new ConfigurationBuilder()
                 .SetBasePath(outputPath)
                 .AddJsonFile("appsettings.json", optional: true)
