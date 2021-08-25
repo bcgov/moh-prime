@@ -36,7 +36,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - uses: amancevice/setup-code-climate@v0
-
         with:
           cc_test_reporter_id: ${{ secrets.CC_TEST_REPORTER_ID }}
           cc_test_reporter_version: latest  # optional
@@ -50,7 +49,6 @@ jobs:
 
       - name: Collect Frontend Report
         run: |
-          cc_test_reporter_id
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
       
       - name: Create frontend coverage file artifact
