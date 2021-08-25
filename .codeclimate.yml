@@ -43,7 +43,7 @@ exclude_patterns:
   - "**/tests/"
   - "**/Tests/"
   - "**/vendor/"
-  
+
   # Exclude File Pattern
   - "**/*_test.go"
   - "**/*.d.ts"
@@ -52,4 +52,3 @@ exclude_patterns:
   - "**/*.html"
   - "**/*.cshtml"
   - "**/*ViewModel.cs"
-
