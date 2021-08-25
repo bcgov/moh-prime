@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<coverage line-rate="0.255" branch-rate="0.1637" version="1.9" timestamp="1629843751" lines-covered="2956" lines-valid="11590" branches-covered="443" branches-valid="2705">
+<coverage line-rate="0.255" branch-rate="0.1637" version="1.9" timestamp="1629844410" lines-covered="2956" lines-valid="11590" branches-covered="443" branches-valid="2705">
   <sources>
     <source>C:\Users\228884\Desktop\Projects\Repos\moh-prime\prime-dotnet-webapi\</source>
   </sources>
@@ -713,13 +713,13 @@
                     <condition number="30" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="143" hits="726" branch="True" condition-coverage="100% (4/4)">
+                <line number="143" hits="707" branch="True" condition-coverage="100% (4/4)">
                   <conditions>
                     <condition number="11" type="jump" coverage="100%" />
                     <condition number="20" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="144" hits="726" branch="False" />
+                <line number="144" hits="707" branch="False" />
                 <line number="146" hits="64" branch="True" condition-coverage="83.33% (5/6)">
                   <conditions>
                     <condition number="68" type="jump" coverage="50%" />
@@ -728,28 +728,28 @@
                   </conditions>
                 </line>
                 <line number="147" hits="64" branch="False" />
-                <line number="149" hits="976" branch="True" condition-coverage="100% (2/2)">
+                <line number="149" hits="926" branch="True" condition-coverage="100% (2/2)">
                   <conditions>
                     <condition number="338" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="150" hits="392" branch="False" />
-                <line number="151" hits="392" branch="False" />
-                <line number="152" hits="392" branch="False" />
-                <line number="154" hits="392" branch="True" condition-coverage="100% (2/2)">
+                <line number="150" hits="367" branch="False" />
+                <line number="151" hits="367" branch="False" />
+                <line number="152" hits="367" branch="False" />
+                <line number="154" hits="367" branch="True" condition-coverage="100% (2/2)">
                   <conditions>
                     <condition number="236" type="jump" coverage="100%" />
                   </conditions>
                 </line>
-                <line number="155" hits="388" branch="False" />
-                <line number="156" hits="388" branch="False" />
-                <line number="157" hits="388" branch="False" />
-                <line number="158" hits="388" branch="False" />
+                <line number="155" hits="363" branch="False" />
+                <line number="156" hits="363" branch="False" />
+                <line number="157" hits="363" branch="False" />
+                <line number="158" hits="363" branch="False" />
                 <line number="160" hits="4" branch="False" />
                 <line number="161" hits="4" branch="False" />
                 <line number="162" hits="4" branch="False" />
                 <line number="163" hits="4" branch="False" />
-                <line number="164" hits="392" branch="False" />
+                <line number="164" hits="367" branch="False" />
                 <line number="165" hits="64" branch="False" />
               </lines>
             </method>
@@ -834,13 +834,13 @@
                 <condition number="30" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="143" hits="726" branch="True" condition-coverage="100% (4/4)">
+            <line number="143" hits="707" branch="True" condition-coverage="100% (4/4)">
               <conditions>
                 <condition number="11" type="jump" coverage="100%" />
                 <condition number="20" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="144" hits="726" branch="False" />
+            <line number="144" hits="707" branch="False" />
             <line number="146" hits="64" branch="True" condition-coverage="83.33% (5/6)">
               <conditions>
                 <condition number="68" type="jump" coverage="50%" />
@@ -849,28 +849,28 @@
               </conditions>
             </line>
             <line number="147" hits="64" branch="False" />
-            <line number="149" hits="976" branch="True" condition-coverage="100% (2/2)">
+            <line number="149" hits="926" branch="True" condition-coverage="100% (2/2)">
               <conditions>
                 <condition number="338" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="150" hits="392" branch="False" />
-            <line number="151" hits="392" branch="False" />
-            <line number="152" hits="392" branch="False" />
-            <line number="154" hits="392" branch="True" condition-coverage="100% (2/2)">
+            <line number="150" hits="367" branch="False" />
+            <line number="151" hits="367" branch="False" />
+            <line number="152" hits="367" branch="False" />
+            <line number="154" hits="367" branch="True" condition-coverage="100% (2/2)">
               <conditions>
                 <condition number="236" type="jump" coverage="100%" />
               </conditions>
             </line>
-            <line number="155" hits="388" branch="False" />
-            <line number="156" hits="388" branch="False" />
-            <line number="157" hits="388" branch="False" />
-            <line number="158" hits="388" branch="False" />
+            <line number="155" hits="363" branch="False" />
+            <line number="156" hits="363" branch="False" />
+            <line number="157" hits="363" branch="False" />
+            <line number="158" hits="363" branch="False" />
             <line number="160" hits="4" branch="False" />
             <line number="161" hits="4" branch="False" />
             <line number="162" hits="4" branch="False" />
             <line number="163" hits="4" branch="False" />
-            <line number="164" hits="392" branch="False" />
+            <line number="164" hits="367" branch="False" />
             <line number="165" hits="64" branch="False" />
             <line number="168" hits="2" branch="False" />
             <line number="169" hits="2" branch="False" />
@@ -21323,7 +21323,7 @@
                   </conditions>
                 </line>
                 <line number="214" hits="28" branch="False" />
-                <line number="215" hits="68" branch="True" condition-coverage="50% (1/2)">
+                <line number="215" hits="66" branch="True" condition-coverage="50% (1/2)">
                   <conditions>
                     <condition number="153" type="jump" coverage="50%" />
                   </conditions>
@@ -21502,7 +21502,7 @@
               </conditions>
             </line>
             <line number="214" hits="28" branch="False" />
-            <line number="215" hits="68" branch="True" condition-coverage="50% (1/2)">
+            <line number="215" hits="66" branch="True" condition-coverage="50% (1/2)">
               <conditions>
                 <condition number="153" type="jump" coverage="50%" />
               </conditions>
@@ -23324,38 +23324,38 @@
           <methods>
             <method name="get_CreatedUserId" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="3788" branch="False" />
+                <line number="12" hits="3770" branch="False" />
               </lines>
             </method>
             <method name="get_CreatedTimeStamp" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="15" hits="3867" branch="False" />
+                <line number="15" hits="3849" branch="False" />
               </lines>
             </method>
             <method name="get_UpdatedUserId" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="18" hits="3788" branch="False" />
+                <line number="18" hits="3770" branch="False" />
               </lines>
             </method>
             <method name="get_UpdatedTimeStamp" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="21" hits="3866" branch="False" />
+                <line number="21" hits="3848" branch="False" />
               </lines>
             </method>
             <method name=".ctor" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="8" hits="2886" branch="False" />
-                <line number="9" hits="5772" branch="False" />
+                <line number="8" hits="2868" branch="False" />
+                <line number="9" hits="5736" branch="False" />
               </lines>
             </method>
           </methods>
           <lines>
-            <line number="12" hits="3788" branch="False" />
-            <line number="15" hits="3867" branch="False" />
-            <line number="18" hits="3788" branch="False" />
-            <line number="21" hits="3866" branch="False" />
-            <line number="8" hits="2886" branch="False" />
-            <line number="9" hits="5772" branch="False" />
+            <line number="12" hits="3770" branch="False" />
+            <line number="15" hits="3849" branch="False" />
+            <line number="18" hits="3770" branch="False" />
+            <line number="21" hits="3848" branch="False" />
+            <line number="8" hits="2868" branch="False" />
+            <line number="9" hits="5736" branch="False" />
           </lines>
         </class>
         <class name="Prime.Models.BusinessEvent" filename="Models\BusinessEvent.cs" line-rate="0" branch-rate="0" complexity="17">
@@ -23545,12 +23545,12 @@
             </method>
             <method name="get_LicenseCode" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="26" hits="4324" branch="False" />
+                <line number="26" hits="4323" branch="False" />
               </lines>
             </method>
             <method name="get_License" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="29" hits="170" branch="False" />
+                <line number="29" hits="171" branch="False" />
               </lines>
             </method>
             <method name="get_LicenseNumber" signature="()" line-rate="1" branch-rate="1">
@@ -23585,8 +23585,8 @@
             <line number="19" hits="0" branch="False" />
             <line number="21" hits="796" branch="False" />
             <line number="24" hits="327" branch="False" />
-            <line number="26" hits="4324" branch="False" />
-            <line number="29" hits="170" branch="False" />
+            <line number="26" hits="4323" branch="False" />
+            <line number="29" hits="171" branch="False" />
             <line number="34" hits="670" branch="False" />
             <line number="40" hits="507" branch="False" />
             <line number="42" hits="453" branch="False" />
@@ -23654,7 +23654,7 @@
             </method>
             <method name="get_LicenseCode" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="143528" branch="False" />
+                <line number="12" hits="149828" branch="False" />
               </lines>
             </method>
             <method name="get_License" signature="()" line-rate="0" branch-rate="1">
@@ -23676,7 +23676,7 @@
           <lines>
             <line number="7" hits="11935" branch="False" />
             <line number="10" hits="0" branch="False" />
-            <line number="12" hits="143528" branch="False" />
+            <line number="12" hits="149828" branch="False" />
             <line number="15" hits="0" branch="False" />
             <line number="17" hits="3389" branch="False" />
             <line number="20" hits="0" branch="False" />
@@ -23720,7 +23720,7 @@
             </method>
             <method name="get_PracticeCode" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="744" branch="False" />
+                <line number="12" hits="904" branch="False" />
               </lines>
             </method>
             <method name="get_Practice" signature="()" line-rate="0" branch-rate="1">
@@ -23732,7 +23732,7 @@
           <lines>
             <line number="7" hits="620" branch="False" />
             <line number="10" hits="0" branch="False" />
-            <line number="12" hits="744" branch="False" />
+            <line number="12" hits="904" branch="False" />
             <line number="15" hits="0" branch="False" />
           </lines>
         </class>
@@ -23740,7 +23740,7 @@
           <methods>
             <method name="get_Code" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="142887" branch="False" />
+                <line number="12" hits="149187" branch="False" />
               </lines>
             </method>
             <method name="get_Weight" signature="()" line-rate="1" branch-rate="1">
@@ -23800,7 +23800,7 @@
             </method>
           </methods>
           <lines>
-            <line number="12" hits="142887" branch="False" />
+            <line number="12" hits="149187" branch="False" />
             <line number="14" hits="2792" branch="False" />
             <line number="16" hits="2850" branch="False" />
             <line number="18" hits="2792" branch="False" />
@@ -23818,7 +23818,7 @@
           <methods>
             <method name="get_Code" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="767" branch="False" />
+                <line number="12" hits="938" branch="False" />
               </lines>
             </method>
             <method name="get_Name" signature="()" line-rate="1" branch-rate="1">
@@ -23838,7 +23838,7 @@
             </method>
           </methods>
           <lines>
-            <line number="12" hits="767" branch="False" />
+            <line number="12" hits="938" branch="False" />
             <line number="15" hits="176" branch="False" />
             <line number="18" hits="0" branch="False" />
             <line number="20" hits="168" branch="False" />
@@ -24274,7 +24274,7 @@
           <methods>
             <method name="get_Id" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="26" hits="910" branch="False" />
+                <line number="26" hits="892" branch="False" />
               </lines>
             </method>
             <method name="get_UserId" signature="()" line-rate="1" branch-rate="1">
@@ -24735,7 +24735,7 @@
             </method>
           </methods>
           <lines>
-            <line number="26" hits="910" branch="False" />
+            <line number="26" hits="892" branch="False" />
             <line number="28" hits="162" branch="False" />
             <line number="31" hits="155" branch="False" />
             <line number="34" hits="162" branch="False" />
@@ -25019,7 +25019,7 @@
             </method>
             <method name="get_CareSettingCode" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="19" hits="537" branch="False" />
+                <line number="19" hits="533" branch="False" />
               </lines>
             </method>
             <method name="get_CareSetting" signature="()" line-rate="0" branch-rate="1">
@@ -25039,7 +25039,7 @@
             <line number="11" hits="198" branch="False" />
             <line number="14" hits="0" branch="False" />
             <line number="17" hits="0" branch="False" />
-            <line number="19" hits="537" branch="False" />
+            <line number="19" hits="533" branch="False" />
             <line number="22" hits="0" branch="False" />
             <line number="25" hits="0" branch="False" />
             <line number="26" hits="0" branch="False" />
@@ -26460,7 +26460,7 @@
             </method>
             <method name="get_PrivilegeId" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="14" hits="14403" branch="False" />
+                <line number="14" hits="14373" branch="False" />
               </lines>
             </method>
             <method name="get_Privilege" signature="()" line-rate="0" branch-rate="1">
@@ -26472,7 +26472,7 @@
           <lines>
             <line number="9" hits="17050" branch="False" />
             <line number="12" hits="0" branch="False" />
-            <line number="14" hits="14403" branch="False" />
+            <line number="14" hits="14373" branch="False" />
             <line number="17" hits="0" branch="False" />
           </lines>
         </class>
@@ -26674,7 +26674,7 @@
           <methods>
             <method name="get_Id" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="13" hits="65" branch="False" />
+                <line number="13" hits="67" branch="False" />
               </lines>
             </method>
             <method name="get_EnrolleeId" signature="()" line-rate="0" branch-rate="1">
@@ -26689,7 +26689,7 @@
             </method>
             <method name="get_SelfDeclarationTypeCode" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="20" hits="141" branch="False" />
+                <line number="20" hits="143" branch="False" />
               </lines>
             </method>
             <method name="get_SelfDeclarationType" signature="()" line-rate="1" branch-rate="1">
@@ -26699,7 +26699,7 @@
             </method>
             <method name="get_SelfDeclarationDetails" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="24" hits="141" branch="False" />
+                <line number="24" hits="143" branch="False" />
               </lines>
             </method>
             <method name="get_DocumentGuids" signature="()" line-rate="1" branch-rate="1">
@@ -26709,12 +26709,12 @@
             </method>
           </methods>
           <lines>
-            <line number="13" hits="65" branch="False" />
+            <line number="13" hits="67" branch="False" />
             <line number="15" hits="0" branch="False" />
             <line number="18" hits="0" branch="False" />
-            <line number="20" hits="141" branch="False" />
+            <line number="20" hits="143" branch="False" />
             <line number="22" hits="52" branch="False" />
-            <line number="24" hits="141" branch="False" />
+            <line number="24" hits="143" branch="False" />
             <line number="28" hits="48" branch="False" />
           </lines>
         </class>
@@ -26722,7 +26722,7 @@
           <methods>
             <method name="get_Code" signature="()" line-rate="1" branch-rate="1">
               <lines>
-                <line number="12" hits="265" branch="False" />
+                <line number="12" hits="267" branch="False" />
               </lines>
             </method>
             <method name="get_Name" signature="()" line-rate="1" branch-rate="1">
@@ -26742,7 +26742,7 @@
             </method>
           </methods>
           <lines>
-            <line number="12" hits="265" branch="False" />
+            <line number="12" hits="267" branch="False" />
             <line number="15" hits="224" branch="False" />
             <line number="18" hits="0" branch="False" />
             <line number="21" hits="0" branch="False" />
@@ -29188,7 +29188,7 @@
                   </conditions>
                 </line>
                 <line number="55" hits="8" branch="False" />
-                <line number="56" hits="20" branch="False" />
+                <line number="56" hits="21" branch="False" />
                 <line number="57" hits="0" branch="False" />
                 <line number="58" hits="0" branch="False" />
                 <line number="61" hits="8" branch="True" condition-coverage="100% (2/2)">
@@ -29321,7 +29321,7 @@
               </conditions>
             </line>
             <line number="55" hits="8" branch="False" />
-            <line number="56" hits="20" branch="False" />
+            <line number="56" hits="21" branch="False" />
             <line number="57" hits="0" branch="False" />
             <line number="58" hits="0" branch="False" />
             <line number="61" hits="8" branch="True" condition-coverage="100% (2/2)">

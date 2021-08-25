@@ -188,6 +188,11 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
+        /// <summary>
+        /// Creates a new Org Agreement of type appropriate for the indicated site if none exist or a newer version is available.
+        /// Otherwise, returns the newest existing Agreement of that type.
+        /// Returns null if the Site doesn't exist on the Organization.
+        /// </summary>
         public async Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId)
         {
             var siteSetting = await _context.Sites

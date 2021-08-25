@@ -23,7 +23,6 @@ exclude_patterns:
   - "**/prime-database-backup/"
   - "**/prime-angular-frontend/node_modules/"
   - "**/prime-dotnet-webapi/Migrations/"
-  - "**/prime-dotnet-webapi/Controllers/"
   - "**/prime-dotnet-webapi/Views/"
   - "**/prime-dotnet-webapi/ViewModels/"
   - "**/prime-dotnet-webapi/Resrouces/"
