@@ -18,6 +18,7 @@ namespace PrimeTests.UnitTests
             IHttpContextAccessor httpContext = null,
             IAgreementService agreementService = null,
             ISubmissionRulesService submissionRulesService = null,
+            IEnrolleeAgreementService enrolleeAgreementService = null,
             IBusinessEventService businessEventService = null,
             IEmailService emailService = null,
             IEnrolleeService enrolleeService = null,
@@ -28,17 +29,17 @@ namespace PrimeTests.UnitTests
         {
             return new SubmissionService(
                 TestDb,
-                httpContext: A.Fake<IHttpContextAccessor>(),
-                agreementService: A.Fake<IAgreementService>(),
-                enrolleeAgreementService: A.Fake<IEnrolleeAgreementService>(),
-                submissionRulesService: A.Fake<ISubmissionRulesService>(),
-                businessEventService: A.Fake<IBusinessEventService>(),
-                emailService: A.Fake<IEmailService>(),
-                enrolleeService: A.Fake<IEnrolleeService>(),
-                enrolleeSubmissionService: A.Fake<IEnrolleeSubmissionService>(),
-                verifiableCredentialService: A.Fake<IVerifiableCredentialService>(),
-                privilegeService: A.Fake<IPrivilegeService>(),
-                logger: A.Fake<ILogger<SubmissionService>>()
+                httpContext ?? A.Fake<IHttpContextAccessor>(),
+                agreementService ?? A.Fake<IAgreementService>(),
+                enrolleeAgreementService ?? A.Fake<IEnrolleeAgreementService>(),
+                submissionRulesService ?? A.Fake<ISubmissionRulesService>(),
+                businessEventService ?? A.Fake<IBusinessEventService>(),
+                emailService ?? A.Fake<IEmailService>(),
+                enrolleeService ?? A.Fake<IEnrolleeService>(),
+                enrolleeSubmissionService ?? A.Fake<IEnrolleeSubmissionService>(),
+                verifiableCredentialService ?? A.Fake<IVerifiableCredentialService>(),
+                privilegeService ?? A.Fake<IPrivilegeService>(),
+                logger ?? A.Fake<ILogger<SubmissionService>>()
             );
         }
     }

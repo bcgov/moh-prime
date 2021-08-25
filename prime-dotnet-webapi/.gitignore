@@ -48,3 +48,9 @@ logs/
 
 # Environment Variables
 .env
+
+# test coverage files
+coverage/
+**/lcov.info
+**/coverage.cobertura.xml
+
