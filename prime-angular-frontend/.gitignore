@@ -46,8 +46,3 @@ testem.log
 Thumbs.db
 
 /src/assets/config-map.json
-
-# ignore test coverage files and directories
-**/coverage
-**/lcov.info
-**/coverage.cobertura.xml 
