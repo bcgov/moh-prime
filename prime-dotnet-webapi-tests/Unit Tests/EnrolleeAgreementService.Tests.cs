@@ -14,20 +14,18 @@ using PrimeTests.ModelFactories;
 
 namespace PrimeTests.UnitTests
 {
-    public class AgreementServiceTests : InMemoryDbTest
+    public class EnrolleeAgreementServiceTests : InMemoryDbTest
     {
-        public AgreementService CreateService(
+        public EnrolleeAgreementService CreateService(
             IHttpContextAccessor httpContext = null,
-            IMapper mapper = null,
-            IPdfService pdfService = null,
-            IRazorConverterService razorConverterService = null,
-            IDocumentManagerClient documentClient = null)
+            IAgreementService agreementService = null,
+            IRazorConverterService razorConverterService = null)
         {
-            return new AgreementService(
+            return new EnrolleeAgreementService(
                 TestDb,
                 httpContext ?? A.Fake<IHttpContextAccessor>(),
-                mapper ?? A.Fake<IMapper>(),
-                documentClient ?? A.Fake<IDocumentManagerClient>()
+                agreementService ?? A.Fake<IAgreementService>(),
+                razorConverterService ?? A.Fake<IRazorConverterService>()
             );
         }
 
