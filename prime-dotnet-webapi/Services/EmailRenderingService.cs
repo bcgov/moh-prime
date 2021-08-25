@@ -161,7 +161,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteNotificationEmailViewModel viewModel)
+        public async Task<Email> RenderSiteReviewedNotificationEmailAsync(SiteReviewedEmailViewModel viewModel)
         {
             return new Email
             (

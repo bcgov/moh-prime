@@ -161,7 +161,7 @@ export class SiteResource {
 
   public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
     const payload = { data: note };
-    return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email-user`, payload)
+    return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
