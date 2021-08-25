@@ -730,6 +730,7 @@ namespace Prime.Services
         public async Task<bool> SiteExists(int siteId)
         {
             return await _context.Sites
+                .AsNoTracking()
                 .AnyAsync(s => s.Id == siteId);
         }
 
