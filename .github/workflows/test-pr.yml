@@ -49,6 +49,7 @@ jobs:
 
       - name: Collect Frontend Report
         run: |
+          cc_test_reporter_id
           cc-test-reporter format-coverage -t lcov -o coverage/frontend.json coverage/lcov.info
       
       - name: Create frontend coverage file artifact
