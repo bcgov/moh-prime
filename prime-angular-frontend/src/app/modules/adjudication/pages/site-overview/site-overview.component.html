@@ -111,6 +111,22 @@
           </section>
 
         </form>
+        <app-page-section *ngIf="showSendNotification">
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>PharmaCare Provider Enrolment</ng-container>
+            <ng-container appPageSubheader2Summary>
+              Send notification to provider enrolment team
+            </ng-container>
+          </app-page-subheader2>
+
+          <button *ngIf="!isNotificationSent; else NotificationSent"
+                  mat-flat-button
+                  color="primary"
+                  (click)="onSendNotification()">Send Notification</button>
+          <ng-template #NotificationSent>
+            <span class="alert-success d-flex align-items-center"><mat-icon class="mr-2">check_circle</mat-icon>Notification sent</span>
+          </ng-template>
+        </app-page-section>
       </div>
     </div>
 

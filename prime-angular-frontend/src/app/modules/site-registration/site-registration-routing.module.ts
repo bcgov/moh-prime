@@ -33,7 +33,7 @@ import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-re
 
 const routes: Routes = [
   {
-    path: SiteRoutes.MODULE_PATH,
+    path: '',
     component: SiteRegistrationDashboardComponent,
     canActivate: [
       AuthenticationGuard,
