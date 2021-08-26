@@ -14,7 +14,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
-import { HealthAuthorityListItem } from '@shared/models/health-authority-list.model';
+import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 // TODO move models into lib
 import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
@@ -39,11 +39,11 @@ export class HealthAuthorityResource {
     private capitalizePipe: CapitalizePipe
   ) { }
 
-  public getHealthAuthorities(): Observable<HealthAuthorityListItem[]> {
-    return this.apiResource.get<HealthAuthorityListItem[]>(`health-authorities`)
+  public getHealthAuthorities(): Observable<HealthAuthorityRow[]> {
+    return this.apiResource.get<HealthAuthorityRow[]>(`health-authorities`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthorityListItem[]>) => response.result),
-        tap((healthAuthorities: HealthAuthorityListItem[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
+        map((response: ApiHttpResponse<HealthAuthorityRow[]>) => response.result),
+        tap((healthAuthorities: HealthAuthorityRow[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authorities could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorities error has occurred: ', error);

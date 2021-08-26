@@ -25,10 +25,10 @@
       <ng-container matColumnDef="orgName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Organization Name
+            scope="col"> Health Authority Name
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ isHealthAuthorityObject(row) ? row.name : "" }} </td>
+            *matCellDef="let row;"> {{ row?.name | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteName">
@@ -71,7 +71,8 @@
             [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
             [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
             [class.declined]="row.status === SiteStatusType.LOCKED">
-          {{ displayStatus(row.status) | capitalize: true | default }} </td>
+          {{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="siteId">
@@ -131,8 +132,8 @@
           <strong>{{groupBy.name}}</strong>
           <button mat-icon-button
                   title="Expand"
-                  (click)="expandHeader(groupBy)">
-            <mat-icon>{{ (groupBy.id === idOfExpandedHA) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+                  (click)="onExpandHeader(groupBy)">
+            <mat-icon>{{ (groupBy.id === expandedHealthAuthId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
         </td>
       </ng-container>
@@ -145,7 +146,7 @@
           *matHeaderRowDef="siteColumns; sticky: true"></tr>
       <tr mat-row
           *matRowDef="let row; columns: siteColumns;"
-          [hidden]="row.healthAuthorityOrganizationId !== idOfExpandedHA"></tr>
+          [hidden]="row.healthAuthorityOrganizationId !== expandedHealthAuthId"></tr>
 
     </table>
 

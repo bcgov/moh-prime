@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 })
 export class AuthorizedUsersPageComponent implements OnInit {
   public busy: Subscription;
-  public haName: string;
+  public healthAuthName: string;
 
   private routeUtils: RouteUtils;
 
@@ -21,7 +21,7 @@ export class AuthorizedUsersPageComponent implements OnInit {
     private router: Router,
     private configService: ConfigService,
   ) {
-    this.haName = this.configService.healthAuthorities.find(ha => ha.code === +this.route.snapshot.params.haid)?.name;
+    this.healthAuthName = this.configService.healthAuthorities.find(ha => ha.code === +this.route.snapshot.params.haid)?.name;
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 

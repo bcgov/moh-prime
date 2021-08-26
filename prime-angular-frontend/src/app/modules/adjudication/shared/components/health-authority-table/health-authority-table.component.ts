@@ -7,7 +7,7 @@ import { ConfigService } from '@config/config.service';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
-import { HealthAuthorityListItem } from '@shared/models/health-authority-list.model';
+import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
 import { exhaustMap, mergeMap } from 'rxjs/operators';
 import { from, of } from 'rxjs';
@@ -23,12 +23,12 @@ export class HealthAuthorityTableComponent implements OnInit {
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public siteColumns: string[];
-  public dataSource: MatTableDataSource<HealthAuthorityListItem | HealthAuthoritySite>;
+  public dataSource: MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>;
   public flaggedHealthAuthorities: HealthAuthorityEnum[];
   public Role = Role;
   public AdjudicationRoutes = AdjudicationRoutes;
   public SiteStatusType = SiteStatusType;
-  public idOfExpandedHA: number;
+  public expandedHealthAuthId: number;
 
 
   constructor(
@@ -47,32 +47,18 @@ export class HealthAuthorityTableComponent implements OnInit {
       'siteActions'
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
-    this.dataSource = new MatTableDataSource<HealthAuthorityListItem | HealthAuthoritySite>([]);
+    this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>([]);
     // No HA headers should be expanded initially
-    this.idOfExpandedHA = -1;
+    this.expandedHealthAuthId = 0;
   }
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
   }
 
-  // TODO: Eliminate duplication as this method copied from SiteRegistrationTableComponent
-  public displayStatus(status: SiteStatusType) {
-    switch (status) {
-      case SiteStatusType.EDITABLE:
-        return "Editable";
-      case SiteStatusType.IN_REVIEW:
-        return "In Review";
-      case SiteStatusType.LOCKED:
-        return "Locked";
-      default:
-        return "Editable";
-    }
-  }
-
   // TODO: Eliminate duplication as this method very similar to that from SiteRegistrationTableComponent
-  public remoteUsers(siteRegistration: HealthAuthoritySite): number | 'Yes' | 'No' {
-    const count = siteRegistration.remoteUsers?.length;
+  public remoteUsers(healthAuthoritySite: HealthAuthoritySite): number | 'Yes' | 'No' {
+    const count = healthAuthoritySite.remoteUsers?.length;
 
     return (!this.activatedRoute.snapshot.params.sid)
       ? (count) ? 'Yes' : 'No'
@@ -80,23 +66,22 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public isHealthAuthorityObject(rowData): boolean {
-    return rowData.hasUnderReviewUsers !== undefined;
+    return rowData.hasOwnProperty('hasUnderReviewUsers');
   }
 
-  public isGroup(index: number, rowData: HealthAuthorityListItem | HealthAuthoritySite): boolean {
+  public isGroup(index: number, rowData: HealthAuthorityRow | HealthAuthoritySite): boolean {
     return HealthAuthorityTableComponent.isHA(rowData);
   }
 
-  public expandHeader(item: HealthAuthorityListItem): void {
-    this.idOfExpandedHA =
-      this.idOfExpandedHA !== item.id ? item.id : -1;
+  public onExpandHeader(item: HealthAuthorityRow): void {
+    this.expandedHealthAuthId = (this.expandedHealthAuthId !== item.id ? item.id : 0);
   }
 
   public ngOnInit(): void {
     this.healthAuthorityResource.getHealthAuthorities()
       .pipe(
-        exhaustMap((healthAuthorities: HealthAuthorityListItem[]) => {
-          this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityListItem) =>
+        exhaustMap((healthAuthorities: HealthAuthorityRow[]) => {
+          this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
             [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
           );
 
@@ -112,7 +97,7 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   private static isHA(obj): boolean {
-    return obj.hasUnderReviewUsers !== undefined;
+    return obj.hasOwnProperty('hasUnderReviewUsers');
   }
 
   /**
@@ -120,22 +105,22 @@ export class HealthAuthorityTableComponent implements OnInit {
    * Compare function for sorting that intends to sort Health Authorities in ascending order by their ID,
    * and group Site Registrations immediately following each related Health Authority.
    */
-  private sortData(a: HealthAuthorityListItem | HealthAuthoritySite, b: HealthAuthorityListItem | HealthAuthoritySite): number {
+  private sortData(a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number {
     if (HealthAuthorityTableComponent.isHA(a) && HealthAuthorityTableComponent.isHA(b)) {
       return a.id - b.id;
     }
     else if (HealthAuthorityTableComponent.isHA(a)) {
-      if ((a as HealthAuthorityListItem).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
+      if ((a as HealthAuthorityRow).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
         return -1;
       } else {
-        return (a as HealthAuthorityListItem).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+        return (a as HealthAuthorityRow).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
       }
     }
     else if (HealthAuthorityTableComponent.isHA(b)) {
-      if ((b as HealthAuthorityListItem).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
+      if ((b as HealthAuthorityRow).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
         return 1;
       } else {
-        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityListItem).id;
+        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityRow).id;
       }
     }
     else {
