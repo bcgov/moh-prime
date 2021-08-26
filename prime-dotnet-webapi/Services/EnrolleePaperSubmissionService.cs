@@ -245,10 +245,11 @@ namespace Prime.Services
                 .AddStatusReason(StatusReasonType.Automatic);
             enrollee.AddEnrolmentStatus(StatusType.Editable);
 
-            var submission = await _context.Submissions
-                .SingleOrDefaultAsync(s => s.EnrolleeId == enrollee.Id);
+            var submission = await _context.Submissions.SingleOrDefaultAsync(s => s.EnrolleeId == enrollee.Id);
+            _context.Remove(submission);
 
-            submission.ProfileSnapshot = _enrolleeSubmissionService.GetEnrolleeProfileSnapshot(enrollee);
+            var newSubmission = await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrolleeId, false);
+            newSubmission.AgreementType = submission.AgreementType;
 
             await _context.SaveChangesAsync();
         }

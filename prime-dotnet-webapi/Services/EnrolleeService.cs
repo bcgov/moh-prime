@@ -16,6 +16,9 @@ using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using System.Security.Claims;
 using System.Linq.Expressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.Models.VerifiableCredentials;
 
@@ -264,8 +267,7 @@ namespace Prime.Services
         private void UpdateAddress<T>(Enrollee dbEnrollee, T newAddress) where T : Address
         {
             var existingEnrolleeAddress = dbEnrollee.Addresses
-                .Where(ea => ea.Address is T)
-                .SingleOrDefault();
+                .SingleOrDefault(ea => ea.Address is T);
 
             if (existingEnrolleeAddress == null)
             {

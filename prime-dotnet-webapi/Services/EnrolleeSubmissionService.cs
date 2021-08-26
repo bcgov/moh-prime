@@ -17,13 +17,6 @@ namespace Prime.Services
 {
     public class EnrolleeSubmissionService : BaseService, IEnrolleeSubmissionService
     {
-        private readonly JsonSerializer _camelCaseSerializer = JsonSerializer.Create(
-            new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
-        );
-
         private readonly IEnrolleeService _enrolleeService;
         private readonly IMapper _mapper;
 
@@ -52,8 +45,8 @@ namespace Prime.Services
         }
 
         /**
-          * Get the most recent submission before a given date.
-          */
+         * Get the most recent submission before a given date.
+         */
         public async Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime)
         {
             return await _context.Submissions
@@ -63,14 +56,19 @@ namespace Prime.Services
                 .FirstOrDefaultAsync();
         }
 
-        public async Task CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true)
+        public async Task<Submission> CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true)
         {
             var enrollee = await _enrolleeService.GetEnrolleeNoTrackingAsync(enrolleeId);
 
             var enrolleeSubmission = new Submission
             {
-                EnrolleeId = enrollee.Id,
-                ProfileSnapshot = GetEnrolleeProfileSnapshot(enrollee),
+                EnrolleeId = enrolleeId,
+                ProfileSnapshot = JObject.FromObject(enrollee, JsonSerializer.Create(
+                    new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    })
+                ),
                 RequestedRemoteAccess = enrollee.EnrolleeRemoteUsers.Any(),
                 CreatedDate = DateTimeOffset.Now
             };
@@ -84,11 +82,8 @@ namespace Prime.Services
             _context.Submissions.Add(enrolleeSubmission);
 
             await _context.SaveChangesAsync();
-        }
 
-        public JObject GetEnrolleeProfileSnapshot(Enrollee enrollee)
-        {
-            return JObject.FromObject(enrollee, _camelCaseSerializer);
+            return enrolleeSubmission;
         }
     }
 }
