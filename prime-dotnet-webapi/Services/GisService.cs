@@ -85,28 +85,30 @@ namespace Prime.Services
             return currentGisEnrolment.Id;
         }
 
-        public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
+        public async Task<LoginStatus> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
+            var success = ldapResponse.GisUserRole == "GISUSER";
 
-            if (ldapResponse.GisUserRole != null)
+            var loginStatus = new LoginStatus
             {
-                var success = ldapResponse.GisUserRole == "GISUSER";
+                RemainingAttempts = ldapResponse.RemainingAttempts,
+                LockoutTimeInHours = ldapResponse.LockoutTimeInHours,
+                Success = success
+            };
 
-                if (success)
-                {
-                    var gisEnrolment = await _context.GisEnrolments
-                    .Include(g => g.Party)
-                    .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
+            if (success)
+            {
+                var gisEnrolment = await _context.GisEnrolments
+                .Include(g => g.Party)
+                .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
 
-                    gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
+                gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
 
-                    await _context.SaveChangesAsync();
-                }
-
-                return success;
+                await _context.SaveChangesAsync();
             }
-            return false;
+
+            return loginStatus;
         }
 
         public async Task<int> SubmitApplicationAsync(int gisId)
