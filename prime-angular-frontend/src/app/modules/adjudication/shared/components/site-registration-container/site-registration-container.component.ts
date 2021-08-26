@@ -69,7 +69,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     protected adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
     private utilResource: UtilsService,
-    private dialog: MatDialog
+    protected dialog: MatDialog
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
 
