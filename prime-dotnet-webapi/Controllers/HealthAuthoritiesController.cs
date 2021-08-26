@@ -48,6 +48,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         [HttpGet("{healthAuthorityId:int}", Name = nameof(GetHealthAuthorityById))]
+        //        [Authorize(Roles = Roles.ViewSite)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -90,6 +91,7 @@ namespace Prime.Controllers
         /// Gets all sites for any health authority.
         /// </summary>
         [HttpGet("sites", Name = nameof(GetAllHealthAuthoritySites))]
+        [Authorize(Roles = Roles.PrimeAdministrant)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<HealthAuthoritySiteViewModel>>), StatusCodes.Status200OK)]

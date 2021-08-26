@@ -15,7 +15,7 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/health-authorities/{healthAuthorityId}/sites")]
     [ApiController]
-    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.PrimeAdministrant)]
+    [Authorize(Roles = Roles.PrimeEnrollee)]
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
