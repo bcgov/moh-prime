@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels.Parties;
+using Prime.Models.Api;
+
 
 namespace Prime.Services
 {
@@ -85,22 +87,28 @@ namespace Prime.Services
 
         public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
-            var gisUserRole = await _ldapClient.GetUserAsync(username, password);
-            var success = gisUserRole == "GISUSER";
+            var ldapResponse = await _ldapClient.GetUserAsync(username, password);
 
-            if (success)
+            if (ldapResponse.GisUserRole != null)
             {
-                var gisEnrolment = await _context.GisEnrolments
-                .Include(g => g.Party)
-                .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
+                var success = ldapResponse.GisUserRole == "GISUSER";
 
-                gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
+                if (success)
+                {
+                    var gisEnrolment = await _context.GisEnrolments
+                    .Include(g => g.Party)
+                    .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
 
-                await _context.SaveChangesAsync();
+                    gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                return success;
             }
-
-            return success;
+            return false;
         }
+
 
         public async Task<int> SubmitApplicationAsync(int gisId)
         {

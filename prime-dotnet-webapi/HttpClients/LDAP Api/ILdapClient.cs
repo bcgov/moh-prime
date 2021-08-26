@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Prime.Models.Api;
 
 namespace Prime.HttpClients
 {
     public interface ILdapClient
     {
-        Task<string> GetUserAsync(string userId, string password);
+        Task<LdapResponseKeys> GetUserAsync(string userId, string password);
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.HttpClients;
 using Prime.Models.Api;
 using Prime.ViewModels.Parties;
 using System;
@@ -18,6 +19,7 @@ namespace Prime.Controllers
     public class GisController : PrimeControllerBase
     {
         private readonly IGisService _gisService;
+        private readonly ILdapClient _ldapClient;
         public GisController(IGisService gisService)
         {
             _gisService = gisService;
@@ -172,20 +174,15 @@ namespace Prime.Controllers
 
             var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
-            var throttlingParameters = new
-            {
-                remainingAttempts = 4,
-                lockoutTimeInHours = 1
-            };
+            var ldapResponse = await _ldapClient.GetUserAsync(payload.LdapUsername, payload.LdapPassword);
 
             if (result)
             {
                 return Ok();
             }
 
-            Response.Headers.Add("RemainingAttempts", throttlingParameters.remainingAttempts.ToString());
-            Response.Headers.Add("LockoutTimeInHours", throttlingParameters.lockoutTimeInHours.ToString());
-
+            Response.Headers.Add("RemainingAttempts", ldapResponse.RemainingAttempts.ToString());
+            Response.Headers.Add("LockoutTimeInHours", ldapResponse.LockoutTimeInHours.ToString());
 
             return Unauthorized();
         }
