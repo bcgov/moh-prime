@@ -727,6 +727,12 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
+        }
 
         private IQueryable<Site> GetBaseSiteQuery()
         {
