@@ -89,7 +89,7 @@ objects:
   metadata:
     annotations:
       app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]  
+        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]
     name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
@@ -132,6 +132,13 @@ objects:
             env:
               - name: DOCUMENT_MANAGER_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/docman
+            resources:
+              limits:
+                cpu: 50m
+                memory: 50Mi
+              requests:
+                cpu: 15m
+                memory: 10Mi
             readinessProbe:
               httpGet:
                 path: /
@@ -191,7 +198,7 @@ objects:
 
 #   Environment file
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-env-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -215,7 +222,7 @@ objects:
 
 #   NGINX Configuration
 - apiVersion: v1
-  kind: ConfigMap  
+  kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
     namespace: ${OC_NAMESPACE}-${OC_APP}
@@ -406,8 +413,8 @@ objects:
           ssl_certificate certs/chained.crt;
           ssl_certificate_key certs/private.key;
           server_tokens off;
-          # `ssl_verify_client` should be `on` in production
           ssl_verify_client optional_no_ca;
+          ssl_client_certificate certs/plr/trusted-ca-certs.pem;
           root /opt/app-root/src;
           index index.html index.htm;
 
@@ -552,7 +559,7 @@ objects:
           - name: PGUSER
             valueFrom:
               secretKeyRef:
-                name: pr-database-secrets                    
+                name: pr-database-secrets
                 key: database-user
           - name: PGPASSWORD
             valueFrom:
@@ -589,7 +596,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -607,10 +614,18 @@ objects:
                 protocol: TCP
               - containerPort: 8080
                 protocol: TCP
+            resources:
+              limits:
+                cpu: 50m
+                memory: 1Gi
+              requests:
+                cpu: 15m
+                memory: 500Mi
             startupProbe:
               httpGet:
                 path: /api/healthcheck
                 port: 8080
+              timeoutSeconds: 30
               failureThreshold: 30
               periodSeconds: 10
             readinessProbe:
@@ -681,7 +696,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
-  
+
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
@@ -730,6 +745,79 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-document-manager
       spec:
+        initContainers:
+        - name: run-migrations
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
+          env:
+            - name: CACHE_REDIS_HOST
+              value: ${SVC_NAME}-redis
+            - name: CACHE_REDIS_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: redis
+                  key: database-password
+            - name: CACHE_REDIS_PORT
+              value: "6379"
+            - name: DB_HOST
+              value: ${SVC_NAME}-postgres
+            - name: DB_NAME
+              value: prime-${SVC_NAME}
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: pr-database-secrets
+                  key: database-password
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: pr-database-secrets
+                  key: database-user
+            - name: DOCUMENT_MANAGER_URL
+              value: "https://${SVC_NAME}${URL_STUB}/api/docman/"
+            - name: FLASK_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_ENV
+            - name: FLASK_RUN_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_RUN_HOST
+            - name: FLASK_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_DEBUG
+            - name: FLASK_APP
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_APP
+            - name: FLASK_RUN_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: document-manager
+                  key: FLASK_RUN_PORT
+            - name: JWT_OIDC_WELL_KNOWN_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: keycloak
+                  key: JWT_WELL_KNOWN_CONFIG
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pr-database-secrets
+                  key: database-password
+          command:
+            # Script force waits migration pod execution until PostgreSQL is verified to
+            # be open to query connections.
+            - /opt/app-root/src/app.sh
+          args:
+            - migrate
         containers:
           - name: ${SVC_NAME}-document-manager
             image: >-
@@ -797,6 +885,13 @@ objects:
                   secretKeyRef:
                     name: pr-database-secrets
                     key: database-password
+            resources:
+              limits:
+                cpu: 25m
+                memory: 128Mi
+              requests:
+                cpu: 10m
+                memory: 28Mi
             volumeMounts:
             # Mount Document Manager to PVC
               - mountPath: /app/
@@ -834,7 +929,7 @@ objects:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
-  
+
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
@@ -851,121 +946,6 @@ objects:
         targetPort: 6001
     selector:
       name: ${SVC_NAME}-document-manager
-
-###########################################
-###     Document Manager (Migration)    ###
-###########################################
-### Document Manager (Migration) Deployment Config
-### Used for Alembic to run database migrations against the PostgreSQL database 
-### for all Document Manager related tables. This pod will run once PostgreSQL 
-### is verified to be open to query connections.
-- apiVersion: batch/v1
-  kind: Job
-  namespace: ${OC_NAMESPACE}-${OC_APP}
-  metadata:
-    name: ${SVC_NAME}-document-manager-migration
-    namespace: ${OC_NAMESPACE}-${OC_APP}
-    labels:
-      app.kubernetes.io/part-of: ${SVC_NAME}
-      app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-redis"}]
-  spec:
-    ttlSecondsAfterFinished: 100
-    template:
-      metadata:
-        labels:
-          dev-app: ${SVC_NAME}
-          name: ${SVC_NAME}-document-manager-migration
-      spec:
-        restartPolicy: OnFailure
-        containers:
-        - name: ${SVC_NAME}-document-manager-migration
-          image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
-          command:
-            # Script force waits migration pod execution until PostgreSQL is verified to 
-            # be open to query connections.
-            - /opt/app-root/src/app.sh
-          args: 
-            - migrate
-          env:
-            - name: CACHE_REDIS_HOST
-              value: ${SVC_NAME}-redis
-            - name: CACHE_REDIS_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: redis
-                  key: database-password
-            - name: CACHE_REDIS_PORT
-              value: "6379"
-            - name: DB_HOST
-              value: ${SVC_NAME}-postgres
-            - name: DB_NAME
-              value: prime-${SVC_NAME}
-            - name: DB_PASS
-              valueFrom:
-                secretKeyRef:
-                  name: pr-database-secrets
-                  key: database-password
-            - name: DB_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: postgresql
-                  key: postgresql_database_port
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: pr-database-secrets
-                  key: database-user
-            - name: FLASK_ENV
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_ENV
-            - name: FLASK_RUN_HOST
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_HOST
-            - name: FLASK_DEBUG
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_DEBUG
-            - name: FLASK_APP
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_APP
-            - name: FLASK_RUN_PORT
-              valueFrom:
-                configMapKeyRef:
-                  name: document-manager
-                  key: FLASK_RUN_PORT
-            - name: JWT_WELL_KNOWN_CONFIG
-              valueFrom:
-                configMapKeyRef:
-                  name: keycloak
-                  key: JWT_WELL_KNOWN_CONFIG
-            - name: PGPASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: pr-database-secrets
-                  key: database-password
-    triggers:
-      - type: ConfigChange
-      - type: ImageChange
-        imageChangeParams:
-          automatic: true
-          containerNames:
-            - ${SVC_NAME}-document-manager-migration
-          from:
-            kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
-            name: 'prime-document-manager:${IMAGE_TAG}'
-  
 
 ###########################################
 ###         PostgreSQL Database         ###
@@ -1003,7 +983,7 @@ objects:
               - name: POSTGRESQL_USER
                 valueFrom:
                   secretKeyRef:
-                    name: pr-database-secrets                    
+                    name: pr-database-secrets
                     key: database-user
               - name: POSTGRESQL_PASSWORD
                 valueFrom:
@@ -1039,7 +1019,11 @@ objects:
                 name: postgresql
             resources:
               limits:
+                cpu: 50m
                 memory: ${POSTGRES_MEMORY_LIMIT}
+              requests:
+                cpu: 10m
+                memory: 100Mi            
             securityContext:
               capabilities: {}
               privileged: false
@@ -1079,7 +1063,7 @@ objects:
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
-    annotations: 
+    annotations:
       template.openshift.io/expose-uri: postgres://{.spec.clusterIP}:{.spec.ports[?(.name=="postgresql")].port}
   spec:
     ports:
@@ -1130,7 +1114,11 @@ objects:
         containers:
           - resources:
               limits:
-                memory: 512Mi
+                cpu: 25m
+                memory: 100Mi
+              requests:
+                cpu: 5m
+                memory: 50Mi 
             readinessProbe:
               exec:
                 command:

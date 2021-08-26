@@ -75,6 +75,7 @@ import { SiteBannerListPageComponent } from './pages/site-banner-list-page/site-
 import { OrganizationToaMaintenanceListPageComponent } from './pages/organization-toa-maintenance-list-page/organization-toa-maintenance-list-page.component';
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
+import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
 
 @NgModule({
   declarations: [
@@ -143,7 +144,8 @@ import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-
     SiteBannerListPageComponent,
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent,
-    LicenseClassesMaintenancePageComponent
+    LicenseClassesMaintenancePageComponent,
+    PlrInfoComponent
   ],
   imports: [
     AdjudicationRoutingModule,

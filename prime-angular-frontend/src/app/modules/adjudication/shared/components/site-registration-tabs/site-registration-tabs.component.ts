@@ -425,7 +425,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthorityId,
         signingAuthority,
         name,
-        doingBusinessAs
+        doingBusinessAs,
+        hasClaim
       } = organization;
 
       return [{
@@ -435,6 +436,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
         signingAuthority,
         name,
         organizationDoingBusinessAs: doingBusinessAs,
+        hasClaim,
         ...this.toSiteViewModelPartial(site)
       }];
     };

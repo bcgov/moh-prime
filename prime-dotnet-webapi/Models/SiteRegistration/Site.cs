@@ -15,7 +15,8 @@ namespace Prime.Models
         {
             // Initialize collections to prevent null exception on computed properties
             // like `Status`
-            this.SiteStatuses = new List<SiteStatus>();
+            SiteStatuses = new List<SiteStatus>();
+            BusinessLicences = new List<BusinessLicence>();
         }
 
 
@@ -83,17 +84,6 @@ namespace Prime.Models
         public ICollection<SiteRegistrationNote> SiteRegistrationNotes { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
-        /// <summary>
-        /// Days in which the business has any business hours.
-        /// Only the time portion of the input parameter is considered.
-        /// </summary>
-        public IEnumerable<DayOfWeek> DaysOpen(DateTimeOffset? atTime = null)
-        {
-            return BusinessHours
-                .Where(h => atTime == null || h.IsOpen(atTime.Value))
-                .Select(b => b.Day)
-                .Distinct();
-        }
 
         public SiteStatus AddStatus(SiteStatusType siteStatusType)
         {

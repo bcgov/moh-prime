@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
-
+using Prime.Models.VerifiableCredentials;
 using Prime.Services;
 
 namespace Prime.Controllers
@@ -32,7 +31,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         // TODO update to response code 202 when queue has been added for webhooks
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] JObject data)
+        public async Task<ActionResult> Webhook(string apiKey, string topic, [FromBody] WebhookData data)
         {
             if (apiKey != PrimeEnvironment.VerifiableCredentialApi.WebhookKey)
             {

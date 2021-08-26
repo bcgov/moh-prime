@@ -38,36 +38,18 @@
   }
 }
 
-.row .info {
-  &:nth-child(1) {
-    background-image: url(/assets/approval.svg);
+$assets:
+  'approval' '/assets/approval.svg' '/assets/approval-full.svg',
+  'notification' '/assets/notification.svg' '/assets/notification-full.svg',
+  'moa' '/assets/moa.svg' '/assets/moa-full.svg',
+  'global' '/assets/global.svg' '/assets/global-full.svg';
 
-    @include media-breakpoint-up(md) {
-      background-image: url(/assets/notification-full.svg);
+  @each $name, $path, $full in $assets {
+    .#{$name} {
+      background-image: url($path);
+
+      @include media-breakpoint-up(md) {
+        background-image: url($full);
+      }
     }
   }
-
-  &:nth-child(2) {
-    background-image: url(/assets/notification.svg);
-
-    @include media-breakpoint-up(md) {
-      background-image: url(/assets/moa-full.svg);
-    }
-  }
-
-  &:nth-child(3) {
-    background-image: url(/assets/moa.svg);
-
-    @include media-breakpoint-up(md) {
-      background-image: url(/assets/approval-full.svg);
-    }
-  }
-
-  &:last-child {
-    margin-bottom: 2rem;
-
-    @include media-breakpoint-up(md) {
-      margin-bottom: 1rem;
-    }
-  }
-}

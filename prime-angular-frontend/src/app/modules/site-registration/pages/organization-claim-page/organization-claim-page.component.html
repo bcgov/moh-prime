@@ -1,0 +1,77 @@
+<app-page [busy]="busy">
+  <app-page-header>PharmaNet Site Registration</app-page-header>
+  <app-site-progress-indicator [inProgress]="!isCompleted"></app-site-progress-indicator>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>{{ title }}</ng-container>
+      <ng-container appPageSubheader2Summary>
+        You can create an Organization and its site(s), or claim an existing Organization to add or update sites.
+        Choose “Claim Organization” if you are taking over an Organization that already has sites registered in PRIME.
+        You will need to know at least one of your organization’s SiteID/PEC codes.
+      </ng-container>
+    </app-page-subheader2>
+    <mat-slide-toggle #claimExistingOrg
+                      color="primary"
+                      [checked]="isClaimExistingOrg"
+                      (change)="onClaimOrgChange($event)">
+      Claim an existing organization.
+    </mat-slide-toggle>
+  </app-page-section>
+
+  <form *ngIf="claimExistingOrg.checked"
+        [formGroup]="formState.form"
+        (ngSubmit)="onSubmit()"
+        novalidate
+        autocomplete="off">
+    <app-alert *ngIf="hasOrgClaimError"
+               type="danger"
+               icon="error_outline"
+               class="mb-4">
+      <ng-container #alertContent
+                    class="alert-content">
+        Could not claim the organization.
+      </ng-container>
+    </app-alert>
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Site ID/PEC Code</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide the PEC or SiteID for one of the sites associated with your organization. If you do not have this
+          information, contact <a href="mailto:PRIMESupport@gov.bc.ca">PRIMESupport@gov.bc.ca</a>
+        </ng-container>
+      </app-page-subheader2>
+      <mat-form-field class="w-100">
+        <input matInput
+               placeholder="Site ID/PEC Code"
+               formControlName="pec">
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </app-page-section>
+
+    <app-page-section>
+      <app-page-subheader2>
+        <ng-container appPageSubheader2Title>Change/Claim Details</ng-container>
+        <ng-container appPageSubheader2Summary>
+          Provide rationale for change in Organization Signing Authority.
+        </ng-container>
+      </app-page-subheader2>
+
+      <mat-form-field class="w-100">
+        <textarea matInput
+                  placeholder="Write Here"
+                  rows="5"
+                  formControlName="claimDetail"></textarea>
+        <mat-error>Required</mat-error>
+      </mat-form-field>
+    </app-page-section>
+
+  </form>
+
+  <app-page-footer [isInitialEnrolment]="!isCompleted"
+                   [hasSecondaryAction]="true"
+                   [primaryActionLabel]="claimExistingOrg.checked ? 'Save and Continue' : 'Continue'"
+                   (back)="onBack()"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-page>

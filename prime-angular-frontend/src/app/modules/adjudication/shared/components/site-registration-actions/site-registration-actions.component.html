@@ -44,7 +44,7 @@
             *ngIf="isActionAllowed(SiteAdjudicationAction.REQUEST_CHANGES)"
             (click)="onRequestChanges()">
       <mat-icon>lock_open</mat-icon>
-      <span>Request Changes</span>
+      <span>Enable Editing</span>
     </button>
     <button mat-menu-item
             [disabled]="!(Role.VIEW_SITE | inRole)"

@@ -2,19 +2,14 @@ import { Component, Input, OnInit, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Observable } from 'rxjs';
-
 import moment from 'moment';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
-import { BannerLocationCode } from '@shared/enums/banner-location-code.enum';
 import { BannerType } from '@shared/enums/banner-type.enum';
 import { Banner, BannerViewModel } from '@shared/models/banner.model';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 import { BannerResourceService } from '@shared/services/banner-resource.service';
-import { TechnicalSupportPageComponent } from '@registration/pages/technical-support-page/technical-support-page.component';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
@@ -35,7 +30,7 @@ export class BannerListViewComponent implements OnInit {
     private bannerResource: BannerResourceService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.LOGIN_PAGE));
-    this.dateFormatString = "MMMM Do YYYY, HH:mm";
+    this.dateFormatString = 'MMMM Do YYYY, HH:mm';
   }
 
   public onView(bannerId: number): void {
@@ -58,7 +53,7 @@ export class BannerListViewComponent implements OnInit {
       .subscribe((result: boolean) => {
         if (result) {
           this.bannerResource.deleteBanner(bannerId)
-            .subscribe(() => this.banners = this.banners.filter(b => b.id !== bannerId))
+            .subscribe(() => this.banners = this.banners.filter(b => b.id !== bannerId));
         }
       });
   }

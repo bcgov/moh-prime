@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Bogus;
 using Bogus.DataSets;
 using NUnit.Framework;
@@ -61,9 +60,14 @@ namespace TestPrimeE2E
         /// </summary>
         protected void TypeIntoField(string fieldId, string text)
         {
-            var field = _driver.FindPatiently($"//input[@data-placeholder='{fieldId}']");
+            var field = _driver.FindPatiently(GetInputFieldXPath(fieldId));
             field.Clear();
             field.SendKeys(text);
+        }
+
+        protected string GetInputFieldXPath(string fieldId)
+        {
+            return $"//input[@data-placeholder='{fieldId}']";
         }
 
 
@@ -73,19 +77,39 @@ namespace TestPrimeE2E
         }
 
 
+        protected void ClickHamburgerMenuInTable(string uniqueTextOfRow)
+        {
+            _driver.FindPatiently($"//tr[td[contains(text(), '{uniqueTextOfRow}')]]/td/button/span/mat-icon[contains(text(), 'more_vert')]").Click();
+        }
+
+
+        protected void ClickHamburgerMenuItem(string menuItemLabel)
+        {
+            _driver.FindPatiently($"//button/span[contains(text(), '{menuItemLabel}')]").Click();
+        }
+
+
         protected void SelectDropdownItem(string formControlName, string itemLabel)
         {
-            _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}']//div[contains(@class,'mat-select-value')]").Click();
+            // Drop-down lists seem like they can be rendered in a number of ways
+            var selectControl = _driver.FindPatiently($"//mat-select[@formcontrolname='{formControlName}' or @ng-reflect-name='{formControlName}']//div[contains(@class,'mat-select-value')]");
+            if (selectControl != null)
+            {
+                selectControl.Click();
+            }
+            else
+            {
+                _driver.FindPatiently($"//app-options-form[@controlname='{formControlName}']").Click();
+            }
             _driver.FindPatiently($"//span[@class='mat-option-text' and contains(text(), '{itemLabel}')]").Click();
         }
 
 
         /// <param name="month">Three character long, e.g. "MAR"</param>
-        protected void PickDate(string year, string month, string dayOfMonth)
+        protected void PickDate(string xPathToDatePicker, string year, string month, string dayOfMonth)
         {
-            // TODO: Support more than one visible calendar control
             month = month.ToUpper();
-            _driver.FindPatiently("//mat-datepicker-toggle//span[@class='mat-button-wrapper']").Click();
+            _driver.FindPatiently(xPathToDatePicker).Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{year}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{month}')]").Click();
             _driver.FindPatiently($"//div[contains(@class, 'mat-calendar-body-cell-content') and contains(text(), '{dayOfMonth}')]").Click();
@@ -94,14 +118,31 @@ namespace TestPrimeE2E
 
         protected void ClickRadioButton(string formControlName, string radioButtonLabel)
         {
-            _driver.FindPatiently($"//mat-radio-group[@formcontrolname='{formControlName}']//label[div[contains(text(), '{radioButtonLabel}')]]").Click();
+            _driver.FindPatiently(GetRadioButtonXPath(formControlName, radioButtonLabel)).Click();
         }
 
-        protected void FillFormField(string formControlName, string text)
+        protected string GetRadioButtonXPath(string formControlName, string radioButtonLabel)
         {
-            var control = _driver.FindPatiently($"//input[@formControlName='{formControlName}']");
+            return $"//mat-radio-group[@formcontrolname='{formControlName}']//label[span[contains(text(), '{radioButtonLabel}')] or div[contains(text(), '{radioButtonLabel}')]]";
+        }
+
+        /// <summary>
+        /// Specifying the <c>ancestorElement</c> can disambiguate the desired control (if necessary)
+        /// </summary>
+        protected void FillFormField(string formControlName, string text, string ancestorElement = "")
+        {
+            var control = _driver.FindPatiently(GetFormFieldXPath(formControlName, ancestorElement));
             control.Clear();
             control.SendKeys(text);
+        }
+
+        protected string GetFormFieldXPath(string formControlName, string ancestorElement = "")
+        {
+            if (!"".Equals(ancestorElement))
+            {
+                ancestorElement = "//" + ancestorElement;
+            }
+            return $"{ancestorElement}//input[@formControlName='{formControlName}']";
         }
 
 
@@ -218,6 +259,20 @@ namespace TestPrimeE2E
             }
 
             return words;
+        }
+
+
+        /// <summary>
+        /// Works for some but not all screens
+        /// </summary>
+        protected void EnterAddress(Address address)
+        {
+            ClickButton("Add address manually");
+            SelectDropdownItem("countryCode", "Canada");
+            SelectDropdownItem("provinceCode", "British Columbia");
+            FillFormField("street", address.StreetAddress());
+            FillFormField("city", address.City());
+            FillFormField("postal", GetCanadianPostalCode(address));
         }
     }
 }

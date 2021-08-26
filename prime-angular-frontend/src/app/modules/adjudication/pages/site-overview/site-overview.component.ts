@@ -4,10 +4,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, noop, of, Subscription } from 'rxjs';
+import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -20,6 +25,8 @@ import { AdjudicationResource } from '@adjudication/shared/services/adjudication
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
+import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
+import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
@@ -37,10 +44,14 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public columns: string[];
   public organization: Organization;
   public site: Site;
+  public orgClaim: OrganizationClaim;
+  public newSigningAuthority: Party;
   public businessLicences: BusinessLicence[];
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
+  public showSendNotification: boolean;
+  public isNotificationSent: boolean;
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -81,6 +92,38 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
+  public onApproveOrgClaim() {
+    this.busy = this.organizationResource
+      .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
+      .pipe(
+        exhaustMap(() => this.organizationResource.getOrganizationById(this.organization.id))
+      )
+      .subscribe((organization: Organization) => {
+        this.refresh.next(true);
+        this.organization = organization;
+      });
+  }
+
+  public onSendNotification(): void {
+    const data: DialogOptions = {
+      title: 'PharmaCare Provider Enrolment',
+      message: 'Send notification to provider enrolment team',
+      actionText: 'Send Notification',
+      component: NoteComponent
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return this.siteResource.sendSiteReviewedEmailUser(this.route.snapshot.params.sid, result.output);
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe(() => this.isNotificationSent = true);
+  }
+
   public ngOnInit(): void {
     super.ngOnInit();
 
@@ -88,15 +131,24 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
 
     const { oid, sid } = this.route.snapshot.params;
 
-    this.busy = forkJoin({
-      organization: this.organizationResource.getOrganizationById(oid),
-      site: this.siteResource.getSiteById(sid),
-      businessLicences: this.siteResource.getBusinessLicences(sid)
-    }).subscribe(({ organization, site, businessLicences }) => {
-      this.organization = organization;
-      this.site = site;
-      this.businessLicences = businessLicences;
-      this.form.get('pec').setValue(site.pec);
+    this.busy = forkJoin([
+      this.organizationResource.getOrganizationById(oid),
+      this.siteResource.getSiteById(sid),
+      this.siteResource.getBusinessLicences(sid),
+      this.organizationResource.getOrganizationClaimByOrgId(oid)
+    ]).pipe(
+      exhaustMap(([organization, site, businessLicences, orgClaim]: [Organization, Site, BusinessLicence[], OrganizationClaim]) => {
+        this.organization = organization;
+        this.site = site;
+        this.businessLicences = businessLicences;
+        this.orgClaim = orgClaim;
+        this.form.get('pec').setValue(site.pec);
+        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
+        return of(null);
+      }),
+      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
+    ).subscribe((signingAuthority: Party | null) => {
+      this.newSigningAuthority = signingAuthority;
     });
   }
 

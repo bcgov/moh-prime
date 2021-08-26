@@ -17,6 +17,7 @@ using Prime.HttpClients.DocumentManagerApiDefinitions;
 using System.Security.Claims;
 using System.Linq.Expressions;
 using Prime.ViewModels.PaperEnrollees;
+using Prime.Models.VerifiableCredentials;
 
 namespace Prime.Services
 {
@@ -127,8 +128,13 @@ namespace Prime.Services
                     .SearchCollections(e => e.Certifications.Select(c => c.LicenseNumber))
                     .Containing(searchOptions.TextSearch)
                 )
-                .If(searchOptions.StatusCode.HasValue, q => q
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode != 42, q => q
                     .Where(e => e.CurrentStatus.StatusCode == searchOptions.StatusCode.Value)
+                )
+                // MacGyver paper enrollee Filter into status Filter. arbitrarily chose 42.
+                // search-form.component.ts constructor() has other reference to this value.
+                .If(searchOptions.StatusCode.HasValue && searchOptions.StatusCode == 42, q => q
+                    .Where(e => e.GPID.StartsWith("NOBCSC"))
                 )
                 .ProjectTo<EnrolleeListViewModel>(_mapper.ConfigurationProvider, new { newestAgreementIds })
                 .DecompileAsync() // Needed to allow selecting into computed properties like DisplayId and CurrentStatus
@@ -557,9 +563,7 @@ namespace Prime.Services
                 .Include(e => e.SelfDeclarations)
                 .Include(e => e.SelfDeclarationDocuments)
                 .Include(e => e.IdentificationDocuments)
-                .Include(e => e.Agreements)
-                .Include(e => e.EnrolleeCredentials)
-                    .ThenInclude(ec => ec.Credential);
+                .Include(e => e.Agreements);
         }
 
         public async Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId)
@@ -921,6 +925,13 @@ namespace Prime.Services
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)
                 .ToListAsync();
+        }
+
+        public async Task<Credential> GetCredentialAsync(int enrolleeId)
+        {
+            return await _context.Credentials
+                .OrderByDescending(c => c.Id)
+                .FirstOrDefaultAsync(c => c.EnrolleeId == enrolleeId);
         }
 
         public async Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType)

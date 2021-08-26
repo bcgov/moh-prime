@@ -7,6 +7,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { MockOrganizationService } from 'test/mocks/mock-organization.service';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { OrganizationNamePageComponent } from './organization-name-page.component';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -29,6 +31,7 @@ describe('OrganizationNamePageComponent', () => {
         NgxMaterialModule
       ],
       providers: [
+        KeycloakService,
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
