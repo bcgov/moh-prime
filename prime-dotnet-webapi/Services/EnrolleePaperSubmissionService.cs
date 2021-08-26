@@ -249,6 +249,7 @@ namespace Prime.Services
             _context.Remove(submission);
 
             var newSubmission = await _enrolleeSubmissionService.CreateEnrolleeSubmissionAsync(enrolleeId, false);
+            newSubmission.CreatedDate = submission.CreatedDate;
             newSubmission.AgreementType = submission.AgreementType;
 
             await _context.SaveChangesAsync();
