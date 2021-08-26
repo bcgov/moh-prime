@@ -109,7 +109,6 @@ namespace Prime.Services
             return false;
         }
 
-
         public async Task<int> SubmitApplicationAsync(int gisId)
         {
             var gisEnrolment = await _context.GisEnrolments

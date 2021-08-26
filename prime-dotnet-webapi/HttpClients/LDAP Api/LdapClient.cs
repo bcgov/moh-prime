@@ -43,19 +43,16 @@ namespace Prime.HttpClients
                 if (response.IsSuccessStatusCode)
                 {
                     var successResponse = JsonConvert.DeserializeObject<GisUser>(responseJsonString);
-                    // var responseKeys = GetParameters(1, 4, successResponse.Gisuserrole);
-                    // return responseKeys;
                     var ldapResponseKeys = new LdapResponseKeys
                     {
                         RemainingAttempts = 1,
                         LockoutTimeInHours = 2,
-                        GisUserRole = successResponse.Gisuserrole
+                        GisUserRole = "no"
                     };
                     return ldapResponseKeys;
                 }
                 else
                 {
-                    // var ldapErrorParams = GetParameters(response.remainingAttempts, response.lockoutTimeInHours);
                     await LogError(response);
                     return null;
                 }
@@ -66,13 +63,6 @@ namespace Prime.HttpClients
                 return null;
             }
         }
-
-        // public async Task<LdapResponseKeys> GetParameters(int remainingAttempts, int lockoutTimeInHours, string gisUserRole)
-        // {
-
-        //     LdapResponseKeys ldapKeys = new LdapResponseKeys(remainingAttempts, lockoutTimeInHours, gisUserRole);
-        //     return ldapKeys;
-        // }
 
         public class GisUser
         {

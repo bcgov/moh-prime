@@ -8,11 +8,5 @@ namespace Prime.Models.Api
 
         public string GisUserRole { get; set; }
 
-        // public LdapResponseKeys(int remainingAttempts, int lockoutTimeInHours, string gisUserRole)
-        // {
-        //     RemainingAttempts = remainingAttempts;
-        //     LockoutTimeInHours = lockoutTimeInHours;
-        //     GisUserRole = gisUserRole;
-        // }
     }
 }
