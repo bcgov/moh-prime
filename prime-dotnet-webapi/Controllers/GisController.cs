@@ -172,11 +172,9 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var result = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
+            var ldapResponse = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
 
-            var ldapResponse = await _ldapClient.GetUserAsync(payload.LdapUsername, payload.LdapPassword);
-
-            if (result)
+            if (ldapResponse.Success)
             {
                 return Ok();
             }
