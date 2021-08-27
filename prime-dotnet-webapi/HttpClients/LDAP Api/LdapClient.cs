@@ -43,13 +43,6 @@ namespace Prime.HttpClients
                 if (response.IsSuccessStatusCode)
                 {
                     var successResponse = JsonConvert.DeserializeObject<GisUser>(responseJsonString);
-                    // when LDAP API is live uncomment and replace the object below
-                    // var ldapResponseKeys = new LdapResponseKeys
-                    // {
-                    //     RemainingAttempts = successResponse.RemainingAttempts,
-                    //     LockoutTimeInHours = successResponse.LockoutTimeInHours,
-                    //     GisUserRole = successResponse.Gisuserrole
-                    // };
                     var ldapResponseKeys = new LdapResponseKeys
                     {
                         RemainingAttempts = successResponse?.RemainingAttempts,
