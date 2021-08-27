@@ -176,7 +176,7 @@
                         matTooltip="Enrollee flagged for manual adjudication"
                         matTooltipPosition="after">flag
               </mat-icon>
-              <mat-icon *ngIf="row.confirmed && paperEnrolleeGpidFilter | contains: row.gpid"
+              <mat-icon *ngIf="row.confirmed && !(paperEnrolleeGpidFilter | contains: row.gpid)"
                         class="material-icons-outlined"
                         matTooltip="Submission confirmed"
                         matTooltipPosition="after">verified
