@@ -168,6 +168,10 @@
                         matTooltip="Submission editable"
                         matTooltipPosition="after">lock_open
               </mat-icon>
+              <mat-icon *ngIf="'NOBCSC' | contains: row.gpid"
+                        matTooltip="Paper Submission"
+                        matTooltipPosition="after">description
+              </mat-icon>
               <mat-icon *ngIf="row.alwaysManual"
                         matTooltip="Enrollee flagged for manual adjudication"
                         matTooltipPosition="after">flag
