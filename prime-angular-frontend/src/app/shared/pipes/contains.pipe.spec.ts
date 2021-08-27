@@ -41,26 +41,26 @@ fdescribe('ContainsPipe', () => {
   describe('testing with string ends', () => {
     it('should return true', () => () => {
       word = 'World';
-      expect(pipe.transform(word, line, 'ends')).toBeTruthy();
+      expect(pipe.transform(word, line, 'end')).toBeTruthy();
     });
 
     it('should return false', () => () => {
       word = 'Hello';
-      expect(pipe.transform(word, line, 'ends')).toBeFalsy();
+      expect(pipe.transform(word, line, 'end')).toBeFalsy();
     });
   });
 
   describe('testing with null values', () => {
     it('should return false with 1 null value for line', () => () => {
-      expect(pipe.transform(word, null, 'ends')).toBeFalsy();
+      expect(pipe.transform(word, null, 'end')).toBeFalsy();
     });
 
     it('should return false with 1 null value for word', () => () => {
-      expect(pipe.transform(null, line, 'ends')).toBeFalsy();
+      expect(pipe.transform(null, line, 'end')).toBeFalsy();
     });
 
     it('should return false with 2 null values', () => () => {
-      expect(pipe.transform(null, null, 'ends')).toBeFalsy();
+      expect(pipe.transform(null, null, 'end')).toBeFalsy();
     });
   });
 });
