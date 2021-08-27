@@ -12,6 +12,9 @@ export class ContainsPipe implements PipeTransform {
     position: 'startsWith' | 'endsWith' | 'withIn' = 'withIn'): boolean {
     if (!line && !word && typeof line === 'string' && typeof word === 'string'){
       switch (position) {
+        case 'withIn':  {
+          return line.includes(word);
+        }
         case 'startsWith': {
           return line.startsWith(word);
         }
@@ -19,7 +22,7 @@ export class ContainsPipe implements PipeTransform {
           return line.endsWith(word);
         }
         default: {
-          return line.includes(word);
+          throw new Error(`Invalid "position" argument specified: ${position}`);
         }
       };
     }
