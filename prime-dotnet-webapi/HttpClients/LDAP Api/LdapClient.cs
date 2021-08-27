@@ -52,9 +52,9 @@ namespace Prime.HttpClients
                     // };
                     var ldapResponseKeys = new LdapResponseKeys
                     {
-                        RemainingAttempts = 0,
-                        LockoutTimeInHours = 2,
-                        GisUserRole = "no"
+                        RemainingAttempts = successResponse?.RemainingAttempts,
+                        LockoutTimeInHours = successResponse?.LockoutTimeInHours,
+                        GisUserRole = successResponse?.Gisuserrole
                     };
                     return ldapResponseKeys;
                 }
