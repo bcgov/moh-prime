@@ -74,5 +74,7 @@ namespace Prime.ViewModels
         public bool RequiresConfirmation { get; set; }
 
         public bool Confirmed { get; set; }
+        
+        public string GPID { get; set; }
     }
 }

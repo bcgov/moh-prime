@@ -56,6 +56,7 @@ export class EnrolleeTableComponent implements OnInit, OnChanges {
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public Role = Role;
+  public readonly paperEnrolleeGpidFilter = 'NOBCSC';
 
   constructor(
     private fb: FormBuilder,
