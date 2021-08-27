@@ -4,9 +4,9 @@
 
   <app-page-section>
     <app-page-subheader2>
-      <ng-container appPageSubheader2Title>Upload Information</ng-container>
+      <ng-container appPageSubheader2Title>Upload Documents</ng-container>
       <ng-container appPageSubheader2Summary>
-        Upload the documents associated with this enrolment including the TOA.
+        Upload the documents associated with this enrolment.
       </ng-container>
     </app-page-subheader2>
 
@@ -62,6 +62,36 @@
       </mat-form-field>
 
     </form>
+  </app-page-section>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Supporting ID</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Upload any supporting documents included in the submission
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-document-upload #documentUpload
+                         componentName="adjudication-document"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event)"></app-document-upload>
+  </app-page-section>
+
+  <app-page-section>
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Paper Form</ng-container>
+      <ng-container appPageSubheader2Summary>
+        Upload the paper form submitted by the user
+      </ng-container>
+    </app-page-subheader2>
+
+    <app-document-upload #documentUpload
+                         componentName="adjudication-document"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event)"></app-document-upload>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"
