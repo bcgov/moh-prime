@@ -21,9 +21,6 @@ export class ContainsPipe implements PipeTransform {
         case 'endsWith': {
           return line.endsWith(word);
         }
-        default: {
-          throw new Error(`Invalid "position" argument specified: ${position}`);
-        }
       };
     }
     return false;
