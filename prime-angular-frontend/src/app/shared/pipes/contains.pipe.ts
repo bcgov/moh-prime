@@ -6,17 +6,17 @@ import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.servic
 })
 export class ContainsPipe implements PipeTransform {
 
-  transform(value: string, line: string, position: string = ''): boolean {
-    if (line != null && value != null){
+  transform(word: string, line: string, position: string = ''): boolean {
+    if (line != null && word != null){
       switch (position) {
-        case '': {
-          return line.includes(value);
-        }
         case "start": {
-          return line.startsWith(value);
+          return line.startsWith(word);
         }
         case "end": {
-          return line.endsWith(value);
+          return line.endsWith(word);
+        }
+        default: {
+          return line.includes(word);
         }
       };
     }
