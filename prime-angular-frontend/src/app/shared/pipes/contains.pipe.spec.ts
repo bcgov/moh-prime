@@ -1,12 +1,11 @@
 import { ContainsPipe } from './contains.pipe';
 
 fdescribe('ContainsPipe', () => {
+  const line = 'Hello World';
   let pipe: ContainsPipe;
-  let line: string;
   let word;
   beforeEach(() => {
     pipe = new ContainsPipe(),
-    line = 'Hello World';
     word = '';
   });
 
