@@ -1,4 +1,7 @@
 @import 'palette';
+@import 'mixins/statuses';
+
+@include statuses;
 
 .prefix {
   width: 2rem;
@@ -12,9 +15,10 @@
   color: theme-palette(yellow);
 }
 
-.mat-expansion-panel-header {
-  /* For more info, see https://stackoverflow.com/questions/49747188/material-angular-accordion-header-title-height */
-  height: auto;
-  padding-top: 12px;
-  padding-bottom: 12px;
+.health-auth-header {
+  color: theme-palette(blue);
+}
+
+.health-auth-site-menu {
+  color: theme-palette(blue);
 }
