@@ -22,5 +22,4 @@ export class ContainsPipe implements PipeTransform {
     }
     return false;
   }
-
 }

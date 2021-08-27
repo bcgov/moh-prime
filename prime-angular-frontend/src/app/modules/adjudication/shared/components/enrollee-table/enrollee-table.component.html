@@ -168,7 +168,7 @@
                         matTooltip="Submission editable"
                         matTooltipPosition="after">lock_open
               </mat-icon>
-              <mat-icon *ngIf="'NOBCSC' | contains: row.gpid"
+              <mat-icon *ngIf="paperEnrolleeGpidFilter | contains: row.gpid"
                         matTooltip="Paper Submission"
                         matTooltipPosition="after">description
               </mat-icon>
