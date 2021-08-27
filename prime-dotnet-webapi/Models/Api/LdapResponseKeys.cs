@@ -7,6 +7,5 @@ namespace Prime.Models.Api
         public int? LockoutTimeInHours { get; set; }
 
         public string GisUserRole { get; set; }
-
     }
 }
