@@ -1,6 +1,6 @@
 import { ContainsPipe } from './contains.pipe';
 
-fdescribe('ContainsPipe', () => {
+describe('ContainsPipe', () => {
   const line = 'Hello World';
   let pipe: ContainsPipe;
   let word;
@@ -26,41 +26,41 @@ fdescribe('ContainsPipe', () => {
     });
   });
 
-  describe('testing with string starts', () => {
+  describe('testing with string startsWith', () => {
     it('should return true', () => () => {
       word = 'Hello';
-      expect(pipe.transform(word, line, 'start')).toBeTruthy();
+      expect(pipe.transform(word, line, 'startsWith')).toBeTruthy();
     });
 
     it('should return false', () => () => {
       word = 'World';
-      expect(pipe.transform(word, line, 'start')).toBeFalsy();
+      expect(pipe.transform(word, line, 'startsWith')).toBeFalsy();
     });
   });
 
   describe('testing with string ends', () => {
     it('should return true', () => () => {
       word = 'World';
-      expect(pipe.transform(word, line, 'end')).toBeTruthy();
+      expect(pipe.transform(word, line, 'endsWith')).toBeTruthy();
     });
 
     it('should return false', () => () => {
       word = 'Hello';
-      expect(pipe.transform(word, line, 'end')).toBeFalsy();
+      expect(pipe.transform(word, line, 'endsWith')).toBeFalsy();
     });
   });
 
   describe('testing with null values', () => {
     it('should return false with 1 null value for line', () => () => {
-      expect(pipe.transform(word, null, 'end')).toBeFalsy();
+      expect(pipe.transform(word, null)).toBeFalsy();
     });
 
     it('should return false with 1 null value for word', () => () => {
-      expect(pipe.transform(null, line, 'end')).toBeFalsy();
+      expect(pipe.transform(null, line)).toBeFalsy();
     });
 
     it('should return false with 2 null values', () => () => {
-      expect(pipe.transform(null, null, 'end')).toBeFalsy();
+      expect(pipe.transform(null, null)).toBeFalsy();
     });
   });
 });
