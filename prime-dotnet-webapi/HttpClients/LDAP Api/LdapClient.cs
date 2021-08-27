@@ -70,11 +70,6 @@ namespace Prime.HttpClients
             public string Authenticated { get; set; }
             public string Unlocked { get; set; }
             public string Username { get; set; }
-            public GisUser()
-            {
-                RemainingAttempts = 0;
-                LockoutTimeInHours = 0;
-            }
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)
