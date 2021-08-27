@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 
@@ -19,10 +19,9 @@ interface SelfDeclarationComposite {
 @Component({
   selector: 'app-enrollee-self-declarations',
   templateUrl: './enrollee-self-declarations.component.html',
-  styleUrls: ['./enrollee-self-declarations.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./enrollee-self-declarations.component.scss']
 })
-export class EnrolleeSelfDeclarationsComponent implements OnInit {
+export class EnrolleeSelfDeclarationsComponent implements OnChanges {
   @Input() public enrolment: Enrolment;
   /**
    * @description
@@ -45,8 +44,11 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  public ngOnInit(): void {
-    this.createSelfDeclarationComposites();
+  public ngOnChanges(changes: SimpleChanges): void {
+    const selfDeclarations = changes.enrolment.currentValue.selfDeclarations;
+    this.selfDeclarationComposites = (selfDeclarations)
+      ? this.createSelfDeclarationComposites()
+      : [];
   }
 
   private createSelfDeclarationComposites() {
@@ -58,7 +60,7 @@ export class EnrolleeSelfDeclarationsComponent implements OnInit {
         .map(type => this.createSelfDeclarationComposite(type))
       : [];
 
-    this.selfDeclarationComposites = this.enrolment.selfDeclarations
+    return this.enrolment.selfDeclarations
       .map((selfDeclaration: SelfDeclaration) => {
         const selfDeclarationTypeCode = selfDeclaration.selfDeclarationTypeCode;
         const selfDeclarationDocuments = this.enrolment.selfDeclarationDocuments
