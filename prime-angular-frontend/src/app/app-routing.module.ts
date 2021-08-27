@@ -9,17 +9,27 @@ import { HelpComponent } from '@lib/modules/root-routes/components/help/help.com
 import { UnderagedComponent } from '@lib/modules/root-routes/components/underaged/underaged.component';
 
 import { AuthRoutes } from '@auth/auth.routes';
+import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
+import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { PaperEnrolmentRoutes } from './modules/paper-enrolment/paper-enrolment.routes';
+import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 
 const routes: Routes = [
   {
     path: AuthRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: EnrolmentRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/enrolment/enrolment.module').then(m => m.EnrolmentModule)
+  },
+  {
+    path: SiteRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/site-registration/site-registration.module').then(m => m.SiteRegistrationModule)
   },
   {
     path: AdjudicationRoutes.MODULE_PATH,
