@@ -17,6 +17,7 @@ import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
 import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
 import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page-form-state.class';
+import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private uniquePecValidator: UniquePecValidator
   ) {
     super(fb, routeStateService, logger);
 
@@ -132,7 +134,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   protected buildForms() {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb);
+    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb, this.uniquePecValidator);
     this.businessLicenceRenewalPageFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);

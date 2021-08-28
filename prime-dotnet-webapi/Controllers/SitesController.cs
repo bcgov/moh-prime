@@ -1146,5 +1146,28 @@ namespace Prime.Controllers
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
         }
+
+        // GET: api/sites/site-exists
+        /// <summary>
+        /// Check if a given PEC already exists in sites,
+        /// not applicable to health authority site
+        /// </summary>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpGet("site-exists", Name = nameof(SiteExists))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> SiteExists(string pec)
+        {
+            if (string.IsNullOrEmpty(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            var exist = await _siteService.SiteExists(pec);
+            return Ok(exist);
+        }
     }
 }

@@ -734,6 +734,13 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
+        public async Task<bool> SiteExists(string pec)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+        }
+
         private IQueryable<Site> GetBaseSiteQuery()
         {
             return _context.Sites

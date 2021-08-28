@@ -1,6 +1,7 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
+import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
@@ -8,7 +9,8 @@ interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'p
 
 export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
   public constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private uniquePecValidator: UniquePecValidator
   ) {
     super();
 
@@ -78,7 +80,8 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       ],
       pec: [
         null,
-        [Validators.required]
+        [Validators.required],
+        this.uniquePecValidator.validate.bind(this.uniquePecValidator)
       ]
     });
   }

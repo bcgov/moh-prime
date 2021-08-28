@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -13,6 +13,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -64,6 +65,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     protected siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
+    private uniquePecValidator: UniquePecValidator,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService
@@ -81,6 +83,10 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
+  }
+
+  public get pec(): FormControl {
+    return this.form.get('pec') as FormControl;
   }
 
   public onSubmit() {
@@ -156,7 +162,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.form = this.fb.group({
       pec: [
         '',
-        [Validators.required]
+        [Validators.required],
+        this.uniquePecValidator.validate.bind(this.uniquePecValidator)
       ]
     });
   }
