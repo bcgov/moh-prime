@@ -129,7 +129,8 @@
         <td colspan="7"
             mat-cell
             *matCellDef="let groupBy"
-            class="health-auth-header">
+            class="health-auth-header"
+            [ngClass]="{'health-auth-header-expanded': groupBy.id === expandedHealthAuthId}">
           <button mat-icon-button
                   title="Expand"
                   (click)="onExpandHeader(groupBy)"

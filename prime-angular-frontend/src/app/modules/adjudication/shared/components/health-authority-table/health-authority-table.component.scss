@@ -17,6 +17,12 @@
 
 .health-auth-header {
   color: theme-palette(blue);
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.health-auth-header-expanded {
+  background-color: theme-palette(blue, lightest);
 }
 
 .health-auth-site-menu {
