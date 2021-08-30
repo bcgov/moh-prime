@@ -83,6 +83,6 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
         [Validators.required],
         this.uniquePecValidator.validate.bind(this.uniquePecValidator)
       ]
-    });
+    }, { updateOn: 'blur'});
   }
 }

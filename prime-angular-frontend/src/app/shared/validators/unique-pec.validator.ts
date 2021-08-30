@@ -11,7 +11,7 @@ export class UniquePecValidator implements AsyncValidator {
   constructor(private siteResource: SiteResource) { }
 
   public validate(control: AbstractControl): Promise<ValidationErrors> | Observable<ValidationErrors> {
-    return this.siteResource.siteExists(control.value)
+    return this.siteResource.pecExists(control.value)
       .pipe(
         map(pecExists => pecExists ? { pecExists } : null)
       );

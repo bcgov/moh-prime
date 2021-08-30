@@ -90,6 +90,16 @@ namespace Prime.Services
         {
             var currentSite = await GetSiteAsync(siteId);
 
+            // for non health authority site, PEC needs to be unique
+            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority)
+            {
+                var ids = await GetNonHaSiteIdsByPec(updatedSite.PEC);
+                if (ids.Count() > 0 && !ids.Contains(siteId))
+                {
+                    return 0;
+                }
+            }
+
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
             if (currentSite.SubmittedDate == null)
@@ -281,6 +291,16 @@ namespace Prime.Services
         {
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
+
+            // for non health authority site, PEC needs to be unique
+            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority)
+            {
+                var ids = await GetNonHaSiteIdsByPec(pecCode);
+                if (ids.Count() > 0 && !ids.Contains(siteId))
+                {
+                    throw new InvalidOperationException($"Could not update the site.");
+                }
+            }
 
             site.PEC = pecCode;
 
@@ -734,11 +754,13 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<bool> SiteExists(string pec)
+        public async Task<IEnumerable<int>> GetNonHaSiteIdsByPec(string searchPec)
         {
             return await _context.Sites
                 .AsNoTracking()
-                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+                .Where(s => s.PEC == searchPec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority)
+                .Select(s => s.Id)
+                .ToListAsync();
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

@@ -518,14 +518,14 @@ export class SiteResource {
       );
   }
 
-  public siteExists(pec: string): Observable<boolean> {
+  public pecExists(pec: string): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams({ pec });
-    return this.apiResource.get(`sites/site-exists`, params)
+    return this.apiResource.get(`sites/pec-exists`, params)
       .pipe(
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Could not check site existence');
-          this.logger.error('[SiteRegistration] SiteResource::siteExists error has occurred: ', error);
+          this.toastService.openErrorToast('Could not check PEC existence');
+          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
           throw error;
         })
       );

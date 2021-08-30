@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -1147,26 +1148,26 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        // GET: api/sites/site-exists
+        // GET: api/sites/pec-exists
         /// <summary>
-        /// Check if a given PEC already exists in sites,
-        /// not applicable to health authority site
+        /// Check if a given PEC already exists, only applicable to non health authority site
         /// </summary>
         /// <param name="pec"></param>
         /// <returns></returns>
-        [HttpGet("site-exists", Name = nameof(SiteExists))]
+        [HttpGet("pec-exists", Name = nameof(PecExists))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> SiteExists(string pec)
+        public async Task<ActionResult> PecExists(string pec)
         {
-            if (string.IsNullOrEmpty(pec))
+            if (string.IsNullOrWhiteSpace(pec))
             {
                 return BadRequest("PEC cannot be empty.");
             }
 
-            var exist = await _siteService.SiteExists(pec);
+            var ids = await _siteService.GetNonHaSiteIdsByPec(pec);
+            var exist = ids.Count() > 0;
             return Ok(exist);
         }
     }
