@@ -3,14 +3,13 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ConfigService } from '@config/config.service';
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { exhaustMap, mergeMap } from 'rxjs/operators';
-import { from, of } from 'rxjs';
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
@@ -56,15 +55,6 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  // TODO: Eliminate duplication as this method very similar to that from SiteRegistrationTableComponent
-  public remoteUsers(healthAuthoritySite: HealthAuthoritySite): number | 'Yes' | 'No' {
-    const count = healthAuthoritySite.remoteUsers?.length;
-
-    return (!this.activatedRoute.snapshot.params.sid)
-      ? (count) ? 'Yes' : 'No'
-      : count;
-  }
-
   public isHealthAuthorityObject(rowData): boolean {
     return rowData.hasOwnProperty('hasUnderReviewUsers');
   }
@@ -81,24 +71,19 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.healthAuthorityResource.getHealthAuthorities()
-      .pipe(
-        exhaustMap((healthAuthorities: HealthAuthorityRow[]) => {
-          this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
-            [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
-          );
-
-          this.dataSource.data = healthAuthorities;
-          return of(null);
-        }),
-        mergeMap(() => this.healthAuthorityResource.getAllHealthAuthoritySites())
-      )
-      .subscribe((sites: HealthAuthoritySite[]) => {
+    forkJoin({
+      healthAuthorities: this.healthAuthorityResource.getHealthAuthorities(),
+      healthAuthoritySites: this.healthAuthorityResource.getAllHealthAuthoritySites()
+    }).pipe(
+      map(({ healthAuthorities, healthAuthoritySites }) => {
+        this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
+          [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
+        );
         // Sort HAs together with HA Site Registrations
-        this.dataSource.data = [...this.dataSource.data, ...sites].sort(this.sortData());
-      });
+        this.dataSource.data = [...healthAuthorities, ...healthAuthoritySites].sort(this.sortData());
+      })
+    ).subscribe();
   }
-
 
   /**
    * @description

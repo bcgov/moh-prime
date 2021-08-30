@@ -90,7 +90,7 @@
             scope="col"> Remote Users
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ remoteUsers(row) | default }} </td>
+            *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
       </ng-container>
 
       <ng-container matColumnDef="haActions">
