@@ -11,7 +11,7 @@ main() {
 
   psql -V
 
-  echo -e "Realm:  ${KEYCLOAK_REALM}"
+  echo -e "PGHOST:  ${PGHOST}"
 
   ls -l /opt/certs
 
