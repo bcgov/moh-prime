@@ -1,10 +1,9 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
 import { MockConfig } from './mock-config';
 
-import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { Configuration } from '@config/config.model';
 import { IConfigService, ConfigService } from '@config/config.service';
 import { ApiResource } from '@core/resources/api-resource.service';
