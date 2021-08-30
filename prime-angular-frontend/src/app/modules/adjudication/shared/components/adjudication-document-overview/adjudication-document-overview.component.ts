@@ -1,33 +1,21 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
-import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { UploadForm } from './upload-form.model';
+import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
 
 @Component({
-  selector: 'app-upload-overview',
+  selector: 'app-adjudication-document-overview',
   template: `
     <app-page-section>
       <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
-
-        <button *ngIf="true"
-                mat-icon-button
-                matTooltip="Edit Upload Information"
-                (click)="onRoute(PaperEnrolmentRoutes.UPLOAD)">
-          <mat-icon>edit</mat-icon>
-        </button>
+        <ng-container appPageSubheaderTitle>Submitted Documents</ng-container>
       </app-page-subheader>
-      <app-enrollee-property title="TOA Type">
-        {{ PaperEnrolmentAgreementTypeNameMap[upload?.assignedTOAType] }}
-      </app-enrollee-property>
 
       <app-enrollee-property *ngIf="documents?.length"
-                             title="Filename(s)">
+                            title="Filename">
         <ng-container *ngFor="let document of documents">
           <button mat-stroked-button
                   color="primary"
@@ -45,14 +33,12 @@ import { UploadForm } from './upload-form.model';
     '.mat-icon { font-size: 1.2em; }',
     '.button > .mat-icon { font-size: 1.35rem; }'
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UploadOverviewComponent extends AbstractOverview {
-  @Input() public upload: UploadForm;
+export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
   @Input() public documents: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
-  public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
+  public PaperEnrolmentRoutes = PaperEnrolmentRoutes
 
   constructor(
     route: ActivatedRoute,
@@ -66,4 +52,5 @@ export class UploadOverviewComponent extends AbstractOverview {
   public downloadDocument(documentId: number): void {
     this.download.emit({ documentId });
   }
+
 }

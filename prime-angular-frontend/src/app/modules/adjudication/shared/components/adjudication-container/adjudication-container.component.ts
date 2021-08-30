@@ -61,7 +61,7 @@ export class AdjudicationContainerComponent implements OnInit {
     protected adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
     private dialog: MatDialog,
-    private utilsService: UtilsService,
+    protected utilsService: UtilsService,
     protected toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
