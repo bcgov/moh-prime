@@ -320,7 +320,7 @@ namespace Prime.Models
         {
             if (Certifications == null)
             {
-                throw new InvalidOperationException($"{nameof(Certifications)} cannnot be null");
+                throw new InvalidOperationException($"{nameof(Certifications)} cannot be null");
             }
 
             return Certifications.Any(cert => cert.License?.NamedInImReg == true);
