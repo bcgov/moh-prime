@@ -7,15 +7,10 @@ main() {
 
   echo -e "-------- STARTING CRON --------\n"
 
-  openssl help
-
-  psql -V
-
-  echo -e "PGHOST:  ${PGHOST}"
+  LAST_TX_ID=psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -W ${PGPASSWORD} -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl'
+  echo -e ${LAST_TX_ID}
 
   ls -l /opt/certs
-
-  # ls -l /opt/app-root/etc/certs
 }
 
 main  # Ensure the whole file is downloaded before executing
