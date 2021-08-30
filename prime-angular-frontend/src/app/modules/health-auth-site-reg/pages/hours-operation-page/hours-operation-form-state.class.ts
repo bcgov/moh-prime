@@ -1,4 +1,4 @@
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormGroupValidators } from '@lib/validators/form-group.validators';
@@ -74,7 +74,7 @@ export class HoursOperationFormState extends AbstractFormState<HoursOperationFor
       this.fb.group({
         startTime: [null, []],
         endTime: [null, []],
-      }, { validator: FormGroupValidators.lessThan('startTime', 'endTime') })
+      }, { validators: FormGroupValidators.lessThan('startTime', 'endTime') })
     );
 
     this.formInstance = this.fb.group({
