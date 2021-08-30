@@ -155,16 +155,16 @@ namespace Prime
             .AddTransient<BearerTokenHandler<DocumentManagerClientCredentials>>()
             .AddSingleton(new DocumentManagerClientCredentials
             {
-                Address = PrimeEnvironment.Keycloak.TokenUrl,
+                Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
                 ClientId = PrimeEnvironment.DocumentManager.ClientId,
                 ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
             })
             .AddTransient<BearerTokenHandler<KeycloakAdministrationClientCredentials>>()
             .AddSingleton(new KeycloakAdministrationClientCredentials
             {
-                Address = PrimeEnvironment.Keycloak.TokenUrl,
-                ClientId = PrimeEnvironment.Keycloak.AdministrationClientId,
-                ClientSecret = PrimeEnvironment.Keycloak.AdministrationClientSecret,
+                Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
+                ClientId = PrimeEnvironment.PrimeKeycloak.AdministrationClientId,
+                ClientSecret = PrimeEnvironment.PrimeKeycloak.AdministrationClientSecret,
             });
 
             // Clients
@@ -193,7 +193,7 @@ namespace Prime
 
             services.AddHttpClient<IKeycloakAdministrationClient, KeycloakAdministrationClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeEnvironment.Keycloak.AdministrationUrl.EnsureTrailingSlash());
+                client.BaseAddress = new Uri(PrimeEnvironment.PrimeKeycloak.AdministrationUrl.EnsureTrailingSlash());
             })
             .AddHttpMessageHandler<BearerTokenHandler<KeycloakAdministrationClientCredentials>>();
 

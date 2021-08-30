@@ -21,7 +21,7 @@ namespace Prime
             public static readonly string ClientSecret = GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
-        public static class Keycloak
+        public static class PrimeKeycloak
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("KEYCLOAK_REALM_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
@@ -35,6 +35,9 @@ namespace Prime
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("MOH_KEYCLOAK_REALM_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
+            public static readonly string AdministrationUrl = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/admin/realms/moh_applications";
+            public static readonly string AdministrationClientId = "PRIME-WEBAPP-ENROLLMENT";
+            public static readonly string AdministrationClientSecret = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
         }
 
         public static class MailServer
