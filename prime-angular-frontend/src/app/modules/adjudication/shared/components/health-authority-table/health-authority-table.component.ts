@@ -69,8 +69,11 @@ export class HealthAuthorityTableComponent implements OnInit {
     return rowData.hasOwnProperty('hasUnderReviewUsers');
   }
 
-  public isGroup(index: number, rowData: HealthAuthorityRow | HealthAuthoritySite): boolean {
-    return HealthAuthorityTableComponent.isHA(rowData);
+  public isGroup(): (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite) => boolean {
+    // Return ES6 Arrow Function to avoid use of `.bind(this)` or static functions
+    return (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite): boolean => {
+      return this.isHealthAuthorityObject(rowData);
+    }
   }
 
   public onExpandHeader(item: HealthAuthorityRow): void {
@@ -92,39 +95,39 @@ export class HealthAuthorityTableComponent implements OnInit {
       )
       .subscribe((sites: HealthAuthoritySite[]) => {
         // Sort HAs together with HA Site Registrations
-        this.dataSource.data = [...this.dataSource.data, ...sites].sort(this.sortData);
+        this.dataSource.data = [...this.dataSource.data, ...sites].sort(this.sortData());
       });
   }
 
-  private static isHA(obj): boolean {
-    return obj.hasOwnProperty('hasUnderReviewUsers');
-  }
 
   /**
    * @description
    * Compare function for sorting that intends to sort Health Authorities in ascending order by their ID,
    * and group Site Registrations immediately following each related Health Authority.
    */
-  private sortData(a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number {
-    if (HealthAuthorityTableComponent.isHA(a) && HealthAuthorityTableComponent.isHA(b)) {
-      return a.id - b.id;
-    }
-    else if (HealthAuthorityTableComponent.isHA(a)) {
-      if ((a as HealthAuthorityRow).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
-        return -1;
-      } else {
-        return (a as HealthAuthorityRow).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+  private sortData(): (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite) => number {
+    // Return ES6 Arrow Function to avoid use of `.bind(this)` or static functions
+    return (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number => {
+      if (this.isHealthAuthorityObject(a) && this.isHealthAuthorityObject(b)) {
+        return a.id - b.id;
       }
-    }
-    else if (HealthAuthorityTableComponent.isHA(b)) {
-      if ((b as HealthAuthorityRow).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
-        return 1;
-      } else {
-        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityRow).id;
+      else if (this.isHealthAuthorityObject(a)) {
+        if ((a as HealthAuthorityRow).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
+          return -1;
+        } else {
+          return (a as HealthAuthorityRow).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+        }
       }
-    }
-    else {
-      return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+      else if (this.isHealthAuthorityObject(b)) {
+        if ((b as HealthAuthorityRow).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
+          return 1;
+        } else {
+          return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityRow).id;
+        }
+      }
+      else {
+        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
+      }
     }
   }
 }
