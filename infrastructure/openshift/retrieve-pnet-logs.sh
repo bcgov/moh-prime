@@ -7,13 +7,13 @@ main() {
 
   echo -e "-------- STARTING CRON --------\n"
 
-  echo -e "Realm:  ${KEYCLOAK_REALM}"
-
-  ls -l /opt/app-root/etc/certs
-
   openssl help
 
   psql -V
+
+  echo -e "Realm:  ${KEYCLOAK_REALM}"
+
+  ls -l /opt/app-root/etc/certs
 }
 
 main  # Ensure the whole file is downloaded before executing
