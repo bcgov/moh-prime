@@ -50,6 +50,9 @@
             <app-review-status-content [enrollee]="enrollee"
                                        [hideStatusHistory]="true">
             </app-review-status-content>
+            <app-adjudication-document-overview [documents]="documents"
+                                                (download)="onDownload($event)">
+            </app-adjudication-document-overview>
           </mat-card-content>
         </mat-card>
       </ng-container>
