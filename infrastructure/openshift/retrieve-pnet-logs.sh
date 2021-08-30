@@ -13,7 +13,9 @@ main() {
 
   echo -e "Realm:  ${KEYCLOAK_REALM}"
 
-  ls -l /opt/app-root/etc/certs
+  ls -l
+
+  # ls -l /opt/app-root/etc/certs
 }
 
 main  # Ensure the whole file is downloaded before executing
