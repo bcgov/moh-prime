@@ -1,12 +1,10 @@
-# Based on update-email-statuses.cron.yml
-#
 apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   annotations:
-    description: Template for job that activates api to update email statuses
+    description: Template for job that activates api to send renewal emails
     tags: cronjob
-  name: update-email-statuses-cronjob-template
+  name: send-renewal-emails-cronjob-template
 objects:
   - apiVersion: batch/v1beta1
     kind: CronJob
@@ -33,14 +31,14 @@ objects:
                       -H "Content-Type: application/x-www-form-urlencoded" \
                       -d "grant_type=client_credentials" \
                       -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                      -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print json.load(sys.stdin)['access_token']")
+                      -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
 
                     echo -e ${TOKEN}
 
                     echo -e "-------- Calling PRIME API --------\n"
 
                     curl -v -X POST
-                    http://dotnet-webapi${SUFFIX}:8080/api/Emails/management/statuses
+                    http://${PREFIX}-webapi:8080/api/Emails/management/enrollees/renewal
                     \
                       -H "Authorization: Bearer ${TOKEN}" \
                       -H "Content-Length: 0"
@@ -68,7 +66,7 @@ objects:
                           key: KEYCLOAK_REALM
                           name: keycloak
                   image: >-
-                    docker-registry.default.svc:5000/openshift/base-centos7:latest
+                    image-registry.openshift-image-registry.svc:5000/openshift/python:3.8
                   limits:
                     cpu: 500m
                     memory: 2Gi
@@ -80,11 +78,11 @@ objects:
               restartPolicy: Never
       schedule: '${CRON_SCHEDULE}'
 parameters:
-  - description: 'Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
+  - description: 'Cron-like schedule expression. Default: Once a day at 11 PM'
     name: CRON_SCHEDULE
-    value: '0 */6 * * *'
+    value: '0 23 * * *'
   - name: CRON_NAME
-    value: update-email-statuses-cronjob
-  - description: 'Environment name suffix appended to all OpenShift objects'
-    name: SUFFIX
+    value: send-renewal-emails-cronjob
+  - description: 'Environment name prefix prepended to all OpenShift objects'
+    name: PREFIX
     required: false
