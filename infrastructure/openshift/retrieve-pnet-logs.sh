@@ -13,7 +13,7 @@ main() {
 
   echo -e "Realm:  ${KEYCLOAK_REALM}"
 
-  ls -l
+  ls -l /opt
 
   # ls -l /opt/app-root/etc/certs
 }
