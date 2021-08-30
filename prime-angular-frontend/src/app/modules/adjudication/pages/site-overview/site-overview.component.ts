@@ -13,7 +13,7 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
+import { UniquePecValidator } from '@lib/validators/unique-pec.validator';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';

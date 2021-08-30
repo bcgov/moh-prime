@@ -1,7 +1,7 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
+import { UniquePecValidator } from '@lib/validators/unique-pec.validator';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 

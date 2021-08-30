@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, AbstractControl } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
+import { UniquePecValidator } from '@lib/validators/unique-pec.validator';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -17,7 +18,6 @@ import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
 import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
 import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page-form-state.class';
-import { UniquePecValidator } from '@shared/validators/unique-pec.validator';
 
 @Injectable({
   providedIn: 'root'
