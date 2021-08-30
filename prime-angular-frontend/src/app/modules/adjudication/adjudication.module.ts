@@ -76,6 +76,7 @@ import { OrganizationToaMaintenanceListPageComponent } from './pages/organizatio
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
+import { ContainsPipe } from '@shared/pipes/contains.pipe';
 
 @NgModule({
   declarations: [
@@ -145,7 +146,8 @@ import { PlrInfoComponent } from './shared/components/plr-info/plr-info.componen
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent,
     LicenseClassesMaintenancePageComponent,
-    PlrInfoComponent
+    PlrInfoComponent,
+    ContainsPipe
   ],
   imports: [
     AdjudicationRoutingModule,

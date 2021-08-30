@@ -46,7 +46,7 @@ namespace PrimeTests.UnitTests
         public void TestParseHL7v3DateTime()
         {
             Assert.Equal(new DateTime(1957, 3, 5, 20, 20, 20), SoapService.ParseHL7v3DateTime("19570305202020"));
-            Assert.ThrowsAny<FormatException>(() => SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
+            Assert.Equal(null, SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
         }
 
         [Fact]
@@ -59,9 +59,9 @@ namespace PrimeTests.UnitTests
         [Fact]
         public void TestSplitTelecomNumber()
         {
-            Assert.Equal(new string[] { "604", "6665555" }, SoapService.SplitHL7v3TelecomNumber("6046665555"));
-            Assert.Equal(new string[] { "1234567" }, SoapService.SplitHL7v3TelecomNumber("1234567"));
-            Assert.Equal(new string[] { "(604)666-5555" }, SoapService.SplitHL7v3TelecomNumber("(604)666-5555"));
+            Assert.Equal(new string[] { "604", "6665555" }, SoapService.SplitTelecomNumber("6046665555"));
+            Assert.Equal(new string[] { "1234567" }, SoapService.SplitTelecomNumber("1234567"));
+            Assert.Equal(new string[] { "(604)666-5555" }, SoapService.SplitTelecomNumber("(604)666-5555"));
         }
     }
 }

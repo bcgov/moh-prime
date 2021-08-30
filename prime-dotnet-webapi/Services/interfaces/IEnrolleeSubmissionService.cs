@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using Prime.Models;
 
 namespace Prime.Services
@@ -14,6 +13,6 @@ namespace Prime.Services
 
         Task<Submission> GetEnrolleeSubmissionBeforeDateAsync(int enrolleeId, DateTimeOffset dateTime);
 
-        Task CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true);
+        Task<Submission> CreateEnrolleeSubmissionAsync(int enrolleeId, bool assignAgreement = true);
     }
 }
