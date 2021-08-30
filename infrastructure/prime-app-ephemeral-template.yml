@@ -514,6 +514,59 @@ objects:
       type: Recreate
       maxSurge: 50%
       maxUnavailable: 0
+      recreateParams:
+        pre:
+          failurePolicy: Abort
+          execNewPod:
+            command:
+             - /bin/bash
+            args:
+            - '-c'
+            - >-
+              echo "SELECT 'CREATE DATABASE \"prime-${SVC_NAME}\"' WHERE NOT EXISTS
+              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" |
+              psql
+            env:
+              - name: PGHOST
+                value: dev-db-patroni-spilo
+              - name: PGDATABASE
+                value: postgres
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-db-patroni-spilo
+                    key: username-admin
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-db-patroni-spilo
+                    key: password-admin
+        post:
+          failurePolicy: Abort
+          execNewPod:
+            command:
+             - /bin/bash
+            args:
+            - '-c'
+            - >-
+              echo "SELECT 'DROP DATABASE \"prime-${SVC_NAME}\"' WHERE EXISTS 
+              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" | 
+              psql
+            env:
+              - name: PGHOST
+                value: ${SVC_NAME}-db-patroni-spilo
+              - name: PGDATABASE
+                value: postgres
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-db-patroni-spilo
+                    key: username-admin
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-db-patroni-spilo
+                    key: password-admin
     template:
       metadata:
         labels:
@@ -710,6 +763,59 @@ objects:
       type: Recreate
       maxSurge: 50%
       maxUnavailable: 0
+      recreateParams:
+        pre:
+          failurePolicy: Abort
+          execNewPod:
+            command:
+             - /bin/bash
+            args:
+            - '-c'
+            - >-
+              echo "SELECT 'CREATE DATABASE \"prime-${SVC_NAME}\"' WHERE NOT EXISTS
+              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" |
+              psql
+            env:
+              - name: PGHOST
+                value: dev-db-patroni-spilo
+              - name: PGDATABASE
+                value: postgres
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-db-patroni-spilo
+                    key: username-admin
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-db-patroni-spilo
+                    key: password-admin
+        post:
+          failurePolicy: Abort
+          execNewPod:
+            command:
+             - /bin/bash
+            args:
+            - '-c'
+            - >-
+              echo "SELECT 'DROP DATABASE \"prime-${SVC_NAME}\"' WHERE EXISTS 
+              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" | 
+              psql
+            env:
+              - name: PGHOST
+                value: ${SVC_NAME}-db-patroni-spilo
+              - name: PGDATABASE
+                value: postgres
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-db-patroni-spilo
+                    key: username-admin
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: ${SVC_NAME}-db-patroni-spilo
+                    key: password-admin
     template:
       metadata:
         labels:
