@@ -7,7 +7,7 @@ main() {
 
   echo -e "-------- STARTING CRON --------\n"
 
-
+  echo -e "Realm:  ${KEYCLOAK_REALM}"
 }
 
 main  # Ensure the whole file is downloaded before executing
