@@ -90,7 +90,6 @@ namespace Prime.Services
         {
             var currentSite = await GetSiteAsync(siteId);
 
-            // for non health authority site, PEC needs to be unique
             if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority
                 && !await IsPecUniqueForNonHaSite(siteId, updatedSite.PEC))
             {
@@ -289,7 +288,6 @@ namespace Prime.Services
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            // for non health authority site, PEC needs to be unique
             if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !await IsPecUniqueForNonHaSite(siteId, pecCode))
             {
