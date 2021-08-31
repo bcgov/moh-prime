@@ -90,7 +90,7 @@ namespace Prime.Services
         {
             var currentSite = await GetSiteAsync(siteId);
 
-            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority && !await IsPecUniqueForNonHaSite(siteId, updatedSite.PEC))
+            if (await IsNonHaSiteAndPecNotUnique(currentSite, updatedSite.PEC))
             {
                 return 0;
             }
@@ -287,7 +287,7 @@ namespace Prime.Services
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority && !await IsPecUniqueForNonHaSite(siteId, pecCode))
+            if (await IsNonHaSiteAndPecNotUnique(site, pecCode))
             {
                 throw new InvalidOperationException($"Could not update the site.");
             }
@@ -749,9 +749,17 @@ namespace Prime.Services
             return await GetNonHaSiteByPecQuery(pec).AnyAsync();
         }
 
-        private async Task<bool> IsPecUniqueForNonHaSite(int siteId, string pec)
+        /// <summary>
+        /// Check if a given site is not health authority site, and the input PEC is not unique among
+        /// other non HA sites
+        /// </summary>
+        /// <param name="site"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        private async Task<bool> IsNonHaSiteAndPecNotUnique(Site site, string pec)
         {
-            return !await GetNonHaSiteByPecQuery(pec).AnyAsync(s => s.Id != siteId);
+            return (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && await GetNonHaSiteByPecQuery(pec).AnyAsync(s => s.Id != site.Id);
         }
 
         private IQueryable<Site> GetNonHaSiteByPecQuery(string searchPec)
