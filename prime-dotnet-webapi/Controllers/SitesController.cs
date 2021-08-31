@@ -1166,8 +1166,7 @@ namespace Prime.Controllers
                 return BadRequest("PEC cannot be empty.");
             }
 
-            var ids = await _siteService.GetNonHaSiteIdsByPec(pec);
-            var exist = ids.Count() > 0;
+            var exist = await _siteService.PecExistsInNonHaSites(pec);
             return Ok(exist);
         }
     }

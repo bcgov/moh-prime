@@ -91,13 +91,10 @@ namespace Prime.Services
             var currentSite = await GetSiteAsync(siteId);
 
             // for non health authority site, PEC needs to be unique
-            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority)
+            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority
+                && !await IsPecUniqueForNonHaSite(siteId, updatedSite.PEC))
             {
-                var ids = await GetNonHaSiteIdsByPec(updatedSite.PEC);
-                if (ids.Count() > 0 && !ids.Contains(siteId))
-                {
-                    return 0;
-                }
+                return 0;
             }
 
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
@@ -293,13 +290,10 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
             // for non health authority site, PEC needs to be unique
-            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority)
+            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !await IsPecUniqueForNonHaSite(siteId, pecCode))
             {
-                var ids = await GetNonHaSiteIdsByPec(pecCode);
-                if (ids.Count() > 0 && !ids.Contains(siteId))
-                {
-                    throw new InvalidOperationException($"Could not update the site.");
-                }
+                throw new InvalidOperationException($"Could not update the site.");
             }
 
             site.PEC = pecCode;
@@ -754,13 +748,21 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<IEnumerable<int>> GetNonHaSiteIdsByPec(string searchPec)
+        public async Task<bool> PecExistsInNonHaSites(string pec)
         {
-            return await _context.Sites
+            return await GetNonHaSiteByPecQuery(pec).AnyAsync();
+        }
+
+        private async Task<bool> IsPecUniqueForNonHaSite(int siteId, string pec)
+        {
+            return !await GetNonHaSiteByPecQuery(pec).AnyAsync(s => s.Id != siteId);
+        }
+
+        private IQueryable<Site> GetNonHaSiteByPecQuery(string searchPec)
+        {
+            return _context.Sites
                 .AsNoTracking()
-                .Where(s => s.PEC == searchPec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority)
-                .Select(s => s.Id)
-                .ToListAsync();
+                .Where(s => s.PEC == searchPec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

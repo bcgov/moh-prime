@@ -165,6 +165,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         [Validators.required],
         this.uniquePecValidator.validate.bind(this.uniquePecValidator)
       ]
-    }, { updateOn: 'blur'});
+    }, { updateOn: 'blur' });
   }
 }
