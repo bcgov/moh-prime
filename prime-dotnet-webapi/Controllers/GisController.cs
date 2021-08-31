@@ -179,8 +179,8 @@ namespace Prime.Controllers
                 return Ok();
             }
 
-            Response.Headers.Add("RemainingAttempts", ldapResponse.RemainingAttempts.ToString());
-            Response.Headers.Add("LockoutTimeInHours", ldapResponse.LockoutTimeInHours.ToString());
+            Response.Headers.Add("RemainingAttempts", ldapResponse.RemainingAttempts);
+            Response.Headers.Add("LockoutTimeInHours", ldapResponse.LockoutTimeInHours);
 
             return Unauthorized();
         }
