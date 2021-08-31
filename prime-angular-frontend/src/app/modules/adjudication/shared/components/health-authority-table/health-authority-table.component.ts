@@ -87,32 +87,31 @@ export class HealthAuthorityTableComponent implements OnInit {
 
   /**
    * @description
-   * Compare function for sorting that intends to sort Health Authorities in ascending order by their ID,
-   * and group Site Registrations immediately following each related Health Authority.
+   * Sort health authorities and their grouped sites in ascending order by ID.
    */
   private sortData(): (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite) => number {
     // Return ES6 Arrow Function to avoid use of `.bind(this)` or static functions
     return (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number => {
       if (this.isHealthAuthorityObject(a) && this.isHealthAuthorityObject(b)) {
         return a.id - b.id;
+      } else if (this.isHealthAuthorityObject(a)) {
+        return this.sortGroups(a, b);
+      } else if (this.isHealthAuthorityObject(b)) {
+        return this.sortGroups(b, a);
       }
-      else if (this.isHealthAuthorityObject(a)) {
-        if ((a as HealthAuthorityRow).id === (b as HealthAuthoritySite).healthAuthorityOrganizationId) {
-          return -1;
-        } else {
-          return (a as HealthAuthorityRow).id - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
-        }
-      }
-      else if (this.isHealthAuthorityObject(b)) {
-        if ((b as HealthAuthorityRow).id === (a as HealthAuthoritySite).healthAuthorityOrganizationId) {
-          return 1;
-        } else {
-          return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthorityRow).id;
-        }
-      }
-      else {
-        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
-      }
+
+      return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
     }
+  }
+
+  private sortGroups(
+    x: HealthAuthorityRow | HealthAuthoritySite,
+    y: HealthAuthorityRow | HealthAuthoritySite
+  ): number {
+    if ((x as HealthAuthorityRow).id === (y as HealthAuthoritySite).healthAuthorityOrganizationId) {
+      return -1;
+    }
+
+    return (x as HealthAuthorityRow).id - (y as HealthAuthoritySite).healthAuthorityOrganizationId;
   }
 }
