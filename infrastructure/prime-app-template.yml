@@ -1272,7 +1272,7 @@ objects:
             containers:
               - name: ${SVC_NAME}-update-email-statuses
                 image: >-
-                  image-registry.openshift-image-registry.svc:5000/openshift/python:3.8
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
                 command:
                 - bash
                 - '-c'
@@ -1287,7 +1287,7 @@ objects:
                     -H "Content-Type: application/x-www-form-urlencoded" \
                     -d "grant_type=client_credentials" \
                     -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
 
                   echo -e ${TOKEN}
 
@@ -1347,7 +1347,7 @@ objects:
             containers:
               - name: ${SVC_NAME}-send-renewal-emails
                 image: >-
-                  image-registry.openshift-image-registry.svc:5000/openshift/python:3.8
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
                 command:
                 - bash
                 - '-c'
@@ -1362,7 +1362,7 @@ objects:
                     -H "Content-Type: application/x-www-form-urlencoded" \
                     -d "grant_type=client_credentials" \
                     -d "client_id=${KEYCLOAK_CLIENT_ID}" \
-                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | python -c "import sys, json; print(json.load(sys.stdin)['access_token'])")
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
 
                   echo -e ${TOKEN}
 
