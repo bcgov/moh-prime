@@ -1,7 +1,7 @@
-namespace Prime.Models.Api
-{
-    public class LoginStatus : LdapResponseKeys
-    {
-        public bool Success { get; set; }
-    }
-}
+// namespace Prime.Models.Api
+// {
+//     public class LoginStatus : GisUser
+//     {
+//         public bool Success { get; set; }
+//     }
+// }
