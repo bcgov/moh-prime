@@ -46,7 +46,7 @@ namespace PrimeTests.UnitTests
         public void TestParseHL7v3DateTime()
         {
             Assert.Equal(new DateTime(1957, 3, 5, 20, 20, 20), SoapService.ParseHL7v3DateTime("19570305202020"));
-            Assert.Equal(null, SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
+            Assert.NotNull(SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
         }
 
         [Fact]
