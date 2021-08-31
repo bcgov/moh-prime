@@ -19,7 +19,6 @@ namespace Prime.Controllers
     public class GisController : PrimeControllerBase
     {
         private readonly IGisService _gisService;
-        private readonly ILdapClient _ldapClient;
         public GisController(IGisService gisService)
         {
             _gisService = gisService;
