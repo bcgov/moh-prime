@@ -28,54 +28,54 @@ namespace PrimeTests.Integration
             return enrollee;
         }
 
-        [Fact]
-        public async void TestGetEnrollees_AsEnrollee()
-        {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
-            {
-                var enrollee = CreateEnrollee(scope);
-                var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees");
-                TestUtils.AddEnrolleeAuth(request, enrollee);
+        // [Fact]
+        // public async void TestGetEnrollees_AsEnrollee()
+        // {
+        //     using (var scope = _factory.Server.Host.Services.CreateScope())
+        //     {
+        //         var enrollee = CreateEnrollee(scope);
+        //         var request = TestUtils.CreateRequest(HttpMethod.Get, "/api/enrollees");
+        //         TestUtils.AddEnrolleeAuth(request, enrollee);
 
-                var response = await _client.SendAsync(request);
+        //         var response = await _client.SendAsync(request);
 
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            }
-        }
+        //         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //     }
+        // }
 
-        [Fact]
-        public async void TestGetEnrolleeById()
-        {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
-            {
-                var expectedEnrollee = CreateEnrollee(scope);
-                var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrollee.Id}");
-                TestUtils.AddEnrolleeAuth(request, expectedEnrollee);
+        // [Fact]
+        // public async void TestGetEnrolleeById()
+        // {
+        //     using (var scope = _factory.Server.Host.Services.CreateScope())
+        //     {
+        //         var expectedEnrollee = CreateEnrollee(scope);
+        //         var request = TestUtils.CreateRequest(HttpMethod.Get, $"/api/enrollees/{expectedEnrollee.Id}");
+        //         TestUtils.AddEnrolleeAuth(request, expectedEnrollee);
 
-                var response = await _client.SendAsync(request);
+        //         var response = await _client.SendAsync(request);
 
-                Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-                var responseEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
-                Assert.Equal(expectedEnrollee.Id, responseEnrollee.Id);
-                Assert.Equal(expectedEnrollee.UserId, responseEnrollee.UserId);
-            }
-        }
+        //         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        //         var responseEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
+        //         Assert.Equal(expectedEnrollee.Id, responseEnrollee.Id);
+        //         Assert.Equal(expectedEnrollee.UserId, responseEnrollee.UserId);
+        //     }
+        // }
 
-        [Fact]
-        public async void TestCreateEnrollee()
-        {
-            using (var scope = _factory.Server.Host.Services.CreateScope())
-            {
-                var testEnrollee = TestUtils.EnrolleeFaker.Generate();
-                var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", new { Enrollee = testEnrollee });
-                TestUtils.AddEnrolleeAuth(request, testEnrollee);
+        // [Fact]
+        // public async void TestCreateEnrollee()
+        // {
+        //     using (var scope = _factory.Server.Host.Services.CreateScope())
+        //     {
+        //         var testEnrollee = TestUtils.EnrolleeFaker.Generate();
+        //         var request = TestUtils.CreateRequest(HttpMethod.Post, "/api/enrollees", new { Enrollee = testEnrollee });
+        //         TestUtils.AddEnrolleeAuth(request, testEnrollee);
 
-                var response = await _client.SendAsync(request);
+        //         var response = await _client.SendAsync(request);
 
-                Assert.Equal(HttpStatusCode.Created, response.StatusCode);
-                var createdEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
-                Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
-            }
-        }
+        //         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        //         var createdEnrollee = (await response.Content.ReadAsAsync<ApiResultResponse<Enrollee>>()).Result;
+        //         Assert.Equal(testEnrollee.UserId, createdEnrollee.UserId);
+        //     }
+        // }
     }
 }
