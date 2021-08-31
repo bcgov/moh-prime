@@ -12,22 +12,15 @@ namespace PrimeTests.UnitTests
 {
     public class SoapServiceTests
     {
-        private readonly SoapService _tested;
-
-
-        public SoapServiceTests()
+        public static SoapService CreateService(
+            ILogger<SoapService> logger = null,
+            IPlrProviderService plrProviderService = null)
         {
-            // https://stackoverflow.com/questions/43424095/how-to-unit-test-with-ilogger-in-asp-net-core
-            var serviceProvider = new ServiceCollection()
-                                    .AddLogging()
-                                    .BuildServiceProvider();
-            var factory = serviceProvider.GetService<ILoggerFactory>();
-            var logger = factory.CreateLogger<SoapService>();
-
-            // Not currently testing saving to database
-            _tested = new SoapService(logger, A.Fake<IPlrProviderService>());
+            return new SoapService(
+                logger ?? A.Fake<ILogger<SoapService>>(),
+                plrProviderService ?? A.Fake<IPlrProviderService>()
+            );
         }
-
 
 
         [Theory]
@@ -36,17 +29,18 @@ namespace PrimeTests.UnitTests
         // [InlineData("./README.md")] ... needs to be tested outside of this unit test since `XDocument.Load` will fail
         public async Task TestHandlingMalformedInput(string filePath)
         {
+            var service = CreateService();
             Assert.True(File.Exists(filePath));
+            service.DocumentRoot = XDocument.Load(filePath).Root;
 
-            _tested.DocumentRoot = XDocument.Load(filePath).Root;
-            await Assert.ThrowsAnyAsync<Exception>(() => _tested.AddBcProviderAsync());
+            await Assert.ThrowsAnyAsync<Exception>(() => service.AddBcProviderAsync());
         }
 
         [Fact]
         public void TestParseHL7v3DateTime()
         {
             Assert.Equal(new DateTime(1957, 3, 5, 20, 20, 20), SoapService.ParseHL7v3DateTime("19570305202020"));
-            Assert.NotNull(SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
+            Assert.Null(SoapService.ParseHL7v3DateTime("19570305XXXXXX"));
         }
 
         [Fact]
