@@ -32,7 +32,7 @@ namespace Prime.HttpClients
         /// </summary>
         /// <param name="role"></param>
         /// <returns></returns>
-        public async Task<Role> GetRoleByName(string role)
+        public async Task<Role> GetRealmRoleByName(string role)
         {
             var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(role)}");
 
@@ -55,7 +55,7 @@ namespace Prime.HttpClients
         public async Task<bool> AssignRealmRole(Guid userId, string role)
         {
             // We need both the name and ID of the role to assign it.
-            var keycloakRole = await GetRoleByName(role);
+            var keycloakRole = await GetRealmRoleByName(role);
             if (keycloakRole == null)
             {
                 return false;

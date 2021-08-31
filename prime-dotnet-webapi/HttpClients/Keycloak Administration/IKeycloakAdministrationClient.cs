@@ -8,10 +8,8 @@ namespace Prime.HttpClients
 {
     public interface IKeycloakAdministrationClient
     {
-        Task<Role> GetRoleByName(string role);
-
+        Task<Role> GetRealmRoleByName(string role);
         Task<bool> AssignRealmRole(Guid userId, string role);
-
         Task<bool> UpdatePhsaUserInfo(Guid userId, PhsaChangeModel party);
     }
 }
