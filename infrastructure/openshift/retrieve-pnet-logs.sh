@@ -12,6 +12,8 @@ main() {
   echo -e "Last transaction id:  ${LAST_TX_ID}\n"
 
   UUID=$(cat /proc/sys/kernel/random/uuid)
+  # Trim whitespace
+  UUID=`echo ${UUID} | sed 's/ *$//g'`
   echo -e "Generated request id:  ${UUID}\n"
 
   echo -e "API client name:  ${PRIME_ODR_API_CLIENT_NAME}\n"
