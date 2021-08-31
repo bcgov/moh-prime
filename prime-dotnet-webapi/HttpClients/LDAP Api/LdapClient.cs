@@ -22,7 +22,7 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        public async Task<LdapResponseKeys> GetUserAsync(string username, string password)
+        public async Task<GisUserRepresentation> GetUserAsync(string username, string password)
         {
             var messageObject = new
             {
@@ -42,14 +42,8 @@ namespace Prime.HttpClients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    var successResponse = JsonConvert.DeserializeObject<GisUser>(responseJsonString);
-                    var ldapResponseKeys = new LdapResponseKeys
-                    {
-                        RemainingAttempts = successResponse?.RemainingAttempts,
-                        LockoutTimeInHours = successResponse?.LockoutTimeInHours,
-                        GisUserRole = successResponse?.Gisuserrole
-                    };
-                    return ldapResponseKeys;
+                    var successResponse = JsonConvert.DeserializeObject<GisUserRepresentation>(responseJsonString);
+                    return successResponse;
                 }
                 else
                 {
@@ -62,14 +56,6 @@ namespace Prime.HttpClients
                 await LogError(response, ex);
                 return null;
             }
-        }
-
-        public class GisUser : LdapResponseKeys
-        {
-            public string Gisuserrole { get; set; }
-            public string Authenticated { get; set; }
-            public string Unlocked { get; set; }
-            public string Username { get; set; }
         }
 
         private async Task LogError(HttpResponseMessage response, Exception exception = null)

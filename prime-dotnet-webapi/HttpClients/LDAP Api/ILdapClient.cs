@@ -6,6 +6,6 @@ namespace Prime.HttpClients
 {
     public interface ILdapClient
     {
-        Task<LdapResponseKeys> GetUserAsync(string userId, string password);
+        Task<GisUserRepresentation> GetUserAsync(string userId, string password);
     }
 }

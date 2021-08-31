@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.Models.Api;
 
@@ -85,19 +86,17 @@ namespace Prime.Services
             return currentGisEnrolment.Id;
         }
 
-        public async Task<LoginStatus> LdapLogin(string username, string password, ClaimsPrincipal user)
+        public async Task<GisLdapUser> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
-            var success = ldapResponse.GisUserRole == "GISUSER";
-
-            var loginStatus = new LoginStatus
+            var gisLdapUser = new GisLdapUser
             {
-                RemainingAttempts = ldapResponse.RemainingAttempts,
-                LockoutTimeInHours = ldapResponse.LockoutTimeInHours,
-                Success = success
+                RemainingAttempts = ldapResponse.RemainingAttempts.ToString(),
+                LockoutTimeInHours = ldapResponse.LockoutTimeInHours.ToString(),
+                GisUserRole = ldapResponse.Gisuserrole
             };
 
-            if (success)
+            if (gisLdapUser.Success)
             {
                 var gisEnrolment = await _context.GisEnrolments
                 .Include(g => g.Party)
@@ -108,7 +107,7 @@ namespace Prime.Services
                 await _context.SaveChangesAsync();
             }
 
-            return loginStatus;
+            return gisLdapUser;
         }
 
         public async Task<int> SubmitApplicationAsync(int gisId)
