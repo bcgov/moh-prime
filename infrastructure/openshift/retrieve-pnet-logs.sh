@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-# Exit immediately if a command exits with a non-zero status.
-set -e
+# TODO: Exit immediately if a command exits with a non-zero status.
+# set -e
 
 main() {
 
@@ -16,11 +16,11 @@ main() {
   sha256sum /opt/certs/prime-odr-api-cert.crt
   sha256sum /opt/certs/prime-odr-api-cert.key
 
-  python --version
-
   curl -V
 
   curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header 'Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}' -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
+
+  python --version
 }
 
 main  # Ensure the whole file is downloaded before executing
