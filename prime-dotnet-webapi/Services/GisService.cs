@@ -10,8 +10,6 @@ using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;
-using Prime.Models.Api;
-
 
 namespace Prime.Services
 {
