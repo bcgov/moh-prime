@@ -8,7 +8,7 @@ main() {
   echo -e "-------- STARTING CRON --------\n"
 
 #  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -W ${PGPASSWORD} -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
-  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c 'select count(*) from "Site" s')
+  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c 'select count(*) from "HealthAuthorityLookup" h')
   echo -e ${LAST_TX_ID}
 
   ls -l /opt/certs
