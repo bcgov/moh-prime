@@ -2,12 +2,12 @@ import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { Observable, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AbstractFormState } from './abstract-form-state.class';
-import { tap } from 'rxjs/operators';
 
 export interface IEnrolmentPage {
   /**
