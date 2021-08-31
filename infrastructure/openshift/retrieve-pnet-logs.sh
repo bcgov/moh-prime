@@ -11,12 +11,12 @@ main() {
   LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select count(*) from "HealthAuthorityLookup" h')
   echo -e ${LAST_TX_ID}
 
-  ls -l /opt/certs
+  ls -l /etc/ssl/certs
 
   sha256sum /opt/certs/prime-odr-api-cert.crt
   sha256sum /opt/certs/prime-odr-api-cert.key
 
-  curl -V
+  echo ${PRIME_ODR_API_ENCODED_CREDENTIALS}
 
   curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header 'Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}' -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
 
