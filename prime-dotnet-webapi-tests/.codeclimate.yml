@@ -1,0 +1,19 @@
+version: "2"         # required to adjust maintainability checks
+plugins:
+  brakeman:
+    enabled: false
+  rubocop:
+    enabled: false
+  eslint:
+    enabled: false
+
+# Exclude Folder Pattern
+# Exclude File Pattern
+exclude_patterns:
+  - "./"
+
+
+# examples of minified files that should be excluded
+# - **.min.js
+# - **.min.css
+

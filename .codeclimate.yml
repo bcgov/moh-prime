@@ -1,0 +1,54 @@
+version: "2"         # required to adjust maintainability checks
+plugins:
+  brakeman:
+    enabled: false
+  rubocop:
+    enabled: false
+  eslint:
+    enabled: false
+
+
+exclude_patterns:
+  # Exclude Folder Pattern
+  - "**/.github/"
+  - "**/.docker/"
+  - "**/.vscode/"
+  - "**/devops/"
+  - "**/document-manager/"
+  - "**/documentation/"
+  - "**/infrastructure/"
+  - "**/mailhog/"
+  - "**/ngork/"
+  - "**/poc/"
+  - "**/prime-database-backup/"
+  - "**/prime-angular-frontend/node_modules/"
+  - "**/prime-dotnet-webapi/Migrations/"
+  - "**/prime-dotnet-webapi/Views/"
+  - "**/prime-dotnet-webapi/ViewModels/"
+  - "**/prime-dotnet-webapi/Resrouces/"
+  - "**/prime-dotnet-webapi/Configuration/"
+  - "**/prime-dotnet-webapi/logs/"
+  - "**/prime-dotnet-webapi-tests/"
+  - "**/prime-e2e-tests/"
+  - "**/schemasoy/"
+  - "**/utilities/"
+  - "**/config/"
+  - "**/db/"
+  - "**/dist/"
+  - "**/features/"
+  - "**/node_modules/"
+  - "**/script/"
+  - "**/spec/"
+  - "**/test/"
+  - "**/tests/"
+  - "**/Tests/"
+  - "**/vendor/"
+
+  # Exclude File Pattern
+  - "**/*_test.go"
+  - "**/*.d.ts"
+  - "**/*.spec.*"
+  - "**/*.json"
+  - "**/*.html"
+  - "**/*.cshtml"
+  - "**/*ViewModel.cs"
