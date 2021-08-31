@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, EMPTY, forkJoin, noop, of, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
