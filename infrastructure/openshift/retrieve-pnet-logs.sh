@@ -7,16 +7,16 @@ main() {
 
   echo -e "-------- STARTING CRON --------\n"
 
-  python --version
-
 #  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -W ${PGPASSWORD} -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
-  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c 'select count(*) from "HealthAuthorityLookup" h')
+  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select count(*) from "HealthAuthorityLookup" h')
   echo -e ${LAST_TX_ID}
 
   ls -l /opt/certs
 
   sha256sum /opt/certs/prime-odr-api-cert.crt
   sha256sum /opt/certs/prime-odr-api-cert.key
+
+  python --version
 
   curl -V
 
