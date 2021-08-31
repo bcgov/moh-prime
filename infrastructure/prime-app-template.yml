@@ -107,6 +107,12 @@ parameters:
   name: POSTGRESQL_VOLUME_CAPACITY
   required: true
   value: 8Gi
+- description: 'Reneal email sending cron schedule. Cron-like schedule expression. Default: Once a day at 11 PM'
+  name: CRON_SCHEDULE_RENEWALS
+  value: '0 23 * * *'
+- description: 'Email status update cron job. Cron-like schedule expression. Default: At minute 0 past every 6th hour.'
+  name: CRON_SCHEDULE_STATUSES
+  value: '0 */6 * * *'
 objects:
 ###########################################
 ###               Frontend              ###
@@ -1246,3 +1252,156 @@ objects:
         targetPort: 6379
     selector:
       name: ${SVC_NAME}-${REDIS_POD}
+
+###########################################
+###              Cron Jobs              ###
+###########################################
+#   Template for job that activates api to update email statuses
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: ${SVC_NAME}-update-email-statuses
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: ${SVC_NAME}-update-email-statuses
+                image: >-
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                command:
+                - bash
+                - '-c'
+                - >-
+                  echo -e "-------- STARTING CRON --------\n"
+
+                  echo -e "-------- Getting access_token --------\n"
+
+                  TOKEN=$(curl -X POST
+                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                  \
+                    -H "Content-Type: application/x-www-form-urlencoded" \
+                    -d "grant_type=client_credentials" \
+                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+
+                  echo -e ${TOKEN}
+
+                  echo -e "-------- Calling PRIME API --------\n"
+
+                  curl -v -X POST
+                  http://${SVC_NAME}-webapi:8080/api/Emails/management/statuses
+                  \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    -H "Content-Length: 0"
+
+                  echo -e "-------- CRON COMPLETE --------\n"
+                env:
+                  - name: KEYCLOAK_CLIENT_SECRET
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_secret
+                        name: prime-service-account
+                  - name: KEYCLOAK_CLIENT_ID
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_id
+                        name: prime-service-account
+                  - name: KEYCLOAK_URL
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_URL
+                        name: keycloak
+                  - name: KEYCLOAK_REALM
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_REALM
+                        name: keycloak
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+            restartPolicy: Never
+    schedule: '${CRON_SCHEDULE_STATUSES}'
+
+#   Template for job that activates api to send renewal emails 
+- apiVersion: batch/v1beta1
+  kind: CronJob
+  metadata:
+    name: ${SVC_NAME}-send-renewal-emails
+    labels:
+      app.kubernetes.io/part-of: ${SVC_NAME}
+  spec:
+    concurrencyPolicy: Forbid
+    jobTemplate:
+      spec:
+        template:
+          spec:
+            containers:
+              - name: ${SVC_NAME}-send-renewal-emails
+                image: >-
+                  public.ecr.aws/h0h9t7p1/alpine-bash-curl-jq:latest
+                command:
+                - bash
+                - '-c'
+                - >-
+                  echo -e "-------- STARTING CRON --------\n"
+
+                  echo -e "-------- Getting access_token --------\n"
+
+                  TOKEN=$(curl -X POST
+                  "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect/token"
+                  \
+                    -H "Content-Type: application/x-www-form-urlencoded" \
+                    -d "grant_type=client_credentials" \
+                    -d "client_id=${KEYCLOAK_CLIENT_ID}" \
+                    -d "client_secret=${KEYCLOAK_CLIENT_SECRET}" | jq -r '.access_token' )
+
+                  echo -e ${TOKEN}
+
+                  echo -e "-------- Calling PRIME API --------\n"
+
+                  curl -v -X POST
+                  http://${SVC_NAME}-webapi:8080/api/Emails/management/enrollees/renewal
+                  \
+                    -H "Authorization: Bearer ${TOKEN}" \
+                    -H "Content-Length: 0"
+
+                  echo -e "-------- CRON COMPLETE --------\n"
+                env:
+                  - name: KEYCLOAK_CLIENT_SECRET
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_secret
+                        name: prime-service-account
+                  - name: KEYCLOAK_CLIENT_ID
+                    valueFrom:
+                      secretKeyRef:
+                        key: prime_service_account_client_id
+                        name: prime-service-account
+                  - name: KEYCLOAK_URL
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_URL
+                        name: keycloak
+                  - name: KEYCLOAK_REALM
+                    valueFrom:
+                      secretKeyRef:
+                        key: KEYCLOAK_REALM
+                        name: keycloak
+                resources:
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+            restartPolicy: Never
+    schedule: '${CRON_SCHEDULE_RENEWALS}'
