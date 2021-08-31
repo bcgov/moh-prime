@@ -58,7 +58,7 @@ export interface HttpEnrollee extends Enrollee {
 
 /**
  * @deprecated
- * With the Enrolent table being dropped this is artifact
+ * With the Enrolment table being dropped this is artifact
  * that needs to be removed to reduce confusion.
  *
  * NOTE: Enrolment contains equivalent data when compared to
@@ -128,4 +128,5 @@ export interface EnrolleeListViewModel {
   hasNotification: boolean;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  gpid: string;
 }

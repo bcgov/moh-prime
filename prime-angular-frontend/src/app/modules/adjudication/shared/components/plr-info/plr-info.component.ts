@@ -12,6 +12,5 @@ export class PlrInfoComponent implements OnInit {
 
   constructor() { }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 }

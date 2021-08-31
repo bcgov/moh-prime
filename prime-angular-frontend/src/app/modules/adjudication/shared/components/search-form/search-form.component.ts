@@ -27,7 +27,6 @@ export class SearchFormComponent implements OnInit {
   private textSearchKey: string;
   private statusCodeKey: string;
 
-
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -36,7 +35,7 @@ export class SearchFormComponent implements OnInit {
   ) {
     this.statuses = this.configService.statuses;
 
-    // MacGyver paper enrollee Filter into status Filter. arbitrarily chose 42.
+    // MacGyver paper enrollee filter into the status filter. Arbitrarily chose 42.
     // EnrolleeService GetEnrolleesAsync() has other reference to this value.
     const manualEnrolleeStatus = new Config<number>(42, 'Manual (Paper) Enrollees');
     this.statuses.push(manualEnrolleeStatus);
