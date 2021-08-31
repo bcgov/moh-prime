@@ -37,7 +37,7 @@ describe('AuthorizedUserReviewComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         {
           provide: AuthService,
@@ -50,8 +50,7 @@ describe('AuthorizedUserReviewComponent', () => {
         CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-      .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

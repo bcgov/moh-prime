@@ -37,7 +37,7 @@ describe('HaAuthorizedUsersViewComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         {
           provide: AuthService,

@@ -164,19 +164,26 @@
 
             <div class="d-flex align-items-center">
               <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
-              <mat-icon *ngIf="row.currentStatusCode === EnrolmentStatus.EDITABLE"
-                        matTooltip="Submission editable"
-                        matTooltipPosition="after">lock_open
-              </mat-icon>
-              <mat-icon *ngIf="row.alwaysManual"
-                        matTooltip="Enrollee flagged for manual adjudication"
-                        matTooltipPosition="after">flag
-              </mat-icon>
-              <mat-icon *ngIf="row.confirmed"
-                        class="material-icons-outlined"
-                        matTooltip="Submission confirmed"
-                        matTooltipPosition="after">verified
-              </mat-icon>
+              <ng-container *ngIf="paperEnrolleeGpidFilter | contains: row.gpid; else nonPaperEnrolleeIcons">
+                <mat-icon matTooltip="Paper Submission"
+                          matTooltipPosition="after">description
+                </mat-icon>
+              </ng-container>
+              <ng-template #nonPaperEnrolleeIcons>
+                <mat-icon *ngIf="row.currentStatusCode === EnrolmentStatus.EDITABLE"
+                          matTooltip="Submission editable"
+                          matTooltipPosition="after">lock_open
+                </mat-icon>
+                <mat-icon *ngIf="row.alwaysManual"
+                          matTooltip="Enrollee flagged for manual adjudication"
+                          matTooltipPosition="after">flag
+                </mat-icon>
+                <mat-icon *ngIf="row.confirmed"
+                          class="material-icons-outlined"
+                          matTooltip="Submission confirmed"
+                          matTooltipPosition="after">verified
+                </mat-icon>
+              </ng-template>
             </div>
           </td>
         </ng-container>

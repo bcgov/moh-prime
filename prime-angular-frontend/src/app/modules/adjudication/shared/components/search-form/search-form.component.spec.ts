@@ -25,6 +25,9 @@ describe('SearchFormComponent', () => {
         NgxMaterialModule,
         BrowserAnimationsModule
       ],
+      declarations: [
+        SearchFormComponent
+      ],
       providers: [
         {
           provide: APP_CONFIG,
@@ -32,7 +35,7 @@ describe('SearchFormComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         }
       ],
       schemas: [NO_ERRORS_SCHEMA]
