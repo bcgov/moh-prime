@@ -50,8 +50,7 @@ describe('BceidDemographicComponent', () => {
         KeycloakService,
         EnrolmentFormStateService
       ]
-    })
-      .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(inject(
