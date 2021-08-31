@@ -18,7 +18,8 @@ main() {
 
   curl -V
 
-  curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_ENCODED_CREDENTIALS} --key /opt/certs/prime-odr-api-cert.key --header 'Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}' -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
+  # curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_ENCODED_CREDENTIALS} --key /opt/certs/prime-odr-api-cert.key --header 'Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}' -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
+  curl --header 'Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}' -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
 }
 
 main  # Ensure the whole file is downloaded before executing
