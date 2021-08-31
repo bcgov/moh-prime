@@ -90,8 +90,7 @@ namespace Prime.Services
         {
             var currentSite = await GetSiteAsync(siteId);
 
-            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority
-                && !await IsPecUniqueForNonHaSite(siteId, updatedSite.PEC))
+            if ((CareSettingType)currentSite.CareSettingCode != CareSettingType.HealthAuthority && !await IsPecUniqueForNonHaSite(siteId, updatedSite.PEC))
             {
                 return 0;
             }
@@ -288,8 +287,7 @@ namespace Prime.Services
             var site = await GetBaseSiteQuery()
                 .SingleOrDefaultAsync(s => s.Id == siteId);
 
-            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !await IsPecUniqueForNonHaSite(siteId, pecCode))
+            if ((CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority && !await IsPecUniqueForNonHaSite(siteId, pecCode))
             {
                 throw new InvalidOperationException($"Could not update the site.");
             }
