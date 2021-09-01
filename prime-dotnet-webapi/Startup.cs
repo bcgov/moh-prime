@@ -165,6 +165,13 @@ namespace Prime
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
                 ClientId = PrimeEnvironment.PrimeKeycloak.AdministrationClientId,
                 ClientSecret = PrimeEnvironment.PrimeKeycloak.AdministrationClientSecret,
+            })
+            .AddTransient<BearerTokenHandler<MohKeycloakAdministrationClientCredentials>>()
+            .AddSingleton(new MohKeycloakAdministrationClientCredentials
+            {
+                Address = PrimeEnvironment.MohKeycloak.TokenUrl,
+                ClientId = PrimeEnvironment.MohKeycloak.AdministrationClientId,
+                ClientSecret = PrimeEnvironment.MohKeycloak.AdministrationClientSecret,
             });
 
             // Clients
@@ -196,6 +203,12 @@ namespace Prime
                 client.BaseAddress = new Uri(PrimeEnvironment.PrimeKeycloak.AdministrationUrl.EnsureTrailingSlash());
             })
             .AddHttpMessageHandler<BearerTokenHandler<KeycloakAdministrationClientCredentials>>();
+
+            services.AddHttpClient<IMohKeycloakClient, MohKeycloakClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeEnvironment.MohKeycloak.AdministrationUrl.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<BearerTokenHandler<MohKeycloakAdministrationClientCredentials>>();
 
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
