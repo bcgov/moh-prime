@@ -516,14 +516,12 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Ignore
+          failurePolicy: Abort
           execNewPod:
             command:
-             - /bin/bash
-            args:
-            - '-c'
-            - createdb
-            - prime-${SVC_NAME}
+              - /bin/bash
+              - -c
+              - createdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -543,11 +541,9 @@ objects:
           failurePolicy: Abort
           execNewPod:
             command:
-             - /bin/bash
-            args:
-            - '-c'
-            - dropdb
-            - prime-${SVC_NAME}
+              - /bin/bash
+              - -c
+              - dropdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -761,13 +757,12 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Ignore
+          failurePolicy: Abort
           execNewPod:
             command:
-             - /bin/bash
-            args:
-            - '-c'
-            - createdb prime-${SVC_NAME}
+              - /bin/bash
+              - -c
+              - createdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -788,9 +783,8 @@ objects:
           execNewPod:
             command:
              - /bin/bash
-            args:
-            - '-c'
-            - dropdb prime-${SVC_NAME}
+             - -c
+             - dropdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
