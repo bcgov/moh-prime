@@ -542,28 +542,6 @@ objects:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: superuser-password
-        post:
-          failurePolicy: Ignore
-          execNewPod:
-            command:
-              - /bin/bash
-              - -c
-              - dropdb prime-${SVC_NAME}
-            env:
-              - name: PGHOST
-                value: dev-patroni
-              - name: PGDATABASE
-                value: postgres
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
     template:
       metadata:
         labels:
@@ -778,28 +756,6 @@ objects:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: app-db-username
-              - name: PGUSER
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-username
-              - name: PGPASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    name: dev-patroni-secret
-                    key: superuser-password
-        post:
-          failurePolicy: Ignore
-          execNewPod:
-            command:
-              - /bin/bash
-              - -c
-              - dropdb prime-${SVC_NAME}
-            env:
-              - name: PGHOST
-                value: dev-patroni
-              - name: PGDATABASE
-                value: postgres
               - name: PGUSER
                 valueFrom:
                   secretKeyRef:
