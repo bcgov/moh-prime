@@ -21,12 +21,12 @@ main() {
 
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
-  (curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
+  curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
     "https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
-    python -c "import sys, json, csv; json_as_dict = json.load(sys.stdin); output = csv.writer(sys.stdout); for row in json_as_dict['pnetTransactions']: output.writerow(row.values());")
+    python3 -c "import sys, json, csv; json_as_dict = json.load(sys.stdin); output = csv.writer(sys.stdout); for row in json_as_dict['pnetTransactions']: output.writerow(row.values());"
 
 
-  echo -e "-------- Write to file? --------\n"
+  echo -e "\n-------- Write to file? --------\n"
   pwd
   touch /tmp/more.txt
   ls -l /tmp
