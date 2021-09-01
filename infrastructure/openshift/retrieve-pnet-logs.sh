@@ -3,17 +3,23 @@
 # TODO: Exit immediately if a command exits with a non-zero status.
 # set -e
 
-main() {
+function get_last_tx_id() {
+  local LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
+  # Trim whitespace
+  LAST_TX_ID=`echo ${LAST_TX_ID} | sed 's/^ *//g'`
+  # Handle initial empty table condition
+  if [ "${LAST_TX_ID}" = '' ]; then LAST_TX_ID='0'; fi
+  # "Return" result to caller
+  echo "${LAST_TX_ID}"
+}
 
+
+function main() {
   echo -e "-------- STARTING CRON --------\n"
 
   echo -e "Connecting to database host:  _${PGHOST}_\n"
 
-  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
-#  LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select count(*) from "HealthAuthorityLookup" h')
-  # Trim whitespace
-  LAST_TX_ID=`echo ${LAST_TX_ID} | sed 's/^ *//g'`
-  if [ "${LAST_TX_ID}" = '' ]; then LAST_TX_ID='0'; fi
+  LAST_TX_ID="$(get_last_tx_id)"
   echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
   UUID=$(cat /proc/sys/kernel/random/uuid)
@@ -32,6 +38,9 @@ main() {
 
   echo -e "\n-------- Read file? --------\n"
   cat /tmp/isThereMoreData.txt
+
+  LAST_TX_ID="$(get_last_tx_id)"
+  echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 }
 
 main  # Ensure the whole file is downloaded before executing
