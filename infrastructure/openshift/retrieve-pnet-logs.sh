@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Exit immediately if a command exits with a non-zero status.
-set -e
+# set -e
 
 function get_last_tx_id() {
   local tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
