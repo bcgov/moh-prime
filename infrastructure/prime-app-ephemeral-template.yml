@@ -767,8 +767,7 @@ objects:
              - /bin/bash
             args:
             - '-c'
-            - createdb
-            - prime-${SVC_NAME}
+            - createdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -791,8 +790,7 @@ objects:
              - /bin/bash
             args:
             - '-c'
-            - dropdb
-            - prime-${SVC_NAME}
+            - dropdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
