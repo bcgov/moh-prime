@@ -37,6 +37,7 @@ namespace Prime
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
             public static readonly string TokenUrl = KeycloakUrls.Token(RealmUrl);
             public static readonly string GisClientId = "GIS";
+            public static readonly string GisUser = "GISUSER";
             public static readonly string AdministrationUrl = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_URL") ?? "https://user-management-dev.api.hlth.gov.bc.ca";
             public static readonly string AdministrationClientId = "PRIME-WEBAPP-ENROLLMENT";
             public static readonly string AdministrationClientSecret = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
