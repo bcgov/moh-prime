@@ -19,11 +19,13 @@ main() {
   echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_\n"
   echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_\n"
 
+  PROCESS_JSON_SCRIPT=(curl -s "https://raw.githubusercontent.com/bcgov/moh-prime/8553e5cec508e8454d7661f4b8a6d255afc7cea5/infrastructure/openshift/parse_api_response.py")
+
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
   curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
     "https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
-    python3 -c "import sys, json, csv; json_as_dict = json.load(sys.stdin); output = csv.writer(sys.stdout); for row in json_as_dict['pnetTransactions']: output.writerow(row.values());"
+    python3 -c ${PROCESS_JSON_SCRIPT}
 
 
   echo -e "\n-------- Write to file? --------\n"
