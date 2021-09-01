@@ -10,12 +10,6 @@
       </ng-container>
     </app-page-subheader2>
 
-    <app-document-upload #documentUpload
-                         componentName="adjudication-document"
-                         labelMessage="Drag and drop your documents or click to browse"
-                         [multiple]="true"
-                         (completed)="onUpload($event)"></app-document-upload>
-
     <app-alert *ngIf="hasNoUploadError"
                type="danger"
                icon="warning">
@@ -42,9 +36,16 @@
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Terms of Access</ng-container>
       <ng-container appPageSubheader2Summary>
-        Select which TOA this user signed.
+        Upload the Terms of Access
       </ng-container>
     </app-page-subheader2>
+
+
+    <app-document-upload #documentUploadTOA
+                         componentName="TOA"
+                         labelMessage="Drag and drop your documents or click to browse"
+                         [multiple]="true"
+                         (completed)="onUpload($event, documentUploadTOA.componentName)"></app-document-upload>
 
     <form (ngSubmit)="onSubmit()"
           [formGroup]="formState.form"
@@ -72,11 +73,12 @@
       </ng-container>
     </app-page-subheader2>
 
-    <app-document-upload #documentUpload
-                         componentName="adjudication-document"
+    <app-document-upload #documentUploadSupportingDocument
+                         componentName="SupportingDocument"
                          labelMessage="Drag and drop your documents or click to browse"
                          [multiple]="true"
-                         (completed)="onUpload($event)"></app-document-upload>
+                         (completed)="onUpload($event, documentUploadSupportingDocument.componentName)">
+    </app-document-upload>
   </app-page-section>
 
   <app-page-section>
@@ -87,11 +89,11 @@
       </ng-container>
     </app-page-subheader2>
 
-    <app-document-upload #documentUpload
-                         componentName="adjudication-document"
+    <app-document-upload #documentUploadPaperForm
+                         componentName="PaperForm"
                          labelMessage="Drag and drop your documents or click to browse"
                          [multiple]="true"
-                         (completed)="onUpload($event)"></app-document-upload>
+                         (completed)="onUpload($event, documentUploadPaperForm.componentName)"></app-document-upload>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="true"

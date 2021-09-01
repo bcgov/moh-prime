@@ -33,6 +33,10 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public plrInfo: PlrInfo[];
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
+  // public TOADocuments: EnrolleeAdjudicationDocument[];
+  // public supportingDocuments: EnrolleeAdjudicationDocument[];
+  // public paperForms: EnrolleeAdjudicationDocument[];
+
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) defaultOptions: DialogDefaultOptions,
@@ -55,6 +59,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       toastService);
 
     this.hasActions = true;
+    // this.TOADocuments = [];
+    // this.supportingDocuments = [];
+    // this.paperForms = [];
   }
 
   public onNavigateEnrollee(enrolleeId: number) {
@@ -71,7 +78,26 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe((documents: EnrolleeAdjudicationDocument[]) => this.documents = documents);
+      .subscribe((documents: EnrolleeAdjudicationDocument[]) => {
+        this.documents = documents
+        // this.documents.forEach((document) => {
+        //   switch(document.documentType) {
+        //     case (1): {
+        //       this.TOADocuments.push(document);
+        //       break;
+        //     }
+        //     case (2): {
+        //       this.supportingDocuments.push(document);
+        //       break;
+        //     }
+        //     case (3): {
+        //       this.paperForms.push(document);
+        //       break;
+        //     }
+        //   }
+        // });
+      });
+    var x =2;
   }
 
   private loadEnrollee(enrolleeId: number): void {

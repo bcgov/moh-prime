@@ -9,6 +9,7 @@ using AutoMapper;
 using Newtonsoft.Json.Linq;
 
 using Prime.Models;
+using Prime.Models.Documents;
 using Prime.Engines;
 using Prime.ViewModels.PaperEnrollees;
 using Prime.HttpClients;
@@ -190,11 +191,13 @@ namespace Prime.Services
             await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
-        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
+        // public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> payload)
         {
-            foreach (var guid in documentGuids)
+            foreach (var guid in payload)
             {
-                var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                var filename = await _documentClient.FinalizeUploadAsync(guid.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                EnrolleeAdjudicationDocumentType documentType = guid.DocumentType;
 
                 if (string.IsNullOrWhiteSpace(filename))
                 {
@@ -204,11 +207,12 @@ namespace Prime.Services
 
                 var adjudicationDocument = new EnrolleeAdjudicationDocument
                 {
-                    DocumentGuid = guid,
+                    DocumentGuid = guid.DocumentGuid,
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,
-                    AdjudicatorId = adminId
+                    AdjudicatorId = adminId,
+                    DocumentType = documentType
                 };
                 _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }
