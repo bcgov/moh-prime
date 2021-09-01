@@ -32,6 +32,7 @@ main() {
   # echo '{ "requestUUID": "a5dd87cf-ebc9-4061-bc6c-86814eb2135c", "numberOfTransactions": 1, "isThereMoreData": "Y", "pnetTransactions": [ { "txnId": 1, "txnDateTime": "20210726T185028.52", "userid": "923456", "sourceIpAddress": "010.085.013.001", "locationIpAddress": "010.085.013.193", "pharmacyId": "BC00000J70", "providerSoftwareId": "PE", "providerSoftwareVer": "02", "practitionerId": "700005", "collegeRef": "P1", "txnType": "TPN", "txnSubtype": null, "pnetTxnOutcome": "0" } ] }' | python3 -c ${PROCESS_JSON_SCRIPT}
 
   ls -l /opt/scripts
+  cat /opt/scripts/parse_api_response.py
 
   # echo -e "\n-------- Write to file? --------\n"
   # pwd
