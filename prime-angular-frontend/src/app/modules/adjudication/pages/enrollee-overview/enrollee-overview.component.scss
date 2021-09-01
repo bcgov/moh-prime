@@ -14,6 +14,10 @@
   color: theme-palette(blue, light);
 }
 
+.adjudicator-actions {
+  padding-right: 15px;
+}
+
 :host ::ng-deep app-plr-info > mat-card {
   overflow: auto;
   height: calc(100vh - 500px);
