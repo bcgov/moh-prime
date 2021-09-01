@@ -56,9 +56,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       toastService);
 
     this.hasActions = true;
-    // this.TOADocuments = [];
-    // this.supportingDocuments = [];
-    // this.paperForms = [];
   }
 
   public onNavigateEnrollee(enrolleeId: number) {
@@ -78,7 +75,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe((documents: EnrolleeAdjudicationDocument[]) => {
         this.documents = documents
       });
-    var x =2;
+    var x = 2;
   }
 
   private loadEnrollee(enrolleeId: number): void {
