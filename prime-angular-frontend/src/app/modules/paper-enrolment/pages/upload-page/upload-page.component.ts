@@ -13,6 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { PaperEnrolmentAgreementType, PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+import { EnrolleeAdjudicationDocumentType } from '@shared/enums/enrollee-adjudication-document-type';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -35,6 +36,8 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   private routeUtils: RouteUtils;
   private documentGuids: string[];
+  // private documentsGuidAndType: {[ key: string ]: EnrolleeAdjudicationDocumentType }[];
+  private documentsGuidAndType: { DocumentGuid: string, DocumentType: number }[];
 
   constructor(
     protected dialog: MatDialog,
@@ -48,12 +51,19 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     super(dialog, formUtilsService);
 
     this.documentGuids = [];
+    this.documentsGuidAndType = [];
     this.agreementTypes = EnumUtils.values(PaperEnrolmentAgreementType);
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onUpload(document: BaseDocument): void {
+  public onUpload(document: BaseDocument, componentName: string = ''): void {
+    var documentType = Object.values(EnrolleeAdjudicationDocumentType).includes(componentName)
+      ? EnrolleeAdjudicationDocumentType[componentName]
+      : EnrolleeAdjudicationDocumentType['NoType'];
     this.documentGuids.push(document.documentGuid);
+    // this.documentsGuidAndType[document.documentGuid] = documentType;
+    this.documentsGuidAndType.push({ DocumentGuid: document.documentGuid, DocumentType: documentType });
+
     this.hasNoUploadError = false;
   }
 
@@ -104,13 +114,15 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
+    // const payload = this.documentsGuidAndType.json;
 
     const enrolleeId = +this.route.snapshot.params.eid;
     return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.assignedTOAType)
       .pipe(
         exhaustMap(() =>
           (this.documentGuids.length > 0)
-            ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
+            // ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
+            ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentsGuidAndType)
             : of(null)
         ),
         exhaustMap(() => this.paperEnrolmentResource.profileCompleted(enrolleeId))

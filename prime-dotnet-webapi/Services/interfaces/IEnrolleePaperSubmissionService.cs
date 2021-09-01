@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Prime.Models;
+using Prime.Models.Documents;
 using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
@@ -23,7 +24,9 @@ namespace Prime.Services
         Task UpdateAgreementAsync(int enrolleeId, PaperEnrolleeAgreementViewModel viewModel);
         Task SetProfileCompletedAsync(int enrolleeId);
         Task FinalizeSubmissionAsync(int enrolleeId);
-        Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documents);
+
+        // Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documents);
+        Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> payload);
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
     }
 }

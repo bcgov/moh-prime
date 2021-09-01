@@ -10,11 +10,14 @@ import tus from 'tus-js-client';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
+import { EnumUtils } from '@lib/utils/enum-utils.class';
+import { EnrolleeAdjudicationDocumentType } from '@shared/enums/enrollee-adjudication-document-type';
 
 export class BaseDocument {
   id: number;
   filename: string;
   documentGuid: string;
+  documentType: EnrolleeAdjudicationDocumentType;
 
   constructor(filename: string, documentGuid: string) {
     this.filename = filename;
@@ -109,9 +112,9 @@ export class DocumentUploadComponent implements OnInit {
 
     const [initialFileType, ...fileTypes] = Object.values(allowedFileTypesMap);
     const allowedFileTypes = fileTypes.reduce((concat, fileType, index) =>
-        (index === fileTypes.length - 1)
-          ? `${concat}, or ${fileType}`
-          : `${concat}, ${fileType}`
+      (index === fileTypes.length - 1)
+        ? `${concat}, or ${fileType}`
+        : `${concat}, ${fileType}`
       , initialFileType);
 
     return `${this.labelMessage}. Files must be ${allowedFileTypes}`;

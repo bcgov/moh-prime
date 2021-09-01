@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
@@ -19,6 +20,7 @@ import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudi
 
 import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
 import { CareSettingForm } from '@paper-enrolment/pages/care-setting-page/care-setting-form.model';
+import { EnrolleeAdjudicationDocumentType } from '@shared/enums/enrollee-adjudication-document-type';
 
 @Injectable({
   providedIn: 'root'
@@ -190,8 +192,15 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateAdjudicationDocuments(enrolleeId: number, documentGuids: string[]): Observable<any> {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentGuids)
+  // public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: { [key: string]: EnrolleeAdjudicationDocumentType }[]): Observable<any> {
+  public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: {}[]): Observable<any> {
+    const options = {
+      'Content-Type': 'application/json',
+    };
+    // public updateAdjudicationDocuments(enrolleeId: number, documentGuids: string[]): Observable<any> {
+    // return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, JSON.stringify(documentsGuidAndType, null, options)
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentsGuidAndType, null, options)
+      // return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentGuids)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

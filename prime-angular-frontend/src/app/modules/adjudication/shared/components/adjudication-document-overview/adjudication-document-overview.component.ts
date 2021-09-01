@@ -8,27 +8,7 @@ import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type
 
 @Component({
   selector: 'app-adjudication-document-overview',
-  template: `
-    <app-page-section>
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>Submitted Documents</ng-container>
-      </app-page-subheader>
-
-      <app-enrollee-property *ngIf="documents?.length"
-                            title="Filename">
-        <ng-container *ngFor="let document of documents">
-          <button mat-stroked-button
-                  color="primary"
-                  class="mb-2"
-                  (click)="downloadDocument(document.id)">
-            <mat-icon class="mr-2">attachment</mat-icon>
-            {{ document.filename | default }}
-          </button>
-          <br>
-        </ng-container>
-      </app-enrollee-property>
-    </app-page-section>
-  `,
+  templateUrl: './adjudication-document-overview.component.html',
   styles: [
     '.mat-icon { font-size: 1.2em; }',
     '.button > .mat-icon { font-size: 1.35rem; }'
@@ -36,9 +16,15 @@ import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type
 })
 export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
   @Input() public documents: BaseDocument[];
+  // @Input() public TOADocuments: BaseDocument[];
+  // @Input() public supportingDocuments: BaseDocument[];
+  // @Input() public paperForms: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
-  public PaperEnrolmentRoutes = PaperEnrolmentRoutes
+  public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
+  public TOADocuments: BaseDocument[];
+  public supportingDocuments: BaseDocument[];
+  public paperForms: BaseDocument[];
 
   constructor(
     route: ActivatedRoute,
@@ -47,6 +33,28 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
     this.download = new EventEmitter<{ documentId: number }>();
+    this.TOADocuments = [];
+    this.supportingDocuments = [];
+    this.paperForms = [];
+  }
+
+  ngOnInit() {
+    this.documents.forEach((document) => {
+      switch(document.documentType) {
+        case (1): {
+          this.TOADocuments.push(document);
+          break;
+        }
+        case (2): {
+          this.supportingDocuments.push(document);
+          break;
+        }
+        case (3): {
+          this.paperForms.push(document);
+          break;
+        }
+      }
+    });
   }
 
   public downloadDocument(documentId: number): void {
