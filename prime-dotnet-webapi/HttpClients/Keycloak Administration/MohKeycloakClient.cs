@@ -28,52 +28,6 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets the Keycloak Role representation by name. Returns null if unccessful.
-        /// </summary>
-        /// <param name="role"></param>
-        public async Task<Role> GetRealmRoleByName(string role)
-        {
-            var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(role)}");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var responseMessage = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Could not retrieve the role {role} from Keycloak. Response message: {responseMessage}");
-                return null;
-            }
-
-            return await response.Content.ReadAsAsync<Role>();
-        }
-
-        /// <summary>
-        /// Assigns a realm-level role to the user, if it exists.
-        /// Returns true if the operation was successful.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="role"></param>
-        public async Task<bool> AssignRealmRole(Guid userId, string role)
-        {
-            // We need both the name and ID of the role to assign it.
-            var keycloakRole = await GetRealmRoleByName(role);
-            if (keycloakRole == null)
-            {
-                return false;
-            }
-
-            // Keycloak expects an array of roles.
-            var content = CreateStringContent(new[] { keycloakRole });
-            var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", content);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                var responseMessage = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Could not assign the role {role} to user {userId}. Response message: {responseMessage}");
-                return false;
-            }
-
-            return true;
-        }
 
         public async Task<Client> GetClient(string clientId)
         {
