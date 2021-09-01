@@ -23,7 +23,7 @@ function main() {
 
   HAS_MORE='Y'
 
-  while [ HAS_MORE = 'Y' ]
+  while [ "${HAS_MORE}" = 'Y' ]
   do
     LAST_TX_ID="$(get_last_tx_id)"
     echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
