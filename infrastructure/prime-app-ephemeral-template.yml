@@ -516,16 +516,14 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
              - /bin/bash
             args:
             - '-c'
-            - >-
-              echo "SELECT 'CREATE DATABASE \"prime-${SVC_NAME}\"' WHERE NOT EXISTS
-              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" |
-              psql
+            - createdb
+            - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -548,10 +546,8 @@ objects:
              - /bin/bash
             args:
             - '-c'
-            - >-
-              echo "SELECT 'DROP DATABASE \"prime-${SVC_NAME}\"' WHERE EXISTS 
-              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" | 
-              psql
+            - dropdb
+            - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -765,16 +761,14 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
              - /bin/bash
             args:
             - '-c'
-            - >-
-              echo "SELECT 'CREATE DATABASE \"prime-${SVC_NAME}\"' WHERE NOT EXISTS
-              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" |
-              psql
+            - createdb
+            - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -797,10 +791,8 @@ objects:
              - /bin/bash
             args:
             - '-c'
-            - >-
-              echo "SELECT 'DROP DATABASE \"prime-${SVC_NAME}\"' WHERE EXISTS 
-              (SELECT FROM pg_database WHERE datname = 'prime-${SVC_NAME}')\gexec" | 
-              psql
+            - dropdb
+            - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
