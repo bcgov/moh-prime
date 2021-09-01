@@ -30,7 +30,7 @@
     <br>
     <ng-container *ngIf="paperForms?.length">
       <h3>Paper Forms:</h3>
-      <ng-container *ngFor="let document of supportingDocuments">
+      <ng-container *ngFor="let document of paperForms">
         <button mat-stroked-button
                 color="primary"
                 class="mb-2"
@@ -42,18 +42,4 @@
       </ng-container>
     </ng-container>
   </app-enrollee-property>
-
-  <!-- <app-enrollee-property *ngIf="documents?.length">
-    <h2>TOA:</h2>
-    <ng-container *ngFor="let document of documents">
-      <button mat-stroked-button
-              color="primary"
-              class="mb-2"
-              (click)="downloadDocument(document.id)">
-        <mat-icon class="mr-2">attachment</mat-icon>
-        {{ document.filename | default }}
-      </button>
-      <br>
-    </ng-container>
-  </app-enrollee-property> -->
 </app-page-section>
