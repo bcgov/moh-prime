@@ -192,15 +192,12 @@ export class PaperEnrolmentResource {
       );
   }
 
-  // public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: { [key: string]: EnrolleeAdjudicationDocumentType }[]): Observable<any> {
+
   public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: {}[]): Observable<any> {
     const options = {
       'Content-Type': 'application/json',
     };
-    // public updateAdjudicationDocuments(enrolleeId: number, documentGuids: string[]): Observable<any> {
-    // return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, JSON.stringify(documentsGuidAndType, null, options)
     return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentsGuidAndType, null, options)
-      // return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentGuids)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
