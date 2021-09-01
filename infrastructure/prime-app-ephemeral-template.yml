@@ -521,7 +521,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb prime-${SVC_NAME}
+              - createdb
+              - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -543,7 +544,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - dropdb prime-${SVC_NAME}
+              - dropdb
+              - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -762,7 +764,8 @@ objects:
             command:
               - /bin/bash
               - -c
-              - createdb prime-${SVC_NAME}
+              - createdb
+              - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -782,9 +785,10 @@ objects:
           failurePolicy: Abort
           execNewPod:
             command:
-             - /bin/bash
-             - -c
-             - dropdb prime-${SVC_NAME}
+              - /bin/bash
+              - -c
+              - dropdb
+              - prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
