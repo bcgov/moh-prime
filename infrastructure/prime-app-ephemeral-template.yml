@@ -516,36 +516,39 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
               - /bin/bash
               - -c
-              - createdb
-              - prime-${SVC_NAME}
+              - createdb -O $(APPUSER) prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
               - name: PGDATABASE
                 value: postgres
-              - name: PGUSER
+              - name: APPUSER
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: app-db-username
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-username
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-password
+                    key: superuser-password
         post:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
               - /bin/bash
               - -c
-              - dropdb
-              - prime-${SVC_NAME}
+              - dropdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -555,12 +558,12 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-username
+                    key: superuser-username
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-password
+                    key: superuser-password
     template:
       metadata:
         labels:
@@ -759,36 +762,39 @@ objects:
       maxUnavailable: 0
       recreateParams:
         pre:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
               - /bin/bash
               - -c
-              - createdb
-              - prime-${SVC_NAME}
+              - createdb -O $(APPUSER) prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
               - name: PGDATABASE
                 value: postgres
-              - name: PGUSER
+              - name: APPUSER
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
                     key: app-db-username
+              - name: PGUSER
+                valueFrom:
+                  secretKeyRef:
+                    name: dev-patroni-secret
+                    key: superuser-username
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-password
+                    key: superuser-password
         post:
-          failurePolicy: Abort
+          failurePolicy: Ignore
           execNewPod:
             command:
               - /bin/bash
               - -c
-              - dropdb
-              - prime-${SVC_NAME}
+              - dropdb prime-${SVC_NAME}
             env:
               - name: PGHOST
                 value: dev-patroni
@@ -798,12 +804,12 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-username
+                    key: superuser-username
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
                     name: dev-patroni-secret
-                    key: app-db-password
+                    key: superuser-password
     template:
       metadata:
         labels:
