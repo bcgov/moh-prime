@@ -11,12 +11,13 @@ main() {
   LAST_TX_ID=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select count(*) from "HealthAuthorityLookup" h')
   # Trim whitespace
   LAST_TX_ID=`echo ${LAST_TX_ID} | sed 's/^ *//g'`
-  echo -e "Last transaction id:  ${LAST_TX_ID}\n"
+  echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
   UUID=$(cat /proc/sys/kernel/random/uuid)
-  echo -e "Generated request id:  ${UUID}\n"
+  echo -e "Generated request id:  _${UUID}_\n"
 
-  echo -e "API client name:  ${PRIME_ODR_API_CLIENT_NAME}\n"
+  echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_\n"
+  echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_\n"
 
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
