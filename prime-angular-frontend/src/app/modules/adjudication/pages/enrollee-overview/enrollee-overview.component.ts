@@ -33,9 +33,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
   public plrInfo: PlrInfo[];
   public showAdjudication: boolean;
   public documents: EnrolleeAdjudicationDocument[];
-  // public TOADocuments: EnrolleeAdjudicationDocument[];
-  // public supportingDocuments: EnrolleeAdjudicationDocument[];
-  // public paperForms: EnrolleeAdjudicationDocument[];
 
 
   constructor(
@@ -80,22 +77,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
       .subscribe((documents: EnrolleeAdjudicationDocument[]) => {
         this.documents = documents
-        // this.documents.forEach((document) => {
-        //   switch(document.documentType) {
-        //     case (1): {
-        //       this.TOADocuments.push(document);
-        //       break;
-        //     }
-        //     case (2): {
-        //       this.supportingDocuments.push(document);
-        //       break;
-        //     }
-        //     case (3): {
-        //       this.paperForms.push(document);
-        //       break;
-        //     }
-        //   }
-        // });
       });
     var x =2;
   }

@@ -191,23 +191,22 @@ namespace Prime.Services
             await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
-        // public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
-        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> payload)
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents)
         {
-            foreach (var guid in payload)
+            foreach (var document in documents)
             {
-                var filename = await _documentClient.FinalizeUploadAsync(guid.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
-                EnrolleeAdjudicationDocumentType documentType = guid.DocumentType;
+                var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                EnrolleeAdjudicationDocumentType documentType = document.DocumentType;
 
                 if (string.IsNullOrWhiteSpace(filename))
                 {
-                    _logger.LogError($"Could not finalize document {guid}");
+                    _logger.LogError($"Could not finalize document {document}");
                     continue;
                 }
 
                 var adjudicationDocument = new EnrolleeAdjudicationDocument
                 {
-                    DocumentGuid = guid.DocumentGuid,
+                    DocumentGuid = document.DocumentGuid,
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,

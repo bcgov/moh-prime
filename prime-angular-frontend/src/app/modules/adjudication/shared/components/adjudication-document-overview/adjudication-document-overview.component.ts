@@ -16,9 +16,6 @@ import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type
 })
 export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
   @Input() public documents: BaseDocument[];
-  // @Input() public TOADocuments: BaseDocument[];
-  // @Input() public supportingDocuments: BaseDocument[];
-  // @Input() public paperForms: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
