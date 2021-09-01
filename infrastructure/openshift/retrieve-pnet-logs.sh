@@ -21,8 +21,8 @@ main() {
   echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_\n"
   echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_\n"
 
-  PROCESS_JSON_SCRIPT=$(curl -s "https://raw.githubusercontent.com/bcgov/moh-prime/8553e5cec508e8454d7661f4b8a6d255afc7cea5/infrastructure/openshift/parse_api_response.py")
-  echo -e "${PROCESS_JSON_SCRIPT}\n"
+  # PROCESS_JSON_SCRIPT=$(curl -s "https://raw.githubusercontent.com/bcgov/moh-prime/8553e5cec508e8454d7661f4b8a6d255afc7cea5/infrastructure/openshift/parse_api_response.py")
+  # echo -e "${PROCESS_JSON_SCRIPT}\n"
 
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
@@ -35,7 +35,8 @@ main() {
   # touch /tmp/more.txt
   # ls -l /tmp
 
-  echo '1,20210726T185028.52,923456,010.085.013.001,010.085.013.193,BC00000J70,PE,02,700005,P1,TPN,,0' | psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "\COPY \"PharmanetTransactionLog\"("TransactionId", "TxDateTime", "UserId", "SourceIpAddress", "LocationIpAddress", "PharmacyId", "TransactionType", "TransactionSubType", "PractitionerId", "CollegePrefix", "TransactionOutcome", "ProviderSoftwareId", "ProviderSoftwareVersion") FROM STDIN (FORMAT CSV)"
+  echo '1,20210726T185028.52,923456,010.085.013.001,010.085.013.193,BC00000J70,PE,02,700005,P1,TPN,,0' | \
+    psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"TransactionType\", \"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\") FROM STDIN (FORMAT CSV)"
 
 }
 
