@@ -19,7 +19,7 @@ main() {
   echo -e "API client name:  _${PRIME_ODR_API_CLIENT_NAME}_\n"
   echo -e "Fetch size:  _${PRIME_ODR_API_FETCH_SIZE}_\n"
 
-  PROCESS_JSON_SCRIPT=(curl -s "https://raw.githubusercontent.com/bcgov/moh-prime/8553e5cec508e8454d7661f4b8a6d255afc7cea5/infrastructure/openshift/parse_api_response.py")
+  PROCESS_JSON_SCRIPT=$(curl -s "https://raw.githubusercontent.com/bcgov/moh-prime/8553e5cec508e8454d7661f4b8a6d255afc7cea5/infrastructure/openshift/parse_api_response.py")
 
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
