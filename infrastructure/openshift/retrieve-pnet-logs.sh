@@ -30,7 +30,9 @@ main() {
   # ls -l /etc/ssl/certs
   curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
     "https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
-    python3 /opt/scripts/parse_api_response.py
+    python3 /opt/scripts/parse_api_response.py | \
+    psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "\copy \"PharmanetTransactionLog\"(\"TransactionId\", \"TxDateTime\", \"UserId\", \"SourceIpAddress\", \"LocationIpAddress\", \"PharmacyId\", \"TransactionType\", \"TransactionSubType\", \"PractitionerId\", \"CollegePrefix\", \"TransactionOutcome\", \"ProviderSoftwareId\", \"ProviderSoftwareVersion\") FROM STDIN (FORMAT CSV)"
+
   # echo '{ "requestUUID": "a5dd87cf-ebc9-4061-bc6c-86814eb2135c", "numberOfTransactions": 1, "isThereMoreData": "Y", "pnetTransactions": [ { "txnId": 1, "txnDateTime": "20210726T185028.52", "userid": "923456", "sourceIpAddress": "010.085.013.001", "locationIpAddress": "010.085.013.193", "pharmacyId": "BC00000J70", "providerSoftwareId": "PE", "providerSoftwareVer": "02", "practitionerId": "700005", "collegeRef": "P1", "txnType": "TPN", "txnSubtype": null, "pnetTxnOutcome": "0" } ] }' | python3 /opt/scripts/parse_api_response.py
 
 
