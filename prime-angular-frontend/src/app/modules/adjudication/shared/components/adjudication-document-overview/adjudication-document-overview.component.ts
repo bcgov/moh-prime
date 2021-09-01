@@ -36,22 +36,24 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
   }
 
   ngOnInit() {
-    this.documents.forEach((document) => {
-      switch(document.documentType) {
-        case (1): {
-          this.TOADocuments.push(document);
-          break;
+    if (this.documents) {
+      this.documents.forEach((document) => {
+        switch(document.documentType) {
+          case (1): {
+            this.TOADocuments.push(document);
+            break;
+          }
+          case (2): {
+            this.supportingDocuments.push(document);
+            break;
+          }
+          case (3): {
+            this.paperForms.push(document);
+            break;
+          }
         }
-        case (2): {
-          this.supportingDocuments.push(document);
-          break;
-        }
-        case (3): {
-          this.paperForms.push(document);
-          break;
-        }
-      }
-    });
+      });
+    }
   }
 
   public downloadDocument(documentId: number): void {
