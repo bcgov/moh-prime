@@ -26,15 +26,17 @@ main() {
 
   # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
-  curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
-    "https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
-    python3 -c ${PROCESS_JSON_SCRIPT}
+  # curl --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
+  #   "https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}" | \
+  #   python3 -c ${PROCESS_JSON_SCRIPT}
 
+  # echo -e "\n-------- Write to file? --------\n"
+  # pwd
+  # touch /tmp/more.txt
+  # ls -l /tmp
 
-  echo -e "\n-------- Write to file? --------\n"
-  pwd
-  touch /tmp/more.txt
-  ls -l /tmp
+  echo '1,20210726T185028.52,923456,010.085.013.001,010.085.013.193,BC00000J70,PE,02,700005,P1,TPN,,0' | psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -c "\COPY \"PharmanetTransactionLog\"("TransactionId", "TxDateTime", "UserId", "SourceIpAddress", "LocationIpAddress", "PharmacyId", "TransactionType", "TransactionSubType", "PractitionerId", "CollegePrefix", "TransactionOutcome", "ProviderSoftwareId", "ProviderSoftwareVersion") FROM STDIN (FORMAT CSV)"
+
 }
 
 main  # Ensure the whole file is downloaded before executing
