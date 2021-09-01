@@ -1166,7 +1166,7 @@ namespace Prime.Controllers
                 return BadRequest("PEC cannot be empty.");
             }
 
-            var exist = await _siteService.PecExistsInNonHaSites(pec);
+            var exist = await _siteService.PecExistsInNonHealthAuthoritySites(pec);
             return Ok(exist);
         }
     }

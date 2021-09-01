@@ -51,6 +51,6 @@ namespace Prime.Services
         Task<SiteRegistrationNoteViewModel> GetSiteRegistrationNoteAsync(int siteId, int siteRegistrationNoteId);
         Task<IEnumerable<int>> GetNotifiedSiteIdsForAdminAsync(ClaimsPrincipal user);
         Task<bool> SiteExists(int siteId);
-        Task<bool> PecExistsInNonHaSites(string pec);
+        Task<bool> PecExistsInNonHealthAuthoritySites(string pec);
     }
 }

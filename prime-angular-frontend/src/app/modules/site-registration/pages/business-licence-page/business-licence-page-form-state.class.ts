@@ -1,16 +1,18 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { UniquePecValidator } from '@lib/validators/unique-pec.validator';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { SiteResource } from '@core/resources/site-resource.service';
+
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
-interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
+type BusinessLicencePageDataModel = Pick<Site, 'doingBusinessAs' | 'pec'>
 
 export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
   public constructor(
     private fb: FormBuilder,
-    private uniquePecValidator: UniquePecValidator
+    private siteResource: SiteResource
   ) {
     super();
 
@@ -81,8 +83,8 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       pec: [
         null,
         [Validators.required],
-        this.uniquePecValidator.validate.bind(this.uniquePecValidator)
+        FormControlValidators.uniqueAsync(this.siteResource.pecExists)
       ]
-    }, { updateOn: 'blur'});
+    });
   }
 }

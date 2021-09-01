@@ -744,9 +744,9 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<bool> PecExistsInNonHaSites(string pec)
+        public async Task<bool> PecExistsInNonHealthAuthoritySites(string pec)
         {
-            return await GetNonHaSiteByPecQuery(pec).AnyAsync();
+            return await GetNonHealthAuthoritySiteByPecQuery(pec).AnyAsync();
         }
 
         /// <summary>
@@ -758,11 +758,15 @@ namespace Prime.Services
         /// <returns></returns>
         private async Task<bool> IsNonHaSiteAndPecNotUnique(Site site, string pec)
         {
-            return (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && await GetNonHaSiteByPecQuery(pec).AnyAsync(s => s.Id != site.Id);
+            if (site.CareSettingCode == null || (CareSettingType)site.CareSettingCode == CareSettingType.HealthAuthority || string.IsNullOrWhiteSpace(pec))
+            {
+                return false;
+            }
+
+            return await GetNonHealthAuthoritySiteByPecQuery(pec).AnyAsync(s => s.Id != site.Id);
         }
 
-        private IQueryable<Site> GetNonHaSiteByPecQuery(string searchPec)
+        private IQueryable<Site> GetNonHealthAuthoritySiteByPecQuery(string searchPec)
         {
             return _context.Sites
                 .AsNoTracking()

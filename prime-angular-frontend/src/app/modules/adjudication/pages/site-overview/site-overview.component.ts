@@ -13,7 +13,6 @@ import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { UniquePecValidator } from '@lib/validators/unique-pec.validator';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -29,6 +28,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-site-overview',
@@ -65,7 +65,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     protected siteResource: SiteResource,
     private formUtilsService: FormUtilsService,
     private fb: FormBuilder,
-    private uniquePecValidator: UniquePecValidator,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService
@@ -89,7 +88,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     return this.form.get('pec') as FormControl;
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
@@ -98,7 +97,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
-  public onApproveOrgClaim() {
+  public onApproveOrgClaim(): void {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .pipe(
@@ -163,8 +162,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        this.uniquePecValidator.validate.bind(this.uniquePecValidator)
+        FormControlValidators.uniqueAsync(this.siteResource.pecExists)
       ]
-    }, { updateOn: 'blur' });
+    });
   }
 }
