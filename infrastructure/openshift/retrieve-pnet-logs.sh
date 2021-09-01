@@ -18,9 +18,11 @@ main() {
 
   echo -e "API client name:  ${PRIME_ODR_API_CLIENT_NAME}\n"
 
+  # CA certs need to be in place:  https://stackoverflow.com/questions/3160909/how-do-i-deal-with-certificates-using-curl-while-trying-to-access-an-https-url
   # ls -l /etc/ssl/certs
   curl -v --cert /opt/certs/prime-odr-api-cert.crt:${PRIME_ODR_API_SSL_CERT_PASSWORD} --key /opt/certs/prime-odr-api-cert.key --header "Authorization: Basic ${PRIME_ODR_API_ENCODED_CREDENTIALS}" \
-    -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}
+    -X GET https://t1primedatasvc.maximusbc.ca/odr/prime/pnetdata/transactionLog
+    # ?requestUUID=${UUID}&clientName=${PRIME_ODR_API_CLIENT_NAME}&lastTxnId=${LAST_TX_ID}&fetchSize=${PRIME_ODR_API_FETCH_SIZE}
 }
 
 main  # Ensure the whole file is downloaded before executing
