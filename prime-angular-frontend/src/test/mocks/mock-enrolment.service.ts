@@ -128,7 +128,8 @@ export class MockEnrolmentService implements IEnrolmentService {
       adjudicator: null,
       base64QRCode: null,
       confirmed: false,
-      requiresConfirmation: false
+      requiresConfirmation: false,
+      jobs: []
     });
   }
 
