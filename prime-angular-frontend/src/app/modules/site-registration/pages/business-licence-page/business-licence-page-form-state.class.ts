@@ -6,6 +6,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { Observable } from 'rxjs';
 
 type BusinessLicencePageDataModel = Pick<Site, 'doingBusinessAs' | 'pec'>
 
@@ -63,10 +64,6 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
   }
 
   public buildForm(): void {
-    // Dependency injected services within the resource lost their reference without
-    // explicitly binding the scope of the service when passed to a static method
-    const pecExists$ = this.siteResource.pecExists.bind(this.siteResource);
-
     this.formInstance = this.fb.group({
       businessLicenceGuid: [
         '',
@@ -87,8 +84,12 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       pec: [
         null,
         [Validators.required],
-        FormControlValidators.uniqueAsync(pecExists$)
+        FormControlValidators.uniqueAsync(this.checkPecExists())
       ]
     });
+  }
+
+  private checkPecExists() {
+    return (value: string) => this.siteResource.pecExists(value);
   }
 }
