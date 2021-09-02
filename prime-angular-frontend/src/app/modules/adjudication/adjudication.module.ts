@@ -76,7 +76,6 @@ import { OrganizationToaMaintenanceListPageComponent } from './pages/organizatio
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
-import { ContainsPipe } from '@shared/pipes/contains.pipe';
 import { AdjudicationDocumentOverviewComponent } from './shared/components/adjudication-document-overview/adjudication-document-overview.component';
 
 @NgModule({
@@ -148,7 +147,6 @@ import { AdjudicationDocumentOverviewComponent } from './shared/components/adjud
     OrganizationToaMaintenanceViewPageComponent,
     LicenseClassesMaintenancePageComponent,
     PlrInfoComponent,
-    ContainsPipe,
     AdjudicationDocumentOverviewComponent
   ],
   imports: [
