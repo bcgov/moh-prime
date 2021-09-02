@@ -4,7 +4,10 @@
 # set -e
 
 function get_last_tx_id() {
-  local tx_id=''
+  # See https://www.linuxjournal.com/content/return-values-bash-functions
+  local  __resultvar=$1
+  local  tx_id=''
+
   # Set to enter loop
   local db_status=-1
   while [ $db_status -ne 0 ]
@@ -21,7 +24,7 @@ function get_last_tx_id() {
   # Handle initial empty table condition
   if [ "${tx_id}" = '' ]; then tx_id='0'; fi
   # "Return" result to caller
-  echo "${tx_id}"
+  eval $__resultvar="${tx_id}"
 }
 
 
@@ -36,7 +39,7 @@ function main() {
 
   while [ "${HAS_MORE}" = 'Y' ]
   do
-    LAST_TX_ID="$(get_last_tx_id)"
+    get_last_tx_id LAST_TX_ID
     echo -e "Last transaction id:  _${LAST_TX_ID}_\n"
 
     UUID=$(cat /proc/sys/kernel/random/uuid)
