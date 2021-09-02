@@ -4,13 +4,11 @@
     "editorconfig.editorconfig",
     "eamodio.gitlens",
     "ms-vsliveshare.vsliveshare",
-    "ms-vsliveshare.vsliveshare-audio",
-    "ms-vsliveshare.vsliveshare-pack",
     "ms-azuretools.vscode-docker",
     "msjsdiag.debugger-for-chrome",
     "christian-kohler.path-intellisense",
     "gruntfuggly.todo-tree",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "angular.ng-template"
+    "angular.ng-template",
+    "dbaeumer.vscode-eslint"
   ]
 }
