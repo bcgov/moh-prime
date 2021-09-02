@@ -4,12 +4,13 @@
 # set -e
 
 function get_last_tx_id() {
+  local tx_id=''
   # Set to enter loop
   local db_status=-1
   while [ $db_status -ne 0 ]
   do
     echo -e "-------- get_last_tx_id calling psql --------\n"
-    local tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
+    tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
     db_status=$?
     echo -e "Last psql status:  _${db_status}_\n"
     if [ $db_status -ne 0 ]; then sleep 5; fi
