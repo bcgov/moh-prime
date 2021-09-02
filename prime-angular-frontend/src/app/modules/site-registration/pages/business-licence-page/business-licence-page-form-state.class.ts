@@ -89,7 +89,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     });
   }
 
-  private checkPecExists() {
+  private checkPecExists(): (value: string) => Observable<boolean> {
     return (value: string) => this.siteResource.pecExists(value);
   }
 }
