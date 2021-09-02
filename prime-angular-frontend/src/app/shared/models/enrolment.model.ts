@@ -14,6 +14,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+// This is needed for legacy enrolments
 import { Job } from '@enrolment/shared/models/job.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
@@ -26,7 +27,6 @@ export interface HttpEnrollee extends Enrollee {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
-  jobs: Job[];
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
@@ -56,6 +56,8 @@ export interface HttpEnrollee extends Enrollee {
   gpid: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 /**
@@ -79,7 +81,6 @@ export interface Enrolment {
   deviceProviderNumber: string;
   isInsulinPumpProvider: boolean;
   oboSites: OboSite[];
-  jobs: Job[],
   enrolleeRemoteUsers: EnrolleeRemoteUser[];
   remoteAccessSites: RemoteAccessSite[];
   remoteAccessLocations: RemoteAccessLocation[];
@@ -108,6 +109,8 @@ export interface Enrolment {
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 export interface EnrolleeListViewModel {
