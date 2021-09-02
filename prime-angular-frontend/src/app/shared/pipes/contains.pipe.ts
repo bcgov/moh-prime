@@ -5,27 +5,28 @@ import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.servic
   name: 'contains'
 })
 export class ContainsPipe implements PipeTransform {
-
-  transform(
-    word: string,
-    line: string,
-    position: 'startsWith' | 'endsWith' | 'withIn' = 'withIn'): boolean {
-    if (line && word && typeof line === 'string' && typeof word === 'string'){
-      switch (position) {
-        case 'withIn':  {
-          return line.includes(word);
-        }
-        case 'startsWith': {
-          return line.startsWith(word);
-        }
-        case 'endsWith': {
-          return line.endsWith(word);
-        }
-        default: {
-          throw new Error(`Invalid "position" argument specified: ${position}`);
-        }
-      };
+  public transform(
+    value: string,
+    search: string,
+    position: 'startsWith' | 'endsWith' | 'withIn' = 'withIn'
+  ): boolean {
+    if(!value || !search || typeof value !== 'string' || typeof search !== 'string') {
+      return false;
     }
-    return false;
+
+    switch (position) {
+      case 'withIn':  {
+        return value.includes(search);
+      }
+      case 'startsWith': {
+        return value.startsWith(search);
+      }
+      case 'endsWith': {
+        return value.endsWith(search);
+      }
+      default: {
+        throw new Error(`Invalid "position" argument specified: ${position}`);
+      }
+    }
   }
 }
