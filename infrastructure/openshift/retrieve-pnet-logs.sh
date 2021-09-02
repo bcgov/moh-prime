@@ -4,7 +4,15 @@
 # set -e
 
 function get_last_tx_id() {
-  local tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
+  # Set to enter loop
+  local db_status=-1
+  while [ $db_status -ne 0 ]
+  do
+    local tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
+    db_status=$?
+    if [ $db_status -ne 0 ]; then sleep 5; fi
+  done
+
   # Trim whitespace
   tx_id=`echo ${tx_id} | sed 's/^ *//g'`
   # Handle initial empty table condition
