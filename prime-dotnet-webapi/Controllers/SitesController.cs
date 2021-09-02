@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -151,6 +150,14 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
+            }
+
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC 
+                && await _siteService.PecExistsAsync(updatedSite.PEC))
+            {
+                return BadRequest("PEC already exists");
             }
 
             await _siteService.UpdateSiteAsync(siteId, updatedSite);
@@ -632,6 +639,13 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
+            }
+
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && await _siteService.PecExistsAsync(pecCode))
+            {
+                return BadRequest("PEC already exists");
             }
 
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
@@ -1166,7 +1180,7 @@ namespace Prime.Controllers
                 return BadRequest("PEC cannot be empty.");
             }
 
-            var exist = await _siteService.PecExistsInNonHealthAuthoritySites(pec);
+            var exist = await _siteService.PecExistsAsync(pec);
             return Ok(exist);
         }
     }

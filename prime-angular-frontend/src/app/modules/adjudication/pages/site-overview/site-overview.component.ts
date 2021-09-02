@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, EMPTY, forkJoin, of, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -162,8 +162,12 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        FormControlValidators.uniqueAsync(this.siteResource.pecExists)
+        FormControlValidators.uniqueAsync(this.checkPecExists())
       ]
     });
+  }
+
+  private checkPecExists(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecExists(value);
   }
 }
