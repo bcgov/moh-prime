@@ -129,7 +129,7 @@ export class MockEnrolmentService implements IEnrolmentService {
       base64QRCode: null,
       confirmed: false,
       requiresConfirmation: false,
-      jobs: []
+      jobs: [{ title: faker.name.jobTitle() }]
     });
   }
 
