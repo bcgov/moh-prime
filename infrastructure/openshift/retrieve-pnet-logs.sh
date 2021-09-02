@@ -16,7 +16,7 @@ function get_last_tx_id() {
     tx_id=$(psql -h ${PGHOST} -d ${PGDATABASE} -U ${PGUSER} -t -c 'select max(ptl."TransactionId") from "PharmanetTransactionLog" ptl')
     db_status=$?
     echo -e "Last psql status:  _${db_status}_\n"
-    if [ $db_status -ne 0 ]; then sleep 5; fi
+    if [ $db_status -ne 0 ]; then sleep 10; fi
   done
 
   # Trim whitespace
