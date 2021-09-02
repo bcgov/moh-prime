@@ -1,6 +1,7 @@
 <app-bcsc-profile [user]="enrollee"></app-bcsc-profile>
 
-<app-page-section *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR">
+<app-page-section
+                  *ngIf="identityProvider === IdentityProviderEnum.BCSC || identityProvider === IdentityProviderEnum.IDIR">
   <!-- Note that for BCeID enrollees, the application forces their preferred names to be identical to their non-preferred counterparts,
        so it is pointless to show the preferred names -->
 
@@ -248,7 +249,15 @@
 
           <app-enrollee-property title="Job Title"
                                  [makeBold]="true">
-            {{ site.jobTitle | default }}
+            <ng-container *ngIf="site.jobTitle; else oldEnrolmentSnapshotBlock">
+              {{ site.jobTitle | default }}
+            </ng-container>
+            <ng-container #oldEnrolmentSnapshotBlock
+                          *ngIf="enrolment.jobs?length?">
+              <ng-container *ngFor="job in enrolment.jobs">
+                {{ job.title | default }}
+              </ng-container>
+            </ng-container>
           </app-enrollee-property>
 
           <app-enrollee-property title="Site Address"
