@@ -15,6 +15,7 @@ import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.mo
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { Job } from '@enrolment/shared/models/job.model';
 
 @Component({
   selector: 'app-enrollee-review',
@@ -85,6 +86,12 @@ export class EnrolleeReviewComponent {
   public get oboSites(): OboSite[] {
     return (this.enrolment.oboSites)
       ? this.enrolment.oboSites
+      : [];
+  }
+
+  public get jobs(): Job[] {
+    return (this.enrolment.jobs)
+      ? this.enrolment.jobs
       : [];
   }
 
