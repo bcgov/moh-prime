@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 
 export class FormControlValidators {
@@ -226,17 +226,14 @@ export class FormControlValidators {
     request: (value: string) => Observable<boolean>,
     { errorKey, dueTime }: { errorKey: string, dueTime?: number }
   ): AsyncValidatorFn {
-    const subject = new BehaviorSubject('');
-    const debounce$ = subject.asObservable().pipe(
-      distinctUntilChanged(),
-      debounceTime(dueTime ?? 400),
-      switchMap((value: string) => request(value)),
-      map((result: boolean) => (result) ? { [errorKey]: result } : null)
-    );
-
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      subject.next(control.value);
-      return debounce$;
+      return of(control.value)
+        .pipe(
+          distinctUntilChanged(),
+          debounceTime(dueTime ?? 400),
+          switchMap((value: string) => request(value)),
+          map((result: boolean) => (result) ? { [errorKey]: result } : null)
+        );
     };
   }
 }
