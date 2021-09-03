@@ -112,7 +112,7 @@ namespace Prime
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader()
-                            .WithExposedHeaders("Location");
+                            .WithExposedHeaders("Location", "RemainingAttempts", "LockoutTimeInHours");
                     });
             });
 

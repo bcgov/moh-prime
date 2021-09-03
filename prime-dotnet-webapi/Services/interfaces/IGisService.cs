@@ -1,7 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Services
@@ -11,7 +11,7 @@ namespace Prime.Services
         Task<GisViewModel> GetGisEnrolmentAsync(int gisId);
         Task<GisViewModel> GetGisEnrolmentAsync(Guid userId);
         Task<int> CreateOrUpdateGisEnrolmentAsync(GisChangeModel changeModel, ClaimsPrincipal user);
-        Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user);
+        Task<GisLdapUser> LdapLogin(string username, string password, ClaimsPrincipal user);
         Task SubmitApplicationAsync(int gisId);
     }
 }
