@@ -10,7 +10,7 @@
     "test": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessCustom",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ngcc",    
+    "postinstall": "ngcc",
     "reporter": "ng build --configuration production --stats-json --sourceMap",
     "bundle-report": "npm reporter && webpack-bundle-analyzer dist/angular-frontend/stats-es2015.json",
     "source-report": "npm reporter && source-map-explorer dist/angular-frontend/main-es2015.**.js",
