@@ -12,7 +12,7 @@ using Prime.HttpClients.KeycloakApiDefinitions;
 
 namespace Prime.HttpClients
 {
-    public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
+    public class KeycloakAdministrationClient : BaseClient, IPrimeKeycloakAdministrationClient
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;
@@ -27,10 +27,7 @@ namespace Prime.HttpClients
             _logger = logger;
         }
 
-        /// <summary>
-        /// Gets the Keycloak Role representation by name. Returns null if unccessful.
-        /// </summary>
-        /// <param name="roleName"></param>
+
         public async Task<Role> GetRealmRole(string roleName)
         {
             var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(roleName)}");
@@ -45,12 +42,6 @@ namespace Prime.HttpClients
             return await response.Content.ReadAsAsync<Role>();
         }
 
-        /// <summary>
-        /// Assigns a realm-level role to the user, if it exists.
-        /// Returns true if the operation was successful.
-        /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="roleName"></param>
         public async Task<bool> AssignRealmRole(Guid userId, string roleName)
         {
             // We need both the name and ID of the role to assign it.

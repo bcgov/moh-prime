@@ -20,11 +20,11 @@ namespace Prime.Controllers
     public class PhsaController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
-        private readonly IKeycloakAdministrationClient _keycloakClient;
+        private readonly IPrimeKeycloakAdministrationClient _keycloakClient;
 
         public PhsaController(
             IPartyService partyService,
-            IKeycloakAdministrationClient keycloakClient)
+            IPrimeKeycloakAdministrationClient keycloakClient)
         {
             _partyService = partyService;
             _keycloakClient = keycloakClient;

@@ -182,7 +182,7 @@ namespace Prime
                 ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
             });
 
-            services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
+            services.AddHttpClientWithBaseAddress<IPrimeKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
