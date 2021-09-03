@@ -529,7 +529,8 @@ export class AdjudicationContainerComponent implements OnInit {
       enrolleeRemoteUsers,
       enrolleeCareSettings,
       requiresConfirmation,
-      confirmed
+      confirmed,
+      gpid
     } = enrollee;
 
     return {
@@ -553,6 +554,7 @@ export class AdjudicationContainerComponent implements OnInit {
       hasNotification: false,
       requiresConfirmation,
       confirmed,
+      gpid,
     };
   }
 }

@@ -37,7 +37,7 @@ import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/
 
 const routes: Routes = [
   {
-    path: EnrolmentRoutes.MODULE_PATH,
+    path: '',
     component: DashboardV1Component,
     canActivate: [
       AuthenticationGuard,
