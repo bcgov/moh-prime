@@ -1,7 +1,7 @@
 import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 
-import { Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 
 export class FormControlValidators {
 
@@ -231,7 +231,9 @@ export class FormControlValidators {
         .pipe(
           distinctUntilChanged(),
           debounceTime(dueTime ?? 400),
-          switchMap((value: string) => request(value)),
+          switchMap((value: string) =>
+            (value) ? request(value) : EMPTY
+          ),
           map((result: boolean) => (result) ? { [errorKey]: result } : null)
         );
     };

@@ -54,7 +54,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
    */
-  public setForm(site: Site, forcePatch = false): void {
+  public setForm(site: Site, forcePatch: boolean = false): void {
     if (!site) {
       return;
     }
