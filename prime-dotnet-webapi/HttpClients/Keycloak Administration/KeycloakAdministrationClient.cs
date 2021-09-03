@@ -30,16 +30,15 @@ namespace Prime.HttpClients
         /// <summary>
         /// Gets the Keycloak Role representation by name. Returns null if unccessful.
         /// </summary>
-        /// <param name="role"></param>
-        /// <returns></returns>
-        public async Task<Role> GetRoleByName(string role)
+        /// <param name="roleName"></param>
+        public async Task<Role> GetRealmRole(string roleName)
         {
-            var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(role)}");
+            var response = await _client.GetAsync($"roles/{WebUtility.UrlEncode(roleName)}");
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseMessage = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Could not retrieve the role {role} from Keycloak. Response message: {responseMessage}");
+                _logger.LogError($"Could not retrieve the role {roleName} from Keycloak. Response message: {responseMessage}");
                 return null;
             }
 
@@ -51,24 +50,24 @@ namespace Prime.HttpClients
         /// Returns true if the operation was successful.
         /// </summary>
         /// <param name="userId"></param>
-        /// <param name="role"></param>
-        public async Task<bool> AssignRealmRole(Guid userId, string role)
+        /// <param name="roleName"></param>
+        public async Task<bool> AssignRealmRole(Guid userId, string roleName)
         {
             // We need both the name and ID of the role to assign it.
-            var keycloakRole = await GetRoleByName(role);
-            if (keycloakRole == null)
+            var role = await GetRealmRole(roleName);
+            if (role == null)
             {
                 return false;
             }
 
             // Keycloak expects an array of roles.
-            var content = CreateStringContent(new[] { keycloakRole });
+            var content = CreateStringContent(new[] { role });
             var response = await _client.PostAsync($"users/{userId}/role-mappings/realm", content);
 
             if (!response.IsSuccessStatusCode)
             {
                 var responseMessage = await response.Content.ReadAsStringAsync();
-                _logger.LogError($"Could not assign the role {role} to user {userId}. Response message: {responseMessage}");
+                _logger.LogError($"Could not assign the role {roleName} to user {userId}. Response message: {responseMessage}");
                 return false;
             }
 
