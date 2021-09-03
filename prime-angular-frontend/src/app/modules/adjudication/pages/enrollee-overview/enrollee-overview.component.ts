@@ -75,7 +75,6 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe((documents: EnrolleeAdjudicationDocument[]) => {
         this.documents = documents
       });
-    var x = 2;
   }
 
   private loadEnrollee(enrolleeId: number): void {
