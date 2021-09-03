@@ -89,12 +89,6 @@ export class EnrolleeReviewComponent {
       : [];
   }
 
-  public get jobs(): Job[] {
-    return (this.enrolment.jobs)
-      ? this.enrolment.jobs
-      : [];
-  }
-
   public get hasCareSetting(): boolean {
     return (this.enrolment && !!this.enrolment.careSettings.length);
   }

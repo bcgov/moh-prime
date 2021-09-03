@@ -32,6 +32,7 @@ import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
+import { ContainsPipe } from '@shared/pipes/contains.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
@@ -126,6 +127,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     InRolePipe,
     AddressFormComponent,
     DefaultPipe,
+    ContainsPipe,
     ConfirmDialogComponent,
     PageComponent,
     ProgressIndicatorComponent,
@@ -233,6 +235,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     AddressPipe,
     RolePipe,
     InRolePipe,
+    ContainsPipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,

@@ -14,7 +14,7 @@ import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
-// This is needed for legacy enrolments
+
 import { Job } from '@enrolment/shared/models/job.model';
 
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
