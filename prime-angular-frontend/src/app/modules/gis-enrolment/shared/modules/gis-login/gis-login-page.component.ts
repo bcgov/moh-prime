@@ -29,7 +29,7 @@ export class GisLoginPageComponent implements OnInit {
   public onLogin() {
     // Route to COLLECTION_NOTICE which determines the direction of routing
     const redirectRoute = GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.COLLECTION_NOTICE);
-    const redirectUri = `${ this.config.loginRedirectUrl }${ redirectRoute }`;
+    const redirectUri = `${this.config.loginRedirectUrl}${redirectRoute}`;
 
     this.authService.login({
       idpHint: IdentityProviderEnum.IDIR,

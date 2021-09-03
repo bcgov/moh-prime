@@ -78,7 +78,7 @@ export abstract class AbstractResource {
    * @description
    * Handle a erroneous HTTP response.
    */
-  protected handleError({ status, error, message }: HttpErrorResponse): Observable<ApiHttpErrorResponse> {
+  protected handleError({ status, error, headers, message }: HttpErrorResponse): Observable<ApiHttpErrorResponse> {
     if (error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
@@ -88,6 +88,6 @@ export abstract class AbstractResource {
       console.error(`Backend returned code ${status}, body was:`, error);
     }
 
-    return throwError(new ApiHttpErrorResponse(status, error, message));
+    return throwError(new ApiHttpErrorResponse(status, error, headers, message));
   }
 }
