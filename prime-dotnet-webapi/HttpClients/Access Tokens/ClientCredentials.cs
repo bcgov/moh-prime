@@ -2,7 +2,7 @@ using IdentityModel.Client;
 
 namespace Prime.HttpClients
 {
-    public class AddressAutocompleteClientCredentials : QueryStringApiKey { }
+    public class AddressAutocompleteClientCredentials : BasicApiKey { }
     public class ChesClientCredentials : ClientCredentialsTokenRequest { }
     public class DocumentManagerClientCredentials : ClientCredentialsTokenRequest { }
     public class KeycloakAdministrationClientCredentials : ClientCredentialsTokenRequest { }
