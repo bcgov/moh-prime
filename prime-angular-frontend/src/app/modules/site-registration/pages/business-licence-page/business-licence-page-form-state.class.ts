@@ -1,12 +1,14 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { Observable } from 'rxjs';
 
 type BusinessLicencePageDataModel = Pick<Site, 'doingBusinessAs' | 'pec'>
 
@@ -84,12 +86,13 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       pec: [
         null,
         [Validators.required],
-        FormControlValidators.uniqueAsync(this.checkPecExists())
+        FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
   }
 
-  private checkPecExists(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecExists(value);
+  private checkPecIsUnique(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecExists(value)
+      .pipe(map((value: boolean) => !value));
   }
 }
