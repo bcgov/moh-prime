@@ -10,7 +10,9 @@ using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 
+
 namespace Prime
+
 {
     public class Program
     {
