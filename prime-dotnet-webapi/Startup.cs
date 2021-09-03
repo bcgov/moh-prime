@@ -155,16 +155,23 @@ namespace Prime
             .AddTransient<BearerTokenHandler<DocumentManagerClientCredentials>>()
             .AddSingleton(new DocumentManagerClientCredentials
             {
-                Address = PrimeEnvironment.Keycloak.TokenUrl,
+                Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
                 ClientId = PrimeEnvironment.DocumentManager.ClientId,
                 ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
             })
             .AddTransient<BearerTokenHandler<KeycloakAdministrationClientCredentials>>()
             .AddSingleton(new KeycloakAdministrationClientCredentials
             {
-                Address = PrimeEnvironment.Keycloak.TokenUrl,
-                ClientId = PrimeEnvironment.Keycloak.AdministrationClientId,
-                ClientSecret = PrimeEnvironment.Keycloak.AdministrationClientSecret,
+                Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
+                ClientId = PrimeEnvironment.PrimeKeycloak.AdministrationClientId,
+                ClientSecret = PrimeEnvironment.PrimeKeycloak.AdministrationClientSecret,
+            })
+            .AddTransient<BearerTokenHandler<MohKeycloakAdministrationClientCredentials>>()
+            .AddSingleton(new MohKeycloakAdministrationClientCredentials
+            {
+                Address = PrimeEnvironment.MohKeycloak.TokenUrl,
+                ClientId = PrimeEnvironment.MohKeycloak.AdministrationClientId,
+                ClientSecret = PrimeEnvironment.MohKeycloak.AdministrationClientSecret,
             });
 
             // Clients
@@ -193,9 +200,15 @@ namespace Prime
 
             services.AddHttpClient<IKeycloakAdministrationClient, KeycloakAdministrationClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeEnvironment.Keycloak.AdministrationUrl.EnsureTrailingSlash());
+                client.BaseAddress = new Uri(PrimeEnvironment.PrimeKeycloak.AdministrationUrl.EnsureTrailingSlash());
             })
             .AddHttpMessageHandler<BearerTokenHandler<KeycloakAdministrationClientCredentials>>();
+
+            services.AddHttpClient<IMohKeycloakClient, MohKeycloakClient>(client =>
+            {
+                client.BaseAddress = new Uri(PrimeEnvironment.MohKeycloak.AdministrationUrl.EnsureTrailingSlash());
+            })
+            .AddHttpMessageHandler<BearerTokenHandler<MohKeycloakAdministrationClientCredentials>>();
 
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
