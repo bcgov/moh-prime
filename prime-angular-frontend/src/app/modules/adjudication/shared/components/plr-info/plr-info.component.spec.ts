@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PlrInfoComponent } from './plr-info.component';
+import { DefaultPipe } from '@shared/pipes/default.pipe';
+import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
 
 describe('PlrInfoComponent', () => {
   let component: PlrInfoComponent;
@@ -8,7 +10,11 @@ describe('PlrInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PlrInfoComponent ]
+      declarations: [
+        PlrInfoComponent,
+        DefaultPipe,
+        FormatDatePipe
+      ]
     })
     .compileComponents();
   });
