@@ -20,14 +20,14 @@ namespace Prime.Controllers
     public class PhsaController : PrimeControllerBase
     {
         private readonly IPartyService _partyService;
-        private readonly IPrimeKeycloakAdministrationClient _keycloakClient;
+        private readonly IPhsaService _phsaService;
 
         public PhsaController(
             IPartyService partyService,
-            IPrimeKeycloakAdministrationClient keycloakClient)
+            IPhsaService phsaService)
         {
             _partyService = partyService;
-            _keycloakClient = keycloakClient;
+            _phsaService = phsaService;
         }
 
         // POST: api/parties/phsa
@@ -59,7 +59,7 @@ namespace Prime.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Could not create the Party." });
             }
 
-            if (!await _keycloakClient.UpdatePhsaUserInfo(User.GetPrimeUserId(), changeModel))
+            if (!await _phsaService.UpdateKeycloakUserInfo(User.GetPrimeUserId(), changeModel))
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = "Error when updating Keycloak." });
             }
