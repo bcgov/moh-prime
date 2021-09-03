@@ -1,7 +1,6 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
@@ -92,7 +91,6 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecExists(value)
-      .pipe(map((value: boolean) => !value));
+    return (value: string) => this.siteResource.pecExists(value);
   }
 }

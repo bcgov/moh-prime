@@ -1,7 +1,7 @@
 import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 
-import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { EMPTY, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, first, map, switchMap } from 'rxjs/operators';
 
 export class FormControlValidators {
 
@@ -226,16 +226,15 @@ export class FormControlValidators {
     request: (value: string) => Observable<boolean>,
     { errorKey, dueTime }: { errorKey: string, dueTime?: number }
   ): AsyncValidatorFn {
-    return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      return of(control.value)
-        .pipe(
-          distinctUntilChanged(),
-          debounceTime(dueTime ?? 400),
-          switchMap((value: string) =>
-            (value) ? request(value) : EMPTY
-          ),
-          map((result: boolean) => (result) ? { [errorKey]: result } : null)
-        );
-    };
+    return control => control.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(dueTime ?? 400),
+        switchMap((value: string) =>
+          (value) ? request(value) : EMPTY
+        ),
+        map((result: boolean) => (result) ? { [errorKey]: result } : null),
+        first() // important, the observable returned must be finite required by asyncValidator
+      );
   }
 }
