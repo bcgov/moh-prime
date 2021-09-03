@@ -44,18 +44,16 @@
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
-                          *ngIf="remainingAttempts === 1"
                           class="alert-content">
-              You have had multiple failed login attempts the next failed attempt will lock your account, and you
-              will need to wait {{ lockoutTimeInHours }} hour(s) before trying again. If you need assistance please
-              contact Reg Admin at (999) 999-9999.
-            </ng-container>
-
-            <ng-container #alertContent
-                          *ngIf="!remainingAttempts"
-                          class="alert-content">
-              Your account is now locked due to too many failed login attempts. Please wait {{ lockoutTimeInHours }}
-              hour(s) before trying again. If you think this is a mistake please contact Reg Admin at (999) 999-9999.
+              <ng-container *ngIf="remainingAttempts === 1; else lockedAccount">
+                You have had multiple failed login attempts the next failed attempt will lock your account, and you
+                will need to wait {{ lockoutTimeInHours }} hour(s) before trying again. If you need assistance please
+                contact Reg Admin at (999) 999-9999.
+              </ng-container>
+              <ng-template #lockedAccount>
+                Your account is now locked due to too many failed login attempts. Please wait {{ lockoutTimeInHours }}
+                hour(s) before trying again. If you think this is a mistake please contact Reg Admin at (999) 999-9999.
+              </ng-template>
             </ng-container>
           </app-alert>
         </ng-container>
