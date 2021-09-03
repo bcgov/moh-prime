@@ -6,9 +6,11 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+
 using Prime.HttpClients;
 using Prime.Models;
 using Prime.ViewModels.Parties;
+using static Prime.PrimeEnvironment.MohKeycloak;
 
 namespace Prime.Services
 {
@@ -16,19 +18,22 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
+        private readonly IMohKeycloakClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
-            ILdapClient ldapClient)
+            ILdapClient ldapClient,
+            IMohKeycloakClient mohKeycloakClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
             _ldapClient = ldapClient;
+            _mohKeycloakClient = mohKeycloakClient;
         }
 
-        public async Task<GisViewModel> GetGisEnrolmentByIdAsync(int gisId)
+        public async Task<GisViewModel> GetGisEnrolmentAsync(int gisId)
         {
             return await _context.GisEnrolments
                 .AsNoTracking()
@@ -36,7 +41,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(g => g.Id == gisId);
         }
 
-        public async Task<GisViewModel> GetGisEnrolmentByUserIdAsync(Guid userId)
+        public async Task<GisViewModel> GetGisEnrolmentAsync(Guid userId)
         {
             return await _context.GisEnrolments
                 .AsNoTracking()
@@ -77,7 +82,7 @@ namespace Prime.Services
             }
             catch (DbUpdateConcurrencyException)
             {
-                return -1;
+                return InvalidId;
             }
 
             return currentGisEnrolment.Id;
@@ -86,13 +91,13 @@ namespace Prime.Services
         public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var gisUserRole = await _ldapClient.GetUserAsync(username, password);
-            var success = gisUserRole == "GISUSER";
+            var success = gisUserRole == GisUserRole;
 
             if (success)
             {
                 var gisEnrolment = await _context.GisEnrolments
-                .Include(g => g.Party)
-                .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
+                    .Include(g => g.Party)
+                    .SingleOrDefaultAsync(g => g.Party.UserId == user.GetPrimeUserId());
 
                 gisEnrolment.LdapLoginSuccessDate = DateTime.Now;
 
@@ -102,14 +107,18 @@ namespace Prime.Services
             return success;
         }
 
-        public async Task<int> SubmitApplicationAsync(int gisId)
+        public async Task SubmitApplicationAsync(int gisId)
         {
             var gisEnrolment = await _context.GisEnrolments
+                .Include(g => g.Party)
                 .SingleOrDefaultAsync(g => g.Id == gisId);
 
             gisEnrolment.SubmittedDate = DateTime.Now;
 
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+
+            // Also update MOH Keycloak now that the applictaion has been completed.
+            await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, GisClientId, GisUserRole);
         }
     }
 }
