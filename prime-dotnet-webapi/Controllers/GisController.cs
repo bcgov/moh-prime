@@ -45,7 +45,7 @@ namespace Prime.Controllers
             }
 
             var createdGisId = await _gisService.CreateOrUpdateGisEnrolmentAsync(changeModel, User);
-            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(createdGisId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(createdGisId);
 
             return CreatedAtAction(
                 nameof(GetGisEnrolmentById),
@@ -73,7 +73,7 @@ namespace Prime.Controllers
                 return BadRequest("Profile update model cannot be null.");
             }
 
-            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(gisId);
             if (gisEnrolment == null)
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
@@ -106,7 +106,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGisEnrolmentById(int gisId)
         {
-            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(gisId);
             if (gisEnrolment == null)
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
@@ -137,7 +137,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var gisEnrolment = await _gisService.GetGisEnrolmentByUserIdAsync(userId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(userId);
             if (gisEnrolment == null)
             {
                 return NotFound($"Gis Enrolment not found for logged in user");
@@ -158,7 +158,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> LdapLogin(int gisId, LdapLoginPayload payload)
         {
-            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(gisId);
             if (gisEnrolment == null)
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
@@ -190,7 +190,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<GisViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> SubmitGis(int gisId)
         {
-            var gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            var gisEnrolment = await _gisService.GetGisEnrolmentAsync(gisId);
             if (gisEnrolment == null)
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
@@ -202,7 +202,7 @@ namespace Prime.Controllers
 
             await _gisService.SubmitApplicationAsync(gisId);
 
-            gisEnrolment = await _gisService.GetGisEnrolmentByIdAsync(gisId);
+            gisEnrolment = await _gisService.GetGisEnrolmentAsync(gisId);
             return Ok(gisEnrolment);
         }
     }

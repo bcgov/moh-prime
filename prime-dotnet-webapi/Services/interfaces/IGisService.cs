@@ -8,10 +8,10 @@ namespace Prime.Services
 {
     public interface IGisService
     {
-        Task<GisViewModel> GetGisEnrolmentByIdAsync(int gisId);
-        Task<GisViewModel> GetGisEnrolmentByUserIdAsync(Guid userId);
+        Task<GisViewModel> GetGisEnrolmentAsync(int gisId);
+        Task<GisViewModel> GetGisEnrolmentAsync(Guid userId);
         Task<int> CreateOrUpdateGisEnrolmentAsync(GisChangeModel changeModel, ClaimsPrincipal user);
         Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user);
-        Task<int> SubmitApplicationAsync(int gisId);
+        Task SubmitApplicationAsync(int gisId);
     }
 }
