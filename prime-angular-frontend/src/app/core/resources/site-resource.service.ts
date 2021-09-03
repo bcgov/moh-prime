@@ -517,4 +517,17 @@ export class SiteResource {
         })
       );
   }
+
+  public pecExists(pec: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ pec });
+    return this.apiResource.get(`sites/pec-exists`, params)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Could not check PEC existence');
+          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 }
