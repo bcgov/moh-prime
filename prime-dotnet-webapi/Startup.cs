@@ -164,15 +164,9 @@ namespace Prime
             {
                 ApiKey = PrimeEnvironment.AddressAutocompleteApi.Key
             })
-            .AddHttpClient<IAddressAutocompleteClient, AddressAutocompleteClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.AddressAutocompleteApi.Url.EnsureTrailingSlash());
-            });
+            .AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(PrimeEnvironment.AddressAutocompleteApi.Url);
 
-            services.AddHttpClient<IChesClient, ChesClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.ChesApi.Url.EnsureTrailingSlash());
-            })
+            services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(PrimeEnvironment.ChesApi.Url)
             .WithBearerToken(new ChesClientCredentials
             {
                 Address = Url.Combine(PrimeEnvironment.ChesApi.TokenUrl, "token"),
@@ -180,10 +174,7 @@ namespace Prime
                 ClientSecret = PrimeEnvironment.ChesApi.ClientSecret
             });
 
-            services.AddHttpClient<IDocumentManagerClient, DocumentManagerClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.DocumentManager.Url.EnsureTrailingSlash());
-            })
+            services.AddHttpClientWithBaseAddress<IDocumentManagerClient, DocumentManagerClient>(PrimeEnvironment.DocumentManager.Url)
             .WithBearerToken(new DocumentManagerClientCredentials
             {
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
@@ -191,10 +182,7 @@ namespace Prime
                 ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
             });
 
-            services.AddHttpClient<IKeycloakAdministrationClient, KeycloakAdministrationClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.PrimeKeycloak.AdministrationUrl.EnsureTrailingSlash());
-            })
+            services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
@@ -202,15 +190,9 @@ namespace Prime
                 ClientSecret = PrimeEnvironment.PrimeKeycloak.AdministrationClientSecret,
             });
 
-            services.AddHttpClient<ILdapClient, LdapClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.LdapApi.Url.EnsureTrailingSlash());
-            });
+            services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(PrimeEnvironment.LdapApi.Url);
 
-            services.AddHttpClient<IMohKeycloakClient, MohKeycloakClient>(client =>
-            {
-                client.BaseAddress = new Uri(PrimeEnvironment.MohKeycloak.AdministrationUrl.EnsureTrailingSlash());
-            })
+            services.AddHttpClientWithBaseAddress<IMohKeycloakClient, MohKeycloakClient>(PrimeEnvironment.MohKeycloak.AdministrationUrl)
             .WithBearerToken(new MohKeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.MohKeycloak.TokenUrl,
