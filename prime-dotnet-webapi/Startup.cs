@@ -83,6 +83,7 @@ namespace Prime
             services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IPhsaService, PhsaService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
