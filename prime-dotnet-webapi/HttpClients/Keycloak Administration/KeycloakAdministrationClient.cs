@@ -10,7 +10,7 @@ using Prime.HttpClients.KeycloakApiDefinitions;
 
 namespace Prime.HttpClients
 {
-    public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient
+    public class KeycloakAdministrationClient : BaseClient, IKeycloakAdministrationClient, IPrimeKeycloakAdministrationClient, IMohKeycloakAdministrationClient
     {
         private readonly HttpClient _client;
         private readonly ILogger _logger;

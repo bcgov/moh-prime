@@ -183,7 +183,7 @@ namespace Prime
             });
 
             services.AddHttpClientWithBaseAddress<IPrimeKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
-            .WithBearerToken(new KeycloakAdministrationClientCredentials
+            .WithBearerToken(new PrimeKeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
                 ClientId = PrimeEnvironment.PrimeKeycloak.AdministrationClientId,
@@ -192,7 +192,7 @@ namespace Prime
 
             services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(PrimeEnvironment.LdapApi.Url);
 
-            services.AddHttpClientWithBaseAddress<IMohKeycloakClient, MohKeycloakClient>(PrimeEnvironment.MohKeycloak.AdministrationUrl)
+            services.AddHttpClientWithBaseAddress<IMohKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.MohKeycloak.AdministrationUrl)
             .WithBearerToken(new MohKeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.MohKeycloak.TokenUrl,
