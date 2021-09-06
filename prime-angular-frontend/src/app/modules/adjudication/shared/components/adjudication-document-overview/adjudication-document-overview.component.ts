@@ -14,9 +14,8 @@ import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type
 export class AdjudicationDocumentOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
-  public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public TOADocuments: BaseDocument[];
+  public ToaDocuments: BaseDocument[];
   public supportingDocuments: BaseDocument[];
   public paperForms: BaseDocument[];
 
@@ -27,7 +26,7 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview impl
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
     this.download = new EventEmitter<{ documentId: number }>();
-    this.TOADocuments = [];
+    this.ToaDocuments = [];
     this.supportingDocuments = [];
     this.paperForms = [];
   }
@@ -41,7 +40,7 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview impl
       this.documents.forEach((document) => {
         switch (document.documentType) {
           case (1): {
-            this.TOADocuments.push(document);
+            this.ToaDocuments.push(document);
             break;
           }
           case (2): {

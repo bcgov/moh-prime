@@ -55,11 +55,10 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onUpload(document: BaseDocument, componentName: string = ''): void {
+  public onUpload({ documentGuid }: BaseDocument, componentName: string = ''): void {
     var documentType = Object.values(EnrolleeAdjudicationDocumentType).includes(componentName)
       ? EnrolleeAdjudicationDocumentType[componentName]
       : EnrolleeAdjudicationDocumentType['NoType'];
-    var documentGuid = document.documentGuid
 
     this.documentGuids.push(documentGuid);
     this.documentsGuidAndType.push({ documentGuid, documentType });
