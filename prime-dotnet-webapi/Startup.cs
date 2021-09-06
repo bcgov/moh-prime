@@ -34,6 +34,7 @@ using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using Sentry;
 
 namespace Prime
 {
@@ -352,15 +353,23 @@ namespace Prime
             // can be used to exclude noisy handlers from logging
             app.UseSerilogRequestLogging(options =>
             {
-                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                try
                 {
-                    var userId = httpContext.User.GetPrimeUserId();
+                    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
+                                    {
+                                        var userId = httpContext.User.GetPrimeUserId();
 
-                    if (!userId.Equals(Guid.Empty))
-                    {
-                        diagnosticContext.Set("User", userId);
-                    }
-                };
+
+                                        if (!userId.Equals(Guid.Empty))
+                                        {
+                                            diagnosticContext.Set("User", userId);
+                                        }
+                                    };
+                }
+                catch (Exception e)
+                {
+                    SentrySdk.CaptureException(e);
+                }
             });
         }
 

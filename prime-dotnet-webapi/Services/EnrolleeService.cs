@@ -919,6 +919,9 @@ namespace Prime.Services
 
         public async Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user)
         {
+            int[] array = { 1, 2 };
+
+            int x = array[3];
             return await _context.EnrolleeNotes
                 .Where(en => en.EnrolleeNotification != null && en.EnrolleeNotification.Assignee.UserId == user.GetPrimeUserId())
                 .Select(en => en.EnrolleeId)

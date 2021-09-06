@@ -10,7 +10,6 @@ using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
 
-
 namespace Prime
 
 {
@@ -42,11 +41,12 @@ namespace Prime
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-                .UseSerilog();
+                    webBuilder.UseSentry();
+                });
 
         private static void CreateLogger()
         {
