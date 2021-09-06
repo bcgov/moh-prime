@@ -36,8 +36,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   private routeUtils: RouteUtils;
   private documentGuids: string[];
-  // private documentsGuidAndType: {[ key: string ]: EnrolleeAdjudicationDocumentType }[];
-  private documentsGuidAndType: { DocumentGuid: string, DocumentType: number }[];
+  private documentsGuidAndType: { documentGuid: string, documentType: number }[];
 
   constructor(
     protected dialog: MatDialog,
@@ -60,9 +59,10 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     var documentType = Object.values(EnrolleeAdjudicationDocumentType).includes(componentName)
       ? EnrolleeAdjudicationDocumentType[componentName]
       : EnrolleeAdjudicationDocumentType['NoType'];
-    this.documentGuids.push(document.documentGuid);
-    // this.documentsGuidAndType[document.documentGuid] = documentType;
-    this.documentsGuidAndType.push({ DocumentGuid: document.documentGuid, DocumentType: documentType });
+    var documentGuid = document.documentGuid
+
+    this.documentGuids.push(documentGuid);
+    this.documentsGuidAndType.push({ documentGuid, documentType });
 
     this.hasNoUploadError = false;
   }
@@ -114,14 +114,12 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
 
   protected performSubmission(): NoContent {
     this.formState.form.markAsPristine();
-    // const payload = this.documentsGuidAndType.json;
 
     const enrolleeId = +this.route.snapshot.params.eid;
     return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.assignedTOAType)
       .pipe(
         exhaustMap(() =>
           (this.documentGuids.length > 0)
-            // ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentGuids)
             ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documentsGuidAndType)
             : of(null)
         ),

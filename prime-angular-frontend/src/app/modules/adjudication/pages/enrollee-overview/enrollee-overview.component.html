@@ -15,14 +15,12 @@
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
   <div class="row mt-4">
-    <div *ngIf="enrolment?.enrollee.gpid"
-         class="col-12 d-flex justify-content-between align-items-center">
-
-      <span>
+    <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+      <span *ngIf="enrolment?.enrollee.gpid">
         <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
       </span>
 
-      <div class="row d-flex justify-content-end mt-auto adjudicator-actions">
+      <span>
         <app-adjudicator-actions *ngIf="enrollees?.length"
                                  [enrollee]="enrollees[0]"
                                  (approve)="onApprove($event)"
@@ -39,7 +37,10 @@
                                  (toggleManualAdj)="onToggleManualAdj($event)"
                                  (reload)="onRefresh()">
         </app-adjudicator-actions>
-      </div>
+      </span>
+      <!-- <div class="row d-flex justify-content-end mt-auto adjudicator-actions">
+
+      </div> -->
     </div>
 
     <div class="col-6">

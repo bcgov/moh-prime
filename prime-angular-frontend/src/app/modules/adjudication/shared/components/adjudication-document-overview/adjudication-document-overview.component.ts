@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
@@ -9,12 +9,9 @@ import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type
 @Component({
   selector: 'app-adjudication-document-overview',
   templateUrl: './adjudication-document-overview.component.html',
-  styles: [
-    '.mat-icon { font-size: 1.2em; }',
-    '.button > .mat-icon { font-size: 1.35rem; }'
-  ],
+  styleUrls: ['./adjudication-document-overview.component.scss']
 })
-export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
+export class AdjudicationDocumentOverviewComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
@@ -35,10 +32,14 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
     this.paperForms = [];
   }
 
-  ngOnInit() {
+  public onDownload(documentId: number): void {
+    this.download.emit({ documentId });
+  }
+
+  ngOnInit(): void {
     if (this.documents) {
       this.documents.forEach((document) => {
-        switch(document.documentType) {
+        switch (document.documentType) {
           case (1): {
             this.TOADocuments.push(document);
             break;
@@ -55,9 +56,4 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview {
       });
     }
   }
-
-  public downloadDocument(documentId: number): void {
-    this.download.emit({ documentId });
-  }
-
 }

@@ -40,11 +40,11 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     protected route: ActivatedRoute,
     protected router: Router,
     protected adjudicationResource: AdjudicationResource,
+    private paperEnrolmentResource: PaperEnrolmentResource,
     permissionService: PermissionService,
     dialog: MatDialog,
     utilsService: UtilsService,
     toastService: ToastService,
-    private paperEnrolmentResource: PaperEnrolmentResource,
   ) {
     super(defaultOptions,
       route,

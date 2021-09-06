@@ -196,7 +196,6 @@ namespace Prime.Services
             foreach (var document in documents)
             {
                 var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
-                EnrolleeAdjudicationDocumentType documentType = document.DocumentType;
 
                 if (string.IsNullOrWhiteSpace(filename))
                 {
@@ -210,8 +209,7 @@ namespace Prime.Services
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,
-                    AdjudicatorId = adminId,
-                    DocumentType = documentType
+                    AdjudicatorId = adminId
                 };
                 _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }
