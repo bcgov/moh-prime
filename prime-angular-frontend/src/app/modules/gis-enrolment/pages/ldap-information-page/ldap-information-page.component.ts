@@ -73,8 +73,8 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
           }
 
           this.handleLdapResponse();
-        }),
-        exhaustMap(() => this.gisEnrolmentResource.updateEnrolment(this.formStateService.json)),
+          return this.gisEnrolmentResource.updateEnrolment(this.formStateService.json);
+        })
       );
   }
 
