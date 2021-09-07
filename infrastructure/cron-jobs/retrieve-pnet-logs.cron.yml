@@ -1,0 +1,99 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+metadata:
+  annotations:
+    description: Template for job that retrieves and saves Pharmanet Transaction logs
+    tags: cronjob
+  name: retrieve-pnet-logs-cronjob-template
+objects:
+  - apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: '${CRON_NAME}'
+    spec:
+      concurrencyPolicy: Forbid
+      jobTemplate:
+        spec:
+          template:
+            spec:
+              containers:
+                - command:
+                  - bash
+                  - '-c'
+                  - >-
+                    curl -sL https://raw.githubusercontent.com/bcgov/moh-prime/feature/PRIME-1802-odr-api-integration-part-deux/infrastructure/openshift/retrieve-pnet-logs.sh | bash
+                  env:
+                    - name: PGHOST
+#                      value: ${SVC_NAME}-postgres
+                      value: dev-patroni
+                    # - name: PGUSER
+                    #   valueFrom:
+                    #     secretKeyRef:
+                    #       name: ${SVC_NAME}-postgres
+                    #       key: database-user
+                    # - name: PGPASSWORD
+                    #   valueFrom:
+                    #     secretKeyRef:
+                    #       name: ${SVC_NAME}-postgres
+                    #       key: database-password
+                    - name: PGUSER
+                      valueFrom:
+                        secretKeyRef:
+                          name: dev-patroni-secret
+                          key: app-db-username
+                    - name: PGPASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: dev-patroni-secret
+                          key: app-db-password
+                    - name: PGDATABASE
+                      value: prime-pr-1576
+                    - name: PRIME_ODR_API_ENCODED_CREDENTIALS
+                      valueFrom:
+                        secretKeyRef:
+                          name: prime-odr-api-secrets
+                          key: PRIME_ODR_API_ENCODED_CREDENTIALS
+                    - name: PRIME_ODR_API_SSL_CERT_PASSWORD
+                      valueFrom:
+                        secretKeyRef:
+                          name: prime-odr-api-secrets
+                          key: PRIME_ODR_API_SSL_CERT_PASSWORD
+                  envFrom:
+                    - configMapRef:
+                        name: prime-odr-api
+                  volumeMounts:
+                    - name: cert-volume
+                      mountPath: /opt/certs
+                      readOnly: true
+                    - name: script-volume
+                      mountPath: /opt/scripts
+                      mode: 0555
+                  image: public.ecr.aws/h0h9t7p1/farma-retriever:12
+                  limits:
+                    cpu: 500m
+                    memory: 2Gi
+                  name: '${CRON_NAME}'
+                  requests:
+                    cpu: 100m
+                    memory: 512Mi
+                  resources: null
+              restartPolicy: Never
+              volumes:
+                - name: cert-volume
+                  secret:
+                    secretName: prime-odr-api-ssl-certs
+                - name: script-volume
+                  configMap:
+                    name: prime-odr-api-cron-scripts
+
+      schedule: '${CRON_SCHEDULE}'
+parameters:
+  - description: 'Cron-like schedule expression'
+    name: CRON_SCHEDULE
+    value: '*/20 * * * *'
+  - name: CRON_NAME
+    value: retrieve-pnet-logs-cronjob
+  - description: 'Environment name prefix prepended to all OpenShift objects'
+    name: SVC_NAME
+    required: false
+    value: dev
