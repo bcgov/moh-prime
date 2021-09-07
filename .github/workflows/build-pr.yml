@@ -47,7 +47,7 @@ jobs:
         with: 
           context:  document-manager/backend
           push: true
-          file: openshift.dockerfile
+          file: document-manager/backend/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
           secrets: |
             BUILD_LOGLEVEL=2
@@ -88,7 +88,7 @@ jobs:
         with:
           context: prime-dotnet-webapi
           push: true
-          file: openshift.dockerfile
+          file: prime-dotnet-webapi/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
           secrets:
             ASPNETCORE_ENVIRONMENT="Development"
@@ -142,7 +142,7 @@ jobs:
         with:
           context: prime-angular-frontend
           push: true
-          file: openshift.dockerfile
+          file: prime-angular-frontend/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
           secrets:
             JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG
