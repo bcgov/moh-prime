@@ -39,12 +39,24 @@
           </mat-form-field>
 
         </div>
-        <div class="col-12 text-right">
-          <button mat-button
-                  type="button"
-                  color="primary">Forgot your password?
-          </button>
-        </div>
+
+        <ng-container *ngIf="hasAttemptedSubmission && remainingAttempts <= 1 && lockoutTimeInHours">
+          <app-alert type="danger"
+                     icon="error_outline">
+            <ng-container #alertContent
+                          class="alert-content">
+              <ng-container *ngIf="remainingAttempts === 1; else lockedAccount">
+                You have had multiple failed login attempts the next failed attempt will lock your account, and you
+                will need to wait {{ lockoutTimeInHours }} hour(s) before trying again. If you need assistance please
+                contact Reg Admin at (999) 999-9999.
+              </ng-container>
+              <ng-template #lockedAccount>
+                Your account is now locked due to too many failed login attempts. Please wait {{ lockoutTimeInHours }}
+                hour(s) before trying again. If you think this is a mistake please contact Reg Admin at (999) 999-9999.
+              </ng-template>
+            </ng-container>
+          </app-alert>
+        </ng-container>
       </div>
     </form>
   </app-page-section>

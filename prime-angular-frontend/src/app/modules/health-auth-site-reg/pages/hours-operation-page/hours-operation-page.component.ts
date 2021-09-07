@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective, FormBuilder } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective, FormBuilder, FormArray } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -148,6 +148,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
           }
         });
       });
+  }
+
+  protected checkValidity(form: FormGroup | FormArray): boolean {
+    // Form being disabled indicates that every day of the week is 24 hours
+    return (form.disabled || this.formUtilsService.checkValidity(form)) && this.additionalValidityChecks(form.getRawValue());
   }
 
   protected additionalValidityChecks(formValue: { businessDays: BusinessDayHours[] }): boolean {

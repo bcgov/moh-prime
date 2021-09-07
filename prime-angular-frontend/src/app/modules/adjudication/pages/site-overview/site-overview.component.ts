@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, EMPTY, forkJoin, noop, of, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -28,6 +28,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-site-overview',
@@ -83,7 +84,11 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  public onSubmit() {
+  public get pec(): FormControl {
+    return this.form.get('pec') as FormControl;
+  }
+
+  public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
@@ -92,7 +97,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
-  public onApproveOrgClaim() {
+  public onApproveOrgClaim(): void {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .pipe(
@@ -156,8 +161,13 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.form = this.fb.group({
       pec: [
         '',
-        [Validators.required]
+        [Validators.required],
+        FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
+  }
+
+  private checkPecIsUnique(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecExists(value);
   }
 }

@@ -1,13 +1,13 @@
-<!--<mat-form-field class="w-100">-->
-<!--  <input matInput-->
-<!--         [placeholder]="label"-->
-<!--         [formControl]="doingBusinessAs"-->
-<!--         [matAutocomplete]="auto">-->
-<!--  <mat-autocomplete #auto="matAutocomplete">-->
-<!--    <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"-->
-<!--                [value]="doingBusinessAsName">-->
-<!--      {{ doingBusinessAsName }}-->
-<!--    </mat-option>-->
-<!--  </mat-autocomplete>-->
-<!--  <mat-error>Required</mat-error>-->
-<!--</mat-form-field>-->
+<mat-form-field class="w-100">
+  <input matInput
+         [placeholder]="label"
+         [formControl]="doingBusinessAs"
+         [matAutocomplete]="auto">
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
+                [value]="doingBusinessAsName">
+      {{ doingBusinessAsName }}
+    </mat-option>
+  </mat-autocomplete>
+  <mat-error>Required</mat-error>
+</mat-form-field>
