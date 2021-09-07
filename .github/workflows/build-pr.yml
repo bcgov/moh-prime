@@ -44,14 +44,15 @@ jobs:
       - name: "Build, tag and push Document Manager image"
         uses: docker/build-push-action@v2
         id: build-image
-        context:  document-manager/backend
-        push: true
-        tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
-        secrets: |
-          BUILD_LOGLEVEL=2
-          SVC_NAME=pr-${{steps.PR.outputs.number}}
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        with: 
+          context:  document-manager/backend
+          push: true
+          tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
+          secrets: |
+            BUILD_LOGLEVEL=2
+            SVC_NAME=pr-${{steps.PR.outputs.number}}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   build-backend:
     runs-on: ubuntu-20.04
