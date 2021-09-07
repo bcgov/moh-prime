@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,33 +43,48 @@ namespace Prime.Services
             user.SetPhoneNumber(party.Phone);
             user.SetPhoneExtension(party.PhoneExtension);
 
-            var success = await _keycloakClient.UpdateUser(userId, user);
-            if (!success)
+            if (!await _keycloakClient.UpdateUser(userId, user))
             {
                 return false;
             }
 
-            success = true;
+            var success = true;
 
-            if (party.PartyTypes.Contains(PartyType.Labtech))
+            foreach (var role in MapToPhsaRoles(party.PartyTypes))
             {
-                if (!await _keycloakClient.AssignRealmRole(userId, Roles.PhsaLabtech))
-                {
-                    _logger.LogError($"Could not assign the role {Roles.PhsaLabtech} to PHSA user {userId}");
-                    success = false;
-                }
-            }
-
-            if (party.PartyTypes.Contains(PartyType.Immunizer))
-            {
-                if (!await _keycloakClient.AssignRealmRole(userId, Roles.PhsaImmunizer))
-                {
-                    _logger.LogError($"Could not assign the role {Roles.PhsaImmunizer} to PHSA user {userId}");
-                    success = false;
-                }
+                success &= await AssignRoleAsync(userId, role);
             }
 
             return success;
+        }
+
+        private IEnumerable<string> MapToPhsaRoles(IEnumerable<PartyType> partyTypes)
+        {
+            static string roleMap(PartyType type)
+            {
+                return type switch
+                {
+                    PartyType.Immunizer => Roles.PhsaImmunizer,
+                    PartyType.Labtech => Roles.PhsaLabtech,
+                    _ => null,
+                };
+            }
+
+            return partyTypes
+                .Select(type => roleMap(type))
+                .Where(role => role != null)
+                .Distinct();
+        }
+
+        private async Task<bool> AssignRoleAsync(Guid userId, string role)
+        {
+            if (!await _keycloakClient.AssignRealmRole(userId, role))
+            {
+                _logger.LogError($"Could not assign the role {role} to PHSA user {userId}");
+                return false;
+            }
+
+            return true;
         }
     }
 }
