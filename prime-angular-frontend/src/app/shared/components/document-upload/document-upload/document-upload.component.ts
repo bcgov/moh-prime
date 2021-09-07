@@ -11,13 +11,13 @@ import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
-import { EnrolleeAdjudicationDocumentType } from '@shared/enums/enrollee-adjudication-document-type';
+import { DocumentType } from '@shared/enums/document-type';
 
 export class BaseDocument {
   id: number;
   filename: string;
   documentGuid: string;
-  documentType: EnrolleeAdjudicationDocumentType;
+  documentType: DocumentType;
 
   constructor(filename: string, documentGuid: string) {
     this.filename = filename;

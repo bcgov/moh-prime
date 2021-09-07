@@ -4,20 +4,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-import { PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
+
+import { DocumentSectionMap } from '@shared/enums/document-type';
 
 @Component({
-  selector: 'app-adjudication-document-overview',
-  templateUrl: './adjudication-document-overview.component.html',
-  styleUrls: ['./adjudication-document-overview.component.scss']
+  selector: 'app-document-attachments',
+  templateUrl: './document-attachments.component.html',
+  styleUrls: ['./document-attachments.component.scss']
 })
-export class AdjudicationDocumentOverviewComponent extends AbstractOverview implements OnInit {
+export class DocumentAttachmentsComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
   @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
-  public ToaDocuments: BaseDocument[];
-  public supportingDocuments: BaseDocument[];
-  public paperForms: BaseDocument[];
+  public documentsByType: { [key: number]: BaseDocument[] };
+  public DocumentSectionMap = DocumentSectionMap;
 
   constructor(
     route: ActivatedRoute,
@@ -26,9 +26,8 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview impl
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
     this.download = new EventEmitter<{ documentId: number }>();
-    this.ToaDocuments = [];
-    this.supportingDocuments = [];
-    this.paperForms = [];
+    this.documents = [];
+    this.documentsByType = {};
   }
 
   public onDownload(documentId: number): void {
@@ -38,20 +37,11 @@ export class AdjudicationDocumentOverviewComponent extends AbstractOverview impl
   ngOnInit(): void {
     if (this.documents) {
       this.documents.forEach((document) => {
-        switch (document.documentType) {
-          case (1): {
-            this.ToaDocuments.push(document);
-            break;
-          }
-          case (2): {
-            this.supportingDocuments.push(document);
-            break;
-          }
-          case (3): {
-            this.paperForms.push(document);
-            break;
-          }
+        if (!this.documentsByType[document.documentType]) {
+          this.documentsByType[document.documentType] = new Array<BaseDocument>();
         }
+        this.documentsByType[document.documentType].push(document);
+
       });
     }
   }

@@ -24,6 +24,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
+  @Input() public isStacked: boolean = true;
   @Output() public approve: EventEmitter<{ enrolleeId: number, agreementName: string }>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
@@ -44,6 +45,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   public EnrolmentStatus = EnrolmentStatusEnum;
   public AdjudicationRoutes = AdjudicationRoutes;
   public Role = Role;
+
 
   constructor(
     private permissionService: PermissionService,

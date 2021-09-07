@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AdjudicationDocumentOverviewComponent } from './adjudication-document-overview.component';
+import { DocumentAttachmentsComponent } from './document-attachments.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 
-describe('AdjudicationDocumentOverviewComponent', () => {
-  let component: AdjudicationDocumentOverviewComponent;
-  let fixture: ComponentFixture<AdjudicationDocumentOverviewComponent>;
+describe('DocumentAttachmentsComponent', () => {
+  let component: DocumentAttachmentsComponent;
+  let fixture: ComponentFixture<DocumentAttachmentsComponent>;
   const mockActivatedRoute = {
     snapshot: { params: { eid: 1 } }
   };
@@ -38,7 +38,7 @@ describe('AdjudicationDocumentOverviewComponent', () => {
         RouterTestingModule
       ],
       declarations: [
-        AdjudicationDocumentOverviewComponent,
+        DocumentAttachmentsComponent,
         DefaultPipe
       ],
     })
@@ -46,7 +46,7 @@ describe('AdjudicationDocumentOverviewComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdjudicationDocumentOverviewComponent);
+    fixture = TestBed.createComponent(DocumentAttachmentsComponent);
     component = fixture.componentInstance;
     component.documents = mockDocuments;
     fixture.detectChanges();

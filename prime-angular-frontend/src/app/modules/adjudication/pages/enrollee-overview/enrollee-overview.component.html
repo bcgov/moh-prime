@@ -35,7 +35,8 @@
                                  (cancelToa)="onCancelToa($event)"
                                  (rerunRules)="onRerunRules($event)"
                                  (toggleManualAdj)="onToggleManualAdj($event)"
-                                 (reload)="onRefresh()">
+                                 (reload)="onRefresh()"
+                                 [isStacked]="false">
         </app-adjudicator-actions>
       </span>
       <!-- <div class="row d-flex justify-content-end mt-auto adjudicator-actions">
@@ -72,9 +73,9 @@
             <app-review-status-content [enrollee]="enrollee"
                                        [hideStatusHistory]="true">
             </app-review-status-content>
-            <app-adjudication-document-overview [documents]="documents"
-                                                (download)="onDownload($event)">
-            </app-adjudication-document-overview>
+            <app-document-attachments [documents]="documents"
+                                      (download)="onDownload($event)">
+            </app-document-attachments>
           </mat-card-content>
         </mat-card>
       </ng-container>

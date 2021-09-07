@@ -2,6 +2,17 @@
   <app-page-header>PRIME Profile</app-page-header>
   <app-paper-enrolment-progress-indicator [inProgress]="true"></app-paper-enrolment-progress-indicator>
 
+
+  <ng-container *ngIf="savedDocuments?.length">
+    <app-page-subheader2>
+      <ng-container appPageSubheader2Title>Saved Documents</ng-container>
+    </app-page-subheader2>
+    <app-enrollee-property title="Saved Documents">
+      <app-document-attachments [documents]="savedDocuments"></app-document-attachments>
+    </app-enrollee-property>
+  </ng-container>
+
+
   <app-page-section>
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Upload Documents</ng-container>
@@ -18,18 +29,6 @@
         No files have been uploaded.
       </ng-container>
     </app-alert>
-
-    <ng-container *ngIf="savedDocuments?.length">
-      <div *ngFor="let document of savedDocuments"
-           class="mb-2">
-        <button mat-stroked-button
-                color="primary"
-                (click)="getDocument(document.id)">
-          <mat-icon class="mr-2">attachment</mat-icon>
-          {{ document.filename | default }}
-        </button>
-      </div>
-    </ng-container>
   </app-page-section>
 
   <app-page-section>

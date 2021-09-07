@@ -27,17 +27,9 @@ import { UploadForm } from './upload-form.model';
       </app-enrollee-property>
 
       <app-enrollee-property *ngIf="documents?.length"
-                             title="Filename(s)">
-        <ng-container *ngFor="let document of documents">
-          <button mat-stroked-button
-                  color="primary"
-                  class="mb-2"
-                  (click)="downloadDocument(document.id)">
-            <mat-icon class="mr-2">attachment</mat-icon>
-            {{ document.filename | default }}
-          </button>
-          <br>
-        </ng-container>
+                             title="File(s)">
+        <app-document-attachments [documents]="documents"> </app-document-attachments>
+
       </app-enrollee-property>
     </app-page-section>
   `,

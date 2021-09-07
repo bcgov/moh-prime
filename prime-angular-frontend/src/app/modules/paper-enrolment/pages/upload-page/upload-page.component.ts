@@ -13,7 +13,7 @@ import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { PaperEnrolmentAgreementType, PaperEnrolmentAgreementTypeNameMap } from '@shared/enums/agreement-type.enum';
-import { EnrolleeAdjudicationDocumentType } from '@shared/enums/enrollee-adjudication-document-type';
+import { DocumentType } from '@shared/enums/document-type';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { EnrolleeAdjudicationDocument } from '@registration/shared/models/adjudication-document.model';
@@ -56,9 +56,9 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   }
 
   public onUpload({ documentGuid }: BaseDocument, componentName: string = ''): void {
-    var documentType = Object.values(EnrolleeAdjudicationDocumentType).includes(componentName)
-      ? EnrolleeAdjudicationDocumentType[componentName]
-      : EnrolleeAdjudicationDocumentType['NoType'];
+    var documentType = Object.values(DocumentType).includes(componentName)
+      ? DocumentType[componentName]
+      : DocumentType['NoType'];
 
     this.documentGuids.push(documentGuid);
     this.documentsGuidAndType.push({ documentGuid, documentType });
