@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
 using Prime.Auth;
 using Prime.Models;
@@ -52,7 +51,7 @@ namespace Prime.Services
 
             foreach (var role in MapToPhsaRoles(party.PartyTypes))
             {
-                success &= await AssignRoleAsync(userId, role);
+                success &= await _keycloakClient.AssignRealmRole(userId, role);
             }
 
             return success;
@@ -74,17 +73,6 @@ namespace Prime.Services
                 .Select(type => roleMap(type))
                 .Where(role => role != null)
                 .Distinct();
-        }
-
-        private async Task<bool> AssignRoleAsync(Guid userId, string role)
-        {
-            if (!await _keycloakClient.AssignRealmRole(userId, role))
-            {
-                _logger.LogError($"Could not assign the role {role} to PHSA user {userId}");
-                return false;
-            }
-
-            return true;
         }
     }
 }
