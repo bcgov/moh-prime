@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
 
 using Prime.Auth;
 using Prime.Models;
@@ -13,14 +12,10 @@ namespace Prime.Services
 {
     public class PhsaService : IPhsaService
     {
-        private readonly ILogger _logger;
         private readonly IPrimeKeycloakAdministrationClient _keycloakClient;
 
-        public PhsaService(
-            ILogger<PhsaService> logger,
-            IPrimeKeycloakAdministrationClient keycloakClient)
+        public PhsaService(IPrimeKeycloakAdministrationClient keycloakClient)
         {
-            _logger = logger;
             _keycloakClient = keycloakClient;
         }
 
