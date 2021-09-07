@@ -59,8 +59,8 @@ jobs:
           secrets: |
             BUILD_LOGLEVEL=2
             SVC_NAME=pr-${{steps.PR.outputs.number}}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:buildcache
+          cache-to: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:buildcache,mode=max
 
   build-backend:
     runs-on: ubuntu-20.04
@@ -116,8 +116,8 @@ jobs:
             POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}}
             POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}}
             SVC_NAME="pr-${{steps.PR.outputs.number}}"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:buildcache
+          cache-to: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:buildcache,mode=max
 
   build-frontend:
     runs-on: ubuntu-20.04
@@ -166,8 +166,8 @@ jobs:
             OC_APP=${{secrets.OC_APP}}
             SVC_NAME="pr-${{steps.PR.outputs.number}}"
             REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:buildcache
+          cache-to: type=registry,ref=${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:buildcache,mode=max
 
   apply-oc-template:
     runs-on: ubuntu-20.04
