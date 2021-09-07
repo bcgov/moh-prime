@@ -23,29 +23,9 @@ objects:
                   - >-
                     curl -sL https://raw.githubusercontent.com/bcgov/moh-prime/feature/PRIME-1802-odr-api-integration-part-deux/infrastructure/openshift/retrieve-pnet-logs.sh | bash
                   env:
-                    # - name: KEYCLOAK_CLIENT_SECRET
-                    #   valueFrom:
-                    #     secretKeyRef:
-                    #       key: prime_service_account_client_secret
-                    #       name: prime-service-account
-                    # - name: KEYCLOAK_CLIENT_ID
-                    #   valueFrom:
-                    #     secretKeyRef:
-                    #       key: prime_service_account_client_id
-                    #       name: prime-service-account
-                    # - name: KEYCLOAK_URL
-                    #   valueFrom:
-                    #     secretKeyRef:
-                    #       key: KEYCLOAK_URL
-                    #       name: keycloak
-                    # - name: KEYCLOAK_REALM
-                    #   valueFrom:
-                    #     secretKeyRef:
-                    #       key: KEYCLOAK_REALM
-                    #       name: keycloak
                     - name: PGHOST
 #                      value: ${SVC_NAME}-postgres
-                      value: pr-1576-postgres
+                      value: dev-patroni
                     # - name: PGUSER
                     #   valueFrom:
                     #     secretKeyRef:
@@ -59,19 +39,15 @@ objects:
                     - name: PGUSER
                       valueFrom:
                         secretKeyRef:
-                          name: pr-database-secrets
-                          key: database-user
+                          name: dev-patroni-secret
+                          key: app-db-username
                     - name: PGPASSWORD
                       valueFrom:
                         secretKeyRef:
-                          name: pr-database-secrets
-                          key: database-password
+                          name: dev-patroni-secret
+                          key: app-db-password
                     - name: PGDATABASE
-                      valueFrom:
-                        secretKeyRef:
-#                          name: ${SVC_NAME}-postgres
-                          name: pr-1576-postgres
-                          key: database-name
+                      value: prime-pr-1576
                     - name: PRIME_ODR_API_ENCODED_CREDENTIALS
                       valueFrom:
                         secretKeyRef:
