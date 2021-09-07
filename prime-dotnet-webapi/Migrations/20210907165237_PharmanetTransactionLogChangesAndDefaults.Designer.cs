@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210901033644_PharmanetTransactionLogChangesAndDefaults")]
+    [Migration("20210907165237_PharmanetTransactionLogChangesAndDefaults")]
     partial class PharmanetTransactionLogChangesAndDefaults
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -13962,11 +13962,6 @@ namespace Prime.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasDefaultValueSql("current_timestamp");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000000"));
-
                     b.Property<string>("LocationIpAddress")
                         .HasColumnType("text");
 
@@ -13999,16 +13994,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("TxDateTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("current_timestamp");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000000"));
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");

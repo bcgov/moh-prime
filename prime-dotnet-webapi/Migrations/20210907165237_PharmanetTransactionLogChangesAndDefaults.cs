@@ -8,32 +8,20 @@ namespace Prime.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
+                name: "CreatedUserId",
+                table: "PharmanetTransactionLog");
+
+            migrationBuilder.DropColumn(
                 name: "IpAddress",
                 table: "PharmanetTransactionLog");
 
-            migrationBuilder.AlterColumn<Guid>(
-                name: "UpdatedUserId",
-                table: "PharmanetTransactionLog",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
-                oldClrType: typeof(Guid),
-                oldType: "uuid");
-
-            migrationBuilder.AlterColumn<DateTimeOffset>(
+            migrationBuilder.DropColumn(
                 name: "UpdatedTimeStamp",
-                table: "PharmanetTransactionLog",
-                nullable: false,
-                defaultValueSql: "current_timestamp",
-                oldClrType: typeof(DateTimeOffset),
-                oldType: "timestamp with time zone");
+                table: "PharmanetTransactionLog");
 
-            migrationBuilder.AlterColumn<Guid>(
-                name: "CreatedUserId",
-                table: "PharmanetTransactionLog",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"),
-                oldClrType: typeof(Guid),
-                oldType: "uuid");
+            migrationBuilder.DropColumn(
+                name: "UpdatedUserId",
+                table: "PharmanetTransactionLog");
 
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreatedTimeStamp",
@@ -64,30 +52,6 @@ namespace Prime.Migrations
                 name: "SourceIpAddress",
                 table: "PharmanetTransactionLog");
 
-            migrationBuilder.AlterColumn<Guid>(
-                name: "UpdatedUserId",
-                table: "PharmanetTransactionLog",
-                type: "uuid",
-                nullable: false,
-                oldClrType: typeof(Guid),
-                oldDefaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
-            migrationBuilder.AlterColumn<DateTimeOffset>(
-                name: "UpdatedTimeStamp",
-                table: "PharmanetTransactionLog",
-                type: "timestamp with time zone",
-                nullable: false,
-                oldClrType: typeof(DateTimeOffset),
-                oldDefaultValueSql: "current_timestamp");
-
-            migrationBuilder.AlterColumn<Guid>(
-                name: "CreatedUserId",
-                table: "PharmanetTransactionLog",
-                type: "uuid",
-                nullable: false,
-                oldClrType: typeof(Guid),
-                oldDefaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
             migrationBuilder.AlterColumn<DateTimeOffset>(
                 name: "CreatedTimeStamp",
                 table: "PharmanetTransactionLog",
@@ -96,11 +60,32 @@ namespace Prime.Migrations
                 oldClrType: typeof(DateTimeOffset),
                 oldDefaultValueSql: "current_timestamp");
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "CreatedUserId",
+                table: "PharmanetTransactionLog",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
             migrationBuilder.AddColumn<string>(
                 name: "IpAddress",
                 table: "PharmanetTransactionLog",
                 type: "text",
                 nullable: true);
+
+            migrationBuilder.AddColumn<DateTimeOffset>(
+                name: "UpdatedTimeStamp",
+                table: "PharmanetTransactionLog",
+                type: "timestamp with time zone",
+                nullable: false,
+                defaultValue: new DateTimeOffset(new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "UpdatedUserId",
+                table: "PharmanetTransactionLog",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
         }
     }
 }

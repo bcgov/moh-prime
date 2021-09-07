@@ -17,14 +17,8 @@ namespace Prime.Configuration
             builder
                 .HasIndex(e => e.TxDateTime);
 
-            // Defaults for audit columns
-            builder.Property(e => e.CreatedUserId)
-                .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000000"));
-            builder.Property(e => e.UpdatedUserId)
-                .HasDefaultValue(new Guid("00000000-0000-0000-0000-000000000000"));
+            // Defaults for audit column
             builder.Property(e => e.CreatedTimeStamp)
-                .HasDefaultValueSql("current_timestamp");
-            builder.Property(e => e.UpdatedTimeStamp)
                 .HasDefaultValueSql("current_timestamp");
         }
     }

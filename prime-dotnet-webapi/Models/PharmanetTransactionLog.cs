@@ -7,13 +7,20 @@ namespace Prime.Models
 {
     /// <summary>
     /// PRIME copy of header information of Pharmanet transactions
-    /// (originally stored in ODR database)
+    /// (originally stored in ODR database).
+    ///
+    /// ** IMPORTANT **
+    /// Changes to this model will likely affect the scripts executed by the Cron job defined in `infrastructure\cron-jobs\retrieve-pnet-logs.cron.yml`.
+    /// On the other hand, this model is not used (much) by the .NET API code.
     /// </summary>
     [Table("PharmanetTransactionLog")]
-    public class PharmanetTransactionLog : BaseAuditable
+    public class PharmanetTransactionLog
     {
         [Key]
         public long Id { get; set; }
+
+        [JsonIgnore]
+        public DateTimeOffset CreatedTimeStamp { get; set; }
 
         [JsonProperty("txnId")]
         public long TransactionId { get; set; }
