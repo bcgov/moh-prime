@@ -108,11 +108,11 @@ jobs:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
             ASPNETCORE_URLS="http://+:8080"
-            DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=$PRIME_DB_PASSWORD"
+            DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
             DB_HOST=pr-${{steps.PR.outputs.number}}-postgres-db
             DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
             PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}}
-            POSTGRESQL_ADMIN_PASSWORD=$PRIME_DB_PASSWORD
+            POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}}
             POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}}
             POSTGRESQL_USERNAME=${{secrets.PRIME_DB_USER}}
             SVC_NAME="pr-${{steps.PR.outputs.number}}"
@@ -159,10 +159,10 @@ jobs:
           file: prime-angular-frontend/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
           secrets:
-            JWT_WELL_KNOWN_CONFIG=$JWT_WELL_KNOWN_CONFIG
-            KEYCLOAK_URL=$KEYCLOAK_URL
-            KEYCLOAK_REALM=$KEYCLOAK_REALM
-            KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID
+            JWT_WELL_KNOWN_CONFIG="https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
+            KEYCLOAK_URL="https://dev.oidc.gov.bc.ca/auth"
+            KEYCLOAK_REALM="v4mbqqas"
+            KEYCLOAK_CLIENT_ID="prime-application-dev"
             OC_APP=${{secrets.OC_APP}}
             SVC_NAME="pr-${{steps.PR.outputs.number}}"
             REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
