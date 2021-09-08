@@ -70,95 +70,95 @@
         A TOA must be assigned in order to approve an enrollee.
       </mat-error>
     </mat-form-field>
-    </ndiv>
+  </div>
 
 
-    <mat-menu #menu>
-      <button mat-menu-item
-              [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
-              *ngIf="isUnderReview"
-              (click)="onApprove()">
-        <mat-icon>check_circle_outline</mat-icon>
-        <span>Approve Enrollee</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.DECLINED"
-              [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onDecline()">
-        <mat-icon>block</mat-icon>
-        <span>Decline Enrollee</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.LOCKED &&
+  <mat-menu #menu>
+    <button mat-menu-item
+            [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
+            *ngIf="isUnderReview"
+            (click)="onApprove()">
+      <mat-icon>check_circle_outline</mat-icon>
+      <span>Approve Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.DECLINED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onDecline()">
+      <mat-icon>block</mat-icon>
+      <span>Decline Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode !== EnrolmentStatus.LOCKED &&
                    enrollee.currentStatusCode !== EnrolmentStatus.DECLINED"
-              [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onLock()">
-        <mat-icon>lock</mat-icon>
-        <span>Lock Enrollee</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="enrollee.currentStatusCode === EnrolmentStatus.LOCKED"
-              [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onUnlock()">
-        <mat-icon>lock_open</mat-icon>
-        <span>Unlock Enrollee</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="enrollee.currentStatusCode === EnrolmentStatus.DECLINED"
-              [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onEnableEnrollee()">
-        <mat-icon>thumb_up</mat-icon>
-        <span>Enable Enrollee</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
-              *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
-              (click)="onEnableEditing()">
-        <mat-icon>lock_open</mat-icon>
-        <span>Enable Editing</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="enrollee.currentStatusCode === EnrolmentStatus.REQUIRES_TOA"
-              [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
-              (click)="onCancelToa()">
-        <mat-icon>error_outline</mat-icon>
-        <span>Cancel TOA Assignment</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onToggleManualAdj()">
-        <mat-icon>flag</mat-icon>
-        <span *ngIf="enrollee.alwaysManual">Unflag Enrollee</span>
-        <span *ngIf="!enrollee.alwaysManual">Flag Enrollee</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
-              *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
-              (click)="onRerunRules()">
-        <mat-icon>redo</mat-icon>
-        <span>Rerun Rules</span>
-      </button>
-      <button mat-menu-item
-              [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || enrollee.adjudicatorIdir)"
-              (click)="onEscalate()">
-        <mat-icon>error_outline</mat-icon>
-        <span>Enrolment Escalation</span>
-      </button>
-      <button mat-menu-item
-              *ngIf="Role.SUPER_ADMIN | inRole"
-              (click)="onDelete()">
-        <mat-icon>delete</mat-icon>
-        <span>Delete Enrollee</span>
-      </button>
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onLock()">
+      <mat-icon>lock</mat-icon>
+      <span>Lock Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.LOCKED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onUnlock()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Unlock Enrollee</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.DECLINED"
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onEnableEnrollee()">
+      <mat-icon>thumb_up</mat-icon>
+      <span>Enable Enrollee</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
+            (click)="onEnableEditing()">
+      <mat-icon>lock_open</mat-icon>
+      <span>Enable Editing</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.REQUIRES_TOA"
+            [disabled]="!(Role.APPROVE_ENROLLEE | inRole)"
+            (click)="onCancelToa()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Cancel TOA Assignment</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onToggleManualAdj()">
+      <mat-icon>flag</mat-icon>
+      <span *ngIf="enrollee.alwaysManual">Unflag Enrollee</span>
+      <span *ngIf="!enrollee.alwaysManual">Flag Enrollee</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!(Role.TRIAGE_ENROLLEE | inRole)"
+            *ngIf="enrollee.currentStatusCode === EnrolmentStatus.UNDER_REVIEW"
+            (click)="onRerunRules()">
+      <mat-icon>redo</mat-icon>
+      <span>Rerun Rules</span>
+    </button>
+    <button mat-menu-item
+            [disabled]="!((Role.TRIAGE_ENROLLEE | inRole) || enrollee.adjudicatorIdir)"
+            (click)="onEscalate()">
+      <mat-icon>error_outline</mat-icon>
+      <span>Enrolment Escalation</span>
+    </button>
+    <button mat-menu-item
+            *ngIf="Role.SUPER_ADMIN | inRole"
+            (click)="onDelete()">
+      <mat-icon>delete</mat-icon>
+      <span>Delete Enrollee</span>
+    </button>
 
-      <mat-divider *ngIf="isUnderReview"></mat-divider>
+    <mat-divider *ngIf="isUnderReview"></mat-divider>
 
-      <button mat-menu-item
-              *ngIf="isUnderReview && (Role.MANAGE_ENROLLEE | inRole)"
-              (click)="onRoute([enrollee.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
-        <mat-icon>description</mat-icon>
-        <span>Add Limits and Conditions</span>
-      </button>
-    </mat-menu>
+    <button mat-menu-item
+            *ngIf="isUnderReview && (Role.MANAGE_ENROLLEE | inRole)"
+            (click)="onRoute([enrollee.id, AdjudicationRoutes.ENROLLEE_LIMITS_CONDITIONS])">
+      <mat-icon>description</mat-icon>
+      <span>Add Limits and Conditions</span>
+    </button>
+  </mat-menu>
 
 </ng-container>
