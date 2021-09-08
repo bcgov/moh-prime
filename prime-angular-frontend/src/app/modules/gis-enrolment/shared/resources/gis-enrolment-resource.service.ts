@@ -34,9 +34,10 @@ export class GisEnrolmentResource {
           this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
 
           if (error.status === 401) {
-            const remainingAttempts = +error.headers.get('RemainingAttempts');
-            const lockoutTimeInHours = +error.headers.get('LockoutTimeInHours');
-            return of(new LdapErrorResponse(remainingAttempts, lockoutTimeInHours));
+            const remainingAttempts = (error.headers.has('RemainingAttempts'))
+              ? +error.headers.get('RemainingAttempts')
+              : null;
+            return of(new LdapErrorResponse(remainingAttempts));
           }
 
           throw error;
