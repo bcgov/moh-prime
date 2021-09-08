@@ -216,7 +216,6 @@ jobs:
             -p SVC_NAME=pr-$PR_NUMBER \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
-            -p POSTGRESQL_USER=${{secrets.PRIME_DB_USER}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
