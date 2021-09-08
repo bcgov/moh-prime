@@ -207,8 +207,7 @@
 
 
 <app-page-section>
-  <ng-container
-                *ngIf="enrolment.oboSites.length || enrolment.jobs.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
+  <ng-container *ngIf="enrolment.oboSites.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
