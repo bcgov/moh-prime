@@ -1,4 +1,7 @@
 @import 'palette';
+@import 'mixins/statuses';
+
+@include statuses;
 
 .prefix {
   width: 2rem;
@@ -6,4 +9,16 @@
 
 .red-icon {
   color: theme-palette(red);
+}
+
+.health-auth-menu {
+  color: theme-palette(yellow);
+}
+
+.health-auth-site-menu {
+  color: theme-palette(blue);
+}
+
+.expanded {
+  background-color: theme-palette(blue, lightest);
 }
