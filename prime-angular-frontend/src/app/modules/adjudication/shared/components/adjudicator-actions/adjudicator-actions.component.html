@@ -1,7 +1,7 @@
 <ng-container *ngIf="enrollee">
 
-  <div [ngClass]="{'d-flex flex-column-reverse': mode === 'column', '': mode === 'row'}">
-    <mat-form-field [ngClass]="{'mr-4': mode === 'row'}">
+  <div [class]="mode === 'column' ? 'd-flex flex-column-reverse': ''">
+    <mat-form-field [class]="mode === 'row' ? 'mr-4': ''">
       <mat-label>TOA Selection</mat-label>
       <mat-select [formControl]="assignedTOAType">
         <mat-option *ngFor="let agreement of termsOfAccessAgreements"
@@ -17,10 +17,7 @@
 
     <button mat-flat-button
             color="primary"
-            [ngClass]="{
-
-              'mb-5 d-block': mode === 'column'
-            }"
+            [class]="mode === 'column' ? 'mb-5 d-block': ''"
             [disabled]="!enrollee"
             [matMenuTriggerFor]="menu">
       Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
