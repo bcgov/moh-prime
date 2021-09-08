@@ -46,7 +46,6 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   public AdjudicationRoutes = AdjudicationRoutes;
   public Role = Role;
 
-
   constructor(
     private permissionService: PermissionService,
     private fb: FormBuilder,
