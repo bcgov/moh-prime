@@ -96,12 +96,7 @@ public class AutoMapping : Profile
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
 
-        CreateMap<Contact, ContactViewModel>()
-            .ReverseMap();
-        CreateMap<Address, AddressViewModel>();
-        CreateMap<AddressViewModel, PhysicalAddress>();
-        CreateMap<AddressViewModel, MailingAddress>();
-        CreateMap<AddressViewModel, VerifiedAddress>();
+
 
         // Don't copy over primary keys
         CreateMap<PlrProvider, PlrProvider>()

@@ -8,7 +8,12 @@ namespace Prime.ViewModels.Profiles
     {
         public CommonMappingProfile()
         {
-
+            CreateMap<Contact, ContactViewModel>()
+                .ReverseMap();
+            CreateMap<Address, AddressViewModel>();
+            CreateMap<AddressViewModel, PhysicalAddress>();
+            CreateMap<AddressViewModel, MailingAddress>();
+            CreateMap<AddressViewModel, VerifiedAddress>();
         }
     }
 }
