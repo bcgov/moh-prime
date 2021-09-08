@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, pipe } from 'rxjs';
+import { EMPTY, Observable, pipe } from 'rxjs';
 import { map, tap, catchError, switchMap } from 'rxjs/operators';
 
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
@@ -106,7 +106,11 @@ export class OrgBookResource {
    */
   public doingBusinessAsMap() {
     return pipe(
-      switchMap((sourceId: string) => this.getOrganizationDetail(sourceId)),
+      switchMap((sourceId: string) =>
+        (sourceId)
+          ? this.getOrganizationDetail(sourceId)
+          : EMPTY
+      ),
       map((response: OrgBookDetailHttpResponse) => response.id),
       switchMap((topicId: number) => this.getOrganizationRelatedTo(topicId)),
       map((response: OrgBookRelatedHttpResponse[]) => {
