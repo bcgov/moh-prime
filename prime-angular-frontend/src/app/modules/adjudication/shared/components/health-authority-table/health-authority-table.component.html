@@ -125,22 +125,22 @@
       <ng-container matColumnDef="haHeader">
         <td colspan="7"
             mat-cell
-            *matCellDef="let groupBy"
-            class="health-auth-header"
-            [ngClass]="{'health-auth-header-expanded': groupBy.id === expandedHealthAuthId}">
+            *matCellDef="let row"
+            class="health-auth-header">
           <button mat-icon-button
                   title="Expand"
-                  [disabled]="expandedHealthAuthId !== 0 && groupBy.id !== expandedHealthAuthId"
+                  [disabled]="expandedHealthAuthId !== 0 && row.id !== expandedHealthAuthId"
                   [disableRipple]="true"
-                  (click)="onExpandHeader(groupBy)">
-            {{groupBy.name}}
-            <mat-icon>{{ (groupBy.id === expandedHealthAuthId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+                  (click)="onExpandHeader(row)">
+            {{row.name}}
+            <mat-icon>{{ (row.id === expandedHealthAuthId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
         </td>
       </ng-container>
 
       <tr mat-row
-          *matRowDef="let row; columns: ['prefixes', 'haHeader', 'haActions']; when: isGroup()" class="test-test-test"></tr>
+          *matRowDef="let row; columns: ['prefixes', 'haHeader', 'haActions']; when: isGroup()"
+          [class]="{ 'health-auth-header-expanded': row.id === expandedHealthAuthId }"></tr>
       <tr mat-header-row
           *matHeaderRowDef="siteColumns; sticky: true"></tr>
       <tr mat-row
