@@ -2,10 +2,9 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
+import { DocumentSectionMap } from '@shared/enums/document-type';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-
-import { DocumentSectionMap } from '@shared/enums/document-type';
 
 @Component({
   selector: 'app-document-attachments',
