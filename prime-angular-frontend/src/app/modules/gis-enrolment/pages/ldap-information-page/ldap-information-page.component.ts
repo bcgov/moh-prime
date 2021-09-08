@@ -25,7 +25,6 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   public title: string;
   public formState: LdapInformationPageFormState;
   public remainingAttempts: number | null;
-  public lockoutTimeInHours: number | null;
 
   private routeUtils: RouteUtils;
 
@@ -67,8 +66,8 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
       .pipe(
         exhaustMap((response: NoContent | LdapErrorResponse) => {
           if (response instanceof LdapErrorResponse) {
-            const { remainingAttempts, lockoutTimeInHours } = response;
-            this.handleLdapResponse(remainingAttempts, lockoutTimeInHours);
+            const { remainingAttempts } = response;
+            this.handleLdapResponse(remainingAttempts);
             return EMPTY;
           }
 
@@ -84,8 +83,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
   }
 
-  private handleLdapResponse(remainingAttempts: number = null, lockoutTimeInHours: number = null) {
+  private handleLdapResponse(remainingAttempts: number = null) {
     this.remainingAttempts = remainingAttempts;
-    this.lockoutTimeInHours = lockoutTimeInHours;
   }
 }
