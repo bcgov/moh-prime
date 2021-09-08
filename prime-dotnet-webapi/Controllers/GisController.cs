@@ -171,14 +171,12 @@ namespace Prime.Controllers
             }
 
             var ldapResponse = await _gisService.LdapLogin(payload.LdapUsername, payload.LdapPassword, User);
-
             if (ldapResponse.Success)
             {
                 return Ok();
             }
 
             Response.Headers.Add("RemainingAttempts", ldapResponse.RemainingAttempts);
-            Response.Headers.Add("LockoutTimeInHours", ldapResponse.LockoutTimeInHours);
 
             return Unauthorized();
         }

@@ -1,9 +1,7 @@
 export class LdapErrorResponse {
   constructor(
-    public remainingAttempts: number,
-    public lockoutTimeInHours: number
+    public remainingAttempts: number
   ) {
     this.remainingAttempts = remainingAttempts;
-    this.lockoutTimeInHours = lockoutTimeInHours;
   }
 }
