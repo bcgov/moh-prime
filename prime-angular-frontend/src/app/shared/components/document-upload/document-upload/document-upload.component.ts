@@ -10,7 +10,7 @@ import tus from 'tus-js-client';
 import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { DocumentType } from '@shared/enums/document-type';
+import { DocumentType } from '@shared/enums/document-type.enum';
 import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {

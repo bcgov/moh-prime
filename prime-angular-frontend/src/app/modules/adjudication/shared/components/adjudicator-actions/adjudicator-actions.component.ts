@@ -24,7 +24,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
-  @Input() public isStacked: boolean = true;
+  @Input() public mode: 'row' | 'column';
   @Output() public approve: EventEmitter<{ enrolleeId: number, agreementName: string }>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
@@ -65,6 +65,7 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
+    this.mode = 'row';
 
     this.termsOfAccessAgreements = [
       { type: 0, name: 'None' },

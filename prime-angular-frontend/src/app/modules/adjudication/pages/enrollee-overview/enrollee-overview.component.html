@@ -14,35 +14,33 @@
                       (navigateEnrollee)="onNavigateEnrollee($event)"
                       (sendBulkEmail)="onSendBulkEmail()"></app-enrollee-table>
 
-  <div class="row mt-4">
-    <div class="col-12 d-flex justify-content-between align-items-center mt-4">
-      <span *ngIf="enrolment?.enrollee.gpid">
-        <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
+  <div class="d-flex justify-content-between align-items-center mt-4">
+    <span *ngIf="enrolment?.enrollee.gpid" >
+        <strong>GPID:</strong><br> {{ enrolment?.enrollee.gpid }}
       </span>
 
-      <span>
+    <span>
         <app-adjudicator-actions *ngIf="enrollees?.length"
-                                 [enrollee]="enrollees[0]"
-                                 (approve)="onApprove($event)"
-                                 (decline)="onDecline($event)"
-                                 (lock)="onLock($event)"
-                                 (unlock)="onUnlock($event)"
-                                 (delete)="onDelete($event)"
-                                 (route)="onRoute($event)"
-                                 (assignToa)="onAssignToa($event)"
-                                 (enableEnrollee)="onEnableEnrollee($event)"
-                                 (enableEditing)="onEnableEditing($event)"
-                                 (cancelToa)="onCancelToa($event)"
-                                 (rerunRules)="onRerunRules($event)"
-                                 (toggleManualAdj)="onToggleManualAdj($event)"
-                                 (reload)="onRefresh()"
-                                 [isStacked]="false">
+                                  [enrollee]="enrollees[0]"
+                                  (approve)="onApprove($event)"
+                                  (decline)="onDecline($event)"
+                                  (lock)="onLock($event)"
+                                  (unlock)="onUnlock($event)"
+                                  (delete)="onDelete($event)"
+                                  (route)="onRoute($event)"
+                                  (assignToa)="onAssignToa($event)"
+                                  (enableEnrollee)="onEnableEnrollee($event)"
+                                  (enableEditing)="onEnableEditing($event)"
+                                  (cancelToa)="onCancelToa($event)"
+                                  (rerunRules)="onRerunRules($event)"
+                                  (toggleManualAdj)="onToggleManualAdj($event)"
+                                  (reload)="onRefresh()"
+                                  mode='row'>
         </app-adjudicator-actions>
       </span>
-    </div>
-
+  </div>
+  <div class="row mt-4">
     <div class="col-6">
-
       <h2>Enrolment</h2>
 
       <mat-card id="enrolmentCard">

@@ -1,10 +1,10 @@
-<ng-container *ngFor="let documentsArray of documentsByType | keyvalue">
+<ng-container *ngFor="let documentsArray of documentsGroupedByType | keyvalue">
   <app-page-section>
     <ng-container *ngIf="DocumentSectionMap[documentsArray.key]">
       <app-enrollee-property [title]=DocumentSectionMap[documentsArray.key]></app-enrollee-property>
     </ng-container>
 
-    <app-document-attachment [documents]=documentsByType[documentsArray.key]>
+    <app-document-attachment [documents]=documentsGroupedByType[documentsArray.key]>
     </app-document-attachment>
   </app-page-section>
 </ng-container>

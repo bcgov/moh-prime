@@ -18,5 +18,5 @@ export class DocumentAttachmentComponent implements OnInit {
     this.download.emit({ documentId });
   }
 
-  ngOnInit(): void { }
+  public ngOnInit(): void { }
 }
