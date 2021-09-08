@@ -41,7 +41,6 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
           this.documentsByType[document.documentType] = new Array<BaseDocument>();
         }
         this.documentsByType[document.documentType].push(document);
-
       });
     }
   }
