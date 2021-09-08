@@ -94,9 +94,8 @@ namespace Prime.Services
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
             var gisLdapUser = new GisLdapUserViewModel
             {
-                RemainingAttempts = ldapResponse.RemainingAttempts.ToString(),
-                LockoutTimeInHours = ldapResponse.LockoutTimeInHours.ToString(),
-                GisUserRole = ldapResponse.Gisuserrole
+                RemainingAttempts = ldapResponse?.RemainingAttempts.ToString(),
+                GisUserRole = ldapResponse?.Gisuserrole
             };
 
             if (gisLdapUser.Success)

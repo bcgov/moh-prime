@@ -51,7 +51,7 @@ export class HealthAuthOrgInfoPageComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
+    this.busy = this.healthAuthResource.getHealthAuthorityById(this.route.snapshot.params.haid)
       .subscribe((healthAuthority: HealthAuthority) => {
         this.healthAuthority = healthAuthority;
         this.isInitial = !!(
