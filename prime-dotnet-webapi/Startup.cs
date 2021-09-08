@@ -239,7 +239,7 @@ namespace Prime
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
             }
 
             ConfigureHealthCheck(app);
@@ -353,23 +353,15 @@ namespace Prime
             // can be used to exclude noisy handlers from logging
             app.UseSerilogRequestLogging(options =>
             {
-                try
+                options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
                 {
-                    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-                                    {
-                                        var userId = httpContext.User.GetPrimeUserId();
+                    var userId = httpContext.User.GetPrimeUserId();
 
-
-                                        if (!userId.Equals(Guid.Empty))
-                                        {
-                                            diagnosticContext.Set("User", userId);
-                                        }
-                                    };
-                }
-                catch (Exception e)
-                {
-                    SentrySdk.CaptureException(e);
-                }
+                    if (!userId.Equals(Guid.Empty))
+                    {
+                        diagnosticContext.Set("User", userId);
+                    }
+                };
             });
         }
 

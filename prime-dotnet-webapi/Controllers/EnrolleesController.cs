@@ -59,7 +59,7 @@ namespace Prime.Controllers
         {
             SentrySdk.CaptureMessage("Hello Sentry");
 
-
+            throw null;
 
             if (User.IsAdministrant())
             {
