@@ -57,13 +57,7 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed))
             .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
 
-        CreateMap<Agreement, AgreementViewModel>()
-            .ForMember(dest => dest.SignedAgreementDocumentGuid, opt =>
-            {
-                opt.PreCondition(src => src.SignedAgreement != null);
-                opt.MapFrom(src => src.SignedAgreement.DocumentGuid);
-            })
-            .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementVersion.AgreementType));
+
 
         CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
         CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
@@ -104,9 +98,6 @@ public class AutoMapping : Profile
         CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
             .IncludeMembers(src => src.Party);
         CreateMap<Party, AuthorizedUserViewModel>();
-
-        CreateMap<AgreementVersion, AgreementVersionViewModel>();
-        CreateMap<AgreementVersion, AgreementVersionListViewModel>();
 
         CreateMap<Contact, ContactViewModel>()
             .ReverseMap();
