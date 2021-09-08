@@ -65,7 +65,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
-    this.mode = 'row';
+    this.mode = 'column';
+
 
     this.termsOfAccessAgreements = [
       { type: 0, name: 'None' },

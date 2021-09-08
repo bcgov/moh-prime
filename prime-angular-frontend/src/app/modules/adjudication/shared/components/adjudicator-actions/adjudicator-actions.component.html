@@ -1,62 +1,6 @@
 <ng-container *ngIf="enrollee">
 
-  <!-- <ng-container *ngIf="mode === 'column'; else isNotStacked">
-    <button mat-flat-button
-            color="primary"
-            class="mb-5 d-block"
-            [disabled]="!enrollee"
-            [matMenuTriggerFor]="menu">
-      Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-
-    <mat-form-field>
-      <mat-label>TOA Selection</mat-label>
-      <mat-select [formControl]="assignedTOAType">
-        <mat-option *ngFor="let agreement of termsOfAccessAgreements"
-                    [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-                    [value]="agreement.type">
-          {{ agreement.name }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="assignedTOAType.hasError('requiredIn')">
-        A TOA must be assigned in order to approve an enrollee.
-      </mat-error>
-    </mat-form-field>
-  </ng-container>
-
-  <ng-template #isNotStacked>
-    <mat-form-field class="mr-4">
-      <mat-label>TOA Selection</mat-label>
-      <mat-select [formControl]="assignedTOAType">
-        <mat-option *ngFor="let agreement of termsOfAccessAgreements"
-                    [disabled]="!(Role.MANAGE_ENROLLEE | inRole)"
-                    [value]="agreement.type">
-          {{ agreement.name }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="assignedTOAType.hasError('requiredIn')">
-        A TOA must be assigned in order to approve an enrollee.
-      </mat-error>
-    </mat-form-field>
-
-    <button mat-flat-button
-            color="primary"
-            [disabled]="!enrollee"
-            [matMenuTriggerFor]="menu">
-      Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-  </ng-template> -->
-
-
-  <div [ngClass]="{'row align-items-center': mode === 'row'}">
-    <button mat-flat-button
-            color="primary"
-            [ngClass]="{'order-last': mode === 'row', 'mb-5 d-block': mode === 'column'}"
-            [disabled]="!enrollee"
-            [matMenuTriggerFor]="menu">
-      Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
-    </button>
-
+  <div [ngClass]="{'d-flex flex-column-reverse': mode === 'column', '': mode === 'row'}">
     <mat-form-field [ngClass]="{'mr-4': mode === 'row'}">
       <mat-label>TOA Selection</mat-label>
       <mat-select [formControl]="assignedTOAType">
@@ -70,8 +14,18 @@
         A TOA must be assigned in order to approve an enrollee.
       </mat-error>
     </mat-form-field>
-  </div>
 
+    <button mat-flat-button
+            color="primary"
+            [ngClass]="{
+
+              'mb-5 d-block': mode === 'column'
+            }"
+            [disabled]="!enrollee"
+            [matMenuTriggerFor]="menu">
+      Adjudicator Actions <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  </div>
 
   <mat-menu #menu>
     <button mat-menu-item
