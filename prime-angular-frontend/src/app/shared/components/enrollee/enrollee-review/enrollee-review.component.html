@@ -113,7 +113,7 @@
     </button>
   </app-page-subheader>
 
-  <ng-container *ngFor="let careSetting of careSettings">
+  <ng-container *ngFor="let careSetting of enrolment.careSettings">
 
     <app-enrollee-property title="Care Setting"
                            [makeBold]="true">
@@ -208,7 +208,7 @@
 
 <app-page-section>
   <ng-container
-                *ngIf="oboSites.length || enrolment.jobs.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
+                *ngIf="enrolment.oboSites.length || enrolment.jobs.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
@@ -219,68 +219,66 @@
         <mat-icon>edit</mat-icon>
       </button>
     </app-page-subheader>
-    <ng-container *ngFor="let careSetting of careSettings">
-      <ng-container *ngIf="oboSites">
-        <ng-container *ngFor="let site of oboSites">
-          <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
-            <app-enrollee-property title="Care Setting"
-                                   [makeBold]="true">
-              <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
-                <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">
+    <ng-container *ngFor="let careSetting of enrolment.careSettings">
+      <ng-container *ngFor="let site of enrolment?.oboSites">
+        <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
+          <app-enrollee-property title="Care Setting"
+                                 [makeBold]="true">
+            <div class="mb-3">{{ careSetting.careSettingCode | configCode: 'careSettings' }}
+              <span *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY">
               ({{ site.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true }})
             </span>
-              </div>
+            </div>
 
-              <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                                     title="Site Name"
-                                     [makeBold]="true">
-                {{ site.siteName | default }}
-              </app-enrollee-property>
-
-              <app-enrollee-property *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
-                                     title="Facility Name"
-                                     [makeBold]="true">
-                {{ site.facilityName | default }}
-              </app-enrollee-property>
-
-              <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
-                                     title="Site ID"
-                                     [makeBold]="true">
-                {{ site.pec | default }}
-              </app-enrollee-property>
-
-              <app-enrollee-property title="Job Title"
-                                     [makeBold]="true">
-                {{ site.jobTitle | default }}
-              </app-enrollee-property>
-
-              <app-enrollee-property title="Site Address"
-                                     [makeBold]="true">
-                <!-- <div class="mb-3">{{ site.physicalAddress?.street | default }}</div> -->
-                <app-enrollee-property title="Street">
-                  {{ site.physicalAddress?.street | default }}
-                </app-enrollee-property>
-
-                <app-enrollee-property title="City">
-                  {{ site.physicalAddress?.city | default }}
-                </app-enrollee-property>
-
-                <app-enrollee-property title="Province">
-                  {{ site.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
-                </app-enrollee-property>
-
-                <app-enrollee-property title="Postal Code">
-                  {{ site.physicalAddress?.postal | postal | default }}
-                </app-enrollee-property>
-
-              </app-enrollee-property>
+            <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                                   title="Site Name"
+                                   [makeBold]="true">
+              {{ site.siteName | default }}
             </app-enrollee-property>
-          </ng-container>
+
+            <app-enrollee-property *ngIf="site.careSettingCode === CareSettingEnum.HEALTH_AUTHORITY"
+                                   title="Facility Name"
+                                   [makeBold]="true">
+              {{ site.facilityName | default }}
+            </app-enrollee-property>
+
+            <app-enrollee-property *ngIf="site.careSettingCode !== CareSettingEnum.HEALTH_AUTHORITY"
+                                   title="Site ID"
+                                   [makeBold]="true">
+              {{ site.pec | default }}
+            </app-enrollee-property>
+
+            <app-enrollee-property title="Job Title"
+                                   [makeBold]="true">
+              {{ site.jobTitle | default }}
+            </app-enrollee-property>
+
+            <app-enrollee-property title="Site Address"
+                                   [makeBold]="true">
+              <!-- <div class="mb-3">{{ site.physicalAddress?.street | default }}</div> -->
+              <app-enrollee-property title="Street">
+                {{ site.physicalAddress?.street | default }}
+              </app-enrollee-property>
+
+              <app-enrollee-property title="City">
+                {{ site.physicalAddress?.city | default }}
+              </app-enrollee-property>
+
+              <app-enrollee-property title="Province">
+                {{ site.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+              </app-enrollee-property>
+
+              <app-enrollee-property title="Postal Code">
+                {{ site.physicalAddress?.postal | postal | default }}
+              </app-enrollee-property>
+
+            </app-enrollee-property>
+          </app-enrollee-property>
         </ng-container>
       </ng-container>
     </ng-container>
 
-    <app-enrollee-property *ngIf="!oboSites.length"
+    <app-enrollee-property *ngIf="!enrolment.oboSites.length"
                            title="Job Sites"
                            [hasError]="enrolmentErrors?.certificateOrOboSite"
                            errorMessage="Must have a college certificate or job site information"
