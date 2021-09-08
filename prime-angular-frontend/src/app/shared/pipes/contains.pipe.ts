@@ -6,16 +6,16 @@ import { KeycloakInitService } from '@core/modules/keycloak/keycloak-init.servic
 })
 export class ContainsPipe implements PipeTransform {
   public transform(
-    value: string,
     search: string,
+    value: string,
     position: 'startsWith' | 'endsWith' | 'withIn' = 'withIn'
   ): boolean {
-    if(!value || !search || typeof value !== 'string' || typeof search !== 'string') {
+    if (!value || !search || typeof value !== 'string' || typeof search !== 'string') {
       return false;
     }
 
     switch (position) {
-      case 'withIn':  {
+      case 'withIn': {
         return value.includes(search);
       }
       case 'startsWith': {

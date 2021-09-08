@@ -209,7 +209,8 @@ namespace Prime.Services
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,
-                    AdjudicatorId = adminId
+                    AdjudicatorId = adminId,
+                    DocumentType = document.DocumentType
                 };
                 _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }
