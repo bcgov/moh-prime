@@ -35,8 +35,7 @@ export class GisEnrolmentResource {
 
           if (error.status === 401) {
             const remainingAttempts = +error.headers.get('RemainingAttempts');
-            const lockoutTimeInHours = +error.headers.get('LockoutTimeInHours');
-            return of(new LdapErrorResponse(remainingAttempts, lockoutTimeInHours));
+            return of(new LdapErrorResponse(remainingAttempts));
           }
 
           throw error;
