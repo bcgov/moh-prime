@@ -7,11 +7,11 @@ import { FilePondPluginFileValidateSizeProps } from 'filepond-plugin-file-valida
 import { FilePondComponent } from 'ngx-filepond/filepond.component';
 import tus from 'tus-js-client';
 
+import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { AccessTokenService } from '@auth/shared/services/access-token.service';
-import { EnumUtils } from '@lib/utils/enum-utils.class';
 import { DocumentType } from '@shared/enums/document-type';
+import { AccessTokenService } from '@auth/shared/services/access-token.service';
 
 export class BaseDocument {
   id: number;
