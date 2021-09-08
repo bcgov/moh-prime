@@ -40,7 +40,7 @@
 
         </div>
 
-        <ng-container *ngIf="hasAttemptedSubmission && remainingAttempts <= 1">
+        <ng-container *ngIf="hasAttemptedSubmission && remainingAttempts !== null && remainingAttempts <= 1">
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
