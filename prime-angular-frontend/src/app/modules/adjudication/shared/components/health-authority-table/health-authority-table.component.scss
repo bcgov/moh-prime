@@ -11,20 +11,14 @@
   color: theme-palette(red);
 }
 
-.org-menu-button {
+.health-auth-menu {
   color: theme-palette(yellow);
-}
-
-.health-auth-header {
-  color: theme-palette(blue);
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-.health-auth-header-expanded {
-  background-color: theme-palette(blue, lightest);
 }
 
 .health-auth-site-menu {
   color: theme-palette(blue);
+}
+
+.expanded {
+  background-color: theme-palette(blue, lightest);
 }

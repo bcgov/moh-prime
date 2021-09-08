@@ -1,15 +1,16 @@
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+import { forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { Role } from '@auth/shared/enum/role.enum';
-import { forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
@@ -29,7 +30,6 @@ export class HealthAuthorityTableComponent implements OnInit {
   public SiteStatusType = SiteStatusType;
   public expandedHealthAuthId: number;
 
-
   constructor(
     private activatedRoute: ActivatedRoute,
     private healthAuthorityResource: HealthAuthorityResource
@@ -47,7 +47,6 @@ export class HealthAuthorityTableComponent implements OnInit {
     ];
     this.route = new EventEmitter<string | (string | number)[]>();
     this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>([]);
-    // No HA headers should be expanded initially
     this.expandedHealthAuthId = 0;
   }
 
@@ -55,18 +54,19 @@ export class HealthAuthorityTableComponent implements OnInit {
     this.route.emit(routePath);
   }
 
-  public isHealthAuthorityObject(rowData): boolean {
-    return rowData.hasOwnProperty('hasUnderReviewUsers');
+  public isHealthAuthority(row: HealthAuthorityRow | HealthAuthoritySite): boolean {
+    return row.hasOwnProperty('hasUnderReviewUsers');
   }
 
-  public isGroup(): (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite) => boolean {
-    return (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite): boolean => {
-      return this.isHealthAuthorityObject(rowData);
-    }
+  public isGroup(): (index: number, row: HealthAuthorityRow | HealthAuthoritySite) => boolean {
+    return (index: number, row: HealthAuthorityRow | HealthAuthoritySite): boolean =>
+      this.isHealthAuthority(row);
   }
 
   public onExpandHeader(item: HealthAuthorityRow): void {
-    this.expandedHealthAuthId = (this.expandedHealthAuthId !== item.id ? item.id : 0);
+    this.expandedHealthAuthId = (this.expandedHealthAuthId !== item.id)
+      ? item.id
+      : 0;
   }
 
   public ngOnInit(): void {
@@ -78,7 +78,7 @@ export class HealthAuthorityTableComponent implements OnInit {
         this.flaggedHealthAuthorities = healthAuthorities.reduce((fhas: number[], ha: HealthAuthorityRow) =>
           [...fhas, ...ArrayUtils.insertIf(ha.hasUnderReviewUsers, ha.id)], []
         );
-        // Sort HAs together with HA Site Registrations
+        // Group sites under their associated health authorities
         this.dataSource.data = [...healthAuthorities, ...healthAuthoritySites].sort(this.sortData());
       })
     ).subscribe();
@@ -90,26 +90,19 @@ export class HealthAuthorityTableComponent implements OnInit {
    */
   private sortData(): (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite) => number {
     return (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number => {
-      if (this.isHealthAuthorityObject(a) && this.isHealthAuthorityObject(b)) {
+      if (this.isHealthAuthority(a) && this.isHealthAuthority(b)) {
         return a.id - b.id;
-      } else if (this.isHealthAuthorityObject(a)) {
-        return this.sortGroups(a, b);
-      } else if (this.isHealthAuthorityObject(b)) {
-        return this.sortGroups(b, a);
+      } else if (this.isHealthAuthority(a)) {
+        return (a.id !== (b as HealthAuthoritySite).healthAuthorityOrganizationId)
+          ? a.id - (b as HealthAuthoritySite).healthAuthorityOrganizationId
+          : -1;
+      } else if (this.isHealthAuthority(b)) {
+        return (b.id !== (a as HealthAuthoritySite).healthAuthorityOrganizationId)
+          ? (a as HealthAuthoritySite).healthAuthorityOrganizationId - b.id
+          : 1;
+      } else {
+        return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
       }
-
-      return (a as HealthAuthoritySite).healthAuthorityOrganizationId - (b as HealthAuthoritySite).healthAuthorityOrganizationId;
-    }
-  }
-
-  private sortGroups(
-    x: HealthAuthorityRow | HealthAuthoritySite,
-    y: HealthAuthorityRow | HealthAuthoritySite
-  ): number {
-    if ((x as HealthAuthorityRow).id === (y as HealthAuthoritySite).healthAuthorityOrganizationId) {
-      return -1;
-    }
-
-    return (x as HealthAuthorityRow).id - (y as HealthAuthoritySite).healthAuthorityOrganizationId;
+    };
   }
 }

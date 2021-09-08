@@ -13,7 +13,7 @@
         <td mat-cell
             *matCellDef="let row;"
             class="prefix">
-          <button *ngIf="isHealthAuthorityObject(row) && flaggedHealthAuthorities?.includes(row.id)"
+          <button *ngIf="isHealthAuthority(row) && flaggedHealthAuthorities?.includes(row.id)"
                   mat-icon-button
                   title="View Pending Authorized Users"
                   (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
@@ -54,7 +54,7 @@
             *matHeaderCellDef
             scope="col"> Assigned To
         </th>
-        <!-- TODO: Need adjudicatorIdir or similar on model -->
+        <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
             *matCellDef="let row;"> {{ null | default }} </td>
       </ng-container>
@@ -111,28 +111,28 @@
       <ng-container matColumnDef="siteActions">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col">&nbsp;</th>
+            scope="col">&nbsp;
+        </th>
         <td mat-cell
             *matCellDef="let row;"
             class="text-right">
 
-          <ng-container [ngTemplateOutlet]="siteMenu"
+          <ng-container [ngTemplateOutlet]="healthAuthSiteMenu"
                         [ngTemplateOutletContext]="{ row: row }"></ng-container>
         </td>
       </ng-container>
 
-      <!-- Health Authority header -->
       <ng-container matColumnDef="haHeader">
         <td colspan="7"
             mat-cell
-            *matCellDef="let row"
-            class="health-auth-header">
+            *matCellDef="let row">
           <button mat-icon-button
                   title="Expand"
-                  [disabled]="expandedHealthAuthId !== 0 && row.id !== expandedHealthAuthId"
+                  color="primary"
                   [disableRipple]="true"
+                  [class]="{ 'mat-button-disabled': expandedHealthAuthId !== 0 && row.id !== expandedHealthAuthId }"
                   (click)="onExpandHeader(row)">
-            {{row.name}}
+            {{ row.name }}
             <mat-icon>{{ (row.id === expandedHealthAuthId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
           </button>
         </td>
@@ -140,7 +140,7 @@
 
       <tr mat-row
           *matRowDef="let row; columns: ['prefixes', 'haHeader', 'haActions']; when: isGroup()"
-          [class]="{ 'health-auth-header-expanded': row.id === expandedHealthAuthId }"></tr>
+          [class]="{ 'expanded': row.id === expandedHealthAuthId }"></tr>
       <tr mat-header-row
           *matHeaderRowDef="siteColumns; sticky: true"></tr>
       <tr mat-row
@@ -157,7 +157,7 @@
                  let-row="row">
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
-              class="org-menu-button">
+              class="health-auth-menu">
         <mat-icon>more_vert</mat-icon>
       </button>
 
@@ -175,7 +175,7 @@
       </mat-menu>
     </ng-template>
 
-    <ng-template #siteMenu
+    <ng-template #healthAuthSiteMenu
                  let-row="row">
       <button mat-icon-button
               [matMenuTriggerFor]="menu">
@@ -183,38 +183,32 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">all_inclusive</mat-icon>
+        <button mat-menu-item>
+          <mat-icon>all_inclusive</mat-icon>
           <span>Overview</span>
         </button>
-        <button mat-menu-item
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">list_alt</mat-icon>
+        <button mat-menu-item>
+          <mat-icon>list_alt</mat-icon>
           <span>Event Log</span>
         </button>
-        <button mat-menu-item
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">message</mat-icon>
+        <button mat-menu-item>
+          <mat-icon>message</mat-icon>
           <span>Add and View Notes</span>
         </button>
-        <button mat-menu-item
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">email</mat-icon>
+        <button mat-menu-item>
+          <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)"
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">pan_tool</mat-icon>
+                [disabled]="!(Role.EDIT_SITE | inRole)">
+          <mat-icon>pan_tool</mat-icon>
           <span>Assign Registration</span>
         </button>
         <button mat-menu-item
                 *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)"
-                class="health-auth-site-menu">
-          <mat-icon class="health-auth-site-menu">pan_tool</mat-icon>
+                [disabled]="!(Role.EDIT_SITE | inRole)">
+          <mat-icon>pan_tool</mat-icon>
           <span>Reassign Registration</span>
         </button>
       </mat-menu>
