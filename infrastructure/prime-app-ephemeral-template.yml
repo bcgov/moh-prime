@@ -189,11 +189,11 @@ objects:
             "clientId": "prime-application-dev"
           }
         },
-        mohKeycloakConfig: {
-          config: {
-            url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
-            realm: 'moh_applications',
-            clientId: 'PRIME-WEBAPP-ENROLLMENT'
+        "mohKeycloakConfig": {
+          "config": {
+            "url": "https://common-logon-dev.hlth.gov.bc.ca/auth",
+            "realm": "moh_applications",
+            "clientId": "PRIME-WEBAPP-ENROLLMENT"
           }
         }
       }
