@@ -60,7 +60,6 @@ export class HealthAuthorityTableComponent implements OnInit {
   }
 
   public isGroup(): (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite) => boolean {
-    // Return ES6 Arrow Function to avoid use of `.bind(this)` or static functions
     return (index: number, rowData: HealthAuthorityRow | HealthAuthoritySite): boolean => {
       return this.isHealthAuthorityObject(rowData);
     }
@@ -90,7 +89,6 @@ export class HealthAuthorityTableComponent implements OnInit {
    * Sort health authorities and their grouped sites in ascending order by ID.
    */
   private sortData(): (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite) => number {
-    // Return ES6 Arrow Function to avoid use of `.bind(this)` or static functions
     return (a: HealthAuthorityRow | HealthAuthoritySite, b: HealthAuthorityRow | HealthAuthoritySite): number => {
       if (this.isHealthAuthorityObject(a) && this.isHealthAuthorityObject(b)) {
         return a.id - b.id;
