@@ -207,7 +207,7 @@
 
 
 <app-page-section>
-  <ng-container *ngIf="enrolment.oboSites.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
+  <ng-container *ngIf="enrolment.oboSites?.length || enrolment.jobs?.length || enrolmentErrors?.certificateOrOboSite;">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Job Site Information</ng-container>
 
@@ -218,6 +218,8 @@
         <mat-icon>edit</mat-icon>
       </button>
     </app-page-subheader>
+  </ng-container>
+  <ng-container *ngIf="enrolment.oboSites?.length || enrolmentErrors?.certificateOrOboSite; else legacyJobInfo">
     <ng-container *ngFor="let careSetting of enrolment.careSettings">
       <ng-container *ngFor="let site of enrolment?.oboSites">
         <ng-container *ngIf="site.careSettingCode === careSetting.careSettingCode">
@@ -285,8 +287,9 @@
       None
     </app-enrollee-property>
   </ng-container>
+
   <ng-template #legacyJobInfo>
-    <ng-container *ngFor="let job of enrolment.jobs">
+    <ng-container *ngFor="let job of enrolment?.jobs">
       <app-enrollee-property title="Job Title"
                              [makeBold]="true">
         {{ job.title | default }}
