@@ -95,7 +95,6 @@ namespace Prime.Services
             var gisLdapUser = new GisLdapUser
             {
                 RemainingAttempts = ldapResponse?.RemainingAttempts.ToString(),
-                Unlocked = ldapResponse?.Unlocked,
                 GisUserRole = ldapResponse?.Gisuserrole
             };
 
