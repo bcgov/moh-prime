@@ -8,7 +8,8 @@ namespace Prime.ViewModels.Profiles
     {
         public BannerMappingProfile()
         {
-
+            CreateMap<Banner, BannerDisplayViewModel>();
+            CreateMap<Banner, BannerViewModel>();
         }
     }
 }

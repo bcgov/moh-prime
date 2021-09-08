@@ -67,9 +67,6 @@ public class AutoMapping : Profile
             .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
         CreateMap<Certification, CertificationDto>();
 
-        CreateMap<Banner, BannerDisplayViewModel>();
-        CreateMap<Banner, BannerViewModel>();
-
         CreateMap<EmailTemplate, EmailTemplateViewModel>();
         CreateMap<EmailTemplate, EmailTemplateListViewModel>();
 
