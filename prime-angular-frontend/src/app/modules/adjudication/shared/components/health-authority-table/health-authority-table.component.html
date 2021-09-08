@@ -13,7 +13,7 @@
         <td mat-cell
             *matCellDef="let row;"
             class="prefix">
-          <button *ngIf="flaggedHealthAuthorities?.includes(row.id)"
+          <button *ngIf="isHealthAuthority(row) && flaggedHealthAuthorities?.includes(row.id)"
                   mat-icon-button
                   title="View Pending Authorized Users"
                   (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
@@ -25,10 +25,10 @@
       <ng-container matColumnDef="orgName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Organization Name
+            scope="col"> Health Authority Name
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ row.name | default }} </td>
+            *matCellDef="let row;"> {{ row?.name | default: '' }} </td>
       </ng-container>
 
       <ng-container matColumnDef="siteName">
@@ -37,7 +37,7 @@
             scope="col"> Site Name
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.siteName | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="submissionDate">
@@ -46,7 +46,7 @@
             scope="col"> Submission Date
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
       </ng-container>
 
       <ng-container matColumnDef="assignedTo">
@@ -54,6 +54,7 @@
             *matHeaderCellDef
             scope="col"> Assigned To
         </th>
+        <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
             *matCellDef="let row;"> {{ null | default }} </td>
       </ng-container>
@@ -64,7 +65,14 @@
             scope="col"> State
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"
+            class="status"
+            [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
+            [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
+            [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
+            [class.declined]="row.status === SiteStatusType.LOCKED">
+          {{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="siteId">
@@ -73,7 +81,7 @@
             scope="col"> Site ID
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.siteId | default }} </td>
       </ng-container>
 
       <ng-container matColumnDef="remoteUsers">
@@ -82,10 +90,10 @@
             scope="col"> Remote Users
         </th>
         <td mat-cell
-            *matCellDef="let row;"> {{ null | default }} </td>
+            *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
       </ng-container>
 
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="haActions">
         <th mat-header-cell
             *matHeaderCellDef
             scope="col">
@@ -95,16 +103,49 @@
             *matCellDef="let row;"
             class="text-right">
 
-          <ng-container [ngTemplateOutlet]="menu"
+          <ng-container [ngTemplateOutlet]="healthAuthMenu"
                         [ngTemplateOutletContext]="{ row: row }"></ng-container>
-
         </td>
       </ng-container>
 
-      <tr mat-header-row
-          *matHeaderRowDef="columns; sticky: true"></tr>
+      <ng-container matColumnDef="siteActions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            scope="col">&nbsp;
+        </th>
+        <td mat-cell
+            *matCellDef="let row;"
+            class="text-right">
+
+          <ng-container [ngTemplateOutlet]="healthAuthSiteMenu"
+                        [ngTemplateOutletContext]="{ row: row }"></ng-container>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="haHeader">
+        <td colspan="7"
+            mat-cell
+            *matCellDef="let row">
+          <button mat-icon-button
+                  title="Expand"
+                  color="primary"
+                  [disableRipple]="true"
+                  [class]="{ 'mat-button-disabled': expandedHealthAuthId !== 0 && row.id !== expandedHealthAuthId }"
+                  (click)="onExpandHeader(row)">
+            {{ row.name }}
+            <mat-icon>{{ (row.id === expandedHealthAuthId) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
       <tr mat-row
-          *matRowDef="let row; columns: columns;"></tr>
+          *matRowDef="let row; columns: ['prefixes', 'haHeader', 'haActions']; when: isGroup()"
+          [class]="{ 'expanded': row.id === expandedHealthAuthId }"></tr>
+      <tr mat-header-row
+          *matHeaderRowDef="siteColumns; sticky: true"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: siteColumns;"
+          [hidden]="row.healthAuthorityOrganizationId !== expandedHealthAuthId"></tr>
     </table>
 
     <p *ngIf="!dataSource?.data?.length"
@@ -112,10 +153,11 @@
       No Health Authorities Found
     </p>
 
-    <ng-template #menu
+    <ng-template #healthAuthMenu
                  let-row="row">
       <button mat-icon-button
-              [matMenuTriggerFor]="menu">
+              [matMenuTriggerFor]="menu"
+              class="health-auth-menu">
         <mat-icon>more_vert</mat-icon>
       </button>
 
@@ -131,7 +173,45 @@
           <span>View Authorized Users</span>
         </button>
       </mat-menu>
+    </ng-template>
 
+    <ng-template #healthAuthSiteMenu
+                 let-row="row">
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>
+          <mat-icon>all_inclusive</mat-icon>
+          <span>Overview</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>list_alt</mat-icon>
+          <span>Event Log</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>message</mat-icon>
+          <span>Add and View Notes</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>email</mat-icon>
+          <span>Send Email</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="!row?.adjudicatorIdir"
+                [disabled]="!(Role.EDIT_SITE | inRole)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Assign Registration</span>
+        </button>
+        <button mat-menu-item
+                *ngIf="row?.adjudicatorIdir"
+                [disabled]="!(Role.EDIT_SITE | inRole)">
+          <mat-icon>pan_tool</mat-icon>
+          <span>Reassign Registration</span>
+        </button>
+      </mat-menu>
     </ng-template>
 
   </div>

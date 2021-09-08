@@ -86,7 +86,7 @@
             [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
             [class.declined]="row.status === SiteStatusType.LOCKED">
           <div class="d-flex align-items-center">
-            <span class="mr-1">{{ displayStatus(row.status) | capitalize: true | default }}</span>
+            <span class="mr-1">{{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}</span>
             <mat-icon *ngIf="row?.flagged"
                       matTooltip="Site Flagged"
                       matTooltipPosition="after">flag
