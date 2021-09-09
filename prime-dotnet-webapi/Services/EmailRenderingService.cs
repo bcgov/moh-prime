@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Prime.Models;
 using Prime.HttpClients.Mail;
 using Prime.ViewModels.Emails;
+
 namespace Prime.Services.EmailInternal
 {
     public class EmailRenderingService : IEmailRenderingService
@@ -14,17 +15,15 @@ namespace Prime.Services.EmailInternal
         private const string MohEmail = "HLTH.HnetConnection@gov.bc.ca";
         private const string ProviderEnrolmentTeamEmail = "Lori.Haggstrom@gov.bc.ca";
 
-
-        private readonly IRazorConverterService _razorConverterService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly IRazorConverterService _razorConverterService;
 
         public EmailRenderingService(
-            IRazorConverterService razorConverterService,
-            IEmailTemplateService emailTemplateService
-        )
+            IEmailTemplateService emailTemplateService,
+            IRazorConverterService razorConverterService)
         {
-            _razorConverterService = razorConverterService;
             _emailTemplateService = emailTemplateService;
+            _razorConverterService = razorConverterService;
         }
 
         public async Task<Email> RenderBusinessLicenceUploadedEmailAsync(string recipientEmail, LinkedEmailViewModel viewModel)
@@ -171,7 +170,6 @@ namespace Prime.Services.EmailInternal
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteReviewedNotification, viewModel)
             );
         }
-
 
         public async Task<Email> RenderOrgClaimApprovalNotificationEmailAsync(string newSigningAuthorityEmail, OrgClaimApprovalNotificationViewModel viewModel)
         {
