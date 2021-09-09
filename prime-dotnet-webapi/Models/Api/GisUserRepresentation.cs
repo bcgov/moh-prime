@@ -5,9 +5,8 @@ namespace Prime.Models.Api
         public string Gisuserrole { get; set; }
         public string Authenticated { get; set; }
         public string Unlocked { get; set; }
+        public string PasswordExpired { get; set; }
         public string Username { get; set; }
         public int? RemainingAttempts { get; set; }
-        public int? LockoutTimeInHours { get; set; }
-
     }
 }
