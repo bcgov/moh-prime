@@ -72,11 +72,11 @@
       </ng-container>
     </app-page-subheader2>
 
-    <app-document-upload #documentUploadSupportingDocument
-                         componentName="SupportingDocument"
+    <app-document-upload #documentUploadSupportingId
+                         componentName="SupportingID"
                          labelMessage="Drag and drop your documents or click to browse"
                          [multiple]="true"
-                         (completed)="onUpload($event, documentUploadSupportingDocument.componentName)">
+                         (completed)="onUpload($event, documentUploadSupportingId.componentName)">
     </app-document-upload>
   </app-page-section>
 
