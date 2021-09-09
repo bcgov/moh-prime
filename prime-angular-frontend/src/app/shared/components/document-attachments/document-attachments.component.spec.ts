@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { DocumentAttachmentsComponent } from './document-attachments.component';
 import { RouterTestingModule } from '@angular/router/testing';
+import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 
 import { DefaultPipe } from '@shared/pipes/default.pipe';
 
@@ -35,12 +38,20 @@ describe('DocumentAttachmentsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule
+        RouterTestingModule,
+        HttpClientModule,
+        MatSnackBarModule
       ],
       declarations: [
         DocumentAttachmentsComponent,
         DefaultPipe
       ],
+      providers: [
+        {
+          provide: APP_CONFIG,
+          useValue: AppConfig
+        },
+      ]
     })
       .compileComponents();
   });
