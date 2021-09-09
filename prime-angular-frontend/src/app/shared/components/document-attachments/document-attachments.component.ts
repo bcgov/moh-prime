@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { DocumentSectionMap } from '@shared/enums/document-type.enum';
@@ -13,7 +14,6 @@ import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
 })
 export class DocumentAttachmentsComponent extends AbstractOverview implements OnInit {
   @Input() public documents: BaseDocument[];
-  @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public documentsGroupedByType: { [key: number]: BaseDocument[] };
   public DocumentSectionMap = DocumentSectionMap;
@@ -24,13 +24,9 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   ) {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
-    this.download = new EventEmitter<{ documentId: number }>();
     this.documents = [];
     this.documentsGroupedByType = {};
-  }
-
-  public onDownload(documentId: number): void {
-    this.download.emit({ documentId });
+    this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
   public ngOnInit(): void {
@@ -42,6 +38,5 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
         this.documentsGroupedByType[document.documentType].push(document);
       });
     }
-
   }
 }
