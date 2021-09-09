@@ -21,12 +21,14 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
   public documentsGroupedByType: { [key: number]: BaseDocument[] };
   public DocumentSectionMap = DocumentSectionMap;
+  public route: ActivatedRoute;
+  public router: Router;
 
   constructor(
-    private paperEnrolmentResource: PaperEnrolmentResource,
-    private utilsService: UtilsService,
     route: ActivatedRoute,
-    router: Router
+    router: Router,
+    private paperEnrolmentResource: PaperEnrolmentResource,
+    private utilsService: UtilsService
   ) {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
@@ -36,7 +38,7 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   }
 
   public onDownload({ documentId }: { documentId: number }): void {
-    const enrolleeId = this.route.snapshot.params.id
+    const enrolleeId = +this.route.snapshot.params.id
       ? this.route.snapshot.params.id
       : this.route.snapshot.params.eid;
     this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
