@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 
 namespace Prime.Services
@@ -10,8 +11,8 @@ namespace Prime.Services
     {
         public DocumentAccessTokenService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<DocumentAccessTokenService> logger)
+            : base(context, logger)
         { }
 
         public async Task<DocumentAccessToken> GetDocumentAccessTokenAsync(Guid documentAccessTokenId)
