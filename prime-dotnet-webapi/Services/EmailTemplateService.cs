@@ -1,11 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 using Prime.ViewModels.Emails;
 
@@ -14,11 +15,12 @@ namespace Prime.Services
     public class EmailTemplateService : BaseService, IEmailTemplateService
     {
         private readonly IMapper _mapper;
+
         public EmailTemplateService(
             ApiDbContext context,
-            IMapper mapper,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<EmailTemplateService> logger,
+            IMapper mapper)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
