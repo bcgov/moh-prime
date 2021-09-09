@@ -2,18 +2,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Newtonsoft.Json.Linq;
+using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Models;
 using Prime.Engines;
-using Prime.ViewModels.PaperEnrollees;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
-using DelegateDecompiler.EntityFrameworkCore;
+using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
@@ -21,30 +20,27 @@ namespace Prime.Services
     {
         private const string PaperGpidPrefix = "NOBCSC";
 
-        private readonly ILogger _logger;
-        private readonly IMapper _mapper;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
-        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
+        private readonly IMapper _mapper;
 
         public EnrolleePaperSubmissionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
             ILogger<EnrolleePaperSubmissionService> logger,
-            IMapper mapper,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
-            IEnrolleeAgreementService enrolleeAgreementService,
+            IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
-            IBusinessEventService businessEventService)
-            : base(context, httpContext)
+            IEnrolleeAgreementService enrolleeAgreementService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _logger = logger;
-            _mapper = mapper;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
-            _enrolleeAgreementService = enrolleeAgreementService;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _enrolleeAgreementService = enrolleeAgreementService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
+            _mapper = mapper;
         }
 
         public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
