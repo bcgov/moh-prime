@@ -35,8 +35,6 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   public hasNoUploadError: boolean;
 
   private routeUtils: RouteUtils;
-  // private documentGuids: string[];
-  // private documentsGuidAndType: { documentGuid: string, documentType: number }[];
   private documents: Pick<BaseDocument, 'documentGuid' | 'documentType'>[]
 
   constructor(
@@ -50,8 +48,6 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
   ) {
     super(dialog, formUtilsService);
 
-    // this.documentGuids = [];
-    // this.documentsGuidAndType = [];
     this.documents = [];
     this.agreementTypes = EnumUtils.values(PaperEnrolmentAgreementType);
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
@@ -62,8 +58,6 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
       ? DocumentType[componentName]
       : DocumentType['NoType'];
 
-    // this.documentGuids.push(documentGuid);
-    // this.documentsGuidAndType.push({ documentGuid, documentType });
     this.documents.push({ documentGuid, documentType });
 
     this.hasNoUploadError = false;
@@ -123,7 +117,7 @@ export class UploadPageComponent extends AbstractEnrolmentPage implements OnInit
     return this.paperEnrolmentResource.updateAgreementType(enrolleeId, this.formState.json.assignedTOAType)
       .pipe(
         exhaustMap(() =>
-          (this.documents.length > 0)
+          (this.documents.length)
             ? this.paperEnrolmentResource.updateAdjudicationDocuments(enrolleeId, this.documents)
             : of(null)
         ),
