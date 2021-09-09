@@ -34,11 +34,14 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   }
 
   public ngOnInit(): void {
-    this.documents.forEach((document) => {
-      if (!this.documentsGroupedByType[document.documentType]) {
-        this.documentsGroupedByType[document.documentType] = new Array<BaseDocument>();
-      }
-      this.documentsGroupedByType[document.documentType].push(document);
-    });
+    if (this.documents) {
+      this.documents.forEach((document) => {
+        if (!this.documentsGroupedByType[document.documentType]) {
+          this.documentsGroupedByType[document.documentType] = new Array<BaseDocument>();
+        }
+        this.documentsGroupedByType[document.documentType].push(document);
+      });
+    }
+
   }
 }
