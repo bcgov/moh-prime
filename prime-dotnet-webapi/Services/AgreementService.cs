@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -16,18 +16,18 @@ namespace Prime.Services
 {
     public class AgreementService : BaseService, IAgreementService
     {
-        private readonly IMapper _mapper;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
 
         public AgreementService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            ILogger<AgreementService> logger,
+            IDocumentManagerClient documentClient,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _documentClient = documentClient;
+            _mapper = mapper;
         }
 
 
