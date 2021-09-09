@@ -10,6 +10,7 @@ namespace Prime.ViewModels.Profiles
         {
             CreateMap<Contact, ContactViewModel>()
                 .ReverseMap();
+
             CreateMap<Address, AddressViewModel>();
             CreateMap<AddressViewModel, PhysicalAddress>();
             CreateMap<AddressViewModel, MailingAddress>();

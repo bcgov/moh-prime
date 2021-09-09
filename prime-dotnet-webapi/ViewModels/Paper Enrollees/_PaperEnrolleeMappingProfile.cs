@@ -5,11 +5,14 @@ using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.ViewModels.Profiles
 {
-    public class PaperEnrolleesMappingProfile : Profile
+    public class PaperEnrolleeMappingProfile : Profile
     {
-        public PaperEnrolleesMappingProfile()
+        public PaperEnrolleeMappingProfile()
         {
-
+            CreateMap<PaperEnrolleeDemographicViewModel, Enrollee>();
+            CreateMap<PaperEnrolleeCertificationViewModel, Certification>();
+            CreateMap<PaperEnrolleeSelfDeclarationViewModel, SelfDeclaration>();
+            CreateMap<PaperEnrolleeOboSiteViewModel, OboSite>();
         }
     }
 }
