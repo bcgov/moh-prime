@@ -83,6 +83,7 @@ namespace Prime
             services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
+            services.AddScoped<IPhsaService, PhsaService>();
             services.AddScoped<IPlrProviderService, PlrProviderService>();
             services.AddScoped<IPrivilegeService, PrivilegeService>();
             services.AddScoped<IRazorConverterService, RazorConverterService>();
@@ -112,7 +113,7 @@ namespace Prime
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader()
-                            .WithExposedHeaders("Location", "RemainingAttempts");
+                            .WithExposedHeaders("Location", "Unlocked");
                     });
             });
 
@@ -182,8 +183,8 @@ namespace Prime
                 ClientSecret = PrimeEnvironment.DocumentManager.ClientSecret,
             });
 
-            services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
-            .WithBearerToken(new KeycloakAdministrationClientCredentials
+            services.AddHttpClientWithBaseAddress<IPrimeKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.PrimeKeycloak.AdministrationUrl)
+            .WithBearerToken(new PrimeKeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.PrimeKeycloak.TokenUrl,
                 ClientId = PrimeEnvironment.PrimeKeycloak.AdministrationClientId,
@@ -192,7 +193,7 @@ namespace Prime
 
             services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(PrimeEnvironment.LdapApi.Url);
 
-            services.AddHttpClientWithBaseAddress<IMohKeycloakClient, MohKeycloakClient>(PrimeEnvironment.MohKeycloak.AdministrationUrl)
+            services.AddHttpClientWithBaseAddress<IMohKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.MohKeycloak.AdministrationUrl)
             .WithBearerToken(new MohKeycloakAdministrationClientCredentials
             {
                 Address = PrimeEnvironment.MohKeycloak.TokenUrl,
