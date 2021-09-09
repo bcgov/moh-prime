@@ -3,15 +3,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Models;
-using Prime.Services.EmailInternal;
 using Prime.HttpClients.Mail;
-using Prime.ViewModels.Emails;
 using Prime.HttpClients.Mail.ChesApiDefinitions;
+using Prime.ViewModels.Emails;
+using Prime.Services.EmailInternal;
 
 namespace Prime.Services
 {
@@ -23,23 +23,23 @@ namespace Prime.Services
             public const string Smtp = "SMTP";
         }
 
+        private readonly IChesClient _chesClient;
         private readonly IEmailDocumentsService _emailDocumentService;
         private readonly IEmailRenderingService _emailRenderingService;
-        private readonly IChesClient _chesClient;
         private readonly ISmtpEmailClient _smtpEmailClient;
 
         public EmailService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<EmailService> logger,
+            IChesClient chesClient,
             IEmailDocumentsService emailDocumentService,
             IEmailRenderingService emailRenderingService,
-            IChesClient chesClient,
             ISmtpEmailClient smtpEmailClient)
-            : base(context, httpContext)
+            : base(context, logger)
         {
+            _chesClient = chesClient;
             _emailDocumentService = emailDocumentService;
             _emailRenderingService = emailRenderingService;
-            _chesClient = chesClient;
             _smtpEmailClient = smtpEmailClient;
         }
 
