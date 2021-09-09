@@ -1,16 +1,16 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 
 using Prime.Models;
+using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.Models.HealthAuthorities;
 
 namespace Prime.Services
 {
@@ -20,9 +20,9 @@ namespace Prime.Services
 
         public HealthAuthorityService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<HealthAuthorityService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
