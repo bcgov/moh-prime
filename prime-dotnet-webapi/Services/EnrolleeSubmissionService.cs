@@ -1,16 +1,16 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
-using Prime.Engines;
 using Prime.Models;
+using Prime.Engines;
 using Prime.DTOs.AgreementEngine;
 
 namespace Prime.Services
@@ -22,13 +22,13 @@ namespace Prime.Services
 
         public EnrolleeSubmissionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
-            IEnrolleeService enrolleeService
-            ) : base(context, httpContext)
+            ILogger<EnrolleeSubmissionService> logger,
+            IEnrolleeService enrolleeService,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _enrolleeService = enrolleeService;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Submission>> GetEnrolleeSubmissionsAsync(int enrolleeId)
