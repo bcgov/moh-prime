@@ -14,7 +14,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
 import { AuthorizedUser } from '@shared/models/authorized-user.model';
 import { HealthAuthority } from '@shared/models/health-authority.model';
-import { HealthAuthorityList } from '@shared/models/health-authority-list.model';
+import { HealthAuthorityRow } from '@shared/models/health-authority-row.model';
 import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 // TODO move models into lib
 import { PrivacyOffice } from '@adjudication/shared/models/privacy-office.model';
@@ -39,11 +39,11 @@ export class HealthAuthorityResource {
     private capitalizePipe: CapitalizePipe
   ) { }
 
-  public getHealthAuthorities(): Observable<HealthAuthorityList[]> {
-    return this.apiResource.get<HealthAuthorityList[]>(`health-authorities`)
+  public getHealthAuthorities(): Observable<HealthAuthorityRow[]> {
+    return this.apiResource.get<HealthAuthorityRow[]>(`health-authorities`)
       .pipe(
-        map((response: ApiHttpResponse<HealthAuthorityList[]>) => response.result),
-        tap((healthAuthorities: HealthAuthorityList[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
+        map((response: ApiHttpResponse<HealthAuthorityRow[]>) => response.result),
+        tap((healthAuthorities: HealthAuthorityRow[]) => this.logger.info('HEALTH_AUTHORITIES', healthAuthorities)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authorities could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthorities error has occurred: ', error);
@@ -232,6 +232,19 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be created');
           this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getAllHealthAuthoritySites(): Observable<HealthAuthoritySite[]> {
+    return this.apiResource.get<HealthAuthoritySite[]>(`health-authorities/sites`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySite[]>) => response.result),
+        tap((healthAuthoritySites: HealthAuthoritySite[]) => this.logger.info('HEALTH_AUTHORITY_SITES', healthAuthoritySites)),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority sites could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getAllHealthAuthoritySites error has occurred: ', error);
           throw error;
         })
       );

@@ -52,20 +52,21 @@ namespace Prime.Services
             return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
+        public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetAllSitesAsync()
+        {
+            return await GetBaseSitesNoTrackingQuery().ToListAsync();
+        }
+
         public async Task<IEnumerable<HealthAuthoritySiteViewModel>> GetSitesAsync(int healthAuthorityId)
         {
-            return await _context.HealthAuthoritySites
+            return await GetBaseSitesNoTrackingQuery()
                 .Where(has => has.HealthAuthorityOrganizationId == healthAuthorityId)
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
                 .ToListAsync();
         }
 
         public async Task<HealthAuthoritySiteViewModel> GetSiteAsync(int siteId)
         {
-            return await _context.HealthAuthoritySites
-                .AsNoTracking()
-                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider)
+            return await GetBaseSitesNoTrackingQuery()
                 .SingleOrDefaultAsync(has => has.Id == siteId);
         }
 
@@ -170,6 +171,13 @@ namespace Prime.Services
             site.SubmittedDate = DateTimeOffset.Now;
 
             await _context.SaveChangesAsync();
+        }
+
+        private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
+        {
+            return _context.HealthAuthoritySites
+                .AsNoTracking()
+                .ProjectTo<HealthAuthoritySiteViewModel>(_mapper.ConfigurationProvider);
         }
     }
 }
