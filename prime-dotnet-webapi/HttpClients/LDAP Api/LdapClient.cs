@@ -45,11 +45,9 @@ namespace Prime.HttpClients
                     var successResponse = JsonConvert.DeserializeObject<GisUserRepresentation>(responseJsonString);
                     return successResponse;
                 }
-                else
-                {
-                    await LogError(response);
-                    return null;
-                }
+
+                await LogError(response);
+                return null;
             }
             catch (Exception ex)
             {
