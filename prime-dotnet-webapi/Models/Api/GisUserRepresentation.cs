@@ -7,6 +7,5 @@ namespace Prime.Models.Api
         public string Unlocked { get; set; }
         public string PasswordExpired { get; set; }
         public string Username { get; set; }
-        public int? RemainingAttempts { get; set; }
     }
 }
