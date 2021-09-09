@@ -1,7 +1,7 @@
 <ng-container *ngIf="enrollee">
 
   <div [class]="(mode === 'column') ? 'd-flex flex-column-reverse' : ''">
-    <mat-form-field [class]="mode === 'row' ? 'mr-4': ''">
+    <mat-form-field [class]="(mode === 'row') ? 'mr-4' : ''">
       <mat-label>TOA Selection</mat-label>
       <mat-select [formControl]="assignedTOAType">
         <mat-option *ngFor="let agreement of termsOfAccessAgreements"
