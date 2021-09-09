@@ -29,7 +29,6 @@ import { UploadForm } from './upload-form.model';
       <app-enrollee-property *ngIf="documents?.length"
                              title="File(s)">
         <app-document-attachments [documents]="documents"> </app-document-attachments>
-
       </app-enrollee-property>
     </app-page-section>
   `,
