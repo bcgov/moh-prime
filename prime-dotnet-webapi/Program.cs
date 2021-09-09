@@ -48,6 +48,7 @@ namespace Prime
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseSentry(o => InitSentry(o));
                 });
+
         private static void InitSentry(SentryAspNetCoreOptions o)
         {
             string dsn = PrimeEnvironment.IsLocal
