@@ -1,11 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
 using Prime.Models;
-using Prime.ViewModels;
 using Prime.Models.Api;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -15,9 +16,9 @@ namespace Prime.Services
 
         public OrganizationClaimService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<OrganizationClaimService> logger,
             IBusinessEventService businessEventService)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _businessEventService = businessEventService;
         }
