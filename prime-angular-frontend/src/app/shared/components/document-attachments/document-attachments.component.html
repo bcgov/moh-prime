@@ -4,7 +4,9 @@
       <app-enrollee-property [title]=DocumentSectionMap[documentsArray.key]></app-enrollee-property>
     </ng-container>
 
-    <app-document-attachment [documents]=documentsGroupedByType[documentsArray.key]>
-    </app-document-attachment>
+    <app-enrollee-property>
+      <app-document-attachment [documents]=documentsGroupedByType[documentsArray.key]>
+      </app-document-attachment>
+    </app-enrollee-property>
   </app-page-section>
 </ng-container>
