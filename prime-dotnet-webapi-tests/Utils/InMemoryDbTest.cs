@@ -1,14 +1,14 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using AutoMapper;
 
 using Prime;
-using Prime.ViewModels;
+using Prime.ViewModels.Profiles;
 using Prime.Configuration;
 using Prime.Configuration.Agreements;
-
-using AutoMapper;
 
 namespace PrimeTests.Utils
 {
@@ -76,7 +76,7 @@ namespace PrimeTests.Utils
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new AutoMapping());
+                cfg.AddMaps(Assembly.GetAssembly(typeof(CommonMappingProfile)));
             }).CreateMapper();
         }
     }
