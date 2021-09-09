@@ -152,9 +152,9 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
     };
   }
 
-  public onDownload({ documentId }: { documentId: number }): void {
-    const enrolleeId = +this.route.snapshot.params.eid;
-    this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
+  // public onDownload({ documentId }: { documentId: number }): void {
+  //   const enrolleeId = +this.route.snapshot.params.eid;
+  //   this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
+  //     .subscribe((token: string) => this.utilsService.downloadToken(token));
+  // }
 }
