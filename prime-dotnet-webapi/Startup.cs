@@ -112,7 +112,7 @@ namespace Prime
                             .AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader()
-                            .WithExposedHeaders("Location", "RemainingAttempts");
+                            .WithExposedHeaders("Location", "Unlocked");
                     });
             });
 
