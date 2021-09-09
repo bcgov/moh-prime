@@ -39,7 +39,6 @@
           </mat-form-field>
 
         </div>
-        {{ remainingAttempts | json }}
 
         <ng-container *ngIf="hasAttemptedSubmission && (remainingAttempts === 1 || locked)">
           <app-alert type="danger"
