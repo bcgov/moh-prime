@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+
 using Prime.Models;
 using Prime.ViewModels;
 
@@ -10,8 +11,8 @@ namespace Prime.Services
     {
         public ClientLogService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<ClientLogService> logger)
+            : base(context, logger)
         { }
 
         public async Task<int> CreateLogAsync(ClientLogViewModel log)
