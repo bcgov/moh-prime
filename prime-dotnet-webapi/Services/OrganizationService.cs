@@ -79,8 +79,8 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .Include(o => o.SigningAuthority)
-                        .ThenInclude(sa => sa.Addresses)
-                            .ThenInclude(pa => pa.Address)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
@@ -89,11 +89,10 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            var organization = await GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
-            return organization;
         }
 
         public async Task<Organization> GetOrganizationByPecAsync(string pec)
