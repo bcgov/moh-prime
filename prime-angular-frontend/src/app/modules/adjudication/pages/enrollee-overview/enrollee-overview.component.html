@@ -68,7 +68,8 @@
             <app-review-status-content [enrollee]="enrollee"
                                        [hideStatusHistory]="true">
             </app-review-status-content>
-            <app-document-attachments [documents]="documents">
+            <app-document-attachments *ngIf="documents"
+                                      [documents]="documents">
             </app-document-attachments>
           </mat-card-content>
         </mat-card>

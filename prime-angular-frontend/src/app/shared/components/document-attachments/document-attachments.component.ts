@@ -32,7 +32,6 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   ) {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
-    this.documents = [];
     this.documentsGroupedByType = {};
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
@@ -46,13 +45,11 @@ export class DocumentAttachmentsComponent extends AbstractOverview implements On
   }
 
   public ngOnInit(): void {
-    if (this.documents) {
-      this.documents.forEach((document) => {
-        if (!this.documentsGroupedByType[document.documentType]) {
-          this.documentsGroupedByType[document.documentType] = new Array<BaseDocument>();
-        }
-        this.documentsGroupedByType[document.documentType].push(document);
-      });
-    }
+    this.documents.forEach((document) => {
+      if (!this.documentsGroupedByType[document.documentType]) {
+        this.documentsGroupedByType[document.documentType] = new Array<BaseDocument>();
+      }
+      this.documentsGroupedByType[document.documentType].push(document);
+    });
   }
 }
