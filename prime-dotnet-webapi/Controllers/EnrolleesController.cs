@@ -13,7 +13,6 @@ using Prime.Services;
 using Prime.ViewModels;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.ViewModels.Plr;
-using Sentry;
 
 namespace Prime.Controllers
 {
@@ -57,10 +56,6 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            SentrySdk.CaptureMessage("Hello Sentry");
-
-            throw null;
-
             if (User.IsAdministrant())
             {
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);

@@ -9,6 +9,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using Sentry.AspNetCore;
 
 namespace Prime
 
@@ -45,8 +46,26 @@ namespace Prime
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseSentry();
+                    webBuilder.UseSentry(o => InitSentry(o));
                 });
+        private static void InitSentry(SentryAspNetCoreOptions o)
+        {
+            string dsn = PrimeEnvironment.IsLocal
+                ? PrimeEnvironment.PrimeSentryKeys.DevEnvDsn
+                : PrimeEnvironment.PrimeSentryKeys.ProdEnvDsn;
+
+            double sampleTraceRate = PrimeEnvironment.IsLocal
+                ? PrimeEnvironment.PrimeSentryKeys.DevEnvTraceSampleRate
+                : PrimeEnvironment.PrimeSentryKeys.ProdEnvTraceSampleRate;
+
+            // Tells which project in Sentry to send events to:
+            o.Dsn = dsn;
+            // When configuring for the first time, to see what the SDK is doing:
+            o.Debug = PrimeEnvironment.IsLocal;
+            // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
+            // We recommend adjusting this value in production.
+            o.TracesSampleRate = sampleTraceRate;
+        }
 
         private static void CreateLogger()
         {

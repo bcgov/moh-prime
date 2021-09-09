@@ -34,7 +34,6 @@ using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
-using Sentry;
 
 namespace Prime
 {
@@ -237,10 +236,13 @@ namespace Prime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
-            if (env.IsDevelopment())
-            {
-                // app.UseDeveloperExceptionPage();
-            }
+            // ********************************* *********************************
+            // Leaving the code block below here and will remove after PR approval
+            // ********************************* *********************************
+            // if (env.IsDevelopment())
+            // {
+            //     app.UseDeveloperExceptionPage();
+            // }
 
             ConfigureHealthCheck(app);
 

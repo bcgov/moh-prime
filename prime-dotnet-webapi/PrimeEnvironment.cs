@@ -109,5 +109,14 @@ namespace Prime
         {
             public static readonly string Url = GetEnvironmentVariable("LDAP_API_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/ldap";
         }
+
+        public static class PrimeSentryKeys
+        {
+            public static readonly string DevEnvDsn = "https://b10d3b20d6cc4eb39e0d90997c72fd0c@o988003.ingest.sentry.io/5945123";
+            public static readonly double DevEnvTraceSampleRate = 1.0;
+
+            public static readonly string ProdEnvDsn = "https://b10d3b20d6cc4eb39e0d90997c72fd0c@o988003.ingest.sentry.io/5945123";
+            public static readonly double ProdEnvTraceSampleRate = 1.0;
+        }
     }
 }
