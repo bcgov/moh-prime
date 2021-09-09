@@ -72,7 +72,7 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       .subscribe((enrollee: HttpEnrollee) => this.enrollee = enrollee);
 
     this.paperEnrolmentResource.getAdjudicationDocuments(+this.route.snapshot.params.id)
-      .subscribe((documents: EnrolleeAdjudicationDocument[]) => {
+      .subscribe(documents => {
         this.documents = documents
       });
   }
@@ -151,10 +151,4 @@ export class EnrolleeOverviewComponent extends AdjudicationContainerComponent im
       ...remainder
     };
   }
-
-  // public onDownload({ documentId }: { documentId: number }): void {
-  //   const enrolleeId = +this.route.snapshot.params.eid;
-  //   this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
-  //     .subscribe((token: string) => this.utilsService.downloadToken(token));
-  // }
 }

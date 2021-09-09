@@ -41,7 +41,7 @@ import { UploadForm } from './upload-form.model';
 export class UploadOverviewComponent extends AbstractOverview {
   @Input() public upload: UploadForm;
   @Input() public documents: BaseDocument[];
-  // @Output() public download: EventEmitter<{ documentId: number }>;
+  @Output() public download: EventEmitter<{ documentId: number }>;
   public PaperEnrolmentAgreementTypeNameMap = PaperEnrolmentAgreementTypeNameMap;
   public PaperEnrolmentRoutes = PaperEnrolmentRoutes;
 
@@ -51,10 +51,10 @@ export class UploadOverviewComponent extends AbstractOverview {
   ) {
     super(route, router, PaperEnrolmentRoutes.MODULE_PATH);
 
-    // this.download = new EventEmitter<{ documentId: number }>();
+    this.download = new EventEmitter<{ documentId: number }>();
   }
 
-  // public downloadDocument(documentId: number): void {
-  //   this.download.emit({ documentId });
-  // }
+  public downloadDocument(documentId: number): void {
+    this.download.emit({ documentId });
+  }
 }

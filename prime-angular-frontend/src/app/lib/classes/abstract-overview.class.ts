@@ -15,8 +15,8 @@ export abstract class AbstractOverview {
   public routeUtils: RouteUtils;
 
   protected constructor(
-    route: ActivatedRoute,
-    router: Router,
+    protected route: ActivatedRoute,
+    protected router: Router,
     baseRoute: string | (string | number)[]
   ) {
     this.showEditRedirect = true;

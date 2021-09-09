@@ -5,7 +5,8 @@
     </ng-container>
 
     <app-enrollee-property>
-      <app-document-attachment [documents]=documentsGroupedByType[documentsArray.key]>
+      <app-document-attachment [documents]=documentsGroupedByType[documentsArray.key]
+                               (download)="onDownload($event)">
       </app-document-attachment>
     </app-enrollee-property>
   </app-page-section>
