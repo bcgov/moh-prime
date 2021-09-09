@@ -1,13 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using Prime.Models;
-using Prime.ViewModels;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
+using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
@@ -17,9 +18,9 @@ namespace Prime.Services
 
         public BannerService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<BannerService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
