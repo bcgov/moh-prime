@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -19,26 +19,26 @@ namespace Prime.Services
     public class OrganizationService : BaseService, IOrganizationService
     {
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPartyService _partyService;
-        private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IPartyService _partyService;
 
         public OrganizationService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<OrganizationService> logger,
             IBusinessEventService businessEventService,
-            IPartyService partyService,
-            IOrganizationClaimService organizationClaimService,
+            IDocumentManagerClient documentClient,
             IMapper mapper,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IOrganizationClaimService organizationClaimService,
+            IPartyService partyService)
+            : base(context, logger)
         {
             _businessEventService = businessEventService;
-            _partyService = partyService;
-            _organizationClaimService = organizationClaimService;
             _documentClient = documentClient;
             _mapper = mapper;
+            _organizationClaimService = organizationClaimService;
+            _partyService = partyService;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
