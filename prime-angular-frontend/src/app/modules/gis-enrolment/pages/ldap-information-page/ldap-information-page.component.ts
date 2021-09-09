@@ -24,8 +24,8 @@ import { LdapErrorResponse } from '@gis/shared/models/ldap-error-response.model'
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: LdapInformationPageFormState;
-  public remainingAttempts: number | null;
-  public lockoutTimeInHours: number | null;
+  public locked: boolean;
+  public remainingAttempts: number;
 
   private routeUtils: RouteUtils;
 
@@ -41,6 +41,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     super(dialog, formUtilsService);
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, GisEnrolmentRoutes.routePath(GisEnrolmentRoutes.MODULE_PATH));
+    this.remainingAttempts = 3;
   }
 
   public onBack() {
@@ -67,8 +68,11 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
       .pipe(
         exhaustMap((response: NoContent | LdapErrorResponse) => {
           if (response instanceof LdapErrorResponse) {
-            const { remainingAttempts, lockoutTimeInHours } = response;
-            this.handleLdapResponse(remainingAttempts, lockoutTimeInHours);
+            const { unlocked } = response;
+            if(this.remainingAttempts) {
+              this.remainingAttempts--;
+            }
+            this.handleLdapResponse(!unlocked);
             return EMPTY;
           }
 
@@ -84,8 +88,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
   }
 
-  private handleLdapResponse(remainingAttempts: number = null, lockoutTimeInHours: number = null) {
-    this.remainingAttempts = remainingAttempts;
-    this.lockoutTimeInHours = lockoutTimeInHours;
+  private handleLdapResponse(locked?: boolean) {
+    this.locked = !!locked;
   }
 }
