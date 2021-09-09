@@ -19,14 +19,14 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
-        private readonly IMohKeycloakClient _mohKeycloakClient;
+        private readonly IMohKeycloakAdministrationClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
             ILdapClient ldapClient,
-            IMohKeycloakClient mohKeycloakClient)
+            IMohKeycloakAdministrationClient mohKeycloakClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
