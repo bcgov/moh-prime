@@ -1,14 +1,18 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, forkJoin, of, Subscription } from 'rxjs';
+import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
+import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
+import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -24,6 +28,7 @@ import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
 import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-site-overview',
@@ -46,6 +51,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   public form: FormGroup;
   public refresh: BehaviorSubject<boolean>;
 
+  public showSendNotification: boolean;
+  public isNotificationSent: boolean;
   public showSearchFilter: boolean;
   public AdjudicationRoutes = AdjudicationRoutes;
 
@@ -77,7 +84,11 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
   }
 
-  public onSubmit() {
+  public get pec(): FormControl {
+    return this.form.get('pec') as FormControl;
+  }
+
+  public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
@@ -86,7 +97,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     }
   }
 
-  public onApproveOrgClaim() {
+  public onApproveOrgClaim(): void {
     this.busy = this.organizationResource
       .approveOrganizationClaim(this.orgClaim.organizationId, this.orgClaim.id)
       .pipe(
@@ -96,6 +107,26 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.refresh.next(true);
         this.organization = organization;
       });
+  }
+
+  public onSendNotification(): void {
+    const data: DialogOptions = {
+      title: 'PharmaCare Provider Enrolment',
+      message: 'Send notification to provider enrolment team',
+      actionText: 'Send Notification',
+      component: NoteComponent
+    };
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) => {
+          if (result) {
+            return this.siteResource.sendSiteReviewedEmailUser(this.route.snapshot.params.sid, result.output);
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe(() => this.isNotificationSent = true);
   }
 
   public ngOnInit(): void {
@@ -117,6 +148,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.form.get('pec').setValue(site.pec);
+        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
         return of(null);
       }),
       exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
@@ -129,8 +161,13 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.form = this.fb.group({
       pec: [
         '',
-        [Validators.required]
+        [Validators.required],
+        FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
+  }
+
+  private checkPecIsUnique(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecExists(value);
   }
 }

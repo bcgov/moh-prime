@@ -17,3 +17,8 @@ BuildReports/
 !.vscode/extensions.json
 
 .env
+
+# Ignore test coverage files and directories
+**/**/coverage
+**/lcov.info
+**/coverage.cobertura.xml 

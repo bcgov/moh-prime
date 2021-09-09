@@ -36,7 +36,7 @@ describe('EnrolleeToaMaintenanceViewPageComponent', () => {
         },
         {
           provide: ConfigService,
-          useValue: MockConfigService
+          useClass: MockConfigService
         },
         {
           provide: AuthService,

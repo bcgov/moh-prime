@@ -152,6 +152,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC 
+                && await _siteService.PecExistsAsync(updatedSite.PEC))
+            {
+                return BadRequest("PEC already exists");
+            }
+
             await _siteService.UpdateSiteAsync(siteId, updatedSite);
 
             return NoContent();
@@ -633,6 +641,13 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && await _siteService.PecExistsAsync(pecCode))
+            {
+                return BadRequest("PEC already exists");
+            }
+
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
 
             return Ok(updatedSite);
@@ -750,6 +765,32 @@ namespace Prime.Controllers
             }
 
             await _emailService.SendRemoteUserNotificationsAsync(site, remoteUsers);
+            return NoContent();
+        }
+
+        // POST: api/Sites/5/site-reviewed-email
+        /// <summary>
+        /// Send site reviewed notification email to provider enrolment team
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="note"></param>
+        /// <returns></returns>
+        [HttpPost("{siteId}/site-reviewed-email", Name = nameof(SendSiteReviewedNotificationEmail))]
+        [Authorize(Roles = Roles.ViewSite)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> SendSiteReviewedNotificationEmail(int siteId, FromBodyText note)
+        {
+            var siteExists = await _siteService.SiteExists(siteId);
+
+            if (!siteExists)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+
+            await _emailService.SendSiteReviewedNotificationAsync(siteId, note);
             return NoContent();
         }
 
@@ -1119,6 +1160,28 @@ namespace Prime.Controllers
             }
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
+        }
+
+        // GET: api/sites/pec-exists
+        /// <summary>
+        /// Check if a given PEC already exists, only applicable to non health authority site
+        /// </summary>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpGet("pec-exists", Name = nameof(PecExists))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> PecExists(string pec)
+        {
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            var exist = await _siteService.PecExistsAsync(pec);
+            return Ok(exist);
         }
     }
 }

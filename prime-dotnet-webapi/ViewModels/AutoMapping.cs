@@ -1,5 +1,5 @@
 using System.Linq;
-using System.Collections.Gener­ic;
+using System.Collections.Generic;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 

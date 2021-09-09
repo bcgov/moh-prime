@@ -727,6 +727,24 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
+        public async Task<bool> SiteExists(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.Id == siteId);
+        }
+
+        /// <summary>
+        /// Check if a given PEC already exists among non health authority sites
+        /// </summary>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        public async Task<bool> PecExistsAsync(string pec)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+        }
 
         private IQueryable<Site> GetBaseSiteQuery()
         {

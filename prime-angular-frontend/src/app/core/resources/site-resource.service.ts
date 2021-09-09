@@ -159,6 +159,19 @@ export class SiteResource {
       );
   }
 
+  public sendSiteReviewedEmailUser(siteId: number, note: string): NoContent {
+    const payload = { data: note };
+    return this.apiResource.post<NoContent>(`sites/${siteId}/site-reviewed-email`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Site reviewed notification email could not be sent');
+          this.logger.error('[SiteRegistration] SiteResource::sendSiteReviewedEmailUser error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updatePecCode(siteId: number, pecCode: string): Observable<Site> {
     const payload = { data: pecCode };
     return this.apiResource.put<Site>(`sites/${siteId}/pec`, payload)
@@ -500,6 +513,19 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site business events could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSiteBusinessEvents error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecExists(pec: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ pec });
+    return this.apiResource.get(`sites/pec-exists`, params)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Could not check PEC existence');
+          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
           throw error;
         })
       );

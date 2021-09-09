@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormGroupDirective } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormGroupDirective, FormArray } from '@angular/forms';
 import { WeekDay } from '@angular/common';
 import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,7 +15,6 @@ import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
@@ -141,6 +140,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
         this.allowEditingHours(group, false);
       }
     });
+  }
+
+  protected checkValidity(form: FormGroup | FormArray): boolean {
+    // Form being disabled indicates that every day of the week is 24 hours
+    return (form.disabled || this.formUtilsService.checkValidity(form)) && this.additionalValidityChecks(form.getRawValue());
   }
 
   protected additionalValidityChecks(formValue: HoursOperationPageFormModel): boolean {
