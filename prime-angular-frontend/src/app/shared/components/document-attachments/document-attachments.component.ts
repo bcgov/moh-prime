@@ -7,9 +7,7 @@ import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { DocumentSectionMap } from '@shared/enums/document-type.enum';
 import { BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
-
 import { PaperEnrolmentResource } from '@paper-enrolment/shared/services/paper-enrolment-resource.service';
-
 
 @Component({
   selector: 'app-document-attachments',
