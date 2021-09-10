@@ -15,6 +15,8 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
 import { OboSite } from '@enrolment/shared/models/obo-site.model';
 
+import { Job } from '@enrolment/shared/models/job.model';
+
 // TODO incoming transitional Enrollee model, eventually will be Enrollee
 export interface HttpEnrollee extends Enrollee {
   displayId?: number;
@@ -54,6 +56,8 @@ export interface HttpEnrollee extends Enrollee {
   gpid: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 /**
@@ -105,6 +109,8 @@ export interface Enrolment {
   base64QRCode: string;
   requiresConfirmation: boolean;
   confirmed: boolean;
+  // This is needed for legacy enrolments
+  jobs: Job[];
 }
 
 export interface EnrolleeListViewModel {
