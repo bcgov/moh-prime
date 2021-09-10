@@ -64,7 +64,7 @@ jobs:
           push: true
           file: document-manager/backend/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-document-manager:pr-${{steps.PR.outputs.number}}
-          secrets: |
+          build-args: |
             BUILD_LOGLEVEL=2
             SVC_NAME=pr-${{steps.PR.outputs.number}}
           cache-from: type=local,src=/tmp/.docman-cache
@@ -125,7 +125,7 @@ jobs:
           push: true
           file: prime-dotnet-webapi/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-webapi-backend:pr-${{steps.PR.outputs.number}}
-          secrets:
+          build-args:
             ASPNETCORE_ENVIRONMENT="Development"
             ASPNETCORE_HTTPS_PORT=5001
             ASPNETCORE_URLS="http://+:8080"
@@ -192,7 +192,7 @@ jobs:
           push: true
           file: prime-angular-frontend/openshift.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          secrets:
+          build-args:
             JWT_WELL_KNOWN_CONFIG="https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
             KEYCLOAK_URL="https://dev.oidc.gov.bc.ca/auth"
             KEYCLOAK_REALM="v4mbqqas"
