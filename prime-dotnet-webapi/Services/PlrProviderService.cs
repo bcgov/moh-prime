@@ -1,33 +1,28 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Prime.Models;
-using Prime.ViewModels.Plr;
-using Prime.Models.Plr;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
+
+using Prime.Models;
+using Prime.Models.Plr;
+using Prime.ViewModels.Plr;
 
 namespace Prime.Services
 {
     public class PlrProviderService : BaseService, IPlrProviderService
     {
-        private readonly ILogger _logger;
-
         private readonly IMapper _mapper;
-
 
         public PlrProviderService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
             ILogger<PlrProviderService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
-            _logger = logger;
             _mapper = mapper;
         }
 
