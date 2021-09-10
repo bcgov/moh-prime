@@ -1,24 +1,24 @@
 #!/bin/bash
-function waitForPsql() 
-{
-until  psql -h $DB_HOST -U ${DB_USER} -d ${DB_NAME} -v QueryTimeout=1 -v ON_ERROR_STOP=1 -c "select version()" > /dev/null;
-do
-    echo "waiting for postgres container..."
-    sleep 2
-done
-}
+# function waitForPsql() 
+# {
+# until  psql -h $DB_HOST -U ${DB_USER} -d ${DB_NAME} -v QueryTimeout=1 -v ON_ERROR_STOP=1 -c "select version()" > /dev/null;
+# do
+#     echo "waiting for postgres container..."
+#     sleep 2
+# done
+# }
 
 function backend()
 {
-    waitForPsql
     cd /opt/app-root/src
+    # python3 wait.py
     flask run ${FLASK_RUN_PARAMS} &disown 
     uwsgi uwsgi.ini
 }
 
 function migrate()
 {
-    waitForPsql
+    python3 /opt/app-root/src/wait.py
     flask db upgrade ${FLASK_RUN_PARAMS}
 }
 case "$1" in
