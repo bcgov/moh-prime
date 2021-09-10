@@ -190,8 +190,9 @@ export class PaperEnrolmentResource {
       );
   }
 
-  public updateAdjudicationDocuments(enrolleeId: number, documentGuids: string[]): Observable<any> {
-    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentGuids)
+
+  public updateAdjudicationDocuments(enrolleeId: number, documentsGuidAndType: { documentGuid, documentType }[]): Observable<NoContent> {
+    return this.apiResource.put<NoContent>(`enrollees/${enrolleeId}/paper-submissions/documents`, documentsGuidAndType)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
