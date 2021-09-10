@@ -1,10 +1,11 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -14,8 +15,8 @@ namespace Prime.Services
     {
         public PartyService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<PartyService> logger)
+            : base(context, logger)
         { }
 
         public async Task<bool> PartyExistsAsync(int partyId, PartyType? withType = null)
