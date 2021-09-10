@@ -173,18 +173,13 @@ jobs:
 
         run: |
           oc process -f infrastructure/prime-app-template.yml \
-            -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres \
-            -p DOCMAN_POD=document-manager \
-            -p FRONTEND_POD=frontend \
             -p VANITY_URL=test.pharmanetenrolment.gov.bc.ca \
             -p IMAGE_TAG=test \
             -p SVC_NAME=test \
             -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p OC_APP=${{secrets.OC_APP}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca \
-            -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -p HPR_URL=test-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=test-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-test.apps.silver.devops.gov.bc.ca \
