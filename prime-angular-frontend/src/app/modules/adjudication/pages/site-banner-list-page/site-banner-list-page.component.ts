@@ -37,6 +37,6 @@ export class SiteBannerListPageComponent implements OnInit {
 
   private getBanners(): void {
     this.bannerResource.getSiteLandingBanners()
-      .subscribe((banners: Banner[]) => this.banners = banners.reverse());
+      .subscribe((banners: Banner[]) => this.banners = banners);
   }
 }

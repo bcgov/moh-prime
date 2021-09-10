@@ -67,6 +67,8 @@ namespace Prime.Services
                 banner.EndTimestamp = DateTime.SpecifyKind(banner.EndTimestamp, DateTimeKind.Utc);
             });
 
+            banners.Reverse();
+
             return banners;
         }
 
