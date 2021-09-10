@@ -1,6 +1,6 @@
 namespace Prime.ViewModels
 {
-    public class GisLdapUser
+    public class GisLdapUserViewModel
     {
         public string Unlocked { get; set; }
         public string GisUserRole { get; set; }
