@@ -12,7 +12,6 @@ using Serilog.Sinks.SystemConsole.Themes;
 using Sentry.AspNetCore;
 
 namespace Prime
-
 {
     public class Program
     {
