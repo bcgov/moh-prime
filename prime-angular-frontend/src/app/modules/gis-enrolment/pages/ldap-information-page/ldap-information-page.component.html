@@ -40,18 +40,20 @@
 
         </div>
 
-        <ng-container *ngIf="hasAttemptedSubmission && remainingAttempts !== null && remainingAttempts <= 1">
+        <ng-container *ngIf="hasAttemptedSubmission && (remainingAttempts === 1 || locked)">
           <app-alert type="danger"
                      icon="error_outline">
             <ng-container #alertContent
                           class="alert-content">
-              <ng-container *ngIf="remainingAttempts === 1; else lockedAccount">
-                You have had multiple failed login attempts the next failed attempt will lock your account. If you need
-                assistance please contact Reg Admin at (999) 999-9999.
-              </ng-container>
-              <ng-template #lockedAccount>
+              <ng-container *ngIf="locked; else oneMoreAttempt">
                 Your account is now locked due to too many failed login attempts. If you think this is a mistake please
-                contact Reg Admin at (999) 999-9999.
+                contact Reg Admin at <a href="tel:12509529137">(250) 952-9137</a> or
+                <a href="mailto:HLTH.REGISTRIESADMIN@gov.bc.ca">HLTH.REGISTRIESADMIN@gov.bc.ca</a>.
+              </ng-container>
+              <ng-template #oneMoreAttempt>
+                You have had multiple failed login attempts the next failed attempt will lock your account. If you need
+                assistance please contact Reg Admin at <a href="tel:12509529137">(250) 952-9137</a> or
+                <a href="mailto:HLTH.REGISTRIESADMIN@gov.bc.ca">HLTH.REGISTRIESADMIN@gov.bc.ca</a>.
               </ng-template>
             </ng-container>
           </app-alert>

@@ -19,14 +19,14 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
-        private readonly IMohKeycloakClient _mohKeycloakClient;
+        private readonly IMohKeycloakAdministrationClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
             ILdapClient ldapClient,
-            IMohKeycloakClient mohKeycloakClient)
+            IMohKeycloakAdministrationClient mohKeycloakClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -89,12 +89,12 @@ namespace Prime.Services
             return currentGisEnrolment.Id;
         }
 
-        public async Task<GisLdapUser> LdapLogin(string username, string password, ClaimsPrincipal user)
+        public async Task<GisLdapUserViewModel> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
-            var gisLdapUser = new GisLdapUser
+            var gisLdapUser = new GisLdapUserViewModel
             {
-                RemainingAttempts = ldapResponse?.RemainingAttempts.ToString(),
+                Unlocked = ldapResponse?.Unlocked,
                 GisUserRole = ldapResponse?.Gisuserrole
             };
 
