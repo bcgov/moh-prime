@@ -109,6 +109,8 @@ import { OboSiteFormComponent } from '@shared/components/obo-site-form/obo-site-
 import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/expiry-alert.component';
 import { InfographicComponent } from './components/infographic/infographic.component';
 import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
+import { DocumentAttachmentsComponent } from '@shared/components/document-attachments/document-attachments.component';
+import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 
 @NgModule({
   declarations: [
@@ -200,7 +202,9 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     OboSiteFormComponent,
     ExpiryAlertComponent,
     ErrorLoggerComponent,
-    InfographicComponent
+    InfographicComponent,
+    DocumentAttachmentsComponent,
+    DocumentAttachmentComponent
   ],
   imports: [
     CommonModule,
@@ -297,7 +301,9 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     OptionsFormComponent,
     OboSiteFormComponent,
     InfographicComponent,
-    ExpiryAlertComponent
+    ExpiryAlertComponent,
+    DocumentAttachmentsComponent,
+    DocumentAttachmentComponent
   ],
   providers: [
     FullnamePipe,
