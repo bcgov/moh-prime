@@ -1,4 +1,5 @@
 using System;
+using Prime.Models.Documents;
 
 namespace Prime.ViewModels.PaperEnrollees
 {
@@ -6,6 +7,6 @@ namespace Prime.ViewModels.PaperEnrollees
     {
         public Guid DocumentGuid { get; set; }
 
-        public string Filename { get; set; }
+        public EnrolleeAdjudicationDocumentType DocumentType { get; set; }
     }
 }

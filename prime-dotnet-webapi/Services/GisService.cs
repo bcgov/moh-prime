@@ -89,10 +89,10 @@ namespace Prime.Services
             return currentGisEnrolment.Id;
         }
 
-        public async Task<GisLdapUser> LdapLogin(string username, string password, ClaimsPrincipal user)
+        public async Task<GisLdapUserViewModel> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
-            var gisLdapUser = new GisLdapUser
+            var gisLdapUser = new GisLdapUserViewModel
             {
                 Unlocked = ldapResponse?.Unlocked,
                 GisUserRole = ldapResponse?.Gisuserrole
