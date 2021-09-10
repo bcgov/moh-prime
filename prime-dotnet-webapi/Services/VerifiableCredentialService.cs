@@ -1,18 +1,15 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 using QRCoder;
+using Newtonsoft.Json;
 
 using Prime.Models;
-using Prime.HttpClients;
-using Microsoft.EntityFrameworkCore;
 using Prime.Models.VerifiableCredentials;
-using System.Reflection;
-using Newtonsoft.Json.Serialization;
+using Prime.HttpClients;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services
@@ -42,21 +39,18 @@ namespace Prime.Services
 
     public class VerifiableCredentialService : BaseService, IVerifiableCredentialService
     {
-        private readonly IVerifiableCredentialClient _verifiableCredentialClient;
         private readonly IEnrolleeService _enrolleeService;
-        private readonly ILogger _logger;
+        private readonly IVerifiableCredentialClient _verifiableCredentialClient;
 
         public VerifiableCredentialService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IVerifiableCredentialClient verifiableCredentialClient,
+            ILogger<VerifiableCredentialService> logger,
             IEnrolleeService enrolleeService,
-            ILogger<VerifiableCredentialService> logger)
-            : base(context, httpContext)
+            IVerifiableCredentialClient verifiableCredentialClient)
+            : base(context, logger)
         {
-            _verifiableCredentialClient = verifiableCredentialClient;
             _enrolleeService = enrolleeService;
-            _logger = logger;
+            _verifiableCredentialClient = verifiableCredentialClient;
         }
 
         // Handle webhook events pushed by the issuing agent.
@@ -84,7 +78,6 @@ namespace Prime.Services
         // Create an invitation to establish a connection between the agents.
         public async Task<bool> CreateConnectionAsync(Enrollee enrollee)
         {
-            var alias = enrollee.Id.ToString();
             var issuerDid = await _verifiableCredentialClient.GetIssuerDidAsync();
             var schemaId = await _verifiableCredentialClient.GetSchemaId(issuerDid);
             var credentialDefinitionId = await _verifiableCredentialClient.GetCredentialDefinitionIdAsync(schemaId);
@@ -94,8 +87,7 @@ namespace Prime.Services
                 EnrolleeId = enrollee.Id,
                 SchemaId = schemaId,
                 CredentialDefinitionId = credentialDefinitionId,
-                Alias = alias
-
+                Alias = enrollee.Id.ToString()
             };
 
             _context.Credentials.Add(credential);
@@ -225,7 +217,7 @@ namespace Prime.Services
         private Credential GetCredentialByConnectionIdAsync(string connectionId)
         {
             return _context.Credentials
-                    .SingleOrDefault(c => c.ConnectionId == connectionId);
+                .SingleOrDefault(c => c.ConnectionId == connectionId);
         }
 
         // Issue a credential to an active connection.
