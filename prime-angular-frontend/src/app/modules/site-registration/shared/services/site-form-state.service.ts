@@ -71,7 +71,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
+    const { doingBusinessAs, pec, operational } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -103,7 +103,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // completed (N/A)
       // approvedDate (N/A)
       // submittedDate (N/A)
-      pec
+      pec,
+      operational
       // TODO output should be a Site-like model instead due to missing properties
     } as Site; // Enforced type due to N/A properties
   }
@@ -151,10 +152,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
+    const { careSettingCode, siteVendors, doingBusinessAs, operational, pec, businessLicence } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec, businessLicence });
+    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec, operational, businessLicence });
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

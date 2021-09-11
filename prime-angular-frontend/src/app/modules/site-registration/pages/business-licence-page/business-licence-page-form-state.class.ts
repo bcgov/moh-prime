@@ -4,7 +4,7 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
-interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
+interface BusinessLicencePageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec' | 'operational'> { }
 
 export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
   public constructor(
@@ -53,9 +53,9 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       return;
     }
 
-    const { doingBusinessAs, pec, businessLicence } = model;
+    const { doingBusinessAs, pec, operational, businessLicence } = model;
 
-    this.formInstance.patchValue({ doingBusinessAs, pec, deferredLicenceReason: businessLicence?.deferredLicenceReason });
+    this.formInstance.patchValue({ doingBusinessAs, pec, operational, deferredLicenceReason: businessLicence?.deferredLicenceReason });
   }
 
   public buildForm(): void {
@@ -79,6 +79,10 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
       pec: [
         null,
         [Validators.required]
+      ],
+      operational: [
+        null,
+        []
       ]
     });
   }
