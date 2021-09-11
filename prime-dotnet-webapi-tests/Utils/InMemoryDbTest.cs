@@ -84,7 +84,7 @@ namespace PrimeTests.Utils
             }).CreateMapper();
         }
 
-        public TService CreateWithMockedDI<TService>(params object[] dependencyOverrides) where TService : BaseService
+        public TService MockDependenciesFor<TService>(params object[] dependencyOverrides) where TService : BaseService
         {
             // Services derived from BaseService should have exactly one constructor.
             var ctor = typeof(TService).GetConstructors().Single();

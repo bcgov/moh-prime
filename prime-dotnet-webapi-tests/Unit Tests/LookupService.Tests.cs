@@ -18,7 +18,7 @@ namespace PrimeTests.UnitTests
         [Fact(Skip = "This test does not work as intended")]
         public async void TestLookupService_ReturnsAllLookpTypes()
         {
-            var service = CreateWithMockedDI<LookupService>();
+            var service = MockDependenciesFor<LookupService>();
             var lookupTypes = System.Reflection.Assembly
                 .GetAssembly(typeof(LookupEntity))
                 .GetTypes()
@@ -39,7 +39,7 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestGetLookups()
         {
-            var service = CreateWithMockedDI<LookupService>();
+            var service = MockDependenciesFor<LookupService>();
 
             var results = await service.GetLookupsAsync();
             Assert.NotNull(results);

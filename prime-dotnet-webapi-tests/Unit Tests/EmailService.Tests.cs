@@ -32,7 +32,7 @@ namespace PrimeTests.UnitTests
             A.CallTo(() => emailRenderingService.RenderRenewalRequiredEmailAsync(A<string>._, A<EnrolleeRenewalEmailViewModel>._)).Returns(requiredEmail);
             A.CallTo(() => emailRenderingService.RenderRenewalPassedEmailAsync(A<string>._, A<EnrolleeRenewalEmailViewModel>._)).Returns(passedEmail);
 
-            var service = CreateWithMockedDI<EmailService>(emailRenderingService, smtpEmailClient);
+            var service = MockDependenciesFor<EmailService>(emailRenderingService, smtpEmailClient);
 
             var enrollee = TestDb.HasAnEnrollee();
             enrollee.Agreements = new[]
@@ -91,7 +91,7 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
         {
-            var service = CreateWithMockedDI<EmailService>();
+            var service = MockDependenciesFor<EmailService>();
             var site = new SiteFactory().Generate();
             var remoteUsers = Enumerable.Empty<RemoteUser>();
 

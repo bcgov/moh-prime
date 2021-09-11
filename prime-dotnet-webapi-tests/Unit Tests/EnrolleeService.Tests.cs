@@ -21,7 +21,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_NoParams()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             var request = new GpidValidationParameters();
 
@@ -42,7 +42,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_MatchesEmail()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             var request = new GpidValidationParameters()
             {
@@ -62,7 +62,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_MatchesPrefferredName()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             enrollee.PreferredFirstName = enrollee.FirstName + "extracharacters";
             var request = new GpidValidationParameters()
@@ -85,7 +85,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_Birthdate(bool requestMatches)
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             var request = new GpidValidationParameters()
             {
@@ -106,7 +106,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_NoMatch()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             enrollee.SmsPhone = null;
             var request = new GpidValidationParameters()
@@ -127,7 +127,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_MultiMatch()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             enrollee.PhoneExtension = "123";
             var request = new GpidValidationParameters()
@@ -155,7 +155,7 @@ namespace PrimeTests.UnitTests
         public async void TestGpidValidation_Certifications()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeService>();
+            var service = MockDependenciesFor<EnrolleeService>();
             var enrollee = TestDb.HasAnEnrollee("default,status.editable");
             enrollee.Certifications = new Certification[]
             {

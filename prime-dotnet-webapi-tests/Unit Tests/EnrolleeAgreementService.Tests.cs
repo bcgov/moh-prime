@@ -45,7 +45,7 @@ namespace PrimeTests.UnitTests
         public async void TestCreateAgreement_ThrowsWhenNull()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeAgreementService>();
+            var service = MockDependenciesFor<EnrolleeAgreementService>();
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
             {
@@ -71,7 +71,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = 66; // arbitrary number
             var agreementService = A.Fake<IAgreementService>();
             A.CallTo(() => agreementService.GetLatestAgreementVersionIdOfTypeAsync(A<AgreementType>.That.IsEqualTo(determinedType))).Returns(expectedAgreementId);
-            var service = CreateWithMockedDI<EnrolleeAgreementService>(agreementService);
+            var service = MockDependenciesFor<EnrolleeAgreementService>(agreementService);
 
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
@@ -104,7 +104,7 @@ namespace PrimeTests.UnitTests
         public async void TestCreateAgreement_WithLimitsClause()
         {
             // Arrange
-            var service = CreateWithMockedDI<EnrolleeAgreementService>();
+            var service = MockDependenciesFor<EnrolleeAgreementService>();
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
             {
