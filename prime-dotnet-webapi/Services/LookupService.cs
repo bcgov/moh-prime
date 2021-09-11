@@ -65,6 +65,9 @@ namespace Prime.Services
                 CareTypes = await _context.Set<CareType>()
                     .AsNoTracking()
                     .ToListAsync(),
+                SecurityGroups = await _context.Set<SecurityGroup>()
+                    .AsNoTracking()
+                    .ToListAsync()
             };
         }
     }

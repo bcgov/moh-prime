@@ -30,7 +30,7 @@ namespace Prime.Models.HealthAuthorities
 
         public string SiteId { get; set; }
 
-        public string SecurityGroup { get; set; }
+        public int SecurityGroupCode { get; set; }
 
         public string CareType { get; set; }
 
