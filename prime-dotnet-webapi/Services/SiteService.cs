@@ -1,17 +1,17 @@
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-using Prime.Models;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using Prime.Models;
 using Prime.ViewModels;
 
 namespace Prime.Services

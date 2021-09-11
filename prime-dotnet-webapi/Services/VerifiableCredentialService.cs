@@ -1,15 +1,15 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using QRCoder;
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using QRCoder;
-using Newtonsoft.Json;
 
+using Prime.HttpClients;
 using Prime.Models;
 using Prime.Models.VerifiableCredentials;
-using Prime.HttpClients;
 
 // TODO should implement a queue when using webhooks
 namespace Prime.Services

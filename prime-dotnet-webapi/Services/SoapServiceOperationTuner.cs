@@ -1,13 +1,13 @@
+using Microsoft.AspNetCore.Http;
+using SoapCore.Extensibility;
 using System;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using System.Text;
-using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Http;
-using SoapCore.Extensibility;
 
 namespace Prime.Services
 {

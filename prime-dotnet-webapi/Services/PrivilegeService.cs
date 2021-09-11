@@ -1,8 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
 using Prime.Models;
 

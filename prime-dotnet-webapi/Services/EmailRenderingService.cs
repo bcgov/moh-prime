@@ -1,9 +1,9 @@
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-using Prime.Models;
 using Prime.HttpClients.Mail;
+using Prime.Models;
 using Prime.ViewModels.Emails;
 
 namespace Prime.Services.EmailInternal

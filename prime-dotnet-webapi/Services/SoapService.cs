@@ -2,12 +2,12 @@ using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
-using System.ServiceModel;
-using System.Globalization;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Globalization;
+using System.ServiceModel;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 using Prime.Models;
 

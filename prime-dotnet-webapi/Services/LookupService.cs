@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.Api;

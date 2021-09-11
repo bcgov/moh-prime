@@ -1,17 +1,17 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-using Prime.Models;
-using Prime.Engines;
 using Prime.DTOs.AgreementEngine;
+using Prime.Engines;
+using Prime.Models;
 
 namespace Prime.Services
 {

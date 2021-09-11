@@ -1,17 +1,17 @@
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
 
-using Prime.Models;
 using Prime.HttpClients.Mail;
 using Prime.HttpClients.Mail.ChesApiDefinitions;
-using Prime.ViewModels.Emails;
+using Prime.Models;
 using Prime.Services.EmailInternal;
+using Prime.ViewModels.Emails;
 
 namespace Prime.Services
 {

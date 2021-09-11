@@ -1,13 +1,13 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 
+using Prime.Engines;
 using Prime.Models;
 using Prime.Models.Api;
-using Prime.Engines;
 using Prime.ViewModels;
 
 namespace Prime.Services

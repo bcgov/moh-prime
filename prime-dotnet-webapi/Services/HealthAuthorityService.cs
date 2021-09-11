@@ -1,16 +1,16 @@
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
-using Prime.ViewModels.Parties;
 using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
