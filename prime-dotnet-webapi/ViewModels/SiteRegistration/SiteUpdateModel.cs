@@ -29,6 +29,8 @@ namespace Prime.ViewModels
 
         public string DoingBusinessAs { get; set; }
 
+        public bool Operational { get; set; }
+
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
