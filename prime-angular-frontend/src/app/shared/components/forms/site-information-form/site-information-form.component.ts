@@ -53,6 +53,8 @@ export class SiteInformationFormComponent implements OnInit {
       this.getDoingBusinessAs(this.organizationId);
     }
 
+    this.getSiteOperational();
+
     this.isNewSite.valueChanges
       .subscribe(value => {
         if (value) {
@@ -80,5 +82,9 @@ export class SiteInformationFormComponent implements OnInit {
         )
       )
       .subscribe();
+  }
+
+  private getSiteOperational(): void {
+    this.form.get('operational').valueChanges.subscribe();
   }
 }
