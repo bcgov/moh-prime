@@ -17,20 +17,11 @@ namespace PrimeTests.UnitTests
 {
     public class EnrolmentCertificateServiceTests : InMemoryDbTest
     {
-        public EnrolmentCertificateService CreateService(
-            IHttpContextAccessor httpContext = null)
-        {
-            return new EnrolmentCertificateService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>()
-            );
-        }
-
         [Fact]
         public async void TestHappyPathCertificateAccess()
         {
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateService();
+            var service = CreateWithMockedDI<EnrolmentCertificateService>();
 
             EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
@@ -45,7 +36,7 @@ namespace PrimeTests.UnitTests
         {
             int tokenMaxViews = 3;
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateService();
+            var service = CreateWithMockedDI<EnrolmentCertificateService>();
 
             EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             Assert.NotNull(token);
@@ -66,7 +57,7 @@ namespace PrimeTests.UnitTests
             TimeSpan tokenLifespan = EnrolmentCertificateAccessToken.Lifespan;
             TimeSpan tolerance = TimeSpan.FromSeconds(2);
             Enrollee enrollee = TestDb.Has(TestUtils.EnrolleeFaker.Generate());
-            var service = CreateService();
+            var service = CreateWithMockedDI<EnrolmentCertificateService>();
 
             EnrolmentCertificateAccessToken token = await service.CreateCertificateAccessTokenAsync(enrollee.Id);
             // Assert that the difference between the computed and actual expiry date is less than some tolerance.

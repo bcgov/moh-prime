@@ -14,17 +14,6 @@ namespace PrimeTests.UnitTests
 {
     public class EnrolleeSubmissionServiceTests : InMemoryDbTest
     {
-        public EnrolleeSubmissionService CreateService(
-            IHttpContextAccessor httpContext = null,
-            IMapper mapper = null,
-            IEnrolleeService enrolleeService = null)
-        {
-            return new EnrolleeSubmissionService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>(),
-                mapper ?? A.Fake<IMapper>(),
-                enrolleeService ?? A.Fake<IEnrolleeService>()
-            );
-        }
+
     }
 }

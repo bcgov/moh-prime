@@ -15,19 +15,10 @@ namespace PrimeTests.UnitTests
 {
     public class LookupServiceTests : InMemoryDbTest
     {
-        public LookupService CreateService(
-            IHttpContextAccessor httpContext = null)
-        {
-            return new LookupService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>()
-            );
-        }
-
         [Fact(Skip = "This test does not work as intended")]
         public async void TestLookupService_ReturnsAllLookpTypes()
         {
-            var service = CreateService();
+            var service = CreateWithMockedDI<LookupService>();
             var lookupTypes = System.Reflection.Assembly
                 .GetAssembly(typeof(LookupEntity))
                 .GetTypes()
@@ -48,7 +39,7 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestGetLookups()
         {
-            var service = CreateService();
+            var service = CreateWithMockedDI<LookupService>();
 
             var results = await service.GetLookupsAsync();
             Assert.NotNull(results);

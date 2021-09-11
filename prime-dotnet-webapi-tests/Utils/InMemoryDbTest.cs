@@ -1,14 +1,18 @@
+using AutoMapper;
+using FakeItEasy;
+using FakeItEasy.Sdk;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using AutoMapper;
 
 using Prime;
-using Prime.ViewModels.Profiles;
 using Prime.Configuration;
 using Prime.Configuration.Agreements;
+using Prime.Services;
+using Prime.ViewModels.Profiles;
 
 namespace PrimeTests.Utils
 {
@@ -78,6 +82,28 @@ namespace PrimeTests.Utils
             {
                 cfg.AddMaps(Assembly.GetAssembly(typeof(CommonMappingProfile)));
             }).CreateMapper();
+        }
+
+        public TService CreateWithMockedDI<TService>(params object[] dependencyOverrides) where TService : BaseService
+        {
+            // Services derived from BaseService should have exactly one constructor.
+            var ctor = typeof(TService).GetConstructors().Single();
+
+            var parameters = new List<object>();
+            foreach (var parameter in ctor.GetParameters())
+            {
+                var targetType = parameter.ParameterType;
+                var defaultParameter = targetType == typeof(ApiDbContext)
+                    ? TestDb
+                    : Create.Fake(targetType);
+
+                parameters.Add(
+                    dependencyOverrides.SingleOrDefault(x => x.GetType().GetInterfaces().Contains(targetType))
+                    ?? defaultParameter
+                );
+            }
+
+            return (TService)ctor.Invoke(parameters.ToArray());
         }
     }
 }

@@ -17,19 +17,6 @@ namespace PrimeTests.UnitTests
 {
     public class EnrolleeAgreementServiceTests : InMemoryDbTest
     {
-        public EnrolleeAgreementService CreateService(
-            IHttpContextAccessor httpContext = null,
-            IAgreementService agreementService = null,
-            IRazorConverterService razorConverterService = null)
-        {
-            return new EnrolleeAgreementService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>(),
-                agreementService ?? A.Fake<IAgreementService>(),
-                razorConverterService ?? A.Fake<IRazorConverterService>()
-            );
-        }
-
         private void AssertAgreementGeneration(Enrollee enrollee, int? expectedAgreementVersionId = null, string expectedLimitsClauseText = null)
         {
             Assert.Single(enrollee.Agreements);
@@ -58,7 +45,7 @@ namespace PrimeTests.UnitTests
         public async void TestCreateAgreement_ThrowsWhenNull()
         {
             // Arrange
-            var service = CreateService();
+            var service = CreateWithMockedDI<EnrolleeAgreementService>();
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
             {
@@ -84,7 +71,7 @@ namespace PrimeTests.UnitTests
             var expectedAgreementId = 66; // arbitrary number
             var agreementService = A.Fake<IAgreementService>();
             A.CallTo(() => agreementService.GetLatestAgreementVersionIdOfTypeAsync(A<AgreementType>.That.IsEqualTo(determinedType))).Returns(expectedAgreementId);
-            var service = CreateService(agreementService: agreementService);
+            var service = CreateWithMockedDI<EnrolleeAgreementService>(agreementService);
 
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
@@ -117,7 +104,7 @@ namespace PrimeTests.UnitTests
         public async void TestCreateAgreement_WithLimitsClause()
         {
             // Arrange
-            var service = CreateService();
+            var service = CreateWithMockedDI<EnrolleeAgreementService>();
             var enrollee = new EnrolleeFactory().Generate();
             enrollee.Submissions = new[]
             {
