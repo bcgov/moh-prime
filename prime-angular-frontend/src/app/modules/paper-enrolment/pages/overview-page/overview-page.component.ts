@@ -41,12 +41,6 @@ export class OverviewPageComponent implements OnInit {
     this.routeUtils = new RouteUtils(route, router, PaperEnrolmentRoutes.MODULE_PATH);
   }
 
-  public onDownload({ documentId }: { documentId: number }): void {
-    const enrolleeId = +this.route.snapshot.params.eid;
-    this.paperEnrolmentResource.getEnrolleeAdjudicationDocumentDownloadToken(enrolleeId, documentId)
-      .subscribe((token: string) => this.utilsService.downloadToken(token));
-  }
-
   public onSubmit() {
     const data: DialogOptions = {
       title: 'Submit Enrolment',

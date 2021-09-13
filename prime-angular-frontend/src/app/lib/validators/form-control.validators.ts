@@ -1,4 +1,7 @@
-import { AbstractControl, ValidatorFn, Validators, ValidationErrors } from '@angular/forms';
+import { AbstractControl, ValidatorFn, Validators, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
+
+import { EMPTY, Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, first, map, switchMap } from 'rxjs/operators';
 
 export class FormControlValidators {
 
@@ -98,7 +101,7 @@ export class FormControlValidators {
    * @description
    * Checks the form control value is a float.
    */
-  public static float(control: AbstractControl, precision: number = 2): ValidationErrors | null {
+  public static float(control: AbstractControl, precision = 2): ValidationErrors | null {
     if (!control.value) { return null; }
     // Doesn't allow . or .# only .##+ or no decimal
     const regExp = /^[-+]?(0?|(?![0,])(,?[\d]{1,3})+)(\.[\d]{2,})?$/;
@@ -202,5 +205,36 @@ export class FormControlValidators {
       const valid = allowedValues.includes(control.value);
       return valid ? null : { requiredIn: true };
     };
+  }
+
+  /**
+   * @description
+   * Check that a value is unique asynchronously.
+   *
+   * @example
+   * FormControlValidators.uniqueAsync(this.httpResource.methodName);
+   */
+  public static uniqueAsync(request: (value: string) => Observable<boolean>, errorKey = 'unique'): AsyncValidatorFn {
+    return this.createAsyncValidator(request, { errorKey });
+  }
+
+  /**
+   * @description
+   * Create an asynchronous validator.
+   */
+  private static createAsyncValidator(
+    request: (value: string) => Observable<boolean>,
+    { errorKey, dueTime }: { errorKey: string, dueTime?: number }
+  ): AsyncValidatorFn {
+    return control => control.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(dueTime ?? 400),
+        switchMap((value: string) =>
+          (value) ? request(value) : EMPTY
+        ),
+        map((result: boolean) => (result) ? { [errorKey]: result } : null),
+        first() // important, the observable returned must be finite required by asyncValidator
+      );
   }
 }
