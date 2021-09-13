@@ -8,8 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
-using Prime.Models;
-using Prime.Models.Documents;
 using Prime.Engines;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
