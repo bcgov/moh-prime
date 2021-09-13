@@ -85,6 +85,6 @@ export class SiteInformationFormComponent implements OnInit {
   }
 
   private getSiteOperational(): void {
-    this.form.get('operational').valueChanges.subscribe();
+    this.form.get('activeBeforeRegistration').valueChanges.subscribe();
   }
 }

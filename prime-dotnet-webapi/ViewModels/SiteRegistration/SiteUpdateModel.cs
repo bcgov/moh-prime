@@ -28,8 +28,7 @@ namespace Prime.ViewModels
         public string PEC { get; set; }
 
         public string DoingBusinessAs { get; set; }
-
-        public bool Operational { get; set; }
+        public bool ActiveBeforeRegistration { get; set; }
 
         public IEnumerable<SiteVendor> SiteVendors { get; set; }
 
