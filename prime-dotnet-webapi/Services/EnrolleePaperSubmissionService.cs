@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
+using Prime.Models;
+using Prime.Models.Documents;
 using Prime.Engines;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
@@ -186,25 +188,26 @@ namespace Prime.Services
             await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
-        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents)
         {
-            foreach (var guid in documentGuids)
+            foreach (var document in documents)
             {
-                var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
 
                 if (string.IsNullOrWhiteSpace(filename))
                 {
-                    _logger.LogError($"Could not finalize document {guid}");
+                    _logger.LogError($"Could not finalize document {document}");
                     continue;
                 }
 
                 var adjudicationDocument = new EnrolleeAdjudicationDocument
                 {
-                    DocumentGuid = guid,
+                    DocumentGuid = document.DocumentGuid,
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,
-                    AdjudicatorId = adminId
+                    AdjudicatorId = adminId,
+                    DocumentType = document.DocumentType
                 };
                 _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }
