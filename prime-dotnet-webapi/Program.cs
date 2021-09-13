@@ -9,7 +9,9 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using Sentry;
 using Sentry.AspNetCore;
+using Sentry.Extensions.Logging;
 
 namespace Prime
 {
@@ -62,9 +64,17 @@ namespace Prime
             o.Dsn = dsn;
             // When configuring for the first time, to see what the SDK is doing:
             o.Debug = PrimeEnvironment.IsLocal;
+
             // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
             o.TracesSampleRate = sampleTraceRate;
+
+            // if (o.Debug)
+            // {
+            //     o.DiagnosticLevel = SentryLevel.Debug;
+
+            //     o.DiagnosticLogger = new SentryLogger(o.DiagnosticLevel);
+            // }
         }
 
         private static void CreateLogger()
