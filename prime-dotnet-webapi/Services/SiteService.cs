@@ -90,6 +90,8 @@ namespace Prime.Services
         {
             var currentSite = await GetSiteAsync(siteId);
 
+            currentSite.ActiveBeforeRegistration = updatedSite.ActiveBeforeRegistration;
+
             _context.Entry(currentSite).CurrentValues.SetValues(updatedSite);
 
             if (currentSite.SubmittedDate == null)
