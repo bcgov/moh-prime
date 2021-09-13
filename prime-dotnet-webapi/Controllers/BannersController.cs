@@ -49,7 +49,7 @@ namespace Prime.Controllers
         /// <param name="bannerId"></param>
         /// <param name="viewModel"></param>
         [HttpPut("{bannerId}", Name = nameof(UpdateBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin + "," + Roles.PrimeMaintenance)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -87,7 +87,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="bannerId"></param>
         [HttpGet("{bannerId}", Name = nameof(GetBannerById))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin + "," + Roles.PrimeMaintenance)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
@@ -102,7 +102,7 @@ namespace Prime.Controllers
         /// Get enrollee landing banners
         /// </summary>
         [HttpGet("enrolment-landing", Name = nameof(GetEnrolmentLandingBanners))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin + "," + Roles.PrimeMaintenance)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerViewModel>>), StatusCodes.Status200OK)]
@@ -117,7 +117,7 @@ namespace Prime.Controllers
         /// Get Site Landing Banners
         /// </summary>
         [HttpGet("site-landing", Name = nameof(GetSiteLandingBanners))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin + "," + Roles.PrimeMaintenance)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<BannerViewModel>>), StatusCodes.Status200OK)]
