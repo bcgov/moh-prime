@@ -55,6 +55,8 @@ namespace Prime.Models
 
         public string DoingBusinessAs { get; set; }
 
+        public bool ActiveBeforeRegistration { get; set; }
+
         public bool Completed { get; set; }
 
         public bool Flagged { get; set; }
