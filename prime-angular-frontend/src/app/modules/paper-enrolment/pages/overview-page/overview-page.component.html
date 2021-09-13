@@ -20,8 +20,7 @@
                           [enrolleeCareSettings]="enrollee?.enrolleeCareSettings"></app-obo-sites-overview>
   <app-self-declaration-overview [selfDeclarations]="enrollee"></app-self-declaration-overview>
   <app-upload-overview [upload]="enrollee"
-                       [documents]="documents"
-                       (download)="onDownload($event)"></app-upload-overview>
+                       [documents]="documents"></app-upload-overview>
 
   <app-page-footer [isInitialEnrolment]="true"
                    primaryActionLabel="Submit Enrolment"
