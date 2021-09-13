@@ -18,7 +18,7 @@
     <mat-icon>edit</mat-icon>
   </button>
 
-  <button *ngIf="(Role.SUPER_ADMIN | inRole) && editable"
+  <button *ngIf="((Role.SUPER_ADMIN | inRole) || (Role.MAINTENANCE | inRole)) && editable"
           mat-icon-button
           matTooltip="Cancel Editing"
           (click)="toggleEdit(false)">
