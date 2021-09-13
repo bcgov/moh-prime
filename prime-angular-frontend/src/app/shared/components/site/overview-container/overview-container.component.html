@@ -128,7 +128,7 @@
   </app-overview-section>
 
   <app-overview-section title="Site Address"
-                        [showEditRedirect]="!site.submittedDate"
+                        [showEditRedirect]="showEditRedirect"
                         [editRoute]="SiteRoutes.SITE_ADDRESS"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Address">
