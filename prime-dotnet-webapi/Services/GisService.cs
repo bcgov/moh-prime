@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Prime.HttpClients;
 using Prime.Models;
+using Prime.ViewModels;
 using Prime.ViewModels.Parties;
 using static Prime.PrimeEnvironment.MohKeycloak;
 
@@ -18,14 +19,14 @@ namespace Prime.Services
     {
         private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
-        private readonly IMohKeycloakClient _mohKeycloakClient;
+        private readonly IMohKeycloakAdministrationClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
             IHttpContextAccessor httpContext,
             IMapper mapper,
             ILdapClient ldapClient,
-            IMohKeycloakClient mohKeycloakClient)
+            IMohKeycloakAdministrationClient mohKeycloakClient)
             : base(context, httpContext)
         {
             _mapper = mapper;
@@ -88,12 +89,16 @@ namespace Prime.Services
             return currentGisEnrolment.Id;
         }
 
-        public async Task<bool> LdapLogin(string username, string password, ClaimsPrincipal user)
+        public async Task<GisLdapUserViewModel> LdapLogin(string username, string password, ClaimsPrincipal user)
         {
-            var gisUserRole = await _ldapClient.GetUserAsync(username, password);
-            var success = gisUserRole == GisUserRole;
+            var ldapResponse = await _ldapClient.GetUserAsync(username, password);
+            var gisLdapUser = new GisLdapUserViewModel
+            {
+                Unlocked = ldapResponse?.Unlocked,
+                GisUserRole = ldapResponse?.Gisuserrole
+            };
 
-            if (success)
+            if (gisLdapUser.Success)
             {
                 var gisEnrolment = await _context.GisEnrolments
                     .Include(g => g.Party)
@@ -104,7 +109,7 @@ namespace Prime.Services
                 await _context.SaveChangesAsync();
             }
 
-            return success;
+            return gisLdapUser;
         }
 
         public async Task SubmitApplicationAsync(int gisId)

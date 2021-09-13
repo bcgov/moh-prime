@@ -112,26 +112,24 @@
     </div>
   </app-page-section>
 
-  <ng-container *ngIf="hasAddressToggle; else noToggle">
-    <!-- Must be hidden and not ngIf so that the toggle can be located by ViewChild -->
-    <div [hidden]="excludeList.includes('physicalAddress')">
-      <div class="mb-4">
-        <mat-slide-toggle #slider
-                          color="primary"
-                          (change)="onAddressChange($event)">
-          The {{ title }}'s mailing address is the same as the site’s address
-        </mat-slide-toggle>
-      </div>
-
-      <ng-container *ngIf="!slider.checked">
-        <ng-container *ngTemplateOutlet="address"></ng-container>
-      </ng-container>
+  <!-- Must be hidden and not ngIf so that the toggle can be located by ViewChild -->
+  <div [hidden]="!hasAddressToggle && excludeList.includes('physicalAddress')">
+    <div class="mb-4">
+      <mat-slide-toggle #slider
+                        color="primary"
+                        (change)="onAddressChange($event)">
+        The {{ title }}'s mailing address is the same as the site’s address
+      </mat-slide-toggle>
     </div>
-  </ng-container>
 
-  <ng-template #noToggle>
+    <ng-container *ngIf="!slider.checked">
+      <ng-container *ngTemplateOutlet="address"></ng-container>
+    </ng-container>
+  </div>
+
+  <div [hidden]="hasAddressToggle">
     <ng-container *ngTemplateOutlet="address"></ng-container>
-  </ng-template>
+  </div>
 
   <ng-content select="app-page-footer"></ng-content>
 </ng-container>

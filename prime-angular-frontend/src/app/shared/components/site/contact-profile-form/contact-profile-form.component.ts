@@ -160,7 +160,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
         .subscribe(() => {
           // Change the validators based on the toggled value, otherwise
           // the default is required so the address should be displayed
-          if (!this.toggle.checked) {
+          if (!this.toggle?.checked) {
             this.changeAddressValidators(this.physicalAddress);
           }
           this.expandAddressFields();

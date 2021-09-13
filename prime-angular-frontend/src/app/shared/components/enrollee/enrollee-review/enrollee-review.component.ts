@@ -82,20 +82,8 @@ export class EnrolleeReviewComponent {
     return (this.enrolment && !!this.enrolment.deviceProviderNumber);
   }
 
-  public get oboSites(): OboSite[] {
-    return (this.enrolment.oboSites)
-      ? this.enrolment.oboSites
-      : [];
-  }
-
   public get hasCareSetting(): boolean {
     return (this.enrolment && !!this.enrolment.careSettings.length);
-  }
-
-  public get careSettings(): CareSetting[] {
-    return (this.hasCareSetting)
-      ? this.enrolment.careSettings
-      : [];
   }
 
   public get healthAuthorities(): { healthAuthorityCode: number }[] {

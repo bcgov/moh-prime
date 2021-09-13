@@ -11830,6 +11830,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("DocumentGuid")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("integer");
+
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
