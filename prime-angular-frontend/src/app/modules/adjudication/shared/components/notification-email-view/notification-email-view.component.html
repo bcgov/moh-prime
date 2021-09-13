@@ -11,7 +11,7 @@
     {{(editable) ? "Editing" : "Preview"}}
   </ng-container>
 
-  <button *ngIf="(Role.SUPER_ADMIN | inRole) && !editable"
+  <button *ngIf="((Role.SUPER_ADMIN | inRole) || (Role.MAINTENANCE | inRole)) && !editable"
           mat-icon-button
           matTooltip="Edit Email Template"
           (click)="toggleEdit(true)">
