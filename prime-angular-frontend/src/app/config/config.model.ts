@@ -14,6 +14,7 @@ export interface Configuration {
   healthAuthorities: Config<number>[];
   facilities: Config<number>[];
   careTypes: Config<number>[];
+  securityGroups: Config<number>[];
   collegeLicenseGroupings: CollegeLicenseGroupingConfig[];
 }
 

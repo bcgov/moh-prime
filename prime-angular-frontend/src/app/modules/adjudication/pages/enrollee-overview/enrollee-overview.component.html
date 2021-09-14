@@ -16,30 +16,31 @@
 
   <div class="d-flex justify-content-between align-items-center mt-4">
     <span *ngIf="enrolment?.enrollee.gpid"
-    class="mb-4 align-self-center">
-      <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
+          class="mb-4 align-self-center">
+        <strong>GPID:</strong> {{ enrolment?.enrollee.gpid }}
     </span>
 
     <span>
         <app-adjudicator-actions *ngIf="enrollees?.length"
-                                  [enrollee]="enrollees[0]"
-                                  (approve)="onApprove($event)"
-                                  (decline)="onDecline($event)"
-                                  (lock)="onLock($event)"
-                                  (unlock)="onUnlock($event)"
-                                  (delete)="onDelete($event)"
-                                  (route)="onRoute($event)"
-                                  (assignToa)="onAssignToa($event)"
-                                  (enableEnrollee)="onEnableEnrollee($event)"
-                                  (enableEditing)="onEnableEditing($event)"
-                                  (cancelToa)="onCancelToa($event)"
-                                  (rerunRules)="onRerunRules($event)"
-                                  (toggleManualAdj)="onToggleManualAdj($event)"
-                                  (reload)="onRefresh()"
-                                  mode='row'>
+                                 [enrollee]="enrollees[0]"
+                                 (approve)="onApprove($event)"
+                                 (decline)="onDecline($event)"
+                                 (lock)="onLock($event)"
+                                 (unlock)="onUnlock($event)"
+                                 (delete)="onDelete($event)"
+                                 (route)="onRoute($event)"
+                                 (assignToa)="onAssignToa($event)"
+                                 (enableEnrollee)="onEnableEnrollee($event)"
+                                 (enableEditing)="onEnableEditing($event)"
+                                 (cancelToa)="onCancelToa($event)"
+                                 (rerunRules)="onRerunRules($event)"
+                                 (toggleManualAdj)="onToggleManualAdj($event)"
+                                 (reload)="onRefresh()"
+                                 mode='row'>
         </app-adjudicator-actions>
       </span>
   </div>
+
   <div class="row">
     <div class="col-6">
       <h2>Enrolment</h2>
