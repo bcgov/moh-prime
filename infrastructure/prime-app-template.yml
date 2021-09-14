@@ -64,11 +64,6 @@ parameters:
   description: Volume space available for Document Manager Backend data e.g. 512Mi, 2Gi.
   required: true
   value: 5Gi
-- name: DB_POD
-  displayName: Database Pod
-  description: Postgres database
-  required: true
-  value: postgres
 - name: REDIS_POD
   displayName: Redis Pod
   description: Redis in-memory database
