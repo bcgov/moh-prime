@@ -1,13 +1,13 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Prime.Extensions;
+
 using Prime.Models;
 using Prime.ViewModels.Parties;
 
@@ -20,10 +20,10 @@ namespace Prime.Services
 
         public AuthorizedUserService(
             ApiDbContext context,
+            ILogger<AuthorizedUserService> logger,
             IMapper mapper,
-            IHttpContextAccessor httpContext,
             IPartyService partyService)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
             _partyService = partyService;

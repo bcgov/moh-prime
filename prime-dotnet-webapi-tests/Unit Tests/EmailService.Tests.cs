@@ -19,24 +19,6 @@ namespace PrimeTests.UnitTests
 {
     public class EmailServiceTests : InMemoryDbTest
     {
-        public EmailService CreateService(
-            IHttpContextAccessor httpContext = null,
-            IEmailDocumentsService emailDocumentService = null,
-            IEmailRenderingService emailRenderingService = null,
-            IChesClient chesClient = null,
-            ISmtpEmailClient smtpEmailClient = null
-            )
-        {
-            return new EmailService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>(),
-                emailDocumentService ?? A.Fake<IEmailDocumentsService>(),
-                emailRenderingService ?? A.Fake<IEmailRenderingService>(),
-                chesClient ?? A.Fake<IChesClient>(),
-                smtpEmailClient ?? A.Fake<ISmtpEmailClient>()
-            );
-        }
-
         [Theory]
         [MemberData(nameof(RenewalScheduleTestCases))]
         public async void TestSendEnrolleeRenewalEmails(int daysUntilExpiry, ExpectedEmail expected)
@@ -50,7 +32,7 @@ namespace PrimeTests.UnitTests
             A.CallTo(() => emailRenderingService.RenderRenewalRequiredEmailAsync(A<string>._, A<EnrolleeRenewalEmailViewModel>._)).Returns(requiredEmail);
             A.CallTo(() => emailRenderingService.RenderRenewalPassedEmailAsync(A<string>._, A<EnrolleeRenewalEmailViewModel>._)).Returns(passedEmail);
 
-            var service = CreateService(emailRenderingService: emailRenderingService, smtpEmailClient: smtpEmailClient);
+            var service = MockDependenciesFor<EmailService>(emailRenderingService, smtpEmailClient);
 
             var enrollee = TestDb.HasAnEnrollee();
             enrollee.Agreements = new[]
@@ -109,7 +91,7 @@ namespace PrimeTests.UnitTests
         [Fact]
         public async void TestSendRemoteUserNotificationsAsync_NoRemoteUsersDoesNotThrow()
         {
-            var service = CreateService();
+            var service = MockDependenciesFor<EmailService>();
             var site = new SiteFactory().Generate();
             var remoteUsers = Enumerable.Empty<RemoteUser>();
 
