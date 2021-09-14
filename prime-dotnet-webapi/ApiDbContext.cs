@@ -172,10 +172,10 @@ namespace Prime
         }
 
         // Uncomment for DB logging
-        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //     => optionsBuilder.UseLoggerFactory(DbLoggerFactory);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+            => optionsBuilder.UseLoggerFactory(DbLoggerFactory);
 
-        // public static readonly Microsoft.Extensions.Logging.ILoggerFactory DbLoggerFactory
-        //     = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
+        public static readonly Microsoft.Extensions.Logging.ILoggerFactory DbLoggerFactory
+            = new Microsoft.Extensions.Logging.LoggerFactory(new[] { new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider() });
     }
 }
