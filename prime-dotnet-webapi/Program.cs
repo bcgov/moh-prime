@@ -119,7 +119,7 @@ namespace Prime
                     new JsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
-                .WriteTo.Sentry(serilogOptionso => InitSentrySerilog(serilogOptionso))
+                .WriteTo.Sentry(serilogOptions => InitSentrySerilog(serilogOptions))
                 .CreateLogger();
         }
     }
