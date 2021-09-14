@@ -99,9 +99,13 @@
                   <input matInput
                          placeholder="Site ID"
                          formControlName="pec">
-                  <mat-error>Required</mat-error>
+                  <mat-error *ngIf="pec.hasError('required')">
+                    Required
+                  </mat-error>
+                  <mat-error *ngIf="pec.hasError('unique')">
+                    PEC has already been used by another site
+                  </mat-error>
                 </mat-form-field>
-
               </div>
             </div>
 

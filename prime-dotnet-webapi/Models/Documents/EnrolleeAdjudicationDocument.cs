@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations.Schema;
+using Prime.Models.Documents;
 
 namespace Prime.Models
 {
@@ -14,5 +15,7 @@ namespace Prime.Models
 
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
+
+        public EnrolleeAdjudicationDocumentType DocumentType { get; set; }
     }
 }

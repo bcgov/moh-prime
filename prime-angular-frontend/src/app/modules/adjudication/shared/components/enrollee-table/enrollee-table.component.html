@@ -164,7 +164,7 @@
 
             <div class="d-flex align-items-center">
               <span class="mr-1">{{ row.currentStatusCode | configCode: 'statuses' | default }}</span>
-              <ng-container *ngIf="paperEnrolleeGpidFilter | contains: row.gpid; else nonPaperEnrolleeIcons">
+              <ng-container *ngIf="row.gpid | contains: paperEnrolleeGpidFilter; else nonPaperEnrolleeIcons">
                 <mat-icon matTooltip="Paper Submission"
                           matTooltipPosition="after">description
                 </mat-icon>
