@@ -37,9 +37,6 @@ using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Sentry.AspNetCore;
 
-
-
-
 namespace Prime
 {
     public class Startup
