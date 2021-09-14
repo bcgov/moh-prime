@@ -1,11 +1,11 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 using Prime.HttpClients;
 using Prime.Models;
@@ -17,20 +17,20 @@ namespace Prime.Services
 {
     public class GisService : BaseService, IGisService
     {
-        private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
+        private readonly IMapper _mapper;
         private readonly IMohKeycloakAdministrationClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<GisService> logger,
             ILdapClient ldapClient,
+            IMapper mapper,
             IMohKeycloakAdministrationClient mohKeycloakClient)
-            : base(context, httpContext)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _ldapClient = ldapClient;
+            _mapper = mapper;
             _mohKeycloakClient = mohKeycloakClient;
         }
 
