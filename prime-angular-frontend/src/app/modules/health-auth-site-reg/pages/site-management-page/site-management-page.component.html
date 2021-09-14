@@ -46,7 +46,7 @@
                       [menuOutletContext]="{ healthAuthoritySite: healthAuthoritySite, healthAuthorityId: healthAuthority.id }"
                       [properties]="[
                             { key: 'Site Name', value: healthAuthoritySite.siteName },
-                            { key: 'Site ID', value: healthAuthoritySite.siteId },
+                            { key: 'Site ID/PEC Code', value: healthAuthoritySite.siteId },
                             { key: 'Vendor', value: healthAuthoritySite.vendorCode | configCode : 'vendors' }
                       ]"
                       (action)="viewSiteRemoteUsers(healthAuthority.id, healthAuthoritySite.id)">
