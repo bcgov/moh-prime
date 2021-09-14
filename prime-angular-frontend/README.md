@@ -47,7 +47,7 @@ ng serve -o
 To test the production build locally before pushing features to the repository for deployment type:
 
 ```bash
-ng build --prod
+ng build --configuration=production
 ```
 
 #### Angular CLI Reference
@@ -55,7 +55,7 @@ ng build --prod
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.x. Refer to the Angular CLI documentation for the available commands, but the most used commands during development will be:
 
 1. `ng serve -o` to serve your application locally in memory during development at `http://localhost:4200` through the default browser, which watches for changes, recompiles, and automatically refresh the application in the browser
-1. `ng build` to build the application, which is stored in `/dist` directory.  Use the `--prod` flag for a production build, which significantly decreases the size of the application
+1. `ng build` to build the application, which is stored in `/dist` directory.  Use the `--configuration=production` flag for a production build, which significantly decreases the size of the application
 1. `ng g <blueprint>` to create code scaffolding for a directive, pipe, service, class, guard, interface, enum, and module
 1. `ng lint` to lint the application code using TSLint.
 1. `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io). The test runner has a variety of options that can be used to refine how the test suite is executed that can be found by running `ng test --help`.  One of these options allows for the narrowing of the tests run through the use of globbing patterns - `ng test --include='**/*.pipe.spec.ts'`.
