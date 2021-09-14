@@ -56,22 +56,21 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // The services are ordered alphabetically assuming the word "Service" is not included
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
             services.AddScoped<IBannerService, BannerService>();
             services.AddScoped<IBusinessEventService, BusinessEventService>();
             services.AddScoped<IClientLogService, ClientLogService>();
-            services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IDocumentAccessTokenService, DocumentAccessTokenService>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IDocumentService, DocumentService>();
             services.AddScoped<IEmailDocumentsService, EmailDocumentsService>();
             services.AddScoped<IEmailRenderingService, EmailRenderingService>();
+            services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
-            services.AddScoped<IEnrolleeService, EnrolleeService>();
             services.AddScoped<IEnrolleeAgreementService, EnrolleeAgreementService>();
             services.AddScoped<IEnrolleePaperSubmissionService, EnrolleePaperSubmissionService>();
+            services.AddScoped<IEnrolleeService, EnrolleeService>();
             services.AddScoped<IEnrolleeSubmissionService, EnrolleeSubmissionService>();
             services.AddScoped<IEnrolmentCertificateService, EnrolmentCertificateService>();
             services.AddScoped<IGisService, GisService>();
@@ -79,9 +78,9 @@ namespace Prime
             services.AddScoped<IHealthAuthoritySiteService, HealthAuthoritySiteService>();
             services.AddScoped<ILookupService, LookupService>();
             services.AddScoped<IMetabaseService, MetabaseService>();
-            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IOrganizationAgreementService, OrganizationAgreementService>();
             services.AddScoped<IOrganizationClaimService, OrganizationClaimService>();
+            services.AddScoped<IOrganizationService, OrganizationService>();
             services.AddScoped<IPartyService, PartyService>();
             services.AddScoped<IPdfService, PdfService>();
             services.AddScoped<IPhsaService, PhsaService>();
@@ -90,8 +89,8 @@ namespace Prime
             services.AddScoped<IRazorConverterService, RazorConverterService>();
             services.AddScoped<ISiteService, SiteService>();
             services.AddScoped<ISoapService, SoapService>();
-            services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
+            services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());

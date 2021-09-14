@@ -1,6 +1,7 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.HealthAuthorities;
@@ -11,8 +12,8 @@ namespace Prime.Services
     {
         public LookupService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<LookupService> logger)
+            : base(context, logger)
         { }
 
         public async Task<LookupEntity> GetLookupsAsync()
@@ -65,6 +66,9 @@ namespace Prime.Services
                 CareTypes = await _context.Set<CareType>()
                     .AsNoTracking()
                     .ToListAsync(),
+                SecurityGroups = await _context.Set<SecurityGroup>()
+                    .AsNoTracking()
+                    .ToListAsync()
             };
         }
     }

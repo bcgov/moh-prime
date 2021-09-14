@@ -1,9 +1,10 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
 using Prime.Models;
 
 namespace Prime.Services
@@ -12,8 +13,8 @@ namespace Prime.Services
     {
         public AdminService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<AdminService> logger)
+            : base(context, logger)
         { }
 
         public async Task<bool> AdminExistsAsync(int adminId)
