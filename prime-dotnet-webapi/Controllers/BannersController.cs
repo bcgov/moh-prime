@@ -32,7 +32,7 @@ namespace Prime.Controllers
         /// <param name="viewModel"></param>
         /// <param name="locationCode"></param>
         [HttpPost("", Name = nameof(CreateBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResultResponse<BannerViewModel>), StatusCodes.Status200OK)]
@@ -71,7 +71,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="bannerId"></param>
         [HttpDelete("{bannerId}", Name = nameof(DeleteBanner))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
