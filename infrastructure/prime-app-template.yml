@@ -567,7 +567,7 @@ objects:
             valueFrom:
               secretKeyRef:
                 name: ${SVC_NAME}-patroni-secret
-                key: database-user
+                key: app-db-username
           - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
@@ -617,7 +617,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-patroni-secret
-                    key: database-user
+                    key: app-db-username
               - name: POSTGRESQL_DATABASE
                 valueFrom:
                   secretKeyRef:
@@ -795,7 +795,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: ${SVC_NAME}-patroni-secret
-                  key: database-user
+                  key: app-db-username
             - name: DOCUMENT_MANAGER_URL
               value: "https://${VANITY_URL}/api/docman/"
             - name: FLASK_ENV
@@ -877,7 +877,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: ${SVC_NAME}-patroni-secret
-                    key: database-user
+                    key: app-db-username
               - name: DOCUMENT_MANAGER_URL
                 value: "https://${VANITY_URL}/api/docman/"
               - name: FLASK_ENV
