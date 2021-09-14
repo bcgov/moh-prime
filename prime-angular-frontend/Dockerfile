@@ -32,7 +32,7 @@ COPY entrypoint.sh /
 RUN cat /usr/src/app/src/environments/environment.prod.ts
 RUN npm install @angular/cli -g && \
     npm install && \
-    ng build --prod && \
+    ng build --configuration=production && \
     echo "NPM packages installed..."
 
 # RUN npm audit fix && \
