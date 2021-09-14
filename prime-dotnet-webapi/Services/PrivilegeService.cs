@@ -1,8 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 
 namespace Prime.Services
@@ -11,8 +12,8 @@ namespace Prime.Services
     {
         public PrivilegeService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext)
-            : base(context, httpContext)
+            ILogger<PrivilegeService> logger)
+            : base(context, logger)
         { }
 
         public async Task AssignPrivilegesToEnrolleeAsync(int enrolleeId, Enrollee enrollee)

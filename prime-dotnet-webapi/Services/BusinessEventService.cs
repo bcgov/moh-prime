@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Prime.Models;
 
 namespace Prime.Services
@@ -8,12 +10,17 @@ namespace Prime.Services
     public class BusinessEventService : BaseService, IBusinessEventService
     {
         private readonly IAdminService _adminService;
+        private readonly IHttpContextAccessor _httpContext;
 
-        public BusinessEventService(ApiDbContext context, IHttpContextAccessor httpContext,
-            IAdminService adminService)
-            : base(context, httpContext)
+        public BusinessEventService(
+            ApiDbContext context,
+            ILogger<BusinessEventService> logger,
+            IAdminService adminService,
+            IHttpContextAccessor httpContext)
+            : base(context, logger)
         {
             _adminService = adminService;
+            _httpContext = httpContext;
         }
 
         public async Task<BusinessEvent> CreateStatusChangeEventAsync(int enrolleeId, string description)

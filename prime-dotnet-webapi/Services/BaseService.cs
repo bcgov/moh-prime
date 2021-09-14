@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services
 {
@@ -7,12 +7,12 @@ namespace Prime.Services
         protected const int InvalidId = -1;
 
         protected readonly ApiDbContext _context;
-        protected readonly IHttpContextAccessor _httpContext;
+        protected readonly ILogger _logger;
 
-        protected BaseService(ApiDbContext context, IHttpContextAccessor httpContext)
+        protected BaseService(ApiDbContext context, ILogger logger)
         {
             _context = context;
-            _httpContext = httpContext;
+            _logger = logger;
         }
     }
 }
