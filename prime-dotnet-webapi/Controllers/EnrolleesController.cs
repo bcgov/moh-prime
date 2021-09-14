@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 using Prime.Auth;
 using Prime.Models;
@@ -56,11 +57,25 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
+            Console.WriteLine("---- entered controller");
+
             if (User.IsAdministrant())
             {
+                var sw = Stopwatch.StartNew();
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
+                sw.Stop();
+                System.Console.WriteLine($"---- first db call: {sw.ElapsedMilliseconds}ms");
+
+                sw = Stopwatch.StartNew();
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+                sw.Stop();
+                System.Console.WriteLine($"---- second db call: {sw.ElapsedMilliseconds}ms");
+
+                sw = Stopwatch.StartNew();
                 var result = enrollees.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
+                sw.Stop();
+                System.Console.WriteLine($"---- remaining code: {sw.ElapsedMilliseconds}ms");
+
                 return Ok(result);
             }
             else
