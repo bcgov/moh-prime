@@ -98,7 +98,7 @@ namespace Prime.Controllers
         /// <param name="emailTemplateId"></param>
         /// <param name="template"></param>
         [HttpPut("management/templates/{emailTemplateId}", Name = nameof(UpdateEmailTemplate))]
-        [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [Authorize(Roles = Roles.PrimeMaintenance)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
