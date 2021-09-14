@@ -35,10 +35,8 @@ using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
-using Prime.ViewModels.HealthAuthoritySites;
-using Sentry.Extensibility;
 using Sentry.AspNetCore;
-using Sentry;
+
 
 
 
@@ -62,8 +60,6 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             // The services are ordered alphabetically assuming the word "Service" is not included
-            // Register as many ISentryEventExceptionProcessor as you need. They ALL get called.
-            services.AddSingleton<ISentryEventExceptionProcessor, SpecialExceptionProcessor>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
@@ -100,11 +96,6 @@ namespace Prime
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
-
-
-
-            // You can also register as many ISentryEventProcessor as you need.
-            services.AddTransient<ISentryEventProcessor, ExampleEventProcessor>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 

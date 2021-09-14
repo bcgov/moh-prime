@@ -2,16 +2,16 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Hosting;
+
 
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
-using Sentry;
 using Sentry.AspNetCore;
-using Sentry.Extensions.Logging;
+using Sentry.Serilog;
 
 namespace Prime
 {
@@ -50,7 +50,7 @@ namespace Prime
                     webBuilder.UseStartup<Startup>();
                 });
 
-        private static void InitSentry(SentryAspNetCoreOptions o)
+        private static void InitSentry(SentryAspNetCoreOptions sentryOptions)
         {
             string dsn = PrimeEnvironment.IsLocal
                 ? PrimeEnvironment.PrimeSentryKeys.DevEnvDsn
@@ -61,21 +61,22 @@ namespace Prime
                 : PrimeEnvironment.PrimeSentryKeys.ProdEnvTraceSampleRate;
 
             // Tells which project in Sentry to send events to:
-            o.Dsn = dsn;
+            sentryOptions.Dsn = dsn;
+
             // When configuring for the first time, to see what the SDK is doing:
-            o.Debug = PrimeEnvironment.IsLocal;
+            sentryOptions.Debug = PrimeEnvironment.IsLocal;
 
             // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
-            o.TracesSampleRate = sampleTraceRate;
-            o.ConfigureScope(s => s.SetTag("Always sent", "this tag"));
+            sentryOptions.TracesSampleRate = sampleTraceRate;
+        }
 
-            // if (o.Debug)
-            // {
-            //     o.DiagnosticLevel = SentryLevel.Debug;
-
-            //     o.DiagnosticLogger = new SentryLogger(o.DiagnosticLevel);
-            // }
+        private static void InitSentrySerilog(SentrySerilogOptions sentrySerilogOptions)
+        {
+            // Debug and higher are stored as breadcrumbs (default is Information)
+            sentrySerilogOptions.MinimumBreadcrumbLevel = LogEventLevel.Debug;
+            // Warning and higher is sent as event (default is Error)
+            sentrySerilogOptions.MinimumEventLevel = LogEventLevel.Warning;
         }
 
         private static void CreateLogger()
@@ -118,6 +119,7 @@ namespace Prime
                     new JsonFormatter(),
                     $@"{path}/prime.json",
                     rollingInterval: RollingInterval.Day))
+                .WriteTo.Sentry(serilogOptionso => InitSentrySerilog(serilogOptionso))
                 .CreateLogger();
         }
     }
