@@ -1,28 +1,28 @@
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
-using Prime.Models;
-using Prime.ViewModels;
-using Prime.Services.Rules;
 using Prime.HttpClients;
+using Prime.Models;
+using Prime.Services.Rules;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class SubmissionRulesService : BaseService, ISubmissionRulesService
     {
-        private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IBusinessEventService _businessEventService;
+        private readonly ICollegeLicenceClient _collegeLicenceClient;
 
         public SubmissionRulesService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            ICollegeLicenceClient collegeLicenceClient,
-            IBusinessEventService businessEventService)
-            : base(context, httpContext)
+            ILogger<SubmissionRulesService> logger,
+            IBusinessEventService businessEventService,
+            ICollegeLicenceClient collegeLicenceClient)
+            : base(context, logger)
         {
-            _collegeLicenceClient = collegeLicenceClient;
             _businessEventService = businessEventService;
+            _collegeLicenceClient = collegeLicenceClient;
         }
 
         /// <summary>

@@ -13,14 +13,7 @@ namespace PrimeTests.UnitTests
 {
     public class PrivilegeServiceTests : InMemoryDbTest
     {
-        public PrivilegeService CreateService(
-            IHttpContextAccessor httpContext = null)
-        {
-            return new PrivilegeService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>()
-            );
-        }
+
     }
 }
 
