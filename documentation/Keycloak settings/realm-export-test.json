@@ -136,7 +136,12 @@
       {
         "id": "a6623ca5-3983-4b07-ae46-4c2617301c63",
         "name": "prime_super_admin",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_maintenance"
+          ]
+        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -196,6 +201,14 @@
       {
         "id": "475e42c5-9162-4288-9178-2474933bc98d",
         "name": "enrollee_elevated_management",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
+        "id": "18afd893-b0c7-4285-902f-4b1cb4a6c219",
+        "name": "prime_maintenance",
         "composite": false,
         "clientRole": false,
         "containerId": "v4mbqqas",
@@ -1128,7 +1141,8 @@
         "https://demo.pharmanetenrolment.gov.bc.ca/*",
         "https://demo.healthpractionerregistration.pathfinder.gov.bc.ca/*",
         "https://test.healthpractionerregistration.pathfinder.gov.bc.ca/*",
-        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*"
+        "https://healthpractionerregistration-test.pathfinder.gov.bc.ca/*",
+        "https://test-9c33a9-test.apps.silver.devops.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -1152,6 +1166,7 @@
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
         "saml_force_name_id_format": "false",
         "saml.client.signature": "false",
         "tls.client.certificate.bound.access.tokens": "false",
