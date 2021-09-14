@@ -52,23 +52,21 @@ namespace Prime
 
         private static void InitSentry(SentryAspNetCoreOptions sentryOptions)
         {
-            string dsn = PrimeEnvironment.IsLocal
-                ? PrimeEnvironment.PrimeSentryKeys.DevEnvDsn
-                : PrimeEnvironment.PrimeSentryKeys.ProdEnvDsn;
-
-            double sampleTraceRate = PrimeEnvironment.IsLocal
-                ? PrimeEnvironment.PrimeSentryKeys.DevEnvTraceSampleRate
-                : PrimeEnvironment.PrimeSentryKeys.ProdEnvTraceSampleRate;
-
-            // Tells which project in Sentry to send events to:
-            sentryOptions.Dsn = dsn;
-
-            // When configuring for the first time, to see what the SDK is doing:
-            sentryOptions.Debug = PrimeEnvironment.IsLocal;
-
-            // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
-            // We recommend adjusting this value in production.
-            sentryOptions.TracesSampleRate = sampleTraceRate;
+            if (PrimeEnvironment.IsLocal)
+            {
+                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.DevEnvDsn;
+                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.DevEnvTraceSampleRate;
+            }
+            else if (PrimeEnvironment.IsProduction)
+            {
+                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.ProdEnvDsn;
+                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.ProdEnvTraceSampleRate;
+            }
+            else
+            {
+                sentryOptions.Dsn = PrimeEnvironment.PrimeSentryKeys.TestEnvDsn;
+                sentryOptions.TracesSampleRate = PrimeEnvironment.PrimeSentryKeys.TestEnvTraceSampleRate;
+            }
         }
 
         private static void InitSentrySerilog(SentrySerilogOptions sentrySerilogOptions)
