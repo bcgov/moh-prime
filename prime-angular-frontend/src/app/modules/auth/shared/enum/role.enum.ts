@@ -2,6 +2,7 @@ export enum Role {
   ENROLLEE = 'prime_user',
   ADMIN = 'prime_administrant',
   SUPER_ADMIN = 'prime_super_admin',
+  MAINTENANCE = 'prime_maintenance',
 
   PHSA_LABTECH = 'phsa_eforms_labtech',
   PHSA_IMMUNIZER = 'phsa_eforms_immunizer_covid19',
