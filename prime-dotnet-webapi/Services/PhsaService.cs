@@ -1,11 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
 using Prime.Auth;
-using Prime.Models;
 using Prime.HttpClients;
+using Prime.Models;
 using Prime.ViewModels.Parties;
 
 namespace Prime.Services
