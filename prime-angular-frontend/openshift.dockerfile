@@ -39,7 +39,7 @@ RUN npm install -g @angular/cli
 # Install dependencies
 RUN npm ci
 # Add application
-RUN ng build --prod
+RUN ng build --configuration=production
 
 ########################################
 ### Stage 2 - Production environment ###

@@ -58,6 +58,7 @@ namespace Prime.Services
             var banners = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
+                .OrderByDescending(b => b.Id)
                 .ToListAsync();
 
             banners.ForEach(banner =>
