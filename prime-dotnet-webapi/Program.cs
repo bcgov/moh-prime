@@ -46,8 +46,8 @@ namespace Prime
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
                     webBuilder.UseSentry(o => InitSentry(o));
+                    webBuilder.UseStartup<Startup>();
                 });
 
         private static void InitSentry(SentryAspNetCoreOptions o)
@@ -68,6 +68,7 @@ namespace Prime
             // Set traces_sample_rate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
             o.TracesSampleRate = sampleTraceRate;
+            o.ConfigureScope(s => s.SetTag("Always sent", "this tag"));
 
             // if (o.Debug)
             // {

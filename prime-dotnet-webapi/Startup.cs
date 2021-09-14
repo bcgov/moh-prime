@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Reflection;
+using System.Web.Http;
 using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.Threading.Tasks;
@@ -35,6 +36,11 @@ using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
 using Prime.ViewModels.HealthAuthorities;
 using Prime.ViewModels.HealthAuthoritySites;
+using Sentry.Extensibility;
+using Sentry.AspNetCore;
+using Sentry;
+
+
 
 namespace Prime
 {
@@ -56,6 +62,8 @@ namespace Prime
         public void ConfigureServices(IServiceCollection services)
         {
             // The services are ordered alphabetically assuming the word "Service" is not included
+            // Register as many ISentryEventExceptionProcessor as you need. They ALL get called.
+            services.AddSingleton<ISentryEventExceptionProcessor, SpecialExceptionProcessor>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
             services.AddScoped<IAuthorizedUserService, AuthorizedUserService>();
@@ -92,6 +100,11 @@ namespace Prime
             services.AddScoped<ISubmissionService, SubmissionService>();
             services.AddScoped<ISubmissionRulesService, SubmissionRulesService>();
             services.AddScoped<IVerifiableCredentialService, VerifiableCredentialService>();
+
+
+
+            // You can also register as many ISentryEventProcessor as you need.
+            services.AddTransient<ISentryEventProcessor, ExampleEventProcessor>();
 
             services.AddSoapServiceOperationTuner(new SoapServiceOperationTuner());
 
@@ -211,13 +224,10 @@ namespace Prime
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
-            // ********************************* *********************************
-            // Leaving the code block below here and will remove after PR approval
-            // ********************************* *********************************
-            // if (env.IsDevelopment())
-            // {
-            //     app.UseDeveloperExceptionPage();
-            // }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
             ConfigureHealthCheck(app);
 
@@ -242,6 +252,9 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
+
+            app.UseSentryTracing();
+
             app.UseCors(AllowSpecificOrigins);
 
             app.UseAuthentication();
