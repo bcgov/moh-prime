@@ -4,5 +4,4 @@ namespace Prime.ViewModels.Emails
     {
         public string Pec { get; set; }
     }
-
 }
