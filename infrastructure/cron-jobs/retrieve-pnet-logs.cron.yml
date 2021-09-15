@@ -81,7 +81,13 @@ objects:
                     - name: PGHOST
                       value: ${SVC_NAME}-patroni
                     - name: PGDATABASE
-                      value: ${DATABASE_NAME}
+                      valueFrom:
+                        secretKeyRef:
+                          name: ${SVC_NAME}-patroni-secret
+                          key: app-db-name
+                    # If working with model changes during PR, specify PR database, but don't merge hard-coding into `develop`
+                    # - name: PGDATABASE
+                    #   value: prime-pr-1576
                     - name: PGUSER
                       valueFrom:
                         secretKeyRef:
@@ -158,9 +164,6 @@ parameters:
     value: '*/60 * * * *'
   - name: CRON_NAME
     value: retrieve-pnet-logs-cronjob
-  - description: 'Environment name prefix prepended to all OpenShift objects'
+  - description: 'Environment name'
     name: SVC_NAME
     value: dev
-  - description: 'Name of PRIME database to save logs into'
-    name: DATABASE_NAME
-    value: prime-pr-1576
