@@ -1,42 +1,42 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using DelegateDecompiler.EntityFrameworkCore;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 using Prime.Auth;
-using Prime.Models;
-using Prime.ViewModels;
-using Prime.Models.Api;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
-using System.Security.Claims;
-using System.Linq.Expressions;
+using Prime.Models;
+using Prime.Models.Api;
 using Prime.Models.VerifiableCredentials;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class EnrolleeService : BaseService, IEnrolleeService
     {
-        private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
 
         public EnrolleeService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<EnrolleeService> logger,
             IBusinessEventService businessEventService,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IDocumentManagerClient documentClient,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _mapper = mapper;
         }
 
         public async Task<bool> EnrolleeExistsAsync(int enrolleeId)

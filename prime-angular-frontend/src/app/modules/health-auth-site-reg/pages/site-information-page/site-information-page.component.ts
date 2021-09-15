@@ -5,6 +5,7 @@ import { FormBuilder } from '@angular/forms';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { Config } from '@config/config.model';
 import { ConfigService } from '@config/config.service';
 import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -23,6 +24,7 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
   public formState: SiteInformationFormState;
   public title: string;
   public routeUtils: RouteUtils;
+  public securityGroups: Config<number>[];
   public isCompleted: boolean;
 
   constructor(
@@ -38,6 +40,8 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
+
+    this.securityGroups = this.configService.securityGroups;
   }
 
   public onBack(): void {

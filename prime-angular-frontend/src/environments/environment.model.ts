@@ -3,7 +3,8 @@ import { ConfigMap } from '@env/config-map.model';
 export type environmentName = 'prod' | 'test' | 'dev' | 'local';
 
 export class AppEnvironment extends ConfigMap {
-  // Only indicates that Angular has been built using --prod
+  // Only indicates that Angular has been built
+  // using --configuration=production
   production: boolean;
   version: string;
   prime: {

@@ -1,13 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
-using System.ServiceModel;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Globalization;
+using System.ServiceModel;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
 using Prime.Models;
 
 namespace Prime.Services
@@ -27,11 +28,8 @@ namespace Prime.Services
         public const string Prefix = "plr";
 
         private readonly ILogger<SoapService> _logger;
-
         private readonly IPlrProviderService _dbService;
-
         private readonly XmlNamespaceManager _nsManager;
-
 
         public SoapService(
             ILogger<SoapService> logger,

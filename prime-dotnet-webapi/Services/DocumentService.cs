@@ -1,9 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Prime.HttpClients;
 
 namespace Prime.Services
@@ -11,20 +11,20 @@ namespace Prime.Services
     public class DocumentService : BaseService, IDocumentService
     {
         private readonly IAgreementService _agreementService;
-        private readonly ISiteService _siteService;
         private readonly IDocumentManagerClient _documentManagerClient;
+        private readonly ISiteService _siteService;
 
         public DocumentService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<DocumentService> logger,
             IAgreementService agreementService,
-            ISiteService siteService,
-            IDocumentManagerClient documentManagerClient)
-            : base(context, httpContext)
+            IDocumentManagerClient documentManagerClient,
+            ISiteService siteService)
+            : base(context, logger)
         {
             _agreementService = agreementService;
-            _siteService = siteService;
             _documentManagerClient = documentManagerClient;
+            _siteService = siteService;
         }
 
         public async Task<string> GetDownloadTokenForBusinessLicenceDocument(int siteId)
