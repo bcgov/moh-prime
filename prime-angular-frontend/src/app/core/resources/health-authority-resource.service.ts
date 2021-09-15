@@ -277,23 +277,20 @@ export class HealthAuthorityResource {
       );
   }
 
-  public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string}[]> {
+  public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
     // TODO create separate endpoint to get health auth contacts
-    return this.apiResource.get<Contact[]>(`health-authorities/${healthAuthId}/sites/${healthAuthSiteId}/contacts`)
+    return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .pipe(
-        map((response: ApiHttpResponse<Contact[]>) => response.result),
-        tap((contacts: Contact[]) => this.logger.info('HEALTH_AUTHORITY_SITE_CONTACTS', contacts)),
-        map((contacts: Contact[]) => [
+        map((healthAuthSite: HealthAuthoritySite) => [
           // TODO no authorized user on health auth site view model
           // {
           //   label: 'Authorized User',
           //   email: healthAuthSite?.authorizedUser?.email
           // },
-          // TODO admin exists on view model but not populated
-          // ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
-          //   label: 'PharmaNet Administrator',
-          //   email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
-          // }),
+          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
+            label: 'PharmaNet Administrator',
+            email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
+          }),
           // TODO no privacy officer on health auth site view model
           // ...ArrayUtils.insertIf(healthAuthSite?.privacyOfficer.email, {
           //   label: 'Privacy Officer',
@@ -310,7 +307,7 @@ export class HealthAuthorityResource {
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteContacts error has occurred: ', error);
           throw error;
         })
-      )
+      );
   }
 
   public updateHealthAuthoritySiteVendor(healthAuthId: number, siteId: number, payload: VendorForm): Observable<NoContent> {
