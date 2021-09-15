@@ -366,7 +366,7 @@ const routes: Routes = [
                 ]
               },
               {
-                // Site registrations is synonymous with size with regards
+                // Site registrations is synonymous with site with regards
                 // to Health Authorities
                 path: `${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
                 children: [
