@@ -6,28 +6,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
-
-import { PermissionService } from '@auth/shared/services/permission.service';
-import { UtilsService } from '@core/services/utils.service';
-import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { Organization } from '@registration/shared/models/organization.model';
-import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
-import { Role } from '@auth/shared/enum/role.enum';
-import {
-  SiteRegistrationListViewModel,
-  SiteListViewModelPartial,
-  OrganizationSearchListViewModel
-} from '@registration/shared/models/site-registration.model';
 import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import {
   AssignAction,
@@ -36,8 +27,19 @@ import {
   ClaimType
 } from '@shared/components/dialogs/content/claim-note/claim-note.component';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
-import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
+
+import { Role } from '@auth/shared/enum/role.enum';
+import { PermissionService } from '@auth/shared/services/permission.service';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
+import { Site } from '@registration/shared/models/site.model';
+import { Organization } from '@registration/shared/models/organization.model';
+import {
+  SiteRegistrationListViewModel,
+  SiteListViewModelPartial,
+  OrganizationSearchListViewModel
+} from '@registration/shared/models/site-registration.model';
+import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 
 @Component({
   selector: 'app-site-registration-container',
