@@ -57,13 +57,14 @@
           <mat-label>Site ID</mat-label>
           <input matInput
                  formControlName="pec" />
-          <mat-error *ngIf="pec.hasError('required')">
+          <mat-error *ngIf="pec.hasError('required') || activeBeforeReg.checked">
             Required
           </mat-error>
         </mat-form-field>
       </ng-container>
     </ng-template>
-    <mat-checkbox formControlName="activeBeforeRegistration">
+    <mat-checkbox formControlName="activeBeforeRegistration"
+                  #activeBeforeReg>
       <div class="pl-3">
         This site is already operational and submitting PharmaNet transactions.
       </div>
