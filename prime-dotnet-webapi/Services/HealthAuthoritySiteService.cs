@@ -1,11 +1,11 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
@@ -20,9 +20,9 @@ namespace Prime.Services
 
         public HealthAuthoritySiteService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<HealthAuthoritySiteService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
