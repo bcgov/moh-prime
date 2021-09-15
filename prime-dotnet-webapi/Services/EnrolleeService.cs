@@ -496,7 +496,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Certification>> GetCertificationsAsync(int enrolleeId)
+        public async Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }

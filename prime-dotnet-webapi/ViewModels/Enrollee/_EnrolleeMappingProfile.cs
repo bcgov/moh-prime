@@ -39,6 +39,8 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
+
+            CreateMap<Certification, CertificationViewModel>();
             CreateMap<Certification, CertificationDto>();
         }
     }
