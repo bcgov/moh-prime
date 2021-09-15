@@ -25,7 +25,7 @@
                                        (flag)="onToggleFlagSite($event)"></app-site-registration-actions>
       </div>
 
-      <app-page-section>
+      <app-page-section class="mb-5">
         <app-page-subheader2>
           <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
           <ng-container appPageSubheader2Summary>
@@ -66,7 +66,8 @@
         </form>
       </app-page-section>
 
-      <app-page-section *ngIf="showSendNotification">
+      <app-page-section *ngIf="showSendNotification"
+                        class="mb-5">
         <app-page-subheader2>
           <ng-container appPageSubheader2Title>PharmaCare Provider Enrolment</ng-container>
           <ng-container appPageSubheader2Summary>
