@@ -188,17 +188,13 @@
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>
+
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)">
+                [disabled]="true || !(Role.EDIT_SITE | inRole)"
+                (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Assign Registration</span>
-        </button>
-        <button mat-menu-item
-                *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)">
-          <mat-icon>pan_tool</mat-icon>
-          <span>Reassign Registration</span>
+          <span>{{ (!row?.adjudicatorIdir) ? 'Assign Registration' : 'Reassign Registration' }}</span>
         </button>
       </mat-menu>
     </ng-template>
