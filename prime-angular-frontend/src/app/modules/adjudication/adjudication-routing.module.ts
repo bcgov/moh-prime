@@ -366,6 +366,21 @@ const routes: Routes = [
                 ]
               },
               {
+                path: `${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
+                children: [
+                  {
+                    path: AdjudicationRoutes.EVENT_LOG,
+                    component: SiteEventsComponent,
+                    data: { title: 'Event Log' }
+                  },
+                  {
+                    path: AdjudicationRoutes.ADJUDICATOR_NOTES,
+                    component: SiteAdjudicatorNotesComponent,
+                    data: { title: 'Adjudicator Notes' }
+                  },
+                ]
+              },
+              {
                 path: '',
                 redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 pathMatch: 'full'
@@ -392,4 +407,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule { }
+export class AdjudicationRoutingModule {}
