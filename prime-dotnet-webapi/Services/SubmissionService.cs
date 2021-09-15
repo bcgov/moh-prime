@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
-using Prime.Models;
 using Prime.Engines;
+using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
 
@@ -15,41 +15,41 @@ namespace Prime.Services
     public class SubmissionService : BaseService, ISubmissionService
     {
         private readonly IAgreementService _agreementService;
-        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
-        private readonly ISubmissionRulesService _submissionRulesService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IEmailService _emailService;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IEnrolleeService _enrolleeService;
         private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
-        private readonly IVerifiableCredentialService _verifiableCredentialService;
+        private readonly IHttpContextAccessor _httpContext;
         private readonly IPrivilegeService _privilegeService;
-        private readonly ILogger _logger;
+        private readonly ISubmissionRulesService _submissionRulesService;
+        private readonly IVerifiableCredentialService _verifiableCredentialService;
 
         public SubmissionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<SubmissionService> logger,
             IAgreementService agreementService,
-            IEnrolleeAgreementService enrolleeAgreementService,
-            ISubmissionRulesService submissionRulesService,
             IBusinessEventService businessEventService,
             IEmailService emailService,
+            IEnrolleeAgreementService enrolleeAgreementService,
             IEnrolleeService enrolleeService,
             IEnrolleeSubmissionService enrolleeSubmissionService,
-            IVerifiableCredentialService verifiableCredentialService,
+            IHttpContextAccessor httpContext,
             IPrivilegeService privilegeService,
-            ILogger<SubmissionService> logger)
-            : base(context, httpContext)
+            ISubmissionRulesService submissionRulesService,
+            IVerifiableCredentialService verifiableCredentialService)
+            : base(context, logger)
         {
             _agreementService = agreementService;
-            _enrolleeAgreementService = enrolleeAgreementService;
-            _submissionRulesService = submissionRulesService;
             _businessEventService = businessEventService;
             _emailService = emailService;
+            _enrolleeAgreementService = enrolleeAgreementService;
             _enrolleeService = enrolleeService;
             _enrolleeSubmissionService = enrolleeSubmissionService;
-            _verifiableCredentialService = verifiableCredentialService;
+            _httpContext = httpContext;
             _privilegeService = privilegeService;
-            _logger = logger;
+            _submissionRulesService = submissionRulesService;
+            _verifiableCredentialService = verifiableCredentialService;
         }
 
         public async Task SubmitApplicationAsync(int enrolleeId, EnrolleeUpdateModel updatedProfile)

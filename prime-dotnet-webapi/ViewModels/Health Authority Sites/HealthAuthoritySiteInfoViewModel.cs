@@ -1,5 +1,6 @@
 using System;
 using FluentValidation;
+using Prime.Models;
 
 namespace Prime.ViewModels.HealthAuthoritySites
 {
@@ -9,7 +10,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
 
         public string SiteId { get; set; }
 
-        public string SecurityGroup { get; set; }
+        public SecurityGroupCode SecurityGroup { get; set; }
     }
 
     public class HealthAuthoritySiteInfoValidator : AbstractValidator<HealthAuthoritySiteInfoViewModel>
