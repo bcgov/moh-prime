@@ -42,6 +42,8 @@ namespace Prime.ViewModels.Profiles
 
             CreateMap<Certification, CertificationViewModel>();
             CreateMap<Certification, CertificationDto>();
+
+            CreateMap<OboSite, OboSiteViewModel>();
         }
     }
 }

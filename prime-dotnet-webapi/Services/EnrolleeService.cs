@@ -501,7 +501,7 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<OboSite>> GetOboSitesAsync(int enrolleeId)
+        public async Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }

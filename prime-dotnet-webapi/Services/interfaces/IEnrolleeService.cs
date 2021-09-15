@@ -25,7 +25,7 @@ namespace Prime.Services
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
         Task DeleteEnrolleeAsync(int enrolleeId);
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
-        Task<IEnumerable<OboSite>> GetOboSitesAsync(int enrolleeId);
+        Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
 
 
 
