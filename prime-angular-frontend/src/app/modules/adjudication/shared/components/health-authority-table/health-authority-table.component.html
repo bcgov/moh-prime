@@ -184,7 +184,9 @@
           <mat-icon>message</mat-icon>
           <span>Add and View Notes</span>
         </button>
-        <button mat-menu-item>
+
+        <button mat-menu-item
+                (click)="onNotify(row.siteId, row.healthAuthorityOrganizationId)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>

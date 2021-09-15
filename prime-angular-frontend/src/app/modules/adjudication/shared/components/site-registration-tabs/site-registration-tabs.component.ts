@@ -74,6 +74,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
     private router: Router,
     private organizationResource: OrganizationResource,
     private siteResource: SiteResource,
+    private healthAuthResource: HealthAuthorityResource,
     private adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
     private utilResource: UtilsService,

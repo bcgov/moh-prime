@@ -20,6 +20,10 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
   styleUrls: ['./health-authority-table.component.scss']
 })
 export class HealthAuthorityTableComponent implements OnInit {
+  @Output() public assign: EventEmitter<number>;
+  @Output() public reassign: EventEmitter<number>;
+  @Output() public notify: EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>;
+  @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public siteColumns: string[];
@@ -45,9 +49,29 @@ export class HealthAuthorityTableComponent implements OnInit {
       'remoteUsers',
       'siteActions'
     ];
+    this.assign = new EventEmitter<number>();
+    this.reassign = new EventEmitter<number>();
+    this.notify = new EventEmitter<{ siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum }>();
+    this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.dataSource = new MatTableDataSource<HealthAuthorityRow | HealthAuthoritySite>([]);
     this.expandedHealthAuthId = 0;
+  }
+
+  public onAssign(siteId: number): void {
+    this.assign.emit(siteId);
+  }
+
+  public onReassign(siteId: number): void {
+    this.reassign.emit(siteId);
+  }
+
+  public onNotify(siteId: number, healthAuthorityOrganizationId: HealthAuthorityEnum): void {
+    this.notify.emit({ siteId, healthAuthorityOrganizationId });
+  }
+
+  public onReload(siteId: number): void {
+    this.reload.emit(siteId);
   }
 
   public onRoute(routePath: string | (string | number)[]) {
