@@ -54,7 +54,6 @@ export class SiteInformationFormComponent implements OnInit {
     }
 
     this.getSiteOperational();
-
     this.isNewSite.valueChanges
       .subscribe(value => {
         if (value) {
