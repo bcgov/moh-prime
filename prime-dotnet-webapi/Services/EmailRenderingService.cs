@@ -184,7 +184,7 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string signingAuthorityEmail, LinkedEmailViewModel viewModel)
+        public async Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string signingAuthorityEmail, SiteActiveBeforeRegistrationEmailViewModel viewModel)
         {
             return new Email
             (

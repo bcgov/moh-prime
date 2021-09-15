@@ -79,15 +79,22 @@ namespace Prime.Services
 
         public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool activeBeforeRegistration, string signingAuthorityEmail)
         {
-            var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
             if (activeBeforeRegistration)
             {
-                var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, new LinkedEmailViewModel(downloadUrl));
+                var viewModel = await _context.Sites
+                .Where(s => s.Id == siteId)
+                .Select(s => new SiteActiveBeforeRegistrationEmailViewModel
+                {
+                    Pec = s.PEC
+                })
+                .SingleAsync();
+                var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
                 await Send(email);
             }
             else
             {
+                var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
                 var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
                 email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
                 await Send(email);
