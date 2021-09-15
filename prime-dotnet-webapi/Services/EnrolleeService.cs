@@ -496,6 +496,38 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Certification>> GetCertificationsAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public async Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType)
         {
             var submission = await _context.Submissions

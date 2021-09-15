@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
+
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.Models.VerifiableCredentials;
@@ -23,6 +24,23 @@ namespace Prime.Services
         Task<int> CreateEnrolleeAsync(EnrolleeCreateModel enrollee);
         Task<int> UpdateEnrolleeAsync(int enrolleeId, EnrolleeUpdateModel enrolleeProfile, bool profileCompleted = false);
         Task DeleteEnrolleeAsync(int enrolleeId);
+        Task<IEnumerable<Certification>> GetCertificationsAsync(int enrolleeId);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         Task AssignToaAgreementType(int enrolleeId, AgreementType? agreementType);
         Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId);
         Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck);

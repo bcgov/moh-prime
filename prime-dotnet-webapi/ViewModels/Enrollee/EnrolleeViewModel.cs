@@ -47,7 +47,7 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        public ICollection<Certification> Certifications { get; set; }
+        // public ICollection<Certification> Certifications { get; set; }
 
         public ICollection<Job> Jobs { get; set; }
 
