@@ -49,9 +49,10 @@ namespace Prime.ViewModels
 
         // public ICollection<Certification> Certifications { get; set; }
 
+        // TODO: this being used on the FE?
         public ICollection<Job> Jobs { get; set; }
 
-        public ICollection<OboSite> OboSites { get; set; }
+        // public ICollection<OboSite> OboSites { get; set; }
 
         public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
 
