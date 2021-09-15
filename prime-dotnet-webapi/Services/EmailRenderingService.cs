@@ -184,12 +184,12 @@ namespace Prime.Services.EmailInternal
             );
         }
 
-        public async Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string newSigningAuthorityEmail, LinkedEmailViewModel viewModel)
+        public async Task<Email> RenderSiteActiveBeforeRegistrationEmailAsync(string signingAuthorityEmail, LinkedEmailViewModel viewModel)
         {
             return new Email
             (
                 from: PrimeEmail,
-                to: newSigningAuthorityEmail,
+                to: signingAuthorityEmail,
                 subject: "PRIME Site Registration Submission",
                 body: await _razorConverterService.RenderEmailTemplateToString(EmailTemplateType.SiteActiveBeforeRegistrationSubmission, viewModel)
             );

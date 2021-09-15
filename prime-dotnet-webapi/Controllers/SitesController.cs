@@ -329,7 +329,7 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
             site = await _siteService.SubmitRegistrationAsync(siteId);
-            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
+            await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode, site.ActiveBeforeRegistration, site.Organization.SigningAuthority.Email);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
@@ -443,7 +443,7 @@ namespace Prime.Controllers
 
             if (site.SubmittedDate != null)
             {
-                await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode);
+                await _emailService.SendSiteRegistrationSubmissionAsync(siteId, businessLicenceId, (CareSettingType)site.CareSettingCode, site.ActiveBeforeRegistration, site.Organization.SigningAuthority.Email);
             }
 
             // Send an notifying email to the adjudicator

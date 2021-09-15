@@ -77,16 +77,24 @@ namespace Prime.Services
             await Send(email);
         }
 
-        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode)
+        public async Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool activeBeforeRegistration, string signingAuthorityEmail)
         {
             var downloadUrl = await _emailDocumentService.GetBusinessLicenceDownloadLink(businessLicenceId);
 
-            var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
-            email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
-            await Send(email);
+            if (activeBeforeRegistration)
+            {
+                var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, new LinkedEmailViewModel(downloadUrl));
+                await Send(email);
+            }
+            else
+            {
+                var email = await _emailRenderingService.RenderSiteRegistrationSubmissionEmailAsync(new LinkedEmailViewModel(downloadUrl), careSettingCode);
+                email.Attachments = await _emailDocumentService.GenerateSiteRegistrationSubmissionAttachmentsAsync(siteId);
+                await Send(email);
 
-            var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
-            await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
+                var siteRegReviewPdf = email.Attachments.Single(a => a.Filename == "SiteRegistrationReview.pdf");
+                await _emailDocumentService.SaveSiteRegistrationReview(siteId, siteRegReviewPdf);
+            }
         }
 
         public async Task SendSiteReviewedNotificationAsync(int siteId, string note)
