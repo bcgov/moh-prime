@@ -164,18 +164,19 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
   }
 
-  public onNotify(siteId: number) {
-    const data: DialogOptions = {
-      title: 'Send Email',
-      data: { siteId }
-    };
-
-    this.busy = this.dialog.open(SendEmailComponent, { data })
-      .afterClosed()
+  public onNotify({ siteId }: { siteId: number }) {
+    this.siteResource.getSiteContacts(siteId)
       .pipe(
+        map((contacts: { label: string, email: string }[]) => ({
+          title: 'Send Email',
+          data: { contacts }
+        })),
+        exhaustMap((data: DialogOptions) =>
+          this.dialog.open(SendEmailComponent, { data }).afterClosed()
+        ),
         exhaustMap((result: string) => (result) ? of(result) : EMPTY)
       )
-      .subscribe((email: string) => this.utilResource.mailTo(email));
+      .subscribe((email: string) => EmailUtils.openEmailClient(email));
   }
 
   public onRoute(routePath: string | (string | number)[]) {

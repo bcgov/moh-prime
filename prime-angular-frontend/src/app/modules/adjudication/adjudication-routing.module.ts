@@ -372,19 +372,19 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    // TODO replace with health authority site overview equivalent component
+                    // TODO replace with health authority site equivalent page component
                     component: SiteOverviewComponent,
                     data: { title: 'Site Overview' }
                   },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,
-                    // TODO replace with health authority site overview equivalent component
+                    // TODO replace with health authority site equivalent page component
                     component: SiteEventsComponent,
                     data: { title: 'Event Log' }
                   },
                   {
                     path: AdjudicationRoutes.ADJUDICATOR_NOTES,
-                    // TODO replace with health authority site overview equivalent component
+                    // TODO replace with health authority site equivalent page component
                     component: SiteAdjudicatorNotesComponent,
                     data: { title: 'Adjudicator Notes' }
                   }

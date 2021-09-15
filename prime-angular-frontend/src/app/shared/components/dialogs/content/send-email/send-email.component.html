@@ -1,6 +1,6 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
-  <mat-icon [color]="'primary'">help</mat-icon>
+  <mat-icon color="primary">help</mat-icon>
   <span class="flex-grow-1">
     {{ this.title }}
   </span>
@@ -24,11 +24,15 @@
     </button>
 
     <mat-menu #menu>
-      <button *ngFor="let contact of contacts"
-              mat-menu-item
-              (click)="onSelect(contact.email)">
-        <span>{{ contact.label }}</span>
-      </button>
+      <ng-container *ngFor="let contact of contacts">
+
+        <button *ngIf="contact?.email"
+                mat-menu-item
+                (click)="onSelect(contact.email)">
+          <span>{{ contact.label }}</span>
+        </button>
+
+      </ng-container>
     </mat-menu>
   </div>
 </mat-dialog-content>
