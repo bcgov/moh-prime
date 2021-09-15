@@ -125,6 +125,7 @@ namespace Prime
             public static readonly double TestEnvTraceSampleRate = 0.5;
 
             public static readonly string ProdEnvDsn = "Placeholder for Prod DSN";
+            
             // The value below can be changed for different environments, arbitirarily set to 0.2 for prod env.
             // Meaning that each transaction will have a 20% chance of being sent to Sentry for performance
             // monitoring in Test environment (higher percentage may cost performance)
