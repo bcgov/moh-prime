@@ -366,8 +366,15 @@ const routes: Routes = [
                 ]
               },
               {
+                // Site registrations is synonymous with size with regards
+                // to Health Authorities
                 path: `${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
                 children: [
+                  {
+                    path: '',
+                    component: SiteOverviewComponent,
+                    data: { title: 'Site Overview' }
+                  },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,
                     component: SiteEventsComponent,
@@ -377,7 +384,7 @@ const routes: Routes = [
                     path: AdjudicationRoutes.ADJUDICATOR_NOTES,
                     component: SiteAdjudicatorNotesComponent,
                     data: { title: 'Adjudicator Notes' }
-                  },
+                  }
                 ]
               },
               {
