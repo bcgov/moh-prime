@@ -260,7 +260,7 @@ namespace Prime.Controllers
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
         /// <param name="payload"></param>
-        [HttpPut("{siteId}/administrator", Name = nameof(UpdateTechnicalSupport))]
+        [HttpPut("{siteId}/technical-support", Name = nameof(UpdateTechnicalSupport))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
