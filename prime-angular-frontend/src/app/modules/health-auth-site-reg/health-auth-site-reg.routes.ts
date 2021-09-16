@@ -16,12 +16,12 @@ export class HealthAuthSiteRegRoutes {
   public static HEALTH_AUTHORITIES = 'health-authorities';
   public static SITES = 'sites';
   public static VENDOR = 'vendor';
-  public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_INFORMATION = 'site-information';
+  public static HEALTH_AUTH_CARE_TYPE = 'health-auth-care-type';
   public static SITE_ADDRESS = 'site-address';
   public static HOURS_OPERATION = 'hours-operation';
   public static REMOTE_USERS = 'remote-users';
-  public static SITE_ADMINISTRATOR = 'site-administrator';
+  public static ADMINISTRATOR = 'administrator';
   public static TECHNICAL_SUPPORT = 'technical-support';
   public static SITE_OVERVIEW = 'site-overview';
 
@@ -38,7 +38,7 @@ export class HealthAuthSiteRegRoutes {
       this.SITE_ADDRESS,
       this.HOURS_OPERATION,
       this.REMOTE_USERS,
-      this.SITE_ADMINISTRATOR,
+      this.ADMINISTRATOR,
       this.TECHNICAL_SUPPORT,
       this.SITE_OVERVIEW
     ];

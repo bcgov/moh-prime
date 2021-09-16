@@ -15,6 +15,7 @@ import { HealthAuthority } from '@shared/models/health-authority.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
 import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
   selector: 'app-technical-support-page',
@@ -47,7 +48,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.REMOTE_USERS;
+      : HealthAuthSiteRegRoutes.ADMINISTRATOR;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
@@ -71,10 +72,10 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
       .pipe(
-        tap(({ pharmanetAdministrators }: HealthAuthority) => {
-          const administrators = pharmanetAdministrators
+        tap(({ technicalSupports }: HealthAuthority) => {
+          const technicalSupportContacts = technicalSupports
             .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-          this.technicalSupports.next(administrators);
+          this.technicalSupports.next(technicalSupportContacts);
         }),
         exhaustMap((_: HealthAuthority) =>
           (healthAuthSiteId)
@@ -86,5 +87,17 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
         this.isCompleted = completed;
         this.formState.patchValue({ healthAuthorityTechnicalSupportId });
       });
+  }
+
+  protected performSubmission(): NoContent {
+    const payload = this.formState.json;
+    const { haid, sid } = this.route.snapshot.params;
+
+    return this.healthAuthorityResource.updateHealthAuthoritySiteTechnicalSupport(haid, sid, payload)
+      .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
+  }
+
+  protected afterSubmitIsSuccessful(): void {
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
   }
 }
