@@ -16,8 +16,10 @@ namespace Prime.Services
         Task SendSiteApprovedHIBCAsync(Site site);
         Task SendSiteApprovedPharmaNetAdministratorAsync(Site site);
         Task SendSiteApprovedSigningAuthorityAsync(Site site);
-        Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode, bool activeBeforeRegistration, string signingAuthorityEmail);
+        Task SendSiteRegistrationSubmissionAsync(int siteId, int businessLicenceId, CareSettingType careSettingCode);
         Task SendSiteReviewedNotificationAsync(int siteId, string note);
+
+        Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail);
 
         Task SendEnrolleeRenewalEmails();
         Task SendOrgClaimApprovalNotificationAsync(OrganizationClaim organizationClaim);
