@@ -20,8 +20,8 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     return this.formInstance.get('siteId') as FormControl;
   }
 
-  public get securityGroup(): FormControl {
-    return this.formInstance.get('securityGroup') as FormControl;
+  public get securityGroupCode(): FormControl {
+    return this.formInstance.get('securityGroupCode') as FormControl;
   }
 
   public get json(): any {
@@ -44,7 +44,7 @@ export class SiteInformationFormState extends AbstractFormState<SiteInformationF
     this.formInstance = this.fb.group({
       siteName: ['', [Validators.required]],
       siteId: [null, [Validators.required]],
-      securityGroup: [null, [Validators.required]]
+      securityGroupCode: [null, [Validators.required]]
     });
   }
 }
