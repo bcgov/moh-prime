@@ -26,6 +26,7 @@ import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-addre
 import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 import { AdministratorForm } from '@health-auth/pages/administrator-page/administrator-form.model';
+import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/technical-support-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -355,6 +356,18 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority administrator could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateHealthAuthorityTechnicalSupport(healthAuthId: number, siteId: number, payload: TechnicalSupportForm): NoContent {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/technical-support`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority technical support could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityTechnicalSupport error has occurred: ', error);
           throw error;
         })
       );
