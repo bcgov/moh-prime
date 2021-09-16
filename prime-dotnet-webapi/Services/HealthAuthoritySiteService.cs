@@ -134,7 +134,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-
         public async Task UpdatePharmanetAdministratorAsync(int siteId, int contactId)
         {
             var site = await _context.HealthAuthoritySites
@@ -147,6 +146,22 @@ namespace Prime.Services
 
             // TODO check administrator exists on the HealthAuthority list of administrator(s)
             site.HealthAuthorityPharmanetAdministratorId = healthAuthorityPharmanetAdministratorId;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateTechnicalSupportAsync(int siteId, int contactId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            var healthAuthorityTechnicalSupportId = await _context.HealthAuthorityContacts
+                .Where(hac => hac.ContactId == contactId)
+                .Select(hac => hac.Id)
+                .SingleOrDefaultAsync();
+
+            // TODO check technical support exists on the HealthAuthority list of technical support(s)
+            site.HealthAuthorityTechnicalSupportId = healthAuthorityTechnicalSupportId;
 
             await _context.SaveChangesAsync();
         }

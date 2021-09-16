@@ -36,7 +36,7 @@ namespace Prime.Models.HealthAuthorities
 
         // TODO list of care types?
         // public int? HealthAuthorityCareTypeId { get; set; }
-        //
+
         // [JsonIgnore]
         // public HealthAuthorityCareType HealthAuthorityCareType { get; set; }
 
@@ -50,6 +50,10 @@ namespace Prime.Models.HealthAuthorities
 
         [JsonIgnore]
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
+
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
+
+        public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
 
         public bool Completed { get; set; }
 
