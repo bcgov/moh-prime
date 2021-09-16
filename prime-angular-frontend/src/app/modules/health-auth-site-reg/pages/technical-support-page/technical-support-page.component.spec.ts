@@ -10,8 +10,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { TechnicalSupportPageComponent } from './technical-support-page.component';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { TechnicalSupportPageComponent } from './technical-support-page.component';
 
 describe('TechnicalSupportPageComponent', () => {
   let component: TechnicalSupportPageComponent;
