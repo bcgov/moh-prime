@@ -14,7 +14,7 @@ export interface HealthAuthoritySite {
   vendorCode: number;
   siteName: string;
   siteId: string;
-  securityGroup: number;
+  securityGroupCode: number;
   // healthAuthorityCareTypeId: number;
   // healthAuthorityCareType: string;
   careType: string;
