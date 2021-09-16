@@ -8,21 +8,104 @@
                                (assign)="onAssign($event)"
                                (reassign)="onReassign($event)"
                                (notify)="onNotify($event)"
-                               (route)="onRoute($event)"
-                               (flag)="onToggleFlagSite($event)">
-  </app-site-registration-table>
+                               (route)="onRoute($event)"></app-site-registration-table>
 
-  <div class="row mt-4">
+  <div *ngIf="organization"
+       class="row mt-4">
+    <div class="col-md-6 order-md-12 mb-3">
 
-    <div class="col-6 mb-3">
-      <ng-container *ngIf="organization?.hasClaim">
+      <div class="d-flex justify-content-end mb-4">
+        <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
+                                       (approve)="onApprove($event)"
+                                       (decline)="onDecline($event)"
+                                       (unreject)="onUnreject($event)"
+                                       (delete)="onDelete($event)"
+                                       (enableEditing)="onEnableEditing($event)"
+                                       (escalate)="onEscalate($event)"
+                                       (flag)="onToggleFlagSite($event)"></app-site-registration-actions>
+      </div>
+
+      <app-page-section class="mb-5">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
+          <ng-container appPageSubheader2Summary>
+            The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
+            vendor associated to this submission.
+          </ng-container>
+        </app-page-subheader2>
+
+        <form (ngSubmit)="onSubmit()"
+              [formGroup]="form"
+              novalidate>
+
+          <div class="row">
+            <div class="col-sm-12 col-lg-9 col-xl-5">
+
+              <mat-form-field class="w-100">
+                <input matInput
+                       placeholder="Site ID"
+                       formControlName="pec">
+                <mat-error *ngIf="pec.hasError('required')">
+                  Required
+                </mat-error>
+                <mat-error *ngIf="pec.hasError('unique')">
+                  PEC has already been used by another site
+                </mat-error>
+              </mat-form-field>
+
+            </div>
+            <div class="col-sm-12">
+
+              <button mat-flat-button
+                      color="primary">Save Site ID
+              </button>
+
+            </div>
+          </div>
+
+        </form>
+      </app-page-section>
+
+      <app-page-section *ngIf="showSendNotification"
+                        class="mb-5">
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>PharmaCare Provider Enrolment</ng-container>
+          <ng-container appPageSubheader2Summary>
+            Send notification to provider enrolment team
+          </ng-container>
+        </app-page-subheader2>
+
+        <button *ngIf="!isNotificationSent; else notificationSent"
+                mat-flat-button
+                color="primary"
+                (click)="onSendNotification()">Send Notification
+        </button>
+
+        <ng-template #notificationSent>
+
+          <app-alert type="success"
+                     icon="check_circle">
+            <ng-container #alertContent
+                          class="alert-content">
+              Notification sent
+            </ng-container>
+          </app-alert>
+
+        </ng-template>
+      </app-page-section>
+
+    </div>
+    <div class="col-md-6">
+
+      <app-page-section *ngIf="organization?.hasClaim">
         <app-page-subheader>
           <ng-container appPageSubheaderTitle>
             <mat-icon class="mr-2">front_hand</mat-icon>
             Signing Authority request for change
           </ng-container>
         </app-page-subheader>
-        <mat-card class="enrolmentCard">
+
+        <mat-card>
           <mat-card-content>
             <app-page-subheader>
               <ng-container appPageSubheaderTitle>Reason for Change</ng-container>
@@ -38,147 +121,77 @@
 
             <button mat-flat-button
                     color="primary"
-                    (click)="onApproveOrgClaim()">Approve Change</button>
+                    (click)="onApproveOrgClaim()">Approve Change
+            </button>
           </mat-card-content>
         </mat-card>
-      </ng-container>
+      </app-page-section>
 
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>
-          <mat-icon class="mr-2">location_city</mat-icon>
-          Organization Information
-        </ng-container>
-        <button mat-icon-button
-                matTooltip="View Organization"
-                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
-          <mat-icon>navigate_next icon</mat-icon>
-        </button>
-      </app-page-subheader>
-      <mat-card class="enrolmentCard">
-        <mat-card-content>
-          <app-overview-container [organization]="organization"
-                                  [showEditRedirect]="false"
-                                  [admin]="true"></app-overview-container>
-        </mat-card-content>
-      </mat-card>
-    </div>
+      <app-page-section>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">location_city</mat-icon>
+            Organization Information
+          </ng-container>
+          <button mat-icon-button
+                  matTooltip="View Organization"
+                  (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+            <mat-icon>navigate_next icon</mat-icon>
+          </button>
+        </app-page-subheader>
 
-    <div class="col-1"></div>
+        <mat-card>
+          <mat-card-content>
+            <app-overview-container [organization]="organization"
+                                    [showEditRedirect]="false"
+                                    [admin]="true"></app-overview-container>
+          </mat-card-content>
+        </mat-card>
+      </app-page-section>
 
-    <div class="col-5">
-      <div class="row mb-5 d-flex justify-content-end">
-        <app-site-registration-actions [siteRegistration]="dataSource?.data[0]"
-                                       (approve)="onApprove($event)"
-                                       (decline)="onDecline($event)"
-                                       (unreject)="onUnreject($event)"
-                                       (delete)="onDelete($event)"
-                                       (enableEditing)="onEnableEditing($event)"
-                                       (escalate)="onEscalate($event)"
-                                       (flag)="onToggleFlagSite($event)">
-        </app-site-registration-actions>
-      </div>
-      <div class="row pl-4">
-        <form (ngSubmit)="onSubmit()"
-              [formGroup]="form"
-              novalidate>
+      <app-page-section>
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">store</mat-icon>
+            Site Information
+          </ng-container>
+          <button mat-icon-button
+                  matTooltip="View Site"
+                  (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
+            <mat-icon>navigate_next icon</mat-icon>
+          </button>
+        </app-page-subheader>
 
-          <section class="mb-3">
+        <mat-card>
+          <mat-card-content>
+            <app-overview-container [site]="site"
+                                    [showEditRedirect]="false"
+                                    [admin]="true"
+                                    [businessLicences]="businessLicences"></app-overview-container>
+          </mat-card-content>
+        </mat-card>
+      </app-page-section>
 
-            <app-page-subheader2>
-              <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
-              <ng-container appPageSubheader2Summary>
-                The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
-                vendor associated to this submission.
-              </ng-container>
-            </app-page-subheader2>
+      <app-page-section *ngIf="site?.remoteUsers.length">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">account_circle</mat-icon>
+            Remote Practitioners
+          </ng-container>
+          <button mat-icon-button
+                  matTooltip="View Remote Practitioners"
+                  (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+            <mat-icon>navigate_next icon</mat-icon>
+          </button>
+        </app-page-subheader>
 
-            <div class="row mb-3">
-              <div class="col-sm-12 col-lg-9 col-xl-5">
+        <mat-card>
+          <mat-card-content>
+            <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
+          </mat-card-content>
+        </mat-card>
+      </app-page-section>
 
-                <mat-form-field class="w-100">
-                  <input matInput
-                         placeholder="Site ID"
-                         formControlName="pec">
-                  <mat-error *ngIf="pec.hasError('required')">
-                    Required
-                  </mat-error>
-                  <mat-error *ngIf="pec.hasError('unique')">
-                    PEC has already been used by another site
-                  </mat-error>
-                </mat-form-field>
-              </div>
-            </div>
-
-            <button mat-flat-button
-                    color="primary">Save Site ID</button>
-
-          </section>
-
-        </form>
-        <app-page-section *ngIf="showSendNotification">
-          <app-page-subheader2>
-            <ng-container appPageSubheader2Title>PharmaCare Provider Enrolment</ng-container>
-            <ng-container appPageSubheader2Summary>
-              Send notification to provider enrolment team
-            </ng-container>
-          </app-page-subheader2>
-
-          <button *ngIf="!isNotificationSent; else NotificationSent"
-                  mat-flat-button
-                  color="primary"
-                  (click)="onSendNotification()">Send Notification</button>
-          <ng-template #NotificationSent>
-            <span class="alert-success d-flex align-items-center"><mat-icon class="mr-2">check_circle</mat-icon>Notification sent</span>
-          </ng-template>
-        </app-page-section>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="row mt-4">
-    <div class="col-6">
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>
-          <mat-icon class="mr-2">store</mat-icon>
-          Site Information
-        </ng-container>
-        <button mat-icon-button
-                matTooltip="View Site"
-                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
-          <mat-icon>navigate_next icon</mat-icon>
-        </button>
-      </app-page-subheader>
-      <mat-card class="enrolmentCard">
-        <mat-card-content>
-          <app-overview-container [site]="site"
-                                  [showEditRedirect]="false"
-                                  [admin]="true"
-                                  [businessLicences]="businessLicences"></app-overview-container>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
-  <div *ngIf="site?.remoteUsers.length"
-       class="row mt-4">
-    <div class="col-6">
-      <app-page-subheader>
-        <ng-container appPageSubheaderTitle>
-          <mat-icon class="mr-2">account_circle</mat-icon>
-          Remote Practitioners
-        </ng-container>
-        <button mat-icon-button
-                matTooltip="View Remote Practitioners"
-                (click)="onRoute([organization.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
-          <mat-icon>navigate_next icon</mat-icon>
-        </button>
-      </app-page-subheader>
-      <mat-card class="enrolmentCard">
-        <mat-card-content>
-          <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
-        </mat-card-content>
-      </mat-card>
     </div>
   </div>
 
