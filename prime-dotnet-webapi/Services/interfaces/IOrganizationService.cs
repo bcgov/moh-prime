@@ -21,10 +21,12 @@ namespace Prime.Services
         Task<int> UpdateCompletedAsync(int organizationId);
         Task DeleteOrganizationAsync(int organizationId);
         Task<Organization> GetOrganizationNoTrackingAsync(int organizationId);
-        Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int siteId);
+        Task<Agreement> EnsureUpdatedOrgAgreementAsync(int organizationId, int careSettingCode, int signingAuthorityId);
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
         Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
+        Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTranferAsync(int organizationId, int signingAuthorityId);
+        Task FinalizeTranferAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
 
         /// <summary>

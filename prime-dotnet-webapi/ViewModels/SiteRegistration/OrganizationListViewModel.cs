@@ -13,6 +13,7 @@ namespace Prime.ViewModels
         public string Name { get; set; }
         public int SigningAuthorityId { get; set; }
         public Party SigningAuthority { get; set; }
+        public bool PendingTransfer { get; set; }
         public string DoingBusinessAs { get; set; }
         public IEnumerable<SiteListViewModel> Sites { get; set; }
         public bool Completed { get; set; }
