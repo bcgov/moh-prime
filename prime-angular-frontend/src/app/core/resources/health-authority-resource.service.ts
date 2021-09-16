@@ -5,6 +5,7 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { Contact } from '@lib/models/contact.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -271,6 +272,38 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be retrieved');
           this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteById error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
+    return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .pipe(
+        map((healthAuthSite: HealthAuthoritySite) => [
+          // TODO no authorized user on health auth site view model
+          // {
+          //   label: 'Authorized User',
+          //   email: healthAuthSite?.authorizedUser?.email
+          // },
+          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
+            label: 'PharmaNet Administrator',
+            email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
+          }),
+          // TODO no privacy officer on health auth site view model
+          // ...ArrayUtils.insertIf(healthAuthSite?.privacyOfficer.email, {
+          //   label: 'Privacy Officer',
+          //   email: healthAuthSite?.privacyOfficer.email
+          // }),
+          // TODO no technical support on health auth site view model
+          // ...ArrayUtils.insertIf(healthAuthSite?.technicalSupport.email, {
+          //   label: 'Technical Support Contact',
+          //   email: healthAuthSite?.technicalSupport.email
+          // })
+        ]),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteContacts error has occurred: ', error);
           throw error;
         })
       );

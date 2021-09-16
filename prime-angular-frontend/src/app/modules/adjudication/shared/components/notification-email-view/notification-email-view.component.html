@@ -8,7 +8,7 @@
 
 <app-page-subheader>
   <ng-container appPageSubheaderTitle>
-    {{(editable) ? "Editing" : "Preview"}}
+    {{ (editable) ? 'Editing' : 'Preview' }}
   </ng-container>
 
   <button *ngIf="Role.MAINTENANCE | inRole"

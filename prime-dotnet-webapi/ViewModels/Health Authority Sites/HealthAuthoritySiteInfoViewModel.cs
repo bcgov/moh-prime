@@ -10,7 +10,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
 
         public string SiteId { get; set; }
 
-        public SecurityGroupCode SecurityGroup { get; set; }
+        public SecurityGroupCode SecurityGroupCode { get; set; }
     }
 
     public class HealthAuthoritySiteInfoValidator : AbstractValidator<HealthAuthoritySiteInfoViewModel>
@@ -19,7 +19,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         {
             RuleFor(x => x.SiteName).NotNull();
             RuleFor(x => x.SiteId).NotNull();
-            RuleFor(x => x.SecurityGroup).NotNull();
+            RuleFor(x => x.SecurityGroupCode).NotNull();
         }
     }
 }

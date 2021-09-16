@@ -69,9 +69,9 @@ export class SiteInformationPageComponent extends AbstractEnrolmentPage implemen
     }
 
     this.busy = this.healthAuthorityResource.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
-      .subscribe(({ siteName, siteId, securityGroup, completed }: HealthAuthoritySite) => {
+      .subscribe(({ siteName, siteId, securityGroupCode, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ siteName, siteId, securityGroup });
+        this.formState.patchValue({ siteName, siteId, securityGroupCode });
       });
   }
 

@@ -16,9 +16,9 @@ export class RolePipe implements PipeTransform {
   ) { }
 
   public transform(roles: Role | Role[], mode: 'in' | 'notIn' = 'in'): boolean {
-    // For simplicity, notIn is now just implmented as a straight negate of 'in'
-    // 'notIn' will yield equivilant result of not having any role from the input
-    // roles.
+    // For simplicity, notIn is now just implemented as a straight negate of 'in'
+    // 'notIn' will yield an equivalent result of not having any role from the
+    // input roles.
     return (mode === 'in') && this.permissionService.hasRoles(roles);
   }
 }
