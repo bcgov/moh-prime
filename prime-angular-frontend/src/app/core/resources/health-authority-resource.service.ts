@@ -278,7 +278,6 @@ export class HealthAuthorityResource {
   }
 
   public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
-    // TODO create separate endpoint to get health auth contacts
     return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
       .pipe(
         map((healthAuthSite: HealthAuthoritySite) => [
