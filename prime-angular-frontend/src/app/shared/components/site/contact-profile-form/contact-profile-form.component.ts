@@ -18,6 +18,7 @@ import { Address } from '@shared/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
 
+// TODO switch from this.toggle to this.hasAddressToggle and exclude list check
 @Component({
   selector: 'app-contact-profile-form',
   templateUrl: './contact-profile-form.component.html',
@@ -114,7 +115,11 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
    * Event handler for the address toggle.
    */
   public onAddressChange({ checked }: MatSlideToggleChange) {
-    if (!checked) {
+    if(!this.hasAddressToggle || this.excludeList.includes('physicalAddress')) {
+      return;
+    }
+
+    if (checked) {
       this.physicalAddress.reset();
     }
 
@@ -148,7 +153,7 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
           if (Address.isNotEmpty(contact.physicalAddress)) {
             // Change the validators based on the toggled value, otherwise
             // the default is required so the address should be displayed
-            this.toggleAddress(true);
+            this.toggleAddress();
             this.expandAddressFields();
           }
         });
