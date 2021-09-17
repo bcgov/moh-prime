@@ -48,7 +48,6 @@ namespace Prime.Models.HealthAuthorities
 
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
 
-        [JsonIgnore]
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
 
         public int? HealthAuthorityTechnicalSupportId { get; set; }
