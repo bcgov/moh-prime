@@ -82,7 +82,6 @@ export class ContactProfileFormComponent implements OnInit, AfterContentInit {
   constructor(
     private formUtilsService: FormUtilsService
   ) {
-    this.hasAddressToggle = true;
     this.excludeList = [];
   }
 
