@@ -65,7 +65,6 @@ export class SiteRegistrationTabsComponent implements OnInit {
   public communityPharmacyColumns: string[];
 
   private careSettingCode: CareSettingEnum;
-
   private routeUtils: RouteUtils;
 
   constructor(
@@ -84,7 +83,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
     this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
 
-    this.communityPracticeColumns = [
+    const commonColumns = [
       'prefixes',
       'displayId',
       'organizationName',
@@ -93,20 +92,16 @@ export class SiteRegistrationTabsComponent implements OnInit {
       'submissionDate',
       'assignedTo',
       'state',
-      'siteId',
+      'siteId'
+    ];
+
+    this.communityPracticeColumns = [
+      ...commonColumns,
       'remoteUsers',
       'actions'
     ];
     this.communityPharmacyColumns = [
-      'prefixes',
-      'displayId',
-      'organizationName',
-      'signingAuthority',
-      'siteDoingBusinessAs',
-      'submissionDate',
-      'assignedTo',
-      'state',
-      'siteId',
+      ...commonColumns,
       'missingBusinessLicence',
       'actions'
     ];
