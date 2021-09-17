@@ -112,36 +112,38 @@
     </div>
   </app-page-section>
 
-  <!-- Must be hidden and not ngIf so that the toggle can be located by ViewChild -->
-  <div [hidden]="!hasAddressToggle && excludeList.includes('physicalAddress')">
-    <div class="mb-4">
-      <mat-slide-toggle #slider
-                        color="primary"
-                        (change)="onAddressChange($event)">
-        The {{ title }}'s mailing address is the same as the site’s address
-      </mat-slide-toggle>
-    </div>
+  <ng-container *ngIf="hasAddressToggle; else noToggle">
+    <ng-container *ngTemplateOutlet="toggle"></ng-container>
+  </ng-container>
 
-    <ng-container *ngIf="!slider.checked">
-      <ng-container *ngTemplateOutlet="address"></ng-container>
-    </ng-container>
-  </div>
-
-  <div [hidden]="hasAddressToggle">
+  <ng-template #noToggle>
     <ng-container *ngTemplateOutlet="address"></ng-container>
-  </div>
+  </ng-template>
 
   <ng-content select="app-page-footer"></ng-content>
 </ng-container>
 
+<ng-template #toggle>
+  <div class="mb-4">
+    <mat-slide-toggle #slider
+                      color="primary"
+                      (change)="onAddressChange($event)">
+      The {{ title }}'s mailing address is the same as the site’s address
+    </mat-slide-toggle>
+  </div>
+
+  <ng-container *ngIf="!slider.checked">
+    <ng-container *ngTemplateOutlet="address"></ng-container>
+  </ng-container>
+</ng-template>
+
 <ng-template #address>
-  <app-page-section>
+  <app-page-section *ngIf="!excludeList.includes('physicalAddress')">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>Address</ng-container>
     </app-page-subheader2>
 
-    <app-address-form *ngIf="!excludeList.includes('physicalAddress')"
-                      [form]="physicalAddress"
+    <app-address-form [form]="physicalAddress"
                       [showManualButton]="true"
                       [showAddressFields]="showAddressFields"></app-address-form>
   </app-page-section>
