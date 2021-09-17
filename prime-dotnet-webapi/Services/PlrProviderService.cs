@@ -61,8 +61,13 @@ namespace Prime.Services
             return existingPlrProvider == null ? dataObject.Id : existingPlrProvider.Id;
         }
 
-        public async Task<IEnumerable<PlrViewModel>> GetPlrDataByCollegeIdsAsync(IEnumerable<string> collegeIds)
+        public async Task<IEnumerable<PlrViewModel>> GetMatchingPlrDataAsync(IEnumerable<string> collegeIds)
         {
+            if (collegeIds == null || !collegeIds.Any())
+            {
+                return Enumerable.Empty<PlrViewModel>();
+            }
+
             IQueryable<PlrRoleType> plrRoleTypes = _context.Set<PlrRoleType>();
             IQueryable<PlrStatusReason> plrStatusReasons = _context.Set<PlrStatusReason>();
 

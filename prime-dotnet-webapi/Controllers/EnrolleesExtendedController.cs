@@ -712,7 +712,7 @@ namespace Prime.Controllers
 
         // GET: api/Enrollees/5/plrs
         /// <summary>
-        /// Gets all PLR data (matched by collegeId)
+        /// Gets all PLR data matching the Enrollee's License Number(s)
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/plrs", Name = nameof(GetPlrData))]
@@ -723,17 +723,14 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<PlrViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetPlrData(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
 
-            var collegeIds = enrollee.Certifications.Select(c => c.LicenseNumber);
+            var certifications = await _enrolleeService.GetCertificationsAsync(enrolleeId);
 
-            var result = await _plrProviderService.GetPlrDataByCollegeIdsAsync(collegeIds);
-            return Ok(result);
+            return Ok(await _plrProviderService.GetMatchingPlrDataAsync(certifications.Select(c => c.LicenseNumber)));
         }
     }
 }
