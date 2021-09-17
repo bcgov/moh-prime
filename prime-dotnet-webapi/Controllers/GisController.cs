@@ -198,7 +198,8 @@ namespace Prime.Controllers
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
             }
-            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+
+            if (gisEnrolment.LdapLoginSuccessDate == null || !gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
