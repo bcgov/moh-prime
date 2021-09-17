@@ -18,7 +18,6 @@ import { Address } from '@shared/models/address.model';
 import { Contact } from '@lib/models/contact.model';
 import { PageFooterComponent } from '@shared/components/pages/page-footer/page-footer.component';
 
-// TODO switch from this.toggle to this.hasAddressToggle and exclude list check
 @Component({
   selector: 'app-contact-profile-form',
   templateUrl: './contact-profile-form.component.html',
