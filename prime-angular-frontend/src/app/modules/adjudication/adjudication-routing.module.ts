@@ -51,6 +51,7 @@ import { OrganizationToaMaintenanceViewPageComponent } from './pages/organizatio
 import {
   LicenseClassesMaintenancePageComponent
 } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
+import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
 
 const routes: Routes = [
   {
@@ -372,8 +373,7 @@ const routes: Routes = [
                 children: [
                   {
                     path: '',
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteOverviewComponent,
+                    component: SiteOverviewPageComponent,
                     data: { title: 'Site Overview' }
                   },
                   {

@@ -76,6 +76,8 @@ import { OrganizationToaMaintenanceListPageComponent } from './pages/organizatio
 import { OrganizationToaMaintenanceViewPageComponent } from './pages/organization-toa-maintenance-view-page/organization-toa-maintenance-view-page.component';
 import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
+import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
+import { HealthAuthoritySiteSummaryComponent } from './shared/components/health-authority-site-summary/health-authority-site-summary.component';
 
 @NgModule({
   declarations: [
@@ -145,7 +147,9 @@ import { PlrInfoComponent } from './shared/components/plr-info/plr-info.componen
     OrganizationToaMaintenanceListPageComponent,
     OrganizationToaMaintenanceViewPageComponent,
     LicenseClassesMaintenancePageComponent,
-    PlrInfoComponent
+    PlrInfoComponent,
+    SiteOverviewPageComponent,
+    HealthAuthoritySiteSummaryComponent
   ],
   imports: [
     AdjudicationRoutingModule,
@@ -154,4 +158,4 @@ import { PlrInfoComponent } from './shared/components/plr-info/plr-info.componen
     EditorModule
   ]
 })
-export class AdjudicationModule { }
+export class AdjudicationModule {}

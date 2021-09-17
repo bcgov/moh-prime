@@ -1,0 +1,128 @@
+<table mat-table
+     [dataSource]="dataSource"
+     class="w-100">
+
+	<ng-container matColumnDef="orgName">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Health Authority Name </th>
+	  <td mat-cell
+	      *matCellDef="let row;">{{ HealthAuthorityEnum[row.healthAuthorityOrganizationId] | case : 'snake' : 'space' | capitalize : true }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="siteName">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Site Name </th>
+	  <td mat-cell
+	      *matCellDef="let row;"> {{ row.siteName | default }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="submissionDate">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Submission Date </th>
+	  <td mat-cell
+	      *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="assignedTo">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Assigned To </th>
+	  <!-- TODO missing adjudicatorIdir on model to populate column -->
+	  <td mat-cell
+	      *matCellDef="let row;"> {{ null | default }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="state">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> State </th>
+	  <td mat-cell
+	      *matCellDef="let row;"
+	      class="status"
+	      [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
+	      [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
+	      [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
+	      [class.declined]="row.status === SiteStatusType.LOCKED">
+	    {{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}
+	  </td>
+	</ng-container>
+
+	<ng-container matColumnDef="siteId">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Site ID </th>
+	  <td mat-cell
+	      *matCellDef="let row;"> {{ row.siteId | default }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="remoteUsers">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col"> Remote Users </th>
+	  <td mat-cell
+	      *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
+	</ng-container>
+
+	<ng-container matColumnDef="siteActions">
+	  <th mat-header-cell
+	      *matHeaderCellDef
+	      scope="col">&nbsp;</th>
+	  <td mat-cell
+	      *matCellDef="let row;"
+	      class="text-right">
+
+	      <button mat-icon-button
+	              [matMenuTriggerFor]="menu">
+	        <mat-icon>more_vert</mat-icon>
+	      </button>
+
+	      <mat-menu #menu="matMenu">
+	        <button mat-menu-item
+	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id])">
+	          <mat-icon>all_inclusive</mat-icon>
+	          <span>Overview</span>
+	        </button>
+	        <button mat-menu-item
+	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.EVENT_LOG])">
+	          <mat-icon>list_alt</mat-icon>
+	          <span>Event Log</span>
+	        </button>
+	        <button mat-menu-item
+	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+	          <mat-icon>message</mat-icon>
+	          <span>Add and View Notes</span>
+	        </button>
+
+	        <button mat-menu-item
+	                (click)="onNotify(row.id)">
+	          <mat-icon>email</mat-icon>
+	          <span>Send Email</span>
+	        </button>
+
+	        <button mat-menu-item
+	                *ngIf="!row?.adjudicatorIdir"
+	                [disabled]="!(Role.EDIT_SITE | inRole)"
+	                (click)="onAssign(row.id)">
+	          <mat-icon>pan_tool</mat-icon>
+	          <span>Assign Registration</span>
+	        </button>
+	        <button mat-menu-item
+	                *ngIf="row?.adjudicatorIdir"
+	                [disabled]="!(Role.EDIT_SITE | inRole)"
+	                (click)="onReassign(row.id)">
+	          <mat-icon>pan_tool</mat-icon>
+	          <span>Reassign Registration</span>
+	        </button>
+
+	      </mat-menu>
+	  </td>
+	</ng-container>
+
+	<tr mat-header-row
+	    *matHeaderRowDef="siteColumns; sticky: true"></tr>
+	<tr mat-row
+	    *matRowDef="let row; columns: siteColumns;"></tr>
+</table>

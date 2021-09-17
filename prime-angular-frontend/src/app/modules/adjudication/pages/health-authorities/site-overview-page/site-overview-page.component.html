@@ -1,0 +1,153 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Overview</app-page-header>
+  <div class="row">
+    <div class="col py-5">
+      <app-health-authority-site-summary *ngIf="site" [site]="site">
+      </app-health-authority-site-summary>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6 order-md-12 mb-3">
+        <div class="d-flex justify-content-end mb-4">
+          <app-site-registration-actions *ngIf="site" 
+                                       [siteRegistration]="site"
+                                       (approve)="onApprove($event)"
+                                       (decline)="onDecline($event)"
+                                       (unreject)="onUnreject($event)"
+                                       (delete)="onDelete($event)"
+                                       (enableEditing)="onEnableEditing($event)"
+                                       (escalate)="onEscalate($event)"
+                                       (flag)="onToggleFlagSite($event)"></app-site-registration-actions>
+        </div>
+
+        <app-page-section class="mb-5 mt-3">
+          <app-page-subheader2>
+            <ng-container appPageSubheader2Title>Enter Site ID</ng-container>
+            <ng-container appPageSubheader2Summary>
+              The Site ID will be sent to the Signing Authority, Administrator of PharmaNet onboarding and the
+              vendor associated to this submission.
+            </ng-container>
+          </app-page-subheader2>
+
+          <form (ngSubmit)="onSubmit()"
+                [formGroup]="form"
+                novalidate>
+
+            <div class="row">
+              <div class="col-sm-12 col-lg-9 col-xl-5">
+
+                <mat-form-field class="w-100">
+                  <input matInput
+                         placeholder="Site ID"
+                         formControlName="pec">
+                  <mat-error *ngIf="pec.hasError('required')">
+                    Required
+                  </mat-error>
+                  <mat-error *ngIf="pec.hasError('unique')">
+                    PEC has already been used by another site
+                  </mat-error>
+                </mat-form-field>
+
+              </div>
+              <div class="col-sm-12">
+
+                <button mat-flat-button
+                        color="primary">Save Site ID
+                </button>
+
+              </div>
+            </div>
+
+          </form>
+        </app-page-section>
+      </div>
+      <div class="col-md-6">
+        <app-page-section *ngIf="healthAuthority">
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>
+              <mat-icon class="mr-2">location_city</mat-icon>
+              Health Authority Information
+            </ng-container>
+            <button mat-icon-button
+                    matTooltip="View Organization"
+                    (click)="onRoute([0, AdjudicationRoutes.SITE_REGISTRATION, 0, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+              <mat-icon>navigate_next icon</mat-icon>
+            </button>
+          </app-page-subheader>
+
+<!--           <mat-card>
+            <mat-card-content>
+              <app-overview-container [organization]="healthAuthority"
+                                      [showEditRedirect]="false"
+                                      [admin]="true"></app-overview-container>
+            </mat-card-content>
+          </mat-card> -->
+        </app-page-section>
+
+        <app-page-section>
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>
+              <mat-icon class="mr-2">store</mat-icon>
+              Site Information
+            </ng-container>
+            <button mat-icon-button
+                    matTooltip="View Site"
+                    (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
+              <mat-icon>navigate_next icon</mat-icon>
+            </button>
+          </app-page-subheader>
+
+<!--           <mat-card>
+            <mat-card-content>
+              <app-overview-container [site]="site"
+                                      [showEditRedirect]="false"
+                                      [admin]="true"></app-overview-container>
+            </mat-card-content>
+          </mat-card> -->
+        </app-page-section>
+
+        <app-page-section *ngIf="site?.remoteUsers.length">
+          <app-page-subheader>
+            <ng-container appPageSubheaderTitle>
+              <mat-icon class="mr-2">account_circle</mat-icon>
+              Remote Practitioners
+            </ng-container>
+            <button mat-icon-button
+                    matTooltip="View Remote Practitioners"
+                    (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+              <mat-icon>navigate_next icon</mat-icon>
+            </button>
+          </app-page-subheader>
+
+<!--           <mat-card>
+            <mat-card-content>
+              <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
+            </mat-card-content>
+          </mat-card> -->
+        </app-page-section>
+
+      <app-page-section *ngIf="site?.remoteUsers.length">
+        <app-page-subheader>
+          <ng-container appPageSubheaderTitle>
+            <mat-icon class="mr-2">account_circle</mat-icon>
+            Remote Practitioners
+          </ng-container>
+          <button mat-icon-button
+                  matTooltip="View Remote Practitioners"
+                  (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
+            <mat-icon>navigate_next icon</mat-icon>
+          </button>
+        </app-page-subheader>
+
+<!--         <mat-card>
+          <mat-card-content>
+            <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
+          </mat-card-content>
+        </mat-card> -->
+      </app-page-section>        
+      </div>
+    </div>
+  </div>
+</app-page>
