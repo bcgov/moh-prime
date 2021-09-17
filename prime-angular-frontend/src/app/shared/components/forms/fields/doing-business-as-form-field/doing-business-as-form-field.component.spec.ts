@@ -1,8 +1,9 @@
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { NgxMaterialModule } from '@lib/modules/ngx-material/ngx-material.module';
@@ -18,7 +19,8 @@ describe('DoingBusinessAsFormFieldComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
-        NgxMaterialModule
+        NgxMaterialModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         DoingBusinessAsFormFieldComponent
@@ -36,10 +38,12 @@ describe('DoingBusinessAsFormFieldComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DoingBusinessAsFormFieldComponent);
     component = fixture.componentInstance;
+    component.doingBusinessAs = new FormControl('INPUT_BINDING');
     fixture.detectChanges();
   });
 
   it('should create', () => {
+    component.doingBusinessAs = new FormControl();
     expect(component).toBeTruthy();
   });
 });

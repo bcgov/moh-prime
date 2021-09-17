@@ -2,18 +2,17 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
-using Prime.Models;
 using Prime.Engines;
-using Prime.ViewModels.PaperEnrollees;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
-using DelegateDecompiler.EntityFrameworkCore;
+using Prime.Models;
+using Prime.ViewModels.PaperEnrollees;
 
 namespace Prime.Services
 {
@@ -21,30 +20,27 @@ namespace Prime.Services
     {
         private const string PaperGpidPrefix = "NOBCSC";
 
-        private readonly ILogger _logger;
-        private readonly IMapper _mapper;
-        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
-        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
         private readonly IBusinessEventService _businessEventService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IEnrolleeAgreementService _enrolleeAgreementService;
+        private readonly IEnrolleeSubmissionService _enrolleeSubmissionService;
+        private readonly IMapper _mapper;
 
         public EnrolleePaperSubmissionService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
             ILogger<EnrolleePaperSubmissionService> logger,
-            IMapper mapper,
-            IEnrolleeSubmissionService enrolleeSubmissionService,
-            IEnrolleeAgreementService enrolleeAgreementService,
+            IBusinessEventService businessEventService,
             IDocumentManagerClient documentClient,
-            IBusinessEventService businessEventService)
-            : base(context, httpContext)
+            IEnrolleeAgreementService enrolleeAgreementService,
+            IEnrolleeSubmissionService enrolleeSubmissionService,
+            IMapper mapper)
+            : base(context, logger)
         {
-            _logger = logger;
-            _mapper = mapper;
-            _enrolleeSubmissionService = enrolleeSubmissionService;
-            _enrolleeAgreementService = enrolleeAgreementService;
             _businessEventService = businessEventService;
             _documentClient = documentClient;
+            _enrolleeAgreementService = enrolleeAgreementService;
+            _enrolleeSubmissionService = enrolleeSubmissionService;
+            _mapper = mapper;
         }
 
         public async Task<bool> PaperSubmissionIsEditableAsync(int enrolleeId)
@@ -190,25 +186,26 @@ namespace Prime.Services
             await _enrolleeAgreementService.AcceptCurrentEnrolleeAgreementAsync(enrolleeId);
         }
 
-        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<Guid> documentGuids)
+        public async Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents)
         {
-            foreach (var guid in documentGuids)
+            foreach (var document in documents)
             {
-                var filename = await _documentClient.FinalizeUploadAsync(guid, DestinationFolders.EnrolleeAdjudicationDocuments);
+                var filename = await _documentClient.FinalizeUploadAsync(document.DocumentGuid, DestinationFolders.EnrolleeAdjudicationDocuments);
 
                 if (string.IsNullOrWhiteSpace(filename))
                 {
-                    _logger.LogError($"Could not finalize document {guid}");
+                    _logger.LogError($"Could not finalize document {document}");
                     continue;
                 }
 
                 var adjudicationDocument = new EnrolleeAdjudicationDocument
                 {
-                    DocumentGuid = guid,
+                    DocumentGuid = document.DocumentGuid,
                     EnrolleeId = enrolleeId,
                     Filename = filename,
                     UploadedDate = DateTimeOffset.Now,
-                    AdjudicatorId = adminId
+                    AdjudicatorId = adminId,
+                    DocumentType = document.DocumentType
                 };
                 _context.EnrolleeAdjudicationDocuments.Add(adjudicationDocument);
             }

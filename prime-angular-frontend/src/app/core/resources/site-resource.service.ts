@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiResourceUtilsService } from '@core/resources/api-resource-utils.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -71,6 +72,27 @@ export class SiteResource {
           this.logger.error('[SiteRegistration] SiteResource::getSiteById error has occurred: ', error);
           throw error;
         })
+      );
+  }
+
+  public getSiteContacts(siteId: number): Observable<{ label: string, email: string }[]> {
+    return this.getSiteById(siteId)
+      .pipe(
+        map((site: Site) => [
+          { label: 'Signing Authority', email: site.provisioner.email },
+          ...ArrayUtils.insertIf(site?.administratorPharmaNet, {
+            label: 'PharmaNet Administrator',
+            email: site?.administratorPharmaNet.email
+          }),
+          ...ArrayUtils.insertIf(site?.privacyOfficer.email, {
+            label: 'Privacy Officer',
+            email: site?.privacyOfficer.email
+          }),
+          ...ArrayUtils.insertIf(site?.technicalSupport.email, {
+            label: 'Technical Support Contact',
+            email: site?.technicalSupport.email
+          })
+        ])
       );
   }
 
@@ -513,6 +535,19 @@ export class SiteResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Site business events could not be retrieved');
           this.logger.error('[SiteRegistration] SiteResource::getSiteBusinessEvents error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public pecExists(pec: string): Observable<boolean> {
+    const params = this.apiResourceUtilsService.makeHttpParams({ pec });
+    return this.apiResource.get(`sites/pec-exists`, params)
+      .pipe(
+        map((response: ApiHttpResponse<boolean>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Could not check PEC existence');
+          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
           throw error;
         })
       );

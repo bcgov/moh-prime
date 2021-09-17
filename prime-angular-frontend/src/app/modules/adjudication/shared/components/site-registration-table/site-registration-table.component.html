@@ -1,227 +1,214 @@
-<div class="row">
-  <div class="col">
+<table mat-table
+       [dataSource]="dataSource"
+       class="w-100">
 
-    <table mat-table
-           [dataSource]="dataSource"
-           class="w-100">
-
-      <ng-container matColumnDef="prefixes">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col">&nbsp;</th>
-        <td mat-cell
-            *matCellDef="let row;">
-          <div class="flex-container flex-wrap d-flex">
-            <button *ngIf="row.hasClaim"
-                    mat-icon-button
-                    color="warn"
-                    (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
-              <mat-icon>front_hand</mat-icon>
-            </button>
-            <app-contextual-site-notification *ngIf="row.hasNotification"
-                                              class="align-self-start"
-                                              [siteId]="row.siteId"
-                                              (removed)="onReload($event)"></app-contextual-site-notification>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="displayId">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Reference ID </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.displayId }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="organizationName">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Organization Name </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.name | default: '' }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="signingAuthority">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Signing Authority </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="siteDoingBusinessAs">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Site Name (Doing Business As) </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.siteDoingBusinessAs | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="submissionDate">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Submission Date </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="assignedTo">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Assigned To </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="state">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> State </th>
-        <td mat-cell
-            *matCellDef="let row;"
-            class="status"
-            [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
-            [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
-            [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
-            [class.declined]="row.status === SiteStatusType.LOCKED">
-          <div class="d-flex align-items-center">
-            <span class="mr-1">{{ displayStatus(row.status) | capitalize: true | default }}</span>
-            <mat-icon *ngIf="row?.flagged"
-                      matTooltip="Site Flagged"
-                      matTooltipPosition="after">flag
-            </mat-icon>
-          </div>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="siteId">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Site ID </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.pec | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="remoteUsers">
-        <th mat-header-cell
-            *matHeaderCellDef> Remote Users </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ remoteUsers(row) }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="careSetting">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Care Setting </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ row.careSettingCode | careSetting: 'abbr' | join | default }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="missingBusinessLicence">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col"> Missing Business Licence </th>
-        <td mat-cell
-            *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
-          ? !row.businessLicence?.businessLicenceDocument : null) | yesNo | default: 'N/A' }} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell
-            *matHeaderCellDef
-            scope="col">
-          <ng-container [ngTemplateOutlet]="bulkActions"></ng-container>
-        </th>
-        <td mat-cell
-            *matCellDef="let row;"
-            class="text-right">
-
-          <ng-container [ngTemplateOutlet]="menu"
-                        [ngTemplateOutletContext]="{ row: row }"></ng-container>
-
-        </td>
-      </ng-container>
-
-      <tr mat-header-row
-          *matHeaderRowDef="columns; sticky: true"></tr>
-      <tr mat-row
-          *matRowDef="let row; columns: columns;"></tr>
-    </table>
-
-    <p *ngIf="!dataSource?.data.length"
-       class="px-4 py-2 text-muted">
-      No Sites Found
-    </p>
-
-    <ng-template #bulkActions
-                 let-row="row">
-      <button mat-icon-button
-              [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.BANNERS])">
-          <mat-icon>bookmark</mat-icon>
-          <span>Site Banners</span>
-        </button>
-        <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
-          <mat-icon>build</mat-icon>
-          <span>Maintenance</span>
-        </button>
-      </mat-menu>
-    </ng-template>
-
-    <ng-template #menu
-                 let-row="row">
-      <button mat-icon-button
-              [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item
+  <ng-container matColumnDef="prefixes">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col">&nbsp;</th>
+    <td mat-cell
+        *matCellDef="let row;">
+      <div class="flex-container flex-wrap d-flex">
+        <button *ngIf="row.hasClaim"
+                mat-icon-button
+                color="warn"
                 (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
-          <mat-icon>all_inclusive</mat-icon>
-          <span>Overview</span>
+          <mat-icon>front_hand</mat-icon>
         </button>
-        <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.EVENT_LOG])">
-          <mat-icon>list_alt</mat-icon>
-          <span>Event Log</span>
-        </button>
-        <button mat-menu-item
-                (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATOR_NOTES])">
-          <mat-icon>message</mat-icon>
-          <span>Add and View Notes</span>
-        </button>
+        <app-contextual-site-notification *ngIf="row.hasNotification"
+                                          class="align-self-start"
+                                          [siteId]="row.siteId"
+                                          (removed)="onReload($event)"></app-contextual-site-notification>
+      </div>
+    </td>
+  </ng-container>
 
-        <button mat-menu-item
-                (click)="onNotify(row.siteId)">
-          <mat-icon>email</mat-icon>
-          <span>Send Email</span>
-        </button>
+  <ng-container matColumnDef="displayId">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Reference ID </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.displayId }} </td>
+  </ng-container>
 
-        <button mat-menu-item
-                *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)"
-                (click)="onAssign(row.siteId)">
-          <mat-icon>pan_tool</mat-icon>
-          <span>Assign Registration</span>
-        </button>
-        <button mat-menu-item
-                *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)"
-                (click)="onReassign(row.siteId)">
-          <mat-icon>pan_tool</mat-icon>
-          <span>Reassign Registration</span>
-        </button>
+  <ng-container matColumnDef="organizationName">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Organization Name </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.name | default: '' }} </td>
+  </ng-container>
 
-      </mat-menu>
-    </ng-template>
+  <ng-container matColumnDef="signingAuthority">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Signing Authority </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.signingAuthority | fullname | default: '' }} </td>
+  </ng-container>
 
-  </div>
-</div>
+  <ng-container matColumnDef="siteDoingBusinessAs">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Site Name (Doing Business As) </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.siteDoingBusinessAs | default }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="submissionDate">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Submission Date </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.submittedDate | formatDate | default }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="assignedTo">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Assigned To </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.adjudicatorIdir | replace: '@idir': '' | default }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="state">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> State </th>
+    <td mat-cell
+        *matCellDef="let row;"
+        class="status"
+        [class.editable]="row.status === SiteStatusType.EDITABLE && !row.approvedDate"
+        [class.under-review]="row.status === SiteStatusType.IN_REVIEW"
+        [class.approved]="row.status === SiteStatusType.EDITABLE && !!row.approvedDate"
+        [class.declined]="row.status === SiteStatusType.LOCKED">
+      <div class="d-flex align-items-center">
+        <span class="mr-1">{{ SiteStatusType[row.status] | case : 'snake' : 'space' | capitalize : true | default: 'Editable' }}</span>
+        <mat-icon *ngIf="row?.flagged"
+                  matTooltip="Site Flagged"
+                  matTooltipPosition="after">flag
+        </mat-icon>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="siteId">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Site ID </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.pec | default }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="remoteUsers">
+    <th mat-header-cell
+        *matHeaderCellDef> Remote Users </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ remoteUsers(row) }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="careSetting">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Care Setting </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ row.careSettingCode | careSetting: 'abbr' | join | default }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="missingBusinessLicence">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col"> Missing Business Licence </th>
+    <td mat-cell
+        *matCellDef="let row;"> {{ ((row.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+      ? !row.businessLicence?.businessLicenceDocument : null) | yesNo | default: 'N/A' }} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell
+        *matHeaderCellDef
+        scope="col">
+
+      <ng-container [ngTemplateOutlet]="bulkActions"></ng-container>
+
+    </th>
+    <td mat-cell
+        *matCellDef="let row;"
+        class="text-right">
+
+      <ng-container [ngTemplateOutlet]="menu"
+                    [ngTemplateOutletContext]="{ row: row }"></ng-container>
+
+    </td>
+  </ng-container>
+
+  <tr mat-header-row
+      *matHeaderRowDef="columns; sticky: true"></tr>
+  <tr mat-row
+      *matRowDef="let row; columns: columns;"></tr>
+</table>
+
+<p *ngIf="!dataSource?.data.length"
+   class="px-4 py-2 text-muted">
+  No Sites Found
+</p>
+
+<ng-template #bulkActions
+             let-row="row">
+  <button mat-icon-button
+          [matMenuTriggerFor]="menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item
+            (click)="onRoute([AdjudicationRoutes.BANNERS])">
+      <mat-icon>bookmark</mat-icon>
+      <span>Site Banners</span>
+    </button>
+    <button mat-menu-item
+            (click)="onRoute([AdjudicationRoutes.MAINTENANCE])">
+      <mat-icon>build</mat-icon>
+      <span>Maintenance</span>
+    </button>
+  </mat-menu>
+</ng-template>
+
+<ng-template #menu
+             let-row="row">
+  <button mat-icon-button
+          [matMenuTriggerFor]="menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId])">
+      <mat-icon>all_inclusive</mat-icon>
+      <span>Overview</span>
+    </button>
+    <button mat-menu-item
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.EVENT_LOG])">
+      <mat-icon>list_alt</mat-icon>
+      <span>Event Log</span>
+    </button>
+    <button mat-menu-item
+            (click)="onRoute([row.organizationId, AdjudicationRoutes.SITE_REGISTRATION, row.siteId, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+      <mat-icon>message</mat-icon>
+      <span>Add and View Notes</span>
+    </button>
+
+    <button mat-menu-item
+            (click)="onNotify(row.siteId)">
+      <mat-icon>email</mat-icon>
+      <span>Send Email</span>
+    </button>
+
+    <button mat-menu-item
+            [disabled]="!(Role.EDIT_SITE | inRole)"
+            (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
+      <mat-icon>pan_tool</mat-icon>
+      <span>{{ (!row?.adjudicatorIdir) ? 'Assign' : 'Reassign' }} Registration</span>
+    </button>
+  </mat-menu>
+</ng-template>

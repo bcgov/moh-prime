@@ -24,23 +24,33 @@
 
       <div class="row">
         <div class="col">
+
           <mat-form-field class="w-100">
-            <mat-label>Site ID</mat-label>
+            <mat-label>Site ID/PEC Code</mat-label>
             <input matInput
                    [formControl]="formState.siteId">
             <mat-error>Required</mat-error>
           </mat-form-field>
+
         </div>
       </div>
 
       <div class="row">
         <div class="col">
+
           <mat-form-field class="w-100">
-            <input matInput
-                   placeholder="Security Group"
-                   [formControl]="formState.securityGroup">
-            <mat-error>Required</mat-error>
+            <mat-label>Security Group</mat-label>
+            <mat-select [formControl]="formState.securityGroupCode">
+              <mat-option *ngFor="let securityGroup of securityGroups"
+                          [value]="securityGroup.code">
+                {{ securityGroup.name }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formState.securityGroupCode.hasError('required')">
+              Required
+            </mat-error>
           </mat-form-field>
+
         </div>
       </div>
     </section>

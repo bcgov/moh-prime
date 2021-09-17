@@ -5,6 +5,7 @@ import { AbstractFormStateService } from '@lib/classes/abstract-form-state-servi
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { SiteResource } from '@core/resources/site-resource.service';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -40,7 +41,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService,
-    private formUtilsService: FormUtilsService
+    private formUtilsService: FormUtilsService,
+    private siteResource: SiteResource
   ) {
     super(fb, routeStateService, logger);
 
@@ -52,7 +54,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Convert JSON into reactive form abstract controls, which can
    * only be set more than once when explicitly forced.
    */
-  public setForm(site: Site, forcePatch: boolean = false) {
+  public setForm(site: Site, forcePatch: boolean = false): void {
     if (!site) {
       return;
     }
@@ -131,9 +133,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Initialize and configure the forms for patching, which is also used
    * clear previous form data from the service.
    */
-  protected buildForms() {
+  protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb);
+    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb, this.siteResource);
     this.businessLicenceRenewalPageFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);

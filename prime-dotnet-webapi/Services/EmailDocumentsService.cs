@@ -1,40 +1,40 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
-using Prime.Models;
 using Prime.HttpClients;
-using Prime.Services.Razor;
+using Prime.Models;
 using Prime.Models.Documents;
+using Prime.Services.Razor;
 using Prime.ViewModels.SiteRegistration;
 
 namespace Prime.Services.EmailInternal
 {
     public class EmailDocumentsService : BaseService, IEmailDocumentsService
     {
-        private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IDocumentAccessTokenService _documentAccessTokenService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IOrganizationAgreementService _organizationAgreementService;
         private readonly IOrganizationService _organizationService;
         private readonly IPdfService _pdfService;
         private readonly IRazorConverterService _razorConverterService;
 
         public EmailDocumentsService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IOrganizationAgreementService organizationAgreementService,
+            ILogger<EmailDocumentsService> logger,
             IDocumentAccessTokenService documentAccessTokenService,
             IDocumentManagerClient documentClient,
+            IOrganizationAgreementService organizationAgreementService,
             IOrganizationService organizationService,
             IPdfService pdfService,
             IRazorConverterService razorConverterService)
-            : base(context, httpContext)
+            : base(context, logger)
         {
-            _organizationAgreementService = organizationAgreementService;
             _documentAccessTokenService = documentAccessTokenService;
             _documentClient = documentClient;
+            _organizationAgreementService = organizationAgreementService;
             _organizationService = organizationService;
             _pdfService = pdfService;
             _razorConverterService = razorConverterService;

@@ -32,6 +32,7 @@ import { CareSettingPipe } from '@shared/pipes/care-setting.pipe';
 import { JoinPipe } from '@shared/pipes/join.pipe';
 import { RolePipe } from '@shared/pipes/role-pipe';
 import { InRolePipe } from '@shared/pipes/in-role-pipe';
+import { ContainsPipe } from '@shared/pipes/contains.pipe';
 import { AddressFormComponent } from '@shared/components/forms/address-form/address-form.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { ProgressIndicatorComponent } from '@shared/components/progress-indicator/progress-indicator.component';
@@ -108,6 +109,8 @@ import { OboSiteFormComponent } from '@shared/components/obo-site-form/obo-site-
 import { ExpiryAlertComponent } from '@shared/components/alerts/expiry-alert/expiry-alert.component';
 import { InfographicComponent } from './components/infographic/infographic.component';
 import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-logger/error-logger.component';
+import { DocumentAttachmentsComponent } from '@shared/components/document-attachments/document-attachments.component';
+import { DocumentAttachmentComponent } from '@shared/components/document-attachment/document-attachment.component';
 
 @NgModule({
   declarations: [
@@ -124,8 +127,11 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     AddressPipe,
     RolePipe,
     InRolePipe,
-    AddressFormComponent,
     DefaultPipe,
+    ContainsPipe,
+    CareSettingPipe,
+    JoinPipe,
+    AddressFormComponent,
     ConfirmDialogComponent,
     PageComponent,
     ProgressIndicatorComponent,
@@ -169,8 +175,6 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     AccessCodeFormComponent,
     ContactInformationFormComponent,
     SendEmailComponent,
-    CareSettingPipe,
-    JoinPipe,
     PreferredNameFormComponent,
     ToggleContentComponent,
     BcscProfileComponent,
@@ -198,7 +202,9 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     OboSiteFormComponent,
     ExpiryAlertComponent,
     ErrorLoggerComponent,
-    InfographicComponent
+    InfographicComponent,
+    DocumentAttachmentsComponent,
+    DocumentAttachmentComponent
   ],
   imports: [
     CommonModule,
@@ -233,6 +239,7 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     AddressPipe,
     RolePipe,
     InRolePipe,
+    ContainsPipe,
     AddressFormComponent,
     PageComponent,
     PageHeaderComponent,
@@ -294,7 +301,9 @@ import { ErrorLoggerComponent } from '@shared/components/dialogs/content/error-l
     OptionsFormComponent,
     OboSiteFormComponent,
     InfographicComponent,
-    ExpiryAlertComponent
+    ExpiryAlertComponent,
+    DocumentAttachmentsComponent,
+    DocumentAttachmentComponent
   ],
   providers: [
     FullnamePipe,

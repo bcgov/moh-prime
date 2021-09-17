@@ -11841,6 +11841,9 @@ namespace Prime.Migrations
                     b.Property<Guid>("DocumentGuid")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("DocumentType")
+                        .HasColumnType("integer");
+
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
@@ -12506,8 +12509,8 @@ namespace Prime.Migrations
                     b.Property<int?>("ProvisionerId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SecurityGroup")
-                        .HasColumnType("text");
+                    b.Property<int>("SecurityGroupCode")
+                        .HasColumnType("integer");
 
                     b.Property<string>("SiteId")
                         .HasColumnType("text");
@@ -12616,6 +12619,67 @@ namespace Prime.Migrations
                     b.HasIndex("PhysicalAddressId");
 
                     b.ToTable("PrivacyOffice");
+                });
+
+            modelBuilder.Entity("Prime.Models.HealthAuthorities.SecurityGroup", b =>
+                {
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Code");
+
+                    b.ToTable("SecurityGroupLookup");
+
+                    b.HasData(
+                        new
+                        {
+                            Code = 1,
+                            Name = "EMRMD (EMR - Community-based Clinics)"
+                        },
+                        new
+                        {
+                            Code = 2,
+                            Name = "HAD (Hospital Admitting)"
+                        },
+                        new
+                        {
+                            Code = 3,
+                            Name = "HAI (HA Viewer)"
+                        },
+                        new
+                        {
+                            Code = 4,
+                            Name = "HAP (Hospital Access)"
+                        },
+                        new
+                        {
+                            Code = 5,
+                            Name = "HNF (Emergency Department Access (EDAP))"
+                        },
+                        new
+                        {
+                            Code = 6,
+                            Name = "IP (In-patient Pharmacies - Hospital)"
+                        },
+                        new
+                        {
+                            Code = 7,
+                            Name = "MD (COMPAP)"
+                        },
+                        new
+                        {
+                            Code = 8,
+                            Name = "OP (Hospital Outpatient Pharmacy)"
+                        },
+                        new
+                        {
+                            Code = 9,
+                            Name = "VHA (Cerner Integration Site)"
+                        });
                 });
 
             modelBuilder.Entity("Prime.Models.HealthAuthority", b =>
@@ -13967,12 +14031,11 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("current_timestamp");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("IpAddress")
+                    b.Property<string>("LocationIpAddress")
                         .HasColumnType("text");
 
                     b.Property<string>("PharmacyId")
@@ -13985,6 +14048,9 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
                         .HasColumnType("text");
 
                     b.Property<long>("TransactionId")
@@ -14001,12 +14067,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("TxDateTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");

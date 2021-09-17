@@ -21,7 +21,7 @@ namespace Prime
             public static readonly string ClientSecret = GetEnvironmentVariable("DOCUMENT_MANAGER_CLIENT_SECRET") ?? "b515de16-419b-49b1-bca9-f97eafc95d41";
         }
 
-        public static class Keycloak
+        public static class PrimeKeycloak
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("KEYCLOAK_REALM_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
@@ -35,6 +35,12 @@ namespace Prime
         {
             public static readonly string RealmUrl = GetEnvironmentVariable("MOH_KEYCLOAK_REALM_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/auth/realms/moh_applications";
             public static readonly string WellKnownConfig = KeycloakUrls.WellKnownConfig(RealmUrl);
+            public static readonly string TokenUrl = KeycloakUrls.Token(RealmUrl);
+            public static readonly string GisClientId = "GIS";
+            public static readonly string GisUserRole = "GISUSER";
+            public static readonly string AdministrationUrl = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_URL") ?? "https://user-management-dev.api.hlth.gov.bc.ca";
+            public static readonly string AdministrationClientId = "PRIME-WEBAPP-ENROLLMENT-SERVICE";
+            public static readonly string AdministrationClientSecret = GetEnvironmentVariable("MOH_KEYCLOAK_ADMINISTRATION_CLIENT_SECRET") ?? "";
         }
 
         public static class MailServer
@@ -55,7 +61,7 @@ namespace Prime
         public static class ChesApi
         {
             public static readonly bool Enabled = bool.Parse(GetEnvironmentVariable("CHES_ENABLED") ?? "false");
-            public static readonly string Url = GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-dev.pathfinder.gov.bc.ca/api/v1";
+            public static readonly string Url = GetEnvironmentVariable("CHES_API_URL") ?? "https://ches-dev.apps.silver.devops.gov.bc.ca/api/v1";
             public static readonly string ClientId = "PRIME_SERVICE_CLIENT";
             public static readonly string ClientSecret = GetEnvironmentVariable("CHES_CLIENT_SECRET") ?? "88e123a6-80cb-46a0-96d3-e2edae076ae7";
             public static readonly string TokenUrl = GetEnvironmentVariable("CHES_TOKEN_URL") ?? "https://dev.oidc.gov.bc.ca/auth/realms/jbd6rnxw/protocol/openid-connect";

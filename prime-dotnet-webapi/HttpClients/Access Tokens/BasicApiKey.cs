@@ -1,6 +1,6 @@
 namespace Prime.HttpClients
 {
-    public class QueryStringApiKey
+    public class BasicApiKey
     {
         public string ApiKey { get; set; }
     }

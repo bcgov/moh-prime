@@ -6,7 +6,7 @@ import { EMPTY, noop, Observable, of, OperatorFunction, pipe, Subscription, fork
 import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { RouteUtils } from '@lib/utils/route-utils.class';
-
+import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { ToastService } from '@core/services/toast.service';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
@@ -26,14 +26,14 @@ import {
   ClaimNoteComponent,
   ClaimType
 } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
+import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { EnrolleeNote } from '@enrolment/shared/models/enrollee-note.model';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
-import { SendBulkEmailComponent } from '@shared/components/dialogs/content/send-bulk-email/send-bulk-email.component';
-import { BulkEmailType } from '@shared/enums/bulk-email-type';
 
 @Component({
   selector: 'app-adjudication-container',
@@ -61,7 +61,7 @@ export class AdjudicationContainerComponent implements OnInit {
     protected adjudicationResource: AdjudicationResource,
     private permissionService: PermissionService,
     private dialog: MatDialog,
-    private utilsService: UtilsService,
+    protected utilsService: UtilsService,
     protected toastService: ToastService,
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.ENROLLEES));
@@ -101,9 +101,7 @@ export class AdjudicationContainerComponent implements OnInit {
             .pipe(map(() => enrollee))
         )
       )
-      .subscribe((enrollee: HttpEnrollee) => {
-        this.utilsService.mailTo(enrollee.email);
-      });
+      .subscribe((enrollee: HttpEnrollee) => EmailUtils.openEmailClient(enrollee.email));
   }
 
   public onAssign(enrolleeId: number) {
@@ -404,7 +402,7 @@ export class AdjudicationContainerComponent implements OnInit {
       )
       .subscribe((emails: string[]) => {
         emails.length
-          ? this.utilsService.mailTo(emails.join(';'))
+          ? EmailUtils.openEmailClient(emails.join(';'))
           : this.toastService.openErrorToast('No enrollees found for email type.');
       });
   }
@@ -430,8 +428,7 @@ export class AdjudicationContainerComponent implements OnInit {
   protected getDataset(enrolleeId: number, queryParams: { search?: string, status?: number }) {
     if (enrolleeId) {
       this.getEnrolleeById(enrolleeId);
-    }
-    else {
+    } else {
       this.busy = this.getEnrollees(queryParams)
         .subscribe((enrollees: EnrolleeListViewModel[]) => this.enrollees = enrollees);
     }
@@ -450,11 +447,10 @@ export class AdjudicationContainerComponent implements OnInit {
         this.enrollees = [enrollee];
         // Set enrolleeNavigation to null to disable navigation arrows for certain routes
         // TODO: add support for enrollee event page and notes page
-        this.enrolleeNavigation =
-          [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
-          AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
-          AdjudicationRoutes.EVENT_LOG]
-            .includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
+        this.enrolleeNavigation = [AdjudicationRoutes.ENROLLEE_CURRENT_ENROLMENT,
+            AdjudicationRoutes.ENROLLEE_ACCESS_TERM_ENROLMENT,
+            AdjudicationRoutes.EVENT_LOG
+        ].includes(RouteUtils.currentRoutePath(this.router.url)) ? null : enrolleeNavigation;
       });
   }
 

@@ -63,7 +63,7 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/5/sites/5
         /// <summary>
-        /// Gets a specific site for a health authority.
+        /// Gets a specific health authority site.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>

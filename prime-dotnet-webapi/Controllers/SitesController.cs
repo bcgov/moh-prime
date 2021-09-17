@@ -152,6 +152,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC 
+                && await _siteService.PecExistsAsync(updatedSite.PEC))
+            {
+                return BadRequest("PEC already exists");
+            }
+
             await _siteService.UpdateSiteAsync(siteId, updatedSite);
 
             return NoContent();
@@ -631,6 +639,13 @@ namespace Prime.Controllers
             if (!site.Provisioner.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
+            }
+
+            // stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && await _siteService.PecExistsAsync(pecCode))
+            {
+                return BadRequest("PEC already exists");
             }
 
             var updatedSite = await _siteService.UpdatePecCode(siteId, pecCode);
@@ -1152,6 +1167,28 @@ namespace Prime.Controllers
             }
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
+        }
+
+        // GET: api/sites/pec-exists
+        /// <summary>
+        /// Check if a given PEC already exists, only applicable to non health authority site
+        /// </summary>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpGet("pec-exists", Name = nameof(PecExists))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> PecExists(string pec)
+        {
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+
+            var exist = await _siteService.PecExistsAsync(pec);
+            return Ok(exist);
         }
     }
 }
