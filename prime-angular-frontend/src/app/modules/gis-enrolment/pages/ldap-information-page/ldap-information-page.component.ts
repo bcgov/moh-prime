@@ -85,7 +85,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   protected afterSubmitIsSuccessful(): void {
     // Don't want the password around any longer than needed
     this.formState.clearPassword();
-    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ENROLLEE_INFO_PAGE}`]);
   }
 
   private handleLdapResponse(locked?: boolean) {

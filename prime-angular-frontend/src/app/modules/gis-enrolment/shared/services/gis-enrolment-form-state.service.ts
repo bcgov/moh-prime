@@ -7,7 +7,6 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { LdapInformationPageFormState } from '@gis/pages/ldap-information-page/ldap-information-page-form-state.class';
 import { LdapUserPageFormState } from '@gis/pages/ldap-user-page/ldap-user-page-form-state.class';
-import { OrganizationInformationPageFormState } from '@gis/pages/organization-information-page/organization-information-page-form-state.class';
 import { EnrolleeInformationPageFormState } from '@gis/pages/enrollee-information-page/enrollee-information-page-form-state.class';
 import { GisEnrolment } from '../models/gis-enrolment.model';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -18,7 +17,6 @@ import { BcscUser } from '@auth/shared/models/bcsc-user.model';
 export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEnrolment> {
   public ldapUserPageFormState: LdapUserPageFormState;
   public ldapInformationPageFormState: LdapInformationPageFormState;
-  public organizationInformationPageFormState: OrganizationInformationPageFormState;
   public enrolleeInformationPageFormState: EnrolleeInformationPageFormState;
 
   private enrolmentId: number;
@@ -61,7 +59,6 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
    */
   public get json(): GisEnrolment {
     const ldapInformation = this.ldapInformationPageFormState.json;
-    const organizationInformation = this.organizationInformationPageFormState.json;
     const enrolleeInformation = this.enrolleeInformationPageFormState.json;
 
     return {
@@ -69,7 +66,6 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
       ...this.bcscUser,
       // ldapLoginSuccessDate (N/A)
       ...ldapInformation,
-      ...organizationInformation,
       ...enrolleeInformation
       // submittedDate (N/A)
     } as GisEnrolment;
@@ -83,7 +79,6 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
     return [
       this.ldapUserPageFormState.form,
       this.ldapInformationPageFormState.form,
-      this.organizationInformationPageFormState.form,
       this.enrolleeInformationPageFormState.form
     ];
   }
@@ -96,7 +91,6 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
   protected buildForms(): void {
     this.ldapUserPageFormState = new LdapUserPageFormState(this.fb);
     this.ldapInformationPageFormState = new LdapInformationPageFormState(this.fb);
-    this.organizationInformationPageFormState = new OrganizationInformationPageFormState(this.fb);
     this.enrolleeInformationPageFormState = new EnrolleeInformationPageFormState(this.fb);
   }
 
@@ -111,7 +105,6 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
 
     this.ldapUserPageFormState.patchValue(model);
     this.ldapInformationPageFormState.patchValue(model);
-    this.organizationInformationPageFormState.patchValue(model);
     this.enrolleeInformationPageFormState.patchValue(model);
 
     // After patching the form is dirty, and needs to be pristine
