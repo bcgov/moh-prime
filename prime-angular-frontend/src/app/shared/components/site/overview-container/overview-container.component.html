@@ -192,3 +192,165 @@
                           (route)="onRouteRelative($event)"></app-remote-user-review>
 
 </ng-container>
+
+<ng-container *ngIf="healthAuthority">
+  <app-overview-section title="Health Authority Care Types"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_CARE_TYPES"
+                        (route)="onRouteRelative($event)">
+    <ng-container *ngIf="healthAuthority?.careTypes.length; else noCareTypes">
+      <app-enrollee-property *ngFor="let careType of healthAuthority.careTypes"
+                             title="Care Type">
+        {{ careType }}
+      </app-enrollee-property>
+    </ng-container>
+
+    <ng-template #noCareTypes>
+      <app-enrollee-property>
+        None
+      </app-enrollee-property>
+    </ng-template>
+  </app-overview-section>
+
+  <app-overview-section title="Health Authority Vendors"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_VENDORS"
+                        (route)="onRouteRelative($event)">
+    <ng-container *ngIf="healthAuthority?.vendorCodes.length; else noVendors">
+      <app-enrollee-property *ngFor="let vendorCode of healthAuthority.vendorCodes"
+                             title="Vendor">
+        {{ vendorCode | configCode: 'vendors' }}
+      </app-enrollee-property>
+    </ng-container>
+
+    <ng-template #noVendors>
+      <app-enrollee-property>
+        None
+      </app-enrollee-property>
+    </ng-template>
+  </app-overview-section>
+
+  <app-overview-section title="Privacy Office"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
+                        (route)="onRouteRelative($event)">
+    <app-enrollee-property title="Email">
+      {{ healthAuthority?.privacyOffice?.email | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Phone">
+      {{ healthAuthority?.privacyOffice?.phone | phone | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+  <app-address-view title="Privacy Office Address"
+                    [address]="healthAuthority?.privacyOffice?.physicalAddress"
+                    [showRedirect]="showEditRedirect"
+                    [showIfEmpty]="true"
+                    (route)="onRoute(AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE)"></app-address-view>
+
+  <app-overview-section title="Privacy Officer"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_PRIVACY_OFFICE"
+                        (route)="onRouteRelative($event)">
+    <app-party-review [party]="healthAuthority?.privacyOffice?.privacyOfficer"
+                      [excludeList]="['fax', 'smsPhone', 'jobRoleTitle', 'mailingAddress']"></app-party-review>
+  </app-overview-section>
+
+  <app-overview-section title="Technical Support Contacts"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS"
+                        (route)="onRouteRelative($event)">
+    <ng-container *ngIf="healthAuthority?.technicalSupports.length; else noTechnicalSupports">
+      <ng-container *ngFor="let technicalSupport of healthAuthority.technicalSupports">
+        <app-enrollee-property title="Technical Support">
+          <app-party-review [party]="technicalSupport"></app-party-review>
+        </app-enrollee-property>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noTechnicalSupports>
+      <app-enrollee-property>
+        None
+      </app-enrollee-property>
+    </ng-template>
+  </app-overview-section>
+
+  <app-overview-section title="PharmaNet Administrators"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS"
+                        (route)="onRouteRelative($event)">
+    <ng-container *ngIf="healthAuthority?.pharmanetAdministrators.length; else noPharmanetAdministrators">
+      <ng-container *ngFor="let pharmanetAdministrator of healthAuthority.pharmanetAdministrators">
+        <app-enrollee-property title="PharmaNet Administrator">
+          <app-party-review [party]="pharmanetAdministrator"></app-party-review>
+        </app-enrollee-property>
+      </ng-container>
+    </ng-container>
+
+    <ng-template #noPharmanetAdministrators>
+      <app-enrollee-property>
+        None
+      </app-enrollee-property>
+    </ng-template>
+  </app-overview-section>
+</ng-container>
+
+<ng-container *ngIf="healthAuthoritySite">
+
+  <app-overview-section title="Care Type"
+                        [showEditRedirect]="!healthAuthoritySite.submittedDate"
+                        [editRoute]="SiteRoutes.CARE_SETTING"
+                        (route)="onRouteRelative($event)">
+    <app-enrollee-property title="Care Type">
+      {{ healthAuthoritySite.careType }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="PharmaNet Software Vendor">
+      {{ healthAuthoritySite?.vendorCode | configCode: 'vendors' | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+  <app-overview-section title="Site Address"
+                        [showEditRedirect]="!healthAuthoritySite.submittedDate"
+                        [editRoute]="SiteRoutes.SITE_ADDRESS"
+                        (route)="onRouteRelative($event)">
+    <app-enrollee-property title="Address">
+      {{ healthAuthoritySite?.physicalAddress?.street | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="City">
+      {{ healthAuthoritySite?.physicalAddress?.city | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Province">
+      {{ healthAuthoritySite?.physicalAddress?.provinceCode | configCode: 'provinces' | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Postal Code">
+      {{ healthAuthoritySite?.physicalAddress?.postal | postal | default }}
+    </app-enrollee-property>
+
+    <app-enrollee-property title="Country">
+      {{ healthAuthoritySite?.physicalAddress?.countryCode | configCode: 'countries' | default }}
+    </app-enrollee-property>
+  </app-overview-section>
+
+  <app-overview-section title="Hours of Operation"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="SiteRoutes.HOURS_OPERATION"
+                        (route)="onRouteRelative($event)">
+    <ng-container *ngFor="let businessDay of healthAuthoritySite?.businessHours">
+      <app-enrollee-property [title]="businessDay.day | weekday">
+        <ng-container *ngIf="businessDay.startTime && businessDay.endTime">
+          {{ businessDay.startTime }} to {{ businessDay.endTime }}
+        </ng-container>
+      </app-enrollee-property>
+    </ng-container>
+  </app-overview-section>
+
+  <app-remote-user-review [remoteUsers]="healthAuthoritySite.remoteUsers"
+                          [showEditRedirect]="showEditRedirect"
+                          [editRoute]="SiteRoutes.REMOTE_USERS"
+                          (route)="onRouteRelative($event)"></app-remote-user-review>
+</ng-container>

@@ -10,6 +10,9 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { HealthAuthority } from '@shared/models/health-authority.model';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 
 @Component({
   selector: 'app-overview-container',
@@ -19,12 +22,15 @@ import { BusinessLicence } from '@registration/shared/models/business-licence.mo
 export class OverviewContainerComponent extends AbstractComponent implements OnInit {
   @Input() public site: Site;
   @Input() public organization: Organization;
+  @Input() public healthAuthority: HealthAuthority;
+  @Input() public healthAuthoritySite: HealthAuthoritySite;
   @Input() public showEditRedirect: boolean;
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
 
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
+  public AdjudicationRoutes = AdjudicationRoutes;
 
   constructor(
     protected route: ActivatedRoute,
@@ -55,6 +61,6 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {}
 
 }

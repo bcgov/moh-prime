@@ -47,6 +47,7 @@ export class SiteOverviewPageComponent implements OnInit {
     private siteResource: SiteResource,
     private healthAuthorityResource: HealthAuthorityResource
   ) {
+    this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
   }
 
   public get pec(): FormControl {

@@ -64,26 +64,28 @@
         </app-page-section>
       </div>
       <div class="col-md-6">
-        <app-page-section *ngIf="healthAuthority">
+        <app-page-section>
           <app-page-subheader>
             <ng-container appPageSubheaderTitle>
               <mat-icon class="mr-2">location_city</mat-icon>
-              Health Authority Information
+              Organization Information
             </ng-container>
             <button mat-icon-button
                     matTooltip="View Organization"
-                    (click)="onRoute([0, AdjudicationRoutes.SITE_REGISTRATION, 0, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+                    (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES,
+                                      healthAuthority.id,
+                                      AdjudicationRoutes.ORGANIZATION_INFORMATION])">
               <mat-icon>navigate_next icon</mat-icon>
             </button>
           </app-page-subheader>
 
-<!--           <mat-card>
+          <mat-card>
             <mat-card-content>
-              <app-overview-container [organization]="healthAuthority"
+              <app-overview-container [healthAuthority]="healthAuthority"
                                       [showEditRedirect]="false"
                                       [admin]="true"></app-overview-container>
             </mat-card-content>
-          </mat-card> -->
+          </mat-card>
         </app-page-section>
 
         <app-page-section>
@@ -92,20 +94,20 @@
               <mat-icon class="mr-2">store</mat-icon>
               Site Information
             </ng-container>
-            <button mat-icon-button
+<!--             <button mat-icon-button
                     matTooltip="View Site"
                     (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
               <mat-icon>navigate_next icon</mat-icon>
-            </button>
+            </button> -->
           </app-page-subheader>
 
-<!--           <mat-card>
+          <mat-card>
             <mat-card-content>
-              <app-overview-container [site]="site"
+              <app-overview-container [healthAuthoritySite]="site"
                                       [showEditRedirect]="false"
                                       [admin]="true"></app-overview-container>
             </mat-card-content>
-          </mat-card> -->
+          </mat-card>
         </app-page-section>
 
         <app-page-section *ngIf="site?.remoteUsers.length">
