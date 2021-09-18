@@ -4,7 +4,6 @@ import { AbstractControl, FormBuilder } from '@angular/forms';
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
 import { LdapInformationPageFormState } from '@gis/pages/ldap-information-page/ldap-information-page-form-state.class';
 import { LdapUserPageFormState } from '@gis/pages/ldap-user-page/ldap-user-page-form-state.class';
 import { EnrolleeInformationPageFormState } from '@gis/pages/enrollee-information-page/enrollee-information-page-form-state.class';
@@ -25,8 +24,7 @@ export class GisEnrolmentFormStateService extends AbstractFormStateService<GisEn
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
-    protected logger: ConsoleLoggerService,
-    private formUtilsService: FormUtilsService
+    protected logger: ConsoleLoggerService
   ) {
     super(fb, routeStateService, logger);
 

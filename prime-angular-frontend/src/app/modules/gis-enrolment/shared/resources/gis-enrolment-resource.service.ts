@@ -34,9 +34,14 @@ export class GisEnrolmentResource {
           this.logger.error('[GisModule] GisResource::ldapLogin error has occurred: ', error);
 
           if (error.status === 401) {
+            const unauthorized = (error.headers.has('Unauthorized'))
+              ? error.headers.get('Unauthorized') === 'true'
+              : false;
             // Absence of unlocked assumed to be unknown and therefore unlocked
-            const unlocked = error.headers.get('Unlocked') ?? true;
-            return of(new LdapErrorResponse(unlocked));
+            const unlocked = (error.headers.has('Unlocked'))
+              ? error.headers.get('Unlocked') === 'true'
+              : true;
+            return of(new LdapErrorResponse(unauthorized, !unlocked));
           }
 
           throw error;
