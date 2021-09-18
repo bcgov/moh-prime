@@ -176,6 +176,7 @@ namespace Prime.Controllers
                 return Ok();
             }
 
+            Response.Headers.Add("Unauthorized", ldapResponse.Success.ToString());
             Response.Headers.Add("Unlocked", ldapResponse.Unlocked);
 
             return Unauthorized();
