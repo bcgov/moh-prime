@@ -39,11 +39,10 @@ export class SiteOverviewPageComponent implements OnInit {
   private routeUtils: RouteUtils;
 
   constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
+    private route: ActivatedRoute,
+    private router: Router,
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
-    protected healthAuthoritySiteResource: HealthAuthorityResource,
     private siteResource: SiteResource,
     private healthAuthorityResource: HealthAuthorityResource
   ) {
@@ -61,20 +60,6 @@ export class SiteOverviewPageComponent implements OnInit {
         .updatePecCode(siteId, this.form.value.pec)
         .subscribe();
     }
-  }
-
-  public ngOnInit(): void {
-    this.createFormInstance();
-    const params = this.route.snapshot.params;
-    forkJoin({
-      site: this.healthAuthoritySiteResource.getHealthAuthoritySiteById(+params.haid, +params.sid),
-      healthAuthority: this.healthAuthorityResource.getHealthAuthorityById(+params.haid)
-    })
-      .subscribe(({ site, healthAuthority }) => {
-        this.site = site;
-        this.healthAuthority = healthAuthority;
-        console.log('ha', healthAuthority);
-      });
   }
 
   public onRoute(routePath: string | (string | number)[]) {
@@ -138,6 +123,19 @@ export class SiteOverviewPageComponent implements OnInit {
       default:
         return false;
     }
+  }
+
+  public ngOnInit(): void {
+    this.createFormInstance();
+    const params = this.route.snapshot.params;
+    forkJoin({
+      site: this.healthAuthorityResource.getHealthAuthoritySiteById(+params.haid, +params.sid),
+      healthAuthority: this.healthAuthorityResource.getHealthAuthorityById(+params.haid)
+    })
+      .subscribe(({ site, healthAuthority }) => {
+        this.site = site;
+        this.healthAuthority = healthAuthority;
+      });
   }
 
   private createFormInstance() {

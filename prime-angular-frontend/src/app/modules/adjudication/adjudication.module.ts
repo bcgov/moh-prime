@@ -78,6 +78,7 @@ import { LicenseClassesMaintenancePageComponent } from './pages/license-classes-
 import { PlrInfoComponent } from './shared/components/plr-info/plr-info.component';
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
 import { HealthAuthoritySiteSummaryComponent } from './shared/components/health-authority-site-summary/health-authority-site-summary.component';
+import { SiteInformationPageComponent } from './pages/health-authorities/site-information-page/site-information-page.component';
 
 @NgModule({
   declarations: [
@@ -149,7 +150,8 @@ import { HealthAuthoritySiteSummaryComponent } from './shared/components/health-
     LicenseClassesMaintenancePageComponent,
     PlrInfoComponent,
     SiteOverviewPageComponent,
-    HealthAuthoritySiteSummaryComponent
+    HealthAuthoritySiteSummaryComponent,
+    SiteInformationPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,

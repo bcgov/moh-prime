@@ -81,17 +81,28 @@
 
 	      <mat-menu #menu="matMenu">
 	        <button mat-menu-item
-	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id])">
+	                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES,
+	                			    row.healthAuthorityOrganizationId,
+	                			    AdjudicationRoutes.SITE_REGISTRATION,
+	                			    row.id])">
 	          <mat-icon>all_inclusive</mat-icon>
 	          <span>Overview</span>
 	        </button>
 	        <button mat-menu-item
-	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.EVENT_LOG])">
+	                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES,
+	                			    row.healthAuthorityOrganizationId, 
+	                			    AdjudicationRoutes.SITE_REGISTRATION, 
+	                			    row.id, 
+	                			    AdjudicationRoutes.EVENT_LOG])">
 	          <mat-icon>list_alt</mat-icon>
 	          <span>Event Log</span>
 	        </button>
 	        <button mat-menu-item
-	                (click)="onRoute([row.healthAuthorityOrganizationId, AdjudicationRoutes.SITE_REGISTRATION, row.id, AdjudicationRoutes.ADJUDICATOR_NOTES])">
+	                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES,
+	                			    row.healthAuthorityOrganizationId,
+	                			    AdjudicationRoutes.SITE_REGISTRATION,
+	                			    row.id,
+	                			    AdjudicationRoutes.ADJUDICATOR_NOTES])">
 	          <mat-icon>message</mat-icon>
 	          <span>Add and View Notes</span>
 	        </button>

@@ -1,0 +1,20 @@
+<app-page [busy]="busy"
+          mode="full">
+
+  <app-page-header>Site Information</app-page-header>
+  <div class="row">
+    <div class="col py-5">
+      <app-health-authority-site-summary *ngIf="site" 
+                                         [site]="site"
+                                         (route)="onRoute($event)">
+      </app-health-authority-site-summary>
+    </div>
+  </div>
+  <div class="row mt-4">
+	  <div class="col">
+	    <app-overview-container [healthAuthoritySite]="site"
+	                            [showEditRedirect]="false"
+	                            [admin]="true"></app-overview-container>
+	  </div>
+	</div>
+</app-page>

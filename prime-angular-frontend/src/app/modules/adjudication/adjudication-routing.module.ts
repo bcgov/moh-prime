@@ -52,6 +52,7 @@ import {
   LicenseClassesMaintenancePageComponent
 } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
+import { SiteInformationPageComponent } from './pages/health-authorities/site-information-page/site-information-page.component';
 
 const routes: Routes = [
   {
@@ -375,6 +376,11 @@ const routes: Routes = [
                     path: '',
                     component: SiteOverviewPageComponent,
                     data: { title: 'Site Overview' }
+                  },
+                  {
+                    path: AdjudicationRoutes.SITE_INFORMATION,
+                    component: SiteInformationPageComponent,
+                    data: { title: 'Site Information' }
                   },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,

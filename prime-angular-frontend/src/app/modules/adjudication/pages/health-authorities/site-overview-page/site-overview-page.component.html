@@ -94,11 +94,15 @@
               <mat-icon class="mr-2">store</mat-icon>
               Site Information
             </ng-container>
-<!--             <button mat-icon-button
+            <button mat-icon-button
                     matTooltip="View Site"
-                    (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_INFORMATION])">
+                    (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, 
+                                      healthAuthority.id, 
+                                      AdjudicationRoutes.SITE_REGISTRATION,
+                                      site.id,
+                                      AdjudicationRoutes.SITE_INFORMATION])">
               <mat-icon>navigate_next icon</mat-icon>
-            </button> -->
+            </button>
           </app-page-subheader>
 
           <mat-card>
