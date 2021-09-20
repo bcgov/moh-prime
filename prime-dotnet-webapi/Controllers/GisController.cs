@@ -175,8 +175,11 @@ namespace Prime.Controllers
             {
                 return Ok();
             }
+            if (ldapResponse.Authenticated == "true")
+            {
+                return Forbid();
+            }
 
-            Response.Headers.Add("Unauthorized", ldapResponse.Success.ToString());
             Response.Headers.Add("Unlocked", ldapResponse.Unlocked);
 
             return Unauthorized();
