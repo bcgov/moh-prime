@@ -1,7 +1,9 @@
 export class LdapErrorResponse {
   constructor(
-    public unlocked: boolean
+    public unauthorized: boolean | null,
+    public locked: boolean | null
   ) {
-    this.unlocked = unlocked;
+    this.unauthorized = unauthorized;
+    this.locked = locked;
   }
 }
