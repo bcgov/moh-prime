@@ -189,7 +189,7 @@ export class RemoteUsersPageComponent extends AbstractEnrolmentPage implements O
   protected afterSubmitIsSuccessful(): void {
     // TODO should account for updates which would redirect back to SiteManagement
     const nextRoutePath = (!this.isCompleted)
-      ? HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR
+      ? HealthAuthSiteRegRoutes.ADMINISTRATOR
       : HealthAuthSiteRegRoutes.SITE_OVERVIEW;
 
     this.routeUtils.routeRelativeTo(['../', nextRoutePath]);

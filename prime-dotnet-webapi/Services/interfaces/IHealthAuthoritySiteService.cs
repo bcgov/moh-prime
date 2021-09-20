@@ -25,7 +25,7 @@ namespace Prime.Services
         Task UpdateHoursOperationAsync(int siteId, ICollection<BusinessDay> businessHours);
         Task UpdateRemoteUsersAsync(int siteId, ICollection<RemoteUser> remoteUsers);
         Task UpdatePharmanetAdministratorAsync(int siteId, int healthAuthoritySiteAdministratorId);
-
+        Task UpdateTechnicalSupportAsync(int siteId, int technicalSupportId);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
     }

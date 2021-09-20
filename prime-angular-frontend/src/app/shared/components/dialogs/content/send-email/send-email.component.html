@@ -1,6 +1,6 @@
 <h2 mat-dialog-title
     class="d-flex align-items-stretch">
-  <mat-icon [color]="'primary'">help</mat-icon>
+  <mat-icon color="primary">help</mat-icon>
   <span class="flex-grow-1">
     {{ this.title }}
   </span>
@@ -13,31 +13,26 @@
     <button mat-stroked-button
             class="mr-4"
             cdkFocusInitial
-            (click)="onCancel()">Cancel</button>
+            (click)="onCancel()">Cancel
+    </button>
 
     <button mat-flat-button
             color="primary"
             [matMenuTriggerFor]="menu">
-      Send To: <mat-icon>keyboard_arrow_down</mat-icon>
+      Send To:
+      <mat-icon>keyboard_arrow_down</mat-icon>
     </button>
 
     <mat-menu #menu>
-      <button mat-menu-item
-              (click)="onSelect(site?.provisioner?.email)">
-        <span>Signing Authority</span>
-      </button>
-      <button mat-menu-item
-              (click)="onSelect(site?.administratorPharmaNet?.email)">
-        <span>PharmaNet Administrator</span>
-      </button>
-      <button mat-menu-item
-              (click)="onSelect(site?.privacyOfficer?.email)">
-        <span>Privacy Officer</span>
-      </button>
-      <button mat-menu-item
-              (click)="onSelect(site?.technicalSupport?.email)">
-        <span>Technical Support Contact</span>
-      </button>
+      <ng-container *ngFor="let contact of contacts">
+
+        <button *ngIf="contact?.email"
+                mat-menu-item
+                (click)="onSelect(contact.email)">
+          <span>{{ contact.label }}</span>
+        </button>
+
+      </ng-container>
     </mat-menu>
   </div>
 </mat-dialog-content>

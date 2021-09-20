@@ -22,8 +22,9 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public ICollection<BusinessDay> BusinessHours { get; set; }
         public ICollection<RemoteUser> RemoteUsers { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        // TODO don't need the whole thing: first and last name for overview
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
+        public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
         public bool Completed { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }
