@@ -23,6 +23,8 @@ export interface HealthAuthoritySite {
   remoteUsers: RemoteUser[];
   healthAuthorityPharmanetAdministratorId: number;
   healthAuthorityPharmanetAdministrator: Contact;
+  healthAuthorityTechnicalSupportId: number;
+  healthAuthorityTechnicalSupport: Contact;
   // Indicates that a user has progressed through the entire registration, and
   // reached the overview page switching them from wizard to spoking navigation
   completed: boolean;

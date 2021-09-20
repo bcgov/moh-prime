@@ -2,9 +2,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-import { AdministratorForm } from './administrator-form.model';
+import { TechnicalSupportForm } from './technical-support-form.model';
 
-export class AdministratorFormState extends AbstractFormState<AdministratorForm> {
+export class TechnicalSupportFormState extends AbstractFormState<TechnicalSupportForm> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -13,7 +13,7 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
     this.buildForm();
   }
 
-  public get json(): AdministratorForm {
+  public get json(): TechnicalSupportForm {
     if (!this.formInstance) {
       return;
     }
@@ -21,7 +21,7 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(model: AdministratorForm): void {
+  public patchValue(model: TechnicalSupportForm): void {
     if (!model) {
       return;
     }
@@ -31,7 +31,7 @@ export class AdministratorFormState extends AbstractFormState<AdministratorForm>
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      healthAuthorityPharmanetAdministratorId: [null, [Validators.required]]
+      healthAuthorityTechnicalSupportId: [null, [Validators.required]]
     });
   }
 }

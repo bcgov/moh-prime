@@ -7,16 +7,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
-
 import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
-import { SiteService } from '@registration/shared/services/site.service';
 import { AdministratorPageComponent } from './administrator-page.component';
 
-describe('AdministratorComponent', () => {
+describe('AdministratorPageComponent', () => {
   let component: AdministratorPageComponent;
   let fixture: ComponentFixture<AdministratorPageComponent>;
 
@@ -38,10 +35,6 @@ describe('AdministratorComponent', () => {
         {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
-        },
-        {
-          provide: SiteService,
-          useClass: MockSiteService
         },
         CapitalizePipe
       ],
