@@ -1,5 +1,6 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,22 +9,21 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { KeycloakService } from 'keycloak-angular';
 
-import { MockSiteService } from 'test/mocks/mock-site.service';
-
 import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
-import { SiteService } from '@registration/shared/services/site.service';
-import { AdministratorPageComponent } from './administrator-page.component';
+import { CapitalizePipe } from '@shared/pipes/capitalize.pipe';
+import { TechnicalSupportPageComponent } from './technical-support-page.component';
 
-describe('AdministratorPageComponent', () => {
-  let component: AdministratorPageComponent;
-  let fixture: ComponentFixture<AdministratorPageComponent>;
+describe('TechnicalSupportPageComponent', () => {
+  let component: TechnicalSupportPageComponent;
+  let fixture: ComponentFixture<TechnicalSupportPageComponent>;
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       declarations: [
-        AdministratorPageComponent
+        TechnicalSupportPageComponent
       ],
       imports: [
+        BrowserAnimationsModule,
         HttpClientTestingModule,
         RouterTestingModule,
         ReactiveFormsModule,
@@ -36,17 +36,14 @@ describe('AdministratorPageComponent', () => {
           provide: APP_CONFIG,
           useValue: APP_DI_CONFIG
         },
-        {
-          provide: SiteService,
-          useClass: MockSiteService
-        }
+        CapitalizePipe
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
-  }));
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AdministratorPageComponent);
+    fixture = TestBed.createComponent(TechnicalSupportPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

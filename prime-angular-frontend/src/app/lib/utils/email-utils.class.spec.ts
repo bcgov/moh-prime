@@ -1,6 +1,6 @@
 import { EmailUtils } from '@lib/utils/email-utils.class';
 
-fdescribe('EmailUtils', () => {
+describe('EmailUtils', () => {
   const util = EmailUtils;
 
   beforeEach(() => { });
