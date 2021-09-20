@@ -253,6 +253,30 @@ namespace Prime.Controllers
             return NoContent();
         }
 
+        // PUT: api/health-authorities/5/sites/5/pec
+        /// <summary>
+        /// Updates a specific health authority site's PEC.
+        /// </summary>
+        /// <param name="healthAuthorityId">The health authority identifier</param>
+        /// <param name="siteId">The site identifier</param>
+        /// <param name="payload">The payload</param>
+        [HttpPut("{siteId}/pec", Name = nameof(UpdatePec))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdatePec(int healthAuthorityId, int siteId, HealthAuthoritySitePecViewModel payload)
+        {
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+
+            await _healthAuthoritySiteService.UpdatePecAsync(siteId, payload);
+
+            return NoContent();
+        }
+
         // PUT: api/health-authorities/5/sites/5/finalize/site-completed
         /// <summary>
         /// Sets the health authority site as "completed", allowing frontend and backend behavioural changes.

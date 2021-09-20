@@ -27,6 +27,7 @@ import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-addre
 import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 import { AdministratorForm } from '@health-auth/pages/administrator-page/administrator-form.model';
+import { SitePecForm } from '@adjudication/pages/health-authorities/site-overview-page/site-pec-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,7 +39,7 @@ export class HealthAuthorityResource {
     private toastService: ToastService,
     private logger: ConsoleLoggerService,
     private capitalizePipe: CapitalizePipe
-  ) { }
+  ) {}
 
   public getHealthAuthorities(): Observable<HealthAuthorityRow[]> {
     return this.apiResource.get<HealthAuthorityRow[]>(`health-authorities`)
@@ -388,6 +389,18 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority administrator could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateHealthAuthoritySitePec(healthAuthId: number, siteId: number, payload: SitePecForm): NoContent {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/pec`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site PEC could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySitePec error has occurred: ', error);
           throw error;
         })
       );

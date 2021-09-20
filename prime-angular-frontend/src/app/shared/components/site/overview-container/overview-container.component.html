@@ -349,6 +349,13 @@
     </ng-container>
   </app-overview-section>
 
+  <app-overview-section title="PharmaNet Administrator"
+                        [showEditRedirect]="showEditRedirect"
+                        [editRoute]="SiteRoutes.ADMINISTRATOR"
+                        (route)="onRouteRelative($event)">
+    <app-party-review [party]="healthAuthoritySite?.healthAuthorityPharmanetAdministrator"></app-party-review>
+  </app-overview-section>  
+
   <app-remote-user-review [remoteUsers]="healthAuthoritySite.remoteUsers"
                           [showEditRedirect]="showEditRedirect"
                           [editRoute]="SiteRoutes.REMOTE_USERS"

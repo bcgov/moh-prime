@@ -134,6 +134,15 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdatePecAsync(int siteId, HealthAuthoritySitePecViewModel viewModel)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            site.SiteId = viewModel.Pec;
+
+            await _context.SaveChangesAsync();
+        }
 
         public async Task UpdatePharmanetAdministratorAsync(int siteId, int contactId)
         {

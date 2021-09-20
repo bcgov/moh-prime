@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
@@ -12,7 +12,7 @@ import { Role } from '@auth/shared/enum/role.enum';
   templateUrl: './health-authority-site-summary.component.html',
   styleUrls: ['./health-authority-site-summary.component.scss']
 })
-export class HealthAuthoritySiteSummaryComponent implements OnInit {
+export class HealthAuthoritySiteSummaryComponent implements OnInit, OnChanges {
   @Input() public site: HealthAuthoritySite;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
@@ -63,5 +63,11 @@ export class HealthAuthoritySiteSummaryComponent implements OnInit {
 
   public onRoute(routePath: string | (string | number)[]) {
     this.route.emit(routePath);
+  }
+
+  public ngOnChanges(changes: SimpleChanges) {
+    if (!changes.site.firstChange) {
+      this.dataSource.data = [changes.site.currentValue];
+    }
   }
 }

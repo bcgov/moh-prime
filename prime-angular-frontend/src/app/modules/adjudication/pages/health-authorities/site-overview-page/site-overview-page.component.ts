@@ -14,7 +14,6 @@ import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { Role } from '@auth/shared/enum/role.enum';
 import { HealthAuthority } from '@shared/models/health-authority.model';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { SiteResource } from '@core/resources/site-resource.service';
 import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
 @Component({
@@ -29,7 +28,6 @@ export class SiteOverviewPageComponent implements OnInit {
   public site: HealthAuthoritySite;
   public healthAuthority: HealthAuthority;
 
-
   public SiteAdjudicationAction = SiteAdjudicationAction;
   public SiteStatusType = SiteStatusType;
   public AdjudicationRoutes = AdjudicationRoutes;
@@ -43,7 +41,6 @@ export class SiteOverviewPageComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private formUtilsService: FormUtilsService,
-    private siteResource: SiteResource,
     private healthAuthorityResource: HealthAuthorityResource
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
@@ -55,10 +52,9 @@ export class SiteOverviewPageComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.formUtilsService.checkValidity(this.form)) {
-      const siteId = this.route.snapshot.params.sid;
-      this.busy = this.siteResource
-        .updatePecCode(siteId, this.form.value.pec)
-        .subscribe();
+      const params = this.route.snapshot.params;
+      this.busy = this.healthAuthorityResource.updateHealthAuthoritySitePec(+params.haid, +params.sid, this.form.value)
+        .subscribe(() => this.getData());
     }
   }
 
@@ -127,14 +123,19 @@ export class SiteOverviewPageComponent implements OnInit {
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.getData();
+  }
+
+  private getData(): void {
     const params = this.route.snapshot.params;
-    forkJoin({
+    this.busy = forkJoin({
       site: this.healthAuthorityResource.getHealthAuthoritySiteById(+params.haid, +params.sid),
       healthAuthority: this.healthAuthorityResource.getHealthAuthorityById(+params.haid)
     })
       .subscribe(({ site, healthAuthority }) => {
         this.site = site;
         this.healthAuthority = healthAuthority;
+        this.form.get('pec').setValue(site.siteId);
       });
   }
 
