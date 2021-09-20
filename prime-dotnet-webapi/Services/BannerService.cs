@@ -1,13 +1,14 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+
 using Prime.Models;
 using Prime.ViewModels;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 
 namespace Prime.Services
 {
@@ -17,9 +18,9 @@ namespace Prime.Services
 
         public BannerService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<BannerService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
@@ -57,6 +58,7 @@ namespace Prime.Services
             var banners = await _context.Banners
                 .Where(b => b.BannerLocationCode == locationCode)
                 .ProjectTo<BannerViewModel>(_mapper.ConfigurationProvider)
+                .OrderByDescending(b => b.Id)
                 .ToListAsync();
 
             banners.ForEach(banner =>

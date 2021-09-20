@@ -5,6 +5,7 @@ import { NoContent, NoContentResponse } from '@core/resources/abstract-resource'
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { Contact } from '@lib/models/contact.model';
 import { ApiResource } from '@core/resources/api-resource.service';
 import { ApiHttpResponse } from '@core/models/api-http-response.model';
@@ -26,6 +27,7 @@ import { SiteAddressForm } from '@health-auth/pages/site-address-page/site-addre
 import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hours-operation-form.model';
 import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 import { AdministratorForm } from '@health-auth/pages/administrator-page/administrator-form.model';
+import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/technical-support-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -276,6 +278,38 @@ export class HealthAuthorityResource {
       );
   }
 
+  public getHealthAuthoritySiteContacts(healthAuthId: number, healthAuthSiteId: number): Observable<{ label: string, email: string }[]> {
+    return this.getHealthAuthoritySiteById(healthAuthId, healthAuthSiteId)
+      .pipe(
+        map((healthAuthSite: HealthAuthoritySite) => [
+          // TODO no authorized user on health auth site view model
+          // {
+          //   label: 'Authorized User',
+          //   email: healthAuthSite?.authorizedUser?.email
+          // },
+          ...ArrayUtils.insertIf(healthAuthSite?.healthAuthorityPharmanetAdministrator, {
+            label: 'PharmaNet Administrator',
+            email: healthAuthSite?.healthAuthorityPharmanetAdministrator?.email
+          }),
+          // TODO no privacy officer on health auth site view model
+          // ...ArrayUtils.insertIf(healthAuthSite?.privacyOfficer.email, {
+          //   label: 'Privacy Officer',
+          //   email: healthAuthSite?.privacyOfficer.email
+          // }),
+          // TODO no technical support on health auth site view model
+          // ...ArrayUtils.insertIf(healthAuthSite?.technicalSupport.email, {
+          //   label: 'Technical Support Contact',
+          //   email: healthAuthSite?.technicalSupport.email
+          // })
+        ]),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site contacts could not be retrieved');
+          this.logger.error('[Core] HealthAuthorityResource::getHealthAuthoritySiteContacts error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateHealthAuthoritySiteVendor(healthAuthId: number, siteId: number, payload: VendorForm): Observable<NoContent> {
     return this.apiResource.put<NoContent>(`health-authorities/${healthAuthId}/sites/${siteId}/vendor`, payload)
       .pipe(
@@ -348,13 +382,25 @@ export class HealthAuthorityResource {
       );
   }
 
-  public updateHealthAuthorityPharmanetAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
+  public updateHealthAuthoritySitePharmanetAdministrator(healthAuthId: number, siteId: number, payload: AdministratorForm): NoContent {
     return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/administrator`, payload)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority administrator could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySiteAdministrator error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateHealthAuthoritySiteTechnicalSupport(healthAuthId: number, siteId: number, payload: TechnicalSupportForm): NoContent {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/technical-support`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority technical support could not be updated');
+          this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthorityTechnicalSupport error has occurred: ', error);
           throw error;
         })
       );

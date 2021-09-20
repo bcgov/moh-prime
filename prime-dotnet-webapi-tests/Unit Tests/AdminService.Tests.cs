@@ -13,14 +13,7 @@ namespace PrimeTests.UnitTests
 {
     public class AdminServiceTests : InMemoryDbTest
     {
-        public AdminService CreateService(
-            IHttpContextAccessor httpContext = null)
-        {
-            return new AdminService(
-                TestDb,
-                httpContext ?? A.Fake<IHttpContextAccessor>()
-            );
-        }
+
     }
 }
 

@@ -1,44 +1,44 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using DelegateDecompiler.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using DelegateDecompiler.EntityFrameworkCore;
 
+using Prime.HttpClients;
+using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
 using Prime.Models.Api;
 using Prime.ViewModels;
-using Prime.HttpClients;
-using Prime.HttpClients.DocumentManagerApiDefinitions;
 
 namespace Prime.Services
 {
     public class OrganizationService : BaseService, IOrganizationService
     {
         private readonly IBusinessEventService _businessEventService;
-        private readonly IPartyService _partyService;
-        private readonly IOrganizationClaimService _organizationClaimService;
         private readonly IDocumentManagerClient _documentClient;
         private readonly IMapper _mapper;
+        private readonly IOrganizationClaimService _organizationClaimService;
+        private readonly IPartyService _partyService;
 
         public OrganizationService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<OrganizationService> logger,
             IBusinessEventService businessEventService,
-            IPartyService partyService,
-            IOrganizationClaimService organizationClaimService,
+            IDocumentManagerClient documentClient,
             IMapper mapper,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IOrganizationClaimService organizationClaimService,
+            IPartyService partyService)
+            : base(context, logger)
         {
             _businessEventService = businessEventService;
-            _partyService = partyService;
-            _organizationClaimService = organizationClaimService;
             _documentClient = documentClient;
             _mapper = mapper;
+            _organizationClaimService = organizationClaimService;
+            _partyService = partyService;
         }
 
         public async Task<bool> OrganizationExistsAsync(int organizationId)
@@ -79,8 +79,8 @@ namespace Prime.Services
         {
             return await _context.Organizations
                 .Include(o => o.SigningAuthority)
-                        .ThenInclude(sa => sa.Addresses)
-                            .ThenInclude(pa => pa.Address)
+                    .ThenInclude(sa => sa.Addresses)
+                        .ThenInclude(pa => pa.Address)
                 .Where(o => o.SigningAuthorityId == partyId)
                 .ProjectTo<OrganizationListViewModel>(_mapper.ConfigurationProvider)
                 .DecompileAsync()
@@ -89,11 +89,10 @@ namespace Prime.Services
 
         public async Task<Organization> GetOrganizationAsync(int organizationId)
         {
-            var organization = await GetBaseOrganizationQuery()
+            return await GetBaseOrganizationQuery()
                 .Include(o => o.Sites)
                     .ThenInclude(s => s.SiteStatuses)
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
-            return organization;
         }
 
         public async Task<Organization> GetOrganizationByPecAsync(string pec)

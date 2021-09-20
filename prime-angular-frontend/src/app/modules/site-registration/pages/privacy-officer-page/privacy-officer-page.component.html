@@ -6,7 +6,8 @@
         novalidate
         autocomplete="off">
     <app-contact-profile-form [title]="title"
-                              [form]="formState.form">
+                              [form]="formState.form"
+                              [hasAddressToggle]="true">
       <app-same-as selectFor="privacyOfficer"
                    (selected)="onSelect($event)"></app-same-as>
 

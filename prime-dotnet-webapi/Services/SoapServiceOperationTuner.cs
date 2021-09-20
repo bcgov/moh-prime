@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http;
+using SoapCore.Extensibility;
 using System;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
@@ -6,9 +8,6 @@ using System.Web;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using Microsoft.AspNetCore.Http;
-using SoapCore.Extensibility;
-
 
 namespace Prime.Services
 {
@@ -20,7 +19,6 @@ namespace Prime.Services
         // This must be the header used by proxies that first receive the client certificate
         // and pass on via HTTP Header
         public const string ClientCertHeader = "X-SSL-CERT";
-
 
         public void Tune(HttpContext httpContext, object serviceInstance, SoapCore.ServiceModel.OperationDescription operation)
         {
