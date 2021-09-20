@@ -18,6 +18,8 @@
   <app-remote-users-overview [remoteUsers]="healthAuthoritySite"></app-remote-users-overview>
   <app-administrator-overview [administrator]="healthAuthoritySite"
                               [pharmanetAdministrators]="pharmanetAdministrators"></app-administrator-overview>
+  <app-technical-support-overview [technicalSupport]="healthAuthoritySite"
+                                  [technicalSupports]="technicalSupports"></app-technical-support-overview>
 
   <ng-container *ngIf="!healthAuthoritySite?.submittedDate; else showBack">
     <div class="footer mb-4">

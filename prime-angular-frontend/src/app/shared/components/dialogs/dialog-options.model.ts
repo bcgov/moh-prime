@@ -6,7 +6,6 @@ export interface DialogOptions {
   actionType?: 'primary' | 'accent' | 'warn';
   actionText?: string;
   actionHide?: boolean;
-  // TODO allow for use of routing internally
   actionLink?: {
     href: string;
     target: '_self' | '_blank';

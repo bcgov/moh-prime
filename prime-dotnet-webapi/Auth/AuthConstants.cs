@@ -43,6 +43,7 @@ namespace Prime.Auth
         public const string ManageEnrollee = "enrollee_elevated_management";
         public const string ViewSite = "site_view";
         public const string EditSite = "site_edit";
+        public const string PrimeMaintenance = "prime_maintenance";
 
         // Business value role that doesn't represent a permission
         public const string PrimeAdministrant = "prime_administrant";

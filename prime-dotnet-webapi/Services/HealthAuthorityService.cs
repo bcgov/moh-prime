@@ -1,16 +1,16 @@
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Models;
-using Prime.ViewModels;
-using Prime.ViewModels.Parties;
-using Prime.ViewModels.HealthAuthorities;
 using Prime.Models.HealthAuthorities;
+using Prime.ViewModels;
+using Prime.ViewModels.HealthAuthorities;
+using Prime.ViewModels.Parties;
 
 namespace Prime.Services
 {
@@ -20,9 +20,9 @@ namespace Prime.Services
 
         public HealthAuthorityService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<HealthAuthorityService> logger,
             IMapper mapper)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
         }
@@ -100,10 +100,14 @@ namespace Prime.Services
 
             _context.Addresses.RemoveRange(oldContacts.Select(c => c.PhysicalAddress).Where(a => a != null));
 
-            var newContacts = contacts.Select(contact => new T
+            var newContacts = contacts.Select(contact =>
             {
-                HealthAuthorityOrganizationId = healthAuthorityId,
-                Contact = _mapper.Map<Contact>(contact)
+                contact.Id = 0;
+                return new T
+                {
+                    HealthAuthorityOrganizationId = healthAuthorityId,
+                    Contact = _mapper.Map<Contact>(contact)
+                };
             });
 
             _context.HealthAuthorityContacts.AddRange(newContacts);

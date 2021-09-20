@@ -4,17 +4,16 @@ import { MatDialog } from '@angular/material/dialog';
 import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
+import { EmailUtils } from '@lib/utils/email-utils.class';
 import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 import { EnrolleeStatusAction } from '@shared/enums/enrollee-status-action.enum';
 import { EnrolmentStatus } from '@shared/models/enrolment-status.model';
 import { HttpEnrollee } from '@shared/models/enrolment.model';
 import { Role } from '@auth/shared/enum/role.enum';
-
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
-
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EscalationNoteComponent, EscalationType } from '../escalation-note/escalation-note.component';
 import { DialogOptions } from '../../dialog-options.model';
@@ -90,9 +89,7 @@ export class TriageComponent implements OnInit {
             .pipe(map(() => enrollee))
         )
       )
-      .subscribe((enrollee: HttpEnrollee) => {
-        this.utilsService.mailTo(enrollee.email);
-      });
+      .subscribe((enrollee: HttpEnrollee) => EmailUtils.openEmailClient(enrollee.email));
   }
 
   public ngOnInit(): void { }

@@ -14,7 +14,7 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public int VendorCode { get; set; }
         public string SiteName { get; set; }
         public string SiteId { get; set; }
-        public string SecurityGroup { get; set; }
+        public int SecurityGroupCode { get; set; }
         // TODO should we use a relationship or direct data type?
         // public int HealthAuthorityCareTypeId { get; set; }
         public string CareType { get; set; }
@@ -22,8 +22,9 @@ namespace Prime.ViewModels.HealthAuthoritySites
         public ICollection<BusinessDay> BusinessHours { get; set; }
         public ICollection<RemoteUser> RemoteUsers { get; set; }
         public int? HealthAuthorityPharmanetAdministratorId { get; set; }
-        // TODO don't need the whole thing: first and last name for overview
         public HealthAuthorityPharmanetAdministrator HealthAuthorityPharmanetAdministrator { get; set; }
+        public int? HealthAuthorityTechnicalSupportId { get; set; }
+        public HealthAuthorityTechnicalSupport HealthAuthorityTechnicalSupport { get; set; }
         public bool Completed { get; set; }
         public DateTimeOffset? SubmittedDate { get; set; }
         public DateTimeOffset? ApprovedDate { get; set; }

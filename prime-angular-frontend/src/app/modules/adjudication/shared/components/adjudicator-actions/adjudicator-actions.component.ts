@@ -24,6 +24,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 })
 export class AdjudicatorActionsComponent implements OnInit, OnChanges {
   @Input() public enrollee: EnrolleeListViewModel;
+  @Input() public mode: 'row' | 'column';
   @Output() public approve: EventEmitter<{ enrolleeId: number, agreementName: string }>;
   @Output() public decline: EventEmitter<number>;
   @Output() public lock: EventEmitter<number>;
@@ -64,6 +65,8 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
     this.toggleManualAdj = new EventEmitter<{ enrolleeId: number, alwaysManual: boolean }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.reload = new EventEmitter<boolean>();
+    this.mode = 'column';
+
 
     this.termsOfAccessAgreements = [
       { type: 0, name: 'None' },
@@ -173,11 +176,9 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       }
 
       // Disable or enable based on enrollee status
-      if (changes.enrollee.currentValue.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW) {
-        this.assignedTOAType.enable({ emitEvent: false });
-      } else {
-        this.assignedTOAType.disable({ emitEvent: false });
-      }
+      (changes.enrollee.currentValue.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW)
+        ? this.assignedTOAType.enable({ emitEvent: false })
+        : this.assignedTOAType.disable({ emitEvent: false });
     }
   }
 

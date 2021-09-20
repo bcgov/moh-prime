@@ -9,7 +9,6 @@ import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-das
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { LdapUserPageComponent } from './pages/ldap-user-page/ldap-user-page.component';
 import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap-information-page.component';
-import { OrganizationInformationPageComponent } from './pages/organization-information-page/organization-information-page.component';
 import { EnrolleeInformationPageComponent } from './pages/enrollee-information-page/enrollee-information-page.component';
 import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
 import { GisEnrolmentProgressIndicatorComponent } from './shared/components/gis-enrolment-progress-indicator/gis-enrolment-progress-indicator.component';
@@ -20,7 +19,6 @@ import { GisEnrolmentProgressIndicatorComponent } from './shared/components/gis-
     CollectionNoticePageComponent,
     LdapUserPageComponent,
     LdapInformationPageComponent,
-    OrganizationInformationPageComponent,
     EnrolleeInformationPageComponent,
     SubmissionConfirmationPageComponent,
     GisEnrolmentProgressIndicatorComponent
