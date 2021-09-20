@@ -236,6 +236,10 @@ namespace Prime.Controllers
             return Ok(enrollee);
         }
 
+
+        // --------- New Stuff --------------------------------------------------------------------------------------------------------------------------------
+
+
         // GET: api/Enrollees/5/certifications
         /// <summary>
         /// Gets an Enrollee's Certifications.
