@@ -17,8 +17,7 @@ describe('AdministratorOverviewComponent', () => {
         AdministratorOverviewComponent,
         FullnamePipe
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   });
 
   beforeEach(() => {

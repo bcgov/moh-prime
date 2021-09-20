@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { TechnicalSupportOverviewComponent } from './technical-support-overview.component';
+import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 describe('TechnicalSupportOverviewComponent', () => {
   let component: TechnicalSupportOverviewComponent;
@@ -8,9 +10,14 @@ describe('TechnicalSupportOverviewComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TechnicalSupportOverviewComponent ]
-    })
-    .compileComponents();
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        TechnicalSupportOverviewComponent,
+        FullnamePipe
+      ]
+    }).compileComponents();
   });
 
   beforeEach(() => {
