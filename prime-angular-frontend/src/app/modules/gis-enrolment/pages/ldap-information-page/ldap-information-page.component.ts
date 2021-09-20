@@ -24,8 +24,8 @@ import { LdapErrorResponse } from '@gis/shared/models/ldap-error-response.model'
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: LdapInformationPageFormState;
-  public unauthorized: boolean;
-  public locked: boolean;
+  public unauthorized: boolean | null;
+  public locked: boolean | null;
   public remainingAttempts: number;
 
   private routeUtils: RouteUtils;
@@ -89,7 +89,7 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ENROLLEE_INFO_PAGE}`]);
   }
 
-  private handleLdapResponse(unauthorized?: boolean, locked?: boolean) {
+  private handleLdapResponse(unauthorized: boolean | null = null, locked: boolean | null = null) {
     this.unauthorized = unauthorized;
     this.locked = locked;
   }
