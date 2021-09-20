@@ -25,8 +25,8 @@ namespace Prime.Services
         Task AcceptOrgAgreementAsync(int organizationId, int agreementId);
         Task<SignedAgreementDocument> AddSignedAgreementAsync(int organizationId, int agreementId, Guid documentGuid);
         Task<SignedAgreementDocument> GetLatestSignedAgreementAsync(int organizationId);
-        Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTranferAsync(int organizationId, int signingAuthorityId);
-        Task FinalizeTranferAsync(int organizationId);
+        Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId);
+        Task FinalizeTransferAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
 
         /// <summary>

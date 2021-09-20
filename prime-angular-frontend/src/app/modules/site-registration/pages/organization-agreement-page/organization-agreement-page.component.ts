@@ -115,7 +115,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
 
   protected initForm() {
     const organization = this.organizationService.organization;
-    const careSettingCode = this.siteService.site.careSettingCode;
+    const careSettingCode = this.siteService.site?.careSettingCode;
     this.busy = this.organizationResource
       .updateOrganizationAgreement(organization.id, careSettingCode)
       .pipe(

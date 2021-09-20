@@ -239,7 +239,7 @@ namespace Prime.Services
             }
         }
 
-        public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTranferAsync(int organizationId, int signingAuthorityId)
+        public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
         {
             var agreements = await _context.Agreements
                 .Include(a => a.AgreementVersion)
@@ -257,7 +257,7 @@ namespace Prime.Services
             return agreementSettings.Where(code => siteSettings.Contains((int)code)).ToList();
         }
 
-        public async Task FinalizeTranferAsync(int organizationId)
+        public async Task FinalizeTransferAsync(int organizationId)
         {
             var organization = await _context.Organizations.SingleOrDefaultAsync(o => o.Id == organizationId);
             organization.PendingTransfer = false;

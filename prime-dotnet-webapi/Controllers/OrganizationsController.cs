@@ -396,14 +396,14 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTranferAsync(organizationId, organization.SigningAuthorityId);
+            var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
 
             return Ok(careSettingCodes);
         }
 
         // PUT: api/Organizations/5/finalize-transfer
         /// <summary>
-        /// Clear Pending Tranfer Flag on an organization.
+        /// Clear Pending Transfer Flag on an organization.
         /// </summary>
         /// <param name="organizationId"></param>
         [HttpPut("{organizationId}/finalize-transfer", Name = nameof(FinalizeTransfer))]
@@ -424,7 +424,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            await _organizationService.FinalizeTranferAsync(organizationId);
+            await _organizationService.FinalizeTransferAsync(organizationId);
 
             return NoContent();
         }

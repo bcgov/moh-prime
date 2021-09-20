@@ -278,7 +278,7 @@ export class OrganizationResource {
   /**
      * @description
      * Get care setting codes that still require a signature on an oganization that is
-     * pending a tranfer
+     * pending a transfer
      */
   public getCareSettingCodesForPendingTransfer(organizationId: number): Observable<CareSettingEnum[]> {
     return this.apiResource.get<CareSettingEnum[]>(`organizations/${organizationId}/care-settings/pending-transfer`)
