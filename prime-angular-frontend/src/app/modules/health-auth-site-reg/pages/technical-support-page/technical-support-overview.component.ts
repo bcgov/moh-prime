@@ -5,24 +5,24 @@ import { Contact } from '@lib/models/contact.model';
 import { AbstractOverview } from '@lib/classes/abstract-overview.class';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 
-import { AdministratorForm } from './administrator-form.model';
+import { TechnicalSupportForm } from '@health-auth/pages/technical-support-page/technical-support-form.model';
 
 @Component({
-  selector: 'app-administrator-overview',
+  selector: 'app-technical-support-overview',
   template: `
-    <app-overview-section title="PharmaNet Administrator"
+    <app-overview-section title="Technical Support"
                           [showEditRedirect]="showEditRedirect"
-                          [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
+                          [editRoute]="HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT"
                           (route)="onRoute($event)">
-      {{ pharmanetAdministrator | fullname }}
+      {{ technicalSupportContact | fullname }}
     </app-overview-section>
   `,
   styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdministratorOverviewComponent extends AbstractOverview implements OnInit {
-  @Input() administrator: AdministratorForm;
-  @Input() pharmanetAdministrators: Contact[];
+export class TechnicalSupportOverviewComponent extends AbstractOverview implements OnInit {
+  @Input() technicalSupport: TechnicalSupportForm;
+  @Input() technicalSupports: Contact[];
   public HealthAuthSiteRegRoutes = HealthAuthSiteRegRoutes;
 
   constructor(
@@ -32,9 +32,9 @@ export class AdministratorOverviewComponent extends AbstractOverview implements 
     super(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
   }
 
-  public get pharmanetAdministrator(): Contact {
-    return this.pharmanetAdministrators
-      ?.find(pa => pa.id === this.administrator.healthAuthorityPharmanetAdministratorId) ?? null;
+  public get technicalSupportContact(): Contact {
+    return this.technicalSupports
+      ?.find(pa => pa.id === this.technicalSupport.healthAuthorityTechnicalSupportId) ?? null;
   }
 
   public ngOnInit(): void { }
