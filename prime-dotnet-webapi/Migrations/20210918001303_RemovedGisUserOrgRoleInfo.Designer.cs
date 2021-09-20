@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Prime;
@@ -10,9 +11,10 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    partial class ApiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210918001303_RemovedGisUserOrgRoleInfo")]
+    partial class RemovedGisUserOrgRoleInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -12483,9 +12485,6 @@ namespace Prime.Migrations
                     b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("HealthAuthorityTechnicalSupportId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -12526,8 +12525,6 @@ namespace Prime.Migrations
                     b.HasIndex("HealthAuthorityOrganizationId");
 
                     b.HasIndex("HealthAuthorityPharmanetAdministratorId");
-
-                    b.HasIndex("HealthAuthorityTechnicalSupportId");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -18673,10 +18670,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
                         .WithMany()
                         .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
-
-                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
-                        .WithMany()
-                        .HasForeignKey("HealthAuthorityTechnicalSupportId");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()
