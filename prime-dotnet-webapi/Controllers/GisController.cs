@@ -177,6 +177,7 @@ namespace Prime.Controllers
             }
             if (ldapResponse.Authenticated == "true")
             {
+                // User was authenticated, but does not have have the proper role
                 return Forbid();
             }
 
