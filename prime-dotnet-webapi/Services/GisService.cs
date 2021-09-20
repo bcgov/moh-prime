@@ -129,7 +129,6 @@ namespace Prime.Services
 
         /// <summary>
         /// Updates the User's email and phone number in MoH Keycloak.
-        /// Returns true if the operation was successful.
         /// </summary>
         /// <param name="party"></param>
         private async Task UpdateMohKeycloakUserInfo(Party party)
