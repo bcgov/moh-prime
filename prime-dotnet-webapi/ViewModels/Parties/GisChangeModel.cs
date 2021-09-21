@@ -19,8 +19,6 @@ namespace Prime.ViewModels.Parties
         public string LdapUsername { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public string Organization { get; set; }
-        public string Role { get; set; }
 
         /// <summary>
         /// Updates the given Party with values from this CreateModel and the User. Also sets the relevant types
@@ -31,8 +29,6 @@ namespace Prime.ViewModels.Parties
             user.ThrowIfNull(nameof(user));
 
             gisEnrolment.LdapUsername = LdapUsername;
-            gisEnrolment.Organization = Organization;
-            gisEnrolment.Role = Role;
 
             gisEnrolment.Party = UpdateParty(gisEnrolment.Party, user);
 

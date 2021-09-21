@@ -175,6 +175,11 @@ namespace Prime.Controllers
             {
                 return Ok();
             }
+            if (ldapResponse.Authenticated == "true")
+            {
+                // User was authenticated, but does not have have the proper role
+                return Forbid();
+            }
 
             Response.Headers.Add("Unlocked", ldapResponse.Unlocked);
 
@@ -198,7 +203,8 @@ namespace Prime.Controllers
             {
                 return NotFound($"Gis Enrolment not found with id {gisId}");
             }
-            if (!gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
+
+            if (gisEnrolment.LdapLoginSuccessDate == null || !gisEnrolment.Party.PermissionsRecord().AccessableBy(User))
             {
                 return Forbid();
             }
