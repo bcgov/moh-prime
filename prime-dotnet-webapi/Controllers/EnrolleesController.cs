@@ -70,6 +70,21 @@ namespace Prime.Controllers
             }
         }
 
+        // GET: api/Enrollees/PotentialPaperEnrolleeReturneeStatus/5
+        /// <summary>
+        /// Gets all paper enrollees and checks whether or not there is a match in dateOfBirth with the current logged on enrollee.
+        /// </summary>
+        [HttpGet("PotentialPaperEnrolleeReturneeStatus/{dateOfBirth}")]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus(string dateOfBirth)
+        {
+            var result = await _enrolleeService.IsPotentialPaperEnrolleeReturnee(dateOfBirth);
+            return Ok(result);
+        }
+
         // GET: api/Enrollees/1/adjacent
         /// <summary>
         /// Gets adjacent next and previous enrollee IDs for a given enrolleeId

@@ -1,0 +1,40 @@
+<app-enrollee-page>
+  <app-page-header>PRIME Enrolment</app-page-header>
+  <app-enrolment-progress-indicator *ngIf="isInitialEnrolment"
+                                    [inProgress]="isInitialEnrolment"></app-enrolment-progress-indicator>
+
+  <app-page-subheader2>
+    <ng-container appPageSubheader2Title>Previous Offline Request for PharmaNet Access</ng-container>
+  </app-page-subheader2>
+
+  <p>
+    Have you previously requested PharmaNet access from the Ministry of Health using form HLTH 4568 (Request Access
+    to
+    PharmaNet without a Mobile BC Services Card)?
+  </p>
+
+  <form [formGroup]="form">
+
+    <app-toggle-content label="I requested access via the offline form"
+                        [checked]="isOfflineFormAccessRequested"
+                        (toggle)="onChangeRequestedOfflineAccess($event)">
+      <section>
+        <app-page-subheader2>
+          <ng-container appPageSubheader2Title>GPID</ng-container>
+          <ng-container appPageSubheader2Summary>
+            Provide the GPID assigned to you after approval. Your GPID is a 20-character string that starts with NOBCSC
+            (e.g. NOBCSC!S*#HFD38WESKT).
+          </ng-container>
+        </app-page-subheader2>
+
+        <app-paper-enrollee-returnee-form [form]="form"></app-paper-enrollee-returnee-form>
+      </section>
+    </app-toggle-content>
+
+  </form>
+
+  <app-page-footer primaryActionLabel="Continue"
+                   [isInitialEnrolment]="false"
+                   (save)="onSubmit()"></app-page-footer>
+
+</app-enrollee-page>

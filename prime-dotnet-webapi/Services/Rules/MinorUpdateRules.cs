@@ -111,12 +111,20 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
+            // If enrollee selected that they had previous paper enrolment and they provided their GPID
+            // taht was provided to them during the papoer enrolment, then check to see if this
+            if (_updatedProfile.GPID != null)
+            {
+                return Task.FromResult(false);
+            }
+
             // If the new profile has self declaration document GUIDs in it, the user has uploaded new documents
             if (_updatedProfile.SelfDeclarations.Any(sd => (sd.DocumentGuids != null && sd.DocumentGuids.Any()))
                 || !CompareCollections(comparitor, enrollee.SelfDeclarations, _updatedProfile.SelfDeclarations))
             {
                 return Task.FromResult(false);
             }
+
 
             return Task.FromResult(true);
         }

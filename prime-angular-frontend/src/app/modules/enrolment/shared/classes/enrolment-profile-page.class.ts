@@ -21,6 +21,7 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
 import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-form-state.service';
 import { BaseEnrolmentPage } from '@enrolment/shared/classes/enrolment-page.class';
+import { Enrollee } from '@shared/models/enrollee.model';
 
 export interface IBaseEnrolmentProfilePage {
   /**

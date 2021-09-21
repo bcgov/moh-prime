@@ -954,5 +954,48 @@ namespace Prime.Services
                 .DecompileAsync()
                 .ToListAsync();
         }
+
+        public async Task<bool> IsPotentialPaperEnrolleeReturnee(string dateOfBirth)
+        {
+            // DateTime dateOfBirthDate = DateTime.Parse(dateOfBirth);
+
+            return await _context.Enrollees
+                .AsNoTracking()
+                .AnyAsync(e => e.GPID.StartsWith("NOBCSC") && e.DateOfBirth.Date == DateTime.Parse(dateOfBirth).Date);
+        }
+
+        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.GPID.StartsWith("NOBCSC") && e.DateOfBirth.Date == dateOfBirth.Date)
+                .DecompileAsync()
+                .ToListAsync();
+        }
+
+        public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId)
+        {
+            var enrollee = await _context.Enrollees
+                .Where(e => e.Id == enrolmentId)
+                .SingleOrDefaultAsync();
+
+            var paperEnrollee = await _context.Enrollees
+                .Where(e => e.GPID.StartsWith("NOBCSC") && e.Id == PaperEnrolmentId)
+                .SingleOrDefaultAsync();
+
+            int DbLinkedEnrolmentId = enrollee.LinkedErolmentId;
+            int DbLinkedPaperEnrolmentId = paperEnrollee.LinkedErolmentId;
+
+            if (DbLinkedEnrolmentId != 0 || DbLinkedPaperEnrolmentId != 0)
+            {
+                // already linked
+            }
+            else
+            {
+                _context.Update(DbLinkedEnrolmentId);
+                _context.Update(DbLinkedPaperEnrolmentId);
+            }
+            return true;
+        }
     }
 }

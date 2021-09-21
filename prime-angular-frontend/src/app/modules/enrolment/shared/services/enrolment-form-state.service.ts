@@ -29,6 +29,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
+import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-returnees/paper-enrollee-returnee-form-state.class';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
   public selfDeclarationForm: FormGroup;
   public careSettingsForm: FormGroup;
   public accessAgreementForm: FormGroup;
+  public paperEnrolleeReturneeFormState: PaperEnrolleeReturneeFormState
 
   private identityProvider: IdentityProviderEnum;
   private enrolleeId: number;
@@ -100,6 +102,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     const profile = (this.identityProvider === IdentityProviderEnum.BCEID)
       ? this.bceidDemographicFormState.json
       : this.bcscDemographicFormState.json;
+    const paperProfile = this.paperEnrolleeReturneeFormState.json;
     const certifications = this.regulatoryFormState.json;
     const deviceProvider = this.deviceProviderForm.getRawValue();
     const { oboSites } = this.oboSitesForm.getRawValue();
@@ -114,7 +117,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       id,
       enrollee: {
         userId,
-        ...profile
+        ...profile,
+        ...paperProfile
       },
       certifications,
       ...deviceProvider,
@@ -150,7 +154,8 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
       // this.deviceProviderForm,
       this.oboSitesForm,
       this.remoteAccessLocationsForm,
-      this.selfDeclarationForm
+      this.selfDeclarationForm,
+      this.paperEnrolleeReturneeFormState.form
     ];
   }
 
@@ -218,6 +223,7 @@ export class EnrolmentFormStateService extends AbstractFormStateService<Enrolmen
     this.selfDeclarationForm = this.buildSelfDeclarationForm();
     this.careSettingsForm = this.buildCareSettingsForm();
     this.accessAgreementForm = this.buildAccessAgreementForm();
+    this.paperEnrolleeReturneeFormState = new PaperEnrolleeReturneeFormState(this.fb);
   }
 
   /**

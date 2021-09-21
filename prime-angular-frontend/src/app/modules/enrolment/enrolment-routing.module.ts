@@ -34,6 +34,7 @@ import { MinorUpdateConfirmationComponent } from './pages/minor-update-confirmat
 import { AccessDeclinedComponent } from './pages/access-declined/access-declined.component';
 import { RemoteAccessComponent } from './pages/remote-access/remote-access.component';
 import { RemoteAccessAddressesComponent } from './pages/remote-access-addresses/remote-access-addresses.component';
+import { PaperEnrolleeReturneesComponent } from './pages/paper-enrollee-returnees/paper-enrollee-returnees.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,14 @@ const routes: Routes = [
         // reviewing prior to submission
         path: EnrolmentRoutes.OVERVIEW,
         component: OverviewComponent,
+        canDeactivate: [CanDeactivateFormGuard],
+        data: { title: 'PRIME Enrolment' }
+      },
+      {
+        // Declaration page to ask enrollees whether they previously
+        // had enrolled through paper enrolment
+        path: EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION,
+        component: PaperEnrolleeReturneesComponent,
         canDeactivate: [CanDeactivateFormGuard],
         data: { title: 'PRIME Enrolment' }
       },

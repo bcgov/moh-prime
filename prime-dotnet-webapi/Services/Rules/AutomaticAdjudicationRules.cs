@@ -233,4 +233,53 @@ namespace Prime.Services.Rules
             return Task.FromResult(true);
         }
     }
+
+    public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
+    {
+        private readonly IEnrolleeService _enrolleeService;
+
+        public IsPotentialPaperEnrolleeReturnee(IEnrolleeService enrolleeService)
+        {
+            _enrolleeService = enrolleeService;
+        }
+        public override async Task<bool> ProcessRule(Enrollee enrollee)
+        {
+            var PaperEnrollees = await _enrolleeService.GetPotentialPaperEnrolleeReturnees(enrollee.DateOfBirth);
+
+            // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
+            if (PaperEnrollees != null)
+            {
+                // *** if yes and GPID is provided
+                if (enrollee.GPID != null)
+                {
+                    var possiblePaperEnrolleeMatchId = -1;
+                    // *** *** Check if GPID match one of the paper enrolment
+                    foreach (var PaperEnrollee in PaperEnrollees)
+                    {
+                        if (
+                                PaperEnrollee.DateOfBirth.Date == enrollee.DateOfBirth.Date &&
+                                PaperEnrollee.GPID == enrollee.GPID
+                            )
+                        {
+                            possiblePaperEnrolleeMatchId = PaperEnrollee.Id;
+                        }
+                    }
+
+                    if (possiblePaperEnrolleeMatchId == -1)
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
+                    }
+                    // *** *** if match auto enrol and link to paper enrolment
+                }
+                // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
+                else
+                {
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Method used: {enrollee.GPID}");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+    }
 }

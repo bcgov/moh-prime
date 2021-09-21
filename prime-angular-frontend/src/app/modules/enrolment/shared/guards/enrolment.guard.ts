@@ -69,6 +69,10 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
+    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)) {
+      return true;
+    }
+
     if (!enrolment) {
       // Route based on identity provider to determine sequence of routing
       // required to create a new enrolment

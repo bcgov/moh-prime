@@ -19,6 +19,8 @@ namespace Prime.Models
         RequestingRemoteAccess = 15,
         NoAssignedAgreement = 16,
         NoVerifiedAddress = 17,
-        PaperEnrollee = 18
+        PaperEnrollee = 18,
+        PaperEnrolmentMismatch = 19,
+        PossiblePaperEnrolmentMatch = 20
     }
 }
