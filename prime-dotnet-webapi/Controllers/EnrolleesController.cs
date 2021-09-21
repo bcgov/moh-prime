@@ -65,8 +65,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var enrollee = await _enrolleeService.GetEnrolleeAsync(User.GetPrimeUserId());
-                return Ok(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee });
+                return RedirectToAction(nameof(GetEnrolleeByUserId), new { userId = User.GetPrimeUserId() });
             }
         }
 
