@@ -95,6 +95,15 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(o => o.Id == organizationId);
         }
 
+        public async Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId)
+        {
+            return await _context.Organizations
+                .AsNoTracking()
+                .Where(o => o.Id == organizationId)
+                .Select(o => o.SigningAuthorityId)
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<Organization> GetOrganizationByPecAsync(string pec)
         {
             return await GetBaseOrganizationQuery()
@@ -304,11 +313,12 @@ namespace Prime.Services
                 .Include(o => o.Claims);
         }
 
-        public async Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
+        public async Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId)
         {
-            var organization = await _context.Organizations.SingleAsync(o => o.Id == organizationId);
+            var organization = await _context.Organizations
+                .SingleAsync(o => o.Id == organizationId);
             organization.SigningAuthorityId = newSigningAuthorityId;
-            return await _context.SaveChangesAsync() == 1;
+            await _context.SaveChangesAsync();
         }
     }
 }

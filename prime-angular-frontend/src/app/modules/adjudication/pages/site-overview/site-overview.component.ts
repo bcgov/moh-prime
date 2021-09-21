@@ -153,7 +153,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       }),
       exhaustMap((newSigningAuthorityId: number | null) =>
         (newSigningAuthorityId)
-          ? this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`)
+          ? this.organizationResource.getSigningAuthorityById(newSigningAuthorityId)
           : of(null)
       )
     ).subscribe((signingAuthority: Party | null) => this.newSigningAuthority = signingAuthority);
