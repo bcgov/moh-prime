@@ -252,7 +252,7 @@ namespace Prime.Services.Rules
                 // *** if yes and GPID is provided
                 if (enrollee.GPID != null)
                 {
-                    var possiblePaperEnrolleeMatchId = -1;
+                    var paperEnrolleeMatchId = -1;
                     // *** *** Check if GPID match one of the paper enrolment
                     foreach (var PaperEnrollee in PaperEnrollees)
                     {
@@ -261,15 +261,21 @@ namespace Prime.Services.Rules
                                 PaperEnrollee.GPID == enrollee.GPID
                             )
                         {
-                            possiblePaperEnrolleeMatchId = PaperEnrollee.Id;
+                            paperEnrolleeMatchId = PaperEnrollee.Id;
                         }
                     }
 
-                    if (possiblePaperEnrolleeMatchId == -1)
+                    if (paperEnrolleeMatchId == -1)
                     {
                         enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
+                        return false;
                     }
-                    // *** *** if match auto enrol and link to paper enrolment
+                    // *** *** if match "auto enrol" and link to paper enrolment
+                    if (await _enrolleeService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
+                    {
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
+                        return false;
+                    }
                 }
                 // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
                 else

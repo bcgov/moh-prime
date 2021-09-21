@@ -957,19 +957,22 @@ namespace Prime.Services
 
         public async Task<bool> IsPotentialPaperEnrolleeReturnee(string dateOfBirth)
         {
-            // DateTime dateOfBirthDate = DateTime.Parse(dateOfBirth);
-
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.GPID.StartsWith("NOBCSC") && e.DateOfBirth.Date == DateTime.Parse(dateOfBirth).Date);
+                .AnyAsync(e => e.GPID.StartsWith("NOBCSC")
+                    && e.DateOfBirth.Date == DateTime.Parse(dateOfBirth).Date
+                    && e.LinkedErolmentId == 0
+                );
         }
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .Where(e => e.GPID.StartsWith("NOBCSC") && e.DateOfBirth.Date == dateOfBirth.Date)
-                .DecompileAsync()
+                .Where(e => e.GPID.StartsWith("NOBCSC")
+                    && e.DateOfBirth.Date == dateOfBirth.Date
+                    && e.LinkedErolmentId == 0
+                )
                 .ToListAsync();
         }
 
@@ -980,7 +983,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             var paperEnrollee = await _context.Enrollees
-                .Where(e => e.GPID.StartsWith("NOBCSC") && e.Id == PaperEnrolmentId)
+                .Where(pe => pe.GPID.StartsWith("NOBCSC") && pe.Id == PaperEnrolmentId)
                 .SingleOrDefaultAsync();
 
             int DbLinkedEnrolmentId = enrollee.LinkedErolmentId;
@@ -988,7 +991,7 @@ namespace Prime.Services
 
             if (DbLinkedEnrolmentId != 0 || DbLinkedPaperEnrolmentId != 0)
             {
-                // already linked
+                return false;
             }
             else
             {

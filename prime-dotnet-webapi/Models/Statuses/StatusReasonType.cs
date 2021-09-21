@@ -21,6 +21,7 @@ namespace Prime.Models
         NoVerifiedAddress = 17,
         PaperEnrollee = 18,
         PaperEnrolmentMismatch = 19,
-        PossiblePaperEnrolmentMatch = 20
+        PossiblePaperEnrolmentMatch = 20,
+        UnableToLinkToPpaperEnrolment = 21
     }
 }
