@@ -93,6 +93,10 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    // If this is the first time the enrollee logs in and is flagged for potential match for paper enrolment
+    // then we create the enrollee here same as in the BCSC-Demographic page. That code remains the same to handle
+    // enrollees who were not flagged by the paper enrolment match check.
+    // We still need the enrollees information to create them in the database, but in this page we will also add GPID
     if (!enrolment.id && this.isInitialEnrolment) {
       return this.getUser$()
         .pipe(
