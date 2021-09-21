@@ -148,8 +148,11 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
         this.initForm(site);
-        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
-        return of(this.orgClaim?.newSigningAuthorityId);
+        this.showSendNotification = [
+          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.DEVICE_PROVIDER
+        ].includes(site.careSettingCode);
+        return of(orgClaim?.newSigningAuthorityId);
       }),
       exhaustMap((newSigningAuthorityId: number | null) =>
         (newSigningAuthorityId)

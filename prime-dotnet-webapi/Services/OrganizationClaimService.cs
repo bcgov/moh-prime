@@ -30,18 +30,17 @@ namespace Prime.Services
                 .AnyAsync(oc => oc.OrganizationId == organizationId);
         }
 
-        public async Task<bool> DeleteClaimAsync(int claimId)
+        public async Task DeleteClaimAsync(int claimId)
         {
             var claim = await _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.Id == claimId);
             if (claim == null)
             {
-                return false;
+                return;
             }
 
             _context.OrganizationClaims.Remove(claim);
-            int numAffected = await _context.SaveChangesAsync();
-            return numAffected == 1;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<OrganizationClaim> GetOrganizationClaimAsync(int claimId)
