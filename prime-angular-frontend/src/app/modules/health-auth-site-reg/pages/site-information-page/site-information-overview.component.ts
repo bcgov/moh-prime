@@ -20,7 +20,7 @@ import { SiteInformationForm } from './site-information-form.model';
         {{ siteInformation?.siteId | default }}
       </app-enrollee-property>
       <app-enrollee-property title="Security Group">
-        {{ siteInformation?.securityGroup | default }}
+        {{ siteInformation?.securityGroupCode | default }}
       </app-enrollee-property>
     </app-overview-section>
   `,

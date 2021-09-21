@@ -12,7 +12,7 @@ import { AdministratorForm } from './administrator-form.model';
   template: `
     <app-overview-section title="PharmaNet Administrator"
                           [showEditRedirect]="showEditRedirect"
-                          [editRoute]="HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR"
+                          [editRoute]="HealthAuthSiteRegRoutes.ADMINISTRATOR"
                           (route)="onRoute($event)">
       {{ pharmanetAdministrator | fullname }}
     </app-overview-section>

@@ -28,6 +28,8 @@ import { RemoteUsersOverviewComponent } from './pages/remote-users-page/remote-u
 import { RemoteUserPageComponent } from './pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from './pages/administrator-page/administrator-page.component';
 import { AdministratorOverviewComponent } from './pages/administrator-page/administrator-overview.component';
+import { TechnicalSupportPageComponent } from './pages/technical-support-page/technical-support-page.component';
+import { TechnicalSupportOverviewComponent } from './pages/technical-support-page/technical-support-overview.component';
 import { OverviewPageComponent } from './pages/overview-page/overview-page.component';
 
 @NgModule({
@@ -55,6 +57,8 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
     RemoteUserPageComponent,
     AdministratorPageComponent,
     AdministratorOverviewComponent,
+    TechnicalSupportPageComponent,
+    TechnicalSupportOverviewComponent,
     OverviewPageComponent
   ],
   imports: [
