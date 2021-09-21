@@ -4,18 +4,18 @@
 
   <app-page-section>
     <app-page-subheader2>
-      <ng-container appPageSubheader2Title>PharmaNet Administrator</ng-container>
+      <ng-container appPageSubheader2Title>Technical Support</ng-container>
       <ng-container appPageSubheader2Summary>
-        Choose the PharmaNet Administrator for this Health Authority.
+        Choose the Technical Support for this Health Authority.
       </ng-container>
     </app-page-subheader2>
 
     <app-options-form [form]="formState.form"
-                      fieldLabel="PharmaNet Administrator"
-                      controlName="healthAuthorityPharmanetAdministratorId"
+                      fieldLabel="Technical Support"
+                      controlName="healthAuthorityTechnicalSupportId"
                       optionKey="id"
                       optionLabel="fullName"
-                      [availableOptions]="pharmanetAdministrators"></app-options-form>
+                      [availableOptions]="technicalSupports"></app-options-form>
   </app-page-section>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"

@@ -334,7 +334,7 @@ const routes: Routes = [
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
                 component: TechnicalSupportsPageComponent,
-                data: { title: 'Technical Support Contact(s)' }
+                data: { title: 'Technical Support(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,

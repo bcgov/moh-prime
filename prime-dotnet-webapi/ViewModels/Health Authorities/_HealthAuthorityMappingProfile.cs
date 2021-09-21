@@ -17,14 +17,17 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.HasUnderReviewUsers, opt => opt.MapFrom(src => underReviewIds.Contains(src.Id)));
             CreateMap<HealthAuthorityOrganization, HealthAuthorityViewModel>()
                 .ForMember(dest => dest.CareTypes, opt => opt.MapFrom(src => src.CareTypes.Select(x => x.CareType)))
-                .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)))
-                .ForMember(dest => dest.TechnicalSupports, opt => opt.MapFrom(src => src.TechnicalSupports.Select(x => x.Contact)))
-                .ForMember(dest => dest.PharmanetAdministrators, opt => opt.MapFrom(src => src.PharmanetAdministrators.Select(x => x.Contact)));
+                .ForMember(dest => dest.VendorCodes, opt => opt.MapFrom(src => src.Vendors.Select(x => x.VendorCode)));
 
             CreateMap<PrivacyOffice, PrivacyOfficeViewModel>()
                 .ForMember(dest => dest.PrivacyOfficer, opt => opt.MapFrom(src => src.HealthAuthorityOrganization.PrivacyOfficers.Select(x => x.Contact).SingleOrDefault()))
                 .ReverseMap();
+
             CreateMap<Contact, PrivacyOfficerViewModel>();
+            CreateMap<Contact, HealthAuthorityContactViewModel>();
+            CreateMap<HealthAuthorityContact, HealthAuthorityContactViewModel>()
+                .IncludeMembers(src => src.Contact)
+                .ForMember(dest => dest.ContactId, opt => opt.MapFrom(src => src.Contact.Id));
 
             CreateMap<AuthorizedUser, AuthorizedUserViewModel>()
                 .IncludeMembers(src => src.Party);
