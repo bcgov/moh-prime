@@ -17,14 +17,14 @@
       <div class="col-md-6 order-md-12 mb-3">
         <div class="d-flex justify-content-end mb-4">
           <app-site-registration-actions *ngIf="site" 
-                                       [siteRegistration]="siteActinoViewModel"
-                                       (approve)="onApprove($event)"
-                                       (decline)="onDecline($event)"
-                                       (unreject)="onUnreject($event)"
-                                       (delete)="onDelete($event)"
-                                       (enableEditing)="onEnableEditing($event)"
-                                       (escalate)="onEscalate($event)"
-                                       (flag)="onToggleFlagSite($event)"></app-site-registration-actions>
+                                         [siteRegistration]="siteActinoViewModel"
+                                         (approve)="onApprove($event)"
+                                         (decline)="onDecline($event)"
+                                         (unreject)="onUnreject($event)"
+                                         (delete)="onDelete($event)"
+                                         (enableEditing)="onEnableEditing($event)"
+                                         (escalate)="onEscalate($event)"
+                                         (flag)="onToggleFlagSite($event)"></app-site-registration-actions>
         </div>
 
         <app-page-section class="mb-5 mt-3">
