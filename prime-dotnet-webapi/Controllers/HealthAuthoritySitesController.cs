@@ -377,8 +377,11 @@ namespace Prime.Controllers
         }
 
         // POST: api/health-authorities/5/sites/5/notes
-
-
+        // <summary>
+        // Creates a health authority site note.
+        // </summary>
+        // <param name="siteId">The site identifier</param>
+        // <param name="note">The note</param>
         [HttpPost("{siteId}/notes", Name = nameof(CreateHealthAuthoritySiteNote))]
         [Authorize(Roles = Roles.EditSite)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
