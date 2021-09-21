@@ -16,11 +16,11 @@ import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudicat
 export class SiteRegistrationActionsComponent implements OnInit {
   @Input() siteRegistration: SiteActionViewModel;
   @Output() public approve: EventEmitter<{ siteId: number, organizationId: number }>;
-  @Output() public decline: EventEmitter<number>;
-  @Output() public unreject: EventEmitter<number>;
-  @Output() public escalate: EventEmitter<number>;
+  @Output() public decline: EventEmitter<{ siteId: number, organizationId: number }>;
+  @Output() public unreject: EventEmitter<{ siteId: number, organizationId: number }>;
+  @Output() public escalate: EventEmitter<{ siteId: number, organizationId: number }>;
   @Output() public delete: EventEmitter<{ [key: string]: number }>;
-  @Output() public enableEditing: EventEmitter<number>;
+  @Output() public enableEditing: EventEmitter<{ siteId: number, organizationId: number }>;
   @Output() public flag: EventEmitter<{ siteId: number, flagged: boolean }>;
 
   public Role = Role;
@@ -33,10 +33,10 @@ export class SiteRegistrationActionsComponent implements OnInit {
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
     this.approve = new EventEmitter<{ siteId: number, organizationId: number }>();
-    this.decline = new EventEmitter<number>();
-    this.unreject = new EventEmitter<number>();
-    this.escalate = new EventEmitter<number>();
-    this.enableEditing = new EventEmitter<number>();
+    this.decline = new EventEmitter<{ siteId: number, organizationId: number }>();
+    this.unreject = new EventEmitter<{ siteId: number, organizationId: number }>();
+    this.escalate = new EventEmitter<{ siteId: number, organizationId: number }>();
+    this.enableEditing = new EventEmitter<{ siteId: number, organizationId: number }>();
     this.flag = new EventEmitter<{ siteId: number, flagged: boolean }>();
   }
 
@@ -48,19 +48,19 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onReject(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.decline.emit(this.siteRegistration.siteId);
+      this.decline.emit({ siteId: this.siteRegistration.siteId, organizationId: this.siteRegistration.organizationId });
     }
   }
 
   public onUnreject(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.unreject.emit(this.siteRegistration.siteId);
+      this.unreject.emit({ siteId: this.siteRegistration.siteId, organizationId: this.siteRegistration.organizationId });
     }
   }
 
   public onEscalate(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.escalate.emit(this.siteRegistration.siteId);
+      this.escalate.emit({ siteId: this.siteRegistration.siteId, organizationId: this.siteRegistration.organizationId });
     }
   }
 
@@ -90,7 +90,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onRequestChanges(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.enableEditing.emit(this.siteRegistration.siteId);
+      this.enableEditing.emit({ siteId: this.siteRegistration.siteId, organizationId: this.siteRegistration.organizationId });
     }
   }
 

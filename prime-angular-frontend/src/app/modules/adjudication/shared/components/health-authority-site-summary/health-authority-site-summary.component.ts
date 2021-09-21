@@ -16,7 +16,7 @@ export class HealthAuthoritySiteSummaryComponent implements OnInit, OnChanges {
   @Input() public site: HealthAuthoritySite;
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
-  @Output() public notify: EventEmitter<{ siteId: number }>;
+  @Output() public notify: EventEmitter<{ siteId: number, healthAuthorityOrganizationId: number }>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
   public siteColumns: string[];
@@ -40,7 +40,7 @@ export class HealthAuthoritySiteSummaryComponent implements OnInit, OnChanges {
     ];
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
-    this.notify = new EventEmitter<{ siteId: number }>();
+    this.notify = new EventEmitter<{ siteId: number, healthAuthorityOrganizationId: number }>();
     this.route = new EventEmitter<string | (string | number)[]>();
     this.dataSource = new MatTableDataSource<HealthAuthoritySite>([]);
   }
@@ -57,8 +57,8 @@ export class HealthAuthoritySiteSummaryComponent implements OnInit, OnChanges {
     this.reassign.emit(siteId);
   }
 
-  public onNotify(siteId: number): void {
-    this.notify.emit({ siteId });
+  public onNotify(siteId: number, healthAuthorityOrganizationId: number): void {
+    this.notify.emit({ siteId, healthAuthorityOrganizationId });
   }
 
   public onRoute(routePath: string | (string | number)[]) {

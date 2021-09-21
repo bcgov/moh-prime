@@ -183,10 +183,10 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.routeUtils.routeWithin(routePath);
   }
 
-  public onEscalate(siteId: number) {
+  public onEscalate(record: { siteId: number, organizationId: number }) {
     const data: DialogOptions = {
       data: {
-        id: siteId,
+        id: record.siteId,
         escalationType: EscalationType.SITE_REGISTRATION
       }
     };
@@ -233,7 +233,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe();
   }
 
-  public onDecline(siteId: number) {
+  public onDecline(record: { siteId: number, organizationId: number }) {
     const data: DialogOptions = {
       title: 'Decline Site Registration',
       message: 'Are you sure you want to Decline this Site Registration?',
@@ -251,7 +251,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap((note: string) =>
-          this.siteResource.declineSite(siteId)
+          this.siteResource.declineSite(record.siteId)
             .pipe(
               map((updatedSite: Site) => this.updateSite(updatedSite)),
               map(() => note)
@@ -259,20 +259,20 @@ export class SiteRegistrationContainerComponent implements OnInit {
         ),
         exhaustMap((note: string) =>
           (note)
-            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            ? this.siteResource.createSiteRegistrationNote(record.siteId, note)
             : of(noop)
         )
       )
       .subscribe();
   }
 
-  public onEnableEditing(siteId: number) {
-    this.busy = this.siteResource.enableEditingSite(siteId)
+  public onEnableEditing(record: { siteId: number, organizationId: number }) {
+    this.busy = this.siteResource.enableEditingSite(record.siteId)
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 
-  public onUnreject(siteId: number) {
-    this.busy = this.siteResource.unrejectSite(siteId)
+  public onUnreject(record: { siteId: number, organizationId: number }) {
+    this.busy = this.siteResource.unrejectSite(record.siteId)
       .subscribe((updatedSite: Site) => this.updateSite(updatedSite));
   }
 

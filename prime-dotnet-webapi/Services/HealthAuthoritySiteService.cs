@@ -188,7 +188,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task ApproveSiteAsync(int siteId)
+        public async Task<HealthAuthoritySiteViewModel> ApproveSiteAsync(int siteId)
         {
             var site = await _context.HealthAuthoritySites
                 .SingleOrDefaultAsync(has => has.Id == siteId);
@@ -196,6 +196,18 @@ namespace Prime.Services
             // TODO change the site status
 
             await _context.SaveChangesAsync();
+            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
+        }
+
+        public async Task<HealthAuthoritySiteViewModel> DeclineSiteAsync(int siteId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO change the site status
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<HealthAuthoritySiteViewModel>(site);
         }
 
         public async Task CreateSiteNoteAsync(int siteId, string note, int adminId)

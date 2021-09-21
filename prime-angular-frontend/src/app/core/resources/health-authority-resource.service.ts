@@ -420,13 +420,25 @@ export class HealthAuthorityResource {
       );
   }
 
-  public approveHealthAuthoritySite(healthAuthId: number, siteId: number): NoContent {
-    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/approve`)
+  public approveHealthAuthoritySite(healthAuthId: number, siteId: number): Observable<HealthAuthoritySite> {
+    return this.apiResource.put<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${siteId}/approve`)
       .pipe(
-        NoContentResponse,
+        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site could not be approved');
           this.logger.error('[Core] HealthAuthorityResource::approveHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public declineHealthAuthoritySite(healthAuthId: number, siteId: number): Observable<HealthAuthoritySite> {
+    return this.apiResource.put<HealthAuthoritySite>(`health-authorities/${healthAuthId}/sites/${siteId}/decline`)
+      .pipe(
+        map((response: ApiHttpResponse<HealthAuthoritySite>) => response.result),
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be declined');
+          this.logger.error('[Core] HealthAuthorityResource::declineHealthAuthoritySite error has occurred: ', error);
           throw error;
         })
       );
@@ -440,6 +452,30 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health Authority Site Registration note could not be saved');
           this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoriitySiteNote error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public enableEditingHealthAuthoritySite(healthAuthId: number, siteId: number) {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/enable-editing`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be ennabled editing');
+          this.logger.error('[Core] HealthAuthorityResource::enableEditingHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public unrejectHealthAuthoritySite(healthAuthId: number, siteId: number) {
+    return this.apiResource.put<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/unreject`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be unrejected');
+          this.logger.error('[Core] HealthAuthorityResource::unrejectHealthAuthoritySite error has occurred: ', error);
           throw error;
         })
       );

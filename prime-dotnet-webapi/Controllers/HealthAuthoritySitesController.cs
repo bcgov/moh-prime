@@ -353,13 +353,13 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/health-authorities/5/sites/5/approve
+        // PUT: api/health-authorities/5/sites/5/approve
         /// <summary>
         /// Approve a specific health authority site.
         /// </summary>
         /// <param name="healthAuthorityId">The health authority identifier</param>
         /// <param name="siteId">The site identifier</param>
-        [HttpPost("{siteId}/approve", Name = nameof(ApproveHealthAuthoritySite))]
+        [HttpPut("{siteId}/approve", Name = nameof(ApproveHealthAuthoritySite))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -371,9 +371,32 @@ namespace Prime.Controllers
             //     return NotFound($"No editable health authority site found with site id {siteId}");
             // }
 
-            await _healthAuthoritySiteService.ApproveSiteAsync(siteId);
+            var site = await _healthAuthoritySiteService.ApproveSiteAsync(siteId);
 
-            return Ok();
+            return Ok(site);
+        }
+
+        // PUT: api/health-authorities/5/sites/5/decline
+        /// <summary>
+        /// Decline a specific health authority site.
+        /// </summary>
+        /// <param name="healthAuthorityId">The health authority identifier</param>
+        /// <param name="siteId">The site identifier</param>
+        [HttpPut("{siteId}/decline", Name = nameof(DeclineHealthAuthoritySite))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> DeclineHealthAuthoritySite(int healthAuthorityId, int siteId)
+        {
+            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
+            // {
+            //     return NotFound($"No editable health authority site found with site id {siteId}");
+            // }
+
+            var site = await _healthAuthoritySiteService.DeclineSiteAsync(siteId);
+
+            return Ok(site);
         }
 
         // POST: api/health-authorities/5/sites/5/notes

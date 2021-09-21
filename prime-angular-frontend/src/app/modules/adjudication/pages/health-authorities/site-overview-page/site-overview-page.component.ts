@@ -20,9 +20,12 @@ import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudicat
 import { SiteActionViewModel } from '@registration/shared/models/site-registration.model';
 import { ManualFlagNoteComponent } from '@shared/components/dialogs/content/manual-flag-note/manual-flag-note.component';
 import { ClaimType, ClaimNoteComponent } from '@shared/components/dialogs/content/claim-note/claim-note.component';
+import { EscalationNoteComponent, EscalationType } from '@shared/components/dialogs/content/escalation-note/escalation-note.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
+import { EmailUtils } from '@lib/utils/email-utils.class';
+import { SendEmailComponent } from '@shared/components/dialogs/content/send-email/send-email.component';
 
 @Component({
   selector: 'app-site-overview-page',
@@ -82,10 +85,10 @@ export class SiteOverviewPageComponent implements OnInit {
       }
     };
 
-    // TODO refactor this so the types align properly
     this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
+        // TODO: implement assign
         // exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
         // exhaustMap((action: AssignAction) => this.adjudicationResource.deleteSiteNotifications(siteId).pipe(map(() => action))),
         // exhaustMap((action: AssignAction) =>
@@ -101,7 +104,7 @@ export class SiteOverviewPageComponent implements OnInit {
         // ),
         // exhaustMap((adjudicatorId: number) => this.siteResource.setSiteAdjudicator(siteId, adjudicatorId)),
       )
-      .subscribe(() => this.getData());
+      .subscribe();
   }
 
   public onReassign(siteId: number) {
@@ -117,6 +120,7 @@ export class SiteOverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ClaimNoteComponent, { data })
       .afterClosed()
       .pipe(
+        // TODO: implement reassign
         // exhaustMap((result: { output: AssignAction }) => (result) ? of(result.output ?? null) : EMPTY),
         // exhaustMap((action: AssignAction) => this.adjudicationResource.deleteSiteNotifications(siteId).pipe(map(() => action))),
         // exhaustMap((action: AssignAction) =>
@@ -140,40 +144,36 @@ export class SiteOverviewPageComponent implements OnInit {
         //     )
         // )
       )
-      .subscribe(() => this.getData());
+      .subscribe();
   }
 
-  public onNotify(siteId: number): void {
-    // const request$ = (healthAuthorityOrganizationId)
-    //   ? this.healthAuthResource.getHealthAuthoritySiteContacts(healthAuthorityOrganizationId, siteId)
-    //   : this.siteResource.getSiteContacts(siteId);
-
-    // request$
-    //   .pipe(
-    //     map((contacts: { label: string, email: string }[]) => {
-    //       return {
-    //         title: 'Send Email',
-    //         data: { contacts }
-    //       };
-    //     }),
-    //     exhaustMap((data: DialogOptions) =>
-    //       this.dialog.open(SendEmailComponent, { data }).afterClosed()
-    //     ),
-    //     exhaustMap((result: string) => (result) ? of(result) : EMPTY)
-    //   )
-    //   .subscribe((email: string) => EmailUtils.openEmailClient(email));
+  public onNotify(record: { siteId: number, healthAuthorityOrganizationId: number }): void {
+    this.healthAuthorityResource.getHealthAuthoritySiteContacts(record.healthAuthorityOrganizationId, record.siteId)
+      .pipe(
+        map((contacts: { label: string, email: string }[]) => {
+          return {
+            title: 'Send Email',
+            data: { contacts }
+          };
+        }),
+        exhaustMap((data: DialogOptions) =>
+          this.dialog.open(SendEmailComponent, { data }).afterClosed()
+        ),
+        exhaustMap((result: string) => (result) ? of(result) : EMPTY)
+      )
+      .subscribe((email: string) => EmailUtils.openEmailClient(email));
   }
 
-  public onEscalate(siteId: number): void {
-    // const data: DialogOptions = {
-    //   data: {
-    //     id: siteId,
-    //     escalationType: EscalationType.SITE_REGISTRATION
-    //   }
-    // };
+  public onEscalate(record: { siteId: number, organizationId: number }): void {
+    const data: DialogOptions = {
+      data: {
+        id: record.siteId,
+        escalationType: EscalationType.SITE_REGISTRATION
+      }
+    };
 
-    // this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
-    //   .subscribe((result: { reload: boolean }) => (result?.reload) ? this.getDataset(this.route.snapshot.queryParams) : noop);
+    this.dialog.open(EscalationNoteComponent, { data }).afterClosed()
+      .subscribe((result: { reload: boolean }) => (result?.reload) ? this.getData() : noop);
   }
 
   public onToggleFlagSite({ siteId, flagged }: { siteId: number, flagged: boolean }) {}
@@ -184,37 +184,37 @@ export class SiteOverviewPageComponent implements OnInit {
       : this.deleteSite(record.siteId);
   }
 
-  public onDecline(siteId: number): void {
-    // const data: DialogOptions = {
-    //   title: 'Decline Site Registration',
-    //   message: 'Are you sure you want to Decline this Site Registration?',
-    //   actionText: 'Decline Site Registration',
-    //   actionType: 'warn',
-    //   component: NoteComponent
-    // };
+  public onDecline(record: { siteId: number, organizationId: number }): void {
+    const data: DialogOptions = {
+      title: 'Decline Site Registration',
+      message: 'Are you sure you want to Decline this Site Registration?',
+      actionText: 'Decline Site Registration',
+      actionType: 'warn',
+      component: NoteComponent
+    };
 
-    // this.busy = this.dialog.open(ConfirmDialogComponent, { data })
-    //   .afterClosed()
-    //   .pipe(
-    //     exhaustMap((result: { output: string }) =>
-    //       (result)
-    //         ? of(result.output ?? null)
-    //         : EMPTY
-    //     ),
-    //     exhaustMap((note: string) =>
-    //       this.siteResource.declineSite(siteId)
-    //         .pipe(
-    //           map((updatedSite: Site) => this.updateSite(updatedSite)),
-    //           map(() => note)
-    //         )
-    //     ),
-    //     exhaustMap((note: string) =>
-    //       (note)
-    //         ? this.siteResource.createSiteRegistrationNote(siteId, note)
-    //         : of(noop)
-    //     )
-    //   )
-    //   .subscribe();
+    this.busy = this.dialog.open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .pipe(
+        exhaustMap((result: { output: string }) =>
+          (result)
+            ? of(result.output ?? null)
+            : EMPTY
+        ),
+        exhaustMap((note: string) =>
+          this.healthAuthorityResource.declineHealthAuthoritySite(record.organizationId, record.siteId)
+            .pipe(
+              map((updatedSite: HealthAuthoritySite) => this.site = updatedSite),
+              map(() => note)
+            )
+        ),
+        exhaustMap((note: string) =>
+          (note)
+            ? this.healthAuthorityResource.createHealthAuthoriitySiteNote(record.organizationId, record.siteId, note)
+            : of(noop)
+        )
+      )
+      .subscribe();
   }
 
   public onApprove(record: { siteId: number, organizationId: number }): void {
@@ -237,6 +237,7 @@ export class SiteOverviewPageComponent implements OnInit {
         exhaustMap((note: string) =>
           this.healthAuthorityResource.approveHealthAuthoritySite(record.organizationId, record.siteId)
             .pipe(
+              map((updatedSite: HealthAuthoritySite) => this.site = updatedSite),
               map(() => note)
             )
         ),
@@ -249,9 +250,15 @@ export class SiteOverviewPageComponent implements OnInit {
       .subscribe();
   }
 
-  public onUnreject(siteId: number): void {}
+  public onEnableEditing(record: { siteId: number, organizationId: number }) {
+    this.busy = this.healthAuthorityResource.enableEditingHealthAuthoritySite(record.organizationId, record.siteId)
+      .subscribe((updatedSite: HealthAuthoritySite) => this.site = updatedSite);
+  }
 
-  public onEnableEditing(siteId: number): void {}
+  public onUnreject(record: { siteId: number, organizationId: number }) {
+    this.busy = this.healthAuthorityResource.unrejectHealthAuthoritySite(record.organizationId, record.siteId)
+      .subscribe((updatedSite: HealthAuthoritySite) => this.site = updatedSite);
+  }
 
   public ngOnInit(): void {
     this.createFormInstance();
