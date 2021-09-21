@@ -4,7 +4,12 @@
   <app-page-header>Overview</app-page-header>
   <div class="row">
     <div class="col py-5">
-      <app-health-authority-site-summary *ngIf="site" [site]="site">
+      <app-health-authority-site-summary *ngIf="site" 
+                                         [site]="site"
+                                         (assign)="onAssign($event)"
+                                         (reassign)="onReassign($event)"
+                                         (notify)="onNotify($event)"
+                                         (route)="onRoute($event)">
       </app-health-authority-site-summary>
     </div>
 
@@ -12,7 +17,7 @@
       <div class="col-md-6 order-md-12 mb-3">
         <div class="d-flex justify-content-end mb-4">
           <app-site-registration-actions *ngIf="site" 
-                                       [siteRegistration]="site"
+                                       [siteRegistration]="siteActinoViewModel"
                                        (approve)="onApprove($event)"
                                        (decline)="onDecline($event)"
                                        (unreject)="onUnreject($event)"

@@ -201,7 +201,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       : this.deleteSite(record.siteId);
   }
 
-  public onApprove(siteId: number) {
+  public onApprove(record: { siteId: number, organizationId: number }) {
     const data: DialogOptions = {
       title: 'Approve Site Registration',
       message: 'Are you sure you want to approve this Registration?',
@@ -218,7 +218,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
             : EMPTY
         ),
         exhaustMap((note: string) =>
-          this.siteResource.approveSite(siteId)
+          this.siteResource.approveSite(record.siteId)
             .pipe(
               map((updatedSite: Site) => this.updateSite(updatedSite)),
               map(() => note)
@@ -226,7 +226,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
         ),
         exhaustMap((note: string) =>
           (note)
-            ? this.siteResource.createSiteRegistrationNote(siteId, note)
+            ? this.siteResource.createSiteRegistrationNote(record.siteId, note)
             : of(noop)
         )
       )

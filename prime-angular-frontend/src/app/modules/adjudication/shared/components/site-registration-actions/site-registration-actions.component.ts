@@ -4,7 +4,7 @@ import { EmailUtils } from '@lib/utils/email-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { SiteActionViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
@@ -14,8 +14,8 @@ import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudicat
   styleUrls: ['./site-registration-actions.component.scss']
 })
 export class SiteRegistrationActionsComponent implements OnInit {
-  @Input() siteRegistration: SiteRegistrationListViewModel;
-  @Output() public approve: EventEmitter<number>;
+  @Input() siteRegistration: SiteActionViewModel;
+  @Output() public approve: EventEmitter<{ siteId: number, organizationId: number }>;
   @Output() public decline: EventEmitter<number>;
   @Output() public unreject: EventEmitter<number>;
   @Output() public escalate: EventEmitter<number>;
@@ -32,7 +32,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
     private utilsService: UtilsService
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
-    this.approve = new EventEmitter<number>();
+    this.approve = new EventEmitter<{ siteId: number, organizationId: number }>();
     this.decline = new EventEmitter<number>();
     this.unreject = new EventEmitter<number>();
     this.escalate = new EventEmitter<number>();
@@ -42,7 +42,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
 
   public onApprove(): void {
     if (this.permissionService.hasRoles(Role.EDIT_SITE)) {
-      this.approve.emit(this.siteRegistration.siteId);
+      this.approve.emit({ siteId: this.siteRegistration.siteId, organizationId: this.siteRegistration.organizationId });
     }
   }
 
@@ -114,5 +114,5 @@ export class SiteRegistrationActionsComponent implements OnInit {
     }
   }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {}
 }

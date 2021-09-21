@@ -32,3 +32,7 @@ export interface SiteRegistrationListViewModel extends OrganizationListViewModel
   // populated by the OrganizationSearchListViewModel
   matchOn?: string[];
 }
+
+export interface SiteActionViewModel extends
+  Pick<OrganizationListViewModelPartial, 'signingAuthority' | 'organizationId' | 'name'>,
+  Pick<SiteListViewModelPartial, 'siteId' | 'status' | 'flagged' | 'adjudicatorIdir'> {}

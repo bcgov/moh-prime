@@ -28,6 +28,7 @@
       <span>Unreject Site</span>
     </button>
     <button mat-menu-item
+            *ngIf="siteRegistration.signingAuthority"
             [disabled]="!(Role.VIEW_SITE | inRole)"
             (click)="onContactSigningAuthority()">
       <mat-icon>mail</mat-icon>

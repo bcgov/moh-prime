@@ -28,6 +28,7 @@ import { HoursOperationForm } from '@health-auth/pages/hours-operation-page/hour
 import { RemoteUsersForm } from '@health-auth/pages/remote-users-page/remote-users-form.model';
 import { AdministratorForm } from '@health-auth/pages/administrator-page/administrator-form.model';
 import { SitePecForm } from '@adjudication/pages/health-authorities/site-overview-page/site-pec-form.model';
+import { SiteRegistrationNote } from '@shared/models/site-registration-note.model';
 
 @Injectable({
   providedIn: 'root'
@@ -401,6 +402,31 @@ export class HealthAuthorityResource {
         catchError((error: any) => {
           this.toastService.openErrorToast('Health authority site PEC could not be updated');
           this.logger.error('[Core] HealthAuthorityResource::updateHealthAuthoritySitePec error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public approveHealthAuthoritySite(healthAuthId: number, siteId: number): NoContent {
+    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}`)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health authority site could not be approved');
+          this.logger.error('[Core] HealthAuthorityResource::approveHealthAuthoritySite error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public createHealthAuthoriitySiteNote(healthAuthId: number, siteId: number, note: string): NoContent {
+    const payload = { data: note };
+    return this.apiResource.post(`health-authorities/${healthAuthId}/sites/${siteId}/notes`, payload)
+      .pipe(
+        NoContentResponse,
+        catchError((error: any) => {
+          this.toastService.openErrorToast('Health Authority Site Registration note could not be saved');
+          this.logger.error('[Core] HealthAuthorityResource::createHealthAuthoriitySiteNote error has occurred: ', error);
           throw error;
         })
       );
