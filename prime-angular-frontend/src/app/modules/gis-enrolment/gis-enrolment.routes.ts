@@ -6,7 +6,6 @@ export class GisEnrolmentRoutes {
 
   public static LDAP_USER_PAGE = 'ldap-user';
   public static LDAP_INFO_PAGE = 'ldap-info';
-  public static ORG_INFO_PAGE = 'org-info';
   public static ENROLLEE_INFO_PAGE = 'enrollee-info';
   public static SUBMISSION_CONFIRMATION = 'confirmation';
 
@@ -20,7 +19,6 @@ export class GisEnrolmentRoutes {
     return [
       GisEnrolmentRoutes.LDAP_USER_PAGE,
       GisEnrolmentRoutes.LDAP_INFO_PAGE,
-      GisEnrolmentRoutes.ORG_INFO_PAGE,
       GisEnrolmentRoutes.ENROLLEE_INFO_PAGE,
       GisEnrolmentRoutes.SUBMISSION_CONFIRMATION
     ];
