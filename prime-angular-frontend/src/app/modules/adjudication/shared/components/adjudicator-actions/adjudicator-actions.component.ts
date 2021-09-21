@@ -176,11 +176,9 @@ export class AdjudicatorActionsComponent implements OnInit, OnChanges {
       }
 
       // Disable or enable based on enrollee status
-      if (changes.enrollee.currentValue.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW) {
-        this.assignedTOAType.enable({ emitEvent: false });
-      } else {
-        this.assignedTOAType.disable({ emitEvent: false });
-      }
+      (changes.enrollee.currentValue.currentStatusCode === EnrolmentStatusEnum.UNDER_REVIEW)
+        ? this.assignedTOAType.enable({ emitEvent: false })
+        : this.assignedTOAType.disable({ emitEvent: false });
     }
   }
 

@@ -12255,14 +12255,8 @@ namespace Prime.Migrations
                     b.Property<string>("LdapUsername")
                         .HasColumnType("text");
 
-                    b.Property<string>("Organization")
-                        .HasColumnType("text");
-
                     b.Property<int>("PartyId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
@@ -12492,6 +12486,9 @@ namespace Prime.Migrations
                     b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("HealthAuthorityTechnicalSupportId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -12532,6 +12529,8 @@ namespace Prime.Migrations
                     b.HasIndex("HealthAuthorityOrganizationId");
 
                     b.HasIndex("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasIndex("HealthAuthorityTechnicalSupportId");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -14023,12 +14022,11 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("current_timestamp");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("IpAddress")
+                    b.Property<string>("LocationIpAddress")
                         .HasColumnType("text");
 
                     b.Property<string>("PharmacyId")
@@ -14041,6 +14039,9 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
                         .HasColumnType("text");
 
                     b.Property<long>("TransactionId")
@@ -14057,12 +14058,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("TxDateTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -18691,6 +18686,10 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
                         .WithMany()
                         .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityTechnicalSupportId");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

@@ -1,4 +1,4 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 

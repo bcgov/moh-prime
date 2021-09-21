@@ -18,10 +18,6 @@ namespace Prime.Models
 
         public DateTimeOffset? LdapLoginSuccessDate { get; set; }
 
-        public string Organization { get; set; }
-
-        public string Role { get; set; }
-
         public DateTimeOffset? SubmittedDate { get; set; }
     }
 }
