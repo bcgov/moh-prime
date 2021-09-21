@@ -65,7 +65,7 @@ namespace Prime.Controllers
             }
             else
             {
-                var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId());
+                var enrollee = await _enrolleeService.GetEnrolleeAsync(User.GetPrimeUserId());
                 return Ok(enrollee == null ? Enumerable.Empty<Enrollee>() : new[] { enrollee });
             }
         }
@@ -136,8 +136,7 @@ namespace Prime.Controllers
         /// Gets a specific Enrollee.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}", Name = nameof(GetEnrolleeById))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("{enrolleeId:int}", Name = nameof(GetEnrolleeById))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -147,7 +146,7 @@ namespace Prime.Controllers
             var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId, User.IsAdministrant());
             if (enrollee == null)
             {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
+                return NotFound($"Enrollee not found with ID {enrolleeId}");
             }
             if (!enrollee.PermissionsRecord().AccessableBy(User))
             {
@@ -157,6 +156,31 @@ namespace Prime.Controllers
             if (User.IsAdministrant())
             {
                 await _businessEventService.CreateAdminViewEventAsync(enrolleeId, "Admin viewing the current Enrolment");
+            }
+
+            return Ok(enrollee);
+        }
+
+        // GET: api/enrollees/b529e73f-8dbe-4868-b672-65bb14412699
+        /// <summary>
+        /// Gets a specific Enrollee by User ID.
+        /// </summary>
+        /// <param name="userId"></param>
+        [HttpGet("{userId:guid}", Name = nameof(GetEnrolleeByUserId))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeByUserId(Guid userId)
+        {
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(userId);
+            if (enrollee == null)
+            {
+                return NotFound($"Enrollee not found with User ID {userId}");
+            }
+            if (!enrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
             }
 
             return Ok(enrollee);

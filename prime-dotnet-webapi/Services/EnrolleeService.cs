@@ -158,7 +158,7 @@ namespace Prime.Services
             return new EnrolleeNavigation { NextId = nextId, PreviousId = previousId };
         }
 
-        public async Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false)
+        public async Task<Enrollee> GetEnrolleeAsync(Guid userId, bool excludeDecline = false)
         {
             Enrollee enrollee = await GetBaseEnrolleeQuery()
                 .AsNoTracking()

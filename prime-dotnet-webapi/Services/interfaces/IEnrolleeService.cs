@@ -12,12 +12,12 @@ namespace Prime.Services
 {
     public interface IEnrolleeService
     {
-        Task<Enrollee> GetEnrolleeForUserIdAsync(Guid userId, bool excludeDecline = false);
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
         Task<bool> UserIdExistsAsync(Guid userId);
         Task<bool> GpidExistsAsync(string gpid);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
+        Task<Enrollee> GetEnrolleeAsync(Guid userId, bool excludeDecline = false);
         Task<Enrollee> GetEnrolleeNoTrackingAsync(int enrolleeId);
         Task<IEnumerable<EnrolleeListViewModel>> GetEnrolleesAsync(EnrolleeSearchOptions searchOptions = null);
         Task<EnrolleeNavigation> GetAdjacentEnrolleeIdAsync(int enrolleeId);

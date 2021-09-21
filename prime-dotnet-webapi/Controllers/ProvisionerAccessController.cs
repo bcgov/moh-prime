@@ -132,7 +132,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetGpid()
         {
-            var enrollee = await _enrolleeService.GetEnrolleeForUserIdAsync(User.GetPrimeUserId(), true);
+            var enrollee = await _enrolleeService.GetEnrolleeAsync(User.GetPrimeUserId(), true);
 
             return Ok(enrollee?.GPID);
         }
