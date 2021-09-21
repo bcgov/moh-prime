@@ -34,8 +34,7 @@ export class CollectionNoticeComponent implements OnInit {
     this.isFull = true;
   }
 
-  private isPossibleMatch(): void {
-
+  private isPotentialPaperEnrolleeReturnee(): void {
     this.getUser$()
     .subscribe(enrollee => {
       this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
@@ -59,7 +58,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit(): void {
     this.authService.hasJustLoggedIn = true;
-    this.isPossibleMatch();
+    this.isPotentialPaperEnrolleeReturnee();
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the enrolment
