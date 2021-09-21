@@ -94,10 +94,10 @@ namespace Prime.Services
 
             if (currentSite.SubmittedDate == null)
             {
-                UpdateAddress(currentSite, updatedSite);
                 UpdateVendors(currentSite, updatedSite);
             }
 
+            UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
