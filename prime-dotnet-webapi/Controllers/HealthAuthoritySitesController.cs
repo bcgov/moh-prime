@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 
 using Prime.Auth;
 using Prime.Services;
+using Prime.Models;
+using Prime.Models.Api;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
 using Prime.ViewModels.HealthAuthoritySites;
@@ -19,10 +21,14 @@ namespace Prime.Controllers
     public class HealthAuthoritySitesController : PrimeControllerBase
     {
         private readonly IHealthAuthoritySiteService _healthAuthoritySiteService;
+        private readonly IAdminService _adminService;
 
-        public HealthAuthoritySitesController(IHealthAuthoritySiteService healthAuthoritySiteService)
+        public HealthAuthoritySitesController(
+            IHealthAuthoritySiteService healthAuthoritySiteService,
+            IAdminService adminService)
         {
             _healthAuthoritySiteService = healthAuthoritySiteService;
+            _adminService = adminService;
         }
 
         // POST: api/health-authorities/5/sites
@@ -343,6 +349,58 @@ namespace Prime.Controllers
             // }
 
             await _healthAuthoritySiteService.SiteSubmissionAsync(siteId);
+
+            return Ok();
+        }
+
+        // POST: api/health-authorities/5/sites/5/approve
+        /// <summary>
+        /// Approve a specific health authority site.
+        /// </summary>
+        /// <param name="healthAuthorityId">The health authority identifier</param>
+        /// <param name="siteId">The site identifier</param>
+        [HttpPost("{siteId}/approve", Name = nameof(ApproveHealthAuthoritySite))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> ApproveHealthAuthoritySite(int healthAuthorityId, int siteId)
+        {
+            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
+            // {
+            //     return NotFound($"No editable health authority site found with site id {siteId}");
+            // }
+
+            await _healthAuthoritySiteService.ApproveSiteAsync(siteId);
+
+            return Ok();
+        }
+
+        // POST: api/health-authorities/5/sites/5/notes
+
+
+        [HttpPost("{siteId}/notes", Name = nameof(CreateHealthAuthoritySiteNote))]
+        [Authorize(Roles = Roles.EditSite)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<SiteRegistrationNote>), StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateHealthAuthoritySiteNote(int siteId, FromBodyText note)
+        {
+            // if (!await _healthAuthoritySiteService.SiteIsEditableAsync(siteId))
+            // {
+            //     return NotFound($"No editable health authority site found with site id {siteId}");
+            // }
+
+            if (string.IsNullOrWhiteSpace(note))
+            {
+                return BadRequest("site registration notes can't be null or empty.");
+            }
+
+            var admin = await _adminService.GetAdminAsync(User.GetPrimeUserId());
+
+            await _healthAuthoritySiteService.CreateSiteNoteAsync(siteId, note, admin.Id);
 
             return Ok();
         }

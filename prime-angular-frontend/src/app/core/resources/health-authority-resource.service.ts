@@ -421,7 +421,7 @@ export class HealthAuthorityResource {
   }
 
   public approveHealthAuthoritySite(healthAuthId: number, siteId: number): NoContent {
-    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}`)
+    return this.apiResource.post<HealthAuthority>(`health-authorities/${healthAuthId}/sites/${siteId}/approve`)
       .pipe(
         NoContentResponse,
         catchError((error: any) => {

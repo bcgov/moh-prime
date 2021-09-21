@@ -188,6 +188,24 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task ApproveSiteAsync(int siteId)
+        {
+            var site = await _context.HealthAuthoritySites
+                .SingleOrDefaultAsync(has => has.Id == siteId);
+
+            // TODO change the site status
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task CreateSiteNoteAsync(int siteId, string note, int adminId)
+        {
+            // TODO: create health authority site note
+
+            await _context.SaveChangesAsync();
+        }
+
+
         private IQueryable<HealthAuthoritySiteViewModel> GetBaseSitesNoTrackingQuery()
         {
             return _context.HealthAuthoritySites

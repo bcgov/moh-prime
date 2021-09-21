@@ -29,5 +29,7 @@ namespace Prime.Services
         Task UpdateTechnicalSupportAsync(int siteId, int technicalSupportId);
         Task SetSiteCompletedAsync(int siteId);
         Task SiteSubmissionAsync(int siteId);
+        Task ApproveSiteAsync(int siteId);
+        Task CreateSiteNoteAsync(int siteId, string note, int adminId);
     }
 }
