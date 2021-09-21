@@ -55,7 +55,7 @@
 <ng-container *ngIf="site">
 
   <app-overview-section title="Care Setting"
-                        [showEditRedirect]="!site.submittedDate"
+                        [showEditRedirect]="!site.submittedDate && !admin"
                         [editRoute]="SiteRoutes.CARE_SETTING"
                         (route)="onRouteRelative($event)">
     <app-enrollee-property title="Care Setting">
@@ -68,7 +68,7 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="!site.submittedDate || !site.businessLicence?.completed"
+                        [showEditRedirect]="(!site.submittedDate || !site.businessLicence?.completed) && !admin"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
@@ -88,8 +88,8 @@
       {{ site?.pec | default }}
     </app-enrollee-property>
 
-    <app-enrollee-property title="Deferred Business Licence Reason"
-                           *ngIf="site.businessLicence?.deferredLicenceReason">
+    <app-enrollee-property *ngIf="site.businessLicence?.deferredLicenceReason"
+                           title="Deferred Business Licence Reason">
       {{ site.businessLicence.deferredLicenceReason | default }}
     </app-enrollee-property>
 
