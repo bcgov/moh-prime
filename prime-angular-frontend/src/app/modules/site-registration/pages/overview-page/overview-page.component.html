@@ -22,7 +22,7 @@
     </app-page-subheader2>
   </div>
 
-  <app-overview-container [showEditRedirect]="isSiteReview || (isOrganizationReview && !organization.hasSubmittedSite)"
+  <app-overview-container [showEditRedirect]="isSiteReview || (isOrganizationReview && !organization.hasSubmittedSite) || site.status == SiteStatusType.EDITABLE"
                           [organization]="(isOrganizationReview || (isSiteReview && !organization.hasSubmittedSite)) ? organization : null"
                           [site]="site"></app-overview-container>
 
