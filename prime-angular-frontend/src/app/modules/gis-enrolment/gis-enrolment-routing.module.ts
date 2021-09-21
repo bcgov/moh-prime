@@ -10,7 +10,6 @@ import { GisDashboardComponent } from './shared/components/gis-dashboard/gis-das
 import { CollectionNoticePageComponent } from './pages/collection-notice-page/collection-notice-page.component';
 import { LdapUserPageComponent } from './pages/ldap-user-page/ldap-user-page.component';
 import { LdapInformationPageComponent } from './pages/ldap-information-page/ldap-information-page.component';
-import { OrganizationInformationPageComponent } from './pages/organization-information-page/organization-information-page.component';
 import { EnrolleeInformationPageComponent } from './pages/enrollee-information-page/enrollee-information-page.component';
 import { SubmissionConfirmationPageComponent } from './pages/submission-confirmation-page/submission-confirmation-page.component';
 
@@ -39,11 +38,6 @@ const routes: Routes = [
       {
         path: GisEnrolmentRoutes.LDAP_INFO_PAGE,
         component: LdapInformationPageComponent,
-        data: { title: 'GIS Enrolment' }
-      },
-      {
-        path: GisEnrolmentRoutes.ORG_INFO_PAGE,
-        component: OrganizationInformationPageComponent,
         data: { title: 'GIS Enrolment' }
       },
       {

@@ -63,7 +63,7 @@ namespace Prime.Controllers
 
         // GET: api/health-authorities/5/sites/5
         /// <summary>
-        /// Gets a specific site for a health authority.
+        /// Gets a specific health authority site.
         /// </summary>
         /// <param name="healthAuthorityId"></param>
         /// <param name="siteId"></param>
@@ -249,6 +249,30 @@ namespace Prime.Controllers
             }
 
             await _healthAuthoritySiteService.UpdatePharmanetAdministratorAsync(siteId, payload.HealthAuthorityPharmanetAdministratorId);
+
+            return NoContent();
+        }
+
+        // PUT: api/health-authorities/5/sites/5/technical-support
+        /// <summary>
+        /// Updates a specific health authority site's technical support.
+        /// </summary>
+        /// <param name="healthAuthorityId"></param>
+        /// <param name="siteId"></param>
+        /// <param name="payload"></param>
+        [HttpPut("{siteId}/technical-support", Name = nameof(UpdateTechnicalSupport))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> UpdateTechnicalSupport(int healthAuthorityId, int siteId, HealthAuthoritySiteTechnicalSupportViewModel payload)
+        {
+            if (!await _healthAuthoritySiteService.SiteExistsAsync(healthAuthorityId, siteId))
+            {
+                return NotFound($"Health authority site not found with id {siteId}");
+            }
+
+            await _healthAuthoritySiteService.UpdateTechnicalSupportAsync(siteId, payload.HealthAuthorityTechnicalSupportId);
 
             return NoContent();
         }

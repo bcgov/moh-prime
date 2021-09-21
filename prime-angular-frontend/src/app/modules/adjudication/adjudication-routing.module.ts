@@ -332,7 +332,7 @@ const routes: Routes = [
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_TECHNICAL_SUPPORTS,
                 component: TechnicalSupportsPageComponent,
-                data: { title: 'Technical Support Contact(s)' }
+                data: { title: 'Technical Support(s)' }
               },
               {
                 path: AdjudicationRoutes.HEALTH_AUTH_ADMINISTRATORS,
@@ -366,6 +366,31 @@ const routes: Routes = [
                 ]
               },
               {
+                // Site registrations is synonymous with site with regards
+                // to Health Authorities
+                path: `${AdjudicationRoutes.SITE_REGISTRATION}/:sid`,
+                children: [
+                  {
+                    path: '',
+                    // TODO replace with health authority site equivalent page component
+                    component: SiteOverviewComponent,
+                    data: { title: 'Site Overview' }
+                  },
+                  {
+                    path: AdjudicationRoutes.EVENT_LOG,
+                    // TODO replace with health authority site equivalent page component
+                    component: SiteEventsComponent,
+                    data: { title: 'Event Log' }
+                  },
+                  {
+                    path: AdjudicationRoutes.ADJUDICATOR_NOTES,
+                    // TODO replace with health authority site equivalent page component
+                    component: SiteAdjudicatorNotesComponent,
+                    data: { title: 'Adjudicator Notes' }
+                  }
+                ]
+              },
+              {
                 path: '',
                 redirectTo: AdjudicationRoutes.ORGANIZATION_INFORMATION,
                 pathMatch: 'full'
@@ -392,4 +417,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule { }
+export class AdjudicationRoutingModule {}
