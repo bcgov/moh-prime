@@ -132,32 +132,12 @@
             </button>
           </app-page-subheader>
 
-<!--           <mat-card>
+          <mat-card>
             <mat-card-content>
               <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
             </mat-card-content>
-          </mat-card> -->
-        </app-page-section>
-
-      <app-page-section *ngIf="site?.remoteUsers.length">
-        <app-page-subheader>
-          <ng-container appPageSubheaderTitle>
-            <mat-icon class="mr-2">account_circle</mat-icon>
-            Remote Practitioners
-          </ng-container>
-          <button mat-icon-button
-                  matTooltip="View Remote Practitioners"
-                  (click)="onRoute([healthAuthority.id, AdjudicationRoutes.SITE_REGISTRATION, site.id, AdjudicationRoutes.SITE_REMOTE_USERS])">
-            <mat-icon>navigate_next icon</mat-icon>
-          </button>
-        </app-page-subheader>
-
-<!--         <mat-card>
-          <mat-card-content>
-            <app-remote-user-review [remoteUsers]="site?.remoteUsers"></app-remote-user-review>
-          </mat-card-content>
-        </mat-card> -->
-      </app-page-section>        
+          </mat-card>
+        </app-page-section> 
       </div>
     </div>
   </div>
