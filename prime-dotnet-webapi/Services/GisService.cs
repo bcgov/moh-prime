@@ -1,11 +1,11 @@
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 
 using Prime.HttpClients;
 using Prime.Models;
@@ -17,20 +17,20 @@ namespace Prime.Services
 {
     public class GisService : BaseService, IGisService
     {
-        private readonly IMapper _mapper;
         private readonly ILdapClient _ldapClient;
+        private readonly IMapper _mapper;
         private readonly IMohKeycloakAdministrationClient _mohKeycloakClient;
 
         public GisService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<GisService> logger,
             ILdapClient ldapClient,
+            IMapper mapper,
             IMohKeycloakAdministrationClient mohKeycloakClient)
-            : base(context, httpContext)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _ldapClient = ldapClient;
+            _mapper = mapper;
             _mohKeycloakClient = mohKeycloakClient;
         }
 
@@ -94,6 +94,7 @@ namespace Prime.Services
             var ldapResponse = await _ldapClient.GetUserAsync(username, password);
             var gisLdapUser = new GisLdapUserViewModel
             {
+                Authenticated = ldapResponse?.Authenticated,
                 Unlocked = ldapResponse?.Unlocked,
                 GisUserRole = ldapResponse?.Gisuserrole
             };
@@ -122,8 +123,27 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
 
-            // Also update MOH Keycloak now that the applictaion has been completed.
+            // Also update MOH Keycloak now that the application has been completed.
+            await UpdateMohKeycloakUserInfo(gisEnrolment.Party);
             await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, GisClientId, GisUserRole);
+        }
+
+        /// <summary>
+        /// Updates the User's email and phone number in MoH Keycloak.
+        /// </summary>
+        /// <param name="party"></param>
+        private async Task UpdateMohKeycloakUserInfo(Party party)
+        {
+            var user = await _mohKeycloakClient.GetUser(party.UserId);
+            if (user == null)
+            {
+                return;
+            }
+
+            user.Email = party.Email;
+            user.SetPhoneNumber(party.Phone);
+
+            await _mohKeycloakClient.UpdateUser(party.UserId, user);
         }
     }
 }

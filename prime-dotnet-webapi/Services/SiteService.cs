@@ -1,41 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using LinqKit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-using Prime.Models;
-using Prime.ViewModels;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
+using Prime.Models;
+using Prime.ViewModels;
 
 namespace Prime.Services
 {
     public class SiteService : BaseService, ISiteService
     {
-        private readonly IMapper _mapper;
         private readonly IBusinessEventService _businessEventService;
-        private readonly IOrganizationService _organizationService;
         private readonly IDocumentManagerClient _documentClient;
+        private readonly IMapper _mapper;
+        private readonly IOrganizationService _organizationService;
 
         public SiteService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
-            IMapper mapper,
+            ILogger<SiteService> logger,
             IBusinessEventService businessEventService,
-            IOrganizationService organizationService,
-            IDocumentManagerClient documentClient)
-            : base(context, httpContext)
+            IDocumentManagerClient documentClient,
+            IMapper mapper,
+            IOrganizationService organizationService)
+            : base(context, logger)
         {
-            _mapper = mapper;
             _businessEventService = businessEventService;
-            _organizationService = organizationService;
             _documentClient = documentClient;
+            _mapper = mapper;
+            _organizationService = organizationService;
         }
 
         public async Task<IEnumerable<Site>> GetSitesAsync(int? organizationId = null)
@@ -94,10 +94,10 @@ namespace Prime.Services
 
             if (currentSite.SubmittedDate == null)
             {
-                UpdateAddress(currentSite, updatedSite);
                 UpdateVendors(currentSite, updatedSite);
             }
 
+            UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);

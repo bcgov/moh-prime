@@ -94,11 +94,11 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthorityPharmanetAdministrator(haid, sid, payload)
+    return this.healthAuthorityResource.updateHealthAuthoritySitePharmanetAdministrator(haid, sid, payload)
       .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT);
   }
 }

@@ -66,6 +66,14 @@
         "attributes": {}
       },
       {
+        "id": "c61d6cf0-a977-4253-bcca-13dd9697022c",
+        "name": "prime_maintenance",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "v4mbqqas",
+        "attributes": {}
+      },
+      {
         "id": "24587706-4661-4ac5-924e-a2802a3ceca8",
         "name": "prime_user",
         "description": "BCSC authenticated primary application user",
@@ -110,7 +118,12 @@
       {
         "id": "ced33b81-df4d-4cfe-a6c7-808bd6b68faa",
         "name": "prime_super_admin",
-        "composite": false,
+        "composite": true,
+        "composites": {
+          "realm": [
+            "prime_maintenance"
+          ]
+        },
         "clientRole": false,
         "containerId": "v4mbqqas",
         "attributes": {}
@@ -1285,8 +1298,9 @@
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
       "redirectUris": [
-        "https://healthpractitionerregistration.pathfinder.gov.bc.ca/*",
-        "https://pharmanetenrolment.gov.bc.ca/*"
+        "https://healthpractitionerregistration.apps.silver.devops.gov.bc.ca/*",
+        "https://pharmanetenrolment.gov.bc.ca/*",
+        "https://prod-9c33a9-prod.apps.silver.devops.gov.bc.ca/*"
       ],
       "webOrigins": [
         "*"
@@ -1310,6 +1324,7 @@
         "saml.server.signature": "false",
         "saml.server.signature.keyinfo.ext": "false",
         "exclude.session.state.from.auth.response": "false",
+        "client_credentials.use_refresh_token": "false",
         "saml_force_name_id_format": "false",
         "saml.client.signature": "false",
         "tls.client.certificate.bound.access.tokens": "false",

@@ -1,16 +1,16 @@
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 using Prime.Models;
+using Prime.Services.Razor;
 using Prime.ViewModels;
 using Prime.ViewModels.Agreements;
-using Prime.Services.Razor;
 
 namespace Prime.Services
 {
@@ -22,11 +22,11 @@ namespace Prime.Services
 
         public OrganizationAgreementService(
             ApiDbContext context,
-            IHttpContextAccessor httpContext,
+            ILogger<OrganizationAgreementService> logger,
             IMapper mapper,
             IPdfService pdfService,
             IRazorConverterService razorConverterService)
-            : base(context, httpContext)
+            : base(context, logger)
         {
             _mapper = mapper;
             _pdfService = pdfService;
