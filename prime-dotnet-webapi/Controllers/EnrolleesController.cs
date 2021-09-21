@@ -248,20 +248,12 @@ namespace Prime.Controllers
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult> DeleteEnrollee(int enrolleeId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(enrolleeId);
-
-            if (enrollee == null)
-            {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
-            }
-
             await _enrolleeService.DeleteEnrolleeAsync(enrolleeId);
 
-            return Ok(enrollee);
+            return NoContent();
         }
 
 
