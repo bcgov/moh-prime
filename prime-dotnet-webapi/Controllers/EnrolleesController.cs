@@ -60,8 +60,13 @@ namespace Prime.Controllers
             {
                 var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
                 var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
-                var result = enrollees.Select(e => e.SetNotification(notifiedIds.Contains(e.Id)));
-                return Ok(result);
+
+                foreach (var enrollee in enrollees)
+                {
+                    enrollee.HasNotification = notifiedIds.Contains(enrollee.Id);
+                }
+
+                return Ok(enrollees);
             }
             else
             {
