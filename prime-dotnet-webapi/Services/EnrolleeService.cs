@@ -961,7 +961,6 @@ namespace Prime.Services
                 .AsNoTracking()
                 .AnyAsync(e => e.GPID.StartsWith("NOBCSC")
                     && e.DateOfBirth.Date == DateTime.Parse(dateOfBirth).Date
-                    && e.LinkedErolmentId == 0
                 );
         }
 
@@ -971,7 +970,6 @@ namespace Prime.Services
                 .AsNoTracking()
                 .Where(e => e.GPID.StartsWith("NOBCSC")
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && e.LinkedErolmentId == 0
                 )
                 .ToListAsync();
         }
@@ -986,18 +984,21 @@ namespace Prime.Services
                 .Where(pe => pe.GPID.StartsWith("NOBCSC") && pe.Id == PaperEnrolmentId)
                 .SingleOrDefaultAsync();
 
-            int DbLinkedEnrolmentId = enrollee.LinkedErolmentId;
-            int DbLinkedPaperEnrolmentId = paperEnrollee.LinkedErolmentId;
+            var newLinkedEnrolment = new EnrolleeLinkedEnrolments
+            {
+                EnrolmentId = enrolmentId,
+                PaperEnrolmentId = PaperEnrolmentId
+            };
 
-            if (DbLinkedEnrolmentId != 0 || DbLinkedPaperEnrolmentId != 0)
+            _context.Add(newLinkedEnrolment);
+
+            var created = await _context.SaveChangesAsync();
+
+            if (created < 1)
             {
-                return false;
+                throw new InvalidOperationException("Could notlink enrolments.");
             }
-            else
-            {
-                _context.Update(DbLinkedEnrolmentId);
-                _context.Update(DbLinkedPaperEnrolmentId);
-            }
+
             return true;
         }
     }

@@ -11730,9 +11730,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("LinkedErolmentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
@@ -17817,6 +17814,11 @@ namespace Prime.Migrations
                         {
                             Code = 20,
                             Name = "Possible match with paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "Unable to link enrollee to paper enrolment"
                         });
                 });
 

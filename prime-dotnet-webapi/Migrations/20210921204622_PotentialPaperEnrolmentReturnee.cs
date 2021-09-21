@@ -6,19 +6,14 @@ namespace Prime.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "LinkedErolmentId",
-                table: "Enrollee",
-                nullable: false,
-                defaultValue: 0);
-
             migrationBuilder.InsertData(
                 table: "StatusReasonLookup",
                 columns: new[] { "Code", "Name" },
                 values: new object[,]
                 {
                     { 19, "PRIME enrolment does not match paper enrollee record" },
-                    { 20, "Possible match with paper enrolment" }
+                    { 20, "Possible match with paper enrolment" },
+                    { 21, "Unable to link enrollee to paper enrolment" }
                 });
         }
 
@@ -34,9 +29,10 @@ namespace Prime.Migrations
                 keyColumn: "Code",
                 keyValue: 20);
 
-            migrationBuilder.DropColumn(
-                name: "LinkedErolmentId",
-                table: "Enrollee");
+            migrationBuilder.DeleteData(
+                table: "StatusReasonLookup",
+                keyColumn: "Code",
+                keyValue: 21);
         }
     }
 }

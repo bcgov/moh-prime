@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210920215613_PotentialPaperEnrolmentReturnee")]
+    [Migration("20210921204622_PotentialPaperEnrolmentReturnee")]
     partial class PotentialPaperEnrolmentReturnee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -11732,9 +11732,6 @@ namespace Prime.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("LinkedErolmentId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Phone")
                         .HasColumnType("text");
 
@@ -17819,6 +17816,11 @@ namespace Prime.Migrations
                         {
                             Code = 20,
                             Name = "Possible match with paper enrolment"
+                        },
+                        new
+                        {
+                            Code = 21,
+                            Name = "Unable to link enrollee to paper enrolment"
                         });
                 });
 
