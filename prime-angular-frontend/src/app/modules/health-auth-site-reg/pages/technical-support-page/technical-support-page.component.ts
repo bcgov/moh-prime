@@ -1,34 +1,33 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { FormBuilder } from '@angular/forms';
 
 import { BehaviorSubject, EMPTY } from 'rxjs';
 import { exhaustMap, tap } from 'rxjs/operators';
 
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
-import { NoContent } from '@core/resources/abstract-resource';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';
 import { HealthAuthority } from '@shared/models/health-authority.model';
-
-import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
-import { AdministratorFormState } from './administrator-form-state.class';
+import { TechnicalSupportFormState } from '@health-auth/pages/technical-support-page/technical-support-form-state.class';
+import { HealthAuthoritySite } from '@health-auth/shared/models/health-authority-site.model';
+import { NoContent } from '@core/resources/abstract-resource';
 
 @Component({
-  selector: 'app-administrator-page',
-  templateUrl: './administrator-page.component.html',
-  styleUrls: ['./administrator-page.component.scss']
+  selector: 'app-technical-support-page',
+  templateUrl: './technical-support-page.component.html',
+  styleUrls: ['./technical-support-page.component.scss']
 })
-export class AdministratorPageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: AdministratorFormState;
+export class TechnicalSupportPageComponent extends AbstractEnrolmentPage implements OnInit {
+  public formState: TechnicalSupportFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public isCompleted: boolean;
-  public pharmanetAdministrators: BehaviorSubject<{ id: number, fullName: string }[]>;
+  public technicalSupports: BehaviorSubject<{ id: number, fullName: string }[]>;
 
   constructor(
     protected dialog: MatDialog,
@@ -43,13 +42,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, HealthAuthSiteRegRoutes.MODULE_PATH);
     // TODO revisit passed subject value type
-    this.pharmanetAdministrators = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
+    this.technicalSupports = new BehaviorSubject<{ id: number, fullName: string }[]>([]);
   }
 
   public onBack(): void {
     const backRoutePath = (this.isCompleted)
       ? HealthAuthSiteRegRoutes.SITE_OVERVIEW
-      : HealthAuthSiteRegRoutes.REMOTE_USERS;
+      : HealthAuthSiteRegRoutes.ADMINISTRATOR;
 
     this.routeUtils.routeRelativeTo(backRoutePath);
   }
@@ -61,7 +60,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   protected createFormInstance(): void {
-    this.formState = new AdministratorFormState(this.fb);
+    this.formState = new TechnicalSupportFormState(this.fb);
   }
 
   protected patchForm(): void {
@@ -73,10 +72,10 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
 
     this.busy = this.healthAuthorityResource.getHealthAuthorityById(healthAuthId)
       .pipe(
-        tap(({ pharmanetAdministrators }: HealthAuthority) => {
-          const administrators = pharmanetAdministrators
+        tap(({ technicalSupports }: HealthAuthority) => {
+          const technicalSupportContacts = technicalSupports
             .map(({ id, firstName, lastName }: Contact) => ({ id, fullName: `${firstName} ${lastName}` }));
-          this.pharmanetAdministrators.next(administrators);
+          this.technicalSupports.next(technicalSupportContacts);
         }),
         exhaustMap((_: HealthAuthority) =>
           (healthAuthSiteId)
@@ -84,9 +83,9 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
             : EMPTY
         )
       )
-      .subscribe(({ healthAuthorityPharmanetAdministratorId, completed }: HealthAuthoritySite) => {
+      .subscribe(({ healthAuthorityTechnicalSupportId, completed }: HealthAuthoritySite) => {
         this.isCompleted = completed;
-        this.formState.patchValue({ healthAuthorityPharmanetAdministratorId });
+        this.formState.patchValue({ healthAuthorityTechnicalSupportId });
       });
   }
 
@@ -94,11 +93,11 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     const payload = this.formState.json;
     const { haid, sid } = this.route.snapshot.params;
 
-    return this.healthAuthorityResource.updateHealthAuthoritySitePharmanetAdministrator(haid, sid, payload)
+    return this.healthAuthorityResource.updateHealthAuthoritySiteTechnicalSupport(haid, sid, payload)
       .pipe(exhaustMap(() => this.healthAuthorityResource.healthAuthoritySiteCompleted(haid, sid)));
   }
 
   protected afterSubmitIsSuccessful(): void {
-    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT);
+    this.routeUtils.routeRelativeTo(HealthAuthSiteRegRoutes.SITE_OVERVIEW);
   }
 }
