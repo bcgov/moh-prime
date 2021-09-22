@@ -18,7 +18,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   @Input() public columns: string[];
   @Output() public assign: EventEmitter<number>;
   @Output() public reassign: EventEmitter<number>;
-  @Output() public notify: EventEmitter<number>;
+  @Output() public notify: EventEmitter<{ siteId: number }>;
   @Output() public reload: EventEmitter<number>;
   @Output() public route: EventEmitter<string | (string | number)[]>;
 
@@ -47,7 +47,7 @@ export class SiteRegistrationTableComponent implements OnInit {
     ];
     this.assign = new EventEmitter<number>();
     this.reassign = new EventEmitter<number>();
-    this.notify = new EventEmitter<number>();
+    this.notify = new EventEmitter<{ siteId: number }>();
     this.reload = new EventEmitter<number>();
     this.route = new EventEmitter<string | (string | number)[]>();
   }
@@ -61,7 +61,7 @@ export class SiteRegistrationTableComponent implements OnInit {
   }
 
   public onNotify(siteId: number): void {
-    this.notify.emit(siteId);
+    this.notify.emit({ siteId });
   }
 
   public onReload(siteId: number): void {

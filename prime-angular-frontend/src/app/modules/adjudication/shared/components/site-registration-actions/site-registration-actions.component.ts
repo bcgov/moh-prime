@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
-import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
+import { EmailUtils } from '@lib/utils/email-utils.class';
+import { UtilsService } from '@core/services/utils.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
-import { UtilsService } from '@core/services/utils.service';
+import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteAdjudicationAction } from '@registration/shared/enum/site-adjudication-action.enum';
 
@@ -66,7 +67,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public onContactSigningAuthority() {
     const signingAuthority = this.siteRegistration?.signingAuthority;
     if (signingAuthority) {
-      this.utilsService.mailTo(
+      EmailUtils.openEmailClient(
         signingAuthority.email,
         `PRIME Site Registration - ${this.siteRegistration.name}`,
         `Dear ${signingAuthority.firstName} ${signingAuthority.lastName},`

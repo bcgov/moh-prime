@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable } from 'rxjs';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { HealthAuthorityResource } from '@core/resources/health-authority-resource.service';

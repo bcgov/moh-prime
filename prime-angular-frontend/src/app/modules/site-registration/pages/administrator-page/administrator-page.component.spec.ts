@@ -14,7 +14,7 @@ import { APP_CONFIG, APP_DI_CONFIG } from 'app/app-config.module';
 import { SiteService } from '@registration/shared/services/site.service';
 import { AdministratorPageComponent } from './administrator-page.component';
 
-describe('AdministratorComponent', () => {
+describe('AdministratorPageComponent', () => {
   let component: AdministratorPageComponent;
   let fixture: ComponentFixture<AdministratorPageComponent>;
 
