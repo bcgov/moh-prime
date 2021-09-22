@@ -53,6 +53,7 @@ import {
 } from './pages/license-classes-maintenance-page/license-classes-maintenance-page.component';
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
 import { SiteInformationPageComponent } from './pages/health-authorities/site-information-page/site-information-page.component';
+import { SiteEventLogPageComponent } from './pages/health-authorities/site-event-log-page/site-event-log-page.component';
 
 const routes: Routes = [
   {
@@ -384,8 +385,7 @@ const routes: Routes = [
                   },
                   {
                     path: AdjudicationRoutes.EVENT_LOG,
-                    // TODO replace with health authority site equivalent page component
-                    component: SiteEventsComponent,
+                    component: SiteEventLogPageComponent,
                     data: { title: 'Event Log' }
                   },
                   {
@@ -423,4 +423,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AdjudicationRoutingModule {}
+export class AdjudicationRoutingModule { }

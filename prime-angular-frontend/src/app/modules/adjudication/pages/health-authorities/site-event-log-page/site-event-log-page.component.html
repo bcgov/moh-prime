@@ -1,0 +1,11 @@
+<app-site-registration-container [content]="content"
+                                 [hasActions]="hasActions">
+
+  <app-page-header>Events</app-page-header>
+
+</app-site-registration-container>
+
+<ng-template #content>
+  <app-adjudicator-events [businessEvents$]="businessEvents$"
+                          (getBusinessEvents)="getBusinessEvents($event)"></app-adjudicator-events>
+</ng-template>

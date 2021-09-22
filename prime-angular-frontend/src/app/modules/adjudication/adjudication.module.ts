@@ -79,6 +79,7 @@ import { PlrInfoComponent } from './shared/components/plr-info/plr-info.componen
 import { SiteOverviewPageComponent } from './pages/health-authorities/site-overview-page/site-overview-page.component';
 import { HealthAuthoritySiteSummaryComponent } from './shared/components/health-authority-site-summary/health-authority-site-summary.component';
 import { SiteInformationPageComponent } from './pages/health-authorities/site-information-page/site-information-page.component';
+import { SiteEventLogPageComponent } from './pages/health-authorities/site-event-log-page/site-event-log-page.component';
 
 @NgModule({
   declarations: [
@@ -151,7 +152,8 @@ import { SiteInformationPageComponent } from './pages/health-authorities/site-in
     PlrInfoComponent,
     SiteOverviewPageComponent,
     HealthAuthoritySiteSummaryComponent,
-    SiteInformationPageComponent
+    SiteInformationPageComponent,
+    SiteEventLogPageComponent
   ],
   imports: [
     AdjudicationRoutingModule,
