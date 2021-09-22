@@ -329,8 +329,6 @@ namespace Prime.Services
                 .Include(o => o.Sites)
                 .SingleAsync(o => o.Id == organizationId);
 
-            organization.SigningAuthorityId = newSigningAuthorityId;
-
             foreach (var site in organization.Sites)
             {
                 site.ProvisionerId = newSigningAuthorityId;
