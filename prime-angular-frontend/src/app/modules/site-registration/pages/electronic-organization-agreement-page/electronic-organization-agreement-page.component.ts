@@ -2,17 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EMPTY, noop, of, Subscription } from 'rxjs';
+import { exhaustMap, map } from 'rxjs/operators';
+
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/models/agreement.model';
-import { EMPTY, noop, of, Subscription } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-electronic-organization-agreement-page',
