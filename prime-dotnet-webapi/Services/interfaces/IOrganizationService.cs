@@ -15,6 +15,7 @@ namespace Prime.Services
         Task<IEnumerable<OrganizationSearchViewModel>> GetOrganizationsAsync(OrganizationSearchOptions search);
         Task<IEnumerable<OrganizationListViewModel>> GetOrganizationsByPartyIdAsync(int partyId);
         Task<Organization> GetOrganizationAsync(int organizationId);
+        Task<int> GetOrganizationSigningAuthorityIdAsync(int organizationId);
         Task<Organization> GetOrganizationByPecAsync(string pec);
         Task<int> CreateOrganizationAsync(int signingAuthorityId);
         Task<int> UpdateOrganizationAsync(int organizationId, OrganizationUpdateModel updatedOrganization);
@@ -28,10 +29,7 @@ namespace Prime.Services
         Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId);
         Task FinalizeTransferAsync(int organizationId);
         AgreementType OrgAgreementTypeForSiteSetting(int careSettingCode);
-
-        /// <summary>
-        /// Returns <c>true</c> if can successfully switch signing authority, <c>false</c> otherwise.
-        /// </summary>
-        Task<bool> SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
+        Task SwitchSigningAuthorityAsync(int organizationId, int newSigningAuthorityId);
+        Task SwitchSitesProvisionerAsync(int organizationId, int newSignAuthorityId);
     }
 }
