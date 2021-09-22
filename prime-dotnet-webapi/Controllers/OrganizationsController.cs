@@ -223,7 +223,7 @@ namespace Prime.Controllers
 
             if (notificationRequired)
             {
-                await _partyService.RemovePartyTypeAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
                 await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
                 await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
             }
