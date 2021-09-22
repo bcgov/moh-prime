@@ -25,5 +25,8 @@ namespace Prime.Services
         Task FinalizeSubmissionAsync(int enrolleeId);
         Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents);
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
+        Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth);
+        Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth);
+        Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId);
     }
 }

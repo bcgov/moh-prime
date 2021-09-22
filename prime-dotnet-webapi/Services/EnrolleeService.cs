@@ -955,60 +955,60 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth)
-        {
-            return await _context.Enrollees
-                .AsNoTracking()
-                .AnyAsync(
-                    e => e.GPID.StartsWith("NOBCSC")
-                    && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
-                );
-        }
+        // public async Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth)
+        // {
+        //     return await _context.Enrollees
+        //         .AsNoTracking()
+        //         .AnyAsync(
+        //             e => e.GPID.StartsWith("NOBCSC")
+        //             && e.DateOfBirth.Date == dateOfBirth.Date
+        //             && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
+        //         );
+        // }
 
-        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth)
-        {
-            return await _context.Enrollees
-                .AsNoTracking()
-                .Where(
-                    e => e.GPID.StartsWith("NOBCSC")
-                    && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
-                )
-                .ToListAsync();
-        }
+        // public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth)
+        // {
+        //     return await _context.Enrollees
+        //         .AsNoTracking()
+        //         .Where(
+        //             e => e.GPID.StartsWith("NOBCSC")
+        //             && e.DateOfBirth.Date == dateOfBirth.Date
+        //             && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
+        //         )
+        //         .ToListAsync();
+        // }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId)
-        {
-            var enrollee = await _context.Enrollees
-                .Where(
-                    e => e.Id == enrolmentId
-                    && _context.EnrolleeLinkedEnrolments.Any(link => link.EnrolleeId == e.Id)
-                )
-                .AnyAsync();
+        // public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId)
+        // {
+        //     var enrollee = await _context.Enrollees
+        //         .Where(
+        //             e => e.Id == enrolmentId
+        //             && _context.EnrolleeLinkedEnrolments.Any(link => link.EnrolleeId == e.Id)
+        //         )
+        //         .AnyAsync();
 
-            var paperEnrollee = await _context.Enrollees
-                .Where(
-                    pe => pe.GPID.StartsWith("NOBCSC")
-                    && pe.Id == PaperEnrolmentId
-                    && _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == pe.Id)
-                )
-                .AnyAsync();
+        //     var paperEnrollee = await _context.Enrollees
+        //         .Where(
+        //             pe => pe.GPID.StartsWith("NOBCSC")
+        //             && pe.Id == PaperEnrolmentId
+        //             && _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == pe.Id)
+        //         )
+        //         .AnyAsync();
 
-            if (enrollee || paperEnrollee)
-            {
-                return false;
-            }
+        //     if (enrollee || paperEnrollee)
+        //     {
+        //         return false;
+        //     }
 
-            var newLinkedEnrolment = new EnrolleeLinkedEnrolments
-            {
-                EnrolleeId = enrolmentId,
-                PaperEnrolleeId = PaperEnrolmentId
-            };
+        //     var newLinkedEnrolment = new EnrolleeLinkedEnrolments
+        //     {
+        //         EnrolleeId = enrolmentId,
+        //         PaperEnrolleeId = PaperEnrolmentId
+        //     };
 
-            _context.Add(newLinkedEnrolment);
+        //     _context.Add(newLinkedEnrolment);
 
-            return true;
-        }
+        //     return true;
+        // }
     }
 }

@@ -15,7 +15,6 @@ namespace Prime.Controllers
     [Produces("application/json")]
     [Route("api/enrollees")]
     [ApiController]
-    [Authorize(Roles = Roles.TriageEnrollee)]
     public class EnrolleePaperSubmissionsController : PrimeControllerBase
     {
         private readonly IEnrolleePaperSubmissionService _enrolleeService;
@@ -35,6 +34,7 @@ namespace Prime.Controllers
         /// Creates a new Enrollee Paper Submission.
         /// </summary>
         [HttpPost("paper-submissions", Name = nameof(CreateEnrolleePaperSubmission))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -56,6 +56,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Agreement.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/agreement", Name = nameof(UpdateEnrolleePaperSubmissionAgreement))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -76,6 +77,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Care Settings.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/care-settings", Name = nameof(UpdateEnrolleePaperSubmissionCareSettings))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -96,6 +98,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Certifications.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/certifications", Name = nameof(UpdateEnrolleePaperSubmissionCertifications))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -116,6 +119,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's demographic information.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/demographics", Name = nameof(UpdateEnrolleePaperSubmissionDemographics))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -137,6 +141,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's OBO Sites.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/obo-sites", Name = nameof(UpdateEnrolleePaperSubmissionOboSites))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -157,6 +162,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Self Declaration information.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/self-declarations", Name = nameof(UpdateEnrolleePaperSubmissionSelfDeclarations))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -177,6 +183,7 @@ namespace Prime.Controllers
         /// Updates a Paper Submission's Documents.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/documents", Name = nameof(UpdateEnrolleePaperSubmissionDocuments))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -199,6 +206,7 @@ namespace Prime.Controllers
         /// Sets the Paper Submission's profile as "completed", allowing frontend and backend behavioural changes.
         /// </summary>
         [HttpPut("{enrolleeId}/paper-submissions/profile-completed", Name = nameof(SetEnrolleePaperSubmissionProfileCompleted))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -221,7 +229,7 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/paper-submissions/documents", Name = nameof(GetAdjudicationDocuments))]
-        [Authorize(Roles = Roles.ViewEnrollee)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -243,6 +251,7 @@ namespace Prime.Controllers
         /// Finalizes a Paper Submission.
         /// </summary>
         [HttpPost("{enrolleeId}/paper-submissions/finalize", Name = nameof(FinalizeEnrolleePaperSubmission))]
+        [Authorize(Roles = Roles.TriageEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -255,6 +264,26 @@ namespace Prime.Controllers
             }
 
             await _enrolleeService.FinalizeSubmissionAsync(enrolleeId);
+
+            return Ok();
+        }
+
+        // HEAD: api/Enrollees/potential-paper-enrollee/5
+        /// <summary>
+        /// Gets all paper enrollees and checks whether or not there is a match in dateOfBirth with the current logged on enrollee.
+        /// </summary>
+        [HttpHead("potential-paper-enrollee/{dateOfBirth}")]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus(DateTime dateOfBirth)
+        {
+            var result = await _enrolleeService.IsPotentialPaperEnrolleeReturnee(dateOfBirth);
+
+            if (!result)
+            {
+                return NotFound();
+            }
 
             return Ok();
         }

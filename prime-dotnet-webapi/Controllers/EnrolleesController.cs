@@ -70,25 +70,6 @@ namespace Prime.Controllers
             }
         }
 
-        // HEAD: api/Enrollees/potential-paper-enrollee/5
-        /// <summary>
-        /// Gets all paper enrollees and checks whether or not there is a match in dateOfBirth with the current logged on enrollee.
-        /// </summary>
-        [HttpHead("potential-paper-enrollee/{dateOfBirth}")]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus(DateTime dateOfBirth)
-        {
-            var result = await _enrolleeService.IsPotentialPaperEnrolleeReturnee(dateOfBirth);
-
-            if (!result)
-            {
-                return NotFound();
-            }
-
-            return Ok();
-        }
-
         // GET: api/Enrollees/1/adjacent
         /// <summary>
         /// Gets adjacent next and previous enrollee IDs for a given enrolleeId

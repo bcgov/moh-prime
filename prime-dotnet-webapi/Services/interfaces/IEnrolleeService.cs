@@ -52,8 +52,8 @@ namespace Prime.Services
         Task<IEnumerable<int>> GetNotifiedEnrolleeIdsForAdminAsync(ClaimsPrincipal user);
         Task<IEnumerable<string>> GetEnrolleeEmails(BulkEmailType bulkEmailType);
         Task<Credential> GetCredentialAsync(int enrolleeId);
-        Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth);
-        Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth);
-        Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId);
+        // Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth);
+        // Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth);
+        // Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId);
     }
 }

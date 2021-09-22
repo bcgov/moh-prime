@@ -236,15 +236,16 @@ namespace Prime.Services.Rules
 
     public class IsPotentialPaperEnrolleeReturnee : AutomaticAdjudicationRule
     {
-        private readonly IEnrolleeService _enrolleeService;
+        private readonly IEnrolleePaperSubmissionService _enrolleePaperSubmissionService;
 
-        public IsPotentialPaperEnrolleeReturnee(IEnrolleeService enrolleeService)
+
+        public IsPotentialPaperEnrolleeReturnee(IEnrolleePaperSubmissionService enrolleePaperSubmissionService)
         {
-            _enrolleeService = enrolleeService;
+            _enrolleePaperSubmissionService = enrolleePaperSubmissionService;
         }
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
-            var PaperEnrollees = await _enrolleeService.GetPotentialPaperEnrolleeReturnees(enrollee.DateOfBirth);
+            var PaperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturnees(enrollee.DateOfBirth);
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
             if (PaperEnrollees != null)
@@ -271,7 +272,7 @@ namespace Prime.Services.Rules
                         return false;
                     }
                     // *** *** if match "auto enrol" and link to paper enrolment
-                    if (!await _enrolleeService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
+                    if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
                     {
                         enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
                         return false;
