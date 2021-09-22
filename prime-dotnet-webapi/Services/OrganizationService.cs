@@ -322,5 +322,21 @@ namespace Prime.Services
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task SwitchSitesProvisionerAsync(int organizationId, int newSigningAuthorityId)
+        {
+            var organization = await _context.Organizations
+                .Include(o => o.Sites)
+                .SingleAsync(o => o.Id == organizationId);
+
+            organization.SigningAuthorityId = newSigningAuthorityId;
+
+            foreach (var site in organization.Sites)
+            {
+                site.ProvisionerId = newSigningAuthorityId;
+            }
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -218,6 +218,7 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId);
+            await _organizationService.SwitchSitesProvisionerAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId);
             await _partyService.RemovePartyTypeAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
