@@ -209,22 +209,24 @@ namespace Prime.Controllers
         public async Task<ActionResult> ApproveOrganizationClaim(int organizationId, int claimId)
         {
             var orgClaim = await _organizationClaimService.GetOrganizationClaimAsync(claimId);
-            if (orgClaim == null || (orgClaim.OrganizationId != organizationId))
+            if (orgClaim == null || organizationId != orgClaim.OrganizationId)
             {
                 return NotFound("Cannot locate Claim for given Organization.");
             }
 
-            if (!await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId))
-            {
-                // TODO: Properly communicate error
-                return BadRequest("Could not assign Organization to new SigningAuthority.");
-            }
+            var existingSigningAuthorityId = await _organizationService.GetOrganizationSigningAuthorityIdAsync(organizationId);
+            var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
-            await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
-
-            await _businessEventService.CreateOrganizationEventAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
-
+            await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
+            await _organizationService.SwitchSitesProvisionerAsync(organizationId, orgClaim.NewSigningAuthorityId);
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
+
+            if (notificationRequired)
+            {
+                await _partyService.RemovePartyEnrolmentAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
+                await _businessEventService.CreateOrganizationEventAsync(organizationId, orgClaim.NewSigningAuthorityId, $"Organization Claim (Site ID/PEC provided: {orgClaim.ProvidedSiteId}, Reason: {orgClaim.Details}) approved.");
+                await _emailService.SendOrgClaimApprovalNotificationAsync(orgClaim);
+            }
 
             return NoContent();
         }
