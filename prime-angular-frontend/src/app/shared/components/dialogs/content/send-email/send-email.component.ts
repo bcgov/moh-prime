@@ -1,11 +1,9 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { SiteResource } from '@core/resources/site-resource.service';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
-import { Site } from '@registration/shared/models/site.model';
-
-import { SiteResource } from '@core/resources/site-resource.service';
 
 @Component({
   selector: 'app-send-email',
@@ -14,16 +12,15 @@ import { SiteResource } from '@core/resources/site-resource.service';
 })
 export class SendEmailComponent implements OnInit {
   public title: string;
-  public site: Site;
-  private siteId: number;
+  public readonly contacts: { label: string, email: string }[];
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: DialogOptions,
+    @Inject(MAT_DIALOG_DATA) public options: DialogOptions,
     private siteResource: SiteResource,
     private dialogRef: MatDialogRef<ConfirmDialogComponent>,
   ) {
-    this.title = data.title;
-    this.siteId = data.data.siteId;
+    this.title = options.title;
+    this.contacts = options.data.contacts;
   }
 
   public onCancel(): void {
@@ -34,12 +31,5 @@ export class SendEmailComponent implements OnInit {
     this.dialogRef.close(email);
   }
 
-  public ngOnInit(): void {
-    this.getSite(this.siteId);
-  }
-
-  private getSite(siteId: number): void {
-    this.siteResource.getSiteById(siteId)
-      .subscribe((site: Site) => this.site = site);
-  }
+  public ngOnInit(): void { }
 }

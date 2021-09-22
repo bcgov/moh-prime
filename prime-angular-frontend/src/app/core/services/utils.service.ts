@@ -4,6 +4,7 @@ import { SortDirection } from '@angular/material/sort';
 
 import { WindowRefService } from './window-ref.service';
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
+import { EmailUtils } from '@lib/utils/email-utils.class';
 
 export type SortWeight = -1 | 0 | 1;
 
@@ -173,27 +174,5 @@ export class UtilsService {
   public downloadToken(token: string): void {
     this.window.location
       .assign(`${this.config.documentManagerUrl}/documents/downloads/${token}`);
-  }
-
-  /**
-   * @description
-   * Open an email using the user's default mail client.
-   */
-  public mailTo(recipient: string, subject: string = null, body: string = null) {
-    if (recipient) {
-      let href = `mailto:${recipient}`;
-
-      const params = [];
-      if (subject) {
-        params.push(`subject=${encodeURI(subject)}`);
-      }
-      if (body) {
-        params.push(`body=${encodeURI(body)}`);
-      }
-      if (params.length > 0) {
-        href += `?${params.join('&')}`;
-      }
-      window.location.href = href;
-    }
   }
 }

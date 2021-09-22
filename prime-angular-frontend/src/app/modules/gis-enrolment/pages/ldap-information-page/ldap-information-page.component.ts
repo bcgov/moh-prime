@@ -24,7 +24,8 @@ import { LdapErrorResponse } from '@gis/shared/models/ldap-error-response.model'
 export class LdapInformationPageComponent extends AbstractEnrolmentPage implements OnInit {
   public title: string;
   public formState: LdapInformationPageFormState;
-  public locked: boolean;
+  public unauthorized: boolean | null;
+  public locked: boolean | null;
   public remainingAttempts: number;
 
   private routeUtils: RouteUtils;
@@ -68,11 +69,11 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
       .pipe(
         exhaustMap((response: NoContent | LdapErrorResponse) => {
           if (response instanceof LdapErrorResponse) {
-            const { unlocked } = response;
-            if(this.remainingAttempts) {
+            const { unauthorized, locked } = response;
+            if (this.remainingAttempts) {
               this.remainingAttempts--;
             }
-            this.handleLdapResponse(!unlocked);
+            this.handleLdapResponse(unauthorized, locked);
             return EMPTY;
           }
 
@@ -85,10 +86,11 @@ export class LdapInformationPageComponent extends AbstractEnrolmentPage implemen
   protected afterSubmitIsSuccessful(): void {
     // Don't want the password around any longer than needed
     this.formState.clearPassword();
-    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ORG_INFO_PAGE}`]);
+    this.routeUtils.routeRelativeTo([`./${GisEnrolmentRoutes.ENROLLEE_INFO_PAGE}`]);
   }
 
-  private handleLdapResponse(locked?: boolean) {
-    this.locked = !!locked;
+  private handleLdapResponse(unauthorized: boolean | null = null, locked: boolean | null = null) {
+    this.unauthorized = unauthorized;
+    this.locked = locked;
   }
 }
