@@ -175,7 +175,6 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
             -p VANITY_URL=test.pharmanetenrolment.gov.bc.ca \
