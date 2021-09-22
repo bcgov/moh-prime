@@ -565,13 +565,12 @@ namespace Prime.Services
 
         public async Task<IEnumerable<EnrolmentStatus>> GetEnrolmentStatusesAsync(int enrolleeId)
         {
-            IQueryable<EnrolmentStatus> query = _context.EnrolmentStatuses
+            return await _context.EnrolmentStatuses
                 .Include(es => es.Status)
-                .Where(es => es.EnrolleeId == enrolleeId);
-
-            var items = await query.ToListAsync();
-
-            return items;
+                .Where(es => es.EnrolleeId == enrolleeId)
+                .OrderByDescending(es => es.StatusDate)
+                    .ThenByDescending(s => s.Id)
+                .ToListAsync();
         }
 
         public async Task<bool> IsEnrolleeInStatusAsync(int enrolleeId, params StatusType[] statusCodesToCheck)

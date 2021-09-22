@@ -66,11 +66,10 @@ namespace Prime.Controllers
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/statuses", Name = nameof(GetEnrolmentStatuses))]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Status>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolmentStatus>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrolmentStatuses(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);

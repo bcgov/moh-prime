@@ -69,7 +69,8 @@ namespace Prime.ViewModels
         // Remove this entireley? BC eID is not used.
         // public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
 
-        public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+        // TODO already in extended controller
+        // public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         public int? AdjudicatorId { get; set; }
 
