@@ -260,6 +260,31 @@ namespace Prime.Controllers
         // --------- New Stuff --------------------------------------------------------------------------------------------------------------------------------
 
 
+        // GET: api/enrollees/5/care-settings
+        /// <summary>
+        /// Gets an Enrollee's Care Setting Codes.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/care-settings", Name = nameof(GetCareSettingCodes))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<int>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCareSettingCodes(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetCareSettingCodes(enrolleeId));
+        }
+
         // GET: api/enrollees/5/certifications
         /// <summary>
         /// Gets an Enrollee's Certifications.
