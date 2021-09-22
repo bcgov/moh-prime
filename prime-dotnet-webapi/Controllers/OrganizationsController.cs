@@ -214,9 +214,11 @@ namespace Prime.Controllers
                 return NotFound("Cannot locate Claim for given Organization.");
             }
 
-            var notificationRequired = await _organizationService.GetOrganizationSigningAuthorityIdAsync(organizationId) != orgClaim.NewSigningAuthorityId;
+            var existingSigningAuthorityId = await _organizationService.GetOrganizationSigningAuthorityIdAsync(organizationId);
+            var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(orgClaim.OrganizationId, orgClaim.NewSigningAuthorityId);
+            await _partyService.RemovePartyTypeAsync(existingSigningAuthorityId, PartyType.SigningAuthority);
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
             if (notificationRequired)

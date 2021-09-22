@@ -317,7 +317,9 @@ namespace Prime.Services
         {
             var organization = await _context.Organizations
                 .SingleAsync(o => o.Id == organizationId);
+
             organization.SigningAuthorityId = newSigningAuthorityId;
+
             await _context.SaveChangesAsync();
         }
     }
