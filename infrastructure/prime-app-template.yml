@@ -768,7 +768,7 @@ objects:
               valueFrom:
                 secretKeyRef:
                   name: redis
-                  key: app-db-password
+                  key: database-password
             - name: CACHE_REDIS_PORT
               value: "6379"
             - name: DB_HOST
@@ -850,7 +850,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: redis
-                    key: app-db-password
+                    key: database-password
               - name: CACHE_REDIS_PORT
                 value: "6379"
               - name: DB_HOST
@@ -1052,7 +1052,7 @@ objects:
                 valueFrom:
                   secretKeyRef:
                     name: redis
-                    key: app-db-password
+                    key: database-password
               - name: REDIS_PORT
                 value: "6379"
             securityContext:

@@ -83,7 +83,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     const site = this.siteService.site;
 
     return this.organizationResource
-      .updateOrganizationAgreement(organizationId, site.id)
+      .updateOrganizationAgreement(organizationId, site.careSettingCode)
       .pipe(
         map((agreement: OrganizationAgreement) => !!agreement),
         exhaustMap((needsOrgAgreement: boolean) =>

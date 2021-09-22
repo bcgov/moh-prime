@@ -30,18 +30,17 @@ namespace Prime.Services
                 .AnyAsync(oc => oc.OrganizationId == organizationId);
         }
 
-        public async Task<bool> DeleteClaimAsync(int claimId)
+        public async Task DeleteClaimAsync(int claimId)
         {
             var claim = await _context.OrganizationClaims
                 .SingleOrDefaultAsync(oc => oc.Id == claimId);
             if (claim == null)
             {
-                return false;
+                return;
             }
 
             _context.OrganizationClaims.Remove(claim);
-            int numAffected = await _context.SaveChangesAsync();
-            return numAffected == 1;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<OrganizationClaim> GetOrganizationClaimAsync(int claimId)
@@ -56,20 +55,20 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(oc => oc.OrganizationId == organizationId);
         }
 
-        public async Task<int> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaim, Organization organization)
+        public async Task<int> CreateOrganizationClaimAsync(OrganizationClaimViewModel organizationClaimVm, Organization organization)
         {
-            var organizationCLaim = new OrganizationClaim
+            var organizationClaim = new OrganizationClaim
             {
                 OrganizationId = organization.Id,
-                NewSigningAuthorityId = organizationClaim.PartyId,
-                ProvidedSiteId = organizationClaim.PEC,
-                Details = organizationClaim.ClaimDetail
+                NewSigningAuthorityId = organizationClaimVm.PartyId,
+                ProvidedSiteId = organizationClaimVm.PEC,
+                Details = organizationClaimVm.ClaimDetail
             };
 
-            _context.OrganizationClaims.Add(organizationCLaim);
+            _context.OrganizationClaims.Add(organizationClaim);
             await _context.SaveChangesAsync();
 
-            await _businessEventService.CreateOrganizationEventAsync(organization.Id, organizationClaim.PartyId, "Organization Claim Created");
+            await _businessEventService.CreateOrganizationEventAsync(organization.Id, organizationClaimVm.PartyId, "Organization Claim Created");
 
             return organization.Id;
         }
