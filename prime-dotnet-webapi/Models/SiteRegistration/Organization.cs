@@ -36,6 +36,8 @@ namespace Prime.Models
         public Party SigningAuthority { get; set; }
 
         public int SigningAuthorityId { get; set; }
+        
+        public bool PendingTransfer { get; set; }
 
         [JsonIgnore]
         public ICollection<Site> Sites { get; set; }

@@ -4,7 +4,7 @@ import { KeyValue } from '@angular/common';
 
 import { Moment } from 'moment';
 
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -46,6 +46,7 @@ export class SiteManagementPageComponent implements OnInit {
   public AgreementType = AgreementType;
   public CareSettingEnum = CareSettingEnum;
   public SiteRoutes = SiteRoutes;
+  public careSettingCodesPendingTransfer: CareSettingEnum[];
 
   constructor(
     private route: ActivatedRoute,
@@ -153,6 +154,10 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public isPendingTransfer(): boolean {
+    return this.organizations[0]?.pendingTransfer;
+  }
+
   public isLocked(site: SiteListViewModel): boolean {
     return (site.status === SiteStatusType.LOCKED);
   }
@@ -179,6 +184,10 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public routeToOrgAgreementByCareSettingCode(code: CareSettingEnum): void {
+    this.routeUtils.routeRelativeTo([this.organizations[0].id, SiteRoutes.CARE_SETTINGS, code, SiteRoutes.ORGANIZATION_AGREEMENT]);
+  }
+
   public ngOnInit(): void {
     this.getOrganizations();
   }
@@ -200,10 +209,16 @@ export class SiteManagementPageComponent implements OnInit {
         }),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
-        )
+        ),
+        exhaustMap((agreements: OrganizationAgreementViewModel[]) => {
+          this.organizationAgreements = agreements;
+          return (this.organizations[0].pendingTransfer)
+            ? this.organizationResource.getCareSettingCodesForPendingTransfer(this.organizations[0].id)
+            : of([]);
+        }),
       )
-      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
-        this.organizationAgreements = agreements
+      .subscribe((careSettingCodes: CareSettingEnum[]) =>
+        this.careSettingCodesPendingTransfer = careSettingCodes
       );
   }
 

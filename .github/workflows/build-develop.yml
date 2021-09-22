@@ -183,7 +183,6 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres-db \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
             -p IMAGE_TAG=dev \
