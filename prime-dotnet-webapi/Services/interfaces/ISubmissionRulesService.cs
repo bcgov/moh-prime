@@ -10,5 +10,7 @@ namespace Prime.Services
         Task<bool> QualifiesForAutomaticAdjudicationAsync(Enrollee enrollee);
 
         Task<bool> QualifiesAsMinorUpdateAsync(Enrollee enrollee, EnrolleeUpdateModel profileUpdate);
+
+        Task<bool> PassesPharmanetValidationRule(Enrollee enrollee);
     }
 }

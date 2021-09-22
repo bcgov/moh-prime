@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using DelegateDecompiler.EntityFrameworkCore;
 
 using Prime.Engines;
 using Prime.Models;
@@ -304,6 +305,28 @@ namespace Prime.Services
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
+        public async Task RerunPharmanetValidationRuleAsync()
+        {
+            var enrollees = GetBaseQueryForEnrolleeApplicationRules()
+                .Where(e => e.Adjudicator == null)
+                .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
+                // TODO: Don't hard-code StatusReasonCodes
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => esr.StatusReasonCode > 2 && esr.StatusReasonCode < 8))
+                // Need `DecompileAsync` due to computed property `CurrentStatus`
+                .DecompileAsync()
+                .ToList();
+            foreach (var enrollee in enrollees)
+            {
+                if (await _submissionRulesService.PassesPharmanetValidationRule(enrollee))
+                {
+                    await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
+                }
+            }
+            await _context.SaveChangesAsync();
+            // TODO: Is following needed?
+            // await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
+        }
+
         private async Task CancelToaAssignmentAsync(Enrollee enrollee)
         {
             var newStatus = enrollee.AddEnrolmentStatus(StatusType.UnderReview);
@@ -330,7 +353,27 @@ namespace Prime.Services
         private async Task ProcessEnrolleeApplicationRules(int enrolleeId)
         {
             // TODO: UpdateEnrollee re-fetches the model, removing the includes we need for the adjudication rules. Fix how this model loading is done.
-            var enrollee = await _context.Enrollees
+            var enrollee = await GetBaseQueryForEnrolleeApplicationRules()
+                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
+
+            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
+            {
+                await AdjudicatedAutomatically(enrollee, "Automatically Approved");
+            }
+        }
+
+        private async Task AdjudicatedAutomatically(Enrollee enrollee, string businessEventDesc)
+        {
+            var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
+            newStatus.AddStatusReason(StatusReasonType.Automatic);
+
+            await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrollee.Id);
+            await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, businessEventDesc);
+        }
+
+        IQueryable<Enrollee> GetBaseQueryForEnrolleeApplicationRules()
+        {
+            return _context.Enrollees
                 .Include(e => e.Submissions)
                 .Include(e => e.Addresses)
                     .ThenInclude(ea => ea.Address)
@@ -338,17 +381,7 @@ namespace Prime.Services
                 .Include(e => e.EnrolmentStatuses)
                     .ThenInclude(es => es.EnrolmentStatusReasons)
                 .Include(e => e.Certifications)
-                    .ThenInclude(c => c.License)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
-            if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
-            {
-                var newStatus = enrollee.AddEnrolmentStatus(StatusType.RequiresToa);
-                newStatus.AddStatusReason(StatusReasonType.Automatic);
-
-                await _enrolleeAgreementService.CreateEnrolleeAgreementAsync(enrolleeId);
-                await _businessEventService.CreateStatusChangeEventAsync(enrolleeId, "Automatically Approved");
-            }
+                    .ThenInclude(c => c.License);
         }
     }
 }

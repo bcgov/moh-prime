@@ -11,5 +11,6 @@ namespace Prime.Services
         Task<bool> PerformEnrolleeStatusActionAsync(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null);
         Task UpdateAlwaysManualAsync(int enrolleeId, bool alwaysManual);
         Task ConfirmLatestSubmissionAsync(int enrolleeId);
+        Task RerunPharmanetValidationRuleAsync();
     }
 }

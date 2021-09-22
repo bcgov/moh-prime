@@ -215,6 +215,24 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
+        // POST: api/enrollees/rerun-pharmanet-rule
+        /// <summary>
+        /// Re-runs the Pharmanet validation rule for all applicable Enrollees.
+        /// </summary>
+        [HttpPost("rerun-pharmanet-rule", Name = nameof(RerunPharmanetValidationRule))]
+        // TODO: Correct required permissions?
+        // [Authorize(Roles = Roles.TriageEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunPharmanetValidationRule()
+        {
+            await _submissionService.RerunPharmanetValidationRuleAsync();
+            return Ok();
+        }
+
         private async Task<ActionResult> EnrolleeStatusActionInternal(int enrolleeId, EnrolleeStatusAction action, object additionalParameters = null)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
