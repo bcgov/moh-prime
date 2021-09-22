@@ -516,6 +516,11 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<VerifiedCredentialViewModel>> GetVerifiedCredentialsAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
 

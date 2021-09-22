@@ -92,9 +92,9 @@ namespace Prime.ViewModels
 
         public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
-        public int? CredentialId { get; set; }
+        // public int? CredentialId { get; set; }
 
-        public string Base64QRCode { get; set; }
+        // public string Base64QRCode { get; set; }
 
         public EnrolmentStatus CurrentStatus { get; set; }
 

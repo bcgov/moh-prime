@@ -28,6 +28,7 @@ namespace Prime.Services
         Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
         Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
+        Task<IEnumerable<VerifiedCredentialViewModel>> GetVerifiedCredentialsAsync(int enrolleeId);
 
 
 
