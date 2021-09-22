@@ -506,6 +506,16 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
 
 
 

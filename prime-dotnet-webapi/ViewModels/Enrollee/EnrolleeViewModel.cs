@@ -49,8 +49,8 @@ namespace Prime.ViewModels
 
         // public ICollection<Certification> Certifications { get; set; }
 
-        // TODO: this being used on the FE?
-        public ICollection<Job> Jobs { get; set; }
+        // TODO: is this being used on the FE? Ideally remove entireley
+        // public ICollection<Job> Jobs { get; set; }
 
         // public ICollection<OboSite> OboSites { get; set; }
 
@@ -62,11 +62,12 @@ namespace Prime.ViewModels
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
+        // public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 
-        public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+        // public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
 
-        public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
+        // Remove this entireley? BC eID is not used.
+        // public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
 
         public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 

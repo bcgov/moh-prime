@@ -26,6 +26,8 @@ namespace Prime.Services
         Task DeleteEnrolleeAsync(int enrolleeId);
         Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId);
         Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId);
+        Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId);
+        Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId);
 
 
 

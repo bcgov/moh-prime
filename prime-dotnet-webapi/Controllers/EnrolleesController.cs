@@ -45,7 +45,7 @@ namespace Prime.Controllers
             _plrProviderService = plrProviderService;
         }
 
-        // GET: api/Enrollees
+        // GET: api/enrollees
         /// <summary>
         /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
         /// </summary>
@@ -74,7 +74,7 @@ namespace Prime.Controllers
             }
         }
 
-        // POST: api/Enrollees
+        // POST: api/enrollees
         /// <summary>
         /// Creates a new Enrollee.
         /// </summary>
@@ -135,7 +135,7 @@ namespace Prime.Controllers
             );
         }
 
-        // GET: api/Enrollees/5
+        // GET: api/enrollees/5
         /// <summary>
         /// Gets a specific Enrollee.
         /// </summary>
@@ -190,7 +190,7 @@ namespace Prime.Controllers
             return Ok(enrollee);
         }
 
-        // PUT: api/Enrollees/5
+        // PUT: api/enrollees/5
         /// <summary>
         /// Updates a specific Enrollee.
         /// </summary>
@@ -239,7 +239,7 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Enrollees/5
+        // DELETE: api/enrollees/5
         /// <summary>
         /// Deletes a specific Enrollee.
         /// </summary>
@@ -260,7 +260,7 @@ namespace Prime.Controllers
         // --------- New Stuff --------------------------------------------------------------------------------------------------------------------------------
 
 
-        // GET: api/Enrollees/5/certifications
+        // GET: api/enrollees/5/certifications
         /// <summary>
         /// Gets an Enrollee's Certifications.
         /// </summary>
@@ -285,7 +285,7 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetCertificationsAsync(enrolleeId));
         }
 
-        // GET: api/Enrollees/5/obo-sites
+        // GET: api/enrollees/5/obo-sites
         /// <summary>
         /// Gets an Enrollee's Obo Sites.
         /// </summary>
@@ -308,6 +308,56 @@ namespace Prime.Controllers
             }
 
             return Ok(await _enrolleeService.GetOboSitesAsync(enrolleeId));
+        }
+
+        // GET: api/enrollees/5/self-declarations
+        /// <summary>
+        /// Gets an Enrollee's Self Declarations.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/self-declarations", Name = nameof(GetSelfDeclarations))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SelfDeclarationViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSelfDeclarations(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetSelfDeclarationsAsync(enrolleeId));
+        }
+
+        // GET: api/enrollees/5/self-declarations/documents
+        /// <summary>
+        /// Gets an Enrollee's Self Declaration Documents.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/self-declarations/documents", Name = nameof(GetSelfDeclarationDocuments))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<SelfDeclarationDocumentViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetSelfDeclarationDocuments(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
         }
     }
 }
