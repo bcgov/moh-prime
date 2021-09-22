@@ -27,9 +27,12 @@ namespace Prime.Configuration
                 .OnDelete(DeleteBehavior.Cascade);
 
             builder
-                .HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey",
+                .HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth",
+                    @"((""OrganizationId"" is null) or (""PartyId"" is not null))");
+
+            builder
+                .HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee",
                     @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
                      + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
         }
     }

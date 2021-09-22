@@ -218,7 +218,6 @@ namespace Prime.Controllers
             var notificationRequired = existingSigningAuthorityId != orgClaim.NewSigningAuthorityId;
 
             await _organizationService.SwitchSigningAuthorityAsync(organizationId, orgClaim.NewSigningAuthorityId);
-            await _organizationService.SwitchSitesProvisionerAsync(organizationId, orgClaim.NewSigningAuthorityId);
             await _organizationClaimService.DeleteClaimAsync(orgClaim.Id);
 
             if (notificationRequired)
@@ -331,18 +330,19 @@ namespace Prime.Controllers
 
         // POST: api/Organizations/5/agreements/update
         /// <summary>
-        /// Creates a new un-accepted Organization Agreement based on the type of Site supplied, if a newer version exits.
+        /// Creates a new un-accepted Organization Agreement based on the Care Setting supplied, if a newer version exits
+        /// or if the signing authority has changed.
         /// Will return a reference to any existing un-accepted agreement instead of creating a new one, if able.
         /// </summary>
         /// <param name="organizationId"></param>
-        /// <param name="siteId"></param>
-        [HttpGet("{organizationId}/agreements/update", Name = nameof(UpdateOrganizationAgreement))]
+        /// <param name="careSettingCode"></param>
+        [HttpPost("{organizationId}/agreements/care-settings/{careSettingCode}", Name = nameof(UpdateOrganizationAgreement))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Agreement>), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult> UpdateOrganizationAgreement(int organizationId, [FromQuery] int siteId)
+        public async Task<ActionResult> UpdateOrganizationAgreement(int organizationId, int careSettingCode)
         {
             var organization = await _organizationService.GetOrganizationAsync(organizationId);
             if (organization == null)
@@ -354,10 +354,10 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, siteId);
+            var agreement = await _organizationService.EnsureUpdatedOrgAgreementAsync(organizationId, careSettingCode, organization.SigningAuthorityId);
             if (agreement == null)
             {
-                return NotFound($"Site with ID {siteId} not found on Organization {organizationId}");
+                return NotFound($"Care Setting Code {careSettingCode} not found on any site on Organization {organizationId}");
             }
 
             if (agreement.AcceptedDate.HasValue)
@@ -372,6 +372,62 @@ namespace Prime.Controllers
                     agreement
                 );
             }
+        }
+
+        // GET: api/Organizations/5/care-settings/pending-transfer
+        /// <summary>
+        /// Get the care setting codes for an organization that require agreements
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpGet("{organizationId}/care-settings/pending-transfer", Name = nameof(GetCareSettingForPendingTransferAgreements))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<CareSettingType>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCareSettingForPendingTransferAgreements(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var careSettingCodes = await _organizationService.GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
+
+            return Ok(careSettingCodes);
+        }
+
+        // PUT: api/Organizations/5/finalize-transfer
+        /// <summary>
+        /// Clear Pending Transfer Flag on an organization.
+        /// </summary>
+        /// <param name="organizationId"></param>
+        [HttpPut("{organizationId}/finalize-transfer", Name = nameof(FinalizeTransfer))]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> FinalizeTransfer(int organizationId)
+        {
+            var organization = await _organizationService.GetOrganizationAsync(organizationId);
+            if (organization == null)
+            {
+                return NotFound($"Organization not found with id {organizationId}");
+            }
+            if (!organization.SigningAuthority.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            await _organizationService.FinalizeTransferAsync(organizationId);
+
+            return NoContent();
         }
 
         // GET: api/Organizations/5/agreements/7
