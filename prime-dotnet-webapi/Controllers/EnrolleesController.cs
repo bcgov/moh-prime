@@ -70,19 +70,23 @@ namespace Prime.Controllers
             }
         }
 
-        // GET: api/Enrollees/PotentialPaperEnrolleeReturneeStatus/5
+        // HEAD: api/Enrollees/potential-paper-enrollee/5
         /// <summary>
         /// Gets all paper enrollees and checks whether or not there is a match in dateOfBirth with the current logged on enrollee.
         /// </summary>
-        [HttpGet("PotentialPaperEnrolleeReturneeStatus/{dateOfBirth}")]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus(string dateOfBirth)
+        [HttpHead("potential-paper-enrollee/{dateOfBirth}")]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus(DateTime dateOfBirth)
         {
             var result = await _enrolleeService.IsPotentialPaperEnrolleeReturnee(dateOfBirth);
-            return Ok(result);
+
+            if (!result)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
 
         // GET: api/Enrollees/1/adjacent

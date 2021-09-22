@@ -271,7 +271,7 @@ namespace Prime.Services.Rules
                         return false;
                     }
                     // *** *** if match "auto enrol" and link to paper enrolment
-                    if (await _enrolleeService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
+                    if (!await _enrolleeService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
                     {
                         enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
                         return false;
@@ -284,7 +284,6 @@ namespace Prime.Services.Rules
                     return false;
                 }
             }
-
             return true;
         }
     }

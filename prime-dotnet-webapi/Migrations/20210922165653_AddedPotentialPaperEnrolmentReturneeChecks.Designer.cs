@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210921204622_PotentialPaperEnrolmentReturnee")]
-    partial class PotentialPaperEnrolmentReturnee
+    [Migration("20210922165653_AddedPotentialPaperEnrolmentReturneeChecks")]
+    partial class AddedPotentialPaperEnrolmentReturneeChecks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -11927,6 +11927,46 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeHealthAuthority");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("EnrolmentCreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PaperEnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserProvidedGpid")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("PaperEnrolleeId");
+
+                    b.ToTable("EnrolleeLinkedEnrolments");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
                 {
                     b.Property<int>("Id")
@@ -12254,14 +12294,8 @@ namespace Prime.Migrations
                     b.Property<string>("LdapUsername")
                         .HasColumnType("text");
 
-                    b.Property<string>("Organization")
-                        .HasColumnType("text");
-
                     b.Property<int>("PartyId")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset?>("SubmittedDate")
                         .HasColumnType("timestamp with time zone");
@@ -12491,6 +12525,9 @@ namespace Prime.Migrations
                     b.Property<int?>("HealthAuthorityPharmanetAdministratorId")
                         .HasColumnType("integer");
 
+                    b.Property<int?>("HealthAuthorityTechnicalSupportId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("PEC")
                         .HasColumnType("text");
 
@@ -12531,6 +12568,8 @@ namespace Prime.Migrations
                     b.HasIndex("HealthAuthorityOrganizationId");
 
                     b.HasIndex("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasIndex("HealthAuthorityTechnicalSupportId");
 
                     b.HasIndex("PhysicalAddressId");
 
@@ -14022,12 +14061,11 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("current_timestamp");
 
-                    b.Property<Guid>("CreatedUserId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("IpAddress")
+                    b.Property<string>("LocationIpAddress")
                         .HasColumnType("text");
 
                     b.Property<string>("PharmacyId")
@@ -14040,6 +14078,9 @@ namespace Prime.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("ProviderSoftwareVersion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SourceIpAddress")
                         .HasColumnType("text");
 
                     b.Property<long>("TransactionId")
@@ -14056,12 +14097,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("TxDateTime")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("UpdatedUserId")
-                        .HasColumnType("uuid");
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
@@ -18546,6 +18581,21 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
+                        .WithMany()
+                        .HasForeignKey("PaperEnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
                 {
                     b.HasOne("Prime.Models.Admin", "Adjudicator")
@@ -18695,6 +18745,10 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityPharmanetAdministrator", "HealthAuthorityPharmanetAdministrator")
                         .WithMany()
                         .HasForeignKey("HealthAuthorityPharmanetAdministratorId");
+
+                    b.HasOne("Prime.Models.HealthAuthorities.HealthAuthorityTechnicalSupport", "HealthAuthorityTechnicalSupport")
+                        .WithMany()
+                        .HasForeignKey("HealthAuthorityTechnicalSupportId");
 
                     b.HasOne("Prime.Models.PhysicalAddress", "PhysicalAddress")
                         .WithMany()

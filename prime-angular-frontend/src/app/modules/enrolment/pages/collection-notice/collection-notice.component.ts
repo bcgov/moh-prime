@@ -32,14 +32,15 @@ export class CollectionNoticeComponent implements OnInit {
     private enrolmentResource: EnrolmentResource
   ) {
     this.isFull = true;
+    this.potentialPaperEnrolleeReturnee = false;
   }
 
   private isPotentialPaperEnrolleeReturnee(): void {
     this.getUser$()
-    .subscribe(enrollee => {
-      this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
-      .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
-    })
+      .subscribe(enrollee => {
+        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
+          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
+      })
   }
 
   public onAccept() {

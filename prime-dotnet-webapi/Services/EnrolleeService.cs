@@ -955,12 +955,14 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> IsPotentialPaperEnrolleeReturnee(string dateOfBirth)
+        public async Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth)
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .AnyAsync(e => e.GPID.StartsWith("NOBCSC")
-                    && e.DateOfBirth.Date == DateTime.Parse(dateOfBirth).Date
+                .AnyAsync(
+                    e => e.GPID.StartsWith("NOBCSC")
+                    && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
                 );
         }
 
@@ -968,8 +970,10 @@ namespace Prime.Services
         {
             return await _context.Enrollees
                 .AsNoTracking()
-                .Where(e => e.GPID.StartsWith("NOBCSC")
+                .Where(
+                    e => e.GPID.StartsWith("NOBCSC")
                     && e.DateOfBirth.Date == dateOfBirth.Date
+                    && !_context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == e.Id)
                 )
                 .ToListAsync();
         }
@@ -977,27 +981,32 @@ namespace Prime.Services
         public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId)
         {
             var enrollee = await _context.Enrollees
-                .Where(e => e.Id == enrolmentId)
-                .SingleOrDefaultAsync();
+                .Where(
+                    e => e.Id == enrolmentId
+                    && _context.EnrolleeLinkedEnrolments.Any(link => link.EnrolleeId == e.Id)
+                )
+                .AnyAsync();
 
             var paperEnrollee = await _context.Enrollees
-                .Where(pe => pe.GPID.StartsWith("NOBCSC") && pe.Id == PaperEnrolmentId)
-                .SingleOrDefaultAsync();
+                .Where(
+                    pe => pe.GPID.StartsWith("NOBCSC")
+                    && pe.Id == PaperEnrolmentId
+                    && _context.EnrolleeLinkedEnrolments.Any(link => link.PaperEnrolleeId == pe.Id)
+                )
+                .AnyAsync();
+
+            if (enrollee || paperEnrollee)
+            {
+                return false;
+            }
 
             var newLinkedEnrolment = new EnrolleeLinkedEnrolments
             {
-                EnrolmentId = enrolmentId,
-                PaperEnrolmentId = PaperEnrolmentId
+                EnrolleeId = enrolmentId,
+                PaperEnrolleeId = PaperEnrolmentId
             };
 
             _context.Add(newLinkedEnrolment);
-
-            var created = await _context.SaveChangesAsync();
-
-            if (created < 1)
-            {
-                throw new InvalidOperationException("Could notlink enrolments.");
-            }
 
             return true;
         }

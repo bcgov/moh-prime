@@ -121,11 +121,10 @@ export class EnrolmentResource {
   }
 
   public getPotentialPaperEnrolleeReturneeStatus(dateOfBirth?: string): Observable<boolean> {
-    return this.apiResource.get<boolean>(`enrollees/PotentialPaperEnrolleeReturneeStatus/${dateOfBirth}`)
+    return this.apiResource.head<boolean>(`enrollees/potential-paper-enrollee/${dateOfBirth}`)
       .pipe(
-        map((response: ApiHttpResponse<boolean>) => response.result),
+        map(() => true),
         catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolments could not be retrieved');
           this.logger.error('[Enrolment] getPotentialPaperEnrolleeReturneeStatus::getCurrentStatus error has occurred:  ', error);
           throw error;
         })

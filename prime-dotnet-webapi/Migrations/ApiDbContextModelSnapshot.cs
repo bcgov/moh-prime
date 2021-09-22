@@ -11925,6 +11925,46 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeHealthAuthority");
                 });
 
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTimeOffset>("CreatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("EnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("EnrolmentCreationDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("PaperEnrolleeId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("UpdatedTimeStamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("UserProvidedGpid")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("PaperEnrolleeId");
+
+                    b.ToTable("EnrolleeLinkedEnrolments");
+                });
+
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
                 {
                     b.Property<int>("Id")
@@ -18535,6 +18575,21 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.HealthAuthority", "HealthAuthority")
                         .WithMany()
                         .HasForeignKey("HealthAuthorityCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+                {
+                    b.HasOne("Prime.Models.Enrollee", "Enrollee")
+                        .WithMany()
+                        .HasForeignKey("EnrolleeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
+                        .WithMany()
+                        .HasForeignKey("PaperEnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
