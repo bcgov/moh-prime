@@ -117,7 +117,7 @@ namespace Prime.Services
         public async Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType)
         {
             var partyEnrolment = _context.Set<PartyEnrolment>()
-                .SingleOrDefault(pe => pe.PartyType == partyType);
+                .SingleOrDefault(pe => pe.PartyId == partyId && pe.PartyType == partyType);
 
             if (partyEnrolment != null)
             {
