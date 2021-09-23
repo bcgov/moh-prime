@@ -569,10 +569,10 @@ namespace Prime.Services
             var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
                 .Cast<int>()
                 .Except(answered.Select(a => a.SelfDeclarationTypeCode))
-                .Select(uac => new SelfDeclarationViewModel
+                .Select(code => new SelfDeclarationViewModel
                 {
                     EnrolleeId = enrolleeId,
-                    SelfDeclarationTypeCode = uac
+                    SelfDeclarationTypeCode = code
                 });
 
             return answered.Concat(unAnswered);
