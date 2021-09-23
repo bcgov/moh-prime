@@ -26,6 +26,7 @@ import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.route
 export class OverviewPageComponent implements OnInit {
   public busy: Subscription;
   public pharmanetAdministrators: Contact[];
+  public technicalSupports: Contact[];
   public healthAuthoritySite: HealthAuthoritySite;
   public showEditRedirect: boolean;
   public showSubmissionAction: boolean;
@@ -88,10 +89,11 @@ export class OverviewPageComponent implements OnInit {
     })
       .pipe(untilDestroyed(this))
       .subscribe(({
-                    healthAuthority: { pharmanetAdministrators },
+                    healthAuthority: { pharmanetAdministrators, technicalSupports },
                     healthAuthoritySite
                   }: { healthAuthority: HealthAuthority, healthAuthoritySite: HealthAuthoritySite }) => {
         this.pharmanetAdministrators = pharmanetAdministrators;
+        this.technicalSupports = technicalSupports;
         this.healthAuthoritySite = healthAuthoritySite;
       });
   }

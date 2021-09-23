@@ -15,6 +15,7 @@ namespace Prime.Services
         Task<Party> GetPartyForUserIdAsync(Guid userId, PartyType? withType = null);
         Task<int> CreateOrUpdatePartyAsync(IPartyChangeModel changeModel, ClaimsPrincipal user);
         void UpdateAddress<T>(Party dbParty, T newAddress) where T : Address;
+        Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType);
         Task DeletePartyAsync(int partyId);
         Task<IEnumerable<PartyType>> GetPreApprovedRegistrationsAsync(string firstName, string lastName, string email);
     }

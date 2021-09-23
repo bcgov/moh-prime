@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Prime.Models;
@@ -15,6 +16,10 @@ namespace Prime.Configuration
                 .HasIndex(e => e.PharmacyId);
             builder
                 .HasIndex(e => e.TxDateTime);
+
+            // Defaults for audit column
+            builder.Property(e => e.CreatedTimeStamp)
+                .HasDefaultValueSql("current_timestamp");
         }
     }
 }
