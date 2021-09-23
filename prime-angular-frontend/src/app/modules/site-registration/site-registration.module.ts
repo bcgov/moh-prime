@@ -29,6 +29,7 @@ import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.
 import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
 import { BusinessLicenceExpiryComponent } from './shared/components/business-licence-expiry/business-licence-expiry.component';
+import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { BusinessLicenceExpiryComponent } from './shared/components/business-lic
     NextStepsPageComponent,
     OrganizationClaimConfirmationPageComponent,
     BusinessLicenceRenewalPageComponent,
-    BusinessLicenceExpiryComponent
+    BusinessLicenceExpiryComponent,
+    ElectronicOrganizationAgreementPageComponent
   ],
   imports: [
     SiteRegistrationRoutingModule,
