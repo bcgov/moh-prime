@@ -64,9 +64,6 @@ namespace Prime.ViewModels
         [JsonIgnore]
         public string IdentityProvider { get; set; }
 
-        public string GPID { get; set; }
-
-
         public void SetPropertiesFromToken(ClaimsPrincipal user)
         {
             IdentityProvider = user.FindFirstValue(Claims.IdentityProvider);

@@ -69,6 +69,8 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
+    // If enrollee date of birth matches a paper enrollee date of birth, go to the
+    // NOBCSC page
     if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)) {
       return true;
     }
@@ -268,5 +270,9 @@ export class EnrolmentGuard extends BaseGuard {
     }
 
     return routePath;
+  }
+
+  private checkPotentialPaperEnrolleeReturnee() {
+
   }
 }

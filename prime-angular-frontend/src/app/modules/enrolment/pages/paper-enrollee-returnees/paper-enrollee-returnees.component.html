@@ -27,7 +27,16 @@
           </ng-container>
         </app-page-subheader2>
 
-        <app-paper-enrollee-returnee-form [form]="form"></app-paper-enrollee-returnee-form>
+        <div [formGroup]="form">
+          <div *ngFor="let control of formControlConfig">
+            <mat-form-field class="w-100">
+              <input matInput
+                     [placeholder]="control.label"
+                     [formControlName]="control.name">
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
       </section>
     </app-toggle-content>
 

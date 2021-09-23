@@ -35,14 +35,6 @@ export class CollectionNoticeComponent implements OnInit {
     this.potentialPaperEnrolleeReturnee = false;
   }
 
-  private isPotentialPaperEnrolleeReturnee(): void {
-    this.getUser$()
-      .subscribe(enrollee => {
-        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
-          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
-      })
-  }
-
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
     const nextRoute = this.potentialPaperEnrolleeReturnee
@@ -85,5 +77,13 @@ export class CollectionNoticeComponent implements OnInit {
           } as Enrollee;
         })
       );
+  }
+
+  private isPotentialPaperEnrolleeReturnee(): void {
+    this.getUser$()
+      .subscribe(enrollee => {
+        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
+          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
+      })
   }
 }

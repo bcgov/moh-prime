@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Prime.Auth;
 using Prime.Models;
+using Prime.Models.Api;
 using Prime.Services;
 using Prime.ViewModels.PaperEnrollees;
 
@@ -286,6 +287,57 @@ namespace Prime.Controllers
             }
 
             return Ok();
+        }
+
+        // POST: api/Enrollees/5/create-link-to-paper-enrollee
+        /// <summary>
+        /// Creates a new Enrollee who may have a a previous paper enrolment.
+        /// </summary>
+        [HttpPost("{enrolleeId}/create-link-to-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
+        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [AllowAnonymous]
+        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
+        public async Task<ActionResult> CreateLinkWithPotentialPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        {
+            await _enrolleeService.CreateInitialLink(enrolleeId, payload.UserProvidedGpid);
+            return Ok();
+        }
+
+        // PUT: api/Enrollees/5/update-gpid-linked-paper-enrollee
+        /// <summary>
+        /// Updates the paper enrolment gpid that the user provided
+        /// </summary>
+        [HttpPost("{enrolleeId}/update-gpid-linked-paper-enrollee", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
+        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [AllowAnonymous]
+        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
+        public async Task<ActionResult> UpdateGpidLinkToPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        {
+            await _enrolleeService.UpdateLinkedGpid(enrolleeId, payload.UserProvidedGpid);
+            return Ok();
+        }
+
+        // GET: api/Enrollees/5/linked-gpid
+        /// <summary>
+        /// Gets the linked gpid
+        /// </summary>
+        [HttpPost("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
+        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [AllowAnonymous]
+        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
+        public async Task<ActionResult> GetLinkedGpid(int enrolleeId)
+        {
+            string gpid = await _enrolleeService.GetLinkedGpid(enrolleeId);
+            return Ok(gpid);
         }
     }
 }

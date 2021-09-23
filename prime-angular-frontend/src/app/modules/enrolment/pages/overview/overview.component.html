@@ -120,6 +120,29 @@
     </ng-container>
   </app-alert>
 
+  <app-page-section *ngIf="true">
+    <app-page-subheader>
+      <ng-container appPageSubheaderTitle>Paper Enrolment Declaration</ng-container>
+
+      <button *ngIf="true"
+              mat-icon-button
+              matTooltip="Edit Paper Enrolment Declaration"
+              (click)="routeTo(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </app-page-subheader>
+
+
+    <ng-container>
+      <app-enrollee-property [title]=" false ? 'Paper enrolment GPID' : 'No manual enrolment GPID provided.'"
+                             [class.text-muted]="true">
+        {{false ? 54545545 : ''}}
+      </app-enrollee-property>
+    </ng-container>
+
+
+  </app-page-section>
+
   <app-page-subheader>
     <ng-container appPageSubheaderTitle>Personal Information from BC Services Card</ng-container>
 

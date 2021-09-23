@@ -27,6 +27,13 @@ namespace Prime.Services
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
         Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth);
         Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth);
-        Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId);
+        Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId, string userProvidedGpid);
+
+        Task CreateInitialLink(int enrolleeId, String userProvidedGpid);
+
+        Task UpdateLinkedGpid(int enrolleeId, String userUpdatedGpid);
+
+        Task<String> GetLinkedGpid(int enrolleeId);
+
     }
 }

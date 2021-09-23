@@ -10,10 +10,12 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
+
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
 
         public int EnrolleeId { get; set; }
+
         [JsonIgnore]
         public Enrollee PaperEnrollee { get; set; }
         public int PaperEnrolleeId { get; set; }

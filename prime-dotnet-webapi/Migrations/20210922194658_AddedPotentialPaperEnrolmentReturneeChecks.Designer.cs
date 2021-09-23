@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210922165653_AddedPotentialPaperEnrolmentReturneeChecks")]
+    [Migration("20210922194658_AddedPotentialPaperEnrolmentReturneeChecks")]
     partial class AddedPotentialPaperEnrolmentReturneeChecks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

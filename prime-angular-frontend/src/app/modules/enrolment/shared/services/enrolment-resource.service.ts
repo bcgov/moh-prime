@@ -65,6 +65,44 @@ export class EnrolmentResource {
       );
   }
 
+  public createLinkWithPotentialPaperEnrollee(enrollee: Enrollee, userProvidedGpid: string): Observable<NoContent> {
+    const { id } = enrollee;
+    const payload = { userProvidedGpid }
+    return this.apiResource.post<NoContent>(`enrollees/${id}/create-link-to-paper-enrollee`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<NoContent>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public updateLinkedGpid(enrollee: Enrollee, userProvidedGpid: string): Observable<String> {
+    const { id } = enrollee;
+    const payload = { userProvidedGpid }
+    return this.apiResource.put<String>(`enrollees/${id}/linked-gpid`, payload)
+      .pipe(
+        map((response: ApiHttpResponse<String>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
+  public getLinkedEnrolment(enrollee: Enrollee): Observable<String> {
+    const { id } = enrollee;
+    return this.apiResource.get<String>(`enrollees/${id}/linked-gpid`)
+      .pipe(
+        map((response: ApiHttpResponse<String>) => response.result),
+        catchError((error: any) => {
+          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
+
   public updateEnrollee(enrolment: Enrolment, beenThroughTheWizard: boolean = false): NoContent {
     const { id } = enrolment;
     const params = this.apiResourceUtilsService.makeHttpParams({ beenThroughTheWizard });

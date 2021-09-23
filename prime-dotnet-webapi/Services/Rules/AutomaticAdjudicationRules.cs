@@ -258,8 +258,8 @@ namespace Prime.Services.Rules
                     foreach (var PaperEnrollee in PaperEnrollees)
                     {
                         if (
-                                PaperEnrollee.DateOfBirth.Date == enrollee.DateOfBirth.Date &&
-                                PaperEnrollee.GPID == enrollee.GPID
+                                PaperEnrollee.DateOfBirth.Date == enrollee.DateOfBirth.Date
+                                && PaperEnrollee.GPID == enrollee.GPID
                             )
                         {
                             paperEnrolleeMatchId = PaperEnrollee.Id;
@@ -268,20 +268,21 @@ namespace Prime.Services.Rules
 
                     if (paperEnrolleeMatchId == -1)
                     {
-                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {enrollee.GPID}");
+                        await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, enrollee.GPID);
                         return false;
                     }
                     // *** *** if match "auto enrol" and link to paper enrolment
-                    if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId))
+                    if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, enrollee.GPID))
                     {
-                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"Method used: {enrollee.GPID}");
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {enrollee.GPID}");
                         return false;
                     }
                 }
                 // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
                 else
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"Method used: {enrollee.GPID}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"User-Provided GPID: {enrollee.GPID}");
                     return false;
                 }
             }
