@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Prime.Models;
 using Prime.HttpClients;
 using Prime.HttpClients.PharmanetCollegeApiDefinitions;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.Services.Rules
 {
@@ -67,13 +68,18 @@ namespace Prime.Services.Rules
     {
         private readonly ICollegeLicenceClient _collegeLicenceClient;
         private readonly IBusinessEventService _businessEventService;
+        private readonly ILogger _logger;
+
 
         public PharmanetValidationRule(
             ICollegeLicenceClient collegeLicenceClient,
-            IBusinessEventService businessEventService)
+            IBusinessEventService businessEventService,
+            ILogger logger
+            )
         {
             _collegeLicenceClient = collegeLicenceClient;
             _businessEventService = businessEventService;
+            _logger = logger;
         }
 
         public override async Task<bool> ProcessRule(Enrollee enrollee)
@@ -86,6 +92,7 @@ namespace Prime.Services.Rules
 
             bool passed = true;
 
+            _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
             foreach (var cert in enrollee.Certifications.Where(c => c.License.Validate))
             {
                 if (cert.License.PrescriberIdType == PrescriberIdType.Optional && cert.PractitionerId == null)

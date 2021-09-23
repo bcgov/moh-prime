@@ -36,7 +36,7 @@ namespace Prime.Services
                 new SelfDeclarationRule(),
                 new AddressRule(),
                 new VerifiedAddressRule(),
-                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService),
+                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService, _logger),
                 // new DeviceProviderRule(),
                 new LicenceClassRule(),
                 new AlwaysManualRule(),

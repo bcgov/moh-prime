@@ -13,7 +13,7 @@ namespace Prime.HttpClients
     public class CollegeLicenceClient : BaseClient, ICollegeLicenceClient
     {
         private readonly HttpClient _client;
-        protected readonly ILogger _logger;
+        private readonly ILogger _logger;
 
 
         public CollegeLicenceClient(HttpClient client, ILogger logger)
