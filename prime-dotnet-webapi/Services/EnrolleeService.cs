@@ -501,7 +501,7 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<int>> GetCareSettingCodesAsync(int enrolleeId)
+        public async Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }

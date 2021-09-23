@@ -284,14 +284,14 @@ namespace Prime.Controllers
 
         // GET: api/enrollees/5/care-settings
         /// <summary>
-        /// Gets an Enrollee's Care Setting Codes.
+        /// Gets an Enrollee's Care Setting(s) and/or Health Authorities (as applicable).
         /// </summary>
         /// <param name="enrolleeId"></param>
         [HttpGet("{enrolleeId}/care-settings", Name = nameof(GetCareSettingCodes))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<int>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<CareSettingViewModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetCareSettingCodes(int enrolleeId)
         {
             var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
@@ -304,7 +304,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetCareSettingCodesAsync(enrolleeId));
+            return Ok(await _enrolleeService.GetCareSettingsAsync(enrolleeId));
         }
 
         // GET: api/enrollees/5/certifications

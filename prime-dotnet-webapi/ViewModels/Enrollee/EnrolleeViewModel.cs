@@ -47,8 +47,6 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
-
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
@@ -134,6 +132,7 @@ namespace Prime.ViewModels
 // public ICollection<Certification> Certifications { get; set; }
 // public ICollection<OboSite> OboSites { get; set; }
 // public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+// public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 // public AccessAgreementNote AccessAgreementNote { get; set; }
 // public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 // public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
