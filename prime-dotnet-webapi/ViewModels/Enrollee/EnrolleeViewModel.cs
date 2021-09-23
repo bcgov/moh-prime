@@ -134,8 +134,6 @@ namespace Prime.ViewModels
 // public ICollection<Certification> Certifications { get; set; }
 // public ICollection<OboSite> OboSites { get; set; }
 // public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
-// public int? CredentialId { get; set; }
-// public string Base64QRCode { get; set; }
 // public AccessAgreementNote AccessAgreementNote { get; set; }
 // public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 // public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
@@ -154,3 +152,9 @@ namespace Prime.ViewModels
 
 // TODO: there is already an endpoint for this
 // public ICollection<EnrolleeNote> AdjudicatorNotes { get; set; }
+
+// TODO: dont think we need this at all
+// public int? CredentialId { get; set; }
+
+// TODO: already an endpoint
+// public string Base64QRCode { get; set; }

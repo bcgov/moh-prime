@@ -406,30 +406,5 @@ namespace Prime.Controllers
 
             return Ok(await _enrolleeService.GetSelfDeclarationDocumentsAsync(enrolleeId));
         }
-
-        // GET: api/enrollees/5/verified-credentials
-        /// <summary>
-        /// Gets an Enrollee's Verified Credentials.
-        /// </summary>
-        /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/verified-credentials", Name = nameof(GetVerifiedCredentials))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<VerifiedCredentialViewModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetVerifiedCredentials(int enrolleeId)
-        {
-            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
-            if (record == null)
-            {
-                return NotFound($"Enrollee not found with id {enrolleeId}");
-            }
-            if (!record.AccessableBy(User))
-            {
-                return Forbid();
-            }
-
-            return Ok(await _enrolleeService.GetVerifiedCredentialsAsync(enrolleeId));
-        }
     }
 }
