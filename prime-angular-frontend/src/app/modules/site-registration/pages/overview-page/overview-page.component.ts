@@ -17,6 +17,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-overview-page',
@@ -31,6 +32,7 @@ export class OverviewPageComponent implements OnInit {
   public siteExpiryDate: string | Moment | null;
   public routeUtils: RouteUtils;
   public SiteRoutes = SiteRoutes;
+  public SiteStatusType = SiteStatusType;
 
   constructor(
     protected route: ActivatedRoute,

@@ -94,10 +94,10 @@ namespace Prime.Services
 
             if (currentSite.SubmittedDate == null)
             {
-                UpdateAddress(currentSite, updatedSite);
                 UpdateVendors(currentSite, updatedSite);
             }
 
+            UpdateAddress(currentSite, updatedSite);
             UpdateContacts(currentSite, updatedSite);
             UpdateBusinessHours(currentSite, updatedSite);
             UpdateRemoteUsers(currentSite, updatedSite);
@@ -112,6 +112,15 @@ namespace Prime.Services
             {
                 return 0;
             }
+        }
+
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .Where(s => s.Id == siteId)
+                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .SingleOrDefaultAsync();
         }
 
         private void UpdateAddress(Site current, SiteUpdateModel updated)

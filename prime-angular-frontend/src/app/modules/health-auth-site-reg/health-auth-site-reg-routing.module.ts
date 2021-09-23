@@ -23,6 +23,7 @@ import { HoursOperationPageComponent } from '@health-auth/pages/hours-operation-
 import { RemoteUsersPageComponent } from '@health-auth/pages/remote-users-page/remote-users-page.component';
 import { RemoteUserPageComponent } from '@health-auth/pages/remote-user-page/remote-user-page.component';
 import { AdministratorPageComponent } from '@health-auth/pages/administrator-page/administrator-page.component';
+import { TechnicalSupportPageComponent } from '@health-auth/pages/technical-support-page/technical-support-page.component';
 import { OverviewPageComponent } from '@health-auth/pages/overview-page/overview-page.component';
 
 const routes: Routes = [
@@ -142,10 +143,16 @@ const routes: Routes = [
             ]
           },
           {
-            path: HealthAuthSiteRegRoutes.SITE_ADMINISTRATOR,
+            path: HealthAuthSiteRegRoutes.ADMINISTRATOR,
             component: AdministratorPageComponent,
             canDeactivate: [CanDeactivateFormGuard],
             data: { title: 'PharmaNet Administrator' }
+          },
+          {
+            path: HealthAuthSiteRegRoutes.TECHNICAL_SUPPORT,
+            component: TechnicalSupportPageComponent,
+            canDeactivate: [CanDeactivateFormGuard],
+            data: { title: 'Technical Support' }
           },
           {
             path: HealthAuthSiteRegRoutes.SITE_OVERVIEW,

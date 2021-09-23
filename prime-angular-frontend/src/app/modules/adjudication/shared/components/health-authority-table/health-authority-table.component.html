@@ -8,8 +8,7 @@
       <ng-container matColumnDef="prefixes">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col">&nbsp;
-        </th>
+            scope="col">&nbsp;</th>
         <td mat-cell
             *matCellDef="let row;"
             class="prefix">
@@ -25,8 +24,7 @@
       <ng-container matColumnDef="orgName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Health Authority Name
-        </th>
+            scope="col"> Health Authority Name </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row?.name | default: '' }} </td>
       </ng-container>
@@ -34,8 +32,7 @@
       <ng-container matColumnDef="siteName">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Site Name
-        </th>
+            scope="col"> Site Name </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.siteName | default }} </td>
       </ng-container>
@@ -43,8 +40,7 @@
       <ng-container matColumnDef="submissionDate">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Submission Date
-        </th>
+            scope="col"> Submission Date </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.submittedDate | formatDate }} </td>
       </ng-container>
@@ -52,8 +48,7 @@
       <ng-container matColumnDef="assignedTo">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Assigned To
-        </th>
+            scope="col"> Assigned To </th>
         <!-- TODO missing adjudicatorIdir on model to populate column -->
         <td mat-cell
             *matCellDef="let row;"> {{ null | default }} </td>
@@ -62,8 +57,7 @@
       <ng-container matColumnDef="state">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> State
-        </th>
+            scope="col"> State </th>
         <td mat-cell
             *matCellDef="let row;"
             class="status"
@@ -78,8 +72,7 @@
       <ng-container matColumnDef="siteId">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Site ID
-        </th>
+            scope="col"> Site ID </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.siteId | default }} </td>
       </ng-container>
@@ -87,8 +80,7 @@
       <ng-container matColumnDef="remoteUsers">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col"> Remote Users
-        </th>
+            scope="col"> Remote Users </th>
         <td mat-cell
             *matCellDef="let row;"> {{ row.remoteUsers?.length | yesNo: true }} </td>
       </ng-container>
@@ -96,9 +88,7 @@
       <ng-container matColumnDef="haActions">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col">
-          &nbsp;
-        </th>
+            scope="col">&nbsp;</th>
         <td mat-cell
             *matCellDef="let row;"
             class="text-right">
@@ -111,8 +101,7 @@
       <ng-container matColumnDef="siteActions">
         <th mat-header-cell
             *matHeaderCellDef
-            scope="col">&nbsp;
-        </th>
+            scope="col">&nbsp;</th>
         <td mat-cell
             *matCellDef="let row;"
             class="text-right">
@@ -123,9 +112,9 @@
       </ng-container>
 
       <ng-container matColumnDef="haHeader">
-        <td colspan="7"
-            mat-cell
-            *matCellDef="let row">
+        <td mat-cell
+            *matCellDef="let row"
+            [attr.colspan]="siteColumns.length - 2">
           <button mat-icon-button
                   title="Expand"
                   color="primary"
@@ -163,12 +152,20 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.ORGANIZATION_INFORMATION])">
+                (click)="onRoute([
+                  AdjudicationRoutes.HEALTH_AUTHORITIES,
+                  row.id,
+                  AdjudicationRoutes.ORGANIZATION_INFORMATION
+                ])">
           <mat-icon>business</mat-icon>
           <span>Add Organization Information</span>
         </button>
         <button mat-menu-item
-                (click)="onRoute([AdjudicationRoutes.HEALTH_AUTHORITIES, row.id, AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS])">
+                (click)="onRoute([
+                  AdjudicationRoutes.HEALTH_AUTHORITIES,
+                  row.id,
+                  AdjudicationRoutes.HEALTH_AUTH_AUTHORIZED_USERS
+                ])">
           <mat-icon>admin_panel_settings</mat-icon>
           <span>View Authorized Users</span>
         </button>
@@ -183,33 +180,55 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>
+        <button mat-menu-item
+                [disabled]="true"
+                (click)="onRoute([
+                  AdjudicationRoutes.HEALTH_AUTHORITIES,
+                  row.healthAuthorityOrganizationId,
+                  AdjudicationRoutes.SITE_REGISTRATION,
+                  row.id
+                ])">
           <mat-icon>all_inclusive</mat-icon>
           <span>Overview</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item
+                [disabled]="true"
+                (click)="onRoute([
+                  AdjudicationRoutes.HEALTH_AUTHORITIES,
+                  row.healthAuthorityOrganizationId,
+                  AdjudicationRoutes.SITE_REGISTRATION,
+                  row.id,
+                  AdjudicationRoutes.EVENT_LOG
+                ])">
           <mat-icon>list_alt</mat-icon>
           <span>Event Log</span>
         </button>
-        <button mat-menu-item>
+        <button mat-menu-item
+                [disabled]="true"
+                (click)="onRoute([
+                  AdjudicationRoutes.HEALTH_AUTHORITIES,
+                  row.healthAuthorityOrganizationId,
+                  AdjudicationRoutes.SITE_REGISTRATION,
+                  row.id,
+                  AdjudicationRoutes.ADJUDICATOR_NOTES
+                ])">
           <mat-icon>message</mat-icon>
           <span>Add and View Notes</span>
         </button>
-        <button mat-menu-item>
+
+        <button mat-menu-item
+                [disabled]="true"
+                (click)="onNotify(row.id, row.healthAuthorityOrganizationId)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>
         </button>
+
         <button mat-menu-item
                 *ngIf="!row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)">
+                [disabled]="true || !(Role.EDIT_SITE | inRole)"
+                (click)="(!row?.adjudicatorIdir) ? onAssign(row.siteId) : onReassign(row.siteId)">
           <mat-icon>pan_tool</mat-icon>
-          <span>Assign Registration</span>
-        </button>
-        <button mat-menu-item
-                *ngIf="row?.adjudicatorIdir"
-                [disabled]="!(Role.EDIT_SITE | inRole)">
-          <mat-icon>pan_tool</mat-icon>
-          <span>Reassign Registration</span>
+          <span>{{ (!row?.adjudicatorIdir) ? 'Assign Registration' : 'Reassign Registration' }}</span>
         </button>
       </mat-menu>
     </ng-template>

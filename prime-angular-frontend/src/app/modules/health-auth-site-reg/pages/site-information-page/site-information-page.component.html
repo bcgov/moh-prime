@@ -40,13 +40,13 @@
 
           <mat-form-field class="w-100">
             <mat-label>Security Group</mat-label>
-            <mat-select [formControl]="formState.securityGroup">
+            <mat-select [formControl]="formState.securityGroupCode">
               <mat-option *ngFor="let securityGroup of securityGroups"
                           [value]="securityGroup.code">
                 {{ securityGroup.name }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="formState.securityGroup.hasError('required')">
+            <mat-error *ngIf="formState.securityGroupCode.hasError('required')">
               Required
             </mat-error>
           </mat-form-field>
