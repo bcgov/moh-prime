@@ -63,12 +63,6 @@ namespace Prime.ViewModels
 
         public bool AlwaysManual { get; set; }
 
-        public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
-
-        public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
-
-        public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
-
         public EnrolmentStatus CurrentStatus { get; set; }
 
         public EnrolmentStatus PreviousStatus { get; set; }
@@ -136,6 +130,9 @@ namespace Prime.ViewModels
 // public AccessAgreementNote AccessAgreementNote { get; set; }
 // public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
 // public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+// public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
+// public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
+// public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
 
 
 //  ---- Removed with notes ----

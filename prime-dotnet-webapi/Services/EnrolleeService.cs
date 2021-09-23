@@ -511,7 +511,22 @@ namespace Prime.Services
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }
