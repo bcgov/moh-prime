@@ -64,16 +64,6 @@ namespace Prime.Services
             return await ProcessRules(rules, enrollee);
         }
 
-        public async Task<bool> PassesPharmanetValidationRule(Enrollee enrollee)
-        {
-            var rules = new List<AutomaticAdjudicationRule>
-            {
-                new PharmanetValidationRule(_collegeLicenceClient, _businessEventService),
-            };
-
-            return await ProcessRules(rules, enrollee);
-        }
-
         private async Task<bool> ProcessRules(IEnumerable<IEnrolleeRule> rules, Enrollee enrollee)
         {
             bool passed = true;

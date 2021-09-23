@@ -305,7 +305,7 @@ namespace Prime.Services
             await _enrolleeService.RemoveNotificationsAsync(enrollee.Id);
         }
 
-        public async Task RerunPharmanetValidationRuleAsync()
+        public async Task RerunRulesAsync()
         {
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
@@ -317,7 +317,8 @@ namespace Prime.Services
                 .ToList();
             foreach (var enrollee in enrollees)
             {
-                if (await _submissionRulesService.PassesPharmanetValidationRule(enrollee))
+                _logger.LogDebug($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
+                if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
                 {
                     await AdjudicatedAutomatically(enrollee, "Cron Job Automatically Approved");
                 }

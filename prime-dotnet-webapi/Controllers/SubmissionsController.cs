@@ -215,21 +215,20 @@ namespace Prime.Controllers
             return await EnrolleeStatusActionInternal(enrolleeId, EnrolleeStatusAction.RerunRules);
         }
 
-        // POST: api/enrollees/rerun-pharmanet-rule
+        // POST: api/enrollees/rerun-rules
         /// <summary>
-        /// Re-runs the Pharmanet validation rule for all applicable Enrollees.
+        /// Re-runs the automatic adjudication rules for all applicable Enrollees.
         /// </summary>
-        [HttpPost("rerun-pharmanet-rule", Name = nameof(RerunPharmanetValidationRule))]
-        // TODO: Correct required permissions?
-        // [Authorize(Roles = Roles.TriageEnrollee)]
+        [HttpPost("rerun-rules", Name = nameof(RerunAutomaticAdjudicationRules))]
+        //        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeViewModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> RerunPharmanetValidationRule()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> RerunAutomaticAdjudicationRules()
         {
-            await _submissionService.RerunPharmanetValidationRuleAsync();
+            await _submissionService.RerunRulesAsync();
             return Ok();
         }
 
