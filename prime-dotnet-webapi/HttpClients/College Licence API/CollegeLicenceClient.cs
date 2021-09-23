@@ -6,18 +6,23 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 
 using Prime.HttpClients.PharmanetCollegeApiDefinitions;
+using Microsoft.Extensions.Logging;
 
 namespace Prime.HttpClients
 {
     public class CollegeLicenceClient : BaseClient, ICollegeLicenceClient
     {
         private readonly HttpClient _client;
+        protected readonly ILogger _logger;
 
-        public CollegeLicenceClient(HttpClient client)
+
+        public CollegeLicenceClient(HttpClient client, ILogger logger)
             : base(PropertySerialization.CamelCase)
         {
             // Auth header and cert are injected in Startup.cs
             _client = client ?? throw new ArgumentNullException(nameof(client));
+
+            _logger = logger;
         }
 
         public async Task<PharmanetCollegeRecord> GetCollegeRecordAsync(string licencePrefix, string licenceNumber)
@@ -41,6 +46,7 @@ namespace Prime.HttpClients
                 await LogError(requestParams.ApplicationUUID, response, ex);
                 throw new PharmanetCollegeApiException("Error occurred when calling Pharmanet API. Try again later.", ex);
             }
+            _logger.LogDebug($"Response from {PrimeEnvironment.PharmanetApi.Url}:  {await response.Content.ReadAsStringAsync()}");
 
             if (!response.IsSuccessStatusCode)
             {
