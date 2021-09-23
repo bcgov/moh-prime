@@ -40,10 +40,17 @@ namespace Prime.ViewModels.Profiles
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
 
             // ------- Children -------
+            CreateMap<AccessAgreementNote, AccessAgreementNoteViewModel>();
             CreateMap<Certification, CertificationDto>();
             CreateMap<Certification, CertificationViewModel>();
             CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
+            CreateMap<EnrolleeRemoteUser, EnrolleeRemoteUserViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
+            CreateMap<RemoteAccessLocation, RemoteAccessLocationViewModel>();
+            CreateMap<RemoteAccessSite, RemoteAccessSiteViewModel>();
+            CreateMap<SelfDeclaration, SelfDeclarationViewModel>()
+                .ForMember(dest => dest.Answered, opt => opt.MapFrom(src => true));
+            CreateMap<SelfDeclarationDocument, SelfDeclarationDocumentViewModel>();
         }
     }
 }

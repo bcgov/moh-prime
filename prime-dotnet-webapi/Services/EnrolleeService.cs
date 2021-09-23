@@ -498,47 +498,92 @@ namespace Prime.Services
 
         public async Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.Set<AccessAgreementNote>()
+                .ProjectTo<AccessAgreementNoteViewModel>(_mapper.ConfigurationProvider)
+                .SingleOrDefaultAsync(a => a.EnrolleeId == enrolleeId);
         }
 
         public async Task<CareSettingViewModel> GetCareSettingsAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.Enrollees
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new CareSettingViewModel
+                {
+                    EnrolleeCareSettings = e.EnrolleeCareSettings,
+                    EnrolleeHealthAuthorities = e.EnrolleeHealthAuthorities
+                })
+                .SingleOrDefaultAsync();
         }
 
         public async Task<IEnumerable<CertificationViewModel>> GetCertificationsAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.Set<Certification>()
+                .Where(c => c.EnrolleeId == enrolleeId)
+                .ProjectTo<CertificationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<EnrolleeRemoteUserViewModel>> GetEnrolleeRemoteUsersAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.EnrolleeRemoteUsers
+                .Where(eru => eru.EnrolleeId == enrolleeId)
+                .ProjectTo<EnrolleeRemoteUserViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<OboSiteViewModel>> GetOboSitesAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.Set<OboSite>()
+                .Where(os => os.EnrolleeId == enrolleeId)
+                .ProjectTo<OboSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<RemoteAccessLocationViewModel>> GetRemoteAccessLocationsAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.Set<RemoteAccessLocation>()
+                .Where(ral => ral.EnrolleeId == enrolleeId)
+                .ProjectTo<RemoteAccessLocationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<RemoteAccessSiteViewModel>> GetRemoteAccessSitesAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.RemoteAccessSites
+                .Where(ras => ras.EnrolleeId == enrolleeId)
+                .ProjectTo<RemoteAccessSiteViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
+        /// <summary>
+        /// Returns a View Model for each Self Declaration Question, including ones answered "No"
+        /// </summary>
+        /// <param name="enrolleeId"></param>
         public async Task<IEnumerable<SelfDeclarationViewModel>> GetSelfDeclarationsAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            var answered = await _context.Set<SelfDeclaration>()
+                .Where(sd => sd.EnrolleeId == enrolleeId)
+                .ProjectTo<SelfDeclarationViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var unAnswered = Enum.GetValues(typeof(SelfDeclarationTypeCode))
+                .Cast<int>()
+                .Except(answered.Select(a => a.SelfDeclarationTypeCode))
+                .Select(uac => new SelfDeclarationViewModel
+                {
+                    EnrolleeId = enrolleeId,
+                    SelfDeclarationTypeCode = uac
+                });
+
+            return answered.Concat(unAnswered);
         }
 
         public async Task<IEnumerable<SelfDeclarationDocumentViewModel>> GetSelfDeclarationDocumentsAsync(int enrolleeId)
         {
-            throw new NotImplementedException();
+            return await _context.SelfDeclarationDocuments
+                .Where(sdd => sdd.EnrolleeId == enrolleeId)
+                .ProjectTo<SelfDeclarationDocumentViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
         }
 
 
