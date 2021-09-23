@@ -295,13 +295,16 @@ namespace Prime.Services
                 .Select(ecs => ecs.CareSetting.Name)
                 .ToListAsync();
 
+            var hasRemoteUsers = await _context.EnrolleeRemoteUsers
+                .AnyAsync(eru => eru.EnrolleeId == enrolleeId);
+
             var attributes = new CredentialPayload
             {
                 GPID = enrollee.GPID,
                 RenewalDate = enrollee.ExpiryDate.Value.Date.ToShortDateString(),
                 TOAName = enrollee.AssignedTOAType.Value.ToString(),
                 CareTypeSetting = string.Join(',', careSettings),
-                RemoteUser = enrollee.EnrolleeRemoteUsers.Count > 0 ? "true" : "false"
+                RemoteUser = hasRemoteUsers.ToString()
             };
 
             _logger.LogInformation("Credential offer attributes for {@JObject}", JsonConvert.SerializeObject(attributes));
