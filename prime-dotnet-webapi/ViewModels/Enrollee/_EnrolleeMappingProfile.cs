@@ -34,15 +34,15 @@ namespace Prime.ViewModels.Profiles
                 ))
                 .ForMember(dest => dest.Confirmed, opt => opt.MapFrom(src => src.Submissions.OrderByDescending(s => s.CreatedDate).FirstOrDefault().Confirmed))
                 .AfterMap((src, dest) => dest.IsRegulatedUser = src.IsRegulatedUser());
-
-            CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
+            // TODO: .AfterMap() DOES NOT RUN WHEN CALLING .ProjectTo()
 
             CreateMap<Enrollee, AgreementEngineDto>()
                 .ForMember(dest => dest.CareSettingCodes, opt => opt.MapFrom(src => src.EnrolleeCareSettings.Select(ecs => ecs.CareSettingCode)));
 
-            CreateMap<Certification, CertificationViewModel>();
+            // ------- Children -------
             CreateMap<Certification, CertificationDto>();
-
+            CreateMap<Certification, CertificationViewModel>();
+            CreateMap<EnrolleeNote, EnrolleeNoteViewModel>();
             CreateMap<OboSite, OboSiteViewModel>();
         }
     }
