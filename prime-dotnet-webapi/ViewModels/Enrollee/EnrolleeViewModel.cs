@@ -47,30 +47,12 @@ namespace Prime.ViewModels
 
         public string PhoneExtension { get; set; }
 
-        // public ICollection<Certification> Certifications { get; set; }
-
-        // TODO: is this being used on the FE? Ideally remove entireley
-        // public ICollection<Job> Jobs { get; set; }
-
-        // public ICollection<OboSite> OboSites { get; set; }
-
-        // public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
-
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
         public string DeviceProviderNumber { get; set; }
 
         public bool? IsInsulinPumpProvider { get; set; }
 
-        // public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
-
-        // public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
-
-        // Remove this entireley? BC eID is not used.
-        // public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
-
-        // TODO already in extended controller
-        // public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
 
         public int? AdjudicatorId { get; set; }
 
@@ -81,10 +63,6 @@ namespace Prime.ViewModels
 
         public bool ProfileCompleted { get; set; }
 
-        public ICollection<EnrolleeNote> AdjudicatorNotes { get; set; }
-
-        public AccessAgreementNote AccessAgreementNote { get; set; }
-
         public bool AlwaysManual { get; set; }
 
         public ICollection<EnrolleeRemoteUser> EnrolleeRemoteUsers { get; set; }
@@ -92,10 +70,6 @@ namespace Prime.ViewModels
         public ICollection<RemoteAccessLocation> RemoteAccessLocations { get; set; }
 
         public ICollection<RemoteAccessSite> RemoteAccessSites { get; set; }
-
-        // public int? CredentialId { get; set; }
-
-        // public string Base64QRCode { get; set; }
 
         public EnrolmentStatus CurrentStatus { get; set; }
 
@@ -154,3 +128,29 @@ namespace Prime.ViewModels
         }
     }
 }
+
+//  ---- Removed Properties: ----
+
+// public ICollection<Certification> Certifications { get; set; }
+// public ICollection<OboSite> OboSites { get; set; }
+// public ICollection<EnrolleeCareSetting> EnrolleeCareSettings { get; set; }
+// public int? CredentialId { get; set; }
+// public string Base64QRCode { get; set; }
+// public AccessAgreementNote AccessAgreementNote { get; set; }
+// public ICollection<SelfDeclaration> SelfDeclarations { get; set; }
+// public ICollection<SelfDeclarationDocument> SelfDeclarationDocuments { get; set; }
+
+
+//  ---- Removed with notes ----
+
+// TODO: is this being used on the FE? Ideally remove entireley
+// public ICollection<Job> Jobs { get; set; }
+
+// TODO: Remove this entireley? BC eID is not used.
+// public ICollection<IdentificationDocument> IdentificationDocuments { get; set; }
+
+// TODO: already in extended controller
+// public ICollection<EnrolmentStatus> EnrolmentStatuses { get; set; }
+
+// TODO: there is already an endpoint for this
+// public ICollection<EnrolleeNote> AdjudicatorNotes { get; set; }
