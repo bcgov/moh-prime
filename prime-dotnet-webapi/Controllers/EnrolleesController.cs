@@ -332,6 +332,31 @@ namespace Prime.Controllers
             return Ok(await _enrolleeService.GetCertificationsAsync(enrolleeId));
         }
 
+        // GET: api/enrollees/5/remote-users
+        /// <summary>
+        /// Gets an Enrollee's Remote Users.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/remote-users", Name = nameof(GetEnrolleeRemoteUsers))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeRemoteUserViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetEnrolleeRemoteUsers(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetEnrolleeRemoteUsersAsync(enrolleeId));
+        }
+
         // GET: api/enrollees/5/obo-sites
         /// <summary>
         /// Gets an Enrollee's Obo Sites.
@@ -355,6 +380,56 @@ namespace Prime.Controllers
             }
 
             return Ok(await _enrolleeService.GetOboSitesAsync(enrolleeId));
+        }
+
+        // GET: api/enrollees/5/remote-locations
+        /// <summary>
+        /// Gets an Enrollee's Remote Access Locations.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/remote-locations", Name = nameof(GetRemoteAccessLocations))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteAccessLocationViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetRemoteAccessLocations(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetRemoteAccessLocationsAsync(enrolleeId));
+        }
+
+        // GET: api/enrollees/5/remote-sites
+        /// <summary>
+        /// Gets an Enrollee's Remote Access Sites.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/remote-sites", Name = nameof(GetRemoteAccessSites))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<RemoteAccessSiteViewModel>>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetRemoteAccessSites(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            return Ok(await _enrolleeService.GetRemoteAccessSitesAsync(enrolleeId));
         }
 
         // GET: api/enrollees/5/self-declarations
