@@ -220,7 +220,7 @@ namespace Prime.Controllers
         /// Re-runs the automatic adjudication rules for all applicable Enrollees.
         /// </summary>
         [HttpPost("rerun-rules", Name = nameof(RerunAutomaticAdjudicationRules))]
-        //        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
+        [Authorize(Roles = Roles.PrimeApiServiceAccount)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
