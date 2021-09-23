@@ -14,6 +14,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
+import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
@@ -42,6 +43,10 @@ const routes: Routes = [
   {
     path: PhsaEformsRoutes.MODULE_PATH,
     loadChildren: () => import('./modules/phsa-eforms/phsa-eforms.module').then(m => m.PhsaEformsModule)
+  },
+  {
+    path: SatEformsRoutes.MODULE_PATH,
+    loadChildren: () => import('./modules/sat-eforms/sat-eforms.module').then(m => m.SatEformsModule)
   },
   {
     path: GisEnrolmentRoutes.MODULE_PATH,
