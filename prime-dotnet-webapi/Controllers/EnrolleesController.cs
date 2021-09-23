@@ -260,6 +260,28 @@ namespace Prime.Controllers
         // --------- New Stuff --------------------------------------------------------------------------------------------------------------------------------
 
 
+        // GET: api/enrollees/5/access-agreement-notes
+        /// <summary>
+        /// Gets an Enrollee's Access Agreement note.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        // URL based on existing PUT
+        [HttpGet("{enrolleeId}/access-agreement-notes", Name = nameof(GetAccessAgreementNote))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<AccessAgreementNoteViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAccessAgreementNote(int enrolleeId)
+        {
+            if (!await _enrolleeService.EnrolleeExistsAsync(enrolleeId))
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}.");
+            }
+
+            return Ok(await _enrolleeService.GetAccessAgreementNoteAsync(enrolleeId));
+        }
+
         // GET: api/enrollees/5/care-settings
         /// <summary>
         /// Gets an Enrollee's Care Setting Codes.
@@ -282,7 +304,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(await _enrolleeService.GetCareSettingCodes(enrolleeId));
+            return Ok(await _enrolleeService.GetCareSettingCodesAsync(enrolleeId));
         }
 
         // GET: api/enrollees/5/certifications

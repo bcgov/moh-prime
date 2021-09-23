@@ -496,7 +496,12 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<int>> GetCareSettingCodes(int enrolleeId)
+        public async Task<AccessAgreementNoteViewModel> GetAccessAgreementNoteAsync(int enrolleeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IEnumerable<int>> GetCareSettingCodesAsync(int enrolleeId)
         {
             throw new NotImplementedException();
         }
