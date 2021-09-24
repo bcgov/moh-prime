@@ -141,7 +141,7 @@ namespace Prime.Services
             }
 
             user.Email = party.Email;
-            user.SetPhoneNumber(party.Phone);
+            user.SetPhone(party.Phone);
 
             await _mohKeycloakClient.UpdateUser(party.UserId, user);
         }
