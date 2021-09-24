@@ -65,10 +65,9 @@ export class EnrolmentResource {
       );
   }
 
-  public createLinkWithPotentialPaperEnrollee(enrollee: Enrollee, userProvidedGpid: string): Observable<NoContent> {
-    const { id } = enrollee;
+  public createLinkWithPotentialPaperEnrollee(enrolleeId: number, userProvidedGpid: String): Observable<NoContent> {
     const payload = { userProvidedGpid }
-    return this.apiResource.post<NoContent>(`enrollees/${id}/create-link-to-paper-enrollee`, payload)
+    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/create-link-to-paper-enrollee`, payload)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
@@ -78,12 +77,12 @@ export class EnrolmentResource {
       );
   }
 
-  public updateLinkedGpid(enrollee: Enrollee, userProvidedGpid: string): Observable<String> {
+  public updateLinkedGpid(enrollee: Enrollee, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrollee;
     const payload = { userProvidedGpid }
-    return this.apiResource.put<String>(`enrollees/${id}/linked-gpid`, payload)
+    return this.apiResource.put<NoContent>(`enrollees/${id}/update-linked-gpid`, payload)
       .pipe(
-        map((response: ApiHttpResponse<String>) => response.result),
+        map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
           this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
           throw error;
@@ -91,9 +90,8 @@ export class EnrolmentResource {
       );
   }
 
-  public getLinkedEnrolment(enrollee: Enrollee): Observable<String> {
-    const { id } = enrollee;
-    return this.apiResource.get<String>(`enrollees/${id}/linked-gpid`)
+  public getLinkedEnrolment(enrolmentId: number): Observable<String> {
+    return this.apiResource.get<String>(`enrollees/${enrolmentId}/linked-gpid`)
       .pipe(
         map((response: ApiHttpResponse<String>) => response.result),
         catchError((error: any) => {

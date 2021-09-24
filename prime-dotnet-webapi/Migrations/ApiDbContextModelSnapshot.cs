@@ -11960,9 +11960,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("EnrolleeId");
 
-                    b.HasIndex("PaperEnrolleeId");
-
-                    b.ToTable("EnrolleeLinkedEnrolments");
+                    b.ToTable("EnrolleeLinkedEnrolment");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
@@ -18584,12 +18582,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
-                        .WithMany()
-                        .HasForeignKey("PaperEnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

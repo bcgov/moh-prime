@@ -4,12 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Prime.Migrations
 {
-    public partial class AddedPotentialPaperEnrolmentReturneeChecks : Migration
+    public partial class PotentialPaperEnrolmentReturnee : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EnrolleeLinkedEnrolments",
+                name: "EnrolleeLinkedEnrolment",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -25,16 +25,10 @@ namespace Prime.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EnrolleeLinkedEnrolments", x => x.Id);
+                    table.PrimaryKey("PK_EnrolleeLinkedEnrolment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EnrolleeLinkedEnrolments_Enrollee_EnrolleeId",
+                        name: "FK_EnrolleeLinkedEnrolment_Enrollee_EnrolleeId",
                         column: x => x.EnrolleeId,
-                        principalTable: "Enrollee",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EnrolleeLinkedEnrolments_Enrollee_PaperEnrolleeId",
-                        column: x => x.PaperEnrolleeId,
                         principalTable: "Enrollee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -51,20 +45,16 @@ namespace Prime.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EnrolleeLinkedEnrolments_EnrolleeId",
-                table: "EnrolleeLinkedEnrolments",
+                name: "IX_EnrolleeLinkedEnrolment_EnrolleeId",
+                table: "EnrolleeLinkedEnrolment",
                 column: "EnrolleeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EnrolleeLinkedEnrolments_PaperEnrolleeId",
-                table: "EnrolleeLinkedEnrolments",
-                column: "PaperEnrolleeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EnrolleeLinkedEnrolments");
+                name: "EnrolleeLinkedEnrolment");
+
 
             migrationBuilder.DeleteData(
                 table: "StatusReasonLookup",

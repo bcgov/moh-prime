@@ -12,7 +12,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrollee } from '@shared/models/enrollee.model';
-import { Enrolment } from '@shared/models/enrolment.model';
+import { Enrolment, HttpEnrollee } from '@shared/models/enrolment.model';
 import { Address, optionalAddressLineItems } from '@shared/models/address.model';
 
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -45,6 +45,8 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
 
+  public userProvidedGpid: String;
+
   constructor(
     protected route: ActivatedRoute,
     protected router: Router,
@@ -71,6 +73,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       formUtilsService,
       authService
     );
+    this.userProvidedGpid = this.router.getCurrentNavigation().extras.state?.userProvidedGpid;
   }
 
   public get preferredFirstName(): FormControl {
@@ -161,8 +164,9 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
+          exhaustMap((newEnrollee: Enrolment) => this.enrolmentResource.createLinkWithPotentialPaperEnrollee(newEnrollee.id, this.userProvidedGpid)),
           this.handleResponse()
-        );
+        )
     } else {
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }

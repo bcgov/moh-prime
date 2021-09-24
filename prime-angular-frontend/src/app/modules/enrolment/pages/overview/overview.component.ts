@@ -166,12 +166,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
-          exhaustMap(() =>
-            this.enrolmentResource.getLinkedEnrolment(this.enrolment.enrollee)
-              .pipe((response) => {
-                this.userProvidedGpid = response;
-              })
-          )
         })
       ).subscribe();
   }

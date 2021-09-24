@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210922194658_AddedPotentialPaperEnrolmentReturneeChecks")]
-    partial class AddedPotentialPaperEnrolmentReturneeChecks
+    [Migration("20210924002230_PotentialPaperEnrolmentReturnee")]
+    partial class PotentialPaperEnrolmentReturnee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -11962,9 +11962,7 @@ namespace Prime.Migrations
 
                     b.HasIndex("EnrolleeId");
 
-                    b.HasIndex("PaperEnrolleeId");
-
-                    b.ToTable("EnrolleeLinkedEnrolments");
+                    b.ToTable("EnrolleeLinkedEnrolment");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>
@@ -18586,12 +18584,6 @@ namespace Prime.Migrations
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()
                         .HasForeignKey("EnrolleeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
-                        .WithMany()
-                        .HasForeignKey("PaperEnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

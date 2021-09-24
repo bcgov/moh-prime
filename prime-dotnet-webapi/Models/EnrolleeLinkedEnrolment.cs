@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Prime.Models
 {
-    [Table("EnrolleeLinkedEnrolments")]
+    [Table("EnrolleeLinkedEnrolment")]
     public class EnrolleeLinkedEnrolments : BaseAuditable
     {
         [Key]
@@ -15,9 +15,6 @@ namespace Prime.Models
         public Enrollee Enrollee { get; set; }
 
         public int EnrolleeId { get; set; }
-
-        [JsonIgnore]
-        public Enrollee PaperEnrollee { get; set; }
         public int PaperEnrolleeId { get; set; }
 
         public string UserProvidedGpid { get; set; }

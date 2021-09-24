@@ -294,8 +294,7 @@ namespace Prime.Controllers
         /// Creates a new Enrollee who may have a a previous paper enrolment.
         /// </summary>
         [HttpPost("{enrolleeId}/create-link-to-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
-        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        [AllowAnonymous]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -306,13 +305,12 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // PUT: api/Enrollees/5/update-gpid-linked-paper-enrollee
+        // PUT: api/Enrollees/5/update-linked-gpid
         /// <summary>
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
-        [HttpPost("{enrolleeId}/update-gpid-linked-paper-enrollee", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
-        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        [AllowAnonymous]
+        [HttpPut("{enrolleeId}/update-linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -327,13 +325,12 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets the linked gpid
         /// </summary>
-        [HttpPost("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
-        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        [AllowAnonymous]
-        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> GetLinkedGpid(int enrolleeId)
         {
             string gpid = await _enrolleeService.GetLinkedGpid(enrolleeId);

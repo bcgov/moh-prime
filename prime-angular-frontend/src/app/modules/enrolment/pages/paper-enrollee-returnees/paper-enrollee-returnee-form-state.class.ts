@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { Enrollee } from '@shared/models/enrollee.model';
 
-export class PaperEnrolleeReturneeFormState extends AbstractFormState<Enrollee> {
+export class PaperEnrolleeReturneeFormState extends AbstractFormState<String> {
   public constructor(
     private fb: FormBuilder,
   ) {
@@ -12,7 +12,7 @@ export class PaperEnrolleeReturneeFormState extends AbstractFormState<Enrollee> 
     this.buildForm();
   }
 
-  public get json(): Enrollee {
+  public get json(): String {
     if (!this.formInstance) {
       return;
     }
@@ -20,17 +20,17 @@ export class PaperEnrolleeReturneeFormState extends AbstractFormState<Enrollee> 
     return this.formInstance.getRawValue();
   }
 
-  public patchValue(enrollee: Enrollee): void {
+  public patchValue(userProvidedGpid: String): void {
     if (!this.formInstance) {
       return;
     }
 
-    this.formInstance.patchValue(enrollee);
+    this.formInstance.patchValue(userProvidedGpid);
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      userProvidedGpid: [null, Validators.required],
+      formUserProvidedGpid: [null, Validators.required],
     });
   }
 
