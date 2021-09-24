@@ -703,6 +703,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-${API_POD}
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
@@ -947,6 +948,7 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-${DOCMAN_POD}
+            - run-migrations
           from:
             kind: ImageStreamTag
             namespace: "${OC_NAMESPACE}-tools"
