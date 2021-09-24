@@ -67,7 +67,7 @@ export class SiteRoutes {
     return [
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
-      this.ORGANIZATION_CLAIM,
+      // this.ORGANIZATION_CLAIM, // ADD
       this.ORGANIZATION_NAME
     ];
   }
