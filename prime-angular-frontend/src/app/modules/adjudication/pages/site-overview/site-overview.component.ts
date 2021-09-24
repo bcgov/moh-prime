@@ -147,14 +147,19 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.site = site;
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
-        this.form.get('pec').setValue(site.pec);
-        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
-        return of(null);
+        this.initForm(site);
+        this.showSendNotification = [
+          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.DEVICE_PROVIDER
+        ].includes(site.careSettingCode);
+        return of(orgClaim?.newSigningAuthorityId);
       }),
-      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
-    ).subscribe((signingAuthority: Party | null) => {
-      this.newSigningAuthority = signingAuthority;
-    });
+      exhaustMap((newSigningAuthorityId: number | null) =>
+        (newSigningAuthorityId)
+          ? this.organizationResource.getSigningAuthorityById(newSigningAuthorityId)
+          : of(null)
+      )
+    ).subscribe((signingAuthority: Party | null) => this.newSigningAuthority = signingAuthority);
   }
 
   private createFormInstance() {
@@ -165,6 +170,10 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
+  }
+
+  private initForm({ pec }: Site) {
+    this.form.patchValue({ pec });
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {

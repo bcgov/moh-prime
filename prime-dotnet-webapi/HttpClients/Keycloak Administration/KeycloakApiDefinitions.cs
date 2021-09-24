@@ -42,6 +42,11 @@ namespace Prime.HttpClients.KeycloakApiDefinitions
         public string Email { get; set; }
         public Dictionary<string, string[]> Attributes { get; set; }
 
+        public void SetPhone(string phoneNumber)
+        {
+            SetAttribute("phone", phoneNumber);
+        }
+
         public void SetPhoneNumber(string phoneNumber)
         {
             SetAttribute("phoneNumber", phoneNumber);
