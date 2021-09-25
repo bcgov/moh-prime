@@ -37,10 +37,6 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     return this.formInstance.get('phone') as FormControl;
   }
 
-  public get healthAuthorityCode(): FormControl {
-    return this.formInstance.get('healthAuthorityCode') as FormControl;
-  }
-
   public get smsPhone(): FormControl {
     return this.formInstance.get('smsPhone') as FormControl;
   }
@@ -65,13 +61,13 @@ export class DemographicFormState extends AbstractFormState<DemographicForm> {
     this.jsonToForm(this.formInstance, model);
   }
 
-  // TODO BCSC information form reuse for sharing between enrolment and PHSA
   public buildForm(): void {
     // Prevent BCSC information from being changed
     this.formInstance = this.fb.group({
       firstName: [{ value: null, disabled: true }, [Validators.required]],
       lastName: [{ value: null, disabled: true }, [Validators.required]],
       givenNames: [{ value: null, disabled: true }, [Validators.required]],
+      dateOfBirth: [{ value: null, disabled: true }, [Validators.required]],
       preferredFirstName: [null, []],
       preferredMiddleName: [null, []],
       preferredLastName: [null, []],

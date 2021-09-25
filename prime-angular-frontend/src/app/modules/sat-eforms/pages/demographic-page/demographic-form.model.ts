@@ -4,6 +4,7 @@ export interface DemographicForm {
   firstName: string;
   lastName: string;
   givenNames: string;
+  dateOfBirth: string;
   preferredFirstName: string;
   preferredMiddleName: string;
   preferredLastName: string;

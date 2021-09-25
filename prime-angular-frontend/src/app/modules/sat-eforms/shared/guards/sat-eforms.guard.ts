@@ -38,6 +38,7 @@ export class SatEformsGuard extends BaseGuard {
     return this.authService.getUser$()
       .pipe(
         exhaustMap(({ userId }: BcscUser) => this.enrolmentResource.getEnrolleeByUserId(userId)),
+        // TODO store enrollee in service for use within views
         map((enrollee: HttpEnrollee) => enrollee?.id ?? 0),
         map((enrolleeId: number) => {
           if (

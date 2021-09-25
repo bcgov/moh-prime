@@ -214,7 +214,6 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * @description
    * Submission hook for execution.
    */
-  // TODO add generic to return value that must match afterSubmitIsSuccessful parameter
   protected abstract performSubmission(): Observable<S>;
 
   /**

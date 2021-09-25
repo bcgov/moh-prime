@@ -78,6 +78,7 @@ export class AuthorizedUserPageComponent extends AbstractEnrolmentPage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
+
     // Ensure that the identity provider user information is loaded
     // prior to initialization of the form override form values, and
     // control the validation management
