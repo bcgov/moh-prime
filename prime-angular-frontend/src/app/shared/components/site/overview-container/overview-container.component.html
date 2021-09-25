@@ -68,7 +68,7 @@
   </app-overview-section>
 
   <app-overview-section title="Site Business Licence"
-                        [showEditRedirect]="(!site.submittedDate || !site.businessLicence?.completed) && !admin"
+                        [showEditRedirect]="!admin"
                         [editRoute]="SiteRoutes.BUSINESS_LICENCE"
                         (route)="onRouteRelative($event)">
 
