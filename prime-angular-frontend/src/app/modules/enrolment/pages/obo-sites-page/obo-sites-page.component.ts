@@ -217,8 +217,6 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected nextRouteAfterSubmit() {
-    console.log('nextRouteAfterSubmit', this.form.getRawValue());
-
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
