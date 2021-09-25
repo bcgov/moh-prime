@@ -132,7 +132,6 @@ jobs:
             DB_CONNECTION_STRING="host=pr-${{steps.PR.outputs.number}}-postgres-db;port=5432;database=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}};username=${{secrets.PRIME_DB_USER}};password=${{secrets.PRIME_DB_PASSWORD}}"
             DB_HOST=pr-${{steps.PR.outputs.number}}-postgres-db
             DOTNET_CLI_HOME="/tmp/DOTNET_CLI_HOME"
-            OC_APP=${{secrets.OC_APP}}
             PGPASSWORD=${{secrets.PRIME_DB_PASSWORD}}
             POSTGRESQL_ADMIN_PASSWORD=${{secrets.PRIME_DB_PASSWORD}}
             POSTGRESQL_DATABASE=${{secrets.PRIME_DB_USER}}-${{steps.PR.outputs.number}}
