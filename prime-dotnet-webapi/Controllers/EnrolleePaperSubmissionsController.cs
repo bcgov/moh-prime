@@ -310,7 +310,7 @@ namespace Prime.Controllers
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
         [HttpPut("{enrolleeId}/update-linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
-        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

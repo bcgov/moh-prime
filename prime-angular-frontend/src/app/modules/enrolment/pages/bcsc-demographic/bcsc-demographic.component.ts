@@ -39,13 +39,11 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
    * within the form for use in creation.
    */
   public bcscUser: BcscUser;
-
   public hasPreferredName: boolean;
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
-
-  public userProvidedGpid: String;
+  public potentialPaperEnrolleeReturnee: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -73,7 +71,6 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
       formUtilsService,
       authService
     );
-    this.userProvidedGpid = this.router.getCurrentNavigation().extras.state?.userProvidedGpid;
   }
 
   public get preferredFirstName(): FormControl {
@@ -114,6 +111,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
+    this.isPotentialPaperEnrolleeReturnee();
     this.patchForm()
       .pipe(
         map(([bcscUser, enrolment]: [BcscUser, Enrolment]) => {
@@ -164,7 +162,6 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrollee: Enrolment) => this.enrolmentResource.createLinkWithPotentialPaperEnrollee(newEnrollee.id, this.userProvidedGpid)),
           this.handleResponse()
         )
     } else {
@@ -207,6 +204,14 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   private setAddressValidator(addressLine: FormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
+  }
+
+  private isPotentialPaperEnrolleeReturnee(): void {
+    this.getUser$()
+      .subscribe(enrollee => {
+        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
+          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
+      })
   }
 
   private getUser$(): Observable<Enrollee> {

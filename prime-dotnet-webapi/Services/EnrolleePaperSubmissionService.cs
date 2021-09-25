@@ -305,20 +305,19 @@ namespace Prime.Services
                 )
                 .AnyAsync();
 
-            if (enrollee || paperEnrollee)
+            if (paperEnrollee)
             {
                 return false;
             }
 
-            var newLinkedEnrolment = new EnrolleeLinkedEnrolments
-            {
-                EnrolleeId = enrolmentId,
-                PaperEnrolleeId = paperEnrolmentId,
-                UserProvidedGpid = userProvidedGpid,
-                EnrolmentCreationDate = DateTime.Now
-            };
+            var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolments
+                .Where(ele => ele.EnrolleeId == enrolmentId)
+                .SingleOrDefaultAsync();
 
-            _context.Add(newLinkedEnrolment);
+            enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolmentId;
+            enrolleeLinkedEnrolment.EnrolmentCreationDate = DateTime.Now;
+
+            // _context.Add(newLinkedEnrolment);
             await _context.SaveChangesAsync();
 
             return true;

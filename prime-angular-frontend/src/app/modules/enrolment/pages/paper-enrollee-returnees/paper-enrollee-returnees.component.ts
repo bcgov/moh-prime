@@ -77,19 +77,9 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
     this.togglePaperEnrolleeReturneeValidator(checked, this.formUserProvidedGpid);
   }
 
-  public onSubmit(beenThroughTheWizard: boolean = false): void {
-    if (this.formUtilsService.checkValidity(this.form)) {
-      this.onSubmitFormIsValid();
-      this.handleSubmission();
-    } else {
-      this.onSubmitFormIsInvalid();
-      // this.utilService.scrollToErrorSection();
-    }
-  }
-
   public ngOnInit(): void {
     this.createFormInstance();
-    if (this.enrolmentService.enrolment.id) {
+    if (this.enrolmentService.enrolment?.id) {
       this.patchForm()
         .pipe(
           map(() => {
@@ -110,31 +100,39 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
     }
   }
 
-  /**
-   * @description
-   * Handle a valid form submission.
-   */
-  protected handleSubmission() {
-    if (!!this.userProvidedGpid) {
-      // pass userProvidedGpid and go to overview
-      if (this.userProvidedGpid !== null) {
-        this.updateUserProvidedGpid();
-      }
-      this.nextRouteAfterSubmit();
+  protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
+    // Only update if the user had previously provided a paper enrolment gpid and
+    // then updates the paper enrolment gpid through the form field
+    if (!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value)) {
+      this.updateUserProvidedGpid();
+      return super.performHttpRequest(enrolment, beenThroughTheWizard);
+    } else if (!enrolment.id && this.isInitialEnrolment && this.formUserProvidedGpid.value) {
+      return this.getUser$()
+        .pipe(
+          map((enrollee: Enrollee) => {
+            const { firstName, lastName, givenNames, verifiedAddress, ...remainder } = enrollee;
+            const { userId, ...demographic } = enrolment.enrollee;
+            return { ...remainder, ...demographic, firstName, lastName, givenNames, verifiedAddress };
+          }),
+          exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
+          // Populate the new enrolment within the form state by force patching
+          tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
+          exhaustMap((newEnrollee: Enrolment) => this.enrolmentResource.createLinkWithPotentialPaperEnrollee(newEnrollee.id, this.formUserProvidedGpid.value)),
+          this.handleResponse()
+        );
     } else {
-      // Allow routing to occur without invoking the deactivation,
-      // modal to persist form state being dirty between views
-      this.allowRoutingWhenDirty = true;
-      this.routeTo(EnrolmentRoutes.BCSC_DEMOGRAPHIC, { state: { userProvidedGpid: this.formUserProvidedGpid.value } });
+      // This is the case where user did not enter paper enrolment GPID but came back later to add it
+      if (enrolment.id && !this.userProvidedGpid) {
+        this.enrolmentResource.createLinkWithPotentialPaperEnrollee(enrolment.id, this.formUserProvidedGpid.value)
+          .subscribe();
+      }
+      return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
   }
 
   protected updateUserProvidedGpid() {
-    // Only update if the user updates the paper enrolment gpid through the form field
-    if (this.userProvidedGpid !== this.formUserProvidedGpid.value) {
-      this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment.enrollee, this.userProvidedGpid)
-        .subscribe(() => this.nextRouteAfterSubmit());
-    }
+    this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment.enrollee, this.formUserProvidedGpid.value)
+      .subscribe(() => this.nextRouteAfterSubmit());
   }
 
   protected createFormInstance(): void {
@@ -152,5 +150,27 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
     isPaperEnrolmentReturnee
       ? this.formUtilsService.setValidators(paperEnrolmentGpid, [Validators.required])
       : this.formUtilsService.resetAndClearValidators(paperEnrolmentGpid);
+  }
+
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ userId, hpdid, firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            userId,
+            hpdid,
+            firstName,
+            lastName,
+            givenNames,
+            dateOfBirth,
+            verifiedAddress,
+            phone: null,
+            email: null
+          } as Enrollee;
+        })
+      );
   }
 }

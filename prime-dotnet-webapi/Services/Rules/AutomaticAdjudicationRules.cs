@@ -246,12 +246,13 @@ namespace Prime.Services.Rules
         public override async Task<bool> ProcessRule(Enrollee enrollee)
         {
             var PaperEnrollees = await _enrolleePaperSubmissionService.GetPotentialPaperEnrolleeReturnees(enrollee.DateOfBirth);
+            var PotentialPaperEnrolleeGpid = await _enrolleePaperSubmissionService.GetLinkedGpid(enrollee.Id);
 
             // Check if there's a match on a birthdate in paper enrollees, get all the ones that have a match
             if (PaperEnrollees != null)
             {
                 // *** if yes and GPID is provided
-                if (enrollee.GPID != null)
+                if (PotentialPaperEnrolleeGpid != null)
                 {
                     var paperEnrolleeMatchId = -1;
                     // *** *** Check if GPID match one of the paper enrolment
@@ -259,7 +260,7 @@ namespace Prime.Services.Rules
                     {
                         if (
                                 PaperEnrollee.DateOfBirth.Date == enrollee.DateOfBirth.Date
-                                && PaperEnrollee.GPID == enrollee.GPID
+                                && PaperEnrollee.GPID == PotentialPaperEnrolleeGpid
                             )
                         {
                             paperEnrolleeMatchId = PaperEnrollee.Id;
@@ -268,25 +269,26 @@ namespace Prime.Services.Rules
 
                     if (paperEnrolleeMatchId == -1)
                     {
-                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {enrollee.GPID}");
-                        await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, enrollee.GPID);
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {PotentialPaperEnrolleeGpid}");
+                        await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, PotentialPaperEnrolleeGpid);
                         return false;
                     }
                     // *** *** if match "auto enrol" and link to paper enrolment
-                    if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, enrollee.GPID))
+                    if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolment(enrollee.Id, paperEnrolleeMatchId, PotentialPaperEnrolleeGpid))
                     {
-                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {enrollee.GPID}");
+                        enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {PotentialPaperEnrolleeGpid}");
                         return false;
                     }
+                    return true;
                 }
                 // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
                 else
                 {
-                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"User-Provided GPID: {enrollee.GPID}");
+                    enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch, $"User-Provided GPID: {PotentialPaperEnrolleeGpid}");
                     return false;
                 }
             }
-            return true;
+            return false;
         }
     }
 }

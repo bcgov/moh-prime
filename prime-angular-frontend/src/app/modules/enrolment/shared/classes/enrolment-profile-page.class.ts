@@ -8,6 +8,7 @@ import { catchError, exhaustMap, map } from 'rxjs/operators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { ToastService } from '@core/services/toast.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
+import { RouteUtils } from '@lib/utils/route-utils.class';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { Enrolment } from '@shared/models/enrolment.model';
@@ -68,6 +69,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
 
   public enrolment: Enrolment;
 
+  public routeUtils: RouteUtils;
+
   protected allowRoutingWhenDirty: boolean;
 
   constructor(
@@ -86,6 +89,8 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     super(route, router);
 
     this.allowRoutingWhenDirty = false;
+    this.routeUtils = new RouteUtils(route, router, EnrolmentRoutes.MODULE_PATH);
+
   }
 
   public onSubmit(beenThroughTheWizard: boolean = false): void {
@@ -103,6 +108,12 @@ export abstract class BaseEnrolmentProfilePage extends BaseEnrolmentPage impleme
     return (this.form.dirty && !this.allowRoutingWhenDirty)
       ? this.dialog.open(ConfirmDialogComponent, { data }).afterClosed()
       : true;
+  }
+
+  public onBack(route: string) {
+    this.routeUtils.routeTo([EnrolmentRoutes.MODULE_PATH, this.isProfileComplete
+      ? EnrolmentRoutes.OVERVIEW
+      : route]);
   }
 
   protected abstract createFormInstance(): void;
