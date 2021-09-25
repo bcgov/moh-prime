@@ -11,6 +11,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { UtilsService } from '@core/services/utils.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
+import { HealthAuthorityEnum } from '@shared/enums/health-authority.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 
 import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
@@ -28,8 +29,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   public jobNames: Config<number>[];
   public allowDefaultOption: boolean;
   public defaultOptionLabel: string;
-
   public CareSettingEnum = CareSettingEnum;
+  public HealthAuthorityEnum = HealthAuthorityEnum;
 
   constructor(
     protected route: ActivatedRoute,
@@ -81,6 +82,10 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return this.form.get('healthAuthoritySites') as FormGroup;
   }
 
+  public get chosenHealthAuthorityCodes(): string[] {
+    return Object.keys(this.healthAuthoritySites.value);
+  }
+
   public get careSettings() {
     let careSettings = (this.enrolment?.careSettings) ? this.enrolment.careSettings : null;
     if (this.enrolmentFormStateService.isPatched) {
@@ -89,12 +94,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     return careSettings;
   }
 
-  public get hasHealthAuthoritySites(): boolean {
-    return Object.keys(this.healthAuthoritySites.controls).length > 0;
-  }
-
-  public healthAuthoritySitesAsControls(healthAuthorityCode: number): AbstractControl[] {
-    const sites = this.healthAuthoritySites.get(`${healthAuthorityCode}`) as FormArray;
+  public healthAuthoritySiteControl(healthAuthorityCode: string): AbstractControl[] {
+    const sites = this.healthAuthoritySites.get(healthAuthorityCode) as FormArray;
     return sites?.controls;
   }
 
@@ -112,8 +113,7 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
 
   public addOboSite(careSettingCode: number, healthAuthorityCode?: number) {
     const site = this.enrolmentFormStateService.buildOboSiteForm();
-    site.get('careSettingCode').patchValue(careSettingCode);
-    site.get('healthAuthorityCode').patchValue(healthAuthorityCode);
+    site.patchValue({ careSettingCode, healthAuthorityCode });
 
     switch (careSettingCode) {
       case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
@@ -171,27 +171,26 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
     // Initialize listeners before patching
     this.patchForm().subscribe(() => {
       // Add at least one site for each careSetting selected by enrollee
-      this.careSettings?.forEach((careSetting) => {
-        switch (careSetting.careSettingCode) {
+      this.careSettings.forEach(({ careSettingCode }) => {
+        switch (careSettingCode) {
           case CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE: {
             this.communityHealthSites.setValidators([FormArrayValidators.atLeast(1)]);
             if (!this.communityHealthSites.length) {
-              this.addOboSite(careSetting.careSettingCode);
+              this.addOboSite(careSettingCode);
             }
             break;
           }
           case CareSettingEnum.COMMUNITY_PHARMACIST: {
             this.communityPharmacySites.setValidators([FormArrayValidators.atLeast(1)]);
             if (!this.communityPharmacySites.length) {
-              this.addOboSite(careSetting.careSettingCode);
+              this.addOboSite(careSettingCode);
             }
             break;
           }
           case CareSettingEnum.HEALTH_AUTHORITY: {
-            this.enrolment.enrolleeHealthAuthorities.forEach(ha => {
-              const sitesOfHealthAuthority = this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`) as FormArray;
-              if (!sitesOfHealthAuthority) {
-                this.addOboSite(careSetting.careSettingCode, ha.healthAuthorityCode);
+            this.enrolmentFormStateService.json.enrolleeHealthAuthorities.forEach(ha => {
+              if (!this.healthAuthoritySites.get(`${ha.healthAuthorityCode}`)) {
+                this.addOboSite(careSettingCode, ha.healthAuthorityCode);
               }
             });
             break;
@@ -218,6 +217,8 @@ export class OboSitesPageComponent extends BaseEnrolmentProfilePage implements O
   }
 
   protected nextRouteAfterSubmit() {
+    console.log('nextRouteAfterSubmit', this.form.getRawValue());
+
     let nextRoutePath: string;
     if (!this.isProfileComplete) {
       nextRoutePath = EnrolmentRoutes.SELF_DECLARATION;
