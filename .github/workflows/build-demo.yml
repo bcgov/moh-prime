@@ -149,6 +149,7 @@ jobs:
   apply-oc-template:
     runs-on: ubuntu-20.04
     environment: Test
+    needs: [build-document-manager-backend,build-frontend,build-backend]
     steps:
       - name: "Use the OpenShift template"
         uses: actions/checkout@v2
