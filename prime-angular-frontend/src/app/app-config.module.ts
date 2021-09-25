@@ -12,6 +12,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
+import { SatEformsRoutes } from '@sat/sat-eforms.routes';
 
 export let APP_CONFIG = new InjectionToken<AppConfig>('app.config');
 
@@ -24,6 +25,7 @@ export class AppConfig extends AppEnvironment {
     adjudication: string;
     site: string;
     phsa: string;
+    sat: string,
     gis: string;
     paperEnrolment: string;
   };
@@ -41,6 +43,7 @@ export const APP_DI_CONFIG: AppConfig = {
     adjudication: AdjudicationRoutes.MODULE_PATH,
     site: SiteRoutes.MODULE_PATH,
     phsa: PhsaEformsRoutes.MODULE_PATH,
+    sat: SatEformsRoutes.MODULE_PATH,
     gis: GisEnrolmentRoutes.MODULE_PATH,
     paperEnrolment: PaperEnrolmentRoutes.MODULE_PATH
   }

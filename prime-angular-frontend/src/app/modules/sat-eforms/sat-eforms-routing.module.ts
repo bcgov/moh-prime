@@ -11,6 +11,7 @@ import { CollectionNoticePageComponent } from '@sat/pages/collection-notice-page
 import { DemographicPageComponent } from '@sat/pages/demographic-page/demographic-page.component';
 import { RegulatoryPageComponent } from '@sat/pages/regulatory-page/regulatory-page.component';
 import { SubmissionConfirmationPageComponent } from '@sat/pages/submission-confirmation-page/submission-confirmation-page.component';
+import { SatEformsGuard } from '@sat/shared/guards/sat-eforms.guard';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
       },
       {
         path: `${SatEformsRoutes.ENROLMENTS}/:eid`,
+        canActivateChild: [SatEformsGuard],
         children: [
           {
             path: SatEformsRoutes.DEMOGRAPHIC,
@@ -45,6 +47,11 @@ const routes: Routes = [
             data: { title: 'Special Authority E-Forms' }
           }
         ]
+      },
+      {
+        path: '', // Equivalent to `/` and alias for `collection-notice`
+        redirectTo: SatEformsRoutes.COLLECTION_NOTICE,
+        pathMatch: 'full'
       }
     ]
   }

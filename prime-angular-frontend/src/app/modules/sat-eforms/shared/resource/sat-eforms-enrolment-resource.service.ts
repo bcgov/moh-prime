@@ -13,8 +13,7 @@ import { HttpEnrollee } from '@shared/models/enrolment.model';
 
 // TODO move to lib
 import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
-
-import { DemographicForm } from '@paper-enrolment/pages/demographic-page/demographic-form.model';
+import { DemographicForm } from '@sat/pages/demographic-page/demographic-form.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +25,20 @@ export class SatEformsEnrolmentResource {
     private toastService: ToastService,
     private logger: ConsoleLoggerService
   ) { }
+
+  public getEnrolleeByUserId(userId: string): Observable<HttpEnrollee> {
+    return this.apiResource.get<HttpEnrollee>(`parties/enrollee/${userId}`)
+      .pipe(
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+        catchError((error: any) => {
+          return of(null);
+
+          this.logger.error('[SatEforms] SatEformsEnrolmentResource::getEnrolleeByUserId error has occurred: ', error);
+          throw error;
+        })
+      );
+  }
 
   public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
     return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)

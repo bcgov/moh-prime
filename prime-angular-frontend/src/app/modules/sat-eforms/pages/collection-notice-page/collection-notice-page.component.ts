@@ -34,8 +34,8 @@ export class CollectionNoticePageComponent implements OnInit {
   }
 
   private nextRoute(): void {
-    // Redirect to demographic and allow the guards to
-    // figure out the proper routing
+    // Redirect to demographic and allow the guards to figure
+    // out the proper routing and enrollee existence
     this.routeUtils.routeRelativeTo([SatEformsRoutes.ENROLMENTS, 0, SatEformsRoutes.DEMOGRAPHIC]);
   }
 }

@@ -15,6 +15,7 @@ import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { ProvisionerAccessRoutes } from '@certificate/provisioner-access.routes';
 import { PhsaEformsRoutes } from '@phsa/phsa-eforms.routes';
 import { SatEformsRoutes } from '@sat/sat-eforms.routes';
+
 import { GisEnrolmentRoutes } from '@gis/gis-enrolment.routes';
 import { HealthAuthSiteRegRoutes } from '@health-auth/health-auth-site-reg.routes';
 import { PaperEnrolmentRoutes } from '@paper-enrolment/paper-enrolment.routes';
