@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210924002230_PotentialPaperEnrolmentReturnee")]
+    [Migration("20210925002243_PotentialPaperEnrolmentReturnee")]
     partial class PotentialPaperEnrolmentReturnee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -11927,7 +11927,7 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeHealthAuthority");
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -18579,7 +18579,7 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()

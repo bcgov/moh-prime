@@ -122,7 +122,7 @@ namespace Prime
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
 
-        public DbSet<EnrolleeLinkedEnrolments> EnrolleeLinkedEnrolments { get; set; }
+        public DbSet<EnrolleeLinkedEnrolment> EnrolleeLinkedEnrolment { get; set; }
 
         public override int SaveChanges()
         {

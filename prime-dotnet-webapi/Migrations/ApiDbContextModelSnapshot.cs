@@ -11925,7 +11925,7 @@ namespace Prime.Migrations
                     b.ToTable("EnrolleeHealthAuthority");
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -18577,7 +18577,7 @@ namespace Prime.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolments", b =>
+            modelBuilder.Entity("Prime.Models.EnrolleeLinkedEnrolment", b =>
                 {
                     b.HasOne("Prime.Models.Enrollee", "Enrollee")
                         .WithMany()

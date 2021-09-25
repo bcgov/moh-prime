@@ -48,13 +48,13 @@ namespace Prime.Migrations
                 name: "IX_EnrolleeLinkedEnrolment_EnrolleeId",
                 table: "EnrolleeLinkedEnrolment",
                 column: "EnrolleeId");
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "EnrolleeLinkedEnrolment");
-
 
             migrationBuilder.DeleteData(
                 table: "StatusReasonLookup",
