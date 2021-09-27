@@ -188,7 +188,7 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: 'node_modules'
+          path: 'prime-angular-frontend/node_modules'
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
