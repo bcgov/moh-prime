@@ -185,6 +185,13 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
 
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-
+
       - name: install dependencies
         run: npm ci
 
