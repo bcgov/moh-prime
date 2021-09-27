@@ -11,8 +11,8 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210925002243_PotentialPaperEnrolmentReturnee")]
-    partial class PotentialPaperEnrolmentReturnee
+    [Migration("20210927195626_AddedPotentialPaperEnrolmentReturneeCheck")]
+    partial class AddedPotentialPaperEnrolmentReturneeCheck
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -11943,8 +11943,11 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EnrolmentCreationDate")
+                    b.Property<DateTime>("EnrolmentLinkDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("PaperEnrolleeId")
                         .HasColumnType("integer");

@@ -87,7 +87,7 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
       this.updateUserProvidedGpid();
     } else {
       // This is the case where user did not enter paper enrolment GPID but came back later to add it
-      if (this.enrolment.id && !this.userProvidedGpid) {
+      if (this.enrolment && !this.userProvidedGpid) {
         this.enrolmentResource.createLinkWithPotentialPaperEnrollee(this.enrolment.id, this.formUserProvidedGpid.value)
           .subscribe();
       }
@@ -99,29 +99,25 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
 
   public ngOnInit(): void {
     this.createFormInstance();
-    if (this.enrolmentService.enrolment?.id) {
-      this.patchForm()
-        .pipe(
-          map(() => {
-            // Patch form only if an enrolment is created on the
-            // bcsc-demographics page
-            this.enrolmentResource.getLinkedEnrolment(this.enrolmentService.enrolment.id)
-              .pipe(
-                map((result) => {
-                  this.userProvidedGpid = result ? result : null;
-                  this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
-                })
-              ).subscribe(() => this.initForm())
-          })
-        )
-        .subscribe();
-    } else {
-      this.initForm()
-    }
+    this.patchForm()
+      .pipe(
+        map(() => {
+          // Patch form only if an enrolment is created on the
+          // bcsc-demographics page
+          this.enrolmentResource.getLinkedEnrolment(this.enrolmentService.enrolment?.id)
+            .pipe(
+              map((result) => {
+                this.userProvidedGpid = result ? result : null;
+                this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
+              })
+            ).subscribe()
+        })
+      )
+      .subscribe(() => this.initForm());
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
-    if (!enrolment.id && this.isInitialEnrolment && this.formUserProvidedGpid.value) {
+    if (!enrolment.id && this.isInitialEnrolment) {
       // If yes and user provides a GPID, create enrollee here.
       return this.getUser$()
         .pipe(

@@ -56,7 +56,6 @@ export class EnrolmentGuard extends BaseGuard {
           this.authService.identityProvider$()
             .pipe(map((identityProvider: IdentityProviderEnum) => [routePath, enrolment, identityProvider]))
         ),
-        tap(() => this.checkIsPotentialPaperEnrolleeReturnee()),
         map((params: [string, Enrolment, IdentityProviderEnum]) =>
           this.routeDestination(...params)
         ),
@@ -74,12 +73,11 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
-    let test = this.router.getCurrentNavigation();
     // If enrollee date of birth matches a paper enrollee date of birth, go to the
     // NOBCSC page
-    if (this.isPotentialPaperEnrolleeReturnee && routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)) {
-      return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)
-    }
+    // if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)) {
+
+    // }
 
     if (!enrolment) {
       // Route based on identity provider to determine sequence of routing
@@ -278,25 +276,5 @@ export class EnrolmentGuard extends BaseGuard {
     return routePath;
   }
 
-  private getUser$(): Observable<Enrollee> {
-    return this.authService.getUser$()
-      .pipe(
-        map(({ dateOfBirth }: BcscUser) => {
-          // Enforced the enrollee type instead of using Partial<Enrollee>
-          // to avoid creating constructors and partials for every model
-          return {
-            // Providing only the minimum required fields for creating an enrollee
-            dateOfBirth,
-          } as Enrollee;
-        })
-      );
-  }
 
-  private checkIsPotentialPaperEnrolleeReturnee(): void {
-    this.getUser$()
-      .subscribe(enrollee => {
-        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
-          .subscribe((result: boolean) => this.isPotentialPaperEnrolleeReturnee = result);
-      })
-  }
 }

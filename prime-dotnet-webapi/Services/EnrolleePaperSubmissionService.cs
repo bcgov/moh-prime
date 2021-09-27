@@ -272,7 +272,9 @@ namespace Prime.Services
                 .AnyAsync(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolment.Any(link => link.PaperEnrolleeId == e.Id)
+                    && !_context.EnrolleeLinkedEnrolment.Any(
+                        ele => ele.IsConfirmed
+                        )
                 );
         }
 
@@ -283,12 +285,14 @@ namespace Prime.Services
                 .Where(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolment.Any(link => link.PaperEnrolleeId == e.Id)
+                    && !_context.EnrolleeLinkedEnrolment.Any(
+                        ele => ele.IsConfirmed
+                        )
                 )
                 .ToListAsync();
         }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int paperEnrolmentId, string userProvidedGpid)
+        public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int paperEnrolmentId, bool isConfirmed = false)
         {
             var enrollee = await _context.Enrollees
                 .Where(
@@ -301,7 +305,9 @@ namespace Prime.Services
                 .Where(
                     pe => pe.GPID.StartsWith(PaperGpidPrefix)
                     && pe.Id == paperEnrolmentId
-                    && _context.EnrolleeLinkedEnrolment.Any(link => link.PaperEnrolleeId == pe.Id)
+                    && _context.EnrolleeLinkedEnrolment.Any(
+                        link => link.PaperEnrolleeId == pe.Id
+                        )
                 )
                 .AnyAsync();
 
@@ -315,9 +321,9 @@ namespace Prime.Services
                 .SingleOrDefaultAsync();
 
             enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolmentId;
-            enrolleeLinkedEnrolment.EnrolmentCreationDate = DateTime.Now;
+            enrolleeLinkedEnrolment.EnrolmentLinkDate = DateTime.Now;
+            enrolleeLinkedEnrolment.IsConfirmed = isConfirmed;
 
-            // _context.Add(newLinkedEnrolment);
             await _context.SaveChangesAsync();
 
             return true;

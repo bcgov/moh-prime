@@ -16,9 +16,8 @@ namespace Prime.Models
 
         public int EnrolleeId { get; set; }
         public int PaperEnrolleeId { get; set; }
-
         public string UserProvidedGpid { get; set; }
-
-        public DateTime EnrolmentCreationDate { get; set; }
+        public DateTime EnrolmentLinkDate { get; set; }
+        public bool IsConfirmed { get; set; }
     }
 }

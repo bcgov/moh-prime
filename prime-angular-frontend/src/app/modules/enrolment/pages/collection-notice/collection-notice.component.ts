@@ -37,13 +37,13 @@ export class CollectionNoticeComponent implements OnInit {
 
   public onAccept() {
     this.authService.hasJustLoggedIn = false;
-    // const nextRoute = this.potentialPaperEnrolleeReturnee
-    //   ? EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION
-    //   : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
+    const nextRoute = this.potentialPaperEnrolleeReturnee
+      ? EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION
+      : EnrolmentRoutes.BCSC_DEMOGRAPHIC;
 
 
     const route = (!this.enrolmentService.isProfileComplete)
-      ? EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION
+      ? nextRoute
       : EnrolmentRoutes.OVERVIEW;
 
     this.router.navigate([route], { relativeTo: this.route.parent });
@@ -51,7 +51,7 @@ export class CollectionNoticeComponent implements OnInit {
 
   public ngOnInit(): void {
     this.authService.hasJustLoggedIn = true;
-    // this.isPotentialPaperEnrolleeReturnee();
+    this.isPotentialPaperEnrolleeReturnee();
 
     // Collection notice is the initial route after login, and used as a hub
     // for redirection to an appropriate view based on the enrolment
@@ -65,25 +65,25 @@ export class CollectionNoticeComponent implements OnInit {
     }
   }
 
-  // private getUser$(): Observable<Enrollee> {
-  //   return this.authService.getUser$()
-  //     .pipe(
-  //       map(({ dateOfBirth }: BcscUser) => {
-  //         // Enforced the enrollee type instead of using Partial<Enrollee>
-  //         // to avoid creating constructors and partials for every model
-  //         return {
-  //           // Providing only the minimum required fields for creating an enrollee
-  //           dateOfBirth,
-  //         } as Enrollee;
-  //       })
-  //     );
-  // }
+  private isPotentialPaperEnrolleeReturnee(): void {
+    this.getUser$()
+      .subscribe(enrollee => {
+        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
+          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
+      })
+  }
 
-  // private isPotentialPaperEnrolleeReturnee(): void {
-  //   this.getUser$()
-  //     .subscribe(enrollee => {
-  //       this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
-  //         .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
-  //     })
-  // }
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ dateOfBirth }: BcscUser) => {
+          // Enforced the enrollee type instead of using Partial<Enrollee>
+          // to avoid creating constructors and partials for every model
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            dateOfBirth,
+          } as Enrollee;
+        })
+      );
+  }
 }

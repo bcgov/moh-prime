@@ -11941,8 +11941,11 @@ namespace Prime.Migrations
                     b.Property<int>("EnrolleeId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("EnrolmentCreationDate")
+                    b.Property<DateTime>("EnrolmentLinkDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("IsConfirmed")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("PaperEnrolleeId")
                         .HasColumnType("integer");
