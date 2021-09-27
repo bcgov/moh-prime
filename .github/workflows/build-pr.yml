@@ -145,7 +145,7 @@ jobs:
           rm -rf /tmp/.backend-cache
           mv /tmp/.backend-cache-new /tmp/.backend-cache
 
-  pr-build-frontend:
+  build-frontend:
     runs-on: ubuntu-latest
     environment: Development
     defaults:
