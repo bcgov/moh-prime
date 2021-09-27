@@ -309,15 +309,15 @@ namespace Prime.Controllers
         /// <summary>
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
-        [HttpPut("{enrolleeId}/update-linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
+        [HttpPut("{Id}/update-linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
         // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
-        public async Task<ActionResult> UpdateGpidLinkToPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        public async Task<ActionResult> UpdateGpidLinkToPaperEnrollee(int Id, EnrolleeLinkedEnrolmentViewModel payload)
         {
-            await _enrolleeService.UpdateLinkedGpid(enrolleeId, payload.UserProvidedGpid);
+            await _enrolleeService.UpdateLinkedGpid(Id, payload.UserProvidedGpid);
             return Ok();
         }
 
@@ -325,15 +325,15 @@ namespace Prime.Controllers
         /// <summary>
         /// Gets the linked gpid
         /// </summary>
-        [HttpGet("{enrolleeId}/linked-gpid", Name = nameof(GetLinkedGpid))]
+        [HttpGet("{Id}/linked-gpid", Name = nameof(GetLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetLinkedGpid(int enrolleeId)
+        public async Task<ActionResult> GetLinkedGpid(int Id)
         {
-            string gpid = await _enrolleeService.GetLinkedGpid(enrolleeId);
+            string gpid = await _enrolleeService.GetLinkedGpid(Id);
             return Ok(gpid);
         }
     }

@@ -88,7 +88,7 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
     } else {
       // This is the case where user did not enter paper enrolment GPID but came back later to add it
       if (this.enrolment && !this.userProvidedGpid) {
-        this.enrolmentResource.createLinkWithPotentialPaperEnrollee(this.enrolment.id, this.formUserProvidedGpid.value)
+        this.enrolmentResource.createLinkWithPotentialPaperEnrollee(this.enrolment, this.formUserProvidedGpid.value)
           .subscribe();
       }
     }
@@ -104,16 +104,16 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
         map(() => {
           // Patch form only if an enrolment is created on the
           // bcsc-demographics page
-          this.enrolmentResource.getLinkedEnrolment(this.enrolmentService.enrolment?.id)
+          this.enrolmentResource.getLinkedEnrolment(this.enrolmentService.enrolment)
             .pipe(
               map((result) => {
                 this.userProvidedGpid = result ? result : null;
                 this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
               })
-            ).subscribe()
+            ).subscribe(() => this.initForm())
         })
       )
-      .subscribe(() => this.initForm());
+      .subscribe();
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
@@ -129,7 +129,7 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
           exhaustMap((enrollee: Enrollee) => this.enrolmentResource.createEnrollee({ enrollee })),
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
-          exhaustMap((newEnrollee: Enrolment) => this.enrolmentResource.createLinkWithPotentialPaperEnrollee(newEnrollee.id, this.formUserProvidedGpid.value)),
+          exhaustMap((newEnrolment: Enrolment) => this.enrolmentResource.createLinkWithPotentialPaperEnrollee(newEnrolment, this.formUserProvidedGpid.value)),
           this.handleResponse()
         );
     } else {
@@ -138,8 +138,8 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
   }
 
   protected updateUserProvidedGpid() {
-    this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment.enrollee, this.formUserProvidedGpid.value)
-      .subscribe(() => this.nextRouteAfterSubmit());
+    this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment, this.formUserProvidedGpid.value)
+      .subscribe(/*() => this.nextRouteAfterSubmit()*/);
   }
 
   protected createFormInstance(): void {

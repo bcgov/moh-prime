@@ -65,9 +65,10 @@ export class EnrolmentResource {
       );
   }
 
-  public createLinkWithPotentialPaperEnrollee(enrolleeId: number, userProvidedGpid: String): Observable<NoContent> {
+  public createLinkWithPotentialPaperEnrollee(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
+    const { id } = enrolment;
     const payload = { userProvidedGpid }
-    return this.apiResource.post<NoContent>(`enrollees/${enrolleeId}/create-link-to-paper-enrollee`, payload)
+    return this.apiResource.post<NoContent>(`enrollees/${id}/create-link-to-paper-enrollee`, payload)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
@@ -77,8 +78,8 @@ export class EnrolmentResource {
       );
   }
 
-  public updateLinkedGpid(enrollee: Enrollee, userProvidedGpid: String): Observable<NoContent> {
-    const { id } = enrollee;
+  public updateLinkedGpid(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
+    const { id } = enrolment;
     const payload = { userProvidedGpid }
     return this.apiResource.put<NoContent>(`enrollees/${id}/update-linked-gpid`, payload)
       .pipe(
@@ -90,8 +91,9 @@ export class EnrolmentResource {
       );
   }
 
-  public getLinkedEnrolment(enrolmentId: number): Observable<String> {
-    return this.apiResource.get<String>(`enrollees/${enrolmentId}/linked-gpid`)
+  public getLinkedEnrolment(enrolment: Enrolment): Observable<String> {
+    const { id } = enrolment;
+    return this.apiResource.get<String>(`enrollees/${id}/linked-gpid`)
       .pipe(
         map((response: ApiHttpResponse<String>) => response.result),
         catchError((error: any) => {

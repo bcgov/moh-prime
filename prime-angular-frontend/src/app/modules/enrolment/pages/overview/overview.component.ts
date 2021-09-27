@@ -39,6 +39,8 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
+
+  public isPotentialPaperEnrolleeReturnee;
   public userProvidedGpid: String;
 
   protected allowRoutingWhenDirty: boolean;
@@ -167,8 +169,11 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
 
-          this.enrolmentResource.getLinkedEnrolment(enrolment.id)
+          this.enrolmentResource.getLinkedEnrolment(enrolment)
             .subscribe((result) => this.userProvidedGpid = result);
+
+          this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrolment.enrollee.dateOfBirth)
+            .subscribe((result) => this.isPotentialPaperEnrolleeReturnee = result);
         })
       ).subscribe();
   }

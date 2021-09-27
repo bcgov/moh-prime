@@ -120,12 +120,11 @@
     </ng-container>
   </app-alert>
 
-  <app-page-section *ngIf="userProvidedGpid">
+  <app-page-section *ngIf="isPotentialPaperEnrolleeReturnee">
     <app-page-subheader>
       <ng-container appPageSubheaderTitle>Paper Enrolment Declaration</ng-container>
 
-      <button *ngIf="userProvidedGpid"
-              mat-icon-button
+      <button mat-icon-button
               matTooltip="Edit Paper Enrolment Declaration"
               (click)="routeTo(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)">
         <mat-icon>edit</mat-icon>
