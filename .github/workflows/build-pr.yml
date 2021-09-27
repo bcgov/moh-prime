@@ -145,9 +145,12 @@ jobs:
           rm -rf /tmp/.backend-cache
           mv /tmp/.backend-cache-new /tmp/.backend-cache
 
-  build-frontend:
-    runs-on: ubuntu-20.04
+  pr-build-frontend:
+    runs-on: ubuntu-latest
     environment: Development
+    defaults:
+      run:
+        working-directory: prime-angular-frontend
     env:
       SERVICE_NAME: nginx-angular
       CONTAINER_NAME: prime-frontend
