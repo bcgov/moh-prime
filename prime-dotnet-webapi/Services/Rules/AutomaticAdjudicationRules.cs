@@ -288,7 +288,7 @@ namespace Prime.Services.Rules
                     return false;
                 }
             }
-            return false;
+            return true;
         }
     }
 }
