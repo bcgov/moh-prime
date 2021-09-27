@@ -192,11 +192,15 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
+      - run: npm install -g ngcc
+
       - name: install dependencies
         run: npm ci --production
 
+      - run: ngcc
+
       - name: build frontend
-        run: npm run build -- --configuration=production
+        run: npm run build
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
