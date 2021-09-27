@@ -13,7 +13,6 @@ namespace Prime.HttpClients
     {
         private readonly HttpClient _client;
 
-
         public CollegeLicenceClient(HttpClient client)
             : base(PropertySerialization.CamelCase)
         {
