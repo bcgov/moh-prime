@@ -188,14 +188,12 @@ jobs:
       - name: Cache dependencies
         uses: actions/cache@v2
         with:
-          path: '**/node_modules'
+          path: 'node_modules'
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
       - name: install dependencies
         run: npm ci
-
-      - run: ngcc
 
       - name: build frontend
         run: npm run build
