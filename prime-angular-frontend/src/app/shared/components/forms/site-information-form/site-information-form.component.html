@@ -57,7 +57,7 @@
           <mat-label>Site ID</mat-label>
           <input matInput
                  formControlName="pec" />
-          <mat-error *ngIf="pec.hasError('required') || activeBeforeReg.checked">
+          <mat-error *ngIf="pec.hasError('required')">
             Required
           </mat-error>
           <mat-error *ngIf="pec.hasError('unique')">
