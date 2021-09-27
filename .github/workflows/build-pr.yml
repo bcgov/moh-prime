@@ -192,10 +192,8 @@ jobs:
           key: npm-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-
 
-      - run: npm install -g @angular/compiler-cli
-
       - name: install dependencies
-        run: npm ci --production
+        run: npm ci
 
       - run: ngcc
 
