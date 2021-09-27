@@ -161,6 +161,16 @@ jobs:
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          cache: 'npm'
+          cache-dependency-path: prime-angular-frontend/package-lock.json
+      - name: install dependencies
+        run: npm ci
+
+      - name: build
+        run: npm run build -- --configuration=production
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -193,16 +203,8 @@ jobs:
         with:
           context: prime-angular-frontend
           push: true
-          file: prime-angular-frontend/openshift.dockerfile
+          file: prime-angular-frontend/ci.dockerfile
           tags: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}/${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools/prime-frontend:pr-${{steps.PR.outputs.number}}
-          build-args:
-            JWT_WELL_KNOWN_CONFIG="https://dev.oidc.gov.bc.ca/auth/realms/v4mbqqas/.well-known/openid-configuration"
-            KEYCLOAK_URL="https://dev.oidc.gov.bc.ca/auth"
-            KEYCLOAK_REALM="v4mbqqas"
-            KEYCLOAK_CLIENT_ID="prime-application-dev"
-            OC_APP=${{secrets.OC_APP}}
-            SVC_NAME="pr-${{steps.PR.outputs.number}}"
-            REDIRECT_URL="https://pr-${{steps.PR.outputs.number}}.pharmanetenrolment.gov.bc.ca"
           cache-from: type=local,src=/tmp/.frontend-cache
           cache-to: type=local,dest=/tmp/.frontend-cache-new,mode=max
 
