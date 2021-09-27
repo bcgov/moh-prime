@@ -159,11 +159,6 @@ jobs:
           node-version: '14.x'
           cache: 'npm'
           cache-dependency-path: prime-angular-frontend/package-lock.json
-      - name: install dependencies
-        run: npm ci
-
-      - name: build
-        run: npm run build -- --configuration=production
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -189,6 +184,12 @@ jobs:
         with:
           github-token: ${{secrets.GITHUB_TOKEN}}
           filterOutClosed: true
+
+      - name: install dependencies
+        run: npm ci
+
+      - name: build frontend
+        run: npm run build -- --configuration=production
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image
