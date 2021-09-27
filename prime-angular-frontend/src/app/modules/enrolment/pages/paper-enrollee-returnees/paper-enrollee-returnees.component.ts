@@ -23,7 +23,6 @@ import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 import { BaseEnrolmentProfilePage } from '@enrolment/shared/classes/enrolment-profile-page.class';
 
 import { PaperEnrolleeReturneeFormState } from './paper-enrollee-returnee-form-state.class';
-import { EnrolmentRoutes } from '@enrolment/enrolment.routes';
 
 @Component({
   selector: 'app-paper-enrollee-returnees',
@@ -77,6 +76,27 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
     this.togglePaperEnrolleeReturneeValidator(checked, this.formUserProvidedGpid);
   }
 
+  public onSubmit(beenThroughTheWizard: boolean = false): void {
+    // For this page we always want to check for changes in the user provided GPID
+    // before hitting the super onSubmit since this page's submission will be skipped
+    // by the super.onSubmit after the profile is complete however users can still update / provide their gpids
+
+    // Only update if the user had previously provided a paper enrolment gpid and
+    // then updates the paper enrolment gpid through the form field
+    if (!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value)) {
+      this.updateUserProvidedGpid();
+    } else {
+      // This is the case where user did not enter paper enrolment GPID but came back later to add it
+      if (this.enrolment.id && !this.userProvidedGpid) {
+        this.enrolmentResource.createLinkWithPotentialPaperEnrollee(this.enrolment.id, this.formUserProvidedGpid.value)
+          .subscribe();
+      }
+    }
+
+    // Continue the normal flow
+    super.onSubmit(beenThroughTheWizard);
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     if (this.enrolmentService.enrolment?.id) {
@@ -101,12 +121,8 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
-    // Only update if the user had previously provided a paper enrolment gpid and
-    // then updates the paper enrolment gpid through the form field
-    if (!!this.userProvidedGpid && (this.userProvidedGpid !== this.formUserProvidedGpid.value)) {
-      this.updateUserProvidedGpid();
-      return super.performHttpRequest(enrolment, beenThroughTheWizard);
-    } else if (!enrolment.id && this.isInitialEnrolment && this.formUserProvidedGpid.value) {
+    if (!enrolment.id && this.isInitialEnrolment && this.formUserProvidedGpid.value) {
+      // If yes and user provides a GPID, create enrollee here.
       return this.getUser$()
         .pipe(
           map((enrollee: Enrollee) => {
@@ -121,11 +137,6 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
           this.handleResponse()
         );
     } else {
-      // This is the case where user did not enter paper enrolment GPID but came back later to add it
-      if (enrolment.id && !this.userProvidedGpid) {
-        this.enrolmentResource.createLinkWithPotentialPaperEnrollee(enrolment.id, this.formUserProvidedGpid.value)
-          .subscribe();
-      }
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
   }
