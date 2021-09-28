@@ -12,14 +12,11 @@ on:
       - 'develop'
       - 'test'
       - 'master'
+
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      BUILD_LOGLEVEL: "2"
-      SERVICE_NAME: document-manager
-      CONTAINER_NAME: prime-document-manager
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -41,13 +38,6 @@ jobs:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with:
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
         id: PR
@@ -78,9 +68,6 @@ jobs:
   build-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: prime-webapi-backend
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -154,6 +141,7 @@ jobs:
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
