@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, tap, pairwise } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -24,7 +24,6 @@ import { EnrolmentFormStateService } from '@enrolment/shared/services/enrolment-
   providedIn: 'root'
 })
 export class EnrolmentGuard extends BaseGuard {
-  public isPotentialPaperEnrolleeReturnee: boolean;
 
   constructor(
     protected authService: AuthService,
@@ -59,6 +58,15 @@ export class EnrolmentGuard extends BaseGuard {
         map((params: [string, Enrolment, IdentityProviderEnum]) =>
           this.routeDestination(...params)
         ),
+        exhaustMap(() => this.getUser$()
+          .pipe(
+            exhaustMap((bcscUser: BcscUser) =>
+              this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(bcscUser.dateOfBirth)
+                .pipe(
+                  map((result: boolean) => this.enrolmentService.isPotentialPaperEnrolleeReturnee = result)
+                )
+            )
+          )),
       );
   }
 
@@ -73,22 +81,24 @@ export class EnrolmentGuard extends BaseGuard {
       return true;
     }
 
-    // If enrollee date of birth matches a paper enrollee date of birth, go to the
-    // NOBCSC page
-    // if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)) {
-
-    // }
-
+    if (
+      this.enrolmentService.isPotentialPaperEnrolleeReturnee
+      && routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION)
+    ) {
+      return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION);
+    }
     if (!enrolment) {
       // Route based on identity provider to determine sequence of routing
       // required to create a new enrolment
       return this.identityProviderRouting(routePath, enrolment, identityProvider);
     }
 
-    routePath = this.checkBlacklistedRoutes(routePath, identityProvider);
+    routePath = this.checkDeniedRoutes(routePath, identityProvider);
 
     // Otherwise, routes are dictated based on enrolment status
     return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
+
+
   }
 
   /**
@@ -168,13 +178,13 @@ export class EnrolmentGuard extends BaseGuard {
         : EnrolmentRoutes.BCSC_DEMOGRAPHIC
       : EnrolmentRoutes.OVERVIEW;
 
-    const blacklistedRoutes = [
+    const deniedRoutes = [
       ...EnrolmentRoutes.enrolmentSubmissionRoutes()
     ];
 
     if (hasNotCompletedProfile) {
       // No access to overview if you've not completed the wizard
-      blacklistedRoutes.push(EnrolmentRoutes.OVERVIEW);
+      deniedRoutes.push(EnrolmentRoutes.OVERVIEW);
     }
 
     let certifications = enrolment.certifications;
@@ -189,11 +199,11 @@ export class EnrolmentGuard extends BaseGuard {
 
     if (!this.enrolmentService.canRequestRemoteAccess(certifications, careSettings)) {
       // No access to remote access if OBO or pharmacist
-      blacklistedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
+      deniedRoutes.push(EnrolmentRoutes.REMOTE_ACCESS);
     }
 
-    return (blacklistedRoutes.includes(route))
-      // Prevent access to post enrolment/blacklisted routes
+    return (deniedRoutes.includes(route))
+      // Prevent access to post enrolment/denied routes
       ? this.navigate(routePath, redirectionRoute)
       // Otherwise, allow the route to resolve
       : true;
@@ -244,10 +254,10 @@ export class EnrolmentGuard extends BaseGuard {
 
   /**
    * @description
-   * General blacklisted routes based on enrolment existence and provider.
+   * General denied routes based on enrolment existence and provider.
    */
-  private checkBlacklistedRoutes(routePath: string, identityProvider: IdentityProviderEnum): string {
-    // Blacklisted routes if an enrolment exists regardless of provider
+  private checkDeniedRoutes(routePath: string, identityProvider: IdentityProviderEnum): string {
+    // Denied routes if an enrolment exists regardless of provider
     if (
       [
         EnrolmentRoutes.ACCESS_CODE,
@@ -260,7 +270,7 @@ export class EnrolmentGuard extends BaseGuard {
       );
     }
 
-    // Blacklisted routes based on provider
+    // Denied routes based on provider
     if (routePath.includes(EnrolmentRoutes.BCSC_DEMOGRAPHIC) && identityProvider === IdentityProviderEnum.BCEID) {
       return routePath.replace(
         EnrolmentRoutes.BCSC_DEMOGRAPHIC,
@@ -276,5 +286,17 @@ export class EnrolmentGuard extends BaseGuard {
     return routePath;
   }
 
-
+  private getUser$(): Observable<Enrollee> {
+    return this.authService.getUser$()
+      .pipe(
+        map(({ dateOfBirth }: BcscUser) => {
+          // We only need the date of birth to check for potential link
+          // to paper enrolments
+          return {
+            // Providing only the minimum required fields for creating an enrollee
+            dateOfBirth,
+          } as Enrollee;
+        })
+      );
+  }
 }

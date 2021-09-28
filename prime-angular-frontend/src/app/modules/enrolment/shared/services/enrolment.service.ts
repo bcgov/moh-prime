@@ -22,6 +22,7 @@ export interface IEnrolmentService {
   providedIn: 'root'
 })
 export class EnrolmentService implements IEnrolmentService {
+  public isPotentialPaperEnrolleeReturnee: boolean;
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
 
@@ -45,6 +46,10 @@ export class EnrolmentService implements IEnrolmentService {
 
   public get isProfileComplete(): boolean {
     return this.enrolment && this.enrolment.profileCompleted;
+  }
+
+  public get isPotentialPaperEnrollee(): boolean {
+    return this.isPotentialPaperEnrolleeReturnee;
   }
 
   /**

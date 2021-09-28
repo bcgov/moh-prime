@@ -43,7 +43,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
   public hasVerifiedAddress: boolean;
   public hasMailingAddress: boolean;
   public hasPhysicalAddress: boolean;
-  public potentialPaperEnrolleeReturnee: boolean;
+  public isPotentialPaperEnrolleeReturnee: boolean;
 
   constructor(
     protected route: ActivatedRoute,
@@ -111,7 +111,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.isPotentialPaperEnrolleeReturnee();
+    this.isPotentialPaperEnrolleeReturnee = this.enrolmentService.isPotentialPaperEnrolleeReturnee;
     this.patchForm()
       .pipe(
         map(([bcscUser, enrolment]: [BcscUser, Enrolment]) => {
@@ -204,14 +204,6 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
 
   private setAddressValidator(addressLine: FormGroup): void {
     this.formUtilsService.setValidators(addressLine, [Validators.required], optionalAddressLineItems);
-  }
-
-  private isPotentialPaperEnrolleeReturnee(): void {
-    this.getUser$()
-      .subscribe(enrollee => {
-        this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrollee.dateOfBirth)
-          .subscribe((result: boolean) => this.potentialPaperEnrolleeReturnee = result);
-      })
   }
 
   private getUser$(): Observable<Enrollee> {

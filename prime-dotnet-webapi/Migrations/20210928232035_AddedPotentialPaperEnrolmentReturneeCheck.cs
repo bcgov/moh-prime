@@ -19,7 +19,7 @@ namespace Prime.Migrations
                     UpdatedUserId = table.Column<Guid>(nullable: false),
                     UpdatedTimeStamp = table.Column<DateTimeOffset>(nullable: false),
                     EnrolleeId = table.Column<int>(nullable: false),
-                    PaperEnrolleeId = table.Column<int>(nullable: false),
+                    PaperEnrolleeId = table.Column<int>(nullable: true),
                     UserProvidedGpid = table.Column<string>(nullable: true),
                     EnrolmentLinkDate = table.Column<DateTime>(nullable: false),
                     IsConfirmed = table.Column<bool>(nullable: false)
@@ -33,6 +33,12 @@ namespace Prime.Migrations
                         principalTable: "Enrollee",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EnrolleeLinkedEnrolment_Enrollee_PaperEnrolleeId",
+                        column: x => x.PaperEnrolleeId,
+                        principalTable: "Enrollee",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -49,6 +55,11 @@ namespace Prime.Migrations
                 name: "IX_EnrolleeLinkedEnrolment_EnrolleeId",
                 table: "EnrolleeLinkedEnrolment",
                 column: "EnrolleeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EnrolleeLinkedEnrolment_PaperEnrolleeId",
+                table: "EnrolleeLinkedEnrolment",
+                column: "PaperEnrolleeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

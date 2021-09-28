@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap, map, tap, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
@@ -99,21 +99,24 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
 
   public ngOnInit(): void {
     this.createFormInstance();
-    this.patchForm()
+    this.patchForm$()
       .pipe(
-        map(() => {
+        exhaustMap((enrolment: Enrolment) => {
           // Patch form only if an enrolment is created on the
           // bcsc-demographics page
-          this.enrolmentResource.getLinkedEnrolment(this.enrolmentService.enrolment)
-            .pipe(
-              map((result) => {
-                this.userProvidedGpid = result ? result : null;
-                this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
-              })
-            ).subscribe(() => this.initForm())
+          if (enrolment) {
+            return this.enrolmentResource.getLinkedEnrolment(enrolment)
+              .pipe(
+                map((result: string) => result)
+              )
+          }
         })
       )
-      .subscribe();
+      .subscribe((result) => {
+        this.userProvidedGpid = result ? result : null;
+        this.form.patchValue({ formUserProvidedGpid: this.userProvidedGpid })
+        this.initForm()
+      });
   }
 
   protected performHttpRequest(enrolment: Enrolment, beenThroughTheWizard: boolean = false): Observable<void> {
@@ -139,7 +142,7 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
 
   protected updateUserProvidedGpid() {
     this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment, this.formUserProvidedGpid.value)
-      .subscribe(/*() => this.nextRouteAfterSubmit()*/);
+      .subscribe();
   }
 
   protected createFormInstance(): void {
@@ -179,5 +182,14 @@ export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage im
           } as Enrollee;
         })
       );
+  }
+
+  private patchForm$(): Observable<Enrolment> {
+    return this.patchForm()
+      .pipe(
+        // We only want the actual enrolment with the enrolment ID and not
+        // the derived one (BcscUser)
+        map((enrolment: Enrolment) => enrolment[1]),
+      )
   }
 }

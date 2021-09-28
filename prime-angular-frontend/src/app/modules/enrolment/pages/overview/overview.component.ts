@@ -40,7 +40,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
 
-  public isPotentialPaperEnrolleeReturnee;
+  public isPotentialPaperEnrolleeReturnee: boolean;
   public userProvidedGpid: String;
 
   protected allowRoutingWhenDirty: boolean;
@@ -128,6 +128,7 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   }
 
   public ngOnInit() {
+    this.isPotentialPaperEnrolleeReturnee = this.enrolmentService.isPotentialPaperEnrolleeReturnee;
     this.authService.getUser$()
       .pipe(
         map(({ firstName, lastName, givenNames, dateOfBirth, verifiedAddress }: BcscUser) => {
@@ -169,11 +170,10 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
 
-          this.enrolmentResource.getLinkedEnrolment(enrolment)
-            .subscribe((result) => this.userProvidedGpid = result);
-
-          this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(enrolment.enrollee.dateOfBirth)
-            .subscribe((result) => this.isPotentialPaperEnrolleeReturnee = result);
+          if (this.isPotentialPaperEnrolleeReturnee) {
+            this.enrolmentResource.getLinkedEnrolment(enrolment)
+              .subscribe((result) => this.userProvidedGpid = result);
+          }
         })
       ).subscribe();
   }

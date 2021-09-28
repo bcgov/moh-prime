@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210927195626_AddedPotentialPaperEnrolmentReturneeCheck")]
+    [Migration("20210928232035_AddedPotentialPaperEnrolmentReturneeCheck")]
     partial class AddedPotentialPaperEnrolmentReturneeCheck
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -11949,7 +11949,7 @@ namespace Prime.Migrations
                     b.Property<bool>("IsConfirmed")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("PaperEnrolleeId")
+                    b.Property<int?>("PaperEnrolleeId")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedTimeStamp")
@@ -11964,6 +11964,8 @@ namespace Prime.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EnrolleeId");
+
+                    b.HasIndex("PaperEnrolleeId");
 
                     b.ToTable("EnrolleeLinkedEnrolment");
                 });
@@ -18589,6 +18591,10 @@ namespace Prime.Migrations
                         .HasForeignKey("EnrolleeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Prime.Models.Enrollee", "PaperEnrollee")
+                        .WithMany()
+                        .HasForeignKey("PaperEnrolleeId");
                 });
 
             modelBuilder.Entity("Prime.Models.EnrolleeNote", b =>

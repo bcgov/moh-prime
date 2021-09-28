@@ -329,7 +329,7 @@ namespace Prime.Services
             return true;
         }
 
-        public async Task CreateInitialLink(int enrolleeId, string userProvidedGpid = "None Provided")
+        public async Task CreateInitialLink(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
                 .Where(ele => ele.EnrolleeId == enrolleeId)
@@ -353,7 +353,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateLinkedGpid(int enrolleeId, string userUpdatedGpid = "None Provided")
+        public async Task UpdateLinkedGpid(int enrolleeId, string userUpdatedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
                 .Where(ele => ele.EnrolleeId == enrolleeId)
