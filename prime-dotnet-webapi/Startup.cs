@@ -52,9 +52,9 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new PrimeEnvironment();
+            var config = new PrimeConfiguration();
             Configuration.Bind(config);
-            PrimeEnvironment.Current = config;
+            PrimeConfiguration.Current = config;
             services.AddSingleton(config);
 
             Console.WriteLine("Prime Environment:");
@@ -150,7 +150,7 @@ namespace Prime
                 .AddTransient<ISmtpEmailClient, SmtpEmailClient>()
                 .AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
-            if (PrimeEnvironment.Current.IsLocal)
+            if (PrimeConfiguration.Current.IsLocal)
             {
                 services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
             }
@@ -160,55 +160,55 @@ namespace Prime
                     .AddTransient<CollegeLicenceClientHandler>()
                     .AddHttpClient<ICollegeLicenceClient, CollegeLicenceClient>(client =>
                     {
-                        client.SetBasicAuthentication(PrimeEnvironment.Current.PharmanetApi.Username, PrimeEnvironment.Current.PharmanetApi.Password);
+                        client.SetBasicAuthentication(PrimeConfiguration.Current.PharmanetApi.Username, PrimeConfiguration.Current.PharmanetApi.Password);
                     })
                     .ConfigurePrimaryHttpMessageHandler<CollegeLicenceClientHandler>();
             }
 
             services.AddSingleton(new AddressAutocompleteClientCredentials
             {
-                ApiKey = PrimeEnvironment.Current.AddressAutocompleteApi.Key
+                ApiKey = PrimeConfiguration.Current.AddressAutocompleteApi.Key
             })
-            .AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(PrimeEnvironment.Current.AddressAutocompleteApi.Url);
+            .AddHttpClientWithBaseAddress<IAddressAutocompleteClient, AddressAutocompleteClient>(PrimeConfiguration.Current.AddressAutocompleteApi.Url);
 
-            services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(PrimeEnvironment.Current.ChesApi.Url)
+            services.AddHttpClientWithBaseAddress<IChesClient, ChesClient>(PrimeConfiguration.Current.ChesApi.Url)
             .WithBearerToken(new ChesClientCredentials
             {
-                Address = Url.Combine(PrimeEnvironment.Current.ChesApi.TokenUrl, "token"),
-                ClientId = PrimeEnvironment.Current.ChesApi.ClientId,
-                ClientSecret = PrimeEnvironment.Current.ChesApi.ClientSecret
+                Address = Url.Combine(PrimeConfiguration.Current.ChesApi.TokenUrl, "token"),
+                ClientId = PrimeConfiguration.Current.ChesApi.ClientId,
+                ClientSecret = PrimeConfiguration.Current.ChesApi.ClientSecret
             });
 
-            services.AddHttpClientWithBaseAddress<IDocumentManagerClient, DocumentManagerClient>(PrimeEnvironment.Current.DocumentManager.Url)
+            services.AddHttpClientWithBaseAddress<IDocumentManagerClient, DocumentManagerClient>(PrimeConfiguration.Current.DocumentManager.Url)
             .WithBearerToken(new DocumentManagerClientCredentials
             {
-                Address = PrimeEnvironment.Current.PrimeKeycloak.TokenUrl,
-                ClientId = PrimeEnvironment.Current.DocumentManager.ClientId,
-                ClientSecret = PrimeEnvironment.Current.DocumentManager.ClientSecret,
+                Address = PrimeConfiguration.Current.PrimeKeycloak.TokenUrl,
+                ClientId = PrimeConfiguration.Current.DocumentManager.ClientId,
+                ClientSecret = PrimeConfiguration.Current.DocumentManager.ClientSecret,
             });
 
-            services.AddHttpClientWithBaseAddress<IPrimeKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.Current.PrimeKeycloak.AdministrationUrl)
+            services.AddHttpClientWithBaseAddress<IPrimeKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeConfiguration.Current.PrimeKeycloak.AdministrationUrl)
             .WithBearerToken(new PrimeKeycloakAdministrationClientCredentials
             {
-                Address = PrimeEnvironment.Current.PrimeKeycloak.TokenUrl,
-                ClientId = PrimeEnvironment.Current.PrimeKeycloak.AdministrationClientId,
-                ClientSecret = PrimeEnvironment.Current.PrimeKeycloak.AdministrationClientSecret,
+                Address = PrimeConfiguration.Current.PrimeKeycloak.TokenUrl,
+                ClientId = PrimeConfiguration.Current.PrimeKeycloak.AdministrationClientId,
+                ClientSecret = PrimeConfiguration.Current.PrimeKeycloak.AdministrationClientSecret,
             });
 
-            services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(PrimeEnvironment.Current.LdapApi.Url);
+            services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(PrimeConfiguration.Current.LdapApi.Url);
 
-            services.AddHttpClientWithBaseAddress<IMohKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeEnvironment.Current.MohKeycloak.AdministrationUrl)
+            services.AddHttpClientWithBaseAddress<IMohKeycloakAdministrationClient, KeycloakAdministrationClient>(PrimeConfiguration.Current.MohKeycloak.AdministrationUrl)
             .WithBearerToken(new MohKeycloakAdministrationClientCredentials
             {
-                Address = PrimeEnvironment.Current.MohKeycloak.TokenUrl,
-                ClientId = PrimeEnvironment.Current.MohKeycloak.AdministrationClientId,
-                ClientSecret = PrimeEnvironment.Current.MohKeycloak.AdministrationClientSecret,
+                Address = PrimeConfiguration.Current.MohKeycloak.TokenUrl,
+                ClientId = PrimeConfiguration.Current.MohKeycloak.AdministrationClientId,
+                ClientSecret = PrimeConfiguration.Current.MohKeycloak.AdministrationClientSecret,
             });
 
             services.AddHttpClient<IVerifiableCredentialClient, VerifiableCredentialClient>(client =>
             {
-                client.BaseAddress = new Uri(PrimeEnvironment.Current.VerifiableCredentialApi.Url.EnsureTrailingSlash());
-                client.DefaultRequestHeaders.Add("x-api-key", PrimeEnvironment.Current.VerifiableCredentialApi.Key);
+                client.BaseAddress = new Uri(PrimeConfiguration.Current.VerifiableCredentialApi.Url.EnsureTrailingSlash());
+                client.DefaultRequestHeaders.Add("x-api-key", PrimeConfiguration.Current.VerifiableCredentialApi.Key);
             });
         }
 
@@ -268,7 +268,7 @@ namespace Prime
                 endpoints.MapHealthChecks("/health");
             });
 
-            if (PrimeEnvironment.Current.IsLocal)
+            if (PrimeConfiguration.Current.IsLocal)
             {
                 lifetime.ApplicationStarted.Register(OnApplicationStartedAsync(app.ApplicationServices.GetRequiredService<IVerifiableCredentialClient>()).Wait);
             }
@@ -306,7 +306,7 @@ namespace Prime
 
         protected virtual void ConfigureDatabase(IServiceCollection services)
         {
-            var connectionString = PrimeEnvironment.Current.ConnectionStrings.PrimeDatabase;
+            var connectionString = PrimeConfiguration.Current.ConnectionStrings.PrimeDatabase;
 
             services.AddDbContext<ApiDbContext>(options =>
             {

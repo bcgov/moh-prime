@@ -124,7 +124,7 @@ namespace Prime.Services
 
             // Also update MOH Keycloak now that the application has been completed.
             await UpdateMohKeycloakUserInfo(gisEnrolment.Party);
-            await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, PrimeEnvironment.Current.MohKeycloak.GisClientId, PrimeEnvironment.Current.MohKeycloak.GisUserRole);
+            await _mohKeycloakClient.AssignClientRole(gisEnrolment.Party.UserId, PrimeConfiguration.Current.MohKeycloak.GisClientId, PrimeConfiguration.Current.MohKeycloak.GisUserRole);
         }
 
         /// <summary>

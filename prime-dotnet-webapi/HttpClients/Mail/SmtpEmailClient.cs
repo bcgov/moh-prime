@@ -13,7 +13,7 @@ namespace Prime.HttpClients.Mail
         {
             var mail = ConvertToMailMessage(email);
 
-            SmtpClient smtp = new SmtpClient(PrimeEnvironment.Current.MailServer.Url, PrimeEnvironment.Current.MailServer.Port);
+            SmtpClient smtp = new SmtpClient(PrimeConfiguration.Current.MailServer.Url, PrimeConfiguration.Current.MailServer.Port);
             try
             {
                 await smtp.SendMailAsync(mail);

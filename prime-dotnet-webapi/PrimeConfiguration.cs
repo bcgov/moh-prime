@@ -2,9 +2,9 @@ using Prime.Infrastructure.Configuration.Internal;
 
 namespace Prime
 {
-    public class PrimeEnvironment
+    public class PrimeConfiguration
     {
-        public static PrimeEnvironment Current { get; set; }
+        public static PrimeConfiguration Current { get; set; }
 
         public string Name { get; set; }
         public string FrontendUrl { get; set; }

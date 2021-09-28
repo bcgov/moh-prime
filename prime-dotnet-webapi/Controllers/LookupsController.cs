@@ -51,5 +51,18 @@ namespace Prime.Controllers
 
             return Ok(record);
         }
+
+        // GET /api/lookups/configuration
+        /// <summary>
+        /// Get the app configuration
+        /// </summary>
+        [HttpGet("configuration", Name = nameof(GetConfiguration))]
+        // [Authorize(Roles = Roles.PrimeSuperAdmin)]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetConfiguration()
+        {
+            return Ok(PrimeConfiguration.Current);
+        }
     }
 }
