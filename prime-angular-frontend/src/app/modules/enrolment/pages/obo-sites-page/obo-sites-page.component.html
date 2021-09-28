@@ -86,45 +86,41 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="CareSettingEnum.HEALTH_AUTHORITY">
-                <!-- Protect against case code called from `initForm` not completed yet -->
-                <div *ngIf="hasHealthAuthoritySites">
 
-                  <ng-container *ngFor="let eha of enrolment?.enrolleeHealthAuthorities; let i = index"
-                                formGroupName="healthAuthoritySites">
+                <ng-container *ngFor="let healthAuthorityCode of chosenHealthAuthorityCodes"
+                              formGroupName="healthAuthoritySites">
 
-                    <ng-container *ngFor="let site of healthAuthoritySitesAsControls(eha.healthAuthorityCode); let j = index; let last = last"
-                                  [formArrayName]="eha.healthAuthorityCode">
+                  <ng-container *ngFor="let site of healthAuthoritySiteControl(healthAuthorityCode); let index = index; let last = last"
+                                [formArrayName]="healthAuthorityCode">
 
-                      <app-obo-site-form [form]="site"
-                                         [index]="j"
-                                         [careSettingCode]="careSetting.careSettingCode"
-                                         [healthAuthorityName]="eha.healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
-                                         [site]="site"
-                                         [total]="healthAuthoritySitesAsControls(eha.healthAuthorityCode).length"
-                                         [last]="last"
-                                         [jobNames]="jobNames"
-                                         [allowDefaultOption]="allowDefaultOption"
-                                         [defaultOptionLabel]="defaultOptionLabel"
-                                         (remove)="removeOboSite($event, careSetting.careSettingCode, eha.healthAuthorityCode)">
-                      </app-obo-site-form>
-
-                    </ng-container>
-                    <button mat-button
-                            class="mb-4"
-                            type="button"
-                            color="primary"
-                            (click)="addOboSite(careSetting.careSettingCode, eha.healthAuthorityCode)">
-                      <mat-icon>add</mat-icon>
-                      Add Additional Site
-                    </button>
+                    <app-obo-site-form [form]="site"
+                                       [index]="index"
+                                       [careSettingCode]="careSetting.careSettingCode"
+                                       [healthAuthorityName]="+healthAuthorityCode | configCode: 'healthAuthorities' | capitalize: true"
+                                       [site]="site"
+                                       [total]="healthAuthoritySiteControl(healthAuthorityCode).length"
+                                       [last]="last"
+                                       [jobNames]="jobNames"
+                                       [allowDefaultOption]="allowDefaultOption"
+                                       [defaultOptionLabel]="defaultOptionLabel"
+                                       (remove)="removeOboSite($event, careSetting.careSettingCode, +healthAuthorityCode)">
+                    </app-obo-site-form>
 
                   </ng-container>
+                  <button mat-button
+                          class="mb-4"
+                          type="button"
+                          color="primary"
+                          (click)="addOboSite(careSetting.careSettingCode, +healthAuthorityCode)">
+                    <mat-icon>add</mat-icon>
+                    Add Additional Site
+                  </button>
 
-                </div>
+                </ng-container>
+
               </ng-container>
 
             </ng-container>
-
 
           </ng-container>
 
