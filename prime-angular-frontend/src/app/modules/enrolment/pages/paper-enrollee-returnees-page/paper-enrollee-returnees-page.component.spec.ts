@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PaperEnrolleeReturneesComponent } from './paper-enrollee-returnees.component';
+import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 
 describe('PaperEnrolleeReturneesComponent', () => {
-  let component: PaperEnrolleeReturneesComponent;
-  let fixture: ComponentFixture<PaperEnrolleeReturneesComponent>;
+  let component: PaperEnrolleeReturneesPageComponent;
+  let fixture: ComponentFixture<PaperEnrolleeReturneesPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PaperEnrolleeReturneesComponent]
+      declarations: [PaperEnrolleeReturneesPageComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PaperEnrolleeReturneesComponent);
+    fixture = TestBed.createComponent(PaperEnrolleeReturneesPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

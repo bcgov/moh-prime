@@ -29,7 +29,7 @@ import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-loc
 import { BcscDemographicFormState } from '@enrolment/pages/bcsc-demographic/bcsc-demographic-form-state.class';
 import { BceidDemographicFormState } from '@enrolment/pages/bceid-demographic/bceid-demographic-form-state.class';
 import { RegulatoryFormState } from '@enrolment/pages/regulatory/regulatory-form-state';
-import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-returnees/paper-enrollee-returnee-form-state.class';
+import { PaperEnrolleeReturneeFormState } from '@enrolment/pages/paper-enrollee-returnees-page/paper-enrollee-returnee-form-state.class';
 
 @Injectable({
   providedIn: 'root'

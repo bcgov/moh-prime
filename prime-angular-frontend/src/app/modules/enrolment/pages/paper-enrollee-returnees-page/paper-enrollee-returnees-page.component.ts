@@ -26,10 +26,10 @@ import { PaperEnrolleeReturneeFormState } from './paper-enrollee-returnee-form-s
 
 @Component({
   selector: 'app-paper-enrollee-returnees',
-  templateUrl: './paper-enrollee-returnees.component.html',
-  styleUrls: ['./paper-enrollee-returnees.component.scss']
+  templateUrl: './paper-enrollee-returnees-page.component.html',
+  styleUrls: ['./paper-enrollee-returnees-page.component.scss']
 })
-export class PaperEnrolleeReturneesComponent extends BaseEnrolmentProfilePage implements OnInit {
+export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePage implements OnInit {
   public isOfflineFormAccessRequested: boolean;
   public formState: PaperEnrolleeReturneeFormState;
   public form: FormGroup;
