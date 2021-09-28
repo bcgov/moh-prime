@@ -221,10 +221,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("rerun-rules", Name = nameof(RerunAutomaticAdjudicationRules))]
         [Authorize(Roles = Roles.PrimeApiServiceAccount)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult> RerunAutomaticAdjudicationRules()
         {
