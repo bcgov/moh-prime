@@ -1,14 +1,15 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
+using System;
+using System.IO;
+using System.Reflection;
+
+using Prime.Infrastructure.Configuration;
 
 namespace Prime
 {
@@ -40,6 +41,12 @@ namespace Prime
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    config.SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json", optional: false)
+                        .AddEnvironmentVariables(_ => new PrimeEnvironmentVariablesConfigurationSource());
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

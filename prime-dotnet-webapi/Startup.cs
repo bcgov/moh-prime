@@ -33,23 +33,23 @@ using Prime.Services.EmailInternal;
 using Prime.HttpClients;
 using Prime.HttpClients.Mail;
 using Prime.Infrastructure;
-using Prime.ViewModels.HealthAuthorities;
-using Prime.ViewModels.HealthAuthoritySites;
 
 namespace Prime
 {
     public class Startup
     {
+        public const string CorsPolicy = "CorsPolicy";
+
         public IConfiguration Configuration { get; }
-        public static IConfiguration StaticConfig { get; private set; }
         public IWebHostEnvironment Environment { get; }
-        public readonly string AllowSpecificOrigins = "CorsPolicy";
 
         public Startup(IWebHostEnvironment env, IConfiguration configuration)
         {
             Configuration = configuration;
-            StaticConfig = configuration;
             Environment = env;
+
+            Console.WriteLine("Prime Environment:");
+            Console.WriteLine(JsonConvert.SerializeObject(configuration));
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -97,7 +97,7 @@ namespace Prime
             ConfigureClients(services);
 
             services.AddControllers()
-                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<PrivacyOfficeValidator>())
+                .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>())
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new EmptyStringToNullJsonConverter());
@@ -105,7 +105,7 @@ namespace Prime
 
             services.AddCors(options =>
             {
-                options.AddPolicy(AllowSpecificOrigins,
+                options.AddPolicy(CorsPolicy,
                     builder =>
                     {
                         builder
@@ -238,7 +238,7 @@ namespace Prime
 
             // Matches request to an endpoint
             app.UseRouting();
-            app.UseCors(AllowSpecificOrigins);
+            app.UseCors(CorsPolicy);
 
             app.UseAuthentication();
             app.UseAuthorization();

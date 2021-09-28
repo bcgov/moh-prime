@@ -4,15 +4,22 @@ using Prime.Auth;
 
 namespace Prime
 {
-    public static class PrimeEnvironment
+    public class PrimeEnvironment
     {
+        public static PrimeEnvironment Current { get; set; }
+
         public static readonly string Name = GetEnvironmentVariable("OC_APP") ?? "local";
         public static readonly string FrontendUrl = GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public static readonly string BackendUrl = GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
         public static readonly string LogFile = GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
+        public ConnectionStrings ConnectionStrings { get; set; }
+
         public static bool IsProduction { get => Name == "prod"; }
         public static bool IsLocal { get => Name == "local"; }
+
+
+
 
         public static class DocumentManager
         {
@@ -109,5 +116,10 @@ namespace Prime
         {
             public static readonly string Url = GetEnvironmentVariable("LDAP_API_URL") ?? "https://common-logon-dev.hlth.gov.bc.ca/ldap";
         }
+    }
+
+    public class ConnectionStrings
+    {
+        public string PrimeDatabase { get; set; }
     }
 }
