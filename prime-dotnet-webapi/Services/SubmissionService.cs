@@ -305,13 +305,21 @@ namespace Prime.Services
             var enrollees = GetBaseQueryForEnrolleeApplicationRules()
                 .Where(e => e.Adjudicator == null)
                 .Where(e => e.CurrentStatus.StatusCode == (int)StatusType.UnderReview)
-                // TODO: Don't hard-code StatusReasonCodes
-                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr => esr.StatusReasonCode > 2 && esr.StatusReasonCode < 8))
+                .Where(e => e.CurrentStatus.EnrolmentStatusReasons.Any(esr =>
+                    esr.StatusReasonCode == (int)StatusReasonType.PharmanetError
+                    || esr.StatusReasonCode == (int)StatusReasonType.NotInPharmanet
+                    || esr.StatusReasonCode == (int)StatusReasonType.BirthdateDiscrepancy
+                    || esr.StatusReasonCode == (int)StatusReasonType.NameDiscrepancy
+                    || esr.StatusReasonCode == (int)StatusReasonType.Practicing))
                 // Need `DecompileAsync` due to computed property `CurrentStatus`
                 .DecompileAsync()
                 .ToList();
             foreach (var enrollee in enrollees)
             {
+                // Group results of the rules under a new enrollment status
+                enrollee.AddEnrolmentStatus(StatusType.UnderReview);
+                await _businessEventService.CreateStatusChangeEventAsync(enrollee.Id, "Cron Job running the enrollee application rules");
+
                 _logger.LogDebug($"RerunRulesAsync on {enrollee.FullName} (Id {enrollee.Id})");
                 if (await _submissionRulesService.QualifiesForAutomaticAdjudicationAsync(enrollee))
                 {
