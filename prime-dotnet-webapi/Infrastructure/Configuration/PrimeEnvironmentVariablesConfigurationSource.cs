@@ -30,7 +30,6 @@ namespace Prime.Infrastructure.Configuration
                 "OC_APP" => "Name",
                 "FRONTEND_URL" => "FrontendUrl",
                 "BACKEND_URL" => "BackendUrl",
-                "LOG_FILE_PATH" => "LogFile",
 
                 "DOCUMENT_MANAGER_URL" => "DocumentManager__Url",
                 "DOCUMENT_MANAGER_CLIENT_ID" => "DocumentManager__ClientId",

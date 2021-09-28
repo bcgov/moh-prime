@@ -20,7 +20,7 @@ namespace Prime.Infrastructure.Configuration.Internal
         public string WellKnownConfig { get => KeycloakUrls.WellKnownConfig(RealmUrl); }
         public string TokenUrl { get => KeycloakUrls.Token(RealmUrl); }
         public string AdministrationUrl { get; set; }
-        public string AdministrationClientId { get => "keycloak-service-account"; }
+        public string AdministrationClientId { get; set; }
         public string AdministrationClientSecret { get; set; }
     }
 
@@ -29,10 +29,10 @@ namespace Prime.Infrastructure.Configuration.Internal
         public string RealmUrl { get; set; }
         public string WellKnownConfig { get => KeycloakUrls.WellKnownConfig(RealmUrl); }
         public string TokenUrl { get => KeycloakUrls.Token(RealmUrl); }
-        public string GisClientId { get => "GIS"; }
-        public string GisUserRole { get => "GISUSER"; }
+        public string GisClientId { get; set; }
+        public string GisUserRole { get; set; }
         public string AdministrationUrl { get; set; }
-        public string AdministrationClientId { get => "PRIME-WEBAPP-ENROLLMENT-SERVICE"; }
+        public string AdministrationClientId { get; set; }
         public string AdministrationClientSecret { get; set; }
     }
 
@@ -55,7 +55,7 @@ namespace Prime.Infrastructure.Configuration.Internal
     {
         public bool Enabled { get; set; }
         public string Url { get; set; }
-        public string ClientId { get => "PRIME_SERVICE_CLIENT"; }
+        public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string TokenUrl { get; set; }
     }
@@ -73,8 +73,8 @@ namespace Prime.Infrastructure.Configuration.Internal
         // Update the following through postman:
         // 1. Add new schema, incrementing schema version -> schema_name  enrollee
         // 2. Create a credential definition for schema -> support_revocation  true, tag  prime
-        public string SchemaName { get => "enrollee"; }
-        public string SchemaVersion { get => "2.2"; }
+        public string SchemaName { get; set; }
+        public string SchemaVersion { get; set; }
     }
 
     /// <summary>

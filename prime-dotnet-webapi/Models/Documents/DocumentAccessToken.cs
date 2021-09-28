@@ -17,7 +17,7 @@ namespace Prime.Models
         [NotMapped]
         public string DownloadUrl
         {
-            get => Url.Combine(PrimeEnvironment.BackendUrl, "document-access", Id.ToString());
+            get => Url.Combine(PrimeEnvironment.Current.BackendUrl, "document-access", Id.ToString());
         }
     }
 }

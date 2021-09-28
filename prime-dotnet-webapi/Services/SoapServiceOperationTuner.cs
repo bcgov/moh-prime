@@ -30,7 +30,7 @@ namespace Prime.Services
                     throw new ArgumentException("Client certificate not received.");
                 }
 
-                if (PrimeEnvironment.PlrIntegration.ClientCertThumbprint == null)
+                if (PrimeEnvironment.Current.PlrIntegration.ClientCertThumbprint == null)
                 {
                     throw new SystemException("Receiving system is not configured properly; please advise system administrator.");
                 }
@@ -38,7 +38,7 @@ namespace Prime.Services
                 string decoded = HttpUtility.UrlDecode(urlEncoded);
                 byte[] certAsBytes = Encoding.ASCII.GetBytes(decoded);
                 var clientCert = new X509Certificate2(certAsBytes);
-                if (clientCert.Thumbprint == PrimeEnvironment.PlrIntegration.ClientCertThumbprint)
+                if (clientCert.Thumbprint == PrimeEnvironment.Current.PlrIntegration.ClientCertThumbprint)
                 {
                     service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
                 }

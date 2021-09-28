@@ -272,8 +272,8 @@ namespace Prime.Services
                 IssuerDid = issuerDid,
                 SchemaId = schemaId,
                 SchemaIssuerDid = issuerDid,
-                SchemaName = PrimeEnvironment.VerifiableCredentialApi.SchemaName,
-                SchemaVersion = PrimeEnvironment.VerifiableCredentialApi.SchemaVersion,
+                SchemaName = PrimeEnvironment.Current.VerifiableCredentialApi.SchemaName,
+                SchemaVersion = PrimeEnvironment.Current.VerifiableCredentialApi.SchemaVersion,
                 CredentialDefinitionId = credentialDefinitionId,
                 Comment = "PharmaNet GPID",
                 CredentialProposal = credentialProposal

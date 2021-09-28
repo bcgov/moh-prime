@@ -45,6 +45,7 @@ namespace Prime
                 {
                     config.SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json", optional: false)
+                        .AddUserSecrets("2144bc8e-373b-4888-a0ca-b0ff7798bd81")
                         .AddEnvironmentVariables(_ => new PrimeEnvironmentVariablesConfigurationSource());
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
@@ -55,11 +56,11 @@ namespace Prime
 
         private static void CreateLogger()
         {
-            var path = PrimeEnvironment.LogFile;
+            var path = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
             try
             {
-                if (PrimeEnvironment.IsLocal)
+                if (Environment.GetEnvironmentVariable("OC_APP") == null)
                 {
                     Directory.CreateDirectory(path);
                 }

@@ -9,7 +9,7 @@ namespace Prime
         public string Name { get; set; }
         public string FrontendUrl { get; set; }
         public string BackendUrl { get; set; }
-        public string LogFile { get; set; }
+
         public bool IsProduction { get => Name == "prod"; }
         public bool IsLocal { get => Name == "local"; }
 
