@@ -203,7 +203,7 @@ namespace PrimeTests.UnitTests
         {
             Enrollee enrollee = new EnrolleeFactory().Generate();
             UpdateCertifications(enrollee, apiModes.Length);
-            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>(), A.Fake<ILogger>());
+            var rule = new PharmanetValidationRule(new CollegeLicenceClientMock(enrollee, apiModes), A.Fake<IBusinessEventService>());
 
             Assert.Equal(expected, await rule.ProcessRule(enrollee));
             AssertReasons(enrollee.CurrentStatus.EnrolmentStatusReasons, expectedReasons);
