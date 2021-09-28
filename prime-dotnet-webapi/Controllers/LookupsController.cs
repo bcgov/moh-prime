@@ -38,31 +38,18 @@ namespace Prime.Controllers
             return Ok(lookupEntity);
         }
 
-        // POST /api/lookups/validate-licence
+        // Get /api/lookups/validate-licence
         /// <summary>
         /// For testing college licence validation
         /// </summary>
-        [HttpPost("validate-licence", Name = nameof(LicenceCodeTest))]
+        [HttpGet("validate-licence", Name = nameof(LicenceCodeTest))]
         [Authorize(Roles = Roles.PrimeSuperAdmin)]
         [ProducesResponseType(typeof(ApiResultResponse<PharmanetCollegeRecord>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> LicenceCodeTest(string collegePrefix, string licenceNumber)
+        public async Task<ActionResult> LicenceCodeTest([FromQuery] string collegePrefix, [FromQuery] string licenceNumber)
         {
             var record = await _collegeLicenceClient.GetCollegeRecordAsync(collegePrefix, licenceNumber);
 
             return Ok(record);
-        }
-
-        // GET /api/lookups/configuration
-        /// <summary>
-        /// Get the app configuration
-        /// </summary>
-        [HttpGet("configuration", Name = nameof(GetConfiguration))]
-        // [Authorize(Roles = Roles.PrimeSuperAdmin)]
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(ApiResultResponse<string>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetConfiguration()
-        {
-            return Ok(PrimeConfiguration.Current);
         }
     }
 }
