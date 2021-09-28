@@ -556,22 +556,22 @@ objects:
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
           env:
-          - name: DB_HOST
+          - name: PGHOST
             valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-          - name: POSTGRESQL_USER
+          - name: PGUSER
             valueFrom:
               secretKeyRef:
                 name: dev-patroni-secret
                 key: app-db-username
-          - name: POSTGRESQL_PASSWORD
+          - name: PGPASSWORD
             valueFrom:
               secretKeyRef:
                 name: dev-patroni-secret
                 key: app-db-password
-          - name: POSTGRESQL_DATABASE
+          - name: PGDATABASE
             value: prime-${SVC_NAME}
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
@@ -803,16 +803,16 @@ objects:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-            - name: DB_NAME
+            - name: POSTGRESQL_DATABASE
               value: prime-${SVC_NAME}
-            - name: DB_PASS
+            - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: dev-patroni-secret
                   key: app-db-password
             - name: DB_PORT
               value: "5432"
-            - name: DB_USER
+            - name: POSTGRESQL_USER
               valueFrom:
                 secretKeyRef:
                   name: dev-patroni-secret
