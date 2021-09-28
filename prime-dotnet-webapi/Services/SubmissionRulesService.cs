@@ -23,6 +23,8 @@ namespace Prime.Services
         {
             _businessEventService = businessEventService;
             _collegeLicenceClient = collegeLicenceClient;
+
+            _logger.LogDebug($"Going to use {_collegeLicenceClient.GetType().Name} in PharmanetValidationRule");
         }
 
         /// <summary>
