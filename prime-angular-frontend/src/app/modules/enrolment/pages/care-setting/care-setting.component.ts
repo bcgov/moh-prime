@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormArray, FormControl, FormBuilder } from '@angular/forms';
+import { FormGroup, FormArray, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
@@ -31,7 +31,6 @@ import { FormArrayValidators } from '@lib/validators/form-array.validators';
   styleUrls: ['./care-setting.component.scss']
 })
 export class CareSettingComponent extends BaseEnrolmentProfilePage implements OnInit, OnDestroy {
-  public careSettingCtrl: FormControl;
   public careSettingTypes: Config<number>[];
   public filteredCareSettingTypes: Config<number>[];
   public healthAuthorities: Config<number>[];
@@ -49,8 +48,7 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
     protected utilService: UtilsService,
     protected formUtilsService: FormUtilsService,
     private configService: ConfigService,
-    protected authService: AuthService,
-    private fb: FormBuilder
+    protected authService: AuthService
   ) {
     super(
       route,
@@ -84,7 +82,6 @@ export class CareSettingComponent extends BaseEnrolmentProfilePage implements On
   }
 
   public onSubmit() {
-
     const controls = this.careSettings.controls;
 
     // Remove any oboSites belonging to careSetting which is no longer selected
