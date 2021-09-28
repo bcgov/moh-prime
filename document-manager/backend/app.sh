@@ -11,7 +11,7 @@
 function backend()
 {
     cd /opt/app-root/src
-    # python3 wait.py
+    python3 wait.py
     flask run ${FLASK_RUN_PARAMS} &disown 
     uwsgi uwsgi.ini
 }

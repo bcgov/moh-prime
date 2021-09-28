@@ -556,22 +556,22 @@ objects:
           image: >-
             image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
           env:
-          - name: PGHOST
+          - name: DB_HOST
             valueFrom:
                   configMapKeyRef:
                     name: database-cm
                     key: database-host
-          - name: PGUSER
+          - name: POSTGRESQL_USER
             valueFrom:
               secretKeyRef:
                 name: dev-patroni-secret
                 key: app-db-username
-          - name: PGPASSWORD
+          - name: POSTGRESQL_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: dev-patroni-secret
                 key: app-db-password
-          - name: PGDATABASE
+          - name: POSTGRESQL_DATABASE
             value: prime-${SVC_NAME}
           command: ['psql', '-a', '-f', './databaseMigrations.sql']
         containers:
