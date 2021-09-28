@@ -52,13 +52,7 @@ namespace Prime
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            var config = new PrimeConfiguration();
-            Configuration.Bind(config);
-            PrimeConfiguration.Current = config;
-            services.AddSingleton(config);
-
-            Console.WriteLine("Prime Environment:");
-            Console.WriteLine(JsonConvert.SerializeObject(config));
+            InitializeConfiguration(services);
 
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IAgreementService, AgreementService>();
@@ -144,7 +138,19 @@ namespace Prime
             AuthenticationSetup.Initialize(services);
         }
 
-        protected void ConfigureClients(IServiceCollection services)
+        private void InitializeConfiguration(IServiceCollection services)
+        {
+            var config = new PrimeConfiguration();
+            Configuration.Bind(config);
+            PrimeConfiguration.Current = config;
+
+            services.AddSingleton(config);
+
+            Log.Logger.Information("###App Version:{0}###", Assembly.GetExecutingAssembly().GetName().Version);
+            Log.Logger.Information("###Prime Configuration:{0}###", JsonConvert.SerializeObject(PrimeConfiguration.Current));
+        }
+
+        private void ConfigureClients(IServiceCollection services)
         {
             services
                 .AddTransient<ISmtpEmailClient, SmtpEmailClient>()
