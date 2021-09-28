@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using Microsoft.Extensions.Hosting;
 
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting.Json;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -17,6 +18,7 @@ namespace Prime
         public static int Main(string[] args)
         {
             CreateLogger();
+            Log.Information($"LOG_LEVEL={Environment.GetEnvironmentVariable("LOG_LEVEL")}");
 
             try
             {
@@ -65,8 +67,20 @@ namespace Prime
             var name = Assembly.GetExecutingAssembly().GetName();
             var outputTemplate = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
+            // Default is Information but can be overridden by LOG_LEVEL environment variable, 
+            // (expecting a number) 
+            int minimumLogLevel = (int)LogEventLevel.Information;
+            if (Int32.TryParse(Environment.GetEnvironmentVariable("LOG_LEVEL"), out int dynamicLogLevel))
+            {
+                minimumLogLevel = dynamicLogLevel;
+            }
+
+            var logLevelSwitch = new LoggingLevelSwitch()
+            {
+                MinimumLevel = (LogEventLevel)minimumLogLevel
+            };
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Information()
+                .MinimumLevel.ControlledBy(logLevelSwitch)
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
