@@ -590,6 +590,8 @@ objects:
                     key: DOCUMENT_MANAGER_CLIENT_ID
               - name: DOCUMENT_MANAGER_URL
                 value: http://${SVC_NAME}-document-manager:6001
+              - name: OC_APP
+                value: ${OC_APP}
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
