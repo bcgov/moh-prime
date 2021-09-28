@@ -181,7 +181,7 @@ jobs:
           restore-keys: npm-
 
       - name: install dependencies
-        run: npm ci
+        run: npm install
 
       - name: build frontend
         run: npm run build
