@@ -158,7 +158,7 @@ export class EnrolmentResource {
       );
   }
 
-  public getPotentialPaperEnrolleeReturneeStatus(dateOfBirth?: string): Observable<boolean> {
+  public getPotentialPaperEnrolleeReturneeStatus(dateOfBirth: string): Observable<boolean> {
     return this.apiResource.head<boolean>(`enrollees/potential-paper-enrollee/${dateOfBirth}`)
       .pipe(
         map(() => true),
