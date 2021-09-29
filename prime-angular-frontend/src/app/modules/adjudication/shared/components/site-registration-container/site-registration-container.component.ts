@@ -6,13 +6,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { Subscription, Observable, EMPTY, of, noop, combineLatest, concat } from 'rxjs';
 import { exhaustMap, map, tap, take } from 'rxjs/operators';
 
-import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { EmailUtils } from '@lib/utils/email-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { MatTableDataSourceUtils } from '@lib/modules/ngx-material/mat-table-data-source-utils.class';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { UtilsService } from '@core/services/utils.service';
+import { ToastService } from '@core/services/toast.service';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
@@ -40,6 +39,7 @@ import {
   OrganizationSearchListViewModel
 } from '@registration/shared/models/site-registration.model';
 import { AdjudicationResource } from '@adjudication/shared/services/adjudication-resource.service';
+import { UtilsService } from '@core/services/utils.service';
 
 @Component({
   selector: 'app-site-registration-container',
@@ -69,9 +69,9 @@ export class SiteRegistrationContainerComponent implements OnInit {
     protected organizationResource: OrganizationResource,
     protected siteResource: SiteResource,
     protected adjudicationResource: AdjudicationResource,
-    private permissionService: PermissionService,
-    private utilResource: UtilsService,
-    protected dialog: MatDialog
+    protected dialog: MatDialog,
+    private toastService: ToastService,
+    private permissionService: PermissionService
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
 
@@ -93,7 +93,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
     this.getDataset(this.route.snapshot.queryParams);
   }
 
-  public onAssign(siteId: number) {
+  public onAssign(siteId: number): void {
     const data: DialogOptions = {
       title: 'Assign Site',
       component: ManualFlagNoteComponent,
@@ -125,7 +125,7 @@ export class SiteRegistrationContainerComponent implements OnInit {
       .subscribe(() => this.getDataset(this.route.snapshot.queryParams));
   }
 
-  public onReassign(siteId: number) {
+  public onReassign(siteId: number): void {
     const data: DialogOptions = {
       title: 'Reassign Site',
       component: ManualFlagNoteComponent,
@@ -201,7 +201,12 @@ export class SiteRegistrationContainerComponent implements OnInit {
       : this.deleteSite(record.siteId);
   }
 
-  public onApprove(siteId: number) {
+  public onApprove(siteId: number): void {
+    if(!this.dataSource.data.find(s => s.siteId === siteId).pec) {
+      this.toastService.openErrorToast('Site cannot be approved without a Site ID/PEC')
+      return;
+    }
+
     const data: DialogOptions = {
       title: 'Approve Site Registration',
       message: 'Are you sure you want to approve this Registration?',
