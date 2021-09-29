@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute, Router, NavigationExtras } from '@angular/router';
 
+import { Moment } from 'moment';
+
+import { DateUtils } from '@lib/utils/date-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -10,20 +13,23 @@ import { Site } from '@registration/shared/models/site.model';
 import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 
 @Component({
   selector: 'app-overview-container',
   templateUrl: './overview-container.component.html',
   styleUrls: ['./overview-container.component.scss']
 })
-export class OverviewContainerComponent extends AbstractComponent implements OnInit {
+export class OverviewContainerComponent implements OnInit {
   @Input() public site: Site;
   @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
 
+  public withinRenewalPeriod: boolean;
   public routeUtils: RouteUtils;
+  public SiteStatusType = SiteStatusType;
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -32,9 +38,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     private siteResource: SiteResource,
     private utilsService: UtilsService,
   ) {
-    super(route, router);
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
-    this.admin = false;
     this.businessLicences = [];
   }
 
@@ -46,7 +50,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
     this.routeUtils.routeTo(routePath, navExtra);
   }
 
-  public onRouteRelative(routePath: string) {
+  public onRouteRelative(routePath: string | string[]) {
     this.routeUtils.routeRelativeTo(routePath);
   }
 
@@ -55,6 +59,7 @@ export class OverviewContainerComponent extends AbstractComponent implements OnI
       .subscribe((token: string) => this.utilsService.downloadToken(token));
   }
 
-  public ngOnInit(): void { }
-
+  public ngOnInit(): void {
+    this.withinRenewalPeriod = DateUtils.withinRenewalPeriod(Site.getExpiryDate(this.site));
+  }
 }

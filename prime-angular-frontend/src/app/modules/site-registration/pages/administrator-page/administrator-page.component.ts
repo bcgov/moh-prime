@@ -11,6 +11,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { Address } from '@shared/models/address.model';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -22,7 +23,7 @@ import { AdministratorPageFormState } from './administrator-page-form-state.clas
   templateUrl: './administrator-page.component.html',
   styleUrls: ['./administrator-page.component.scss']
 })
-export class AdministratorPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class AdministratorPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: AdministratorPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -35,13 +36,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -55,14 +56,13 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
   }
 
   public onBack() {
-    const site = this.siteService.site;
-    let routePath = SiteRoutes.REMOTE_USERS;
+    const nextRoute = (!this.isCompleted)
+      ? (this.siteService.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST)
+        ? SiteRoutes.HOURS_OPERATION
+        : SiteRoutes.REMOTE_USERS
+      : SiteRoutes.SITE_REVIEW;
 
-    if (site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST) {
-      routePath = SiteRoutes.HOURS_OPERATION;
-    }
-
-    this.routeUtils.routeRelativeTo(routePath);
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public ngOnInit() {
@@ -81,14 +81,7 @@ export class AdministratorPageComponent extends AbstractEnrolmentPage implements
     this.formState.form.markAsPristine();
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload);
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.PRIVACY_OFFICER;

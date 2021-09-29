@@ -7,16 +7,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 
-import { tap } from 'rxjs/operators';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
@@ -37,7 +34,7 @@ export class LessThanErrorStateMatcher extends ShowOnDirtyErrorStateMatcher {
   templateUrl: './hours-operation-page.component.html',
   styleUrls: ['./hours-operation-page.component.scss']
 })
-export class HoursOperationPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class HoursOperationPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: HoursOperationPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -67,13 +64,13 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     route: ActivatedRoute,
     router: Router,
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
@@ -115,7 +112,11 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.SITE_ADDRESS);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.SITE_ADDRESS
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public ngOnInit() {
@@ -159,15 +160,7 @@ export class HoursOperationPageComponent extends AbstractEnrolmentPage implement
     this.hasNoBusinessHoursError = true;
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.formState.form.markAsPristine()));
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const site = this.siteService.site;
     let routePath = SiteRoutes.REMOTE_USERS;
 

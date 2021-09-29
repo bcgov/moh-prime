@@ -234,7 +234,7 @@ export class FormControlValidators {
           (value) ? request(value) : EMPTY
         ),
         map((result: boolean) => (result) ? { [errorKey]: result } : null),
-        first() // important, the observable returned must be finite required by asyncValidator
+        first() // IMPORTANT: must be finite observable
       );
   }
 }

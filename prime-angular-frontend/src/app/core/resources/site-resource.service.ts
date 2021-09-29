@@ -256,8 +256,8 @@ export class SiteResource {
       );
   }
 
-  public submitSite(site: Site): Observable<string> {
-    return this.apiResource.post<string>(`sites/${site.id}/submission`)
+  public submitSite(siteId: number): Observable<string> {
+    return this.apiResource.post<string>(`sites/${siteId}/submission`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),

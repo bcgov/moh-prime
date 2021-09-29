@@ -73,7 +73,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
+    const { businessLicence, doingBusinessAs, pec } = this.businessLicencePageFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -92,6 +92,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       careSettingCode,
       siteVendors,
       doingBusinessAs,
+      businessLicence,
       physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       physicalAddress,
       businessHours,
@@ -106,7 +107,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec
-      // TODO output should be a Site-like model instead due to missing properties
     } as Site; // Enforced type due to N/A properties
   }
 

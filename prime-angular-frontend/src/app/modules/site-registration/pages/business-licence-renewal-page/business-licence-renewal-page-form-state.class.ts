@@ -20,18 +20,9 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
   }
 
   public get businessLicenceExpiry(): FormControl {
-    return this.formInstance.get('businessLicenceExpiry') as FormControl;
+    return this.formInstance.get('expiryDate') as FormControl;
   }
 
-  /**
-   * @description
-   * Access to doingBusinessAs and pec, but prevents transmission
-   * of the deferredLicenceReason and businessLicenceGuid.
-   *
-   * NOTE: deferredLicenceReason and businessLicenceGuid are not
-   * updated using the site update endpoint, and are only used
-   * within the business licence page.
-   */
   public get json(): BusinessLicenceRenewalPageDataModel {
     if (!this.formInstance) {
       return;
@@ -45,15 +36,19 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
       return;
     }
 
-    const { businessLicence } = model;
-
-    this.formInstance.patchValue({ deferredLicenceReason: businessLicence?.deferredLicenceReason });
+    // NOOP, Nothing needs to be patched
   }
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      businessLicenceGuid: ['', [Validators.required]],
-      businessLicenceExpiry: ['', [Validators.required]]
+      businessLicenceGuid: [
+        '',
+        [Validators.required]
+      ],
+      expiryDate: [
+        '',
+        [Validators.required]
+      ]
     });
   }
 }

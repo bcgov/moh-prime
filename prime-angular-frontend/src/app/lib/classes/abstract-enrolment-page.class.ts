@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { NoContent } from '@core/resources/abstract-resource';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AbstractFormState } from './abstract-form-state.class';
@@ -126,7 +127,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .pipe(tap((_) => this.formState.form.markAsPristine()))
-        .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
+        .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();
     }
@@ -214,7 +215,6 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
    * @description
    * Submission hook for execution.
    */
-  // TODO add generic to return value that must match afterSubmitIsSuccessful parameter
   protected abstract performSubmission(): Observable<S>;
 
   /**

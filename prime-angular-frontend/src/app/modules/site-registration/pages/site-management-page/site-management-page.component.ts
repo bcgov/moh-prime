@@ -24,7 +24,7 @@ import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
-import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -140,6 +140,10 @@ export class SiteManagementPageComponent implements OnInit {
       label: 'Renew Site',
       route: () => this.viewSite(organizationId, site)
     };
+  }
+
+  public inComplete(site: SiteListViewModel): boolean {
+    return !site.submittedDate || (site.submittedDate && !site.approvedDate && site.status === SiteStatusType.EDITABLE);
   }
 
   public isInReview(site: SiteListViewModel): boolean {

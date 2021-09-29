@@ -137,5 +137,4 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
         this.businessLicence = businessLicense ?? this.businessLicence;
       });
   }
-
 }

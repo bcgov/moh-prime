@@ -6,7 +6,6 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 
 import { Observable, concat } from 'rxjs';
 
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -14,6 +13,7 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
@@ -27,7 +27,7 @@ import { BusinessLicencePageFormState } from './business-licence-page-form-state
   templateUrl: './business-licence-page.component.html',
   styleUrls: ['./business-licence-page.component.scss']
 })
-export class BusinessLicencePageComponent extends AbstractEnrolmentPage implements OnInit {
+export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: BusinessLicencePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -45,14 +45,14 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteFormStateService: SiteFormStateService,
-    private siteResource: SiteResource,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -64,7 +64,10 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   public canDefer(): boolean {
     const code = this.siteService.site.careSettingCode;
-    return code === CareSettingEnum.COMMUNITY_PHARMACIST || code === CareSettingEnum.DEVICE_PROVIDER;
+    return [
+      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.DEVICE_PROVIDER
+    ].includes(code);
   }
 
   public onUpload(document: BaseDocument): void {
@@ -79,7 +82,11 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.CARE_SETTING
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public downloadBusinessLicence(event: Event): void {
@@ -129,7 +136,7 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     }
   }
 
-  protected performSubmission(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
+  protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
     // Collect a list of requests that will be executed in order, which
     // will always update the site initially
     const requests$: Observable<BusinessLicence | BusinessLicenceDocument | void>[] = [
@@ -171,8 +178,8 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected afterSubmitIsSuccessful(): void {
-    // Remove the business licence GUID to prevent 404 already
-    // submitted if re-submitted in same session
+    // Remove the business licence GUID to prevent 404
+    // already submitted if re-submitted in same session
     this.formState.businessLicenceGuid.patchValue(null);
     this.formState.form.markAsPristine();
 

@@ -76,7 +76,7 @@
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
                         (action)="viewSiteRemoteUsers(organization.id, site)">
-        <ng-container *ngIf="!site.submittedDate"
+        <ng-container *ngIf="inComplete(site)"
                       [ngTemplateOutlet]="notification"
                       [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
         </ng-container>

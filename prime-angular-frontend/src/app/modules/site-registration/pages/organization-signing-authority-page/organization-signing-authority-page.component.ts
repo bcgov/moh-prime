@@ -138,8 +138,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(party: Party): void {
-    this.formState.form.markAsPristine();
-
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: (string | number)[];
     const organization = this.organizationService.organization;

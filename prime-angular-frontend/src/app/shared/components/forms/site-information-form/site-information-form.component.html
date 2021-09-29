@@ -56,12 +56,15 @@
         <mat-form-field>
           <mat-label>Site ID</mat-label>
           <input matInput
-                 formControlName="pec" />
+                 formControlName="pec"/>
           <mat-error *ngIf="pec.hasError('required')">
             Required
           </mat-error>
+          <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
+            Must be a 3-letter code
+          </mat-error>
           <mat-error *ngIf="pec.hasError('unique')">
-            PEC has already been used by another site
+            Site ID has already been used by another site
           </mat-error>
         </mat-form-field>
       </ng-container>

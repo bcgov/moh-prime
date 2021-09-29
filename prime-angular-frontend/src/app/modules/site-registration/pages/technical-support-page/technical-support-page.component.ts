@@ -2,18 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Contact } from '@lib/models/contact.model';
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { OrganizationAgreement } from '@shared/models/agreement.model';
 import { Address } from '@shared/models/address.model';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -25,7 +25,7 @@ import { TechnicalSupportPageFormState } from './technical-support-page-form-sta
   templateUrl: './technical-support-page.component.html',
   styleUrls: ['./technical-support-page.component.scss']
 })
-export class TechnicalSupportPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class TechnicalSupportPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: TechnicalSupportPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -37,14 +37,14 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private organizationResource: OrganizationResource,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
@@ -58,7 +58,11 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.PRIVACY_OFFICER);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.PRIVACY_OFFICER
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public ngOnInit() {
@@ -77,10 +81,10 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
     this.formState.form.markAsPristine();
   }
 
-  protected performSubmission(): Observable<boolean> {
-    const payload = this.siteFormStateService.json;
+  protected submissionRequest(): Observable<unknown> {
     const organizationId = this.route.snapshot.params.oid;
-    const site = this.siteService.site;
+    const siteId = this.siteService.site.id;
+    const payload = this.siteFormStateService.json;
 
     return this.organizationResource
       .updateOrganizationAgreement(organizationId, site.careSettingCode)
@@ -94,7 +98,7 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
           // Mark the site as completed if an organization
           // agreement does not need to be signed
           (!needsOrgAgreement)
-            ? this.siteResource.setSiteCompleted(site.id)
+            ? this.siteResource.setSiteCompleted(siteId)
               .pipe(map(() => needsOrgAgreement))
             : of(needsOrgAgreement)
         )
@@ -102,8 +106,6 @@ export class TechnicalSupportPageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(needsOrgAgreement?: boolean): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (needsOrgAgreement)
       ? SiteRoutes.ORGANIZATION_AGREEMENT
       : SiteRoutes.SITE_REVIEW;

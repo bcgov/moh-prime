@@ -2,15 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { tap } from 'rxjs/operators';
-
 import { RouteUtils } from '@lib/utils/route-utils.class';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { AddressLine } from '@shared/models/address.model';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
@@ -21,7 +18,7 @@ import { SiteAddressPageFormState } from './site-address-page-form-state.class';
   templateUrl: './site-address-page.component.html',
   styleUrls: ['./site-address-page.component.scss']
 })
-export class SiteAddressPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class SiteAddressPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: SiteAddressPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -33,13 +30,13 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteResource: SiteResource,
-    private siteFormStateService: SiteFormStateService,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.SITES);
@@ -53,7 +50,11 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.BUSINESS_LICENCE);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.BUSINESS_LICENCE
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public ngOnInit() {
@@ -81,15 +82,7 @@ export class SiteAddressPageComponent extends AbstractEnrolmentPage implements O
     this.showAddressFields = true;
   }
 
-  protected performSubmission(): NoContent {
-    const payload = this.siteFormStateService.json;
-    return this.siteResource.updateSite(payload)
-      .pipe(tap(() => this.formState.form.markAsPristine()));
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.HOURS_OPERATION;
