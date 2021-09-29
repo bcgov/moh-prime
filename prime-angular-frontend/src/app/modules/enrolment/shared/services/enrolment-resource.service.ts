@@ -68,11 +68,11 @@ export class EnrolmentResource {
   public createLinkWithPotentialPaperEnrollee(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrolment;
     const payload = { userProvidedGpid }
-    return this.apiResource.post<NoContent>(`enrollees/${id}/create-link-to-paper-enrollee`, payload)
+    return this.apiResource.post<NoContent>(`enrollees/${id}/potential-paper-enrollee`, payload)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::createLinkWithPotentialPaperEnrollee error has occurred: ', error);
           throw error;
         })
       );
@@ -81,11 +81,11 @@ export class EnrolmentResource {
   public updateLinkedGpid(enrolment: Enrolment, userProvidedGpid: String): Observable<NoContent> {
     const { id } = enrolment;
     const payload = { userProvidedGpid }
-    return this.apiResource.put<NoContent>(`enrollees/${id}/update-linked-gpid`, payload)
+    return this.apiResource.put<NoContent>(`enrollees/${id}/linked-gpid`, payload)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::updateLinkedGpid error has occurred: ', error);
           throw error;
         })
       );
@@ -97,7 +97,7 @@ export class EnrolmentResource {
       .pipe(
         map((response: ApiHttpResponse<String>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] EnrolmentResource::createEnrollee error has occurred: ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::getLinkedEnrolment error has occurred: ', error);
           throw error;
         })
       );
@@ -163,7 +163,7 @@ export class EnrolmentResource {
       .pipe(
         map(() => true),
         catchError((error: any) => {
-          this.logger.error('[Enrolment] getPotentialPaperEnrolleeReturneeStatus::getCurrentStatus error has occurred:  ', error);
+          this.logger.error('[Enrolment] EnrolmentResource::getPotentialPaperEnrolleeReturneeStatus error has occurred:  ', error);
           throw error;
         })
       );

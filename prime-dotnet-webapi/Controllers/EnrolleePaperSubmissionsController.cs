@@ -289,11 +289,11 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // POST: api/Enrollees/5/create-link-to-paper-enrollee
+        // POST: api/Enrollees/5/potential-paper-enrollee
         /// <summary>
         /// Creates a new Enrollee who may have a a previous paper enrolment.
         /// </summary>
-        [HttpPost("{enrolleeId}/create-link-to-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
+        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -305,11 +305,11 @@ namespace Prime.Controllers
             return Ok();
         }
 
-        // PUT: api/Enrollees/5/update-linked-gpid
+        // PUT: api/Enrollees/5/linked-gpid
         /// <summary>
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
-        [HttpPut("{Id}/update-linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
+        [HttpPut("{Id}/linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
         // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
