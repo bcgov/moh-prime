@@ -926,5 +926,142 @@ namespace Prime.Controllers
             var result = await _plrProviderService.GetPlrDataByCollegeIdsAsync(collegeIds);
             return Ok(result);
         }
+
+        // POST: api/Enrollees/5/enrollee-absence
+        /// <summary>
+        /// Creates a new enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="createModel"></param>
+        [HttpPost("{enrolleeId}/enrollee-absence", Name = nameof(CreateEnrolleeAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> CreateEnrolleeAbsence(int enrolleeId, EnrolleeAbsenceViewModel createModel)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.MatchesUserIdOf(User))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.CreateEnrolleeAbsenceAsync(enrolleeId, createModel.StartTimestamp, createModel.EndTimestamp);
+
+            return NoContent();
+        }
+
+        // GET: api/Enrollees/5/enrollee-absence
+        /// <summary>
+        /// Gets your current or future absence
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/enrollee-absence", Name = nameof(GetAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAbsenceViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetAbsence(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.MatchesUserIdOf(User))
+            {
+                return Forbid();
+            }
+
+            var absence = await _enrolleeService.GetEnrolleeAbsenceAsync(enrolleeId);
+
+            return Ok(absence);
+        }
+
+        // GET: api/Enrollees/5/enrollee-absence/current
+        /// <summary>
+        /// Gets your current absence
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpGet("{enrolleeId}/enrollee-absence/current", Name = nameof(GetCurrentAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<EnrolleeAbsenceViewModel>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> GetCurrentAbsence(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            var absence = await _enrolleeService.GetCurrentEnrolleeAbsenceAsync(enrolleeId);
+
+            return Ok(absence);
+        }
+
+        // PUT: api/Enrollees/5/enrollee-absence/end-absence
+        /// <summary>
+        /// Ends an enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        [HttpPut("{enrolleeId}/enrollee-absence/end-absence", Name = nameof(EndEnrolleeAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> EndEnrolleeAbsence(int enrolleeId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.MatchesUserIdOf(User))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.EndEnrolleeAbsenceAsync(enrolleeId);
+
+            return NoContent();
+        }
+
+        // DELETE: api/Enrollees/5/enrollee-absence/1
+        /// <summary>
+        /// Deletes a specific Enrollee absence.
+        /// </summary>
+        /// <param name="enrolleeId"></param>
+        /// <param name="absenceId"></param>
+        [HttpDelete("{enrolleeId}/enrollee-absence/{absenceId}", Name = nameof(DeleteFutureEnrolleeAbsence))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> DeleteFutureEnrolleeAbsence(int enrolleeId, int absenceId)
+        {
+            var record = await _enrolleeService.GetPermissionsRecordAsync(enrolleeId);
+            if (record == null)
+            {
+                return NotFound($"Enrollee not found with id {enrolleeId}");
+            }
+            if (!record.MatchesUserIdOf(User))
+            {
+                return Forbid();
+            }
+
+            await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
+
+            return NoContent();
+        }
     }
 }

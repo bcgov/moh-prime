@@ -117,6 +117,8 @@ namespace Prime.Models
 
         public ICollection<EnrolleeHealthAuthority> EnrolleeHealthAuthorities { get; set; }
 
+        public ICollection<EnrolleeAbsence> EnrolleeAbsences { get; set; }
+
         [NotMapped]
         public PhysicalAddress PhysicalAddress
         {

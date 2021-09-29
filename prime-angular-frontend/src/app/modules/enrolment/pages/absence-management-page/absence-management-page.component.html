@@ -1,0 +1,90 @@
+<app-enrollee-page [busy]="busy">
+
+  <app-page-header>Absence Management</app-page-header>
+
+  <app-page-subheader>
+    <ng-container appPageSubheaderSummary>
+      In case of a prolonged absence (e.g. maternity leave, sick leave, or extended person leave) please report it here.
+      Also use this page to end a current absence or cancel an upcoming absence.
+    </ng-container>
+  </app-page-subheader>
+
+  <ng-container *ngIf="absence; else noAbsence">
+    <ng-container *ngIf="isCurrent(); else futureAbsence">
+      <app-alert type="danger"
+                 icon="warning">
+        <ng-container #alertTitle
+                      class="alert-title">
+          Reported Absent
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          You are currently reported absent from
+          <strong>{{absence.startTimestamp | formatDate}} - {{absence.endTimestamp | formatDate}}</strong>,
+          would you like to end your absence?
+        </ng-container>
+      </app-alert>
+      <div class="d-flex justify-content-end mb-4">
+        <button mat-flat-button
+                color="primary"
+                (click)="endAbsence()">End Absence
+        </button>
+      </div>
+    </ng-container>
+    <ng-template #futureAbsence>
+      <app-alert type="warning"
+                 icon="warning">
+        <ng-container #alertTitle
+                      class="alert-title">
+          Upcoming Reported Absence
+        </ng-container>
+        <ng-container #alertContent
+                      class="alert-content">
+          You have an upcoming absence reported from
+          <strong>{{absence.startTimestamp | formatDate}} - {{absence.endTimestamp | formatDate}}</strong>,
+          would you like to cancel this absence?
+        </ng-container>
+      </app-alert>
+      <div class="d-flex justify-content-end mb-4">
+        <button mat-flat-button
+                color="primary"
+                (click)="cancelAbsence(absence.id)">Cancel Absence
+        </button>
+      </div>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #noAbsence>
+    <form (ngSubmit)="onSubmit()"
+          [formGroup]="formState.form"
+          novalidate>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Enter a date range</mat-label>
+        <mat-date-range-input [formGroup]="formState.range"
+                              [rangePicker]="picker">
+          <input matStartDate
+                 formControlName="start"
+                 placeholder="Start date">
+          <input matEndDate
+                 formControlName="end"
+                 placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix
+                               [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+
+        <mat-error *ngIf="formState.range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+        <mat-error *ngIf="formState.range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+      </mat-form-field>
+
+      <div class="d-flex justify-content-end mb-4">
+        <button mat-flat-button
+                color="primary">Publish Absence
+        </button>
+      </div>
+
+    </form>
+  </ng-template>
+
+</app-enrollee-page>
