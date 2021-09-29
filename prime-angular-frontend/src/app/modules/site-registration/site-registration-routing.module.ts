@@ -73,12 +73,6 @@ const routes: Routes = [
                 canDeactivate: [CanDeactivateFormGuard],
                 data: { title: 'Signing Authority' }
               },
-              // { // ADD
-              //   path: SiteRoutes.ORGANIZATION_CLAIM,
-              //   component: OrganizationClaimPageComponent,
-              //   canDeactivate: [CanDeactivateFormGuard],
-              //   data: { title: 'Claim Organization' }
-              // },
               {
                 path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
                 component: OrganizationClaimConfirmationPageComponent,
