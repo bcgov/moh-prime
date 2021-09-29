@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { EmailUtils } from '@lib/utils/email-utils.class';
-import { UtilsService } from '@core/services/utils.service';
 import { Role } from '@auth/shared/enum/role.enum';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
@@ -28,8 +27,7 @@ export class SiteRegistrationActionsComponent implements OnInit {
   public SiteAdjudicationAction = SiteAdjudicationAction;
 
   constructor(
-    private permissionService: PermissionService,
-    private utilsService: UtilsService
+    private permissionService: PermissionService
   ) {
     this.delete = new EventEmitter<{ [key: string]: number }>();
     this.approve = new EventEmitter<number>();
