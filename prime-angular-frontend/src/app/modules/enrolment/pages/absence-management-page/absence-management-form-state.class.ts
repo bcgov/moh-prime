@@ -1,9 +1,7 @@
-import { FormBuilder, FormControl, FormGroup, FormGroupDirective, ValidationErrors, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 
-import { ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
-import moment from 'moment';
 import { AbsenceManagementForm } from './absence-management-form.model';
 
 export class AbsenceManagementFormState extends AbstractFormState<AbsenceManagementForm> {

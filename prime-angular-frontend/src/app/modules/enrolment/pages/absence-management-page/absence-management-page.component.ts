@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
-import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
-import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
-import { FormatDatePipe } from '@shared/pipes/format-date.pipe';
-import { Observable, Subscription } from 'rxjs';
-import moment, { Moment } from 'moment';
-import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AbsenceManagementFormState } from './absence-management-form-state.class';
 import { MatDialog } from '@angular/material/dialog';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { FormBuilder } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import moment from 'moment';
+
+import { FormUtilsService } from '@core/services/form-utils.service';
 import { NoContent } from '@core/resources/abstract-resource';
+
+import { EnrolleeAbsence } from '@shared/models/enrollee-absence.model';
+import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+
+import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
+import { EnrolmentResource } from '@enrolment/shared/services/enrolment-resource.service';
+
+import { AbsenceManagementFormState } from './absence-management-form-state.class';
 
 @Component({
   selector: 'app-absence-management-page',
   templateUrl: './absence-management-page.component.html',
-  styleUrls: ['./absence-management-page.component.scss'],
-  providers: [FormatDatePipe]
+  styleUrls: ['./absence-management-page.component.scss']
 })
 export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implements OnInit {
   public busy: Subscription;
@@ -29,11 +30,8 @@ export class AbsenceManagementPageComponent extends AbstractEnrolmentPage implem
     protected formUtils: FormUtilsService,
     protected dialog: MatDialog,
     private fb: FormBuilder,
-    private formatDatePipe: FormatDatePipe,
     private enrolmentResource: EnrolmentResource,
     private enrolmentService: EnrolmentService,
-    private route: ActivatedRoute,
-    private router: Router
   ) {
     super(dialog, formUtils);
   }
