@@ -181,7 +181,7 @@ jobs:
           restore-keys: npm-frontend-
 
       - name: install dependencies
-        run: npm install --package-lock-only --prefer-offline
+        run: npm ci --prefer-offline
 
       - name: build frontend
         run: npm run build
