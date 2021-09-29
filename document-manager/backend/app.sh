@@ -11,6 +11,8 @@
 function backend()
 {
     cd /opt/app-root/src
+    export LC_ALL=en_US.utf-8
+    export LANG=en_US.utf-8
     python3 wait.py
     flask run ${FLASK_RUN_PARAMS} &disown 
     uwsgi uwsgi.ini
@@ -18,7 +20,10 @@ function backend()
 
 function migrate()
 {
-    python3 /opt/app-root/src/wait.py
+    cd /opt/app-root/src
+    export LC_ALL=en_US.utf-8
+    export LANG=en_US.utf-8
+    python3 wait.py
     flask db upgrade ${FLASK_RUN_PARAMS}
 }
 case "$1" in
