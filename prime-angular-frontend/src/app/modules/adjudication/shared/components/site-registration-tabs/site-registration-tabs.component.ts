@@ -66,8 +66,8 @@ export class SiteRegistrationTabsComponent implements OnInit {
   public siteTabIndex: number;
 
   private routeUtils: RouteUtils;
-  private tabIndexCareSettingMap: Record<number, CareSettingEnum>;
-  private careSettingTabIndexMap: { [key in CareSettingEnum]?: number }
+  private tabIndexToCareSettingMap: Record<number, CareSettingEnum>;
+  private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number }
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -106,12 +106,12 @@ export class SiteRegistrationTabsComponent implements OnInit {
       'missingBusinessLicence',
       'actions'
     ];
-    this.tabIndexCareSettingMap = {
+    this.tabIndexToCareSettingMap = {
       0: null, // map to null to remove queryString
       1: CareSettingEnum.COMMUNITY_PHARMACIST,
       2: CareSettingEnum.HEALTH_AUTHORITY
     };
-    this.careSettingTabIndexMap = {
+    this.careSettingToTabIndexMap = {
       [CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE]: 0,
       [CareSettingEnum.COMMUNITY_PHARMACIST]: 1,
       [CareSettingEnum.HEALTH_AUTHORITY]: 2
@@ -310,7 +310,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
-    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexCareSettingMap[tabChangeEvent.index] });
+    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index] });
   }
 
   public ngOnInit(): void {
@@ -318,7 +318,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
     // update results on query param change
     this.route.queryParams
       .subscribe((queryParams: { [key: string]: any }) => {
-        this.siteTabIndex = this.careSettingTabIndexMap[+queryParams.careSetting];
+        this.siteTabIndex = this.careSettingToTabIndexMap[+queryParams.careSetting];
         this.getDataset(queryParams)
       });
 
@@ -334,7 +334,7 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   private getDataset(queryParams: { careSetting?: CareSettingEnum, textSearch?: string }): void {
     let careSettingCode = +queryParams?.careSetting ?? CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
-    if (!(careSettingCode in this.careSettingTabIndexMap)) {
+    if (!(careSettingCode in this.careSettingToTabIndexMap)) {
       careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
     }
     this.busy = this.getOrganizations({ careSettingCode, ...queryParams })
