@@ -15,6 +15,7 @@ namespace Prime.Services
         Task<bool> EnrolleeExistsAsync(int enrolleeId);
         Task<bool> UserIdExistsAsync(Guid userId);
         Task<bool> GpidExistsAsync(string gpid);
+        Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId);
         Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
         Task<EnrolleeViewModel> GetEnrolleeAsync(int enrolleeId, bool isAdmin = false);
         Task<Enrollee> GetEnrolleeAsync(Guid userId, bool excludeDecline = false);

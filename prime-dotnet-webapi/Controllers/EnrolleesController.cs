@@ -47,31 +47,24 @@ namespace Prime.Controllers
 
         // GET: api/enrollees
         /// <summary>
-        /// Gets all of the enrollees for the user, or all enrollees if user has ADMIN role.
+        /// Gets all of the enrollees.
         /// </summary>
         [HttpGet(Name = nameof(GetEnrollees))]
+        [Authorize(Roles = Roles.ViewEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<Enrollee>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResultResponse<IEnumerable<EnrolleeListViewModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetEnrollees([FromQuery] EnrolleeSearchOptions searchOptions)
         {
-            if (User.IsAdministrant())
-            {
-                var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
-                var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
+            var notifiedIds = await _enrolleeService.GetNotifiedEnrolleeIdsForAdminAsync(User);
+            var enrollees = await _enrolleeService.GetEnrolleesAsync(searchOptions);
 
-                foreach (var enrollee in enrollees)
-                {
-                    enrollee.HasNotification = notifiedIds.Contains(enrollee.Id);
-                }
-
-                return Ok(enrollees);
-            }
-            else
+            foreach (var enrollee in enrollees)
             {
-                return RedirectToAction(nameof(GetEnrolleeByUserId), new { userId = User.GetPrimeUserId() });
+                enrollee.HasNotification = notifiedIds.Contains(enrollee.Id);
             }
+
+            return Ok(enrollees);
         }
 
         // POST: api/enrollees
@@ -174,10 +167,10 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<Enrollee>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status302Found)]
         public async Task<ActionResult> GetEnrolleeByUserId(Guid userId)
         {
-            var enrollee = await _enrolleeService.GetEnrolleeAsync(userId);
+            var enrollee = await _enrolleeService.GetEnrolleeStubAsync(userId);
             if (enrollee == null)
             {
                 return NotFound($"Enrollee not found with User ID {userId}");
@@ -187,7 +180,7 @@ namespace Prime.Controllers
                 return Forbid();
             }
 
-            return Ok(enrollee);
+            return RedirectToAction(nameof(GetEnrolleeById), new { enrolleeId = enrollee.Id });
         }
 
         // PUT: api/enrollees/5

@@ -60,6 +60,15 @@ namespace Prime.Services
                 .AnyAsync(e => e.GPID == gpid);
         }
 
+        public async Task<EnrolleeStub> GetEnrolleeStubAsync(Guid userId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.UserId == userId)
+                .Select(e => new EnrolleeStub { Id = e.Id, UserId = e.UserId })
+                .SingleOrDefaultAsync();
+        }
+
         public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
         {
             return await _context.Enrollees
