@@ -38,7 +38,7 @@ namespace Prime.Services
                 string decoded = HttpUtility.UrlDecode(urlEncoded);
                 byte[] certAsBytes = Encoding.ASCII.GetBytes(decoded);
                 var clientCert = new X509Certificate2(certAsBytes);
-                if (clientCert.Thumbprint == PrimeEnvironment.PlrIntegration.ClientCertThumbprint)
+                if (clientCert.Thumbprint.Equals(PrimeEnvironment.PlrIntegration.ClientCertThumbprint))
                 {
                     service.DocumentRoot = GetRequestBody(httpContext, Prefix, Uri, operation.Name);
                 }
