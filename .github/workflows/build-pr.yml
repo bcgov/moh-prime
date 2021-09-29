@@ -12,14 +12,11 @@ on:
       - 'develop'
       - 'test'
       - 'master'
+
 jobs:
   build-document-manager-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      BUILD_LOGLEVEL: "2"
-      SERVICE_NAME: document-manager
-      CONTAINER_NAME: prime-document-manager
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -41,13 +38,6 @@ jobs:
           registry: ${{secrets.OPENSHIFT_IMAGE_REPOSITORY}}
           username: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_USERNAME}}
           password: ${{secrets.OPENSHIFT_TOOLS_SERVICE_ACCOUNT_PASSWORD}}
-
-      - name: "Login to RedHat container repository"
-        uses: docker/login-action@v1
-        with:
-          registry: ${{secrets.REDHAT_REGISTRY_URL}}
-          username: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_USER}}
-          password: ${{secrets.REDHAT_REGISTRY_SERVICE_ACCOUNT_AUTH_TOKEN}}
 
       - name: "Get current pull request"
         id: PR
@@ -78,9 +68,6 @@ jobs:
   build-backend:
     runs-on: ubuntu-20.04
     environment: Development
-    env:
-      SERVICE_NAME: dotnet-webapi
-      CONTAINER_NAME: prime-webapi-backend
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
@@ -154,11 +141,12 @@ jobs:
     steps:
       - name: "Checkout the repo"
         uses: actions/checkout@v2
+
       - uses: actions/setup-node@v2
         with:
           node-version: '14.x'
-          cache: 'npm'
-          cache-dependency-path: prime-angular-frontend/package-lock.json
+          cache: 'yarn'
+          cache-dependency-path: prime-angular-frontend/yarn.lock
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -189,14 +177,20 @@ jobs:
         uses: actions/cache@v2
         with:
           path: 'prime-angular-frontend/node_modules'
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          key: npm-frontend-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-frontend-
 
       - name: install dependencies
-        run: npm ci
+        run: npm install -g yarn
+
+      - run: yarn global add @angular/compiler-cli
+      - run: yarn global add @angular/cli
+
+      - name: install dependencies
+        run: yarn
 
       - name: build frontend
-        run: npm run build
+        run: yarn run build
 
       - name: "Build, tag & push Angular frontend image"
         id: build-image

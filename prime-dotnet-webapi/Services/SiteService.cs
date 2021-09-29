@@ -372,6 +372,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.ApprovedDate = null;
+            site.SubmittedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 

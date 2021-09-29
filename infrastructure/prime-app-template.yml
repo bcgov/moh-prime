@@ -79,7 +79,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${FRONTEND_POD}
+    name: ${SVC_NAME}-frontend
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
@@ -495,7 +495,7 @@ objects:
   kind: DeploymentConfig
   namespace: ${OC_NAMESPACE}-${OC_APP}
   metadata:
-    name: ${SVC_NAME}-${API_POD}
+    name: ${SVC_NAME}-webapi
     namespace: ${OC_NAMESPACE}-${OC_APP}
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
