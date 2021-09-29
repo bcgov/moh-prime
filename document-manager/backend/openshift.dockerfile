@@ -4,7 +4,7 @@ WORKDIR /opt/app-root/src
 
 
 # Install dependencies
-RUN install_packages gcc libc6-dev libpq-dev
+RUN install_packages gcc libc6-dev libpq-dev libmagic-dev
 
 # Install the requirements
 COPY ./requirements.txt .

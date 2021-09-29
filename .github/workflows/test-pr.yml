@@ -22,23 +22,28 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v1
 
-      - name: Cache node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: Cache node modules
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/prime-angular-frontend/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
       - name: Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+          cache-dependency-path: prime-angular-frontend/yarn.lock
+
+      - name: install yarn
+        run: npm install -g yarn
 
       - uses: amancevice/setup-code-climate@v0
         with:
@@ -47,10 +52,10 @@ jobs:
 
       - run: cc-test-reporter before-build
 
-      - name: npm ci and npm run test
+      - name: yarn and yarn run test
         run: |
-          npm ci
-          npm run test
+          yarn
+          yarn run test
 
       - name: Collect Frontend Report
         run: |
