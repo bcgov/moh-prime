@@ -177,8 +177,8 @@ jobs:
         uses: actions/cache@v2
         with:
           path: 'prime-angular-frontend/node_modules'
-          key: npm-${{ hashFiles('package-lock.json') }}
-          restore-keys: npm-
+          key: npm-frontend-${{ hashFiles('package-lock.json') }}
+          restore-keys: npm-frontend-
 
       - name: install dependencies
         run: npm install --package-lock-only --prefer-offline
