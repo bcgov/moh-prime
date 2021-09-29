@@ -97,8 +97,6 @@ export class EnrolmentGuard extends BaseGuard {
 
     // Otherwise, routes are dictated based on enrolment status
     return this.enrolmentStatusRouting(routePath, enrolment, identityProvider);
-
-
   }
 
   /**

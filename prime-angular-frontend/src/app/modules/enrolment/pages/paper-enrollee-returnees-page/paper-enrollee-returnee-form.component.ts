@@ -25,7 +25,6 @@ export class PaperEnrolleeReturneeFormComponent implements OnInit {
   public formControlConfig: { label: string, name: string }[];
   @Input() public mode: 'column' | 'columns';
 
-
   constructor() {
     this.mode = 'column';
 

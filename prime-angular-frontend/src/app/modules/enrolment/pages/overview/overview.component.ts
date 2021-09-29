@@ -39,7 +39,6 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
   public IdentityProviderEnum = IdentityProviderEnum;
   public EnrolmentStatus = EnrolmentStatusEnum;
   public withinDaysOfRenewal: boolean;
-
   public isPotentialPaperEnrolleeReturnee: boolean;
   public userProvidedGpid: String;
 

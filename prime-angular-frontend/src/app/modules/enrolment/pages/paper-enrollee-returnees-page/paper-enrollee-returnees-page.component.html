@@ -14,7 +14,6 @@
   </p>
 
   <form [formGroup]="form">
-
     <app-toggle-content label="I requested access via the offline form"
                         [checked]="isOfflineFormAccessRequested"
                         (toggle)="onChangeRequestedOfflineAccess($event)">
@@ -39,7 +38,6 @@
         </div>
       </section>
     </app-toggle-content>
-
   </form>
 
   <app-page-footer primaryActionLabel="Continue"

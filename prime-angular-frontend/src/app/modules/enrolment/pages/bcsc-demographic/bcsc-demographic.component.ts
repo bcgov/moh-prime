@@ -163,7 +163,7 @@ export class BcscDemographicComponent extends BaseEnrolmentProfilePage implement
           // Populate the new enrolment within the form state by force patching
           tap((newEnrolment: Enrolment) => this.enrolmentFormStateService.setForm(newEnrolment, true)),
           this.handleResponse()
-        )
+        );
     } else {
       return super.performHttpRequest(enrolment, beenThroughTheWizard);
     }
