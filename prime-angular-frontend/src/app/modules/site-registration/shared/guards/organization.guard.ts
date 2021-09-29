@@ -123,8 +123,7 @@ export class OrganizationGuard extends BaseGuard {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
     const destPath = (party)
-      // ? SiteRoutes.ORGANIZATION_CLAIM // ADD
-      ? SiteRoutes.ORGANIZATION_NAME // REMOVE
+      ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
     return this.manageRouting(routePath, destPath, organization);
   }
