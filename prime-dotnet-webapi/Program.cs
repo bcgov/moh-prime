@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -40,13 +39,17 @@ namespace Prime
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            // By default, .CreateDefaultBuilder() adds Configuration from the following, in order:
+            // 1. appsettings.json
+            // 2. appsettings.{EnvironmentName}.json,
+            // 3. user secrets (only in local development)
+            // 4. environment variables
+            // 5. command line arguments
+            // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-5.0
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
-                    config.SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: false)
-                        .AddUserSecrets("2144bc8e-373b-4888-a0ca-b0ff7798bd81")
-                        .AddEnvironmentVariables(_ => new PrimeEnvironmentVariablesConfigurationSource());
+                    config.Add(new PrimeEnvironmentVariablesConfigurationSource());
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
