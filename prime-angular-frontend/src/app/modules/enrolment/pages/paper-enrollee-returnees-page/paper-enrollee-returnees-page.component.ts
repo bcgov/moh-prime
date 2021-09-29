@@ -141,7 +141,7 @@ export class PaperEnrolleeReturneesPageComponent extends BaseEnrolmentProfilePag
   }
 
   protected updateUserProvidedGpid() {
-    this.busy = this.enrolmentResource.updateLinkedGpid(this.enrolment, this.formUserProvidedGpid.value)
+    this.enrolmentResource.updateLinkedGpid(this.enrolment, this.formUserProvidedGpid.value)
       .subscribe();
   }
 
