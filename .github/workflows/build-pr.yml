@@ -180,7 +180,7 @@ jobs:
           key: npm-frontend-${{ hashFiles('package-lock.json') }}
           restore-keys: npm-frontend-
 
-      - name: install dependencies
+      - name: install yarn
         run: npm install -g yarn
 
       - run: yarn global add @angular/compiler-cli
