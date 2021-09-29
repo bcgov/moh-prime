@@ -96,7 +96,10 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
         .updatePecCode(siteId, this.form.value.pec)
-        .subscribe(() => this.refresh.next(true));
+        .subscribe((site: Site) => {
+          this.refresh.next(true);
+          this.site = site;
+        });
     }
   }
 
