@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -33,18 +33,18 @@ export class EnrolmentResource {
     private apiResourceUtilsService: ApiResourceUtilsService,
     private toastService: ToastService,
     private logger: ConsoleLoggerService
-  ) { }
+  ) {}
 
-  public enrollee(): Observable<Enrolment> {
-    return this.apiResource.get<HttpEnrollee[]>('enrollees')
+  public enrollee(userId: string): Observable<Enrolment> {
+    return this.apiResource.get<HttpEnrollee>(`enrollees/${userId}`)
       .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee[]>) => response.result),
-        tap((enrollees) => this.logger.info('ENROLLEE', enrollees[0])),
-        map((enrollees) =>
-          // Only a single enrollee will be provided
-          (enrollees.length) ? this.enrolleeAdapterResponse(enrollees.pop()) : null
-        ),
+        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
+        tap((enrollee) => this.logger.info('ENROLLEE', enrollee)),
+        map((enrollee) => this.enrolleeAdapterResponse(enrollee)),
         catchError((error: any) => {
+          if (error.status === 404) {
+            return of(null);
+          }
           this.logger.error('[Enrolment] EnrolmentResource::enrollee error has occurred: ', error);
           throw error;
         })
@@ -380,6 +380,18 @@ export class EnrolmentResource {
 
     if (!enrollee.remoteAccessSites) {
       enrollee.remoteAccessSites = [];
+    }
+
+    if (!enrollee.enrolleeHealthAuthorities) {
+      enrollee.enrolleeHealthAuthorities = [];
+    }
+
+    if (!enrollee.remoteAccessLocations) {
+      enrollee.remoteAccessLocations = [];
+    }
+
+    if (!enrollee.selfDeclarations) {
+      enrollee.selfDeclarations = [];
     }
 
     // Reorganize the shape of the enrollee into an enrolment
