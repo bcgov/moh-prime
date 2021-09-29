@@ -83,7 +83,7 @@ export class TechnicalSupportPageComponent extends AbstractSiteRegistrationPage 
 
   protected submissionRequest(): Observable<unknown> {
     const organizationId = this.route.snapshot.params.oid;
-    const siteId = this.siteService.site.id;
+    const site = this.siteService.site;
     const payload = this.siteFormStateService.json;
 
     return this.organizationResource
@@ -98,7 +98,7 @@ export class TechnicalSupportPageComponent extends AbstractSiteRegistrationPage 
           // Mark the site as completed if an organization
           // agreement does not need to be signed
           (!needsOrgAgreement)
-            ? this.siteResource.setSiteCompleted(siteId)
+            ? this.siteResource.setSiteCompleted(site.id)
               .pipe(map(() => needsOrgAgreement))
             : of(needsOrgAgreement)
         )
