@@ -11,6 +11,7 @@ import { CollegeCertification } from '@enrolment/shared/models/college-certifica
 import { CareSetting } from '@enrolment/shared/models/care-setting.model';
 
 export class MockEnrolmentService implements IEnrolmentService {
+  public isPotentialPaperEnrolleeReturnee: boolean;
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
 
@@ -151,5 +152,9 @@ export class MockEnrolmentService implements IEnrolmentService {
 
   public canRequestRemoteAccess(certifications: CollegeCertification[], careSettings: CareSetting[]): boolean {
     return true;
+  }
+
+  public get isPotentialPaperEnrollee(): boolean {
+    return this.isPotentialPaperEnrolleeReturnee;
   }
 }

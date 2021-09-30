@@ -295,7 +295,7 @@ namespace Prime.Controllers
         /// </summary>
         [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
@@ -310,8 +310,8 @@ namespace Prime.Controllers
         /// Updates the paper enrolment gpid that the user provided
         /// </summary>
         [HttpPut("{Id}/linked-gpid", Name = nameof(UpdateGpidLinkToPaperEnrollee))]
-        // [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        // [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status201Created)]
@@ -327,7 +327,6 @@ namespace Prime.Controllers
         /// </summary>
         [HttpGet("{Id}/linked-gpid", Name = nameof(GetLinkedGpid))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]

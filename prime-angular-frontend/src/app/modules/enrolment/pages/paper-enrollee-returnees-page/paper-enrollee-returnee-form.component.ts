@@ -18,7 +18,7 @@ import { FormGroup } from '@angular/forms';
       </div>
     </div>
   `,
-  styles: ['']
+  styles: []
 })
 export class PaperEnrolleeReturneeFormComponent implements OnInit {
   @Input() public form: FormGroup;

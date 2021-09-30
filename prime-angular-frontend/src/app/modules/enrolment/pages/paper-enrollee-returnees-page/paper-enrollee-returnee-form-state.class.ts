@@ -1,7 +1,6 @@
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Enrollee } from '@shared/models/enrollee.model';
 
 export class PaperEnrolleeReturneeFormState extends AbstractFormState<String> {
   public constructor(
