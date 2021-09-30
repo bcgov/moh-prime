@@ -93,10 +93,21 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.formState.form.markAsUntouched();
   }
 
+  public onSubmit() {
+    const pec = this.siteService.site.pec;
+    if (pec === this.formState.form.controls.pec.value && !!this.site.doingBusinessAs) {
+      this.formState.form.controls.pec.disable();
+    }
+    super.onSubmit();
+  }
+
   public ngOnInit(): void {
     this.createFormInstance();
     this.patchForm();
     this.initForm();
+    if (this.site.pec) {
+      this.formState.form.controls.pec.enable();
+    }
   }
 
   protected createFormInstance(): void {
