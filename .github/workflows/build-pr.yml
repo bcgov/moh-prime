@@ -177,7 +177,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: 'prime-angular-frontend/node_modules'
-          key: npm-frontend-${{ hashFiles('package-lock.json') }}
+          key: npm-frontend-${{ hashFiles('yarn.lock') }}
           restore-keys: npm-frontend-
 
       - name: install yarn
