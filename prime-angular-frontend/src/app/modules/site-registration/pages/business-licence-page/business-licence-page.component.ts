@@ -113,7 +113,7 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
 
@@ -152,9 +152,9 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   protected afterSubmitIsSuccessful(): void {
     // Remove the business licence GUID to prevent 404
     // already submitted if re-submitted in same session
-    // TODO should occur due to route
-    this.formState.businessLicenceGuid.patchValue(null);
-    this.formState.form.markAsPristine();
+    // TODO revisit as this will occur, but we can't clear the GUID anymore
+    // this.formState.businessLicenceGuid.patchValue(null);
+    // this.formState.form.markAsPristine();
 
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW

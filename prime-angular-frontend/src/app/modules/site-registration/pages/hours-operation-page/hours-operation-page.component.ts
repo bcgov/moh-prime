@@ -132,7 +132,7 @@ export class HoursOperationPageComponent extends AbstractSiteRegistrationPage im
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
 
     this.formState.businessDays.controls.forEach((group: FormGroup) => {

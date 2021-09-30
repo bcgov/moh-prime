@@ -110,7 +110,7 @@ export class RemoteUsersPageComponent extends AbstractSiteRegistrationPage imple
     const fromRemoteUser = this.route.snapshot.queryParams.fromRemoteUser === 'true';
     // Remove query param from URL without refreshing
     this.routeUtils.removeQueryParams({ fromRemoteUser: null });
-    this.siteFormStateService.setForm(site, !fromRemoteUser);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted && !fromRemoteUser);
     this.formState.form.markAsPristine();
   }
 

@@ -77,7 +77,7 @@ export class TechnicalSupportPageComponent extends AbstractSiteRegistrationPage 
   protected patchForm(): void {
     this.site = this.siteService.site;
     this.isCompleted = this.site?.completed;
-    this.siteFormStateService.setForm(this.site);
+    this.siteFormStateService.setForm(this.site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
 
