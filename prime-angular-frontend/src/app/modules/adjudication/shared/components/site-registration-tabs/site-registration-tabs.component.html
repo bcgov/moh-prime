@@ -6,6 +6,7 @@
   <ng-content select="app-page-subheader"></ng-content>
 
   <mat-tab-group animationDuration="0ms"
+                 [selectedIndex]="siteTabIndex"
                  (selectedTabChange)="onTabChange($event)">
     <mat-tab label="Private Community Health Practices"
              [id]="CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE">
