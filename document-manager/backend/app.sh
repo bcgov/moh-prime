@@ -17,7 +17,6 @@ function backend()
 
 function migrate()
 {
-    cd /opt/app-root/src
     flask db upgrade ${FLASK_RUN_PARAMS}
 }
 case "$1" in

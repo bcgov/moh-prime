@@ -5,13 +5,8 @@ class Config(object):
     # Environment config
     SECRET_KEY = os.urandom(16)
     BASE_PATH = os.environ.get('BASE_PATH', '')
-    DB_HOST = os.environ.get('DB_HOST')
-    DB_USER = os.environ.get('DB_USER')
-    DB_PASS = os.environ.get('DB_PASS')
-    DB_PORT = os.environ.get('DB_PORT')
-    DB_NAME = os.environ.get('DB_NAME')
-    DB_URL = f"postgres://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-    SQLALCHEMY_DATABASE_URI = DB_URL
+
+    # SQLALCHEMY_DATABASE_URI should be set. 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Auth
@@ -39,9 +34,7 @@ class TestConfig(Config):
     TESTING = os.environ.get('TESTING', True)
     CACHE_TYPE = "null"
 
-    DB_NAME = os.environ.get('DB_NAME_TEST', 'db_name_test')
-    DB_URL = f"postgres://{Config.DB_USER}:{Config.DB_PASS}@{Config.DB_HOST}:{Config.DB_PORT}/{DB_NAME}"
-    SQLALCHEMY_DATABASE_URI = DB_URL
+    # SQLALCHEMY_DATABASE_URI should be set. 
 
     JWT_OIDC_TEST_MODE = True
     JWT_OIDC_TEST_AUDIENCE = "test_audience"
