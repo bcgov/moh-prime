@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 
-import { EMPTY, Observable, of, Subscription } from 'rxjs';
+import { concat, EMPTY, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Moment } from 'moment';
@@ -84,7 +84,7 @@ export class OverviewPageComponent implements OnInit {
 
     if (!this.siteFormStateService.isValid) {
       this.siteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
-      this.toastService.openErrorToast('Your enrolment has an error that needs to be corrected before you will be able to submit');
+      this.toastService.openErrorToast('Your site has an error that needs to be corrected before you will be able to submit');
       return;
     }
 
@@ -99,27 +99,36 @@ export class OverviewPageComponent implements OnInit {
         exhaustMap((result: boolean) =>
           (result)
             ? of([
-              this.siteService.site.id,
+              this.siteService.site,
               this.siteFormStateService.json,
               this.siteService.site.businessLicence,
               this.siteFormStateService.businessLicencePageFormState.form.value
             ])
             : EMPTY
         ),
+        // TODO clean this up
         exhaustMap(
           ([
-             siteId,
-             payload,
+             currentSite,
+             updatedSite,
              oldBusinessLicence,
              newBusinessLicence
-           ]: [number, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
-            this.siteResource.updateSite(payload)
+           ]: [Site, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
+            of(!!currentSite.submittedDate)
               .pipe(
-                // TODO will save on every submission but not needed on first submission
-                exhaustMap(() => this.siteService.businessLicenceUpdates(siteId, oldBusinessLicence, newBusinessLicence)),
-                exhaustMap(() => this.siteResource.submitSite(siteId))
-              )
-        )).subscribe(() => this.nextRoute());
+                exhaustMap((hasSubmission: boolean) =>
+                  // Existence of a submission indicates that a resubmission is
+                  // occurring and the site and/or business licence need updating
+                  (hasSubmission)
+                    ? concat(
+                      this.siteResource.updateSite(updatedSite),
+                      this.siteService.businessLicenceUpdates(currentSite.id, oldBusinessLicence, newBusinessLicence)
+                    )
+                    : of(noop())
+                ),
+                exhaustMap(() => this.siteResource.submitSite(currentSite.id))
+            ))
+      ).subscribe(() => this.nextRoute());
   }
 
   public onRoute(routePath: string): void {

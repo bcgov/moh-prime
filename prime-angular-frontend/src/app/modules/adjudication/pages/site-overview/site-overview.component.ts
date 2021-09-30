@@ -181,7 +181,8 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        FormControlValidators.uniqueAsync(this.checkPecIsUnique())
+        // TODO revisit async validator
+        // FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
   }
