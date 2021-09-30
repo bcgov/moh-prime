@@ -8,6 +8,5 @@ namespace Prime.Models.Api
         public EnrolleeCreateModel Enrollee { get; set; }
 
         public Guid? IdentificationDocumentGuid { get; set; }
-
     }
 }
