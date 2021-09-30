@@ -46,6 +46,10 @@ export class Site {
   flagged: boolean;
 
   public static getExpiryDate(site: Site | SiteListViewModel): string | Moment | null {
+    if(!site) {
+      return null;
+    }
+
     // Expiry based on business licence expiry date, unless not present
     // or deferred, which defaults to using the submitted date of the site
     return (site.businessLicence?.expiryDate)

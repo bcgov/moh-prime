@@ -18,7 +18,6 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { optionalAddressLineItems } from '@shared/models/address.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
@@ -42,11 +41,12 @@ export class SiteManagementPageComponent implements OnInit {
   public organizationSitesExpiryDates: (string | Moment | null)[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
-  public VendorEnum = VendorEnum;
+  public careSettingCodesPendingTransfer: CareSettingEnum[];
+
   public AgreementType = AgreementType;
   public CareSettingEnum = CareSettingEnum;
   public SiteRoutes = SiteRoutes;
-  public careSettingCodesPendingTransfer: CareSettingEnum[];
+  public SiteStatusType = SiteStatusType;
 
   constructor(
     private route: ActivatedRoute,

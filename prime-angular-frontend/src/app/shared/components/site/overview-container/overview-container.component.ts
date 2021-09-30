@@ -21,9 +21,9 @@ import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
   styleUrls: ['./overview-container.component.scss']
 })
 export class OverviewContainerComponent implements OnInit {
-  @Input() public site: Site;
-  @Input() public organization: Organization;
   @Input() public showEditRedirect: boolean;
+  @Input() public organization: Organization;
+  @Input() public site: Site;
   @Input() public admin: boolean;
   @Input() public businessLicences: BusinessLicence[];
 

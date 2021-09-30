@@ -179,7 +179,7 @@
         <span>View/Update Site Information</span>
       </button>
       <button mat-menu-item
-              [disabled]="!site.completed || site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
+              [disabled]="site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || !site.completed || site.status === SiteStatusType.IN_REVIEW"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <span>View/Update Remote Practitioners</span>
       </button>
