@@ -22,6 +22,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
+import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-overview-page',
@@ -87,6 +88,8 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
+    // TODO add update for business licence, but only when editable and not approved
+
     const data: DialogOptions = {
       title: 'Save Site',
       message: 'When your site is saved, it will be submitted for review.',
@@ -95,19 +98,37 @@ export class OverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
+        // TODO will save on every submission but not needed on first submission
         exhaustMap((result: boolean) =>
           (result)
-            ? of([this.siteService.site.id, this.siteFormStateService.json])
+            ? of([
+              this.siteService.site.id,
+              this.siteFormStateService.json,
+              this.siteService.site.businessLicence,
+              this.siteFormStateService.businessLicencePageFormState.form.value
+            ])
             : EMPTY
         ),
-        exhaustMap(([siteId, payload]: [number, Site]) =>
-          this.siteResource.updateSite(payload)
-            .pipe(
-              exhaustMap(() => this.siteResource.submitSite(siteId))
-            )
+        exhaustMap(
+          ([
+             siteId,
+             payload,
+             oldBusinessLicence,
+             newBusinessLicence
+           ]: [number, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
+            this.siteResource.updateSite(payload)
+              .pipe(
+                exhaustMap(() =>
+                  this.siteService.businessLicenceUpdates(
+                    siteId,
+                    oldBusinessLicence,
+                    newBusinessLicence
+                  )
+                ),
+                exhaustMap(() => this.siteResource.submitSite(siteId))
+              )
         )
-      )
-      .subscribe(() => this.nextRoute());
+      ).subscribe(() => this.nextRoute());
   }
 
   public onRoute(routePath: string): void {

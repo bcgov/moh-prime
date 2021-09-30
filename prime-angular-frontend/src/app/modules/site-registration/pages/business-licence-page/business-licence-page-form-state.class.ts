@@ -63,6 +63,8 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     }
 
     const { doingBusinessAs, pec, businessLicence } = model;
+    // Preserve the business licence for use when
+    // creating JSON format from form
     this.businessLicence = businessLicence;
 
     this.formInstance.patchValue({

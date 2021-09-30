@@ -21,6 +21,8 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
+import { ArrayUtils } from '@lib/utils/array-utils.class';
+import { ObjectUtils } from '@lib/utils/object-utils.class';
 
 @Component({
   selector: 'app-business-licence-page',
@@ -119,7 +121,7 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
 
   protected initForm(): void {
     this.site = this.siteService.site;
-    this.getBusinessLicence(this.site);
+    this.getBusinessLicence(this.site.id);
   }
 
   protected additionalValidityChecks(): boolean {
@@ -137,49 +139,96 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   }
 
   protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
+    // // Collect a list of requests that will be executed in order, which
+    // // will always update the site initially
+    // const requests$: Observable<BusinessLicence | BusinessLicenceDocument | void>[] = [
+    //   this.siteResource.updateSite(this.siteFormStateService.json)
+    // ];
+    // const siteId = this.route.snapshot.params.sid;
+    // const hasBusinessLicence = !!this.businessLicence.id;
+    // this.businessLicence.expiryDate = this.formState.businessLicenceExpiry.value;
+    //
+    // // Create or update the business licence with an uploaded document, otherwise
+    // // with a deferred licence reason
+    // if (this.deferredLicenceToggle?.checked) {
+    //   this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
+    //
+    //   if (!hasBusinessLicence) {
+    //     requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, null));
+    //   } else {
+    //     // Perform an update by removing an existing business licence document
+    //     // and/or update the deferred reason
+    //     if (this.businessLicence.businessLicenceDocument) {
+    //       requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId, this.businessLicence.id));
+    //     }
+    //     requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
+    //   }
+    // } else {
+    //   const businessLicenceGuid = this.formState.businessLicenceGuid.value;
+    //
+    //   if (!hasBusinessLicence) {
+    //     requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
+    //   } else {
+    //     if (this.uploadedFile) {
+    //       requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, this.businessLicence.id, businessLicenceGuid));
+    //     }
+    //     requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
+    //   }
+    // }
+    //
+    // return concat(...requests$);
+
+    const oldBusinessLicence = this.siteService.site.businessLicence;
+    const newBusinessLicence = this.siteFormStateService.businessLicencePageFormState.form.value;
+
     // Collect a list of requests that will be executed in order, which
     // will always update the site initially
-    const requests$: Observable<BusinessLicence | BusinessLicenceDocument | void>[] = [
-      this.siteResource.updateSite(this.siteFormStateService.json)
-    ];
-    const siteId = this.route.snapshot.params.sid;
-    const hasBusinessLicence = !!this.businessLicence.id;
-    this.businessLicence.expiryDate = this.formState.businessLicenceExpiry.value;
+    return concat(
+      this.siteResource.updateSite(this.siteFormStateService.json),
+      // ...this.businessLicenceUpdates(this.route.snapshot.params.sid)
+      ...this.siteService.businessLicenceUpdates(this.route.snapshot.params.sid, oldBusinessLicence, newBusinessLicence)
+    );
+  }
 
-    // Create or update the business licence with an uploaded document, otherwise
-    // with a deferred licence reason
-    if (this.deferredLicenceToggle?.checked) {
-      this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
+  protected businessLicenceUpdates(siteId: number): Observable<BusinessLicence | BusinessLicenceDocument | void>[] {
+    const oldBusinessLicence = this.siteService.site.businessLicence;
+    const newBusinessLicence = this.siteFormStateService.businessLicencePageFormState.form.value;
+    const documentGuid = newBusinessLicence.businessLicenceGuid ?? null;
 
-      if (!hasBusinessLicence) {
-        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, null));
-      } else {
-        // Perform an update by removing an existing business licence document
-        // and/or update the deferred reason
-        if (this.businessLicence.businessLicenceDocument) {
-          requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId, this.businessLicence.id));
-        }
-        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
-      }
-    } else {
-      const businessLicenceGuid = this.formState.businessLicenceGuid.value;
-
-      if (!hasBusinessLicence) {
-        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
-      } else {
-        if (this.uploadedFile) {
-          requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, this.businessLicence.id, businessLicenceGuid));
-        }
-        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
-      }
+    if (!oldBusinessLicence?.id) {
+      // Create a business licence when none existed
+      return [this.siteResource.createBusinessLicence(siteId, newBusinessLicence, documentGuid)];
     }
 
-    return concat(...requests$);
+    newBusinessLicence.id = oldBusinessLicence.id;
+
+    if (oldBusinessLicence.deferredLicenceReason !== newBusinessLicence.deferredLicenceReason) {
+      // Remove an existing business licence document before updating
+      // with a reason for deferment
+      return [
+        ...ArrayUtils.insertResultIf(
+          oldBusinessLicence?.businessLicenceDocument,
+          () => [this.siteResource.removeBusinessLicenceDocument(siteId, oldBusinessLicence.id)]
+        ),
+        this.siteResource.updateBusinessLicence(siteId, newBusinessLicence)
+      ];
+    }
+
+    // Create a business licence document each time a file is uploaded, and/or
+    // update an existing business licence
+    return [
+      ...ArrayUtils.insertResultIf(
+        documentGuid,
+        () => [this.siteResource.createBusinessLicenceDocument(siteId, oldBusinessLicence.id, documentGuid)]
+      ),
+      this.siteResource.updateBusinessLicence(siteId, newBusinessLicence)
+    ];
   }
 
   protected afterSubmitIsSuccessful(): void {
     // Remove the business licence GUID to prevent 404
     // already submitted if re-submitted in same session
+    // TODO should occur due to route
     this.formState.businessLicenceGuid.patchValue(null);
     this.formState.form.markAsPristine();
 
@@ -190,8 +239,8 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  private getBusinessLicence(site: Site): void {
-    this.siteResource.getBusinessLicence(site.id)
+  private getBusinessLicence(siteId: number): void {
+    this.siteResource.getBusinessLicence(siteId)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
 

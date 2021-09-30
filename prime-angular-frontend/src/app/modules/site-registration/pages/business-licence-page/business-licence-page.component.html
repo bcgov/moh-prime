@@ -7,7 +7,7 @@
         novalidate
         autocomplete="off">
 
-    <section class="mb-4">
+    <app-page-section>
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>{{ title }}</ng-container>
         <ng-container appPageSubheader2Summary>
@@ -78,14 +78,11 @@
           </div>
         </section>
       </ng-container>
-    </section>
+    </app-page-section>
 
-    <section class="mb-4"
-             *ngIf="!deferredLicenceToggle?.checked">
-
+    <app-page-section *ngIf="!deferredLicenceToggle?.checked">
       <app-business-licence-expiry [form]="formState.form"></app-business-licence-expiry>
-
-    </section>
+    </app-page-section>
 
     <app-site-information-form [form]="formState.form"
                                [organizationId]="site.organizationId"></app-site-information-form>
