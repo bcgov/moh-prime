@@ -247,7 +247,7 @@ jobs:
             -p FRONTEND_URL=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p SVC_NAME=pr-$PR_NUMBER \
-            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}}
+            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
             -p WEB_PORT=8080 \
             -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -
