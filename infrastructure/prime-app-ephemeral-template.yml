@@ -873,7 +873,7 @@ objects:
                     key: JWT_WELL_KNOWN_CONFIG
             envFrom:
               - configMapRef:
-                name: document-manager
+                  name: document-manager
             resources:
               limits:
                 cpu: 25m
