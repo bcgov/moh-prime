@@ -309,7 +309,7 @@ export class EnrolmentResource {
   public createEnrolleeAbsence(enrolleeId: number, startTimestamp: string, endTimestamp: string): Observable<NoContent> {
     const payload = { startTimestamp, endTimestamp };
     return this
-      .apiResource.post<NoContent>(`enrollees/${enrolleeId}/enrollee-absence`, payload)
+      .apiResource.post<NoContent>(`enrollees/${enrolleeId}/absences`, payload)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         tap(() => this.toastService.openSuccessToast('Enrollee Absence has been created.')),
@@ -323,7 +323,7 @@ export class EnrolmentResource {
 
   public endEnrolleeAbsence(enrolleeId: number): Observable<NoContent> {
     return this
-      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/enrollee-absence/end-absence`)
+      .apiResource.put<NoContent>(`enrollees/${enrolleeId}/absences/end-absence`)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         tap(() => this.toastService.openSuccessToast('Enrollee Absence has been ended.')),
@@ -337,7 +337,7 @@ export class EnrolmentResource {
 
   public deleteFutureEnrolleeAbsence(enrolleeId: number, absenceId: number): Observable<NoContent> {
     return this
-      .apiResource.delete<NoContent>(`enrollees/${enrolleeId}/enrollee-absence/${absenceId}`)
+      .apiResource.delete<NoContent>(`enrollees/${enrolleeId}/absences/${absenceId}`)
       .pipe(
         map((response: ApiHttpResponse<NoContent>) => response.result),
         tap(() => this.toastService.openSuccessToast('Enrollee Absence has been removed.')),
@@ -351,7 +351,7 @@ export class EnrolmentResource {
 
   public getEnrolleeAbsence(enrolleeId: number): Observable<EnrolleeAbsence> {
     return this.apiResource
-      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/enrollee-absence`)
+      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/absences`)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAbsence>) => response.result),
         tap((absence: EnrolleeAbsence) => this.logger.info('ENROLLEE_ABSENCE', absence)),
@@ -365,7 +365,7 @@ export class EnrolmentResource {
 
   public getCurrentEnrolleeAbsence(enrolleeId: number): Observable<EnrolleeAbsence> {
     return this.apiResource
-      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/enrollee-absence/current`)
+      .get<EnrolleeAbsence>(`enrollees/${enrolleeId}/absences/current`)
       .pipe(
         map((response: ApiHttpResponse<EnrolleeAbsence>) => response.result),
         tap((absence: EnrolleeAbsence) => this.logger.info('CURRENT_ENROLLEE_ABSENCE', absence)),

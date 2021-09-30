@@ -955,24 +955,16 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, DateTime startTimestamp, DateTime endTimestamp)
+        public async Task<EnrolleeAbsence> CreateEnrolleeAbsenceAsync(int enrolleeId, EnrolleeAbsenceViewModel createModel)
         {
-            if (startTimestamp >= endTimestamp)
-            {
-                throw new ArgumentException($"endTimestamp is not after the startTimestamp of absence.");
-            }
-
-            var enrollee = await _context.Enrollees
-                .Include(e => e.EnrolleeAbsences)
-                .SingleOrDefaultAsync(e => e.Id == enrolleeId);
-
             var absence = new EnrolleeAbsence
             {
-                StartTimestamp = startTimestamp,
-                EndTimestamp = endTimestamp
+                EnrolleeId = enrolleeId,
+                StartTimestamp = createModel.StartTimestamp.ToUniversalTime(),
+                EndTimestamp = createModel.EndTimestamp.ToUniversalTime()
             };
 
-            enrollee.EnrolleeAbsences.Add(absence);
+            _context.EnrolleeAbsences.Add(absence);
             await _context.SaveChangesAsync();
 
             return absence;
@@ -982,16 +974,18 @@ namespace Prime.Services
         {
             var rightNow = DateTime.UtcNow;
             return await _context.EnrolleeAbsences
+                .Where(ea => rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId)
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(ea => rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId);
+                .SingleOrDefaultAsync();
         }
 
         public async Task<EnrolleeAbsenceViewModel> GetCurrentEnrolleeAbsenceAsync(int enrolleeId)
         {
             var rightNow = DateTime.UtcNow;
             return await _context.EnrolleeAbsences
+                .Where(ea => ea.StartTimestamp <= rightNow && rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId)
                 .ProjectTo<EnrolleeAbsenceViewModel>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync(ea => ea.StartTimestamp <= rightNow && rightNow <= ea.EndTimestamp && ea.EnrolleeId == enrolleeId);
+                .SingleOrDefaultAsync();
         }
 
         public async Task EndEnrolleeAbsenceAsync(int enrolleeId)

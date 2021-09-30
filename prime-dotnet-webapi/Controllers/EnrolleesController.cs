@@ -927,13 +927,14 @@ namespace Prime.Controllers
             return Ok(result);
         }
 
-        // POST: api/Enrollees/5/enrollee-absence
+        // POST: api/Enrollees/5/absences
         /// <summary>
         /// Creates a new enrollee absence.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="createModel"></param>
-        [HttpPost("{enrolleeId}/enrollee-absence", Name = nameof(CreateEnrolleeAbsence))]
+        [HttpPost("{enrolleeId}/absences", Name = nameof(CreateEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -945,22 +946,19 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
-            {
-                return Forbid();
-            }
 
-            await _enrolleeService.CreateEnrolleeAbsenceAsync(enrolleeId, createModel.StartTimestamp, createModel.EndTimestamp);
+            await _enrolleeService.CreateEnrolleeAbsenceAsync(enrolleeId, createModel);
 
             return NoContent();
         }
 
-        // GET: api/Enrollees/5/enrollee-absence
+        // GET: api/Enrollees/5/absences
         /// <summary>
         /// Gets your current or future absence
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/enrollee-absence", Name = nameof(GetAbsence))]
+        [HttpGet("{enrolleeId}/absences", Name = nameof(GetAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -972,22 +970,18 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
-            {
-                return Forbid();
-            }
 
             var absence = await _enrolleeService.GetEnrolleeAbsenceAsync(enrolleeId);
 
             return Ok(absence);
         }
 
-        // GET: api/Enrollees/5/enrollee-absence/current
+        // GET: api/Enrollees/5/absences/current
         /// <summary>
         /// Gets your current absence
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpGet("{enrolleeId}/enrollee-absence/current", Name = nameof(GetCurrentAbsence))]
+        [HttpGet("{enrolleeId}/absences/current", Name = nameof(GetCurrentAbsence))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1009,12 +1003,13 @@ namespace Prime.Controllers
             return Ok(absence);
         }
 
-        // PUT: api/Enrollees/5/enrollee-absence/end-absence
+        // PUT: api/Enrollees/5/absences/end-absence
         /// <summary>
         /// Ends an enrollee absence.
         /// </summary>
         /// <param name="enrolleeId"></param>
-        [HttpPut("{enrolleeId}/enrollee-absence/end-absence", Name = nameof(EndEnrolleeAbsence))]
+        [HttpPut("{enrolleeId}/absences/end-absence", Name = nameof(EndEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1026,23 +1021,20 @@ namespace Prime.Controllers
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
             }
-            if (!record.MatchesUserIdOf(User))
-            {
-                return Forbid();
-            }
 
             await _enrolleeService.EndEnrolleeAbsenceAsync(enrolleeId);
 
             return NoContent();
         }
 
-        // DELETE: api/Enrollees/5/enrollee-absence/1
+        // DELETE: api/Enrollees/5/absences/1
         /// <summary>
         /// Deletes a specific Enrollee absence.
         /// </summary>
         /// <param name="enrolleeId"></param>
         /// <param name="absenceId"></param>
-        [HttpDelete("{enrolleeId}/enrollee-absence/{absenceId}", Name = nameof(DeleteFutureEnrolleeAbsence))]
+        [HttpDelete("{enrolleeId}/absences/{absenceId}", Name = nameof(DeleteFutureEnrolleeAbsence))]
+        [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
@@ -1053,10 +1045,6 @@ namespace Prime.Controllers
             if (record == null)
             {
                 return NotFound($"Enrollee not found with id {enrolleeId}");
-            }
-            if (!record.MatchesUserIdOf(User))
-            {
-                return Forbid();
             }
 
             await _enrolleeService.DeleteFutureEnrolleeAbsenceAsync(enrolleeId, absenceId);
