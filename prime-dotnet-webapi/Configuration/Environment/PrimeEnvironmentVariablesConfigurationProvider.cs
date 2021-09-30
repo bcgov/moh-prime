@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Prime.Infrastructure.Configuration
+namespace Prime.Configuration.Environment
 {
     public class PrimeEnvironmentVariablesConfigurationProvider : ConfigurationProvider
     {
@@ -12,7 +12,7 @@ namespace Prime.Infrastructure.Configuration
         {
             Data = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-            foreach (var envVariable in Environment.GetEnvironmentVariables().Cast<DictionaryEntry>())
+            foreach (var envVariable in System.Environment.GetEnvironmentVariables().Cast<DictionaryEntry>())
             {
                 var appKey = MapEnvKeyToAppKey((string)envVariable.Key);
 

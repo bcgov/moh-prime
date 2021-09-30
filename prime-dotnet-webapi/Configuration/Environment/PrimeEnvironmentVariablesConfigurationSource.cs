@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace Prime.Infrastructure.Configuration
+namespace Prime.Configuration.Environment
 {
     public class PrimeEnvironmentVariablesConfigurationSource : IConfigurationSource
     {

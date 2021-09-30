@@ -278,7 +278,7 @@ namespace Prime.Services
 
         private async Task Send(Email email)
         {
-            if (!PrimeConfiguration.Current.IsProduction)
+            if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
             }

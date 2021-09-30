@@ -1,4 +1,7 @@
-using Prime.Infrastructure.Configuration.Internal;
+using Microsoft.Extensions.Hosting;
+using System;
+
+using Prime.Configuration.Internal;
 
 namespace Prime
 {
@@ -6,12 +9,13 @@ namespace Prime
     {
         public static PrimeConfiguration Current { get; set; }
 
-        public string Name { get; set; }
+        public static readonly string LogFilePath = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
+        public static bool IsProduction() => EnvironmentName == Environments.Production;
+        public static bool IsDevelopment() => EnvironmentName == Environments.Development;
+        private static readonly string EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
         public string FrontendUrl { get; set; }
         public string BackendUrl { get; set; }
-
-        public bool IsProduction { get => Name == "prod"; }
-        public bool IsLocal { get => Name == "local"; }
 
         public ConnectionStringConfiguration ConnectionStrings { get; set; }
 

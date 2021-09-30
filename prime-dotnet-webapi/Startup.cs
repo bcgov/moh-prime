@@ -156,7 +156,7 @@ namespace Prime
                 .AddTransient<ISmtpEmailClient, SmtpEmailClient>()
                 .AddHttpClient<IAccessTokenClient, AccessTokenClient>();
 
-            if (PrimeConfiguration.Current.IsLocal)
+            if (Environment.IsDevelopment())
             {
                 services.AddSingleton<ICollegeLicenceClient, DummyCollegeLicenceClient>();
             }
@@ -274,7 +274,7 @@ namespace Prime
                 endpoints.MapHealthChecks("/health");
             });
 
-            if (PrimeConfiguration.Current.IsLocal)
+            if (Environment.IsDevelopment())
             {
                 lifetime.ApplicationStarted.Register(OnApplicationStartedAsync(app.ApplicationServices.GetRequiredService<IVerifiableCredentialClient>()).Wait);
             }

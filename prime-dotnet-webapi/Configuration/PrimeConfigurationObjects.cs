@@ -1,6 +1,6 @@
 using Prime.Auth;
 
-namespace Prime.Infrastructure.Configuration.Internal
+namespace Prime.Configuration.Internal
 {
     public class ConnectionStringConfiguration
     {

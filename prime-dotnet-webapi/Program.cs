@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-using Prime.Infrastructure.Configuration;
+using Prime.Configuration.Environment;
 
 namespace Prime
 {
@@ -59,11 +59,11 @@ namespace Prime
 
         private static void CreateLogger()
         {
-            var path = Environment.GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
+            var path = PrimeConfiguration.LogFilePath;
 
             try
             {
-                if (Environment.GetEnvironmentVariable("OC_APP") == null)
+                if (PrimeConfiguration.IsDevelopment())
                 {
                     Directory.CreateDirectory(path);
                 }
