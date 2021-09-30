@@ -2,7 +2,7 @@ import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigat
 import { Injectable } from '@angular/core';
 
 import { forkJoin, Observable } from 'rxjs';
-import { map, tap, catchError, mergeMap } from 'rxjs/operators';
+import { map, tap, catchError } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
@@ -65,37 +65,36 @@ export class AdjudicationResource {
       );
   }
 
-  public getEnrolleeById(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
-    const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
+  public getEnrolleeById(enrolleeId: number): Observable<HttpEnrollee> {
     return forkJoin([
-      this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
+      this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`)
         .pipe(
           map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
-      this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`, params)
+      this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`)
         .pipe(
           map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
-      this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`, params)
+      this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`)
         .pipe(
           map((response: ApiHttpResponse<CareSetting>) => response.result)),
-      this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`, params)
+      this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`)
         .pipe(
           map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
-      this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`, params)
+      this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`)
         .pipe(
           map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
-      this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`, params)
+      this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`)
         .pipe(
           map((response: ApiHttpResponse<OboSite[]>) => response.result)),
-      this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`, params)
+      this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`)
         .pipe(
           map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
-      this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`, params)
+      this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`)
         .pipe(
           map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
-      this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`, params)
+      this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`)
         .pipe(
           map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
-      this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`, params)
+      this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`)
         .pipe(
           map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
     ]).pipe(
