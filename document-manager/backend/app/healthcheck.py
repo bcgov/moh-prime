@@ -19,7 +19,7 @@ def postgres_healthcheck():
 
     try:
         # db = f"postgres+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-        db = Config.SQLALCHEMY_DATABASE_URI
+        db = ""
         db_engine = create_engine(db)
 
         db_engine.connect()
