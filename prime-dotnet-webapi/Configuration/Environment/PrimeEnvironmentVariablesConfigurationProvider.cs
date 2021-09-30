@@ -24,7 +24,6 @@ namespace Prime.Configuration.Environment
         {
             var appKey = envKey switch
             {
-                "OC_APP" => "Name",
                 "FRONTEND_URL" => "FrontendUrl",
                 "BACKEND_URL" => "BackendUrl",
 
