@@ -60,7 +60,7 @@
           <mat-error *ngIf="pec.hasError('required')">
             Required
           </mat-error>
-          <mat-error *ngIf="pec.hasError('unique')">
+          <mat-error *ngIf="pec.hasError('unique') && isNewSite.value">
             PEC has already been used by another site
           </mat-error>
         </mat-form-field>
