@@ -1,8 +1,8 @@
 import { EnrolleeNavigation } from './../../../../shared/models/enrollee-navigation-model';
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { forkJoin, Observable } from 'rxjs';
+import { map, tap, catchError, mergeMap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
 import { NoContent, NoContentResponse } from '@core/resources/abstract-resource';
@@ -21,6 +21,14 @@ import { EnrolmentCard } from '@shared/models/enrolment-card.model';
 import { Admin } from '@auth/shared/models/admin.model';
 
 import { EnrolleeNote } from '@adjudication/shared/models/adjudication-note.model';
+import { CollegeCertification } from '@enrolment/shared/models/college-certification.model';
+import { CareSetting } from '@enrolment/shared/models/care-setting.model';
+import { EnrolleeRemoteUser } from '@shared/models/enrollee-remote-user.model';
+import { OboSite } from '@enrolment/shared/models/obo-site.model';
+import { RemoteAccessLocation } from '@enrolment/shared/models/remote-access-location.model';
+import { RemoteAccessSite } from '@enrolment/shared/models/remote-access-site.model';
+import { SelfDeclaration } from '@shared/models/self-declarations.model';
+import { SelfDeclarationDocument } from '@shared/models/self-declaration-document.model';
 import { BusinessEvent } from '@adjudication/shared/models/business-event.model';
 import { PlrInfo } from '@adjudication/shared/models/plr-info.model';
 import { BusinessEventTypeEnum } from '@adjudication/shared/models/business-event-type.model';
@@ -59,17 +67,49 @@ export class AdjudicationResource {
 
   public getEnrolleeById(enrolleeId: number, statusCode?: number): Observable<HttpEnrollee> {
     const params = this.apiResourceUtilsService.makeHttpParams({ statusCode });
-    return this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
-      .pipe(
-        map((response: ApiHttpResponse<HttpEnrollee>) => response.result),
-        tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
-        map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
-        catchError((error: any) => {
-          this.toastService.openErrorToast('Enrolment could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
-          throw error;
-        })
-      );
+    return forkJoin([
+      this.apiResource.get<HttpEnrollee>(`enrollees/${enrolleeId}`, params)
+        .pipe(
+          map((response: ApiHttpResponse<HttpEnrollee>) => response.result)),
+      this.apiResource.get<EnrolleeNote>(`enrollees/${enrolleeId}/access-agreement-notes`, params)
+        .pipe(
+          map((response: ApiHttpResponse<EnrolleeNote>) => response.result)),
+      this.apiResource.get<CareSetting>(`enrollees/${enrolleeId}/care-settings`, params)
+        .pipe(
+          map((response: ApiHttpResponse<CareSetting>) => response.result)),
+      this.apiResource.get<CollegeCertification[]>(`enrollees/${enrolleeId}/certifications`, params)
+        .pipe(
+          map((response: ApiHttpResponse<CollegeCertification[]>) => response.result)),
+      this.apiResource.get<EnrolleeRemoteUser[]>(`enrollees/${enrolleeId}/remote-users`, params)
+        .pipe(
+          map((response: ApiHttpResponse<EnrolleeRemoteUser[]>) => response.result)),
+      this.apiResource.get<OboSite[]>(`enrollees/${enrolleeId}/obo-sites`, params)
+        .pipe(
+          map((response: ApiHttpResponse<OboSite[]>) => response.result)),
+      this.apiResource.get<RemoteAccessLocation[]>(`enrollees/${enrolleeId}/remote-locations`, params)
+        .pipe(
+          map((response: ApiHttpResponse<RemoteAccessLocation[]>) => response.result)),
+      this.apiResource.get<RemoteAccessSite[]>(`enrollees/${enrolleeId}/remote-sites`, params)
+        .pipe(
+          map((response: ApiHttpResponse<RemoteAccessSite[]>) => response.result)),
+      this.apiResource.get<SelfDeclaration[]>(`enrollees/${enrolleeId}/self-declarations`, params)
+        .pipe(
+          map((response: ApiHttpResponse<SelfDeclaration[]>) => response.result)),
+      this.apiResource.get<SelfDeclarationDocument[]>(`enrollees/${enrolleeId}/self-declarations/documents`, params)
+        .pipe(
+          map((response: ApiHttpResponse<SelfDeclarationDocument[]>) => response.result)),
+    ]).pipe(
+      map(([enrollee, accessAgreementNote, enrolleeCareSettings, certifications, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments]: [HttpEnrollee, EnrolleeNote, CareSetting, CollegeCertification[], EnrolleeRemoteUser[], OboSite[], RemoteAccessLocation[], RemoteAccessSite[], SelfDeclaration[], SelfDeclarationDocument[]]) => {
+        return { ...enrollee, accessAgreementNote, certifications, ...enrolleeCareSettings, enrolleeRemoteUsers, oboSites, remoteAccessLocations, remoteAccessSites, selfDeclarations, selfDeclarationDocuments }
+      }),
+      tap((enrollee: HttpEnrollee) => this.logger.info('ENROLLEE', enrollee)),
+      map((enrollee: HttpEnrollee) => this.enrolleeAdapterResponse(enrollee)),
+      catchError((error: any) => {
+        this.toastService.openErrorToast('Enrolment could not be retrieved');
+        this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeById error has occurred: ', error);
+        throw error;
+      })
+    );
   }
 
   public getPlrInfoByEnrolleeId(enrolleeId: number): Observable<PlrInfo[]> {
@@ -573,8 +613,36 @@ export class AdjudicationResource {
       enrollee.certifications = [];
     }
 
+    if (!enrollee.oboSites) {
+      enrollee.oboSites = [];
+    }
+
     if (!enrollee.enrolleeCareSettings) {
       enrollee.enrolleeCareSettings = [];
+    }
+
+    if (!enrollee.enrolleeRemoteUsers) {
+      enrollee.enrolleeRemoteUsers = [];
+    }
+
+    if (!enrollee.remoteAccessSites) {
+      enrollee.remoteAccessSites = [];
+    }
+
+    if (!enrollee.enrolleeHealthAuthorities) {
+      enrollee.enrolleeHealthAuthorities = [];
+    }
+
+    if (!enrollee.remoteAccessLocations) {
+      enrollee.remoteAccessLocations = [];
+    }
+
+    if (!enrollee.selfDeclarations) {
+      enrollee.selfDeclarations = [];
+    }
+
+    if (!enrollee.selfDeclarationDocuments) {
+      enrollee.selfDeclarationDocuments = [];
     }
 
     return enrollee;
