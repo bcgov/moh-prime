@@ -88,8 +88,6 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
-    // TODO add update for business licence, but only when editable and not approved
-
     const data: DialogOptions = {
       title: 'Save Site',
       message: 'When your site is saved, it will be submitted for review.',
@@ -98,7 +96,6 @@ export class OverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        // TODO will save on every submission but not needed on first submission
         exhaustMap((result: boolean) =>
           (result)
             ? of([
@@ -118,17 +115,11 @@ export class OverviewPageComponent implements OnInit {
            ]: [number, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
             this.siteResource.updateSite(payload)
               .pipe(
-                exhaustMap(() =>
-                  this.siteService.businessLicenceUpdates(
-                    siteId,
-                    oldBusinessLicence,
-                    newBusinessLicence
-                  )
-                ),
+                // TODO will save on every submission but not needed on first submission
+                exhaustMap(() => this.siteService.businessLicenceUpdates(siteId, oldBusinessLicence, newBusinessLicence)),
                 exhaustMap(() => this.siteResource.submitSite(siteId))
               )
-        )
-      ).subscribe(() => this.nextRoute());
+        )).subscribe(() => this.nextRoute());
   }
 
   public onRoute(routePath: string): void {
