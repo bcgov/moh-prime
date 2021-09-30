@@ -42,6 +42,10 @@ export class SiteService {
     return this._site.asObservable();
   }
 
+  /**
+   * @description
+   * Perform the updates required for a site business licence.
+   */
   public businessLicenceUpdates(
     siteId: number,
     oldBusinessLicence: BusinessLicence,

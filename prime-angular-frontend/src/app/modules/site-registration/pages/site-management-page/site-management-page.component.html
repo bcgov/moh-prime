@@ -178,8 +178,9 @@
               (click)="viewSite(organizationId, site)">
         <span>View/Update Site Information</span>
       </button>
-      <button mat-menu-item
-              [disabled]="site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST || !site.completed || site.status === SiteStatusType.IN_REVIEW"
+      <button *ngIf="site.careSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST"
+              mat-menu-item
+              [disabled]="!site.completed || site.status === SiteStatusType.IN_REVIEW"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <span>View/Update Remote Practitioners</span>
       </button>

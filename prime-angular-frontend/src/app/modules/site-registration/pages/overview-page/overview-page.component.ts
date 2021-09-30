@@ -106,7 +106,6 @@ export class OverviewPageComponent implements OnInit {
             ])
             : EMPTY
         ),
-        // TODO clean this up
         exhaustMap(
           ([
              currentSite,
@@ -117,13 +116,14 @@ export class OverviewPageComponent implements OnInit {
             // Existence of a submission indicates that a resubmission is
             // occurring and the site and/or business licence need updating
             iif(() => !currentSite.submittedDate,
-              of(noop()), // Skip as initial updates have already occurred
+              of(currentSite.id), // Skip as initial updates have already occurred
               concat(
                 this.siteResource.updateSite(updatedSite),
                 this.siteService.businessLicenceUpdates(currentSite.id, oldBusinessLicence, newBusinessLicence)
-              )
+              ).pipe(map(() => currentSite.id))
             )
-        )
+        ),
+        exhaustMap((siteId: number) => this.siteResource.submitSite(siteId))
       ).subscribe(() => this.nextRoute());
   }
 
@@ -187,6 +187,9 @@ export class OverviewPageComponent implements OnInit {
     // Attempt to patch the form if not already patched so
     // a validation check is against actual data, which will
     // not patch if already patched during a user update
+    //
+    // NOTE: Initializes the form state service for workflow
+    // updates when not already patched and contains changes
     this.siteFormStateService.setForm(site);
   }
 

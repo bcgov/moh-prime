@@ -21,8 +21,6 @@ import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
-import { ArrayUtils } from '@lib/utils/array-utils.class';
-import { ObjectUtils } from '@lib/utils/object-utils.class';
 
 @Component({
   selector: 'app-business-licence-page',
@@ -115,7 +113,7 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site, true);
+    this.siteFormStateService.setForm(site);
     this.formState.form.markAsPristine();
   }
 
@@ -143,7 +141,6 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
     // will always update the site initially
     return concat(
       this.siteResource.updateSite(this.siteFormStateService.json),
-      // ...this.businessLicenceUpdates(this.route.snapshot.params.sid)
       ...this.siteService.businessLicenceUpdates(
         this.route.snapshot.params.sid,
         this.siteService.site.businessLicence,
@@ -170,8 +167,6 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
     this.siteResource.getBusinessLicence(siteId)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
-
-        this.formState.businessLicenceExpiry.setValue(businessLicense?.expiryDate);
 
         if (businessLicense && !businessLicense.completed) {
           // Business licence may exist, but the deferred licence toggle may be

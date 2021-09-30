@@ -92,7 +92,7 @@ export class CareSettingPageComponent extends AbstractSiteRegistrationPage imple
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site, true);
+    this.siteFormStateService.setForm(site);
     this.formState.form.markAsPristine();
   }
 
