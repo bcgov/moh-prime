@@ -22,7 +22,7 @@ import { PaperEnrolleeReturneeFormComponent } from './paper-enrollee-returnee-fo
 import { PaperEnrolleeReturneesPageComponent } from './paper-enrollee-returnees-page.component';
 import { EnrolmentService } from '@enrolment/shared/services/enrolment.service';
 
-fdescribe('PaperEnrolleeReturneesComponent', () => {
+describe('PaperEnrolleeReturneesComponent', () => {
   let component: PaperEnrolleeReturneesPageComponent;
   let fixture: ComponentFixture<PaperEnrolleeReturneesPageComponent>;
 
