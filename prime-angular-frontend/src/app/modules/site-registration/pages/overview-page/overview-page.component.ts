@@ -172,12 +172,14 @@ export class OverviewPageComponent implements OnInit {
       : null;
 
     if (this.siteFormStateService.isPatched) {
-      // Replace site with the version from the form, but maintain
-      // a subset of immutable properties
-      const { status } = site;
+      // Replace site with the version from the form for the user
+      // to review, but maintain a subset of immutable properties
+      const { status, submittedDate, approvedDate } = site;
       site = {
         ...this.siteFormStateService.json,
-        status
+        status,
+        submittedDate,
+        approvedDate
       };
     }
 
