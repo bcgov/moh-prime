@@ -6,7 +6,7 @@ class Config(object):
     SECRET_KEY = os.urandom(16)
     BASE_PATH = os.environ.get('BASE_PATH', '')
 
-    # SQLALCHEMY_DATABASE_URI should be set. 
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # Auth
@@ -34,7 +34,7 @@ class TestConfig(Config):
     TESTING = os.environ.get('TESTING', True)
     CACHE_TYPE = "null"
 
-    # SQLALCHEMY_DATABASE_URI should be set. 
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
 
     JWT_OIDC_TEST_MODE = True
     JWT_OIDC_TEST_AUDIENCE = "test_audience"
