@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
 
-import { concat, EMPTY, noop, Observable, of, Subscription } from 'rxjs';
+import { concat, EMPTY, iif, noop, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { Moment } from 'moment';
@@ -114,20 +114,16 @@ export class OverviewPageComponent implements OnInit {
              oldBusinessLicence,
              newBusinessLicence
            ]: [Site, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
-            of(!!currentSite.submittedDate)
-              .pipe(
-                exhaustMap((hasSubmission: boolean) =>
-                  // Existence of a submission indicates that a resubmission is
-                  // occurring and the site and/or business licence need updating
-                  (hasSubmission)
-                    ? concat(
-                      this.siteResource.updateSite(updatedSite),
-                      this.siteService.businessLicenceUpdates(currentSite.id, oldBusinessLicence, newBusinessLicence)
-                    )
-                    : of(noop())
-                ),
-                exhaustMap(() => this.siteResource.submitSite(currentSite.id))
-            ))
+            // Existence of a submission indicates that a resubmission is
+            // occurring and the site and/or business licence need updating
+            iif(() => !currentSite.submittedDate,
+              of(noop()), // Skip as initial updates have already occurred
+              concat(
+                this.siteResource.updateSite(updatedSite),
+                this.siteService.businessLicenceUpdates(currentSite.id, oldBusinessLicence, newBusinessLicence)
+              )
+            )
+        )
       ).subscribe(() => this.nextRoute());
   }
 
