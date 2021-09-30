@@ -18,6 +18,7 @@ export class SiteRoutes {
   public static ORGANIZATION_AGREEMENT = 'organization-agreement';
 
   public static SITES = 'sites';
+  public static CARE_SETTINGS = 'care-settings';
 
   public static CARE_SETTING = 'care-setting';
   public static BUSINESS_LICENCE = 'business-licence';
@@ -66,7 +67,6 @@ export class SiteRoutes {
     return [
       this.COLLECTION_NOTICE,
       this.ORGANIZATION_SIGNING_AUTHORITY,
-      this.ORGANIZATION_CLAIM,
       this.ORGANIZATION_NAME
     ];
   }

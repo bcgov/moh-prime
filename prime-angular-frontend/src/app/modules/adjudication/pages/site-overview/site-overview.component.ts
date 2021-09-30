@@ -16,8 +16,11 @@ import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
+import { ToastService } from '@core/services/toast.service';
 import { UtilsService } from '@core/services/utils.service';
 
+import { Party } from '@lib/models/party.model';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
@@ -26,9 +29,7 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { SiteRegistrationListViewModel } from '@registration/shared/models/site-registration.model';
 import { Site } from '@registration/shared/models/site.model';
 import { OrganizationClaim } from '@registration/shared/models/organization-claim.model';
-import { Party } from '@lib/models/party.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 
 @Component({
   selector: 'app-site-overview',
@@ -67,17 +68,19 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     private fb: FormBuilder,
     permissionService: PermissionService,
     dialog: MatDialog,
-    utilsService: UtilsService
+    toastService: ToastService
   ) {
-    super(defaultOptions,
+    super(
+      defaultOptions,
       route,
       router,
       organizationResource,
       siteResource,
       adjudicationResource,
-      permissionService,
-      utilsService,
-      dialog);
+      dialog,
+      toastService,
+      permissionService
+    );
 
     this.hasActions = true;
     this.refresh = new BehaviorSubject<boolean>(null);
@@ -93,8 +96,19 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       const siteId = this.route.snapshot.params.sid;
       this.busy = this.siteResource
         .updatePecCode(siteId, this.form.value.pec)
-        .subscribe(() => this.refresh.next(true));
+        .subscribe((site: Site) => {
+          this.refresh.next(true);
+          this.site = site;
+        });
     }
+  }
+
+  public onApprove(siteId: number) {
+    if (!this.formUtilsService.checkValidity(this.form)) {
+      return;
+    }
+
+    super.onApprove(siteId);
   }
 
   public onApproveOrgClaim(): void {
@@ -147,14 +161,19 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         this.site = site;
         this.businessLicences = businessLicences;
         this.orgClaim = orgClaim;
-        this.form.get('pec').setValue(site.pec);
-        this.showSendNotification = [CareSettingEnum.COMMUNITY_PHARMACIST, CareSettingEnum.DEVICE_PROVIDER].includes(site.careSettingCode);
-        return of(null);
+        this.initForm(site);
+        this.showSendNotification = [
+          CareSettingEnum.COMMUNITY_PHARMACIST,
+          CareSettingEnum.DEVICE_PROVIDER
+        ].includes(site.careSettingCode);
+        return of(orgClaim?.newSigningAuthorityId);
       }),
-      exhaustMap(() => this.organizationResource.getSigningAuthorityByUserId(`${this.orgClaim?.newSigningAuthorityId}`))
-    ).subscribe((signingAuthority: Party | null) => {
-      this.newSigningAuthority = signingAuthority;
-    });
+      exhaustMap((newSigningAuthorityId: number | null) =>
+        (newSigningAuthorityId)
+          ? this.organizationResource.getSigningAuthorityById(newSigningAuthorityId)
+          : of(null)
+      )
+    ).subscribe((signingAuthority: Party | null) => this.newSigningAuthority = signingAuthority);
   }
 
   private createFormInstance() {
@@ -165,6 +184,10 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
         FormControlValidators.uniqueAsync(this.checkPecIsUnique())
       ]
     });
+  }
+
+  private initForm({ pec }: Site) {
+    this.form.patchValue({ pec });
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {

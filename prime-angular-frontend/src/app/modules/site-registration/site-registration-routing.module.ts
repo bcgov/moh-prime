@@ -30,6 +30,9 @@ import { OverviewPageComponent } from './pages/overview-page/overview-page.compo
 import { NextStepsPageComponent } from './pages/next-steps-page/next-steps-page.component';
 import { OrganizationClaimConfirmationPageComponent } from './pages/organization-claim-confirmation-page/organization-claim-confirmation-page.component';
 import { BusinessLicenceRenewalPageComponent } from './pages/business-licence-renewal-page/business-licence-renewal-page.component';
+import { ElectronicOrganizationAgreementPageComponent } from './pages/electronic-organization-agreement-page/electronic-organization-agreement-page.component';
+import { ElectronicAgreementGuard } from './shared/guards/electronic-agreement.guard';
+import { PendingTransferGuard } from './shared/guards/pending-transfer.guard';
 
 const routes: Routes = [
   {
@@ -71,12 +74,6 @@ const routes: Routes = [
                 data: { title: 'Signing Authority' }
               },
               {
-                path: SiteRoutes.ORGANIZATION_CLAIM,
-                component: OrganizationClaimPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Claim Organization' }
-              },
-              {
                 path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
                 component: OrganizationClaimConfirmationPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
@@ -100,7 +97,14 @@ const routes: Routes = [
                 pathMatch: 'full'
               },
               {
+                path: `${SiteRoutes.CARE_SETTINGS}/:csid/${SiteRoutes.ORGANIZATION_AGREEMENT}`,
+                component: ElectronicOrganizationAgreementPageComponent,
+                canActivate: [ElectronicAgreementGuard],
+                data: { title: 'Organization Agreement' }
+              },
+              {
                 path: `${SiteRoutes.SITES}/:sid`,
+                canActivateChild: [PendingTransferGuard],
                 children: [
                   {
                     path: SiteRoutes.CARE_SETTING,
@@ -220,4 +224,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SiteRegistrationRoutingModule { }
+export class SiteRegistrationRoutingModule {}

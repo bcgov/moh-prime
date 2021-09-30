@@ -23,6 +23,7 @@ import { SiteRoutes } from '@registration/site-registration.routes';
 import { OrganizationFormStateService } from '@registration/shared/services/organization-form-state.service';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationAgreementPageFormState } from './organization-agreement-page-form-state.class';
+import { SiteService } from '@registration/shared/services/site.service';
 
 @Component({
   selector: 'app-organization-agreement-page',
@@ -46,6 +47,7 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
     private organizationService: OrganizationService,
+    private siteService: SiteService,
     private organizationResource: OrganizationResource,
     private organizationFormStateService: OrganizationFormStateService,
     private siteResource: SiteResource,
@@ -113,9 +115,9 @@ export class OrganizationAgreementPageComponent extends AbstractEnrolmentPage im
 
   protected initForm() {
     const organization = this.organizationService.organization;
-    const siteId = this.route.snapshot.params.sid;
+    const careSettingCode = this.siteService.site?.careSettingCode;
     this.busy = this.organizationResource
-      .updateOrganizationAgreement(organization.id, siteId)
+      .updateOrganizationAgreement(organization.id, careSettingCode)
       .pipe(
         map(({ id }: OrganizationAgreement) =>
           this.agreementId = id

@@ -139,7 +139,7 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-            --build-arg OC_APP=${{secrets.OC_APP}} \
+            --build-arg OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
             --build-arg SVC_NAME="prod" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
@@ -163,7 +163,7 @@ jobs:
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
       - name: "Process template"
         id: oc
@@ -175,17 +175,16 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
             -p VANITY_URL=pharmanetenrolment.gov.bc.ca \
             -p IMAGE_TAG=prod \
             -p SVC_NAME=prod \
-            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=${{secrets.OC_APP}} \
+            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
+            -p OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
             -p HPR_URL=healthpractitionerregistration.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=prod-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-prod.apps.silver.devops.gov.bc.ca \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -

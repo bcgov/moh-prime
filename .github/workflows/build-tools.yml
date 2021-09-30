@@ -138,7 +138,7 @@ jobs:
             --build-arg KEYCLOAK_URL=$KEYCLOAK_URL \
             --build-arg KEYCLOAK_REALM=$KEYCLOAK_REALM \
             --build-arg KEYCLOAK_CLIENT_ID=$KEYCLOAK_CLIENT_ID \
-            --build-arg OC_APP=${{secrets.OC_APP}} \
+            --build-arg OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
             --build-arg SVC_NAME="tools" \
             --build-arg REDIRECT_URL=$REDIRECT_URL \
             $SERVICE_NAME
@@ -162,7 +162,7 @@ jobs:
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
       - name: "Process template"
         id: oc
@@ -173,24 +173,23 @@ jobs:
           oc process -f infrastructure/prime-app-template.yml \
             -p API_POD=webapi \
             -p ASP_ENV=Development \
-            -p DB_POD=postgres-db \
             -p DOCMAN_POD=document-manager \
             -p FRONTEND_POD=frontend \
             -p FRONTEND_URL=tools \
             -p IMAGE_TAG=tools \
             -p SVC_NAME=tools \
-            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=${{secrets.OC_APP}} \
+            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
+            -p OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
             -p URL_STUB=-${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools.apps.silver.devops.gov.bc.ca \
             -p HPR_URL=tools-hpr-${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools.apps.silver.devops.gov.bc.ca \
             -p MAUTH_URL=tools-mauth-${{secrets.OPENSHIFT_LICENSE_PLATE}}-tools.apps.silver.devops.gov.bc.ca \
             -p REDIS_POD=redis \
             -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -
 
           oc process -f infrastructure/mailhog-template.yml \
             -p MAILHOG_SERVICE_NAME=mailhog-server \
-            -p OC_APP=${{secrets.OC_APP}} \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+            -p OC_ENV=${{secrets.OPENSHIFT_ENVIRONMENT}} \
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -
           
-          oc process -f infrastructure/metabase-template.yml -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+          oc process -f infrastructure/metabase-template.yml -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -

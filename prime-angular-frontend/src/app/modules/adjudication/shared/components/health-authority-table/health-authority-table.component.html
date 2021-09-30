@@ -181,6 +181,7 @@
 
       <mat-menu #menu="matMenu">
         <button mat-menu-item
+                [disabled]="true"
                 (click)="onRoute([
                   AdjudicationRoutes.HEALTH_AUTHORITIES,
                   row.healthAuthorityOrganizationId,
@@ -191,6 +192,7 @@
           <span>Overview</span>
         </button>
         <button mat-menu-item
+                [disabled]="true"
                 (click)="onRoute([
                   AdjudicationRoutes.HEALTH_AUTHORITIES,
                   row.healthAuthorityOrganizationId,
@@ -215,6 +217,7 @@
         </button>
 
         <button mat-menu-item
+                [disabled]="true"
                 (click)="onNotify(row.id, row.healthAuthorityOrganizationId)">
           <mat-icon>email</mat-icon>
           <span>Send Email</span>

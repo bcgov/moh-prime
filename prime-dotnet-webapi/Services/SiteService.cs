@@ -114,6 +114,15 @@ namespace Prime.Services
             }
         }
 
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int siteId)
+        {
+            return await _context.Sites
+                .AsNoTracking()
+                .Where(s => s.Id == siteId)
+                .Select(s => new PermissionsRecord { UserId = s.Organization.SigningAuthority.UserId })
+                .SingleOrDefaultAsync();
+        }
+
         private void UpdateAddress(Site current, SiteUpdateModel updated)
         {
             if (updated?.PhysicalAddress != null)
@@ -363,6 +372,7 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.ApprovedDate = null;
+            site.SubmittedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 

@@ -114,6 +114,19 @@ namespace Prime.Services
             }
         }
 
+        public async Task RemovePartyEnrolmentAsync(int partyId, PartyType partyType)
+        {
+            var partyEnrolment = _context.Set<PartyEnrolment>()
+                .SingleOrDefault(pe => pe.PartyId == partyId && pe.PartyType == partyType);
+
+            if (partyEnrolment != null)
+            {
+                _context.Set<PartyEnrolment>().Remove(partyEnrolment);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+
         public async Task DeletePartyAsync(int partyId)
         {
             var party = await GetBasePartyQuery()

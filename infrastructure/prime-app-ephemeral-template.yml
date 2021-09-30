@@ -15,15 +15,11 @@ parameters:
   displayName: Image Tag
   description: an identifier that labels which version an image belongs to.
   required: true
-- name: OC_NAMESPACE
+- name: OC_LICENSE_PLATE
   displayName: OpenShift License Plate
   description: Prepends your dev/test/prod URL
   required: true
   value: 9c33a9
-- name: OC_APP
-  displayName: Openshift Environment
-  description: dev/test/prod
-  required: true
 - name: FRONTEND_URL
   displayName: Frontend URL
   description: Minus the HTTP/HTTPS, this is your vanity URL or the prefix of your default URL
@@ -56,13 +52,10 @@ objects:
 #   Frontend Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-webapi"}]
     name: ${SVC_NAME}-frontend
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: nginx
@@ -84,7 +77,7 @@ objects:
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-frontend:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-frontend:${IMAGE_TAG}
             ports:
               - containerPort: 80
                 protocol: TCP
@@ -164,7 +157,7 @@ objects:
             - ${SVC_NAME}-frontend
           from:
             kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
+            namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-frontend:${IMAGE_TAG}'
 
 #   Environment file
@@ -172,7 +165,7 @@ objects:
   kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-env-config
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   data:
@@ -203,7 +196,7 @@ objects:
   kind: ConfigMap
   metadata:
     name: ${SVC_NAME}-nginx-config
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   data:
@@ -417,10 +410,10 @@ objects:
 #   Frontend Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-frontend
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -444,7 +437,7 @@ objects:
   kind: Ingress
   metadata:
     name: ${SVC_NAME}
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -476,10 +469,10 @@ objects:
                     number: 8888
 - apiVersion: route.openshift.io/v1
   kind: Route
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-mutualauth
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -501,14 +494,10 @@ objects:
 #   Backend Web API Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
-    annotations:
-      app.openshift.io/connects-to: >-
-        ["[{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-postgres"}]
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-document-manager"}]"]
     name: ${SVC_NAME}-webapi
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: dotnet
@@ -531,7 +520,10 @@ objects:
               - createdb -O $(APPUSER) prime-${SVC_NAME}
             env:
               - name: PGHOST
-                value: dev-patroni
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
               - name: PGDATABASE
                 value: postgres
               - name: APPUSER
@@ -558,10 +550,13 @@ objects:
         initContainers:
         - name: run-migrations
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
           env:
           - name: PGHOST
-            value: dev-patroni
+            valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
           - name: PGUSER
             valueFrom:
               secretKeyRef:
@@ -578,7 +573,7 @@ objects:
         containers:
           - name: ${SVC_NAME}-webapi
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-webapi-backend:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-webapi-backend:${IMAGE_TAG}
             command:
               - bash
               - '-c'
@@ -594,7 +589,10 @@ objects:
               - name: PHARMANET_SSL_CERT_FILENAME
                 value: /opt/app-root/etc/certs/pharmanet-api-cert.pfx
               - name: DB_HOST
-                value: dev-patroni
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
               - name: BACKEND_URL
                 value: https://${SVC_NAME}${URL_STUB}/api/v1/
               - name: FRONTEND_URL
@@ -698,18 +696,19 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-webapi
+            - run-migrations
           from:
             kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
+            namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-webapi-backend:${IMAGE_TAG}'
 
 #   Backend Web API Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-webapi
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -726,16 +725,13 @@ objects:
 #   Document Manager (backend) Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: python
-    annotations:
-      app.openshift.io/connects-to: >-
-        [{"apiVersion":"apps.openshift.io/v1","kind":"DeploymentConfig","name":"${SVC_NAME}-redis"}]
   spec:
     completionDeadlineSeconds: 1200
     replicas: 1
@@ -755,7 +751,10 @@ objects:
               - createdb -O $(APPUSER) prime-${SVC_NAME}
             env:
               - name: PGHOST
-                value: dev-patroni
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
               - name: PGDATABASE
                 value: postgres
               - name: APPUSER
@@ -782,7 +781,7 @@ objects:
         initContainers:
         - name: run-migrations
           image: >-
-            image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
+            image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
           env:
             - name: CACHE_REDIS_HOST
               value: ${SVC_NAME}-redis
@@ -794,7 +793,10 @@ objects:
             - name: CACHE_REDIS_PORT
               value: "6379"
             - name: DB_HOST
-              value: dev-patroni
+              valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
             - name: DB_NAME
               value: prime-${SVC_NAME}
             - name: DB_PASS
@@ -855,7 +857,7 @@ objects:
         containers:
           - name: ${SVC_NAME}-document-manager
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/prime-document-manager:${IMAGE_TAG}
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/prime-document-manager:${IMAGE_TAG}
             env:
               - name: CACHE_REDIS_HOST
                 value: ${SVC_NAME}-redis
@@ -867,7 +869,10 @@ objects:
               - name: CACHE_REDIS_PORT
                 value: "6379"
               - name: DB_HOST
-                value: dev-patroni
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
               - name: DB_NAME
                 value: prime-${SVC_NAME}
               - name: DB_PASS
@@ -959,18 +964,19 @@ objects:
           automatic: true
           containerNames:
             - ${SVC_NAME}-document-manager
+            - run-migrations
           from:
             kind: ImageStreamTag
-            namespace: "${OC_NAMESPACE}-tools"
+            namespace: "${OC_LICENSE_PLATE}-tools"
             name: 'prime-document-manager:${IMAGE_TAG}'
 
 #   Document Manager (backend) Service
 - apiVersion: v1
   kind: Service
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-document-manager
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:
@@ -987,10 +993,10 @@ objects:
 #   Redis Deployment Config
 - apiVersion: apps.openshift.io/v1
   kind: DeploymentConfig
-  namespace: ${OC_NAMESPACE}-${OC_APP}
+  namespace: ${OC_LICENSE_PLATE}-dev
   metadata:
     name: ${SVC_NAME}-redis
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
       app.openshift.io/runtime: redis
@@ -1067,7 +1073,7 @@ objects:
                 mountPath: /var/lib/redis/data
             terminationMessagePolicy: File
             image: >-
-              image-registry.openshift-image-registry.svc:5000/${OC_NAMESPACE}-tools/redis-6:latest
+              image-registry.openshift-image-registry.svc:5000/${OC_LICENSE_PLATE}-tools/redis-6:latest
         restartPolicy: Always
         dnsPolicy: ClusterFirst
 
@@ -1076,7 +1082,7 @@ objects:
   apiVersion: v1
   metadata:
     name: ${SVC_NAME}-redis
-    namespace: ${OC_NAMESPACE}-${OC_APP}
+    namespace: ${OC_LICENSE_PLATE}-dev
     labels:
       app.kubernetes.io/part-of: ${SVC_NAME}
   spec:

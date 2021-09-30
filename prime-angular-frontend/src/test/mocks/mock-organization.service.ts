@@ -47,7 +47,8 @@ export class MockOrganizationService implements IOrganizationService {
       hasAcceptedAgreement: false,
       hasSubmittedSite: false,
       sites: [],
-      hasClaim: false
+      hasClaim: false,
+      pendingTransfer: false
     });
   }
 
