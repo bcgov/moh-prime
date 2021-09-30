@@ -11,14 +11,15 @@ def postgres_healthcheck():
     Verify that the PRIME PostgreSQL database is available for connection requests.
     If successful, return True. Otherwise, return False.
     """
-    DB_HOST = Config.DB_HOST
-    DB_PORT = Config.DB_PORT
-    DB_NAME = Config.DB_NAME
-    DB_USER = Config.DB_USER
-    DB_PASS = Config.DB_PASS
+    # DB_HOST = Config.DB_HOST
+    # DB_PORT = Config.DB_PORT
+    # DB_NAME = Config.DB_NAME
+    # DB_USER = Config.DB_USER
+    # DB_PASS = Config.DB_PASS
 
     try:
-        db = f"postgres+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        # db = f"postgres+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+        db = Config.SQLALCHEMY_DATABASE_URI
         db_engine = create_engine(db)
 
         db_engine.connect()
