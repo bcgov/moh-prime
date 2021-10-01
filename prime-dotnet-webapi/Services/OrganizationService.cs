@@ -249,20 +249,52 @@ namespace Prime.Services
 
         public async Task<IEnumerable<CareSettingType>> GetCareSettingCodesForPendingTransferAsync(int organizationId, int signingAuthorityId)
         {
+            // Get a list of the care settings used on sites that exist for an organization
+            var oganizationCareSettings = await _context.Sites.Where(s => s.OrganizationId == organizationId).Select(s => s.CareSettingCode).ToListAsync();
+
             var agreements = await _context.Agreements
                 .Include(a => a.AgreementVersion)
                 .OrderByDescending(a => a.CreatedDate)
                 .Where(a => a.OrganizationId == organizationId)
                 .ToListAsync();
 
-            var siteSettings = await _context.Sites.Where(s => s.OrganizationId == organizationId).Select(s => s.CareSettingCode).ToListAsync();
-
+            // Get Care Settings for agreements signed by previous signing authority and unsigned agreements from current signing authority
             var agreementSettings = agreements
                 .GroupBy(a => a.AgreementVersion.AgreementType)
                 .Select(a => a.FirstOrDefault())
-                .Where(a => a.PartyId != signingAuthorityId || (a.PartyId == signingAuthorityId && a.AcceptedDate == null)).Select(a => SiteSettingForOrgAgreementType(a.AgreementVersion.AgreementType)).ToList();
+                .Where(a => a.PartyId != signingAuthorityId || (a.PartyId == signingAuthorityId && a.AcceptedDate == null))
+                .Select(a => SiteSettingForOrgAgreementType(a.AgreementVersion.AgreementType)).ToList();
 
-            return agreementSettings.Where(code => siteSettings.Contains((int)code)).ToList();
+            return agreementSettings.Where(code => oganizationCareSettings.Contains((int)code)).ToList();
+        }
+
+        public async Task<bool> IsOrganizationTransferCompleteAsync(int organizationId)
+        {
+            var signingAuthorityId = _context.Organizations.Where(o => o.Id == organizationId).Select(o => o.SigningAuthorityId).SingleOrDefault();
+            var careSettingsRequiringOrgAgreements = await GetCareSettingCodesForPendingTransferAsync(organizationId, signingAuthorityId);
+
+            return careSettingsRequiringOrgAgreements.Count() == 0;
+        }
+
+        private async Task<IEnumerable<int>> GetCareSettingsFromOrganizationAsync(int organizationId)
+        {
+            return await _context.Sites
+                .Where(s => s.OrganizationId == organizationId && s.CareSettingCode != null)
+                .Select(s => (int)s.CareSettingCode).ToListAsync();
+        }
+
+        public async Task FlagPendingTransferIfOrganizationAgreementsRequireSignaturesAsync(int organizationId)
+        {
+            var organization = await _context.Organizations
+                .SingleAsync(o => o.Id == organizationId);
+
+            var careSettingsRequiringOrgAgreements = await GetCareSettingCodesForPendingTransferAsync(organizationId, organization.SigningAuthorityId);
+            if (careSettingsRequiringOrgAgreements.Count() > 0)
+            {
+                organization.PendingTransfer = true;
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task FinalizeTransferAsync(int organizationId)
@@ -355,19 +387,17 @@ namespace Prime.Services
                 .SingleAsync(o => o.Id == organizationId);
 
             organization.SigningAuthorityId = newSigningAuthorityId;
-            organization.PendingTransfer = true;
 
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RemoveUnsignedOrganizationAgreementsAsync(int organizationId)
+        {
             // Delete all non-accepted agreements
             var pendingAgreements = await _context.Agreements
                 .Where(a => a.OrganizationId == organizationId && a.AcceptedDate == null)
                 .ToListAsync();
             _context.RemoveRange(pendingAgreements);
-
-            var hasAcceptedAgreements = await _context.Agreements
-                .Where(a => a.OrganizationId == organizationId && a.AcceptedDate != null)
-                .AnyAsync();
-            organization.PendingTransfer = hasAcceptedAgreements;
-
             await _context.SaveChangesAsync();
         }
     }
