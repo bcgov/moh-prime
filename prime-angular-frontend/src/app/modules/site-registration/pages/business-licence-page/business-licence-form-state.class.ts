@@ -100,11 +100,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       ],
       pec: [
         null,
-        [
-          Validators.required,
-          FormControlValidators.requiredLength(3),
-          FormControlValidators.alpha
-        ],
+        [Validators.required],
         uniqueAsync(this.checkPecIsUnique())
       ]
     });
