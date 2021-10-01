@@ -9,7 +9,7 @@ import { SiteResource } from '@core/resources/site-resource.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
 
-export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicenceForm> {
+export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
   private businessLicence: BusinessLicence;
 
   public constructor(

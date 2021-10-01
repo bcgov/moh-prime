@@ -1,12 +1,13 @@
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
-import { Site } from '@registration/shared/models/site.model';
+
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { BusinessLicenceRenewalForm } from './business-licence-renewal-form.model';
 
-interface BusinessLicenceRenewalPageDataModel extends Pick<Site, 'doingBusinessAs' | 'pec'> { }
+export class BusinessLicenceRenewalPageFormState extends AbstractFormState<BusinessLicenceRenewalForm> {
+  private businessLicence: BusinessLicence;
 
-export class BusinessLicenceRenewalPageFormState extends AbstractFormState<BusinessLicenceRenewalPageDataModel> {
   public constructor(
     private fb: FormBuilder
   ) {
@@ -23,18 +24,31 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
     return this.formInstance.get('expiryDate') as FormControl;
   }
 
-  public get json(): BusinessLicenceRenewalPageDataModel {
+  public get json(): BusinessLicenceRenewalForm {
     if (!this.formInstance) {
       return;
     }
 
-    return this.formInstance.getRawValue();
+    const { expiryDate, deferredLicenceReason } = this.formInstance.getRawValue();
+
+    return {
+      businessLicence: {
+        ...this.businessLicence,
+        expiryDate,
+        deferredLicenceReason
+      }
+    };
   }
 
-  public patchValue(model: BusinessLicenceRenewalPageDataModel & { businessLicence: BusinessLicence; }): void {
+  public patchValue(model: BusinessLicenceRenewalForm): void {
     if (!this.formInstance) {
       return;
     }
+
+    const { businessLicence } = model;
+    // Preserve the business licence for use when
+    // creating JSON format from the form
+    this.businessLicence = businessLicence;
 
     // NOOP, Nothing needs to be patched
   }
@@ -42,6 +56,10 @@ export class BusinessLicenceRenewalPageFormState extends AbstractFormState<Busin
   public buildForm(): void {
     this.formInstance = this.fb.group({
       businessLicenceGuid: [
+        // Will never be patched when the form is built, and is
+        // only updated based on a document upload occurring.
+        //
+        // NOTE: Direct access only through getter
         '',
         [Validators.required]
       ],

@@ -20,7 +20,7 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { BusinessLicencePageFormState } from './business-licence-form-state.class';
+import { BusinessLicenceFormState } from './business-licence-form-state.class';
 
 @Component({
   selector: 'app-business-licence-page',
@@ -28,7 +28,7 @@ import { BusinessLicencePageFormState } from './business-licence-form-state.clas
   styleUrls: ['./business-licence-page.component.scss']
 })
 export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage implements OnInit {
-  public formState: BusinessLicencePageFormState;
+  public formState: BusinessLicenceFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicence: BusinessLicence;
@@ -107,7 +107,7 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   }
 
   protected createFormInstance(): void {
-    this.formState = this.siteFormStateService.businessLicencePageFormState;
+    this.formState = this.siteFormStateService.businessLicenceFormState;
   }
 
   protected patchForm(): void {
@@ -144,8 +144,8 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
       ...this.siteService.businessLicenceUpdates(
         this.route.snapshot.params.sid,
         this.siteService.site.businessLicence,
-        this.siteFormStateService.businessLicencePageFormState.json.businessLicence,
-        this.siteFormStateService.businessLicencePageFormState.businessLicenceGuid.value
+        this.siteFormStateService.businessLicenceFormState.json.businessLicence,
+        this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value
       )
     );
   }

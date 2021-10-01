@@ -103,7 +103,7 @@ export class CareSettingPageComponent extends AbstractSiteRegistrationPage imple
         startWith([null]),
         pairwise(),
         exhaustMap(([prevCareSettingCode, nextCareSettingCode]: [number, number]) => {
-          const deferredLicenceReason = this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason;
+          const deferredLicenceReason = this.siteFormStateService.businessLicenceFormState.deferredLicenceReason;
 
           // Reset the deferred licence reason when changing from Community Pharmacist as
           // no other care setting allows for deferment of the business licence upload
@@ -121,7 +121,7 @@ export class CareSettingPageComponent extends AbstractSiteRegistrationPage imple
           return this.siteResource.updateBusinessLicence(id, businessLicence)
             .pipe(
               // When not reset prevents interaction with specific controls on business licence
-              tap(() => this.siteFormStateService.businessLicencePageFormState.deferredLicenceReason.reset()),
+              tap(() => this.siteFormStateService.businessLicenceFormState.deferredLicenceReason.reset()),
               exhaustMap(() => {
                 // Do nothing if not completed, but when site is marked as completed reset it
                 // to force user through the wizard to ensure a business licence is uploaded

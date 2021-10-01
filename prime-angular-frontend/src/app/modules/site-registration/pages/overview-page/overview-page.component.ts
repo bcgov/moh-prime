@@ -100,7 +100,7 @@ export class OverviewPageComponent implements OnInit {
             ? of([
               this.siteService.site,
               this.siteFormStateService.json,
-              this.siteFormStateService.businessLicencePageFormState.businessLicenceGuid.value
+              this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value
             ])
             : EMPTY
         ),
