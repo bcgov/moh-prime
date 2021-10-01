@@ -459,8 +459,8 @@ namespace Prime.Controllers
             }
 
             // Send an notifying email to the adjudicator
-            // if the site is calimed by a adjudicator, is a community pharmacy,
-            // and previsouly deferred the business licence document.
+            // if the site is claimed by a adjudicator, is a community pharmacy,
+            // and previously deferred the business licence document.
             if (site.Adjudicator != null
                 && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
