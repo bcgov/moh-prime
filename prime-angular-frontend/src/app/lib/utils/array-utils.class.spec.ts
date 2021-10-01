@@ -1,6 +1,6 @@
 import { ArrayUtils } from '@lib/utils/array-utils.class';
 
-fdescribe('ArrayUtils', () => {
+describe('ArrayUtils', () => {
   const util = ArrayUtils;
 
   describe('insertIf', () => {
@@ -65,7 +65,7 @@ fdescribe('ArrayUtils', () => {
     });
   });
 
-  fdescribe('insertResultIf', () => {
+  describe('insertResultIf', () => {
     it('should insert result into array using anonymous method', () => {
       const result = [
         1, 2, 3,

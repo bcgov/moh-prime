@@ -170,13 +170,15 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
         this.businessLicence = businessLicense ?? this.businessLicence;
 
         if (businessLicense && !businessLicense.completed) {
+          const canDefer = this.canDefer();
+
           // Business licence may exist, but the deferred licence toggle may be
           // hidden based on care setting leaving the toggle undefined
-          if (this.canDefer()) {
+          if (canDefer) {
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
 
-          this.updateBusLicAccess(this.canDefer());
+          this.updateBusLicAccess(canDefer);
         }
       });
   }

@@ -2,13 +2,14 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
+import moment from 'moment';
+
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
 
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { BusinessLicenceForm } from './business-licence-form.model';
-import { Moment } from 'moment';
 
 export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicenceForm> {
   private businessLicence: BusinessLicence;
@@ -48,7 +49,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return {
       businessLicence: {
         ...this.businessLicence,
-        expiryDate: expiryDate.format(), // Convert from Moment
+        expiryDate: (moment.isMoment(expiryDate)) ? expiryDate.format() : expiryDate,
         deferredLicenceReason
       },
       doingBusinessAs,
@@ -77,7 +78,9 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     this.formInstance = this.fb.group({
       businessLicenceGuid: [
         // Will never be patched when the form is built, and is
-        // only updated based on a document upload occurring
+        // only updated based on a document upload occurring.
+        //
+        // NOTE: Direct access only through getter
         '',
         []
       ],

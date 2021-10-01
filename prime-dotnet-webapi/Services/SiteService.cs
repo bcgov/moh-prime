@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using DelegateDecompiler.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
@@ -528,8 +528,11 @@ namespace Prime.Services
         public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
         {
             return await _context.Sites
+                .Include(s => s.BusinessLicences)
+                    .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Where(s => s.Id == siteId)
                 .Select(s => s.BusinessLicence)
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
         }
 
