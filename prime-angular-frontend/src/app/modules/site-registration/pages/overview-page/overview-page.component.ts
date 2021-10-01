@@ -101,28 +101,28 @@ export class OverviewPageComponent implements OnInit {
             ? of([
               this.siteService.site,
               this.siteFormStateService.json,
-              this.siteService.site.businessLicence,
-              this.siteFormStateService.businessLicencePageFormState.form.value
+              this.siteFormStateService.businessLicencePageFormState.businessLicenceGuid.value
             ])
             : EMPTY
         ),
         exhaustMap(
-          ([
-             currentSite,
-             updatedSite,
-             oldBusinessLicence,
-             newBusinessLicence
-           ]: [Site, Site, BusinessLicence, BusinessLicence & { businessLicenceGuid }]) =>
+          ([currentSite, updatedSite, uploadedBusinessLicenceGuid]: [Site, Site, string]) => {
             // Existence of a submission indicates that a resubmission is
             // occurring and the site and/or business licence need updating
-            iif(() => !currentSite.submittedDate,
+            return iif(
+              () => !currentSite.submittedDate,
               of(currentSite.id), // Skip as initial updates have already occurred
               concat(
                 this.siteResource.updateSite(updatedSite),
-                this.siteService.businessLicenceUpdates(currentSite.id, oldBusinessLicence, newBusinessLicence)
+                ...this.siteService.businessLicenceUpdates(
+                  currentSite.id,
+                  currentSite.businessLicence,
+                  updatedSite.businessLicence,
+                  uploadedBusinessLicenceGuid
+                )
               ).pipe(map(() => currentSite.id))
-            )
-        ),
+            );
+          }),
         exhaustMap((siteId: number) => this.siteResource.submitSite(siteId))
       ).subscribe(() => this.nextRoute());
   }

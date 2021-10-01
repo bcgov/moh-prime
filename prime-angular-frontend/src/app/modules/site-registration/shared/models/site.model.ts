@@ -45,8 +45,8 @@ export class Site {
   pec: string;
   flagged: boolean;
 
-  public static getExpiryDate(site: Site | SiteListViewModel): string | Moment | null {
-    if(!site) {
+  public static getExpiryDate(site: Site | SiteListViewModel): string | null {
+    if (!site) {
       return null;
     }
 
@@ -55,7 +55,7 @@ export class Site {
     return (site.businessLicence?.expiryDate)
       ? site.businessLicence?.expiryDate
       : (site.submittedDate)
-        ? moment(site.submittedDate).add(1, 'year')
+        ? moment(site.submittedDate).add(1, 'year').format()
         : null;
   }
 }

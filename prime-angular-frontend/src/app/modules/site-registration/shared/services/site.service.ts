@@ -48,27 +48,26 @@ export class SiteService {
    */
   public businessLicenceUpdates(
     siteId: number,
-    oldBusinessLicence: BusinessLicence,
-    newBusinessLicence: BusinessLicence & { businessLicenceGuid }
+    currentBusinessLicence: BusinessLicence,
+    updatedBusinessLicence: BusinessLicence,
+    documentGuid: string = null
   ): Observable<BusinessLicence | BusinessLicenceDocument | void>[] {
-    const documentGuid = newBusinessLicence.businessLicenceGuid ?? null;
-
-    if (!oldBusinessLicence?.id) {
+    if (!currentBusinessLicence?.id) {
       // Create a business licence when none existed
-      return [this.siteResource.createBusinessLicence(siteId, newBusinessLicence, documentGuid)];
+      return [this.siteResource.createBusinessLicence(siteId, updatedBusinessLicence, documentGuid)];
     }
 
-    newBusinessLicence.id = oldBusinessLicence.id;
+    updatedBusinessLicence.id = currentBusinessLicence.id;
 
-    if (oldBusinessLicence.deferredLicenceReason !== newBusinessLicence.deferredLicenceReason) {
+    if (currentBusinessLicence.deferredLicenceReason !== updatedBusinessLicence.deferredLicenceReason) {
       // Remove an existing business licence document before updating
       // with a reason for deferment
       return [
         ...ArrayUtils.insertResultIf(
-          oldBusinessLicence?.businessLicenceDocument,
-          () => [this.siteResource.removeBusinessLicenceDocument(siteId, oldBusinessLicence.id)]
+          currentBusinessLicence?.businessLicenceDocument,
+          () => [this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)]
         ),
-        this.siteResource.updateBusinessLicence(siteId, newBusinessLicence)
+        this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
       ];
     }
 
@@ -77,9 +76,9 @@ export class SiteService {
     return [
       ...ArrayUtils.insertResultIf(
         documentGuid,
-        () => [this.siteResource.createBusinessLicenceDocument(siteId, oldBusinessLicence.id, documentGuid)]
+        () => [this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)]
       ),
-      this.siteResource.updateBusinessLicence(siteId, newBusinessLicence)
+      this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
     ];
   }
 }

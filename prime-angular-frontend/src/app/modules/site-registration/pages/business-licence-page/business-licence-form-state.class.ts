@@ -6,12 +6,11 @@ import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
 
-import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
+import { BusinessLicenceForm } from './business-licence-form.model';
+import { Moment } from 'moment';
 
-type BusinessLicencePageDataModel = Pick<Site, 'businessLicence' | 'doingBusinessAs' | 'pec'>
-
-export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicencePageDataModel> {
+export class BusinessLicencePageFormState extends AbstractFormState<BusinessLicenceForm> {
   private businessLicence: BusinessLicence;
 
   public constructor(
@@ -39,7 +38,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return this.formInstance.get('doingBusinessAs') as FormControl;
   }
 
-  public get json(): BusinessLicencePageDataModel {
+  public get json(): BusinessLicenceForm {
     if (!this.formInstance) {
       return;
     }
@@ -49,7 +48,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return {
       businessLicence: {
         ...this.businessLicence,
-        expiryDate,
+        expiryDate: expiryDate.format(), // Convert from Moment
         deferredLicenceReason
       },
       doingBusinessAs,
@@ -57,14 +56,14 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     };
   }
 
-  public patchValue(model: BusinessLicencePageDataModel & { businessLicence: BusinessLicence; }): void {
+  public patchValue(model: BusinessLicenceForm): void {
     if (!this.formInstance) {
       return;
     }
 
     const { doingBusinessAs, pec, businessLicence } = model;
     // Preserve the business licence for use when
-    // creating JSON format from form
+    // creating JSON format from the form
     this.businessLicence = businessLicence;
 
     this.formInstance.patchValue({

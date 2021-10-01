@@ -20,7 +20,7 @@ import { BusinessLicenceDocument } from '@registration/shared/models/business-li
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
+import { BusinessLicencePageFormState } from './business-licence-form-state.class';
 
 @Component({
   selector: 'app-business-licence-page',
@@ -144,7 +144,8 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
       ...this.siteService.businessLicenceUpdates(
         this.route.snapshot.params.sid,
         this.siteService.site.businessLicence,
-        this.siteFormStateService.businessLicencePageFormState.form.value
+        this.siteFormStateService.businessLicencePageFormState.json.businessLicence,
+        this.siteFormStateService.businessLicencePageFormState.businessLicenceGuid.value
       )
     );
   }

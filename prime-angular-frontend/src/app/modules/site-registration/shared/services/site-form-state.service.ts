@@ -16,7 +16,7 @@ import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer
 import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
-import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
+import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-form-state.class';
 import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page-form-state.class';
 
 @Injectable({

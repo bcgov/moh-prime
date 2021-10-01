@@ -5,7 +5,6 @@ import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
-import { NoContent } from '@core/resources/abstract-resource';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 
 import { AbstractFormState } from './abstract-form-state.class';

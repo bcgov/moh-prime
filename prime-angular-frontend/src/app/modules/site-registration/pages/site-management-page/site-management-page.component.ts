@@ -38,7 +38,7 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
-  public organizationSitesExpiryDates: (string | Moment | null)[];
+  public organizationSitesExpiryDates: (string | null)[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
   public careSettingCodesPendingTransfer: CareSettingEnum[];
@@ -205,6 +205,7 @@ export class SiteManagementPageComponent implements OnInit {
         map((organizations: Organization[]) => {
           this.organizationSitesExpiryDates = organizations[0].sites
             .map(s => {
+              // TODO this will produce a list of results mixed with undefined indices...
               if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate) {
                 return Site.getExpiryDate(s);
               }
