@@ -153,10 +153,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence });
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence }, id);
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

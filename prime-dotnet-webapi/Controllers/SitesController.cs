@@ -155,9 +155,10 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
             // stop update if site is non health authority and PEC is not unique
-            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC
-                && await _siteService.PecExistsAsync(updatedSite.PEC))
+                && await _siteService.PecExistsAsync(siteId, updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -646,8 +647,9 @@ namespace Prime.Controllers
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
             // stop update if site is non health authority and PEC is not unique
-            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && await _siteService.PecExistsAsync(pecCode))
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && await _siteService.PecExistsAsync(siteId, pecCode))
             {
                 return BadRequest("PEC already exists");
             }
@@ -1161,25 +1163,31 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        // GET: api/sites/pec-exists
+        // GET: api/sites/1/pec-exists
         /// <summary>
         /// Check if a given PEC already exists, only applicable to non health authority site
         /// </summary>
+        /// <param name="siteId"></param>
         /// <param name="pec"></param>
         /// <returns></returns>
-        [HttpGet("pec-exists", Name = nameof(PecExists))]
+        [HttpGet("{siteId}/pec-exists", Name = nameof(PecExists))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> PecExists(string pec)
+        public async Task<ActionResult> PecExists(int siteId, string pec)
         {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
             if (string.IsNullOrWhiteSpace(pec))
             {
                 return BadRequest("PEC cannot be empty.");
             }
 
-            var exist = await _siteService.PecExistsAsync(pec);
+            var exist = await _siteService.PecExistsAsync(siteId, pec);
             return Ok(exist);
         }
     }

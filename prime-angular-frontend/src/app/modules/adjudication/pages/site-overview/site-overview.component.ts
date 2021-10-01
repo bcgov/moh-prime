@@ -7,20 +7,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from 'rxjs';
 import { exhaustMap } from 'rxjs/operators';
 
+import { Party } from '@lib/models/party.model';
+import { uniqueAsync } from '@lib/validators/form-async.validators';
+import { FormControlValidators } from '@lib/validators/form-control.validators';
+import { OrganizationResource } from '@core/resources/organization-resource.service';
+import { SiteResource } from '@core/resources/site-resource.service';
+import { FormUtilsService } from '@core/services/form-utils.service';
+import { ToastService } from '@core/services/toast.service';
+import { UtilsService } from '@core/services/utils.service';
 import { DialogDefaultOptions } from '@shared/components/dialogs/dialog-default-options.model';
 import { DIALOG_DEFAULT_OPTION } from '@shared/components/dialogs/dialogs-properties.provider';
 import { DialogOptions } from '@shared/components/dialogs/dialog-options.model';
 import { ConfirmDialogComponent } from '@shared/components/dialogs/confirm-dialog/confirm-dialog.component';
 import { NoteComponent } from '@shared/components/dialogs/content/note/note.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { OrganizationResource } from '@core/resources/organization-resource.service';
-import { SiteResource } from '@core/resources/site-resource.service';
-import { FormUtilsService } from '@core/services/form-utils.service';
-import { ToastService } from '@core/services/toast.service';
-import { UtilsService } from '@core/services/utils.service';
 
-import { Party } from '@lib/models/party.model';
-import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { PermissionService } from '@auth/shared/services/permission.service';
 import { AdjudicationRoutes } from '@adjudication/adjudication.routes';
 import { SiteRegistrationContainerComponent } from '@adjudication/shared/components/site-registration-container/site-registration-container.component';
@@ -181,8 +182,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        // TODO revisit async validator
-        // FormControlValidators.uniqueAsync(this.checkPecIsUnique())
+        uniqueAsync(this.checkPecIsUnique())
       ]
     });
   }
@@ -192,6 +192,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecExists(value);
+    return (value: string) => this.siteResource.pecExists(this.site.id, value);
   }
 }

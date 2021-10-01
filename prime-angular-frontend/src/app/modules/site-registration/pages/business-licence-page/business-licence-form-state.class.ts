@@ -2,6 +2,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
+import { uniqueAsync } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -10,6 +11,7 @@ import { BusinessLicence } from '@registration/shared/models/business-licence.mo
 import { BusinessLicenceForm } from './business-licence-form.model';
 
 export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceForm> {
+  private siteId: number;
   private businessLicence: BusinessLicence;
 
   public constructor(
@@ -55,10 +57,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     };
   }
 
-  public patchValue(model: BusinessLicenceForm): void {
+  public patchValue(model: BusinessLicenceForm, siteId: number): void {
     if (!this.formInstance) {
       return;
     }
+
+    this.siteId = siteId;
 
     const { doingBusinessAs, pec, businessLicence } = model;
     // Preserve the business licence for use when
@@ -101,13 +105,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
           FormControlValidators.requiredLength(3),
           FormControlValidators.alpha
         ],
-        // TODO revisit async validator
-        // FormControlValidators.uniqueAsync(this.checkPecIsUnique())
+        uniqueAsync(this.checkPecIsUnique())
       ]
     });
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecExists(value);
+    return (value: string) => this.siteResource.pecExists(this.siteId, value);
   }
 }

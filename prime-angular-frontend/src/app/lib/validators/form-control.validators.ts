@@ -206,35 +206,4 @@ export class FormControlValidators {
       return valid ? null : { requiredIn: true };
     };
   }
-
-  /**
-   * @description
-   * Check that a value is unique asynchronously.
-   *
-   * @example
-   * FormControlValidators.uniqueAsync(this.httpResource.methodName);
-   */
-  public static uniqueAsync(request: (value: string) => Observable<boolean>, errorKey = 'unique'): AsyncValidatorFn {
-    return this.createAsyncValidator(request, { errorKey });
-  }
-
-  /**
-   * @description
-   * Create an asynchronous validator.
-   */
-  private static createAsyncValidator(
-    request: (value: string) => Observable<boolean>,
-    { errorKey, dueTime }: { errorKey: string, dueTime?: number }
-  ): AsyncValidatorFn {
-    return control => control.valueChanges
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(dueTime ?? 400),
-        switchMap((value: string) =>
-          (value) ? request(value) : EMPTY
-        ),
-        map((result: boolean) => (result) ? { [errorKey]: result } : null),
-        first() // IMPORTANT: must be finite observable
-      );
-  }
 }
