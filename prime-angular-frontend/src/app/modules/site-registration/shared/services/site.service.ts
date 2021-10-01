@@ -71,12 +71,15 @@ export class SiteService {
       ];
     }
 
-    // Create a business licence document each time a file is uploaded, and/or
-    // update an existing business licence
+    // Create a business licence document each time a file is uploaded, and
+    // update the existing business licence
     return [
       ...ArrayUtils.insertResultIf(
         documentGuid,
-        () => [this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)]
+        () => [
+          this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id),
+          this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
+        ]
       ),
       this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
     ];

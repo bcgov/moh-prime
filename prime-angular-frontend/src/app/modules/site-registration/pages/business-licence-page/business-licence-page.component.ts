@@ -6,6 +6,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 
 import { Observable, concat } from 'rxjs';
 
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -137,26 +138,23 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
   }
 
   protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
-    // Collect a list of requests that will be executed in order, which
-    // will always update the site initially
+    const siteId = this.route.snapshot.params.sid;
+    const currentBusinessLicence = this.siteService.site.businessLicence;
+    const updatedBusinessLicence = this.siteFormStateService.businessLicenceFormState.json.businessLicence;
+    const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
+
     return concat(
       this.siteResource.updateSite(this.siteFormStateService.json),
-      ...this.siteService.businessLicenceUpdates(
-        this.route.snapshot.params.sid,
-        this.siteService.site.businessLicence,
-        this.siteFormStateService.businessLicenceFormState.json.businessLicence,
-        this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value
+      ...this.businessLicenceUpdates(
+        siteId,
+        currentBusinessLicence,
+        updatedBusinessLicence,
+        documentGuid
       )
     );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    // Remove the business licence GUID to prevent 404
-    // already submitted if re-submitted in same session
-    // TODO revisit as this will occur, but we can't clear the GUID anymore
-    // this.formState.businessLicenceGuid.patchValue(null);
-    // this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.SITE_ADDRESS;
@@ -210,5 +208,50 @@ export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage i
     this.hasNoBusinessLicenceError = false;
     requiredControls.forEach(control => control.setValidators([Validators.required]));
     notRequiredControls.forEach(control => this.formUtilsService.resetAndClearValidators(control));
+  }
+
+  /**
+   * @description
+   * Collect a list of requests that will be executed in order, which
+   * will update the business licence directly during initial registration
+   * and then becomes the responsibility of site submission.
+   */
+  public businessLicenceUpdates(
+    siteId: number,
+    currentBusinessLicence: BusinessLicence,
+    updatedBusinessLicence: BusinessLicence,
+    documentGuid: string = null
+  ): Observable<BusinessLicence | BusinessLicenceDocument | void>[] {
+    if (!currentBusinessLicence?.id) {
+      // Create a business licence when none existed
+      return [this.siteResource.createBusinessLicence(siteId, updatedBusinessLicence, documentGuid)];
+    }
+
+    updatedBusinessLicence.id = currentBusinessLicence.id;
+
+    if (currentBusinessLicence.deferredLicenceReason !== updatedBusinessLicence.deferredLicenceReason) {
+      // Remove an existing business licence document before updating
+      // with a reason for deferment
+      return [
+        ...ArrayUtils.insertResultIf(
+          currentBusinessLicence?.businessLicenceDocument,
+          () => [this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)]
+        ),
+        this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
+      ];
+    }
+
+    // Create a business licence document each time a file is uploaded, and
+    // update the existing business licence
+    return [
+      ...ArrayUtils.insertResultIf(
+        documentGuid,
+        () => [
+          this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id),
+          this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
+        ]
+      ),
+      this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
+    ];
   }
 }
