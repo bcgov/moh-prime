@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder } from '@angular/forms';
-import { EMPTY, noop, Observable, of, Subscription } from 'rxjs';
+import { EMPTY, Observable, Subscription } from 'rxjs';
 import moment from 'moment';
 
 import { FormUtilsService } from '@core/services/form-utils.service';
