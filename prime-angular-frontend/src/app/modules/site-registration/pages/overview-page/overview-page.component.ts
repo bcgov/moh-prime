@@ -22,7 +22,6 @@ import { Organization } from '@registration/shared/models/organization.model';
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
-import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 
 @Component({
   selector: 'app-overview-page',

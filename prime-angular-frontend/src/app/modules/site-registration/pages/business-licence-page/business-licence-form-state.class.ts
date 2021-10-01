@@ -2,8 +2,6 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
-import moment from 'moment';
-
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -49,7 +47,7 @@ export class BusinessLicencePageFormState extends AbstractFormState<BusinessLice
     return {
       businessLicence: {
         ...this.businessLicence,
-        expiryDate: (moment.isMoment(expiryDate)) ? expiryDate.format() : expiryDate,
+        expiryDate,
         deferredLicenceReason
       },
       doingBusinessAs,
