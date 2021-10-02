@@ -89,10 +89,7 @@ namespace Prime.Models
         {
             var newStatus = SiteStatus.FromType(siteStatusType, Id);
 
-            if (SiteStatuses == null)
-            {
-                SiteStatuses = new List<SiteStatus>();
-            }
+            SiteStatuses ??= new List<SiteStatus>();
             SiteStatuses.Add(newStatus);
 
             return newStatus;
@@ -109,7 +106,8 @@ namespace Prime.Models
                 ? SiteStatuses
                     .OrderByDescending(s => s.StatusDate)
                     .ThenByDescending(s => s.Id)
-                    .FirstOrDefault().StatusType
+                    .FirstOrDefault()
+                    .StatusType
                 : SiteStatusType.Editable;
         }
 
