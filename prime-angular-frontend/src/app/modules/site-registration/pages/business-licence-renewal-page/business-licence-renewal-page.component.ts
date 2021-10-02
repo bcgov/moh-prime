@@ -113,23 +113,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistratio
     }
   }
 
-  protected submissionRequest(): Observable<BusinessLicence> {
-    const siteId = this.route.snapshot.params.sid;
-
-    // Create or update the business licence with an uploaded document
-    const businessLicenceGuid = this.formState.businessLicenceGuid.value;
-    const expiryDate = this.formState.businessLicenceExpiry.value;
-
-    return this.siteResource.createBusinessLicence(siteId, new BusinessLicence(siteId, expiryDate), businessLicenceGuid);
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    // Remove the business licence GUID to prevent 404 already
-    // submitted if re-submitted in same session
-    // TODO revisit as this will occur, but we can't clear the GUID anymore
-    // this.formState.businessLicenceGuid.patchValue(null);
-    // this.formState.form.markAsPristine();
-
     const routePath = SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(routePath);

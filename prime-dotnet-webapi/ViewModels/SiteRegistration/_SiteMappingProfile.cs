@@ -21,6 +21,8 @@ namespace Prime.ViewModels.Profiles
             CreateMap<BusinessLicence, BusinessLicence>();
 
             CreateMap<SiteRegistrationNote, SiteRegistrationNoteViewModel>();
+
+            CreateMap<SiteSubmissionViewModel, SiteUpdateModel>();
         }
     }
 }

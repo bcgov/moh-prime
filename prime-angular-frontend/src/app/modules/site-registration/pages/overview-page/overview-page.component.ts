@@ -95,34 +95,21 @@ export class OverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) =>
-          (result)
-            ? of([
-              this.siteService.site,
-              this.siteFormStateService.json,
-              this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value
-            ])
-            : EMPTY
-        ),
-        exhaustMap(
-          ([currentSite, updatedSite, uploadedBusinessLicenceGuid]: [Site, Site, string]) => {
-            // Existence of a submission indicates that a resubmission is
-            // occurring and the site and/or business licence need updating
-            return iif(
-              () => !currentSite.submittedDate,
-              of(currentSite.id), // Skip as initial updates have already occurred
-              concat(
-                this.siteResource.updateSite(updatedSite),
-                ...this.siteService.businessLicenceUpdates(
-                  currentSite.id,
-                  currentSite.businessLicence,
-                  updatedSite.businessLicence,
-                  uploadedBusinessLicenceGuid
-                )
-              ).pipe(map(() => currentSite.id))
-            );
-          }),
-        exhaustMap((siteId: number) => this.siteResource.submitSite(siteId))
+        exhaustMap((result: boolean) => {
+          const { businessLicence, ...remainder } = this.siteFormStateService.json;
+          const value = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
+          const documentGuid = (value) ? value : null;
+          const payload = {
+            ...remainder,
+            businessLicence: {
+              ...businessLicence,
+              documentGuid
+            }
+          };
+          return (result)
+            ? this.siteResource.submitSite(this.siteService.site.id, payload)
+            : EMPTY;
+        })
       ).subscribe(() => this.nextRoute());
   }
 

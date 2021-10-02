@@ -256,8 +256,18 @@ export class SiteResource {
       );
   }
 
-  public submitSite(siteId: number): Observable<string> {
-    return this.apiResource.post<string>(`sites/${siteId}/submission`)
+  public submitSite(siteId: number, site: Site & { businessLicence: { documentGuid: string } }): Observable<string> {
+    if (site.businessHours?.length) {
+      site.businessHours = site.businessHours
+        .map((businessDay: BusinessDay) => {
+          businessDay.startTime = BusinessDayHours.toTimespan(businessDay.startTime);
+          businessDay.endTime = BusinessDayHours.toTimespan(businessDay.endTime);
+          return businessDay;
+        });
+    } else {
+      site.businessHours = null;
+    }
+    return this.apiResource.post<string>(`sites/${siteId}/submission`, site)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),

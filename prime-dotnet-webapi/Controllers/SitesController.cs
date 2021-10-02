@@ -315,14 +315,15 @@ namespace Prime.Controllers
         /// <summary>
         /// Submits the given site for adjudication.
         /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="updatedSite"></param>
         [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SubmitSiteRegistration(int siteId)
+        public async Task<ActionResult> SubmitSiteRegistration(int siteId, SiteSubmissionViewModel updatedSite)
         {
-
             var record = await _siteService.GetPermissionsRecordAsync(siteId);
             if (record == null)
             {
@@ -338,6 +339,9 @@ namespace Prime.Controllers
             {
                 return BadRequest("Action could not be performed.");
             }
+
+            await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
+
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
@@ -535,7 +539,6 @@ namespace Prime.Controllers
             return latest == true
                 ? Ok(await _siteService.GetLatestBusinessLicenceAsync(siteId))
                 : Ok(await _siteService.GetBusinessLicencesAsync(siteId));
-
         }
 
         // POST: api/sites/5/adjudication-documents
@@ -646,7 +649,7 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // stop update if site is non health authority and PEC is not unique
+            // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && await _siteService.PecExistsAsync(siteId, pecCode))
