@@ -341,6 +341,16 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
+            // Stop update if site is non health authority and PEC is not unique
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
+                && await _siteService.PecExistsAsync(updatedSite.PEC))
+            {
+                return BadRequest("PEC already exists");
+            }
+
             await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
