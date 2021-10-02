@@ -51,17 +51,6 @@ export class EnrolmentGuard extends BaseGuard {
           // allows be the most up-to-date enrolment (source of truth)
           this.enrolmentService.enrolment$.next(enrolment);
         }),
-        // exhaustMap((enrolment: Enrolment) => this.getUser$()
-        //   .pipe(
-        //     exhaustMap((bcscUser: BcscUser) =>
-        //       this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(bcscUser.dateOfBirth)
-        //         .pipe(
-        //           tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrolleeReturnee = result),
-        //           map((_) => enrolment),
-        //         )
-        //     ),
-        //   ),
-        // ),
         exhaustMap((enrolment: Enrolment) =>
           this.getUser$()
             .pipe(map((bcscUser: BcscUser) => [bcscUser, enrolment]))
