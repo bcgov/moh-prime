@@ -95,10 +95,17 @@ export class OverviewPageComponent implements OnInit {
     this.busy = this.dialog.open(ConfirmDialogComponent, { data })
       .afterClosed()
       .pipe(
-        exhaustMap((result: boolean) => {
-          const { businessLicence, ...remainder } = this.siteFormStateService.json;
-          const value = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
-          const documentGuid = (value) ? value : null;
+        exhaustMap((result: boolean) =>
+          (result)
+            ? of([
+              this.siteFormStateService.json,
+              this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value
+            ])
+            : EMPTY
+        ),
+        exhaustMap(([updatedSite, uploadedDocumentGuid]: [Site, string]) => {
+          const { businessLicence, ...remainder } = updatedSite;
+          const documentGuid = (uploadedDocumentGuid) ? uploadedDocumentGuid : null;
           const payload = {
             ...remainder,
             businessLicence: {
@@ -106,9 +113,7 @@ export class OverviewPageComponent implements OnInit {
               documentGuid
             }
           };
-          return (result)
-            ? this.siteResource.submitSite(this.siteService.site.id, payload)
-            : EMPTY;
+          return this.siteResource.submitSite(this.siteService.site.id, payload);
         })
       ).subscribe(() => this.nextRoute());
   }

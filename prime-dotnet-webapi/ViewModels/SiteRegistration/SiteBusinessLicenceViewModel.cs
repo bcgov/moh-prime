@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using Prime.Models;
 
 namespace Prime.ViewModels
 {
