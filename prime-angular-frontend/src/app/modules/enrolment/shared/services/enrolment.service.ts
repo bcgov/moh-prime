@@ -22,15 +22,14 @@ export interface IEnrolmentService {
   providedIn: 'root'
 })
 export class EnrolmentService implements IEnrolmentService {
-  public isPotentialPaperEnrolleeReturnee: boolean;
   // eslint-disable-next-line @typescript-eslint/naming-convention, no-underscore-dangle, id-blacklist, id-match
   private _enrolment: BehaviorSubject<Enrolment>;
+  private _isPotentialPaperEnrollee: boolean;
 
   constructor(
     private configService: ConfigService
   ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
-    this.isPotentialPaperEnrolleeReturnee = false;
   }
 
   public get enrolment$(): BehaviorSubject<Enrolment> {
@@ -49,8 +48,12 @@ export class EnrolmentService implements IEnrolmentService {
     return this.enrolment && this.enrolment.profileCompleted;
   }
 
-  public get isPotentialPaperEnrollee(): boolean {
-    return this.isPotentialPaperEnrolleeReturnee;
+  public get isPotentialPaperEnrolleeReturnee(): boolean {
+    return this._isPotentialPaperEnrollee;
+  }
+
+  public set isPotentialPaperEnrolleeReturnee(isPotentialPaperEnrollee: boolean) {
+    this._isPotentialPaperEnrollee = isPotentialPaperEnrollee
   }
 
   /**
