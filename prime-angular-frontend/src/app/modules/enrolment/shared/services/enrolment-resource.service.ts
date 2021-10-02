@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { ObjectUtils } from '@lib/utils/object-utils.class';
@@ -159,10 +159,14 @@ export class EnrolmentResource {
   }
 
   public getPotentialPaperEnrolleeReturneeStatus(dateOfBirth: string): Observable<boolean> {
-    return this.apiResource.head<boolean>(`enrollees/potential-paper-enrollee/${dateOfBirth}`)
+    const params = this.apiResourceUtilsService.makeHttpParams({ dateOfBirth });
+    return this.apiResource.head<boolean>('enrollees/paper-submissions', params)
       .pipe(
         map(() => true),
         catchError((error: any) => {
+          if (error.status === 404) {
+            return of(false);
+          }
           this.logger.error('[Enrolment] EnrolmentResource::getPotentialPaperEnrolleeReturneeStatus error has occurred:  ', error);
           throw error;
         })

@@ -265,20 +265,24 @@ namespace Prime.Services
             _context.Set<T>().AddRange(itemList);
         }
 
-        public async Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth)
+        public async Task<bool> IsPotentialPaperEnrolleeReturneeAsync(DateTime dateOfBirth)
         {
+            var confirmedLinks = await _context.EnrolleeLinkedEnrolment
+                .AsNoTracking()
+                .Where(cl => cl.Confirmed)
+                .Select(cl => cl.PaperEnrolleeId)
+                .ToListAsync();
+
             return await _context.Enrollees
                 .AsNoTracking()
                 .AnyAsync(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
+                    && !confirmedLinks.Contains(e.Id)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolment.Any(
-                        ele => ele.IsConfirmed
-                        )
                 );
         }
 
-        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth)
+        public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
             return await _context.Enrollees
                 .AsNoTracking()
@@ -286,13 +290,13 @@ namespace Prime.Services
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
                     && !_context.EnrolleeLinkedEnrolment.Any(
-                        ele => ele.IsConfirmed
+                        ele => ele.Confirmed
                         )
                 )
                 .ToListAsync();
         }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int paperEnrolmentId, bool isConfirmed = false)
+        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolmentId, int paperEnrolmentId, bool isConfirmed = false)
         {
             var enrollee = await _context.Enrollees
                 .Where(
@@ -322,14 +326,14 @@ namespace Prime.Services
 
             enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolmentId;
             enrolleeLinkedEnrolment.EnrolmentLinkDate = DateTime.Now;
-            enrolleeLinkedEnrolment.IsConfirmed = isConfirmed;
+            enrolleeLinkedEnrolment.Confirmed = isConfirmed;
 
             await _context.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task CreateInitialLink(int enrolleeId, string userProvidedGpid)
+        public async Task CreateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
                 .Where(ele => ele.EnrolleeId == enrolleeId)
@@ -353,7 +357,7 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateLinkedGpid(int enrolleeId, string userUpdatedGpid)
+        public async Task UpdateLinkedGpidAsync(int enrolleeId, string userUpdatedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
                 .Where(ele => ele.EnrolleeId == enrolleeId)
@@ -363,7 +367,7 @@ namespace Prime.Services
             _context.SaveChanges();
         }
 
-        public async Task<string> GetLinkedGpid(int enrolleeId)
+        public async Task<string> GetLinkedGpidAsync(int enrolleeId)
         {
             var value = await _context.EnrolleeLinkedEnrolment
             .AsNoTracking()
@@ -377,6 +381,13 @@ namespace Prime.Services
 
             return value.UserProvidedGpid;
         }
-
+        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
+        {
+            return await _context.Enrollees
+                .AsNoTracking()
+                .Where(e => e.Id == enrolleeId)
+                .Select(e => new PermissionsRecord { UserId = e.UserId })
+                .SingleOrDefaultAsync();
+        }
     }
 }

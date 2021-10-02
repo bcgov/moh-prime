@@ -30,6 +30,7 @@ export class EnrolmentService implements IEnrolmentService {
     private configService: ConfigService
   ) {
     this._enrolment = new BehaviorSubject<Enrolment>(null);
+    this.isPotentialPaperEnrolleeReturnee = false;
   }
 
   public get enrolment$(): BehaviorSubject<Enrolment> {

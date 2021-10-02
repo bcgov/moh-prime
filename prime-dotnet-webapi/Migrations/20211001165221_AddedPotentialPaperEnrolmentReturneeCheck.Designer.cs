@@ -11,7 +11,7 @@ using Prime.Models;
 namespace Prime.Migrations
 {
     [DbContext(typeof(ApiDbContext))]
-    [Migration("20210928232035_AddedPotentialPaperEnrolmentReturneeCheck")]
+    [Migration("20211001165221_AddedPotentialPaperEnrolmentReturneeCheck")]
     partial class AddedPotentialPaperEnrolmentReturneeCheck
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -218,8 +218,9 @@ namespace Prime.Migrations
 
                     b.ToTable("Agreement");
 
-                    b.HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey", @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                    b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
+
+                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
                      + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
@@ -11934,6 +11935,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -11945,9 +11949,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("EnrolmentLinkDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
 
                     b.Property<int?>("PaperEnrolleeId")
                         .HasColumnType("integer");
@@ -13848,6 +13849,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<bool>("PendingTransfer")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");

@@ -11933,6 +11933,9 @@ namespace Prime.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<bool>("Confirmed")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTimeOffset>("CreatedTimeStamp")
                         .HasColumnType("timestamp with time zone");
 
@@ -11944,9 +11947,6 @@ namespace Prime.Migrations
 
                     b.Property<DateTime>("EnrolmentLinkDate")
                         .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsConfirmed")
-                        .HasColumnType("boolean");
 
                     b.Property<int?>("PaperEnrolleeId")
                         .HasColumnType("integer");

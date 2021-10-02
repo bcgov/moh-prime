@@ -22,7 +22,7 @@ namespace Prime.Migrations
                     PaperEnrolleeId = table.Column<int>(nullable: true),
                     UserProvidedGpid = table.Column<string>(nullable: true),
                     EnrolmentLinkDate = table.Column<DateTime>(nullable: false),
-                    IsConfirmed = table.Column<bool>(nullable: false)
+                    Confirmed = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

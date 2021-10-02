@@ -25,12 +25,12 @@ namespace Prime.Services
         Task FinalizeSubmissionAsync(int enrolleeId);
         Task AddEnrolleeAdjudicationDocumentsAsync(int enrolleeId, int adminId, IEnumerable<PaperEnrolleeDocumentViewModel> documents);
         Task<IEnumerable<EnrolleeAdjudicationDocument>> GetEnrolleeAdjudicationDocumentsAsync(int enrolleeId);
-        Task<bool> IsPotentialPaperEnrolleeReturnee(DateTime dateOfBirth);
-        Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturnees(DateTime dateOfBirth);
-        Task<bool> LinkEnrolmentToPaperEnrolment(int enrolmentId, int PaperEnrolmentId, bool isConfirmed = false);
-        Task CreateInitialLink(int enrolleeId, string userProvidedGpid);
-        Task UpdateLinkedGpid(int enrolleeId, string userUpdatedGpid);
-        Task<String> GetLinkedGpid(int enrolleeId);
-
+        Task<bool> IsPotentialPaperEnrolleeReturneeAsync(DateTime dateOfBirth);
+        Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth);
+        Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolmentId, int PaperEnrolmentId, bool isConfirmed = false);
+        Task CreateInitialLinkAsync(int enrolleeId, string userProvidedGpid);
+        Task UpdateLinkedGpidAsync(int enrolleeId, string userUpdatedGpid);
+        Task<string> GetLinkedGpidAsync(int enrolleeId);
+        Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
     }
 }

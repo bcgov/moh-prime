@@ -22,6 +22,12 @@ export abstract class AbstractResource {
     options: { [key: string]: any; }
   ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
 
+  public abstract head(
+    path: string,
+    params: HttpParams,
+    options: { [key: string]: any; }
+  ): Observable<ApiHttpResponse<any> | ApiHttpErrorResponse>;
+
   public abstract post(
     path: string,
     body: { [key: string]: any; },

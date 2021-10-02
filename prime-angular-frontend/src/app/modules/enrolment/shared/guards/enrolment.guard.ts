@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { exhaustMap, map, tap } from 'rxjs/operators';
+import { exhaustMap, map, tap, startWith, concatMap } from 'rxjs/operators';
 
 import { APP_CONFIG, AppConfig } from 'app/app-config.module';
 import { RouteUtils } from '@lib/utils/route-utils.class';
@@ -51,6 +51,17 @@ export class EnrolmentGuard extends BaseGuard {
           // allows be the most up-to-date enrolment (source of truth)
           this.enrolmentService.enrolment$.next(enrolment);
         }),
+        exhaustMap((enrolment: Enrolment) => this.getUser$()
+          .pipe(
+            exhaustMap((bcscUser: BcscUser) =>
+              this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(bcscUser.dateOfBirth)
+                .pipe(
+                  tap((result: boolean) => this.enrolmentService.isPotentialPaperEnrolleeReturnee = result),
+                  map((_) => enrolment),
+                )
+            ),
+          ),
+        ),
         exhaustMap((enrolment: Enrolment) =>
           this.authService.identityProvider$()
             .pipe(map((identityProvider: IdentityProviderEnum) => [routePath, enrolment, identityProvider]))
@@ -58,15 +69,6 @@ export class EnrolmentGuard extends BaseGuard {
         map((params: [string, Enrolment, IdentityProviderEnum]) =>
           this.routeDestination(...params)
         ),
-        exhaustMap(() => this.getUser$()
-          .pipe(
-            exhaustMap((bcscUser: BcscUser) =>
-              this.enrolmentResource.getPotentialPaperEnrolleeReturneeStatus(bcscUser.dateOfBirth)
-                .pipe(
-                  map((result: boolean) => this.enrolmentService.isPotentialPaperEnrolleeReturnee = result)
-                )
-            )
-          )),
       );
   }
 
@@ -87,6 +89,7 @@ export class EnrolmentGuard extends BaseGuard {
     ) {
       return this.navigate(routePath, EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION);
     }
+
     if (!enrolment) {
       // Route based on identity provider to determine sequence of routing
       // required to create a new enrolment
@@ -277,6 +280,14 @@ export class EnrolmentGuard extends BaseGuard {
     } else if (routePath.includes(EnrolmentRoutes.BCEID_DEMOGRAPHIC) && identityProvider === IdentityProviderEnum.BCSC) {
       return routePath.replace(
         EnrolmentRoutes.BCEID_DEMOGRAPHIC,
+        EnrolmentRoutes.OVERVIEW
+      );
+    }
+
+    // Denined routes based on potential paper enrollees
+    if (routePath.includes(EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION) && !this.enrolmentService.isPotentialPaperEnrolleeReturnee) {
+      return routePath.replace(
+        EnrolmentRoutes.PAPER_ENROLLEE_RETURNEE_DECLARATION,
         EnrolmentRoutes.OVERVIEW
       );
     }
