@@ -154,11 +154,12 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // stop update if site is non health authority and PEC is not unique
+            // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC
-                && await _siteService.PecExistsAsync(siteId, updatedSite.PEC))
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
+                && await _siteService.PecExistsAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -652,7 +653,8 @@ namespace Prime.Controllers
             // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && await _siteService.PecExistsAsync(siteId, pecCode))
+                && site.PEC != pecCode
+                && await _siteService.PecExistsAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
             }
@@ -1168,7 +1170,8 @@ namespace Prime.Controllers
 
         // GET: api/sites/1/pec-exists
         /// <summary>
-        /// Check if a given PEC already exists, only applicable to non health authority site
+        /// Check if a given PEC already exists, and not already associated to the site.
+        /// Only applicable to non health authority site
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="pec"></param>
@@ -1189,9 +1192,13 @@ namespace Prime.Controllers
             {
                 return BadRequest("PEC cannot be empty.");
             }
+            if (site.PEC == pec)
+            {
+                return Ok(false);
+            }
 
-            var exist = await _siteService.PecExistsAsync(siteId, pec);
-            return Ok(exist);
+            var exists = await _siteService.PecExistsAsync(pec);
+            return Ok(exists);
         }
     }
 }

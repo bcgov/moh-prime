@@ -746,11 +746,11 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<bool> PecExistsAsync(int siteId, string pec)
+        public async Task<bool> PecExistsAsync(string pec)
         {
             return await _context.Sites
                 .AsNoTracking()
-                .AnyAsync(s => s.Id != siteId && s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

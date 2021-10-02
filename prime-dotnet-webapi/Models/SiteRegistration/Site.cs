@@ -19,6 +19,7 @@ namespace Prime.Models
             BusinessLicences = new List<BusinessLicence>();
         }
 
+        public const int RENEWAL_PERIOD_IN_DAYS = 90;
 
         [Key]
         public int Id { get; set; }
@@ -122,6 +123,18 @@ namespace Prime.Models
                     .OrderByDescending(l => l.UploadedDate.HasValue)
                     .ThenByDescending(l => l.UploadedDate)
                     .FirstOrDefault();
+        }
+
+        public bool WithinRenewalPeriod()
+        {
+            if (BusinessLicence?.ExpiryDate == null && SubmittedDate == null)
+            {
+                return false;
+            }
+
+            var expiryDate = BusinessLicence?.ExpiryDate ?? SubmittedDate.Value.AddYears(1);
+
+            return DateTime.Now > expiryDate.AddDays(-RENEWAL_PERIOD_IN_DAYS);
         }
     }
 }
