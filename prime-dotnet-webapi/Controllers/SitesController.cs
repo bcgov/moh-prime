@@ -350,8 +350,32 @@ namespace Prime.Controllers
             {
                 return BadRequest("PEC already exists");
             }
-
+            
             await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
+
+            var updatedBusinessLicence = _mapper.Map<BusinessLicence>(updatedSite.BusinessLicence);
+            var documentGuid = updatedSite.BusinessLicence.DocumentGuid ?? Guid.Empty;
+
+            if (site.WithinRenewalPeriod())
+            {
+                var licence = await _siteService.AddBusinessLicenceAsync(siteId, _mapper.Map<BusinessLicence>(updatedBusinessLicence), documentGuid);
+                if (licence == null)
+                {
+                    return BadRequest("Business Licence could not be created; network error or upload is already submitted");
+                }
+            }
+            else
+            {
+                if (documentGuid != Guid.Empty)
+                {
+                    var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(updatedBusinessLicence.Id, documentGuid);
+                    if (document == null)
+                    {
+                        return BadRequest("Business Licence Document could not be created; network error or upload is already submitted");
+                    }
+                }
+                await _siteService.UpdateBusinessLicenceAsync(updatedBusinessLicence.Id, updatedBusinessLicence);
+            }
 
             site = await _siteService.SubmitRegistrationAsync(siteId);
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
@@ -1180,8 +1204,8 @@ namespace Prime.Controllers
 
         // GET: api/sites/1/pec-exists
         /// <summary>
-        /// Check if a given PEC already exists, and not already associated to the site.
-        /// Only applicable to non health authority site
+        /// Check if a given PEC exists within non health authority sites, and
+        /// excludes the PEC if already assigned to the site.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="pec"></param>
