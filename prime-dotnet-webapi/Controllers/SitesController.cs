@@ -680,8 +680,7 @@ namespace Prime.Controllers
                 return Ok(true);
             }
 
-            var valid = await _siteService.PecValidAsync(pec);
-            return Ok(valid);
+            return Ok(await _siteService.PecValidAsync(pec));
         }
 
         // PUT: api/Sites/5/pec
