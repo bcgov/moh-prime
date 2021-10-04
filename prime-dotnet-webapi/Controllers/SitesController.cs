@@ -653,6 +653,39 @@ namespace Prime.Controllers
             return Ok(token);
         }
 
+        // GET: api/sites/1/pec/abc/validate
+        /// <summary>
+        /// Check if a given PEC is valid.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpPost("{siteId}/pec/{pec}/validate", Name = nameof(PecValid))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> PecValid(int siteId, string pec)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+            if (site.PEC == pec)
+            {
+                return Ok(true);
+            }
+
+            var valid = await _siteService.PecValidAsync(pec);
+            return Ok(valid);
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.
@@ -1200,38 +1233,6 @@ namespace Prime.Controllers
             }
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
-        }
-
-        // GET: api/sites/1/pec-valid
-        /// <summary>
-        /// Check if a given PEC is valid, and excludes the PEC already assigned to the site.
-        /// </summary>
-        /// <param name="siteId"></param>
-        /// <param name="pec"></param>
-        /// <returns></returns>
-        [HttpGet("{siteId}/pec-valid", Name = nameof(PecValid))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> PecValid(int siteId, string pec)
-        {
-            var site = await _siteService.GetSiteAsync(siteId);
-            if (site == null)
-            {
-                return NotFound($"Site not found with id {siteId}");
-            }
-            if (string.IsNullOrWhiteSpace(pec))
-            {
-                return BadRequest("PEC cannot be empty.");
-            }
-            if (site.PEC == pec)
-            {
-                return Ok(true);
-            }
-
-            var valid = await _siteService.PecValidAsync(pec);
-            return Ok(valid);
         }
     }
 }
