@@ -2,7 +2,7 @@ import { FormBuilder, FormControl, Validators } from '@angular/forms';
 
 import { Observable } from 'rxjs';
 
-import { uniqueAsync } from '@lib/validators/form-async.validators';
+import { asyncValidator } from '@lib/validators/form-async.validators';
 import { AbstractFormState } from '@lib/classes/abstract-form-state.class';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -101,12 +101,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       pec: [
         null,
         [Validators.required],
-        uniqueAsync(this.checkPecIsUnique())
+        asyncValidator(this.checkPecIsValid(), 'pecValid')
       ]
     });
   }
 
-  private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecUnique(this.siteId, value);
+  private checkPecIsValid(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecValid(this.siteId, value);
   }
 }

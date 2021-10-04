@@ -8,7 +8,7 @@ import { BehaviorSubject, EMPTY, forkJoin, Observable, of, Subscription } from '
 import { exhaustMap } from 'rxjs/operators';
 
 import { Party } from '@lib/models/party.model';
-import { uniqueAsync } from '@lib/validators/form-async.validators';
+import { asyncValidator } from '@lib/validators/form-async.validators';
 import { FormControlValidators } from '@lib/validators/form-control.validators';
 import { OrganizationResource } from '@core/resources/organization-resource.service';
 import { SiteResource } from '@core/resources/site-resource.service';
@@ -182,7 +182,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        uniqueAsync(this.checkPecIsUnique())
+        asyncValidator(this.checkPecIsValid(), 'pecValid')
       ]
     });
   }
@@ -191,7 +191,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.form.patchValue({ pec });
   }
 
-  private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecUnique(this.site.id, value);
+  private checkPecIsValid(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecValid(this.site.id, value);
   }
 }

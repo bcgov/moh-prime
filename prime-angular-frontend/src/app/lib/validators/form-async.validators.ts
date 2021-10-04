@@ -5,13 +5,13 @@ import { map } from 'rxjs/operators';
 
 /**
  * @description
- * Check that a value is unique.
+ * Customizable async validator.
  */
-export function uniqueAsync(request: (value: string) => Observable<boolean>, errorKey = 'unique'): AsyncValidatorFn {
+export function asyncValidator(request: (value: string) => Observable<boolean>, errorKey: string): AsyncValidatorFn {
   return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     return request(control.value)
       .pipe(
-        map((result: boolean) => (result) ? { [errorKey]: result } : null)
+        map((result: boolean) => (!result) ? { [errorKey]: result } : null)
       );
   };
 }
