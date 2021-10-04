@@ -24,6 +24,8 @@ namespace Prime.Configuration.Environment
         {
             var appKey = envKey switch
             {
+                "DB_CONNECTION_STRING" => "ConnectionStrings__PrimeDatabase",
+
                 "FRONTEND_URL" => "FrontendUrl",
                 "BACKEND_URL" => "BackendUrl",
 
