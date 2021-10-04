@@ -10,14 +10,21 @@ namespace Prime.Models
     {
         [Key]
         public int Id { get; set; }
+
         public int EnrolleeId { get; set; }
+
         [JsonIgnore]
         public Enrollee Enrollee { get; set; }
+
         public int? PaperEnrolleeId { get; set; }
+
         [JsonIgnore]
         public Enrollee PaperEnrollee { get; set; }
+
         public string UserProvidedGpid { get; set; }
+
         public DateTime EnrolmentLinkDate { get; set; }
+
         public bool Confirmed { get; set; }
     }
 }
