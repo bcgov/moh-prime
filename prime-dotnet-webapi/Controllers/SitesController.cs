@@ -69,10 +69,8 @@ namespace Prime.Controllers
             {
                 return Ok(sites);
             }
-            else
-            {
-                return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
-            }
+
+            return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
         }
 
         // GET: api/Sites/5
