@@ -63,11 +63,12 @@
           <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
             Must be a 3-letter code
           </mat-error>
-          <mat-error *ngIf="pec.hasError('pecValid')">
+          <mat-error *ngIf="pec.hasError('valid')">
             Site ID has already been used by another site
           </mat-error>
         </mat-form-field>
       </ng-container>
     </ng-template>
   </section>
+
 </ng-container>

@@ -101,7 +101,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       pec: [
         null,
         [Validators.required],
-        asyncValidator(this.checkPecIsValid(), 'pecValid')
+        asyncValidator(this.checkPecIsValid(), 'valid')
       ]
     });
   }

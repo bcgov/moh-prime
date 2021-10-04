@@ -748,9 +748,9 @@ namespace Prime.Services
 
         public async Task<bool> PecValidAsync(string pec)
         {
-            return await _context.Sites
+            return !await _context.Sites
                 .AsNoTracking()
-                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+                .AnyAsync(s => s.PEC == pec);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()
