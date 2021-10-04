@@ -550,13 +550,13 @@ export class SiteResource {
       );
   }
 
-  public pecUnique(siteId: number, pec: string): Observable<boolean> {
+  public pecExists(siteId: number, pec: string): Observable<boolean> {
     const params = this.apiResourceUtilsService.makeHttpParams({ pec });
-    return this.apiResource.get(`sites/${siteId}/pec-unique`, params)
+    return this.apiResource.get(`sites/${siteId}/pec-exists`, params)
       .pipe(
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[SiteRegistration] SiteResource::pecUnique error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::pecExists error has occurred: ', error);
           throw error;
         })
       );

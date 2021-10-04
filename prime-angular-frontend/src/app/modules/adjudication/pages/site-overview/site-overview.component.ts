@@ -192,6 +192,6 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecUnique(this.site.id, value);
+    return (value: string) => this.siteResource.pecExists(this.site.id, value);
   }
 }
