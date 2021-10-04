@@ -159,7 +159,7 @@ namespace Prime.Controllers
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
                 && site.PEC != updatedSite.PEC
-                && await _siteService.PecValidAsync(updatedSite.PEC))
+                && !await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -346,7 +346,7 @@ namespace Prime.Controllers
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
                 && site.PEC != updatedSite.PEC
-                && await _siteService.PecValidAsync(updatedSite.PEC))
+                && !await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -688,7 +688,7 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && site.PEC != pecCode
-                && await _siteService.PecValidAsync(pecCode))
+                && !await _siteService.PecValidAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
             }
