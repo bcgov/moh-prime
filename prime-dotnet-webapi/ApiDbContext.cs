@@ -122,6 +122,11 @@ namespace Prime
         // GIS
         public DbSet<GisEnrolment> GisEnrolments { get; set; }
 
+
+        public DbSet<PartyCertification> PartyCertifications { get; set; }
+
+
+
         public override int SaveChanges()
         {
             ApplyAudits();
