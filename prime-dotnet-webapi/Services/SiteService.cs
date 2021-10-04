@@ -748,6 +748,7 @@ namespace Prime.Services
 
         public async Task<bool> PecValidAsync(string pec)
         {
+            // TODO: Validate re: care settings and HA
             return !await _context.Sites
                 .AsNoTracking()
                 .AnyAsync(s => s.PEC == pec);
