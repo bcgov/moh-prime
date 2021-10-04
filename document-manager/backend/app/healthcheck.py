@@ -3,7 +3,6 @@ import psycopg2
 from flask import current_app
 from psycopg2 import OperationalError
 from redis import Redis, ConnectionError
-# from sqlalchemy import create_engine
 
 
 def postgres_healthcheck():
