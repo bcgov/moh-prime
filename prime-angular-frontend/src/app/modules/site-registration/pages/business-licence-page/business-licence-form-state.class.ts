@@ -107,6 +107,6 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
   }
 
   private checkPecIsUnique(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecExists(this.siteId, value);
+    return (value: string) => this.siteResource.pecUnique(this.siteId, value);
   }
 }
