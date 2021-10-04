@@ -746,7 +746,7 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<bool> PecExistsAsync(string pec)
+        public async Task<bool> PecValidAsync(string pec)
         {
             return await _context.Sites
                 .AsNoTracking()

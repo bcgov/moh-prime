@@ -159,7 +159,7 @@ namespace Prime.Controllers
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
                 && site.PEC != updatedSite.PEC
-                && await _siteService.PecExistsAsync(updatedSite.PEC))
+                && await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -346,7 +346,7 @@ namespace Prime.Controllers
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
                 && site.PEC != updatedSite.PEC
-                && await _siteService.PecExistsAsync(updatedSite.PEC))
+                && await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -688,7 +688,7 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && site.PEC != pecCode
-                && await _siteService.PecExistsAsync(pecCode))
+                && await _siteService.PecValidAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
             }
@@ -1202,20 +1202,19 @@ namespace Prime.Controllers
             return Ok(site);
         }
 
-        // GET: api/sites/1/pec-unique
+        // GET: api/sites/1/pec-valid
         /// <summary>
-        /// Check if a given PEC is unique within non health authority sites, and
-        /// exclude the PEC already assigned to the site.
+        /// Check if a given PEC is valid, and excludes the PEC already assigned to the site.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="pec"></param>
         /// <returns></returns>
-        [HttpGet("{siteId}/pec-unique", Name = nameof(PecUnique))]
+        [HttpGet("{siteId}/pec-valid", Name = nameof(PecValid))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> PecUnique(int siteId, string pec)
+        public async Task<ActionResult> PecValid(int siteId, string pec)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -1228,11 +1227,11 @@ namespace Prime.Controllers
             }
             if (site.PEC == pec)
             {
-                return Ok(false);
+                return Ok(true);
             }
 
-            var exists = await _siteService.PecExistsAsync(pec);
-            return Ok(exists);
+            var valid = await _siteService.PecValidAsync(pec);
+            return Ok(valid);
         }
     }
 }
