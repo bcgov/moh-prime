@@ -1,10 +1,9 @@
-import os
 from .config import Config
-
+import psycopg2
 from flask import current_app
 from psycopg2 import OperationalError
 from redis import Redis, ConnectionError
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 
 
 def postgres_healthcheck():
@@ -12,18 +11,10 @@ def postgres_healthcheck():
     Verify that the PRIME PostgreSQL database is available for connection requests.
     If successful, return True. Otherwise, return False.
     """
-    # DB_HOST = Config.DB_HOST
-    # DB_PORT = Config.DB_PORT
-    # DB_NAME = Config.DB_NAME
-    # DB_USER = Config.DB_USER
-    # DB_PASS = Config.DB_PASS
 
     try:
-        # db = f"postgres+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-        db = os.environ.get('SQLALCHEMY_DATABASE_URI')
-        db_engine = create_engine(db)
-
-        db_engine.connect()
+        db = psycopg2.connect("")
+        
     except OperationalError:
         return False, "Document Manager is unhealthy because the PostgreSQL database cannot be reached."
     
