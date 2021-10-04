@@ -38,6 +38,7 @@ import { SiteNotification } from '../models/site-notification.model';
 import { BulkEmailType } from '@shared/enums/bulk-email-type';
 import { AgreementTypeGroup } from '@shared/enums/agreement-type-group.enum';
 import { AgreementVersion } from '@shared/models/agreement-version.model';
+
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 
 @Injectable({
@@ -100,7 +101,7 @@ export class AdjudicationResource {
         tap((notes: EnrolleeNote) => this.logger.info('ENROLLEE AGREEMENT NOTES', notes)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee access agreement notes could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeAccessAgreementNotes error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getAccessAgreementNotesByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -113,7 +114,7 @@ export class AdjudicationResource {
         tap((careSettings: CareSetting) => this.logger.info('ENROLLEE CARE SETTINGS', careSettings)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeCareSettings error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getCareSettingsByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -126,7 +127,7 @@ export class AdjudicationResource {
         tap((certifications: CollegeCertification[]) => this.logger.info('ENROLLEE CERTIFICATIONS', certifications)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeCertifications error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getCertificationsByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -139,7 +140,7 @@ export class AdjudicationResource {
         tap((remoteUsers: EnrolleeRemoteUser[]) => this.logger.info('ENROLLEE REMOTE USERS', remoteUsers)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeRemoteUser error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getRemoteUsersByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -152,7 +153,7 @@ export class AdjudicationResource {
         tap((oboSites: OboSite[]) => this.logger.info('ENROLLEE OBO SITES', oboSites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeOboSites error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getOboSitesByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -165,7 +166,7 @@ export class AdjudicationResource {
         tap((remoteAccessLocations: RemoteAccessLocation[]) => this.logger.info('ENROLLEE REMOTE ACCESS LOCATIONS', remoteAccessLocations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeRemoteAccessLocations error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getRemoteAccessLocationsByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -178,7 +179,7 @@ export class AdjudicationResource {
         tap((remoteAccessSites: RemoteAccessSite[]) => this.logger.info('REMOTE ACCESS SITES', remoteAccessSites)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeRemoteAccessSites error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getRemoteAccessSitesByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -191,7 +192,7 @@ export class AdjudicationResource {
         tap((selfDeclarations: SelfDeclaration[]) => this.logger.info('ENROLLEE SELF DECLARATIONS', selfDeclarations)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeSelfDeclarations error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getSelfDeclarationsByEnrolleeId error has occurred: ', error);
           throw error;
         })
       );
@@ -204,7 +205,7 @@ export class AdjudicationResource {
         tap((SelfDeclarationsDocument: SelfDeclarationDocument[]) => this.logger.info('ENROLLEE SELF DECLARATIONS DOCUMENTS', SelfDeclarationsDocument)),
         catchError((error: any) => {
           this.toastService.openErrorToast('Enrollee care settings could not be retrieved');
-          this.logger.error('[Adjudication] AdjudicationResource::getEnrolleeSelfDeclarations error has occurred: ', error);
+          this.logger.error('[Adjudication] AdjudicationResource::getSelfDeclarationsDocumentsById error has occurred: ', error);
           throw error;
         })
       );
