@@ -158,7 +158,6 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && site.PEC != updatedSite.PEC
                 && !await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
@@ -345,7 +344,6 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && site.PEC != updatedSite.PEC
                 && !await _siteService.PecValidAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
@@ -687,7 +685,6 @@ namespace Prime.Controllers
             // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && site.PEC != pecCode
                 && !await _siteService.PecValidAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
