@@ -43,7 +43,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Shallowly immutable reference to a selection of site properties
    * for use determining state of the site.
    */
-  private site: Pick<Site, 'status'| 'completed' | 'submittedDate' | 'approvedDate' | 'careSettingCode'>;
+  private site: Pick<Site, 'status' | 'completed' | 'submittedDate' | 'approvedDate' | 'careSettingCode'>;
 
   constructor(
     protected fb: FormBuilder,
@@ -161,6 +161,12 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     if (pecDeferred) {
       pecControl.clearValidators();
       pecControl.updateValueAndValidity();
+    }
+
+    // Hours of operation disables fields when marking them as 24 hours, which
+    // persists to the overview during routing
+    if (this.hoursOperationPageFormState.form.disabled) {
+      this.hoursOperationPageFormState.form.enable();
     }
 
     const isSubmissionValid = this.isValid;

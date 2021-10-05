@@ -550,12 +550,12 @@ export class SiteResource {
       );
   }
 
-  public pecValid(siteId: number, pec: string): Observable<boolean> {
-    return this.apiResource.post(`sites/${siteId}/pec/${pec}/validate`)
+  public pecAssignable(siteId: number, pec: string): Observable<boolean> {
+    return this.apiResource.post(`sites/${siteId}/pec/${pec}/assignable`)
       .pipe(
         map((response: ApiHttpResponse<boolean>) => response.result),
         catchError((error: any) => {
-          this.logger.error('[SiteRegistration] SiteResource::pecValid error has occurred: ', error);
+          this.logger.error('[SiteRegistration] SiteResource::pecAssignable error has occurred: ', error);
           throw error;
         })
       );

@@ -105,12 +105,12 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       pec: [
         null,
         [Validators.required],
-        asyncValidator(this.checkPecIsValid(), 'pecValid')
+        asyncValidator(this.checkPecIsAssignable(), 'assignable')
       ]
     });
   }
 
-  private checkPecIsValid(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecValid(this.siteId, value);
+  private checkPecIsAssignable(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecAssignable(this.siteId, value);
   }
 }

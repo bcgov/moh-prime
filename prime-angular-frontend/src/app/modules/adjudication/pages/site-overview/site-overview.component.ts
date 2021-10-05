@@ -182,7 +182,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        asyncValidator(this.checkPecIsValid(), 'pecValid')
+        asyncValidator(this.checkPecIsAssignable(), 'assignable')
       ]
     });
   }
@@ -191,7 +191,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
     this.form.patchValue({ pec });
   }
 
-  private checkPecIsValid(): (value: string) => Observable<boolean> {
-    return (value: string) => this.siteResource.pecValid(this.site.id, value);
+  private checkPecIsAssignable(): (value: string) => Observable<boolean> {
+    return (value: string) => this.siteResource.pecAssignable(this.site.id, value);
   }
 }

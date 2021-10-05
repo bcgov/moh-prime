@@ -152,10 +152,10 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
                 && !await _siteService.PecAssignableAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
@@ -341,6 +341,7 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
                 && !await _siteService.PecAssignableAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
@@ -661,20 +662,20 @@ namespace Prime.Controllers
             return Ok(token);
         }
 
-        // GET: api/sites/1/pec/abc/validate
+        // GET: api/sites/1/pec/abc/assignable
         /// <summary>
-        /// Check if a given PEC is valid.
+        /// Check if a given PEC is assignable.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="pec"></param>
         /// <returns></returns>
-        [HttpPost("{siteId}/pec/{pec}/validate", Name = nameof(PecValid))]
+        [HttpPost("{siteId}/pec/{pec}/assignable", Name = nameof(PecAssignable))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> PecValid(int siteId, string pec)
+        public async Task<ActionResult> PecAssignable(int siteId, string pec)
         {
             var site = await _siteService.GetSiteAsync(siteId);
             if (site == null)
@@ -724,9 +725,9 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && site.PEC != pecCode
                 && !await _siteService.PecAssignableAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
