@@ -18,6 +18,7 @@
       </ng-container>
 
       <app-page-footer [isInitialEnrolment]="!isCompleted"
+                       [primaryActionLabel]="(hasBeenSubmitted) ? 'Continue' : 'Save and Continue'"
                        [hasSecondaryAction]="true"
                        (save)="onSubmit()"
                        (continue)="onBack()"
