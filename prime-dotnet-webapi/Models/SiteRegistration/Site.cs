@@ -127,7 +127,7 @@ namespace Prime.Models
         /// Site submissions are considered renewals starting 90 days before the expiry of its current Business Licence.
         /// For sites without expiry dates on thier BL, expiry is considered to be one year after the Site's submitted date.
         /// </summary>
-        public bool WithinRenewalPeriod()
+        public bool IsWithinRenewalPeriod()
         {
             if (SubmittedDate == null)
             {
