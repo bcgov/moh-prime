@@ -21,7 +21,6 @@ import { OrganizationFormStateService } from '@registration/shared/services/orga
 import { OrganizationService } from '@registration/shared/services/organization.service';
 import { OrganizationSigningAuthorityPageFormState } from './organization-signing-authority-page-form-state.class';
 
-
 @Component({
   selector: 'app-organization-signing-authority-page',
   templateUrl: './organization-signing-authority-page.component.html',
@@ -30,8 +29,9 @@ import { OrganizationSigningAuthorityPageFormState } from './organization-signin
 export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolmentPage implements OnInit {
   public formState: OrganizationSigningAuthorityPageFormState;
   public title: string;
-  public isCompleted: boolean;
+  public organizationId: number;
   public organization: Organization;
+  public isCompleted: boolean;
   public SiteRoutes = SiteRoutes;
   /**
    * @description
@@ -59,6 +59,8 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.organizationId = +this.route.snapshot.params.oid;
   }
 
   public onPreferredNameChange({ checked }: { checked: boolean }): void {
@@ -75,6 +77,10 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
 
   public onMailingAddressChange({ checked }: { checked: boolean }): void {
     this.toggleAddressLineValidators(checked, this.formState.mailingAddress, this.hasVerifiedAddress);
+  }
+
+  public onBack() {
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public ngOnInit(): void {
@@ -138,8 +144,6 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
   }
 
   protected afterSubmitIsSuccessful(party: Party): void {
-    this.formState.form.markAsPristine();
-
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: (string | number)[];
     const organization = this.organizationService.organization;
@@ -151,8 +155,7 @@ export class OrganizationSigningAuthorityPageComponent extends AbstractEnrolment
         ? ['../', organization.id, SiteRoutes.ORGANIZATION_REVIEW]
         : organization
           ? ['../', organization.id, SiteRoutes.ORGANIZATION_NAME]
-          // : ['../', 0, SiteRoutes.ORGANIZATION_CLAIM]; // ADD
-          : ['../', 0, SiteRoutes.ORGANIZATION_NAME]; // REMOVE
+          : ['../', 0, SiteRoutes.ORGANIZATION_NAME];
     }
     this.routeUtils.routeRelativeTo(routePath);
   }

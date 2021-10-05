@@ -123,8 +123,7 @@ export class OrganizationGuard extends BaseGuard {
     // Provides a default of the initial site registration view unless the current view
     // can be determined through state of the organization
     const destPath = (party)
-      // ? SiteRoutes.ORGANIZATION_CLAIM // ADD
-      ? SiteRoutes.ORGANIZATION_NAME // REMOVE
+      ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
     return this.manageRouting(routePath, destPath, organization);
   }
@@ -135,19 +134,7 @@ export class OrganizationGuard extends BaseGuard {
    * registration has not been completed.
    */
   private manageNoOrganizationRouting(routePath: string, party: Party, hasOrgClaim: boolean) {
-    // Allow navigation from CLAIM to SIGNING_AUTHORITY, ORGANIZATION_NAME, or CLAIM_CONFIRMATION
-    // if (this.router.url.includes(SiteRoutes.ORGANIZATION_CLAIM) // ADD
-    //   && (routePath.includes(SiteRoutes.ORGANIZATION_NAME)
-    //     || routePath.includes(SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION)
-    //     || routePath.includes(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY))) {
-    //   return true;
-    // }
-    // const destPath = (hasOrgClaim) // ADD
-    //   ? SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION
-    //   : (party)
-    //     ? SiteRoutes.ORGANIZATION_CLAIM
-    //     : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
-    const destPath = (party) // REMOVE
+    const destPath = (party)
       ? SiteRoutes.ORGANIZATION_NAME
       : SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY;
 

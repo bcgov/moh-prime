@@ -216,8 +216,9 @@ namespace Prime.Migrations
 
                     b.ToTable("Agreement");
 
-                    b.HasCheckConstraint("CHK_Agreement_OnlyOneForeignKey", @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
-                     + CASE WHEN ""OrganizationId"" IS NULL THEN 0 ELSE 1 END
+                    b.HasCheckConstraint("CHK_Agreement_OrganizationHasSigningAuth", "((\"OrganizationId\" is null) or (\"PartyId\" is not null))");
+
+                    b.HasCheckConstraint("CHK_Agreement_EitherPartyOrEnrollee", @"( CASE WHEN ""EnrolleeId"" IS NULL THEN 0 ELSE 1 END
                      + CASE WHEN ""PartyId"" IS NULL THEN 0 ELSE 1 END) = 1");
                 });
 
@@ -13803,6 +13804,9 @@ namespace Prime.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
+
+                    b.Property<bool>("PendingTransfer")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("RegistrationId")
                         .HasColumnType("text");

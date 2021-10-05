@@ -13,6 +13,24 @@
 
   <app-page-header>Site Management</app-page-header>
 
+  <ng-container *ngFor="let code of careSettingCodesPendingTransfer">
+    <app-alert type="danger"
+               icon="warning">
+      <ng-container #alertTitle
+                    class="alert-title">
+        Required Action: Sign Organization Agreement
+      </ng-container>
+      <ng-container #alertContent
+                    class="alert-content">
+        You are required to sign the <strong>{{ CareSettingEnum[code] | replace: '_':' ' | capitalize: true }} Organization
+          Agreement</strong>. Please follow the link below to read and sign the agreement before being granted
+        permission to edit and view this organization.
+        <br/>
+        <a [routerLink]="" (click)="routeToOrgAgreementByCareSettingCode(code)">Organization Agreement</a>
+      </ng-container>
+    </app-alert>
+  </ng-container>
+
   <section class="mb-3">
     <app-page-subheader2>
       <ng-container appPageSubheader2Title>{{ title }}</ng-container>
@@ -43,7 +61,7 @@
       <button mat-button
               type="button"
               color="primary"
-              [disabled]="!organization.completed"
+              [disabled]="!organization.completed || isPendingTransfer()"
               (click)="addSite(organization.id)">
         <mat-icon>add_business</mat-icon>
         Add Site
@@ -58,7 +76,7 @@
                         [menuOutletContext]="{ site: site, organizationId: organization.id }"
                         [properties]="getSiteProperties(site)"
                         (action)="viewSiteRemoteUsers(organization.id, site)">
-        <ng-container *ngIf="!site.submittedDate"
+        <ng-container *ngIf="inComplete(site)"
                       [ngTemplateOutlet]="notification"
                       [ngTemplateOutletContext]="{ props: getNotSubmittedSiteNotificationProperties(organization.id, site) }">
         </ng-container>
@@ -116,7 +134,8 @@
   <ng-template #organizationMenu
                let-organization="organization">
     <button mat-icon-button
-            [matMenuTriggerFor]="rootMenu">
+            [matMenuTriggerFor]="rootMenu"
+            [disabled]="isPendingTransfer()">
       <mat-icon>more_vert</mat-icon>
     </button>
 
@@ -148,7 +167,8 @@
                let-site="site"
                let-organizationId="organizationId">
     <button mat-icon-button
-            [matMenuTriggerFor]="menu">
+            [matMenuTriggerFor]="menu"
+            [disabled]="isPendingTransfer()">
       <mat-icon>more_vert</mat-icon>
     </button>
 
@@ -158,8 +178,9 @@
               (click)="viewSite(organizationId, site)">
         <span>View/Update Site Information</span>
       </button>
-      <button mat-menu-item
-              [disabled]="!site.completed || site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST"
+      <button *ngIf="site.careSettingCode !== CareSettingEnum.COMMUNITY_PHARMACIST"
+              mat-menu-item
+              [disabled]="!site.completed || site.status === SiteStatusType.IN_REVIEW"
               (click)="viewSiteRemoteUsers(organizationId, site)">
         <span>View/Update Remote Practitioners</span>
       </button>

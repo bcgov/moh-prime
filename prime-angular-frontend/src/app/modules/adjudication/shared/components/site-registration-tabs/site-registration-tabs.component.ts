@@ -63,9 +63,11 @@ export class SiteRegistrationTabsComponent implements OnInit {
 
   public communityPracticeColumns: string[];
   public communityPharmacyColumns: string[];
+  public siteTabIndex: number;
 
-  private careSettingCode: CareSettingEnum;
   private routeUtils: RouteUtils;
+  private tabIndexToCareSettingMap: Record<number, CareSettingEnum>;
+  private careSettingToTabIndexMap: { [key in CareSettingEnum]?: number }
 
   constructor(
     @Inject(DIALOG_DEFAULT_OPTION) private defaultOptions: DialogDefaultOptions,
@@ -81,7 +83,6 @@ export class SiteRegistrationTabsComponent implements OnInit {
   ) {
     this.routeUtils = new RouteUtils(route, router, AdjudicationRoutes.routePath(AdjudicationRoutes.SITE_REGISTRATIONS));
     this.dataSource = new MatTableDataSource<SiteRegistrationListViewModel>([]);
-    this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
 
     const commonColumns = [
       'prefixes',
@@ -105,6 +106,16 @@ export class SiteRegistrationTabsComponent implements OnInit {
       'missingBusinessLicence',
       'actions'
     ];
+    this.tabIndexToCareSettingMap = {
+      0: null, // map to null to remove queryString
+      1: CareSettingEnum.COMMUNITY_PHARMACIST,
+      2: CareSettingEnum.HEALTH_AUTHORITY
+    };
+    this.careSettingToTabIndexMap = {
+      [CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE]: 0,
+      [CareSettingEnum.COMMUNITY_PHARMACIST]: 1,
+      [CareSettingEnum.HEALTH_AUTHORITY]: 2
+    };
   }
 
   public onSearch(textSearch: string | null): void {
@@ -299,30 +310,17 @@ export class SiteRegistrationTabsComponent implements OnInit {
   }
 
   public onTabChange(tabChangeEvent: MatTabChangeEvent): void {
-    switch (tabChangeEvent.index) {
-      case 0:
-        this.careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
-        this.getDataset(this.route.snapshot.queryParams);
-        break;
-      case 1:
-        this.careSettingCode = CareSettingEnum.COMMUNITY_PHARMACIST;
-        this.getDataset(this.route.snapshot.queryParams);
-        break;
-      case 2:
-        this.careSettingCode = CareSettingEnum.HEALTH_AUTHORITY;
-        // TODO: Health authorities are currently not organizations
-        // this.getDataset(this.route.snapshot.queryParams);
-        break;
-      default:
-        break;
-    }
+    this.routeUtils.updateQueryParams({ careSetting: this.tabIndexToCareSettingMap[tabChangeEvent.index] });
   }
 
   public ngOnInit(): void {
     // Use existing query params for initial search, and
     // update results on query param change
     this.route.queryParams
-      .subscribe((queryParams: { [key: string]: any }) => this.getDataset(queryParams));
+      .subscribe((queryParams: { [key: string]: any }) => {
+        this.siteTabIndex = this.careSettingToTabIndexMap[+queryParams.careSetting];
+        this.getDataset(queryParams)
+      });
 
     // Listen for requests to refresh the data layer
     if (this.refresh instanceof Observable) {
@@ -334,8 +332,12 @@ export class SiteRegistrationTabsComponent implements OnInit {
     }
   }
 
-  private getDataset(queryParams: { textSearch?: string }): void {
-    this.busy = this.getOrganizations({ careSettingCode: this.careSettingCode, ...queryParams })
+  private getDataset(queryParams: { careSetting?: CareSettingEnum, textSearch?: string }): void {
+    let careSettingCode = +queryParams?.careSetting ?? CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+    if (!(careSettingCode in this.careSettingToTabIndexMap)) {
+      careSettingCode = CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE;
+    }
+    this.busy = this.getOrganizations({ careSettingCode, ...queryParams })
       .pipe(
         map(this.toSiteRegistrations)
       )

@@ -427,7 +427,8 @@ export class SiteRegistrationContainerComponent implements OnInit {
         signingAuthority,
         name,
         doingBusinessAs,
-        hasClaim
+        hasClaim,
+        pendingTransfer
       } = organization;
 
       return [{

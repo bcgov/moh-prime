@@ -6,13 +6,15 @@ namespace Prime
 {
     public static class PrimeEnvironment
     {
-        public static readonly string Name = GetEnvironmentVariable("OC_APP") ?? "local";
+        // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/environments
+        // As per documentation, "Development" refers to local machine
+        public static readonly string Name = GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
         public static readonly string FrontendUrl = GetEnvironmentVariable("FRONTEND_URL") ?? "localhost:4200";
         public static readonly string BackendUrl = GetEnvironmentVariable("BACKEND_URL") ?? "http://localhost:5000/api";
         public static readonly string LogFile = GetEnvironmentVariable("LOG_FILE_PATH") ?? "logs";
 
-        public static bool IsProduction { get => Name == "prod"; }
-        public static bool IsLocal { get => Name == "local"; }
+        public static bool IsProduction { get => Name == "Production"; }
+        public static bool IsLocal { get => Name == "Development"; }
 
         public static class DocumentManager
         {

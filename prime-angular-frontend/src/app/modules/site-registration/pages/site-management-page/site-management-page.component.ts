@@ -4,7 +4,7 @@ import { KeyValue } from '@angular/common';
 
 import { Moment } from 'moment';
 
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { exhaustMap, map } from 'rxjs/operators';
 
 import { ArrayUtils } from '@lib/utils/array-utils.class';
@@ -18,13 +18,12 @@ import { OrganizationAgreement, OrganizationAgreementViewModel } from '@shared/m
 import { optionalAddressLineItems } from '@shared/models/address.model';
 import { AgreementType } from '@shared/enums/agreement-type.enum';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
-import { VendorEnum } from '@shared/enums/vendor.enum';
 import { AddressPipe } from '@shared/pipes/address.pipe';
 import { FullnamePipe } from '@shared/pipes/fullname.pipe';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Organization } from '@registration/shared/models/organization.model';
-import { SiteListViewModel, Site } from '@registration/shared/models/site.model';
+import { Site, SiteListViewModel } from '@registration/shared/models/site.model';
 import { SiteStatusType } from '@registration/shared/enum/site-status.enum';
 import { AuthService } from '@auth/shared/services/auth.service';
 import { BcscUser } from '@auth/shared/models/bcsc-user.model';
@@ -39,13 +38,15 @@ export class SiteManagementPageComponent implements OnInit {
   public busy: Subscription;
   public title: string;
   public organizations: Organization[];
-  public organizationSitesExpiryDates: (string | Moment | null)[];
+  public organizationSitesExpiryDates: (string | null)[];
   public organizationAgreements: OrganizationAgreementViewModel[];
   public routeUtils: RouteUtils;
-  public VendorEnum = VendorEnum;
+  public careSettingCodesPendingTransfer: CareSettingEnum[];
+
   public AgreementType = AgreementType;
   public CareSettingEnum = CareSettingEnum;
   public SiteRoutes = SiteRoutes;
+  public SiteStatusType = SiteStatusType;
 
   constructor(
     private route: ActivatedRoute,
@@ -141,6 +142,10 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public inComplete(site: SiteListViewModel): boolean {
+    return !site.submittedDate || (site.submittedDate && !site.approvedDate && site.status === SiteStatusType.EDITABLE);
+  }
+
   public isInReview(site: SiteListViewModel): boolean {
     return site.submittedDate && site.status === SiteStatusType.IN_REVIEW;
   }
@@ -151,6 +156,10 @@ export class SiteManagementPageComponent implements OnInit {
       icon: 'notification_important',
       text: `This site is waiting for approval${andSiteId}`,
     };
+  }
+
+  public isPendingTransfer(): boolean {
+    return this.organizations[0]?.pendingTransfer;
   }
 
   public isLocked(site: SiteListViewModel): boolean {
@@ -179,6 +188,10 @@ export class SiteManagementPageComponent implements OnInit {
     };
   }
 
+  public routeToOrgAgreementByCareSettingCode(code: CareSettingEnum): void {
+    this.routeUtils.routeRelativeTo([this.organizations[0].id, SiteRoutes.CARE_SETTINGS, code, SiteRoutes.ORGANIZATION_AGREEMENT]);
+  }
+
   public ngOnInit(): void {
     this.getOrganizations();
   }
@@ -192,6 +205,7 @@ export class SiteManagementPageComponent implements OnInit {
         map((organizations: Organization[]) => {
           this.organizationSitesExpiryDates = organizations[0].sites
             .map(s => {
+              // TODO this will produce a list of results mixed with undefined indices...
               if (s.status === SiteStatusType.EDITABLE && !!s.approvedDate) {
                 return Site.getExpiryDate(s);
               }
@@ -200,10 +214,16 @@ export class SiteManagementPageComponent implements OnInit {
         }),
         exhaustMap((organization: Organization[]) =>
           this.organizationResource.getOrganizationAgreements(organization[0].id)
-        )
+        ),
+        exhaustMap((agreements: OrganizationAgreementViewModel[]) => {
+          this.organizationAgreements = agreements;
+          return (this.organizations[0].pendingTransfer)
+            ? this.organizationResource.getCareSettingCodesForPendingTransfer(this.organizations[0].id)
+            : of([]);
+        }),
       )
-      .subscribe((agreements: OrganizationAgreementViewModel[]) =>
-        this.organizationAgreements = agreements
+      .subscribe((careSettingCodes: CareSettingEnum[]) =>
+        this.careSettingCodesPendingTransfer = careSettingCodes
       );
   }
 
