@@ -38,13 +38,33 @@ export class ObjectUtils {
    * Merge a key/value pair into an object if the key
    * exists in the source object.
    */
-  public static mergeInto(key: string, refObject: { [key: string]: any }, mergeObject: { [key: string]: any } = {}) {
+  public static mergeInto(
+    key: string,
+    refObject: { [key: string]: any },
+    mergeObject: { [key: string]: any } = {}
+  ): { [key: string]: any } {
     if (!key || !refObject || !mergeObject) {
       return mergeObject;
     }
 
-    return (refObject[key])
+    return (refObject.hasOwnProperty(key))
       ? { ...mergeObject, [key]: refObject[key] }
+      : mergeObject;
+  }
+
+  /**
+   * @description
+   * Merge a key/value pair into an object if the key
+   * exists in the source object.
+   */
+  public static mergeIntoIf(
+    condition: boolean,
+    key: string,
+    refObject: { [key: string]: any },
+    mergeObject: { [key: string]: any } = {}
+  ): { [key: string]: any } {
+    return (condition)
+      ? this.mergeInto(key, refObject, mergeObject)
       : mergeObject;
   }
 }
