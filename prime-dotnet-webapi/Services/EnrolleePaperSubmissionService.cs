@@ -284,14 +284,18 @@ namespace Prime.Services
 
         public async Task<IEnumerable<Enrollee>> GetPotentialPaperEnrolleeReturneesAsync(DateTime dateOfBirth)
         {
+            var confirmedLinks = await _context.EnrolleeLinkedEnrolment
+                .AsNoTracking()
+                .Where(cl => cl.Confirmed)
+                .Select(cl => cl.PaperEnrolleeId)
+                .ToListAsync();
+
             return await _context.Enrollees
                 .AsNoTracking()
                 .Where(
                     e => e.GPID.StartsWith(PaperGpidPrefix)
                     && e.DateOfBirth.Date == dateOfBirth.Date
-                    && !_context.EnrolleeLinkedEnrolment.Any(
-                        ele => ele.Confirmed
-                        )
+                    && !confirmedLinks.Contains(e.Id)
                 )
                 .ToListAsync();
         }
@@ -380,14 +384,6 @@ namespace Prime.Services
             .SingleOrDefaultAsync();
 
             return value.UserProvidedGpid;
-        }
-        public async Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId)
-        {
-            return await _context.Enrollees
-                .AsNoTracking()
-                .Where(e => e.Id == enrolleeId)
-                .Select(e => new PermissionsRecord { UserId = e.UserId })
-                .SingleOrDefaultAsync();
         }
     }
 }

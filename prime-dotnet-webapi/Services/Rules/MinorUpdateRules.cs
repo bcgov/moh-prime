@@ -118,7 +118,6 @@ namespace Prime.Services.Rules
                 return Task.FromResult(false);
             }
 
-
             return Task.FromResult(true);
         }
 

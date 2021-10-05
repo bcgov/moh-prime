@@ -31,6 +31,5 @@ namespace Prime.Services
         Task CreateInitialLinkAsync(int enrolleeId, string userProvidedGpid);
         Task UpdateLinkedGpidAsync(int enrolleeId, string userUpdatedGpid);
         Task<string> GetLinkedGpidAsync(int enrolleeId);
-        Task<PermissionsRecord> GetPermissionsRecordAsync(int enrolleeId);
     }
 }
