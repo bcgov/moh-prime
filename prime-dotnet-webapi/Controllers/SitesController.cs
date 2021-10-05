@@ -309,13 +309,13 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/sites/5/submission
+        // POST: api/sites/5/submissions
         /// <summary>
         /// Submits the given site for adjudication.
         /// </summary>
         /// <param name="siteId"></param>
         /// <param name="updatedSite"></param>
-        [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
+        [HttpPost("{siteId}/submissions", Name = nameof(SubmitSiteRegistration))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
