@@ -379,13 +379,13 @@ namespace Prime.Controllers
                 // always allow for ExpiryDate and/or DeferredReason to be updated.
                 await _siteService.UpdateBusinessLicenceAsync(existingLicence.Id, _mapper.Map<BusinessLicence>(newLicence));
 
-                if (isNewDocument)
+                if (!isNewDocument)
                 {
-                    var licence = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(existingLicence.Id, newLicence.DocumentGuid.Value);
-                    return licence != null;
+                    return true;
                 }
 
-                return true;
+                var licence = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(existingLicence.Id, newLicence.DocumentGuid.Value);
+                return licence != null;
             }
             else
             {
