@@ -126,7 +126,7 @@ export abstract class AbstractEnrolmentPage<T extends AbstractFormState<unknown>
       this.onSubmitFormIsValid();
       this.busy = this.performSubmission()
         .pipe(tap((_) => this.formState.form.markAsPristine()))
-        .subscribe((response?: any) => this.afterSubmitIsSuccessful(response));
+        .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {
       this.onSubmitFormIsInvalid();
     }

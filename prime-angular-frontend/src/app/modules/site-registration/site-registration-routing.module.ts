@@ -74,12 +74,6 @@ const routes: Routes = [
                 data: { title: 'Signing Authority' }
               },
               {
-                path: SiteRoutes.ORGANIZATION_CLAIM,
-                component: OrganizationClaimPageComponent,
-                canDeactivate: [CanDeactivateFormGuard],
-                data: { title: 'Claim Organization' }
-              },
-              {
                 path: SiteRoutes.ORGANIZATION_CLAIM_CONFIRMATION,
                 component: OrganizationClaimConfirmationPageComponent,
                 canDeactivate: [CanDeactivateFormGuard],
@@ -196,8 +190,8 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
-                    canActivate: [SiteGuard],
                     component: OverviewPageComponent,
+                    canActivate: [SiteGuard],
                     data: { title: 'Site Registration Review' }
                   },
                   {
@@ -230,4 +224,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SiteRegistrationRoutingModule { }
+export class SiteRegistrationRoutingModule {}
