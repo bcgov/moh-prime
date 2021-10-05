@@ -16,7 +16,7 @@ import { ConsoleLoggerService } from '@core/services/console-logger.service';
 export abstract class AbstractFormStateService<T> {
   protected patched: boolean;
 
-  constructor(
+  protected constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
     protected logger: ConsoleLoggerService

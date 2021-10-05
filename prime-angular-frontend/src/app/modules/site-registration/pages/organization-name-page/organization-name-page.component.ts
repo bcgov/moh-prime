@@ -36,11 +36,12 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   public formState: OrganizationNamePageFormState;
   public title: string;
   public routeUtils: RouteUtils;
-  public organizations: string[];
-  public totalResults: number;
-  public doingBusinessAsNames: string[];
+  public organizationId: number;
   public isCompleted: boolean;
   public usedOrgBook: boolean;
+  public orgBookOrganizations: string[];
+  public orgBookTotalResults: number;
+  public orgBookDoingBusinessAsNames: string[];
   public SiteRoutes = SiteRoutes;
 
   constructor(
@@ -59,6 +60,8 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
 
     this.title = this.route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
+
+    this.organizationId = +this.route.snapshot.params.oid;
   }
 
   public getOrgBookLink(orgId: string, display: boolean = false) {
@@ -86,7 +89,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   public onBack() {
-    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_SIGNING_AUTHORITY);
+    this.routeUtils.routeRelativeTo(SiteRoutes.ORGANIZATION_REVIEW);
   }
 
   public ngOnInit() {
@@ -125,16 +128,15 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
         switchMap((value: string) => this.orgBookResource.autocomplete(value))
       )
       .subscribe((response: OrgBookAutocompleteHttpResponse) => {
-        // Assumed only a single name per organization is relavent
-        this.organizations = response.results.map(o => o.names[0]?.text).filter(o => o);
-        this.totalResults = response.total;
+        // Assumed only a single name per organization is relevant
+        this.orgBookOrganizations = response.results.map(o => o.names[0]?.text).filter(o => o);
+        this.orgBookTotalResults = response.total;
       });
   }
 
   protected performSubmission(): Observable<number | null> {
-    const organizationId = this.route.snapshot.params.oid;
     const payload = this.organizationFormStateService.json;
-    const request$ = (+organizationId !== 0)
+    const request$ = (this.organizationId)
       ? this.organizationResource.updateOrganization(payload)
       : this.authService.getUser$()
         .pipe(
@@ -164,8 +166,6 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
   }
 
   protected afterSubmitIsSuccessful(siteId?: number): void {
-    this.formState.form.markAsPristine();
-
     const redirectPath = this.route.snapshot.queryParams.redirect;
     let routePath: string | string[];
 
@@ -184,7 +184,7 @@ export class OrganizationNamePageComponent extends AbstractEnrolmentPage impleme
     return pipe(
       // Expects an organization registrationId
       this.orgBookResource.doingBusinessAsMap(),
-      tap((doingBusinessAsNames: string[]) => this.doingBusinessAsNames = doingBusinessAsNames)
+      tap((doingBusinessAsNames: string[]) => this.orgBookDoingBusinessAsNames = doingBusinessAsNames)
     );
   }
 }

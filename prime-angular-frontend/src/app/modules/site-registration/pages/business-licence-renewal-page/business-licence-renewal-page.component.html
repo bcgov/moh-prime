@@ -52,8 +52,8 @@
 
   <app-page-footer [isInitialEnrolment]="true"
                    [hasSecondaryAction]="true"
-                   primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
+                   (continue)="onBack()"
                    (back)="onBack()"></app-page-footer>
 
 </app-page>
