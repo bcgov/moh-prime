@@ -19,8 +19,6 @@ namespace Prime.Models
             BusinessLicences = new List<BusinessLicence>();
         }
 
-        public const int RENEWAL_PERIOD_IN_DAYS = 90;
-
         [Key]
         public int Id { get; set; }
 
@@ -120,21 +118,25 @@ namespace Prime.Models
         public BusinessLicence BusinessLicence
         {
             get => BusinessLicences
-                    .OrderByDescending(l => l.UploadedDate.HasValue)
-                    .ThenByDescending(l => l.UploadedDate)
-                    .FirstOrDefault();
+                .OrderByDescending(l => l.UploadedDate.HasValue)
+                .ThenByDescending(l => l.UploadedDate)
+                .FirstOrDefault();
         }
 
+        /// <summary>
+        /// Site submissions are considered renewals starting 90 days before the expiry of its current Business Licence.
+        /// For sites without expiry dates on thier BL, expiry is considered to be one year after the Site's submitted date.
+        /// </summary>
         public bool WithinRenewalPeriod()
         {
-            if (BusinessLicence?.ExpiryDate == null && SubmittedDate == null)
+            if (SubmittedDate == null)
             {
                 return false;
             }
 
             var expiryDate = BusinessLicence?.ExpiryDate ?? SubmittedDate.Value.AddYears(1);
 
-            return DateTime.Now > expiryDate.AddDays(-RENEWAL_PERIOD_IN_DAYS);
+            return DateTimeOffset.Now >= expiryDate.AddDays(-90);
         }
     }
 }
