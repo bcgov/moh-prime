@@ -10,14 +10,11 @@
     <div class="col">
 
       <mat-form-field class="w-100">
-
-
-
         <input matInput
                placeholder="Expiry Date"
                [min]="minExpiryDate"
                [matDatepicker]="expiryDatePicker"
-               formControlName="businessLicenceExpiry"
+               formControlName="expiryDate"
                (click)="expiryDatePicker.open()"
                readonly>
 

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl } from '@angular/forms';
+import { FormBuilder, AbstractControl, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -16,16 +17,16 @@ import { PrivacyOfficerPageFormState } from '@registration/pages/privacy-officer
 import { TechnicalSupportPageFormState } from '@registration/pages/technical-support-page/technical-support-page-form-state.class';
 import { RemoteUsersPageFormState } from '@registration/pages/remote-users-page/remote-users-page-form-state.class';
 import { CareSettingPageFormState } from '@registration/pages/care-setting-page/care-setting-page-form-state.class';
-import { BusinessLicencePageFormState } from '@registration/pages/business-licence-page/business-licence-page-form-state.class';
-import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-page-form-state.class';
+import { BusinessLicenceFormState } from '@registration/pages/business-licence-page/business-licence-form-state.class';
+import { BusinessLicenceRenewalPageFormState } from '@registration/pages/business-licence-renewal-page/business-licence-renewal-form-state.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SiteFormStateService extends AbstractFormStateService<Site> {
   public careSettingPageFormState: CareSettingPageFormState;
-  public businessLicencePageFormState: BusinessLicencePageFormState;
-  public businessLicenceRenewalPageFormState: BusinessLicenceRenewalPageFormState;
+  public businessLicenceFormState: BusinessLicenceFormState;
+  public businessLicenceRenewalFormState: BusinessLicenceRenewalPageFormState;
   public siteAddressPageFormState: SiteAddressPageFormState;
   public hoursOperationPageFormState: HoursOperationPageFormState;
   public remoteUsersPageFormState: RemoteUsersPageFormState;
@@ -36,6 +37,13 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   private siteId: number;
   private organizationId: number;
   private provisionerId: number;
+
+  /**
+   * @description
+   * Shallowly immutable reference to a selection of site properties
+   * for use determining state of the site.
+   */
+  private site: Pick<Site, 'status' | 'completed' | 'submittedDate' | 'approvedDate' | 'careSettingCode'>;
 
   constructor(
     protected fb: FormBuilder,
@@ -64,6 +72,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.organizationId = site.organizationId;
     this.provisionerId = site.provisionerId;
 
+    const { status, completed, submittedDate, approvedDate, careSettingCode } = site;
+    this.site = Object.freeze({ status, completed, submittedDate, approvedDate, careSettingCode });
+
     super.setForm(site, forcePatch);
   }
 
@@ -73,7 +84,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get json(): Site {
     const { careSettingCode, siteVendors } = this.careSettingPageFormState.json;
-    const { doingBusinessAs, pec } = this.businessLicencePageFormState.json;
+    const { businessLicence, doingBusinessAs, pec } = this.businessLicenceFormState.json;
     const physicalAddress = this.siteAddressPageFormState.json;
     const businessHours = this.hoursOperationPageFormState.json;
     const remoteUsers = this.remoteUsersPageFormState.json;
@@ -92,6 +103,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       careSettingCode,
       siteVendors,
       doingBusinessAs,
+      businessLicence,
       physicalAddressId: physicalAddress?.id, // TODO can this be dropped?
       physicalAddress,
       businessHours,
@@ -106,7 +118,6 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       // approvedDate (N/A)
       // submittedDate (N/A)
       pec
-      // TODO output should be a Site-like model instead due to missing properties
     } as Site; // Enforced type due to N/A properties
   }
 
@@ -117,7 +128,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   public get forms(): AbstractControl[] {
     return [
       this.careSettingPageFormState.form,
-      this.businessLicencePageFormState.form,
+      this.businessLicenceFormState.form,
       this.siteAddressPageFormState.form,
       this.hoursOperationPageFormState.form,
       this.remoteUsersPageFormState.form,
@@ -129,13 +140,64 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
 
   /**
    * @description
+   * Check that all constituent forms are valid for submission.
+   *
+   * NOTE: PEC can be deferred, but the toggle is not persisted. This patch
+   * will allow submission for an unapproved site that does not have a PEC.
+   */
+  public get isValidSubmission(): boolean {
+    const pecControl = this.businessLicenceFormState.pec;
+    // Managed to make it through the registration without a PEC and is
+    // Community Pharmacy then assumed to indicate deferment, which is
+    // not possible after the site has been approved
+    const pecDeferred = this.site.completed &&
+      !this.site.approvedDate &&
+      !pecControl.value &&
+      this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
+
+    // Loosen validation on submission only when the PEC is deferred, which
+    // allows for submissions regardless of toggle state that is not
+    // persisted on refresh or re-authentication
+    if (pecDeferred) {
+      pecControl.clearValidators();
+      pecControl.updateValueAndValidity();
+    }
+
+    // Hours of operation disables fields when marked as 24 hours, which
+    // persists to the overview during routing and needs to be enabled
+    // to allow submission
+    if (this.hoursOperationPageFormState.form.disabled) {
+      this.hoursOperationPageFormState.form.enable();
+    }
+
+    // Assumption that PEC is required except for private community
+    // health practice, and at this point can be considered deferred
+    // when found to be empty
+    if (!this.businessLicenceFormState.pec.value && this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      this.businessLicenceFormState.pec.disable();
+    }
+
+    const isSubmissionValid = this.isValid;
+
+    // Re-apply the validations to prevent the validations being
+    // incorrect if the page is visited after a submission fails
+    if (pecDeferred) {
+      pecControl.setValidators([Validators.required]);
+      pecControl.updateValueAndValidity();
+    }
+
+    return isSubmissionValid;
+  }
+
+  /**
+   * @description
    * Initialize and configure the forms for patching, which is also used
    * clear previous form data from the service.
    */
   protected buildForms(): void {
     this.careSettingPageFormState = new CareSettingPageFormState(this.fb);
-    this.businessLicencePageFormState = new BusinessLicencePageFormState(this.fb, this.siteResource);
-    this.businessLicenceRenewalPageFormState = new BusinessLicenceRenewalPageFormState(this.fb);
+    this.businessLicenceFormState = new BusinessLicenceFormState(this.fb, this.siteResource);
+    this.businessLicenceRenewalFormState = new BusinessLicenceRenewalPageFormState(this.fb);
     this.siteAddressPageFormState = new SiteAddressPageFormState(this.fb, this.formUtilsService);
     this.hoursOperationPageFormState = new HoursOperationPageFormState(this.fb);
     this.remoteUsersPageFormState = new RemoteUsersPageFormState(this.fb);
@@ -153,10 +215,10 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       return;
     }
 
-    const { careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
+    const { id, careSettingCode, siteVendors, doingBusinessAs, pec, businessLicence } = site;
 
     this.careSettingPageFormState.patchValue({ careSettingCode, siteVendors });
-    this.businessLicencePageFormState.patchValue({ doingBusinessAs, pec, businessLicence });
+    this.businessLicenceFormState.patchValue({ doingBusinessAs, pec, businessLicence }, id);
     this.siteAddressPageFormState.patchValue(site?.physicalAddress);
     this.hoursOperationPageFormState.patchValue(site?.businessHours);
     this.remoteUsersPageFormState.patchValue(site?.remoteUsers);

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup, FormArray } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 
 import { noop, of } from 'rxjs';
 
@@ -20,7 +21,6 @@ import { RemoteUser } from '@registration/shared/models/remote-user.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { RemoteUserCertification } from '@registration/shared/models/remote-user-certification.model';
-import { MatDialog } from '@angular/material/dialog';
 import { RemoteUsersPageFormState } from '../remote-users-page/remote-users-page-form-state.class';
 
 @Component({
@@ -134,7 +134,7 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
 
     // Attempt to patch if needed on a refresh, otherwise do not forcibly
     // update the form state as it will drop unsaved updates
-    this.siteFormStateService.setForm(site);
+    this.siteFormStateService.setForm(site, false);
 
     // Extract an existing remoteUser from the parent form for updates, otherwise new
     const remoteUser = this.formState.getRemoteUsers()[+this.remoteUserIndex] ?? null;
@@ -146,7 +146,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
     }
 
     // Create a local form group for creating or updating remote users
-    // TODO use formState
     this.form = this.formState.createEmptyRemoteUserFormAndPatch(remoteUser);
 
     // Must always have at least one certification
@@ -158,7 +157,6 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
   protected checkValidity(): boolean {
     // Pass the local form for validation and submission instead
     // of using the default form from the form state
-    // TODO use formState
     return super.checkValidity(this.form);
   }
 
@@ -187,11 +185,9 @@ export class RemoteUserPageComponent extends AbstractEnrolmentPage implements On
       }
 
       // Replace the updated remote user in the parent form for submission
-      // TODO use formState
       remoteUserFormGroup.reset(this.form.getRawValue());
     } else {
       // Store the new remote user in the parent form for submission
-      // TODO use formState
       remoteUsersFormArray.push(this.form);
     }
 

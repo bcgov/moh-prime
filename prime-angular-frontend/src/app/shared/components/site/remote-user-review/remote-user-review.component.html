@@ -1,32 +1,36 @@
-<ng-container *ngFor="let remoteUser of remoteUsers">
-  <app-overview-section title="Remote User"
+<ng-container *ngIf="remoteUsers?.length">
+  <app-overview-section title="Remote Users"
                         [showEditRedirect]="showEditRedirect"
                         [editRoute]="editRoute"
                         (route)="onRoute($event)">
 
-    <div class="mb-3">
-      <app-enrollee-property title="Name">
-        {{ remoteUser | fullname | default }}
-      </app-enrollee-property>
-    </div>
-
-    <ng-container *ngFor="let remoteUserCertification of remoteUser.remoteUserCertifications">
+    <ng-container *ngFor="let remoteUser of remoteUsers">
 
       <div class="mb-3">
-        <strong>Certification</strong>
+        <app-enrollee-property title="Name">
+          {{ remoteUser | fullname | default }}
+        </app-enrollee-property>
       </div>
 
-      <div class="ml-4 mb-3">
+      <ng-container *ngFor="let remoteUserCertification of remoteUser.remoteUserCertifications">
 
-        <app-enrollee-property title="College">
-          {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
-        </app-enrollee-property>
+        <div class="mb-3">
+          <strong>Certification</strong>
+        </div>
 
-        <app-enrollee-property title="Licence">
-          {{ remoteUserCertification.licenseNumber | default }}
-        </app-enrollee-property>
+        <div class="ml-4 mb-3">
 
-      </div>
+          <app-enrollee-property title="College">
+            {{ remoteUserCertification.collegeCode | configCode: 'colleges' | default }}
+          </app-enrollee-property>
+
+          <app-enrollee-property title="Licence">
+            {{ remoteUserCertification.licenseNumber | default }}
+          </app-enrollee-property>
+
+        </div>
+
+      </ng-container>
 
     </ng-container>
 
