@@ -53,6 +53,7 @@ export class AdministratorPageComponent extends AbstractSiteRegistrationPage imp
       contact.physicalAddress = new Address();
     }
     this.formState.form.patchValue(contact);
+    this.formState.form.markAsDirty();
   }
 
   public onBack() {
