@@ -69,10 +69,8 @@ namespace Prime.Controllers
             {
                 return Ok(sites);
             }
-            else
-            {
-                return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
-            }
+
+            return Ok(_mapper.Map<IEnumerable<SiteListViewModel>>(sites));
         }
 
         // GET: api/Sites/5
@@ -154,10 +152,11 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // stop update if site is non health authority and PEC is not unique
-            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !string.IsNullOrWhiteSpace(updatedSite.PEC) && site.PEC != updatedSite.PEC
-                && await _siteService.PecExistsAsync(updatedSite.PEC))
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
+                && !await _siteService.PecAssignableAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -310,18 +309,19 @@ namespace Prime.Controllers
             return NoContent();
         }
 
-        // POST: api/sites/5/submission
+        // POST: api/sites/5/submissions
         /// <summary>
         /// Submits the given site for adjudication.
         /// </summary>
-        [HttpPost("{siteId}/submission", Name = nameof(SubmitSiteRegistration))]
+        /// <param name="siteId"></param>
+        /// <param name="updatedSite"></param>
+        [HttpPost("{siteId}/submissions", Name = nameof(SubmitSiteRegistration))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResultResponse<Site>), StatusCodes.Status200OK)]
-        public async Task<ActionResult> SubmitSiteRegistration(int siteId)
+        public async Task<ActionResult> SubmitSiteRegistration(int siteId, SiteSubmissionViewModel updatedSite)
         {
-
             var record = await _siteService.GetPermissionsRecordAsync(siteId);
             if (record == null)
             {
@@ -337,11 +337,71 @@ namespace Prime.Controllers
             {
                 return BadRequest("Action could not be performed.");
             }
+
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && !string.IsNullOrWhiteSpace(updatedSite.PEC)
+                && site.PEC != updatedSite.PEC
+                && !await _siteService.PecAssignableAsync(updatedSite.PEC))
+            {
+                return BadRequest("PEC already exists");
+            }
+
+            if (!await HandleBusinessLicenseUpdateAsync(site, updatedSite.BusinessLicence))
+            {
+                return BadRequest("Business Licence could not be created; network error or upload is already submitted");
+            }
+
+            await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
             site = await _siteService.SubmitRegistrationAsync(siteId);
+
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
+        }
+
+        private async Task<bool> HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicence)
+        {
+            if (site.SubmittedDate == null
+                || (site.ApprovedDate.HasValue && !site.IsWithinRenewalPeriod()))
+            {
+                // First submission ever, or site is approved but not in renewal. No Licence updates.
+                return true;
+            }
+
+            var existingLicence = site.BusinessLicence;
+            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
+
+            if (site.ApprovedDate == null)
+            {
+                // Editing was re-enabled before approval: Update existing licence. If new Document replace, but
+                // always allow for ExpiryDate and/or DeferredReason to be updated.
+                await _siteService.UpdateBusinessLicenceAsync(existingLicence.Id, _mapper.Map<BusinessLicence>(newLicence));
+
+                if (!isNewDocument)
+                {
+                    return true;
+                }
+
+                var licence = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(existingLicence.Id, newLicence.DocumentGuid.Value);
+                return licence != null;
+            }
+            else
+            {
+                // Renewal: Only Document GUID and Expiry Date are editable. If new Document, make new Licence.
+                // Could be submitted without updating Business Licence.
+                if (!isNewDocument)
+                {
+                    return true;
+                }
+
+                var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
+                licenceDto.ExpiryDate = newLicence.ExpiryDate;
+
+                var licence = await _siteService.AddBusinessLicenceAsync(site.Id, licenceDto, newLicence.DocumentGuid.Value);
+                return licence != null;
+            }
         }
 
         // POST: api/sites/5/business-licences
@@ -458,8 +518,8 @@ namespace Prime.Controllers
             }
 
             // Send an notifying email to the adjudicator
-            // if the site is calimed by a adjudicator, is a community pharmacy,
-            // and previsouly deferred the business licence document.
+            // if the site is claimed by a adjudicator, is a community pharmacy,
+            // and previously deferred the business licence document.
             if (site.Adjudicator != null
                 && site.CareSetting.Code == (int)CareSettingType.CommunityPharmacy
                 && !string.IsNullOrEmpty(site.BusinessLicence.DeferredLicenceReason))
@@ -534,7 +594,6 @@ namespace Prime.Controllers
             return latest == true
                 ? Ok(await _siteService.GetLatestBusinessLicenceAsync(siteId))
                 : Ok(await _siteService.GetBusinessLicencesAsync(siteId));
-
         }
 
         // POST: api/sites/5/adjudication-documents
@@ -614,6 +673,38 @@ namespace Prime.Controllers
             return Ok(token);
         }
 
+        // GET: api/sites/1/pec/abc/assignable
+        /// <summary>
+        /// Check if a given PEC is assignable.
+        /// </summary>
+        /// <param name="siteId"></param>
+        /// <param name="pec"></param>
+        /// <returns></returns>
+        [HttpPost("{siteId}/pec/{pec}/assignable", Name = nameof(PecAssignable))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ApiResultResponse<bool>), StatusCodes.Status200OK)]
+        public async Task<ActionResult> PecAssignable(int siteId, string pec)
+        {
+            var site = await _siteService.GetSiteAsync(siteId);
+            if (site == null)
+            {
+                return NotFound($"Site not found with id {siteId}");
+            }
+            if (string.IsNullOrWhiteSpace(pec))
+            {
+                return BadRequest("PEC cannot be empty.");
+            }
+            if (site.PEC == pec)
+            {
+                return Ok(true);
+            }
+
+            return Ok(await _siteService.PecAssignableAsync(pec));
+        }
+
         // PUT: api/Sites/5/pec
         /// <summary>
         /// Update the PEC code.
@@ -645,9 +736,10 @@ namespace Prime.Controllers
 
             var site = await _siteService.GetSiteNoTrackingAsync(siteId);
 
-            // stop update if site is non health authority and PEC is not unique
-            if (site.CareSettingCode != null && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && await _siteService.PecExistsAsync(pecCode))
+            if (site.CareSettingCode != null
+                && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
+                && site.PEC != pecCode
+                && !await _siteService.PecAssignableAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
             }
@@ -1166,28 +1258,6 @@ namespace Prime.Controllers
             }
             await _siteService.UpdateSiteFlag(siteId, flagged);
             return Ok(site);
-        }
-
-        // GET: api/sites/pec-exists
-        /// <summary>
-        /// Check if a given PEC already exists, only applicable to non health authority site
-        /// </summary>
-        /// <param name="pec"></param>
-        /// <returns></returns>
-        [HttpGet("pec-exists", Name = nameof(PecExists))]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> PecExists(string pec)
-        {
-            if (string.IsNullOrWhiteSpace(pec))
-            {
-                return BadRequest("PEC cannot be empty.");
-            }
-
-            var exist = await _siteService.PecExistsAsync(pec);
-            return Ok(exist);
         }
     }
 }

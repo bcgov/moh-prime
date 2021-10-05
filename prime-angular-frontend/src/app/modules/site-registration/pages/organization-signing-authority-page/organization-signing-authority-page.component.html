@@ -200,8 +200,10 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
-                   [hasSecondaryAction]="false"
+                   [hasSecondaryAction]="!!organizationId"
                    primaryActionLabel="Save and Continue"
-                   (save)="onSubmit()"></app-page-footer>
+                   (save)="onSubmit()"
+                   (back)="onBack()"
+                   (continue)="onBack()"></app-page-footer>
 
 </app-page>
