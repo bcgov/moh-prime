@@ -29,11 +29,12 @@
             <mat-autocomplete autoActiveFirstOption
                               #nameAuto="matAutocomplete"
                               (optionSelected)="onSelect($event)">
-              <mat-option *ngIf="organizations?.length"
-                          [disabled]="true">Top 10 results of {{ totalResults }} potential results</mat-option>
-              <mat-option *ngFor="let organization of organizations"
-                          [value]="organization">
-                {{ organization }}
+              <mat-option *ngIf="orgBookOrganizations?.length"
+                          [disabled]="true">Top 10 results of {{ orgBookTotalResults }} potential results
+              </mat-option>
+              <mat-option *ngFor="let orgBookOrganization of orgBookOrganizations"
+                          [value]="orgBookOrganization">
+                {{ orgBookOrganization }}
               </mat-option>
             </mat-autocomplete>
             <mat-error>Required</mat-error>
@@ -96,9 +97,9 @@
                    [matAutocomplete]="doingBusinessAsAuto">
             <mat-autocomplete autoActiveFirstOption
                               #doingBusinessAsAuto="matAutocomplete">
-              <mat-option *ngFor="let doingBusinessAsName of doingBusinessAsNames"
-                          [value]="doingBusinessAsName">
-                {{ doingBusinessAsName }}
+              <mat-option *ngFor="let orgBookDoingBusinessAsName of orgBookDoingBusinessAsNames"
+                          [value]="orgBookDoingBusinessAsName">
+                {{ orgBookDoingBusinessAsName }}
               </mat-option>
             </mat-autocomplete>
             <mat-error>Required</mat-error>
@@ -111,9 +112,10 @@
   </form>
 
   <app-page-footer [isInitialEnrolment]="!isCompleted"
-                   [hasSecondaryAction]="true"
+                   [hasSecondaryAction]="!!organizationId"
                    primaryActionLabel="Save and Continue"
                    (save)="onSubmit()"
+                   (continue)="onBack()"
                    (back)="onBack()"></app-page-footer>
 
 </app-page>
