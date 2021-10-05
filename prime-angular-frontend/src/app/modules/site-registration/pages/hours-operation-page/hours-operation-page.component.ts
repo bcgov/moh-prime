@@ -148,7 +148,7 @@ export class HoursOperationPageComponent extends AbstractSiteRegistrationPage im
   }
 
   protected additionalValidityChecks(formValue: HoursOperationPageFormModel): boolean {
-    return !!formValue.businessDays.length;
+    return !!this.siteFormStateService.json.businessHours.length;
   }
 
   protected onSubmitFormIsValid(): void {
