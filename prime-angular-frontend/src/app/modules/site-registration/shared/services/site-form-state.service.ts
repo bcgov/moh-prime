@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, AbstractControl } from '@angular/forms';
+import { FormBuilder, AbstractControl, FormControl, Validators } from '@angular/forms';
 
 import { AbstractFormStateService } from '@lib/classes/abstract-form-state-service.class';
 import { RouteStateService } from '@core/services/route-state.service';
@@ -37,6 +37,13 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
   private organizationId: number;
   private provisionerId: number;
 
+  /**
+   * @description
+   * Shallowly immutable reference to a selection of site properties
+   * for use determining state of the site.
+   */
+  private site: Pick<Site, 'status'| 'completed' | 'submittedDate' | 'approvedDate'>;
+
   constructor(
     protected fb: FormBuilder,
     protected routeStateService: RouteStateService,
@@ -63,6 +70,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.siteId = site.id;
     this.organizationId = site.organizationId;
     this.provisionerId = site.provisionerId;
+
+    const { status, completed, submittedDate, approvedDate } = site;
+    this.site = Object.freeze({ status, completed, submittedDate, approvedDate });
 
     super.setForm(site, forcePatch);
   }
@@ -125,6 +135,40 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.privacyOfficerFormState.form,
       this.technicalSupportFormState.form
     ];
+  }
+
+  /**
+   * @description
+   * Check that all constituent forms are valid for submission.
+   *
+   * NOTE: PEC can be deferred, but the toggle is not persisted. This patch
+   * will allow submission for an unapproved site that does not have a PEC.
+   */
+  public get isValidSubmission(): boolean {
+    const pecControl = this.businessLicenceFormState.pec;
+    // Managed to make it through then registration without a PEC
+    // assumed to indicate deferment, which is not possible after
+    // the site has been approved
+    const pecDeferred = this.site.completed && !this.site.approvedDate && !pecControl.value;
+
+    // Loosen validation on submission only when the PEC is deferred, which
+    // allows for submissions regardless of toggle state that is not
+    // persisted on refresh or re-authentication
+    if (pecDeferred) {
+      pecControl.clearValidators();
+      pecControl.updateValueAndValidity();
+    }
+
+    const isSubmissionValid = this.isValid;
+
+    // Re-apply the validations to prevent the validations being
+    // incorrect if the page is visited after a submission fails
+    if (pecDeferred) {
+      pecControl.setValidators([Validators.required]);
+      pecControl.updateValueAndValidity();
+    }
+
+    return isSubmissionValid;
   }
 
   /**

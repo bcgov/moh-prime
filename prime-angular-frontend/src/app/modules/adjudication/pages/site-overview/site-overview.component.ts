@@ -182,7 +182,7 @@ export class SiteOverviewComponent extends SiteRegistrationContainerComponent im
       pec: [
         '',
         [Validators.required],
-        asyncValidator(this.checkPecIsValid(), 'valid')
+        asyncValidator(this.checkPecIsValid(), 'pecValid')
       ]
     });
   }

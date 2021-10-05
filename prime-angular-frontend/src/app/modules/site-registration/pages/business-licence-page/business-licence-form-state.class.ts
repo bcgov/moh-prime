@@ -39,6 +39,10 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
     return this.formInstance.get('doingBusinessAs') as FormControl;
   }
 
+  public get pec(): FormControl {
+    return this.formInstance.get('pec') as FormControl;
+  }
+
   public get json(): BusinessLicenceForm {
     if (!this.formInstance) {
       return;
@@ -101,7 +105,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
       pec: [
         null,
         [Validators.required],
-        asyncValidator(this.checkPecIsValid(), 'valid')
+        asyncValidator(this.checkPecIsValid(), 'pecValid')
       ]
     });
   }

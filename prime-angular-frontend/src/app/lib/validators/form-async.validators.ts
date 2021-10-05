@@ -11,7 +11,7 @@ export function asyncValidator(request: (value: string) => Observable<boolean>, 
   return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
     return request(control.value)
       .pipe(
-        map((result: boolean) => (!result) ? { [errorKey]: result } : null)
+        map((result: boolean) => (!result) ? { [errorKey]: true } : null)
       );
   };
 }

@@ -81,7 +81,7 @@ export class OverviewPageComponent implements OnInit {
       return;
     }
 
-    if (!this.siteFormStateService.isValid) {
+    if (!this.siteFormStateService.isValidSubmission) {
       this.siteFormStateService.forms.forEach((form: FormGroup) => this.formUtilsService.logFormErrors(form));
       this.toastService.openErrorToast('Your site has an error that needs to be corrected before you will be able to submit');
       return;

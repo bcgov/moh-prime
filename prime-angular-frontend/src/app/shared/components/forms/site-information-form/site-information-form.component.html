@@ -48,8 +48,8 @@
       <app-page-subheader2>
         <ng-container appPageSubheader2Title>Site ID</ng-container>
         <ng-container appPageSubheader2Summary>
-          Provide the sites ID{{ isCommunityPharmacy() ? '.' : ' or PEC Code. This is a 3-letter code. For example, JZY'
-          }}
+          Provide the sites
+          ID{{ isCommunityPharmacy() ? '.' : ' or PEC Code. This is a 3-letter code. For example, JZY' }}
         </ng-container>
       </app-page-subheader2>
       <ng-container>
@@ -63,7 +63,7 @@
           <mat-error *ngIf="pec.hasError('length') || pec.hasError('alpha')">
             Must be a 3-letter code
           </mat-error>
-          <mat-error *ngIf="pec.hasError('valid')">
+          <mat-error *ngIf="pec.hasError('pecValid')">
             Site ID has already been used by another site
           </mat-error>
         </mat-form-field>
