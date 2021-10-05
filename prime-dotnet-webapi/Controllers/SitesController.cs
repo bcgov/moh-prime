@@ -364,9 +364,9 @@ namespace Prime.Controllers
         private async Task<bool> HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicence)
         {
             if (site.SubmittedDate == null
-                || (site.ApprovedDate != null && !site.IsWithinRenewalPeriod()))
+                || (site.ApprovedDate.HasValue && !site.IsWithinRenewalPeriod()))
             {
-                // First submission ever, or approved site + not in renewal
+                // First submission ever, or site is approved but not in renewal. No Licence updates.
                 return true;
             }
 
@@ -375,13 +375,15 @@ namespace Prime.Controllers
                 return false;
             }
 
+            var existingLicence = site.BusinessLicence;
+            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid;
+
             if (site.ApprovedDate == null)
             {
-                // Editing was re-enabled before approval
-                var existingLicence = site.BusinessLicence;
+                // Editing was re-enabled before approval: update existing Licence.
                 await _siteService.UpdateBusinessLicenceAsync(existingLicence.Id, _mapper.Map<BusinessLicence>(newLicence));
 
-                if (existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid)
+                if (isNewDocument)
                 {
                     var licence = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(existingLicence.Id, newLicence.DocumentGuid.Value);
                     return licence != null;
@@ -391,8 +393,17 @@ namespace Prime.Controllers
             }
             else
             {
-                // Renewal
-                var licence = await _siteService.AddBusinessLicenceAsync(site.Id, _mapper.Map<BusinessLicence>(newLicence), newLicence.DocumentGuid.Value);
+                // Renewal: only Document GUID and Expiry Date are editable. If new Document, make new Licence.
+                // Could be submitted without updating Business Licence.
+                if (!isNewDocument)
+                {
+                    return true;
+                }
+
+                var licenceDto = _mapper.Map<BusinessLicence>(existingLicence);
+                licenceDto.ExpiryDate = newLicence.ExpiryDate;
+
+                var licence = await _siteService.AddBusinessLicenceAsync(site.Id, licenceDto, newLicence.DocumentGuid.Value);
                 return licence != null;
             }
         }
