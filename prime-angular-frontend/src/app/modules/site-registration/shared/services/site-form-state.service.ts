@@ -170,6 +170,12 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       this.hoursOperationPageFormState.form.enable();
     }
 
+    // Assumption that PEC is required except for private community
+    // health practice, and at this point can be considered deferred
+    if (!this.businessLicenceFormState.pec.value && this.site.careSettingCode === CareSettingEnum.PRIVATE_COMMUNITY_HEALTH_PRACTICE) {
+      this.businessLicenceFormState.pec.disable();
+    }
+
     const isSubmissionValid = this.isValid;
 
     // Re-apply the validations to prevent the validations being
