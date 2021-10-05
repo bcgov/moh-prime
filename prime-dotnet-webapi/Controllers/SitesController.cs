@@ -382,7 +382,14 @@ namespace Prime.Controllers
 
         private async Task HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicense)
         {
+            if (site.SubmittedDate == null
+                || site.ApprovedDate.HasValue && !site.WithinRenewalPeriod())
+            {
+                // First submission ever, or post approval and not within renewal
+                return;
+            }
 
+            //TODO
         }
 
         // POST: api/sites/5/business-licences
