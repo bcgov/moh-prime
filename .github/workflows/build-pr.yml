@@ -226,7 +226,7 @@ jobs:
         with:
           openshift_server_url: ${{secrets.OPENSHIFT_SERVER_URL}}
           openshift_token: ${{secrets.OPENSHIFT_SERVICE_TOKEN}}
-          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}}
+          namespace: ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}}
 
       - name: "Get current pull request"
         uses: 8BitJonny/gh-get-current-pr@1.0.1
@@ -248,8 +248,7 @@ jobs:
             -p FRONTEND_URL=pr-$PR_NUMBER \
             -p IMAGE_TAG=pr-$PR_NUMBER \
             -p SVC_NAME=pr-$PR_NUMBER \
-            -p OC_NAMESPACE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
-            -p OC_APP=${{secrets.OC_APP}} \
+            -p OC_LICENSE_PLATE=${{secrets.OPENSHIFT_LICENSE_PLATE}} \
             -p URL_STUB=.pharmanetenrolment.gov.bc.ca \
             -p WEB_PORT=8080 \
-            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OC_APP}} -f -
+            -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} | oc apply -n ${{secrets.OPENSHIFT_LICENSE_PLATE}}-${{secrets.OPENSHIFT_ENVIRONMENT}} -f -

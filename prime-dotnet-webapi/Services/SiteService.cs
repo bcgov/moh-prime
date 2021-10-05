@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using DelegateDecompiler.EntityFrameworkCore;
 using Prime.HttpClients;
 using Prime.HttpClients.DocumentManagerApiDefinitions;
 using Prime.Models;
@@ -372,7 +372,6 @@ namespace Prime.Services
         {
             var site = await _context.Sites.SingleOrDefaultAsync(s => s.Id == siteId);
             site.ApprovedDate = null;
-            site.SubmittedDate = null;
             site.AddStatus(SiteStatusType.Editable);
             await _context.SaveChangesAsync();
 
@@ -529,8 +528,11 @@ namespace Prime.Services
         public async Task<BusinessLicence> GetLatestBusinessLicenceAsync(int siteId)
         {
             return await _context.Sites
+                .Include(s => s.BusinessLicences)
+                    .ThenInclude(bl => bl.BusinessLicenceDocument)
                 .Where(s => s.Id == siteId)
                 .Select(s => s.BusinessLicence)
+                .DecompileAsync()
                 .SingleOrDefaultAsync();
         }
 
@@ -744,16 +746,12 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        /// <summary>
-        /// Check if a given PEC already exists among non health authority sites
-        /// </summary>
-        /// <param name="pec"></param>
-        /// <returns></returns>
-        public async Task<bool> PecExistsAsync(string pec)
+        public async Task<bool> PecAssignableAsync(string pec)
         {
+            // TODO: Validate re: care settings and HA
             return await _context.Sites
                 .AsNoTracking()
-                .AnyAsync(s => s.PEC == pec && (CareSettingType)s.CareSettingCode != CareSettingType.HealthAuthority);
+                .AllAsync(s => s.PEC != pec);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

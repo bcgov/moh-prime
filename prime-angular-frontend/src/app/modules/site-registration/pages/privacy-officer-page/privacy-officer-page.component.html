@@ -18,9 +18,10 @@
       </ng-container>
 
       <app-page-footer [isInitialEnrolment]="!isCompleted"
+                       [primaryActionLabel]="(hasBeenSubmitted) ? 'Continue' : 'Save and Continue'"
                        [hasSecondaryAction]="true"
-                       primaryActionLabel="Save and Continue"
                        (save)="onSubmit()"
+                       (continue)="onBack()"
                        (back)="onBack()"></app-page-footer>
     </app-contact-profile-form>
   </form>
