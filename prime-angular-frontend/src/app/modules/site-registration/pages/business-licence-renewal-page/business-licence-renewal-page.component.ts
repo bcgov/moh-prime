@@ -1,27 +1,30 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
+
 import { SiteResource } from '@core/resources/site-resource.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { UtilsService } from '@core/services/utils.service';
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
+import { DocumentUploadComponent, BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
+
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
 import { Site } from '@registration/shared/models/site.model';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteRoutes } from '@registration/site-registration.routes';
-import { DocumentUploadComponent, BaseDocument } from '@shared/components/document-upload/document-upload/document-upload.component';
-import { Observable } from 'rxjs';
-import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-page-form-state.class';
+import { BusinessLicenceRenewalPageFormState } from './business-licence-renewal-form-state.class';
 
 @Component({
   selector: 'app-business-licence-renewal-page',
   templateUrl: './business-licence-renewal-page.component.html',
   styleUrls: ['./business-licence-renewal-page.component.scss']
 })
-export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage implements OnInit {
+export class BusinessLicenceRenewalPageComponent extends AbstractSiteRegistrationPage implements OnInit {
   public formState: BusinessLicenceRenewalPageFormState;
   public title: string;
   public routeUtils: RouteUtils;
@@ -38,14 +41,14 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteFormStateService: SiteFormStateService,
-    private siteResource: SiteResource,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -83,7 +86,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
   }
 
   protected createFormInstance(): void {
-    this.formState = this.siteFormStateService.businessLicenceRenewalPageFormState;
+    this.formState = this.siteFormStateService.businessLicenceRenewalFormState;
   }
 
   protected patchForm(): void {
@@ -110,22 +113,7 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
     }
   }
 
-  protected performSubmission(): Observable<BusinessLicence> {
-    const siteId = this.route.snapshot.params.sid;
-
-    // Create or update the business licence with an uploaded document
-    const businessLicenceGuid = this.formState.businessLicenceGuid.value;
-    const expiryDate = this.formState.businessLicenceExpiry.value;
-
-    return this.siteResource.createBusinessLicence(siteId, new BusinessLicence(siteId, expiryDate), businessLicenceGuid);
-  }
-
   protected afterSubmitIsSuccessful(): void {
-    // Remove the business licence GUID to prevent 404 already
-    // submitted if re-submitted in same session
-    this.formState.businessLicenceGuid.patchValue(null);
-    this.formState.form.markAsPristine();
-
     const routePath = SiteRoutes.SITE_REVIEW;
 
     this.routeUtils.routeRelativeTo(routePath);
@@ -137,5 +125,4 @@ export class BusinessLicenceRenewalPageComponent extends AbstractEnrolmentPage i
         this.businessLicence = businessLicense ?? this.businessLicence;
       });
   }
-
 }

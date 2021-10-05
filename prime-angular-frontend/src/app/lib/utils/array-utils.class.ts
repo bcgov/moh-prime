@@ -15,6 +15,22 @@ export class ArrayUtils {
 
   /**
    * @description
+   * Conditional insert into an array when used in conjunction
+   * with the spread operator.
+   *
+   * @example
+   * const doSomething = (...results) => [...results, 7, 8, 9]
+   * const example = [1, 2, 3, ...ArrayUtils.insertIf(true, doSomething)] // [1, 2, 3, 7, 8, 9]
+   * const example = [1, 2, 3, ...ArrayUtils.insertIf(true, () => doSomething(4, 5, 6))] // [1, 2, 3, 4, 5, 6, 7, 8, 9]
+   * const example = [1, 2, 3, ...ArrayUtils.insertIf(false, doSomething)] // [1, 2, 3, 4, 5, 6]
+   */
+  // TODO make response generic to provide stronger type safety
+  public static insertResultIf(condition: any, callback: () => any[]): any[] {
+    return (condition) ? callback() : [];
+  }
+
+  /**
+   * @description
    * Find the intersection between two arrays.
    */
   public static intersection<T>(arrX: T[], arrY: T[]) {
