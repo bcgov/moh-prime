@@ -347,50 +347,54 @@ namespace Prime.Controllers
                 return BadRequest("PEC already exists");
             }
 
+            if (!await HandleBusinessLicenseUpdateAsync(site, updatedSite.BusinessLicence))
+            {
+                return BadRequest("Business Licence could not be created; network error or upload is already submitted");
+            };
+
             await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
-
-            await HandleBusinessLicenseUpdateAsync(site, updatedSite.BusinessLicence);
-
-            // if (site.ApprovedDate == null || site.WithinRenewalPeriod())
-            // {
-            // var updatedBusinessLicence = _mapper.Map<BusinessLicence>(updatedSite.BusinessLicence);
-            // var documentGuid = updatedSite.BusinessLicence.DocumentGuid ?? Guid.Empty;
-
-            //     var licence = await _siteService.AddBusinessLicenceAsync(siteId, _mapper.Map<BusinessLicence>(updatedBusinessLicence), documentGuid);
-            //     if (licence == null)
-            //     {
-            //         return BadRequest("Business Licence could not be created; network error or upload is already submitted");
-            //     }
-            // }
-
-
-
-            //         var document = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(updatedBusinessLicence.Id, documentGuid);
-            //         if (document == null)
-            //         {
-            //             return BadRequest("Business Licence Document could not be created; network error or upload is already submitted");
-            //         }
-
-            //     await _siteService.UpdateBusinessLicenceAsync(updatedBusinessLicence.Id, updatedBusinessLicence);
-
-
             site = await _siteService.SubmitRegistrationAsync(siteId);
+
             await _emailService.SendSiteRegistrationSubmissionAsync(siteId, site.BusinessLicence.Id, (CareSettingType)site.CareSettingCode);
             await _emailService.SendRemoteUserNotificationsAsync(site, site.RemoteUsers);
 
             return Ok(site);
         }
 
-        private async Task HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicense)
+        private async Task<bool> HandleBusinessLicenseUpdateAsync(Site site, SiteBusinessLicenceViewModel newLicence)
         {
             if (site.SubmittedDate == null
-                || site.ApprovedDate.HasValue && !site.WithinRenewalPeriod())
+                || (site.ApprovedDate != null && !site.IsWithinRenewalPeriod()))
             {
-                // First submission ever, or post approval and not within renewal
-                return;
+                // First submission ever, or approved site + not in renewal
+                return true;
             }
 
-            //TODO
+            if (newLicence.DocumentGuid == null)
+            {
+                return false;
+            }
+
+            if (site.ApprovedDate == null)
+            {
+                // Editing was re-enabled before approval
+                var existingLicence = site.BusinessLicence;
+                await _siteService.UpdateBusinessLicenceAsync(existingLicence.Id, _mapper.Map<BusinessLicence>(newLicence));
+
+                if (existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid)
+                {
+                    var licence = await _siteService.AddOrReplaceBusinessLicenceDocumentAsync(existingLicence.Id, newLicence.DocumentGuid.Value);
+                    return licence != null;
+                }
+
+                return true;
+            }
+            else
+            {
+                // Renewal
+                var licence = await _siteService.AddBusinessLicenceAsync(site.Id, _mapper.Map<BusinessLicence>(newLicence), newLicence.DocumentGuid.Value);
+                return licence != null;
+            }
         }
 
         // POST: api/sites/5/business-licences
