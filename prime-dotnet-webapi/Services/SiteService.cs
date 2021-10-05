@@ -746,12 +746,12 @@ namespace Prime.Services
                 .AnyAsync(s => s.Id == siteId);
         }
 
-        public async Task<bool> PecValidAsync(string pec)
+        public async Task<bool> PecAssignableAsync(string pec)
         {
             // TODO: Validate re: care settings and HA
             return await _context.Sites
                 .AsNoTracking()
-                .AnyAsync(s => s.PEC == pec);
+                .AllAsync(s => s.PEC != pec);
         }
 
         private IQueryable<Site> GetBaseSiteQuery()

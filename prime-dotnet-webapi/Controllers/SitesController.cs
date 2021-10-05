@@ -156,7 +156,7 @@ namespace Prime.Controllers
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && !await _siteService.PecValidAsync(updatedSite.PEC))
+                && !await _siteService.PecAssignableAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -338,11 +338,10 @@ namespace Prime.Controllers
                 return BadRequest("Action could not be performed.");
             }
 
-            // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
                 && !string.IsNullOrWhiteSpace(updatedSite.PEC)
-                && !await _siteService.PecValidAsync(updatedSite.PEC))
+                && !await _siteService.PecAssignableAsync(updatedSite.PEC))
             {
                 return BadRequest("PEC already exists");
             }
@@ -678,7 +677,7 @@ namespace Prime.Controllers
                 return Ok(true);
             }
 
-            return Ok(!await _siteService.PecValidAsync(pec));
+            return Ok(await _siteService.PecAssignableAsync(pec));
         }
 
         // PUT: api/Sites/5/pec
@@ -715,7 +714,7 @@ namespace Prime.Controllers
             // Stop update if site is non health authority and PEC is not unique
             if (site.CareSettingCode != null
                 && (CareSettingType)site.CareSettingCode != CareSettingType.HealthAuthority
-                && !await _siteService.PecValidAsync(pecCode))
+                && !await _siteService.PecAssignableAsync(pecCode))
             {
                 return BadRequest("PEC already exists");
             }
