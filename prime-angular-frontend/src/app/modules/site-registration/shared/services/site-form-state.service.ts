@@ -6,6 +6,7 @@ import { RouteStateService } from '@core/services/route-state.service';
 import { ConsoleLoggerService } from '@core/services/console-logger.service';
 import { FormUtilsService } from '@core/services/form-utils.service';
 import { SiteResource } from '@core/resources/site-resource.service';
+import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
@@ -42,7 +43,7 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    * Shallowly immutable reference to a selection of site properties
    * for use determining state of the site.
    */
-  private site: Pick<Site, 'status'| 'completed' | 'submittedDate' | 'approvedDate'>;
+  private site: Pick<Site, 'status'| 'completed' | 'submittedDate' | 'approvedDate' | 'careSettingCode'>;
 
   constructor(
     protected fb: FormBuilder,
@@ -71,8 +72,8 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
     this.organizationId = site.organizationId;
     this.provisionerId = site.provisionerId;
 
-    const { status, completed, submittedDate, approvedDate } = site;
-    this.site = Object.freeze({ status, completed, submittedDate, approvedDate });
+    const { status, completed, submittedDate, approvedDate, careSettingCode } = site;
+    this.site = Object.freeze({ status, completed, submittedDate, approvedDate, careSettingCode });
 
     super.setForm(site, forcePatch);
   }
@@ -146,10 +147,13 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
    */
   public get isValidSubmission(): boolean {
     const pecControl = this.businessLicenceFormState.pec;
-    // Managed to make it through then registration without a PEC
-    // assumed to indicate deferment, which is not possible after
-    // the site has been approved
-    const pecDeferred = this.site.completed && !this.site.approvedDate && !pecControl.value;
+    // Managed to make it through the registration without a PEC and is
+    // Community Pharmacy then assumed to indicate deferment, which is
+    // not possible after the site has been approved
+    const pecDeferred = this.site.completed &&
+      !this.site.approvedDate &&
+      !pecControl.value &&
+      this.site.careSettingCode === CareSettingEnum.COMMUNITY_PHARMACIST;
 
     // Loosen validation on submission only when the PEC is deferred, which
     // allows for submissions regardless of toggle state that is not
