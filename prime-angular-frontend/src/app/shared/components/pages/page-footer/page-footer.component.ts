@@ -59,11 +59,14 @@ export class PageFooterComponent implements OnInit, OnChanges {
     if (this.isInitialEnrolment) {
       // TODO temporary hack until time for generic page footer, otherwise normal functionality
       this.saveButtonLabel = this.primaryActionLabel ?? 'Save and Continue';
-      this.secondaryActionButtonLabel = this.secondaryActionLabel ?? 'Back';
     } else {
       this.saveButtonLabel = this.primaryActionLabel ?? 'Continue';
       // TODO drop opinion from generic page footer
-      this.hasSecondaryAction = false;
+      this.hasSecondaryAction = (typeof this.hasSecondaryAction === 'boolean')
+        ? this.hasSecondaryAction
+        : false;
     }
+
+    this.secondaryActionButtonLabel = this.secondaryActionLabel ?? 'Back';
   }
 }
