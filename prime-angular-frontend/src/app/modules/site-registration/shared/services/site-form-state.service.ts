@@ -163,8 +163,9 @@ export class SiteFormStateService extends AbstractFormStateService<Site> {
       pecControl.updateValueAndValidity();
     }
 
-    // Hours of operation disables fields when marking them as 24 hours, which
-    // persists to the overview during routing
+    // Hours of operation disables fields when marked as 24 hours, which
+    // persists to the overview during routing and needs to be enabled
+    // to allow submission
     if (this.hoursOperationPageFormState.form.disabled) {
       this.hoursOperationPageFormState.form.enable();
     }
