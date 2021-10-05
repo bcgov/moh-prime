@@ -350,7 +350,7 @@ namespace Prime.Controllers
             if (!await HandleBusinessLicenseUpdateAsync(site, updatedSite.BusinessLicence))
             {
                 return BadRequest("Business Licence could not be created; network error or upload is already submitted");
-            };
+            }
 
             await _siteService.UpdateSiteAsync(siteId, _mapper.Map<SiteUpdateModel>(updatedSite));
             site = await _siteService.SubmitRegistrationAsync(siteId);
