@@ -36,9 +36,7 @@
          class="mb-3">
       <mat-slide-toggle [formControl]="isNewSite"
                         color="primary">
-        {{ (isNewSite.value)
-        ? 'This is a new Site without a Site ID'
-        : 'This is not a new Site and it has a PEC Code assigned' }}
+        This is a new Site without a Site ID
       </mat-slide-toggle>
     </div>
     <ng-container *ngIf="isNewSite.value && !isCommunityPharmacy(); else notNewSite">

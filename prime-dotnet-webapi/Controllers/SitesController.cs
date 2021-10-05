@@ -370,17 +370,13 @@ namespace Prime.Controllers
                 return true;
             }
 
-            if (newLicence.DocumentGuid == null)
-            {
-                return false;
-            }
-
             var existingLicence = site.BusinessLicence;
-            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid;
+            var isNewDocument = existingLicence.BusinessLicenceDocument.DocumentGuid != newLicence.DocumentGuid && newLicence.DocumentGuid != null;
 
             if (site.ApprovedDate == null)
             {
-                // Editing was re-enabled before approval: update existing Licence.
+                // Editing was re-enabled before approval: Update existing licence. If new Document replace, but
+                // always allow for ExpiryDate and/or DeferredReason to be updated.
                 await _siteService.UpdateBusinessLicenceAsync(existingLicence.Id, _mapper.Map<BusinessLicence>(newLicence));
 
                 if (isNewDocument)
@@ -393,7 +389,7 @@ namespace Prime.Controllers
             }
             else
             {
-                // Renewal: only Document GUID and Expiry Date are editable. If new Document, make new Licence.
+                // Renewal: Only Document GUID and Expiry Date are editable. If new Document, make new Licence.
                 // Could be submitted without updating Business Licence.
                 if (!isNewDocument)
                 {
