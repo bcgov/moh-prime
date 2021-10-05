@@ -74,6 +74,16 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-frontend
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - ${SVC_NAME}-frontend
+                topologyKey: "kubernetes.io/hostname"
         containers:
           - name: ${SVC_NAME}-frontend
             image: >-
@@ -547,6 +557,15 @@ objects:
           dev-app: ${SVC_NAME}
           name: ${SVC_NAME}-webapi
       spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+              - labelSelector:
+                  matchExpressions:
+                    - key: deploymentconfig
+                      operator: In
+                      values:
+                        - ${SVC_NAME}-webapi
         initContainers:
         - name: run-migrations
           image: >-
