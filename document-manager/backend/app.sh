@@ -1,12 +1,4 @@
 #!/bin/bash
-# function waitForPsql() 
-# {
-# until  psql -h $DB_HOST -U ${DB_USER} -d ${DB_NAME} -v QueryTimeout=1 -v ON_ERROR_STOP=1 -c "select version()" > /dev/null;
-# do
-#     echo "waiting for postgres container..."
-#     sleep 2
-# done
-# }
 
 function backend()
 {
