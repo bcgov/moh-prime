@@ -267,7 +267,7 @@ export class SiteResource {
     } else {
       site.businessHours = null;
     }
-    return this.apiResource.post<string>(`sites/${siteId}/submission`, site)
+    return this.apiResource.post<string>(`sites/${siteId}/submissions`, site)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         tap(() => this.toastService.openSuccessToast('Site registration has been submitted')),
