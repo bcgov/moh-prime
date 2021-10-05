@@ -34,7 +34,7 @@
     "@tinymce/tinymce-angular": "^4.2.4",
     "bootstrap": "^4.5.3",
     "classlist.js": "^1.1.20150312",
-    "filepond": "^4.22.1",
+    "filepond": "^4.30.3",
     "filepond-plugin-file-validate-size": "^2.2.1",
     "filepond-plugin-file-validate-type": "^1.2.5",
     "keycloak-angular": "^8.4.0",
