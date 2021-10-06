@@ -180,6 +180,19 @@ namespace Prime.Services
             await Send(email);
         }
 
+        public async Task SendSiteActiveBeforeRegistrationAsync(int siteId, string signingAuthorityEmail)
+        {
+            var viewModel = await _context.Sites
+            .Where(s => s.Id == siteId)
+            .Select(s => new SiteActiveBeforeRegistrationEmailViewModel
+            {
+                Pec = s.PEC
+            })
+            .SingleAsync();
+            var email = await _emailRenderingService.RenderSiteActiveBeforeRegistrationEmailAsync(signingAuthorityEmail, viewModel);
+            await Send(email);
+        }
+
         public async Task SendSiteApprovedHIBCAsync(Site site)
         {
             var viewModel = new SiteApprovalEmailViewModel
