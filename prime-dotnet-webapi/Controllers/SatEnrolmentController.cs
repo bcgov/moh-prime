@@ -22,10 +22,15 @@ namespace Prime.Controllers
     public class SatEnrolmentController : PrimeControllerBase
     {
         private readonly ISatEnrolmentService _satEnrolmentService;
+        private readonly IPlrProviderService _plrProviderService;
 
-        public SatEnrolmentController(ISatEnrolmentService satEnrolmentService)
+        public SatEnrolmentController(
+            ISatEnrolmentService satEnrolmentService,
+            IPlrProviderService plrProviderService
+            )
         {
             _satEnrolmentService = satEnrolmentService;
+            _plrProviderService = plrProviderService;
         }
 
         // POST: api/parties/sat
@@ -117,6 +122,41 @@ namespace Prime.Controllers
 
             await _satEnrolmentService.UpdateCertificationsAsync(satId, payload);
             return Ok();
+        }
+
+        // POST: api/parties/sat/5/finalize
+        /// <summary>
+        /// Finalize a SAT Enrolment
+        /// </summary>
+        /// <param name="satId"></param>
+        [HttpPost("{satId}/finalize", Name = nameof(CreateSatEnrollee))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> FinalizeSatEnrollee(int satId)
+        {
+            var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
+            if (satEnrollee == null)
+            {
+                return NotFound($"SAT Enrollee not found with id {satId}");
+            }
+            if (!satEnrollee.PermissionsRecord().AccessableBy(User))
+            {
+                return Forbid();
+            }
+
+            // TODO: Currently just checks if party exists in PLR with
+            // matching College Id, First Name, and Last Name.
+            // Need more talks as to what finalizing a Sat Enrollee entails.
+            var found = await _plrProviderService.CheckPartyValidityAsync(satId);
+
+            if (!found)
+            {
+                return NotFound($"No matching PLR data found.");
+            }
+
+            return NoContent();
         }
     }
 }

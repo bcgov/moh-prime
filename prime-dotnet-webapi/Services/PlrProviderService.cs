@@ -80,6 +80,28 @@ namespace Prime.Services
                 });
         }
 
+
+        public async Task<bool> CheckPartyValidityAsync(int partyId)
+        {
+            var party = await _context.Parties
+                .Where(p => p.Id == partyId)
+                .SingleOrDefaultAsync();
+
+            // PLR college Ids map to License Number
+            var collegeIds = await _context.PartyCertifications
+                .Where(pc => pc.PartyId == partyId)
+                .Select(cert => cert.LicenseNumber)
+                .ToListAsync();
+
+            return await _context.PlrProviders
+                .Where(
+                    p => collegeIds.Contains(p.CollegeId)
+                    && (p.FirstName == party.FirstName || p.FirstName == party.PreferredFirstName)
+                    && (p.LastName == party.LastName || p.LastName == party.PreferredLastName)
+                )
+                .AnyAsync();
+        }
+
         private async Task TranslateIdentifierTypeAsync(PlrProvider dataObject)
         {
             var identifierType = await _context.Set<IdentifierType>()
