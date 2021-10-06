@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Services;
 using Prime.Models.Api;
 using Prime.ViewModels.Parties;
