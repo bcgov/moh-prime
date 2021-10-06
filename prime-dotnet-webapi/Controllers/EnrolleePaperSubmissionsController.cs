@@ -277,11 +277,11 @@ namespace Prime.Controllers
         /// Checks if there are any unclaimed paper Enrollees submissions with the supplied date of birth.
         /// </summary>
         /// <param name="dateOfBirth"></param>
-        [HttpHead("paper-submissions")]
+        [HttpHead("paper-submissions", Name = nameof(CheckForPotentialPaperEnrolleeReturnee))]
         [Authorize(Roles = Roles.PrimeEnrollee)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus([FromQuery] DateTime dateOfBirth)
+        public async Task<ActionResult> CheckForPotentialPaperEnrolleeReturnee([FromQuery] DateTime dateOfBirth)
         {
             var result = await _enrolleePaperSubmissionService.PotentialReturneeExistsAsync(dateOfBirth);
 
