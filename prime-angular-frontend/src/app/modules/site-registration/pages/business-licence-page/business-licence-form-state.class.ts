@@ -109,7 +109,7 @@ export class BusinessLicenceFormState extends AbstractFormState<BusinessLicenceF
         asyncValidator(this.checkPecIsAssignable(), 'assignable')
       ],
       activeBeforeRegistration: [
-        null,
+        false,
         []
       ]
     });

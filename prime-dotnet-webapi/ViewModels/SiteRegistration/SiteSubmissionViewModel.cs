@@ -36,5 +36,7 @@ namespace Prime.ViewModels
         public IEnumerable<RemoteUser> RemoteUsers { get; set; }
 
         public ICollection<BusinessDay> BusinessHours { get; set; }
+
+        public bool ActiveBeforeRegistration { get; set; }
     }
 }
