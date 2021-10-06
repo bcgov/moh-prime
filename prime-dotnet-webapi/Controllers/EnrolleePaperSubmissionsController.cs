@@ -283,7 +283,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetPotentialPaperEnrolleeReturneeStatus([FromQuery] DateTime dateOfBirth)
         {
-            var result = await _enrolleePaperSubmissionService.IsPotentialPaperEnrolleeReturneeAsync(dateOfBirth);
+            var result = await _enrolleePaperSubmissionService.PotentialReturneeExistsAsync(dateOfBirth);
 
             if (!result)
             {
