@@ -190,8 +190,8 @@ const routes: Routes = [
                   },
                   {
                     path: SiteRoutes.SITE_REVIEW,
-                    canActivate: [SiteGuard],
                     component: OverviewPageComponent,
+                    canActivate: [SiteGuard],
                     data: { title: 'Site Registration Review' }
                   },
                   {
