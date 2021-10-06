@@ -106,12 +106,15 @@ objects:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                    - key: deploymentconfig
-                      operator: In
-                      values:
-                        - ${SVC_NAME}-frontend
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-frontend
+                  topologyKey: "kubernetes.io/hostname"
         volumes:
           - name: vanity-tls-certs
             secret:
@@ -531,12 +534,15 @@ objects:
         affinity:
           podAntiAffinity:
             preferredDuringSchedulingIgnoredDuringExecution:
-              - labelSelector:
-                  matchExpressions:
-                    - key: deploymentconfig
-                      operator: In
-                      values:
-                        - ${SVC_NAME}-webapi
+              - weight: 100
+                podAffinityTerm:
+                  labelSelector:
+                    matchExpressions:
+                      - key: deploymentconfig
+                        operator: In
+                        values:
+                          - ${SVC_NAME}-webapi
+                  topologyKey: "kubernetes.io/hostname"
         initContainers:
         - name: run-migrations
           image: >-
