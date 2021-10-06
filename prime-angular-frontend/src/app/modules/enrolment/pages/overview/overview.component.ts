@@ -4,7 +4,7 @@ import { FormGroup, ValidationErrors } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { EMPTY, Subscription, Observable } from 'rxjs';
-import { exhaustMap, map } from 'rxjs/operators';
+import { exhaustMap, map, tap } from 'rxjs/operators';
 
 import { DateUtils } from '@lib/utils/date-utils.class';
 import { ToastService } from '@core/services/toast.service';
@@ -169,9 +169,12 @@ export class OverviewComponent extends BaseEnrolmentPage implements OnInit {
           this.enrolmentErrors = this.getEnrolmentErrors(enrolment);
 
           this.withinDaysOfRenewal = DateUtils.withinRenewalPeriod(this.enrolment?.expiryDate);
+        }),
+        exhaustMap((_) => {
+          let enrolment = this.enrolmentService.enrolment;
 
           if (this.isPotentialPaperEnrollee) {
-            this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
+            return this.enrolmentResource.getGpidFromLinkWithPotentialEnrollee(enrolment)
               .pipe(
                 exhaustMap((result) => this.userProvidedGpid = result)
               );

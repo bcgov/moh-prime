@@ -93,7 +93,7 @@ export class EnrolmentResource {
 
   public getGpidFromLinkWithPotentialEnrollee(enrolment: Enrolment): Observable<string> {
     const { id } = enrolment;
-    return this.apiResource.get<String>(`enrollees/${id}/linked-gpid`)
+    return this.apiResource.get<string>(`enrollees/${id}/linked-gpid`)
       .pipe(
         map((response: ApiHttpResponse<string>) => response.result),
         catchError((error: any) => {
