@@ -15,7 +15,7 @@ namespace Prime.Services
         {
             var token = BuildMetabaseSecurityToken();
 
-            return Url.Combine(PrimeEnvironment.MetabaseApi.Url, "embed/dashboard", token)
+            return Url.Combine(PrimeConfiguration.Current.MetabaseApi.Url, "embed/dashboard", token)
                 .SetFragment("bordered=false&titled=false");
         }
 
@@ -23,7 +23,7 @@ namespace Prime.Services
         {
             var payload = new JwtPayload
             {
-               { "resource", new { dashboard = PrimeEnvironment.MetabaseApi.DashboardId } },
+               { "resource", new { dashboard = PrimeConfiguration.Current.MetabaseApi.DashboardId } },
                { "exp", DateTimeOffset.Now.AddMinutes(10).ToUnixTimeSeconds() },
                { "params", new object() }
             };
@@ -34,7 +34,7 @@ namespace Prime.Services
 
         private JwtHeader BuildJwtHeader()
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrimeEnvironment.MetabaseApi.Key));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(PrimeConfiguration.Current.MetabaseApi.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
             return new JwtHeader(credentials);
         }

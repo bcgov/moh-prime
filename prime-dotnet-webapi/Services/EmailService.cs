@@ -50,7 +50,7 @@ namespace Prime.Services
                 .Select(e => e.Email)
                 .SingleOrDefaultAsync();
 
-            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel(PrimeEnvironment.FrontendUrl));
+            var email = await _emailRenderingService.RenderReminderEmailAsync(enrolleeEmail, new LinkedEmailViewModel(PrimeConfiguration.Current.FrontendUrl));
             await Send(email);
         }
 
@@ -135,7 +135,7 @@ namespace Prime.Services
                 OrganizationName = site.Organization.Name,
                 SiteStreetAddress = site.PhysicalAddress.Street,
                 SiteCity = site.PhysicalAddress.City,
-                PrimeUrl = PrimeEnvironment.FrontendUrl
+                PrimeUrl = PrimeConfiguration.Current.FrontendUrl
             };
 
             var email = await _emailRenderingService.RenderRemoteUserNotificationEmailAsync(recipients.First(), viewModel);
@@ -291,12 +291,12 @@ namespace Prime.Services
 
         private async Task Send(Email email)
         {
-            if (!PrimeEnvironment.IsProduction)
+            if (!PrimeConfiguration.IsProduction())
             {
                 email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
             }
 
-            if (PrimeEnvironment.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
+            if (PrimeConfiguration.Current.ChesApi.Enabled && await _chesClient.HealthCheckAsync())
             {
                 var msgId = await _chesClient.SendAsync(email);
                 await CreateEmailLog(email, SendType.Ches, msgId);
