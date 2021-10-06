@@ -298,12 +298,12 @@ namespace Prime.Controllers
         /// <summary>
         /// Creates a new Enrollee who may have a a previous paper enrolment.
         /// </summary>
-        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateLinkWithPotentialPaperEnrollee))]
+        [HttpPost("{enrolleeId}/potential-paper-enrollee", Name = nameof(CreateInitialPaperEnrolleeLink))]
         [Authorize(Roles = Roles.TriageEnrollee + "," + Roles.PrimeEnrollee)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> CreateLinkWithPotentialPaperEnrollee(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
+        public async Task<ActionResult> CreateInitialPaperEnrolleeLink(int enrolleeId, EnrolleeLinkedEnrolmentViewModel payload)
         {
             await _enrolleePaperSubmissionService.CreateInitialLinkAsync(enrolleeId, payload.UserProvidedGpid);
             return Ok();
