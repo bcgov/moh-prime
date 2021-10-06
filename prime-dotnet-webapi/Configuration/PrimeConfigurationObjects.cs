@@ -1,4 +1,4 @@
-using Prime.Auth;
+using Prime.Configuration.Auth;
 
 namespace Prime.Configuration.Internal
 {
