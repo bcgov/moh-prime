@@ -274,11 +274,11 @@ namespace Prime.Services.Rules
                 if (paperEnrolleeMatchId == -1)
                 {
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.PaperEnrolmentMismatch, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
-                    await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrollee.Id, paperEnrolleeMatchId);
+                    await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
                     return false;
                 }
                 // *** *** if match "auto enrol" and link to paper enrolment and confirm the linkage here
-                if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrollee.Id, paperEnrolleeMatchId, isConfirmed: true))
+                if (!await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId, isConfirmed: true))
                 {
                     // If for any reason the database call fails, send to manual adjudication with reason "Unable to link enrollee to paper enrollee"
                     enrollee.AddReasonToCurrentStatus(StatusReasonType.UnableToLinkToPpaperEnrolment, $"User-Provided GPID: {potentialPaperEnrolleeGpid}");
@@ -289,7 +289,7 @@ namespace Prime.Services.Rules
             // *** if yes and GPID not provided - flag with "Possible match with paper enrolment"
             else
             {
-                await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrollee.Id, paperEnrolleeMatchId);
+                await _enrolleePaperSubmissionService.LinkEnrolmentToPaperEnrolmentAsync(enrolleeId: enrollee.Id, paperEnrolleeId: paperEnrolleeMatchId);
                 enrollee.AddReasonToCurrentStatus(StatusReasonType.PossiblePaperEnrolmentMatch);
                 return false;
             }

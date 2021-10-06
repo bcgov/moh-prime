@@ -300,19 +300,12 @@ namespace Prime.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolmentId, int paperEnrolmentId, bool isConfirmed = false)
+        public async Task<bool> LinkEnrolmentToPaperEnrolmentAsync(int enrolleeId, int paperEnrolleeId, bool isConfirmed = false)
         {
-            var enrollee = await _context.Enrollees
-                .Where(
-                    e => e.Id == enrolmentId
-                    && _context.EnrolleeLinkedEnrolment.Any(link => link.EnrolleeId == e.Id)
-                )
-                .AnyAsync();
-
             var paperEnrollee = await _context.Enrollees
                 .Where(
                     pe => pe.GPID.StartsWith(PaperGpidPrefix)
-                    && pe.Id == paperEnrolmentId
+                    && pe.Id == paperEnrolleeId
                     && _context.EnrolleeLinkedEnrolment.Any(
                         link => link.PaperEnrolleeId == pe.Id
                         )
@@ -325,10 +318,10 @@ namespace Prime.Services
             }
 
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .Where(ele => ele.EnrolleeId == enrolmentId)
+                .Where(ele => ele.EnrolleeId == enrolleeId)
                 .SingleOrDefaultAsync();
 
-            enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolmentId;
+            enrolleeLinkedEnrolment.PaperEnrolleeId = paperEnrolleeId;
             enrolleeLinkedEnrolment.EnrolmentLinkDate = DateTime.Now;
             enrolleeLinkedEnrolment.Confirmed = isConfirmed;
 
@@ -340,24 +333,20 @@ namespace Prime.Services
         public async Task CreateInitialLinkAsync(int enrolleeId, string userProvidedGpid)
         {
             var enrolleeLinkedEnrolment = await _context.EnrolleeLinkedEnrolment
-                .Where(ele => ele.EnrolleeId == enrolleeId)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(ele => ele.EnrolleeId == enrolleeId);
 
-            if (enrolleeLinkedEnrolment == null)
+            if (enrolleeLinkedEnrolment != null)
             {
-                var newLinkedEnrolment = new EnrolleeLinkedEnrolment
-                {
-                    EnrolleeId = enrolleeId,
-                    UserProvidedGpid = userProvidedGpid,
-                };
-
-                _context.Add(newLinkedEnrolment);
-            }
-            else
-            {
-                enrolleeLinkedEnrolment.UserProvidedGpid = userProvidedGpid;
+                return;
             }
 
+            var newLinkedEnrolment = new EnrolleeLinkedEnrolment
+            {
+                EnrolleeId = enrolleeId,
+                UserProvidedGpid = userProvidedGpid,
+            };
+
+            _context.Add(newLinkedEnrolment);
             await _context.SaveChangesAsync();
         }
 
@@ -373,17 +362,13 @@ namespace Prime.Services
 
         public async Task<string> GetLinkedGpidAsync(int enrolleeId)
         {
-            var value = await _context.EnrolleeLinkedEnrolment
+            var linkedGpid = await _context.EnrolleeLinkedEnrolment
             .AsNoTracking()
             .Where(ele => ele.EnrolleeId == enrolleeId)
-            .Select(ele => new
-            {
-                ele.UserProvidedGpid
-            })
-            .DecompileAsync()
+            .Select(ele => ele.UserProvidedGpid)
             .SingleOrDefaultAsync();
 
-            return value.UserProvidedGpid;
+            return linkedGpid;
         }
     }
 }
