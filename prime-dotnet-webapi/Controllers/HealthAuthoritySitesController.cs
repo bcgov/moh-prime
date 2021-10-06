@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 
-using Prime.Auth;
+using Prime.Configuration.Auth;
 using Prime.Services;
 using Prime.Models.HealthAuthorities;
 using Prime.ViewModels;
