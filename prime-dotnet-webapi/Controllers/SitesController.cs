@@ -1219,7 +1219,7 @@ namespace Prime.Controllers
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult> DeleteSiteNotifications(int siteId)
         {
-            if (await _siteService.SiteExists(siteId))
+            if (!await _siteService.SiteExists(siteId))
             {
                 return NotFound($"Site not found with id {siteId}");
             }

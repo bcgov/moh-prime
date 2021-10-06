@@ -675,7 +675,7 @@ namespace Prime.Services
             {
                 SiteRegistrationNoteId = siteRegistrationNoteId,
                 AdminId = adminId,
-                AssigneeId = assineeId,
+                AssigneeId = assineeId
             };
 
             _context.SiteNotifications.Add(notification);
