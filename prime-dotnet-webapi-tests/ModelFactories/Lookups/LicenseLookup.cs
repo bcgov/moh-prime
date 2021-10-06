@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Prime.Models;
-using Prime.Configuration;
+using Prime.Configuration.Database;
 
 namespace PrimeTests.ModelFactories
 {

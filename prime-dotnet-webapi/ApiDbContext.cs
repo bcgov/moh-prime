@@ -1,13 +1,14 @@
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.Extensions.Configuration;
 
+using Prime.Configuration.Environment;
 using Prime.Models;
 using Prime.Models.HealthAuthorities;
 using Prime.Models.VerifiableCredentials;
@@ -19,18 +20,14 @@ namespace Prime
     {
         public ApiDbContext CreateDbContext(string[] args)
         {
-            // Connect to database
-            var connectionString = System.Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
-            if (connectionString == null)
-            {
-                // Build the configuration
-                IConfiguration config = new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json")
-                    .Build();
+            IConfiguration config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Add(new PrimeEnvironmentVariablesConfigurationSource())
+                .Build();
 
-                connectionString = config.GetConnectionString("PrimeDatabase");
-            }
+            var connectionString = config.GetConnectionString("PrimeDatabase");
 
             var optionsBuilder = new DbContextOptionsBuilder<ApiDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
