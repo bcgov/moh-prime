@@ -30,7 +30,7 @@ namespace Prime.Models
         [NotMapped]
         public string FrontendUrl
         {
-            get => Url.Combine(PrimeEnvironment.FrontendUrl, "provisioner-access", Id.ToString());
+            get => Url.Combine(PrimeConfiguration.Current.FrontendUrl, "provisioner-access", Id.ToString());
         }
     }
 }
