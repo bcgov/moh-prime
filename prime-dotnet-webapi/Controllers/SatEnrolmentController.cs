@@ -15,8 +15,7 @@ namespace Prime.Controllers
     /// "Special Authority Transformation" Controller
     /// </summary>
     [Produces("application/json")]
-    // TODO: Enable
-    //    [Authorize(Roles = Roles.PrimeEnrollee + "," + Roles.ViewEnrollee)]
+    [Authorize(Roles = Roles.PrimeEnrollee)]
     [Route("api/parties/sat")]
     [ApiController]
     public class SatEnrolmentController : PrimeControllerBase
@@ -36,15 +35,14 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ApiResultResponse<Party>), StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicViewModel payload)
+        public async Task<ActionResult> CreateSatEnrollee(SatEnrolleeDemographicChangeModel payload)
         {
-            Party createdEnrollee = await _satEnrolmentService.CreateEnrolleeAsync(payload);
-
+            int enrolleeId = await _satEnrolmentService.CreateOrUpdateEnrolleeAsync(payload, User);
+            Party satParty = await _satEnrolmentService.GetEnrolleeAsync(enrolleeId);
             return CreatedAtAction(
-                nameof(EnrolleesController.GetEnrolleeById),
-                "enrollees",
-                new { enrolleeId = createdEnrollee.Id },
-                createdEnrollee
+                nameof(GetSatEnrolleeById),
+                new { satId = satParty.Id },
+                satParty
             );
         }
 
@@ -58,7 +56,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ApiResultResponse<SatEnrolleeDemographicViewModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResultResponse<SatEnrolleeDemographicChangeModel>), StatusCodes.Status200OK)]
         public async Task<ActionResult> GetSatEnrolleeById(int satId)
         {
             var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
@@ -85,7 +83,7 @@ namespace Prime.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiMessageResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicViewModel payload)
+        public async Task<ActionResult> UpdateSatEnrolleeDemographics(int satId, SatEnrolleeDemographicChangeModel payload)
         {
             var satEnrollee = await _satEnrolmentService.GetEnrolleeAsync(satId);
             if (satEnrollee == null)

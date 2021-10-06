@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -14,36 +14,44 @@ namespace Prime.Services
 {
     public class SatEnrolmentService : BaseService, ISatEnrolmentService
     {
+        private readonly IPartyService _partyService;
+
         private readonly IMapper _mapper;
 
         public SatEnrolmentService(
             ApiDbContext context,
             ILogger<SatEnrolmentService> logger,
+            IPartyService partyService,
             IMapper mapper)
             : base(context, logger)
         {
+            _partyService = partyService;
+
             _mapper = mapper;
         }
 
-        public async Task<Party> CreateEnrolleeAsync(SatEnrolleeDemographicViewModel viewModel)
+        public async Task<int> CreateOrUpdateEnrolleeAsync(SatEnrolleeDemographicChangeModel changeModel, ClaimsPrincipal user)
         {
-            viewModel.ThrowIfNull(nameof(viewModel));
+            changeModel.ThrowIfNull(nameof(changeModel));
 
-            var party = _mapper.Map<Party>(viewModel);
-
-            party.UserId = Guid.NewGuid();
-            party.Addresses = new[]
+            var currentParty = await _partyService.GetPartyForUserIdAsync(user.GetPrimeUserId());
+            if (currentParty == null)
             {
-                new PartyAddress
-                {
-                    Address = _mapper.Map<PhysicalAddress>(viewModel.PhysicalAddress)
-                }
-            };
+                currentParty = new Party();
+                _context.Parties.Add(currentParty);
+            }
+            currentParty = changeModel.UpdateParty(currentParty, user);
 
-            _context.Parties.Add(party);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return InvalidId;
+            }
 
-            return party;
+            return currentParty.Id;
         }
 
         public async Task<Party> GetEnrolleeAsync(int satId)
@@ -53,7 +61,7 @@ namespace Prime.Services
                 .SingleOrDefaultAsync(p => p.Id == satId);
         }
 
-        public async Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicViewModel viewModel)
+        public async Task UpdateDemographicsAsync(int satId, SatEnrolleeDemographicChangeModel viewModel)
         {
             var enrollee = await _context.Parties
                 .Include(p => p.Addresses)
@@ -66,7 +74,6 @@ namespace Prime.Services
             await _context.SaveChangesAsync();
         }
 
-        // TODO: Do this or something more like `EnrolleePaperSubmissionService.ReplaceCollection`?
         public async Task UpdateCertificationsAsync(int satId, IEnumerable<SatEnrolleeCertificationViewModel> viewModels)
         {
             var newCerts = _mapper.Map<IEnumerable<PartyCertification>>(viewModels);
