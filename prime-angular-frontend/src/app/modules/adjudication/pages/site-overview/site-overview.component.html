@@ -39,7 +39,7 @@
               novalidate>
 
           <div class="row">
-            <div class="col-sm-12 col-lg-9 col-xl-5">
+            <div class="col-sm-12 col-lg-9 col-xl-5 pb-2">
 
               <mat-form-field class="w-100">
                 <input matInput
@@ -48,8 +48,8 @@
                 <mat-error *ngIf="pec.hasError('required')">
                   Required
                 </mat-error>
-                <mat-error *ngIf="pec.hasError('unique')">
-                  PEC has already been used by another site
+                <mat-error *ngIf="pec.hasError('assignable')">
+                  Site ID has already been used by another site
                 </mat-error>
               </mat-form-field>
 

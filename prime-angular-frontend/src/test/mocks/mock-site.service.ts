@@ -77,7 +77,8 @@ export class MockSiteService {
       adjudicator: null,
       status: SiteStatusType.EDITABLE,
       pec: null,
-      flagged: false
+      flagged: false,
+      activeBeforeRegistration: false
     });
   }
 

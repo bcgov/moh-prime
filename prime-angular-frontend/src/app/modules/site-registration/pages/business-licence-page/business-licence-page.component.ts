@@ -6,7 +6,7 @@ import { MatSlideToggle, MatSlideToggleChange } from '@angular/material/slide-to
 
 import { Observable, concat } from 'rxjs';
 
-import { AbstractEnrolmentPage } from '@lib/classes/abstract-enrolment-page.class';
+import { ArrayUtils } from '@lib/utils/array-utils.class';
 import { RouteUtils } from '@lib/utils/route-utils.class';
 import { SiteResource } from '@core/resources/site-resource.service';
 import { UtilsService } from '@core/services/utils.service';
@@ -14,21 +14,22 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { BaseDocument, DocumentUploadComponent } from '@shared/components/document-upload/document-upload/document-upload.component';
 import { CareSettingEnum } from '@shared/enums/care-setting.enum';
 
+import { AbstractSiteRegistrationPage } from '@registration/shared/classes/abstract-site-registration-page.class';
 import { SiteRoutes } from '@registration/site-registration.routes';
 import { Site } from '@registration/shared/models/site.model';
 import { BusinessLicenceDocument } from '@registration/shared/models/business-licence-document.model';
 import { SiteService } from '@registration/shared/services/site.service';
 import { SiteFormStateService } from '@registration/shared/services/site-form-state.service';
 import { BusinessLicence } from '@registration/shared/models/business-licence.model';
-import { BusinessLicencePageFormState } from './business-licence-page-form-state.class';
+import { BusinessLicenceFormState } from './business-licence-form-state.class';
 
 @Component({
   selector: 'app-business-licence-page',
   templateUrl: './business-licence-page.component.html',
   styleUrls: ['./business-licence-page.component.scss']
 })
-export class BusinessLicencePageComponent extends AbstractEnrolmentPage implements OnInit {
-  public formState: BusinessLicencePageFormState;
+export class BusinessLicencePageComponent extends AbstractSiteRegistrationPage implements OnInit {
+  public formState: BusinessLicenceFormState;
   public title: string;
   public routeUtils: RouteUtils;
   public businessLicence: BusinessLicence;
@@ -45,14 +46,14 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   constructor(
     protected dialog: MatDialog,
     protected formUtilsService: FormUtilsService,
-    private siteService: SiteService,
-    private siteFormStateService: SiteFormStateService,
-    private siteResource: SiteResource,
+    protected siteService: SiteService,
+    protected siteFormStateService: SiteFormStateService,
+    protected siteResource: SiteResource,
     private utilsService: UtilsService,
     private route: ActivatedRoute,
     router: Router
   ) {
-    super(dialog, formUtilsService);
+    super(dialog, formUtilsService, siteService, siteFormStateService, siteResource);
 
     this.title = route.snapshot.data.title;
     this.routeUtils = new RouteUtils(route, router, SiteRoutes.MODULE_PATH);
@@ -64,7 +65,10 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
 
   public canDefer(): boolean {
     const code = this.siteService.site.careSettingCode;
-    return code === CareSettingEnum.COMMUNITY_PHARMACIST || code === CareSettingEnum.DEVICE_PROVIDER;
+    return [
+      CareSettingEnum.COMMUNITY_PHARMACIST,
+      CareSettingEnum.DEVICE_PROVIDER
+    ].includes(code);
   }
 
   public onUpload(document: BaseDocument): void {
@@ -79,7 +83,11 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   public onBack(): void {
-    this.routeUtils.routeRelativeTo(SiteRoutes.CARE_SETTING);
+    const nextRoute = (!this.isCompleted)
+      ? SiteRoutes.CARE_SETTING
+      : SiteRoutes.SITE_REVIEW;
+
+    this.routeUtils.routeRelativeTo(nextRoute);
   }
 
   public downloadBusinessLicence(event: Event): void {
@@ -100,19 +108,19 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
   }
 
   protected createFormInstance(): void {
-    this.formState = this.siteFormStateService.businessLicencePageFormState;
+    this.formState = this.siteFormStateService.businessLicenceFormState;
   }
 
   protected patchForm(): void {
     const site = this.siteService.site;
     this.isCompleted = site?.completed;
-    this.siteFormStateService.setForm(site, true);
+    this.siteFormStateService.setForm(site, !this.hasBeenSubmitted);
     this.formState.form.markAsPristine();
   }
 
   protected initForm(): void {
     this.site = this.siteService.site;
-    this.getBusinessLicence(this.site);
+    this.getBusinessLicence(this.site.id);
   }
 
   protected additionalValidityChecks(): boolean {
@@ -129,53 +137,24 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     }
   }
 
-  protected performSubmission(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
-    // Collect a list of requests that will be executed in order, which
-    // will always update the site initially
-    const requests$: Observable<BusinessLicence | BusinessLicenceDocument | void>[] = [
-      this.siteResource.updateSite(this.siteFormStateService.json)
-    ];
+  protected submissionRequest(): Observable<BusinessLicence | BusinessLicenceDocument | void> {
     const siteId = this.route.snapshot.params.sid;
-    const hasBusinessLicence = !!this.businessLicence.id;
-    this.businessLicence.expiryDate = this.formState.businessLicenceExpiry.value;
+    const currentBusinessLicence = this.siteService.site.businessLicence;
+    const updatedBusinessLicence = this.siteFormStateService.businessLicenceFormState.json.businessLicence;
+    const documentGuid = this.siteFormStateService.businessLicenceFormState.businessLicenceGuid.value;
 
-    // Create or update the business licence with an uploaded document, otherwise
-    // with a deferred licence reason
-    if (this.deferredLicenceToggle?.checked) {
-      this.businessLicence.deferredLicenceReason = this.formState.deferredLicenceReason.value;
-
-      if (!hasBusinessLicence) {
-        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, null));
-      } else {
-        // Perform an update by removing an existing business licence document
-        // and/or update the deferred reason
-        if (this.businessLicence.businessLicenceDocument) {
-          requests$.push(this.siteResource.removeBusinessLicenceDocument(siteId, this.businessLicence.id));
-        }
-        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
-      }
-    } else {
-      const businessLicenceGuid = this.formState.businessLicenceGuid.value;
-
-      if (!hasBusinessLicence) {
-        requests$.push(this.siteResource.createBusinessLicence(siteId, this.businessLicence, businessLicenceGuid));
-      } else {
-        if (this.uploadedFile) {
-          requests$.push(this.siteResource.createBusinessLicenceDocument(siteId, this.businessLicence.id, businessLicenceGuid));
-        }
-        requests$.push(this.siteResource.updateBusinessLicence(siteId, this.businessLicence));
-      }
-    }
-
-    return concat(...requests$);
+    return concat(
+      this.siteResource.updateSite(this.siteFormStateService.json),
+      ...this.businessLicenceUpdates(
+        siteId,
+        currentBusinessLicence,
+        updatedBusinessLicence,
+        documentGuid
+      )
+    );
   }
 
   protected afterSubmitIsSuccessful(): void {
-    // Remove the business licence GUID to prevent 404 already
-    // submitted if re-submitted in same session
-    this.formState.businessLicenceGuid.patchValue(null);
-    this.formState.form.markAsPristine();
-
     const routePath = (this.isCompleted)
       ? SiteRoutes.SITE_REVIEW
       : SiteRoutes.SITE_ADDRESS;
@@ -183,21 +162,21 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.routeUtils.routeRelativeTo(routePath);
   }
 
-  private getBusinessLicence(site: Site): void {
-    this.siteResource.getBusinessLicence(site.id)
+  private getBusinessLicence(siteId: number): void {
+    this.siteResource.getBusinessLicence(siteId)
       .subscribe((businessLicense: BusinessLicence) => {
         this.businessLicence = businessLicense ?? this.businessLicence;
 
-        this.formState.businessLicenceExpiry.setValue(businessLicense?.expiryDate);
-
         if (businessLicense && !businessLicense.completed) {
+          const canDefer = this.canDefer();
+
           // Business licence may exist, but the deferred licence toggle may be
           // hidden based on care setting leaving the toggle undefined
-          if (this.canDefer()) {
+          if (canDefer) {
             this.deferredLicenceToggle.checked = !!this.businessLicence.deferredLicenceReason;
           }
 
-          this.updateBusLicAccess(this.canDefer());
+          this.updateBusLicAccess(canDefer);
         }
       });
   }
@@ -229,5 +208,50 @@ export class BusinessLicencePageComponent extends AbstractEnrolmentPage implemen
     this.hasNoBusinessLicenceError = false;
     requiredControls.forEach(control => control.setValidators([Validators.required]));
     notRequiredControls.forEach(control => this.formUtilsService.resetAndClearValidators(control));
+  }
+
+  /**
+   * @description
+   * Collect a list of requests that will be executed in order, which
+   * will update the business licence directly during initial registration
+   * and then becomes the responsibility of site submission.
+   */
+  public businessLicenceUpdates(
+    siteId: number,
+    currentBusinessLicence: BusinessLicence,
+    updatedBusinessLicence: BusinessLicence,
+    documentGuid: string = null
+  ): Observable<BusinessLicence | BusinessLicenceDocument | void>[] {
+    if (!currentBusinessLicence?.id) {
+      // Create a business licence when none existed
+      return [this.siteResource.createBusinessLicence(siteId, updatedBusinessLicence, documentGuid)];
+    }
+
+    updatedBusinessLicence.id = currentBusinessLicence.id;
+
+    if (currentBusinessLicence.deferredLicenceReason !== updatedBusinessLicence.deferredLicenceReason) {
+      // Remove an existing business licence document before updating
+      // with a reason for deferment
+      return [
+        ...ArrayUtils.insertResultIf(
+          currentBusinessLicence?.businessLicenceDocument,
+          () => [this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id)]
+        ),
+        this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
+      ];
+    }
+
+    // Create a business licence document each time a file is uploaded, and
+    // update the existing business licence
+    return [
+      ...ArrayUtils.insertResultIf(
+        documentGuid,
+        () => [
+          this.siteResource.removeBusinessLicenceDocument(siteId, currentBusinessLicence.id),
+          this.siteResource.createBusinessLicenceDocument(siteId, currentBusinessLicence.id, documentGuid)
+        ]
+      ),
+      this.siteResource.updateBusinessLicence(siteId, updatedBusinessLicence)
+    ];
   }
 }
